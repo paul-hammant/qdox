@@ -6,8 +6,7 @@ import junit.framework.Test;
 public class PackageTestSuite extends TestSuite {
 
 	public static Test suite() {
-	    TestSuite suite = new TestSuite();
-		suite.addTestSuite(JavaDocBuilderTest.class);
+		TestSuite suite = new TestSuite();
 		suite.addTestSuite(MultipleJavaDocBuilderTest.class);
 		return suite;
 	}

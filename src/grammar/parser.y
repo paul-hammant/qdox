@@ -7,7 +7,7 @@ import java.io.IOException;
 %token SEMI DOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
-%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
+%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN
 %token JAVADOCSTART JAVADOCEND
 %token CODEBLOCK STRING
 
@@ -109,7 +109,7 @@ class:
     };
 
 classdefinition: 
-    modifiers classorinterface IDENTIFIER extends implements { 
+    modifiers classorinterface IDENTIFIER typearguments extends implements {
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
         cls.name = $3; 
         builder.beginClass(cls); 
@@ -120,10 +120,12 @@ classorinterface:
     CLASS | 
     INTERFACE { cls.isInterface = true; };
 
+typearguments: | LESSTHAN IDENTIFIER GREATERTHAN
+
 extends: | EXTENDS extendslist;
 
 extendslist: 
-    fullidentifier { cls.extendz.add($1); } | 
+    fullidentifier { cls.extendz.add($1); } typearguments | 
     extendslist COMMA fullidentifier { cls.extendz.add($3); };
 
 implements: | IMPLEMENTS implementslist;

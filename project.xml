@@ -22,18 +22,13 @@
 		by active code generators or documentation tools.
 	</description>
 
-	<url>http://qdox.sourceforge.net/</url>
-	<issueTrackingUrl>http://wiki.truemesh.com/qdox/</issueTrackingUrl>
+	<url>http://qdox.codehaus.org/</url>
+	<issueTrackingUrl>http://jira.codehaus.org/secure/BrowseProject.jspa?id=10103</issueTrackingUrl>
 
-	<siteAddress>qdox.sf.net</siteAddress>
-	<siteDirectory>/home/groups/q/qd/qdox/htdocs</siteDirectory>
-	<distributionDirectory>/home/groups/q/qd/qdox/htdocs/downloads</distributionDirectory>
-	<distributionSite>qdox.sf.net</distributionSite>
-
-	<repository>
-		<connection>scm:cvs::pserver:anonymous@cvs.sourceforge.net:/cvsroot/qdox:qdox</connection>
-		<url>http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/qdox/qdox/</url>
-	</repository>
+	<siteAddress>codehaus.org</siteAddress>
+	<siteDirectory>/www/qdox.codehaus.org/</siteDirectory>
+	<distributionDirectory>/www/qdox.codehaus.org/downloads/</distributionDirectory>
+	<cvsWebUrl>http://cvs.codehaus.org/viewcvs.cgi/qdox/?cvsroot=qdox</cvsWebUrl>
 
 	<versions>
 		<version>
@@ -59,12 +54,12 @@
 	</versions>
 
 	<mailingLists>
-		<mailingList>
+		<!--<mailingList>
 			<name>QDox User List</name>
 			<subscribe>qdox-user-request@lists.sourceforge.net</subscribe>
 			<unsubscribe>qdox-user-request@lists.sourceforge.net</unsubscribe>
 			<archive>http://www.geocrawler.com/lists/3/SourceForge/23415/0/</archive>
-		</mailingList>
+		</mailingList>-->
 	</mailingLists>
 
 	<developers>
@@ -139,14 +134,14 @@
 			<version>3.8.1</version>
 		</dependency>
 		<dependency>
-			<id>mockobjects</id>
-			<version>DEV</version>
+			<id>mockobjects:mockobjects-core</id>
+			<version>0.08dev-20030318</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 
-		<nagEmailAddress>qdox-user@lists.sourceforge.net</nagEmailAddress>
+		<nagEmailAddress>qdox-user@lists.codehaus.org</nagEmailAddress>
 
 		<sourceDirectory>src/java</sourceDirectory>
 		<unitTestSourceDirectory>src/test</unitTestSourceDirectory>

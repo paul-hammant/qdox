@@ -2,9 +2,6 @@ package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TypeTest extends TestCase{
 
     public TypeTest(String s) {

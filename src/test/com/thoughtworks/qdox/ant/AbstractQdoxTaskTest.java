@@ -3,9 +3,6 @@ package com.thoughtworks.qdox.ant;
 import junit.framework.TestCase;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.FileOutputStream;
-
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.BuildException;

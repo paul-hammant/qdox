@@ -3,7 +3,6 @@ package com.thoughtworks.qdox.model;
 import junit.framework.TestCase;
 
 import java.util.Collection;
-import java.util.HashSet;
 
 public class ClassLibraryTest extends TestCase implements JavaClassCache {
 

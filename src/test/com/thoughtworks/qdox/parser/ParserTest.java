@@ -4,9 +4,7 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
-import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
-import junit.framework.TestCase;
 
 public class ParserTest extends TestCase {
 

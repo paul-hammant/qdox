@@ -199,6 +199,14 @@ public class AbstractJavaEntityTest extends TestCase {
         assertTrue(entity.isFinal());
     }
 
+    public void testQDOX30() {
+        AbstractJavaEntity entity = new JavaField();
+        entity.setModifiers(new String[]{"native", "volatile", "strictfp"});
+        assertTrue(entity.isNative());
+        assertTrue(entity.isVolatile());
+        assertTrue(entity.isStrictfp());
+    }
+
     public void testGetTagsReturnsEmptyArrayInsteadOfNull() throws Exception {
         AbstractJavaEntity entity = new JavaField();
         assertEquals(0, entity.getTags().length);

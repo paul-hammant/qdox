@@ -166,6 +166,27 @@ public abstract class AbstractJavaEntity implements Serializable {
         return isModifierPresent("transient");
     }
 
+	/**
+	 * @since 1.4
+	 */
+    public boolean isVolatile() {
+        return isModifierPresent("volatile");
+    }
+
+	/**
+	 * @since 1.4
+	 */
+    public boolean isNative() {
+        return isModifierPresent("native");
+    }
+
+	/**
+	 * @since 1.4
+	 */
+    public boolean isStrictfp() {
+        return isModifierPresent("strictfp");
+    }
+
     private boolean isModifierPresent(String modifier) {
         return modifiers.contains(modifier);
     }

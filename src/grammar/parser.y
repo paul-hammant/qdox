@@ -79,6 +79,7 @@ member: javadoc
 	| modifiers IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new Builder.MethodDef(); }; // constructor
 	| modifiers CODEBLOCK // static block
 	| modifiers classorinterface IDENTIFIER extends implements CODEBLOCK { cls = new Builder.ClassDef(); modifiers.clear(); } // inner class
+	| SEMI
 	;
 modifiers: | modifiers modifier { modifiers.add($2); };
 memberend: SEMI | CODEBLOCK | ASSIGNMENT;

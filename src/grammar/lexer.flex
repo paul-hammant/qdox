@@ -4,6 +4,7 @@ package net.sf.qdox.parser;
 
 // class and lexer definitions
 %class JFlexLexer
+%public
 %implements Lexer
 %byaccj
 %line
@@ -11,6 +12,7 @@ package net.sf.qdox.parser;
 
 %{
 	private int parenDepth = 0;
+	private int lastState;
 
 	public String text() {
 		return yytext();
@@ -52,8 +54,8 @@ package net.sf.qdox.parser;
 	"extends"          { return Parser.EXTENDS; }
 	"implements"       { return Parser.IMPLEMENTS; }
 
-	"["                { return Parser.SQUAREOPEN; }
-	"]"                { return Parser.SQUARECLOSE; }
+//	"["                { return Parser.SQUAREOPEN; }
+//	"]"                { return Parser.SQUARECLOSE; }
 	"("                { return Parser.BRACKETOPEN; }
 	")"                { return Parser.BRACKETCLOSE; }
 
@@ -105,17 +107,21 @@ package net.sf.qdox.parser;
 		}
 	}
 
+	"\""               { yybegin(STRING); lastState = CODEBLOCK; }
+
 }
 
 <ASSIGNMENT> {
 
-	"\""               { yybegin(STRING); }
-	";"                { yybegin(YYINITIAL); return Parser.ASSIGNMENT; }
+	"\""               { yybegin(STRING); lastState = ASSIGNMENT; }
+	";"                { if (parenDepth == 1) { yybegin(YYINITIAL); return Parser.ASSIGNMENT; } }
+	"{"                { parenDepth++; }
+	"}"                { parenDepth--; }
 
 }
 
 <STRING> {
-  "\""               { yybegin(ASSIGNMENT); }
+  "\""               { yybegin(lastState); }
 }
 
-.|\n                       { }
+.|\n                  { }

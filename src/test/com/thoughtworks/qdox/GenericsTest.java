@@ -1,7 +1,5 @@
 package com.thoughtworks.qdox;
 
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.parser.ParseException;
 import junit.framework.TestCase;
 
 import java.io.StringReader;
@@ -14,16 +12,19 @@ public class GenericsTest extends TestCase {
 
     private JavaDocBuilder builder = new JavaDocBuilder();
 
-    public void testShouldUnderstandGenericClassDeclarations() {
-        try {
-            String source = "" +
-                    "public interface Collection<T> extends Iterable<T> {}";
+    public void testShouldUnderstandSingleGenericClassDeclarations() {
+        String source = "" +
+                "public interface Foo<T> extends Bar<T> {}";
 
-            builder.addSource(new StringReader(source));
-            JavaClass collection = builder.getClassByName("Collection");
-        } catch (ParseException e) {
-            System.out.println("col:" + e.getColumn());
-            throw e;
-        }
+        builder.addSource(new StringReader(source));
+        assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }
+
+    public void testShouldUnderstandMultipleGenericClassDeclarations() {
+        String source = "" +
+                "public interface Foo<X,Y> extends Bar<X,Y> {}";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Foo", builder.getClassByName("Foo").getName());
     }
 }

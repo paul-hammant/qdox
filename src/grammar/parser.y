@@ -120,12 +120,16 @@ classorinterface:
     CLASS | 
     INTERFACE { cls.isInterface = true; };
 
-typearguments: | LESSTHAN IDENTIFIER GREATERTHAN
+typearguments: | LESSTHAN referencetypelist GREATERTHAN
+
+referencetypelist:
+    IDENTIFIER |
+    referencetypelist COMMA IDENTIFIER
 
 extends: | EXTENDS extendslist;
 
 extendslist: 
-    fullidentifier { cls.extendz.add($1); } typearguments | 
+    fullidentifier { cls.extendz.add($1); } typearguments |
     extendslist COMMA fullidentifier { cls.extendz.add($3); };
 
 implements: | IMPLEMENTS implementslist;

@@ -1,25 +1,26 @@
 <project name="qdox" repository="qdox" href="http://qdox.codehaus.org">
 
-	<title>QDox : Quick JavaDoc Scanner</title>
+  <title>QDox : Quick JavaDoc Scanner</title>
 
-	<body>
-		<links>
-			<item name="QDox" href="http://qdox.codehaus.org/"/>
-			<item name="Codehaus" href="http://www.codehaus.org/"/>
-			<item name="Download" href="/download.html"/>
-			<item name="ThoughtWorks" href="http://www.thoughtworks.com/"/>
-			<item name="Attributes" href="http://jakarta.apache.org/commons/sandbox/attributes/"/>
-			<item name="Nanning" href="http://nanning.sourceforge.net/"/>
-			<item name="Joe" href="http://joe.truemesh.com"/>
-		</links>
-		<menu name="QDox">
-			<item name="Overview"            href="/index.html"/>
-			<item name="Usage"               href="/usage.html"/>
-			<item name="The Model"           href="/model.html"/>
-			<item name="Who's Using It"      href="/whouses.html"/>
-			<item name="License"             href="/license.html"/>
-			<item name="Download"            href="/download.html"/>
-		</menu>
-	</body>
+  <body>
+    <links>
+      <item name="QDox" href="http://qdox.codehaus.org/"/>
+      <item name="Codehaus" href="http://www.codehaus.org/"/>
+      <item name="Download" href="/download.html"/>
+      <item name="ThoughtWorks" href="http://www.thoughtworks.com/"/>
+      <item name="Attributes" href="http://jakarta.apache.org/commons/sandbox/attributes/"/>
+      <item name="Nanning" href="http://nanning.sourceforge.net/"/>
+      <item name="Joe" href="http://joe.truemesh.com"/>
+    </links>
+    <menu name="QDox">
+      <item name="Overview"            href="/index.html"/>
+      <item name="Usage"               href="/usage.html"/>
+      <item name="The Model"           href="/model.html"/>
+      <item name="Who's Using It"      href="/whouses.html"/>
+      <item name="License"             href="/license.html"/>
+      <item name="Download"            href="/download.html"/>
+      <item name="Upgrade"             href="/upgrade.html"/>
+    </menu>
+  </body>
 
 </project>

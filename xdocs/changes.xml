@@ -8,7 +8,7 @@
     <body>
   
         <!-- action types are add/update/fix/remove -->
-        <release version="1.3" date="In CVS">
+        <release version="1.3" date="2003-11-03">
             <action dev="rinkrank" type="add">
                 Implemented QDOX-3.
                 Support for binary classes. 

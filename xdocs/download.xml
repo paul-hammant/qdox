@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <document>
 
-	<properties>
-		<title>Download</title>
-		<author email="joew@thoughtworks.com">Joe Walnes</author>
-	</properties>
+  <properties>
+    <title>Download</title>
+    <author email="joew@thoughtworks.com">Joe Walnes</author>
+  </properties>
 
-	<body>
-		<section name="Downloads">
-			<p>
-				The latest released binary is available to
-				<a href="http://qdox.codehaus.org/downloads/qdox-1.2.jar">download here</a>.
-			</p>
-			<p>
-				The current development version can be obtained from <a href="cvs-usage.html">CVS</a>.
-			</p>
-		</section>
-	</body>
+  <body>
+    <section name="Downloads">
+      <p>
+        The latest released binary is available to
+        <a href="http://dist.codehaus.org/qdox/jars/qdox-1.3.jar">download here</a>.
+      </p>
+      <p>
+        The current development version can be obtained from <a href="cvs-usage.html">CVS</a>.
+      </p>
+    </section>
+  </body>
 
 </document>

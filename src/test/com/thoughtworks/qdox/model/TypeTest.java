@@ -14,7 +14,7 @@ public class TypeTest extends TestCase {
         JavaSource src = new JavaSource();
         src.setClassLibrary(classLib);
         src.addImport("foo.*");
-        Type type = new Type("Bar", 0, src);
+        Type type = Type.createUnresolved("Bar", 0, src);
         assertEquals(false, type.isResolved());
         classLib.add("foo.Bar");
         assertEquals(true, type.isResolved());

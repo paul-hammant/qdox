@@ -7,27 +7,35 @@ public class Type implements Comparable, Serializable {
     public static final Type[] EMPTY_ARRAY = new Type[0];
 
     private String name;
-    private JavaClassParent javaClassParent;
+    private JavaClassParent context;
     private String fullName;
     private int dimensions;
 
-    public Type(String name, int dimensions, JavaClassParent javaClassParent) {
+    public Type(String fullName, String name, int dimensions, JavaClassParent context) {
+        this.fullName = fullName;
         this.name = name;
         this.dimensions = dimensions;
-        this.javaClassParent = javaClassParent;
+        this.context = context;
+    }
+
+    public Type(String fullName, int dimensions, JavaClassParent context) {
+        this(fullName, null, dimensions, context);
     }
 
     public Type(String fullName, int dimensions) {
-        this.fullName = fullName;
-        this.dimensions = dimensions;
+        this(fullName, dimensions, null);
     }
 
     public Type(String fullName) {
         this(fullName, 0);
     }
-
+    
+    public static Type createUnresolved(String name, int dimensions, JavaClassParent context) {
+        return new Type(null, name, dimensions, context);
+    }
+    
     public JavaClassParent getJavaClassParent() {
-        return javaClassParent;
+        return context;
     }
 
     public String getValue() {
@@ -35,8 +43,8 @@ public class Type implements Comparable, Serializable {
     }
 
     public boolean isResolved() {
-        if (fullName == null && javaClassParent != null) {
-            fullName = javaClassParent.resolveType(name);
+        if (fullName == null && context != null) {
+            fullName = context.resolveType(name);
         }
         return (fullName != null);
     }

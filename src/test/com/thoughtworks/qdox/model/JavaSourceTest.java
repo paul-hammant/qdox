@@ -134,11 +134,15 @@ public class JavaSourceTest extends TestCase {
         }
     }
 
-    public void testResolveFullyQualifiedName() throws Exception {
-        source.addImport("foo.Bar");
-        assertEquals("open.Bar", source.resolveType("open.Bar"));
+    public void testDontResolveMissingClasses() throws Exception {
+        assertEquals(null, source.resolveType("not.Found"));
     }
 
+    public void testResolveFullyQualifiedName() throws Exception {
+        source.getClassLibrary().add("open.Bar");
+        assertEquals("open.Bar", source.resolveType("open.Bar"));
+    }
+    
     public void testResolveFullyQualifiedImport() throws Exception {
         source.addImport("foo.Bar");
         assertEquals("foo.Bar", source.resolveType("Bar"));
@@ -157,9 +161,10 @@ public class JavaSourceTest extends TestCase {
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
-    public void testResolveFullyQualifiedOverridesSamePackage() throws Exception {
+    public void testResolveFullyQualifiedTrumpsSamePackage() throws Exception {
         source.setPackage("foo");
         source.getClassLibrary().add("foo.Bar");
+        source.getClassLibrary().add("open.Bar");
         assertEquals("open.Bar", source.resolveType("open.Bar"));
     }
 
@@ -169,17 +174,16 @@ public class JavaSourceTest extends TestCase {
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
-    public void testResolveWildcardsLast() throws Exception {
-        source.getClassLibrary().add("foo.Bar");
-        source.addImport("foo.*");
-        source.addImport("com.thoughtworks.qdox.model.Type");
-        source.addImport("another.package.Type");
-        assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
-    }
-
     public void testResolveJavaLangClass() throws Exception {
         source.getClassLibrary().add("java.lang.System");
         assertEquals("java.lang.System", source.resolveType("System"));
+    }
+
+    public void testResolveSamePackageTrumpsWildcard() throws Exception {
+        source.addImport("com.thoughtworks.qdox.model.Type");
+        source.addImport("foo.*");
+        source.getClassLibrary().add("foo.Type");
+        assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
     }
 
     public void DISABLED_testResolveFullyQualifiedInnerClass() throws Exception {

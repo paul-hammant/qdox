@@ -104,7 +104,7 @@ public class ModelBuilder implements Builder {
 
     private Type createType(String typeName, int dimensions) {
         if (typeName == null || typeName.equals("")) return null;
-        return new Type(typeName, dimensions, currentClass);
+        return Type.createUnresolved(typeName, dimensions, currentClass);
     }
 
     private void addJavaDoc(AbstractJavaEntity entity) {

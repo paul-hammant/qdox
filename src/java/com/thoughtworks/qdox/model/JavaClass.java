@@ -424,7 +424,6 @@ public class JavaClass extends AbstractInheritableJavaEntity
      */
     public boolean isA(String fullClassName) {
         Type type = new Type(fullClassName, 0, this);
-
         return asType().isA(type);
     }
 

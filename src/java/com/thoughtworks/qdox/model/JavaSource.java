@@ -132,7 +132,6 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
 
     private String resolveTypeInternal(String typeName) {
-        if (typeName.indexOf('.') != -1) return typeName;
 
         // primitive types
         if (PRIMITIVE_TYPES.contains(typeName)) return typeName;
@@ -140,34 +139,43 @@ public class JavaSource implements Serializable, JavaClassParent {
         // check if a matching fully-qualified import
         String[] imports = getImports();
         for (int i = 0; i < imports.length; i++) {
-            if (imports[i].endsWith("." + typeName)) {
-                return imports[i];
-            }
+            if (imports[i].equals(typeName)) return typeName;
+            if (imports[i].endsWith("." + typeName)) return imports[i];
         }
 
         if (getClassLibrary() == null) return null;
 
+        // check for fully-qualified class
+        if (getClassLibrary().contains(typeName)) {
+            return typeName;
+        }
+        
         // check for a class in the same package
-        String potentialName = packge + "." + typeName;
-        if (getClassLibrary().contains(potentialName)) {
-            return potentialName;
+        {
+            String fqn = getClassNamePrefix() + typeName;
+            if (getClassLibrary().contains(fqn)) {
+                return fqn;
+            }
         }
 
         // check for wildcard imports
         for (int i = 0; i < imports.length; i++) {
             if (imports[i].endsWith(".*")) {
-                potentialName =
-                        imports[i].substring(0, imports[i].length() - 1) + typeName;
-                if (getClassLibrary().contains(potentialName)) {
-                    return potentialName;
+                String fqn = 
+                    imports[i].substring(0, imports[i].length() - 1)
+                    + typeName;
+                if (getClassLibrary().contains(fqn)) {
+                    return fqn;
                 }
             }
         }
 
         // try java.lang.*
-        potentialName = "java.lang." + typeName;
-        if (getClassLibrary().contains(potentialName)) {
-            return potentialName;
+        {
+            String fqn = "java.lang." + typeName;
+            if (getClassLibrary().contains(fqn)) {
+                return fqn;
+            }
         }
 
         return null;

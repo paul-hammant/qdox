@@ -21,25 +21,29 @@
 				Implemented QDOX-6.
 				Support for bean properties. 
 			</action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-12.
+                Pluggable DocletTag implementations via DocletTagFactory.
+                This opens up for tag validation, ${property} substitution
+                and other goodies that shouldn't go directly into QDox'
+                core, but rather into pluggable extensions.
+            </action>
 			<action dev="rinkrank" type="add">
 				Type now has a getJavaClass() method making
 				it easier to find the JavaClass of a Type in e.g. Velocity.
 				Example: $method.returns.javaClass
 			</action>
-			<action dev="rinkrank" type="add">
-				Implemented QDOX-12.
-				Pluggable DocletTag implementations via DocletTagFactory.
-				This opens up for tag validation, ${property} substitution
-				and other goodies that shouldn't go directly into QDox'
-				core, but rather into pluggable extensions.
-			</action>
 			<action dev="rinkrank" type="update">
 				DocletTag is an interface.
 			</action>
-			<action dev="rinkrank" type="add">
-				Added a getClasses() method to JavaDocBuilder that will
-				return all JavaClasses.
-			</action>
+            <action dev="rinkrank" type="add">
+                Added a getClasses() method to JavaDocBuilder that will
+                return all JavaClasses.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added a getDerivedClasses() method to JavaClass that will
+                return all derived classes, i.e. subclasses or subinterfaces.
+            </action>
 		</release>
 		
 		<release version="1.2" date="2003-03-23">

@@ -1,11 +1,14 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.JavaDocBuilder;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.ArrayList;
 import java.beans.Introspector;
 
 /**
@@ -15,6 +18,7 @@ import java.beans.Introspector;
 public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
     private static Type OBJECT = new Type("java.lang.Object");
+
     private List methods = new LinkedList();
     private JavaMethod[] methodsArray;
     private List fields = new LinkedList();
@@ -30,8 +34,10 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
     private BeanProperty[] beanProperties;
     private Map beanPropertyMap;
+    private JavaClassCache javaClassCache;
 
     public void setJavaClassCache(JavaClassCache javaClassCache) {
+        this.javaClassCache = javaClassCache;
         // reassign OBJECT. This will make it have a "source" too,
         // causing Type.getJavaClass() to return a JavaClass, instead
         // of null.
@@ -304,6 +310,9 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         return asType().isA(type);
     }
 
+    /**
+     * @since 1.3
+     */
     public boolean isA(JavaClass javaClass) {
         return asType().isA(javaClass.asType());
     }
@@ -405,5 +414,18 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
             throw new IllegalStateException("Shouldn't happen");
         }
         return Introspector.decapitalize(method.getName().substring(start));
+    }
+
+    public JavaClass[] getDerivedClasses() {
+        List result = new ArrayList();
+        JavaDocBuilder builder = (JavaDocBuilder) javaClassCache;
+        JavaClass[] classes = builder.getClasses();
+        for (int i = 0; i < classes.length; i++) {
+            JavaClass clazz = classes[i];
+            if( clazz.isA(this) && !(clazz == this) ) {
+                result.add(clazz);
+            }
+        }
+        return (JavaClass[]) result.toArray(new JavaClass[result.size()]);
     }
 }

@@ -2,6 +2,7 @@ package com.thoughtworks.qdox;
 
 import java.io.*;
 import java.util.List;
+import java.util.Arrays;
 
 import junit.framework.TestCase;
 
@@ -345,6 +346,38 @@ public class JavaDocBuilderTest extends TestCase {
         BeanProperty image = imageIcon.getProperty("image");
         assertNotNull(image.getAccessor());
         assertNotNull(image.getMutator());
+    }
+
+    public void testDerivedClassesAreFound() {
+        /*
+        Collection
+         |  interface extension
+        List
+         |  interface implemention
+        AbstractList
+         |  class extension
+        ArrayList
+        */
+        builder.addSource( new StringReader("public interface Collection {}"));
+        builder.addSource( new StringReader("public interface List extends Collection {}"));
+
+        builder.addSource( new StringReader("public class AbstractList implements List {}"));
+        builder.addSource( new StringReader("public class ArrayList extends AbstractList {}"));
+
+        JavaClass collection = builder.getClassByName("Collection");
+        JavaClass list = builder.getClassByName("List");
+        JavaClass abstractList = builder.getClassByName("AbstractList");
+        JavaClass arrayList = builder.getClassByName("ArrayList");
+
+        List derivedClassesOfCollection = Arrays.asList(collection.getDerivedClasses());
+        List derivedClassesOfList = Arrays.asList(list.getDerivedClasses());
+        List derivedClassesOfAbstractList = Arrays.asList(abstractList.getDerivedClasses());
+        List derivedClassesOfArrayList = Arrays.asList(arrayList.getDerivedClasses());
+
+        assertEquals(3, derivedClassesOfCollection.size());
+        assertEquals(2, derivedClassesOfList.size());
+        assertEquals(1, derivedClassesOfAbstractList.size());
+        assertEquals(0, derivedClassesOfArrayList.size());
     }
 
     public void testSourcePropertyClass() throws FileNotFoundException {

@@ -687,5 +687,18 @@ public class JavaDocBuilderTest extends TestCase {
         expected.add("fish");
         assertEquals(expected,frenchEnglish.getNamedParameterMap().keySet());
     }
+    
+    public void testJiraQdox58() {
+        builder.addSource(new StringReader(
+            "class Y implements SomeInterface { }")
+        );
 
+        List results = builder.search(new Searcher() {
+            public boolean eval(JavaClass javaClass) {
+                return javaClass.isA("SomeInterface");
+            }
+        });
+
+        assertEquals(1, results.size());
+    } 
 }

@@ -11,7 +11,7 @@
 	</target>
 
 	<target name="test" depends="compile">
-		<!--<exec executable="build-mocks.bat"/>-->
+		<exec executable="build-mocks.bat"/>
 		<javac srcdir="src/test" destdir="build" debug="true">
 			<classpath>
 				<fileset dir="bin"/>

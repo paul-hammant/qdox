@@ -5,7 +5,7 @@
 
 	<name>QDox</name>
 	<id>qdox</id>
-	<currentVersion>0.3</currentVersion>
+	<currentVersion>1.0</currentVersion>
 	<inceptionYear>2002</inceptionYear>
 	<package>com.thoughtworks.qdox</package>
 	<logo>/images/qdox.gif</logo>
@@ -23,7 +23,7 @@
 	</description>
 
 	<url>http://qdox.sourceforge.net/</url>
-	<issueTrackingUrl>#</issueTrackingUrl>
+	<issueTrackingUrl>http://wiki.truemesh.com/qdox/</issueTrackingUrl>
 
 	<siteAddress>qdox.sf.net</siteAddress>
 	<siteDirectory>/home/groups/q/qd/qdox/htdocs</siteDirectory>
@@ -37,8 +37,13 @@
 
 	<versions>
 		<version>
-			<id>0.3</id>
-			<name>0.3</name>
+			<id>1.0</id>
+			<name>1.0</name>
+			<tag>1_0</tag>
+		</version>
+		<version>
+			<id>current</id>
+			<name>Current</name>
 			<tag>HEAD</tag>
 		</version>
 	</versions>
@@ -82,6 +87,13 @@
 			</roles>
 		</developer>
 	</developers>
+
+	<contributors>
+		<contributor>
+			<name>Mike Williams</name>
+			<email>mdub@bigfoot.com</email>
+		</contributor>
+	</contributors>
 
 	<dependencies>
 	</dependencies>

@@ -1,7 +1,7 @@
 <project name="qdox" default="jar">
 
 	<property name="name" value="qdox"/>
-	<property name="version" value="0.2"/>
+	<property name="version" value="current"/>
 	<property name="build.compiler" value="jikes"/>
 
 	<taskdef name="mockmaker" classname="mockmaker.AntTask">

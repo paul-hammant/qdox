@@ -1,3 +1,8 @@
+%{
+import net.sf.qdox.parser.*;
+import java.io.IOException;
+%}
+
 %token SEMI DOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
@@ -128,10 +133,11 @@ public boolean parse() {
 private int yylex() {
 	try {
 		final int result = lexer.lex();
-		yylval = new ParserVal(lexer.text());
+		yylval = new Value();
+		yylval.sval = lexer.text();
 		return result;
 	}
-	catch(java.io.IOException e) {
+	catch(IOException e) {
 		return 0;
 	}
 }
@@ -139,3 +145,8 @@ private int yylex() {
 private void yyerror(String msg) {
 	builder.fail();
 }
+
+private class Value {
+	String sval;
+}
+

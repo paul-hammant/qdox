@@ -13,6 +13,10 @@
                 Refactor DocletTag handling so that all context information
                 is provided via the DocletTagFactory.
             </action>
+            <action dev="rinkrank" type="add">
+                Implement QDOX-53:
+                Add support for parsing of JSR-14 generic types.
+            </action>
         </release>
 
         <!-- action types are add/update/fix/remove -->

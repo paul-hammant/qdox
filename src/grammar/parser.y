@@ -64,8 +64,8 @@ javadoctag:
 typearguments: | LESSTHAN referencetypelist GREATERTHAN
 
 referencetypelist:
-    IDENTIFIER |
-    referencetypelist COMMA IDENTIFIER
+    type |
+    referencetypelist COMMA type
 
 // A fullidentifier is "a", "a.b", "a.b.c", "a.b.*", etc...
 fullidentifier: 

@@ -8,10 +8,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.FileSet;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.DocletTagFactory;
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.DefaultDocletTag;
+import com.thoughtworks.qdox.model.*;
 
 // Not really abstract, but a test of the abstract.
 
@@ -48,13 +45,13 @@ public class AbstractQdoxTaskTest extends TestCase {
             // Tag factory that returns tags with "aslak." prefixed to their "original" name.
             // Not useful at all, only to test that we can actually plug in any tag factory.
             return new DocletTagFactory() {
-                public DocletTag createDocletTag(String tag, String text, int lineNumber) {
-                    fail();
-                    return null;
+                public DocletTag createDocletTag(String tag, String text, int lineNumber, JavaSource javaSource) {
+                    return new DefaultDocletTag("aslak." + tag, text);
                 }
 
                 public DocletTag createDocletTag(String tag, String text) {
-                    return new DefaultDocletTag("aslak." + tag, text);
+                    fail();
+                    return null;
                 }
             };
         }

@@ -484,7 +484,7 @@ public class JavaDocBuilderTest extends TestCase {
         assertNull( "Shouldn't be able to get private methods", betterList.getMethodBySignature("myown", null, true) );
     }
 
-    public void testTagLineNumbersAreProperlyCounted() {
+    public void testTagLineNumbersAndSourceInTags() {
         String jallaSource = ""
                 + "package x;\n"
                 + "import java.util.*;\n"
@@ -497,5 +497,6 @@ public class JavaDocBuilderTest extends TestCase {
         JavaClass jalla = builder.getClassByName("x.Jalla");
         DocletTag line4 = jalla.getTagByName("line");
         assertEquals(4, line4.getLineNumber());
+        assertSame(line4.getJavaSource().getClasses()[0], jalla);
     }
 }

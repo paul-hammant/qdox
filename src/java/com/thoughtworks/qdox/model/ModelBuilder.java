@@ -49,7 +49,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void addJavaDocTag(String tag, String text, int lineNumber) {
-        DocletTag docletTag = docletTagFactory.createDocletTag(tag, text, lineNumber);
+        DocletTag docletTag = docletTagFactory.createDocletTag(tag, text, lineNumber, source);
         lastTagSet.add(docletTag);
     }
 

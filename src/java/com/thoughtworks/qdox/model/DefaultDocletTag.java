@@ -11,19 +11,21 @@ public class DefaultDocletTag implements DocletTag {
     private final String name;
     private final String value;
     private final int lineNumber;
+    private final JavaSource javaSource;
 
     private String[] parameters;
     private Map namedParameters;
     private String[] quotes = new String[]{"\"", "'"};
 
-    public DefaultDocletTag(String name, String value, int lineNumber) {
+    public DefaultDocletTag(String name, String value, int lineNumber, JavaSource javaSource) {
         this.name = name;
         this.value = value;
         this.lineNumber = lineNumber;
+        this.javaSource = javaSource;
     }
 
     public DefaultDocletTag(String name, String value) {
-        this(name, value, 0);
+        this(name, value, 0, null);
     }
 
     public String getName() {
@@ -81,6 +83,10 @@ public class DefaultDocletTag implements DocletTag {
 
     public int getLineNumber() {
         return lineNumber;
+    }
+
+    public JavaSource getJavaSource() {
+        return javaSource;
     }
 
     private String trim(String value, String[] strings) {

@@ -10,6 +10,6 @@ public interface DocletTagFactory extends Serializable {
     /**
      * @since 1.3
      */ 
-    DocletTag createDocletTag(String tag, String text, int lineNumber);
+    DocletTag createDocletTag(String tag, String text, int lineNumber, JavaSource javaSource);
     DocletTag createDocletTag(String tag, String text);
 }

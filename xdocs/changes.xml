@@ -72,6 +72,9 @@
             <action dev="rinkrank" type="add">
                 Added getLineNumber() to DocletTag.
             </action>
+            <action dev="rinkrank" type="add">
+                Added getJavaSource() to DocletTag.
+            </action>
         </release>
 
         <release version="1.2" date="2003-03-23">

@@ -25,4 +25,6 @@ public class TypeTest extends TestCase{
     	assertTrue(type.isArray());
     }
 
+	// TODO: test equals(), including comparison to null
+	 
 }

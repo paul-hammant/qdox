@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Type implements Comparable, Serializable {
 
+	public static final Type[] EMPTY_ARRAY = new Type[0];
+
 	private String name;
 	private JavaSource parentSource;
 	private String fullName;

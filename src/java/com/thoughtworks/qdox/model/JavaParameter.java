@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 public class JavaParameter implements Serializable {
 
+	public static final JavaParameter[] 
+		EMPTY_ARRAY = new JavaParameter[0];
+
 	private String name;
 	private Type type;
 	private JavaMethod parentMethod;

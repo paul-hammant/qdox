@@ -6,6 +6,8 @@ import java.util.List;
 
 public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
+	public static final Type OBJECT = new Type("java.lang.Object", 0);
+
 	private List methods = new LinkedList();
 	private JavaMethod[] methodsArray;
 	private List fields = new LinkedList();
@@ -18,11 +20,10 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 	private Type[] implementz = new Type[0];
 	private JavaClassParent parent;
 
-	public static final Type OBJECT = new Type("java.lang.Object", 0);
 	private JavaClassCache javaClassCache;
 
 	public void setJavaClassCache(JavaClassCache javaClassCache) {
-	   this.javaClassCache = javaClassCache;
+		this.javaClassCache = javaClassCache;
 	}
 
 	/**
@@ -165,12 +166,34 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 		return methodsArray;
 	}
 
+	public JavaMethod getMethodBySignature(String name, 
+										   Type[] parameterTypes) 
+	{
+		JavaMethod[] methods = getMethods();
+		for (int i = 0; i < methods.length; i++) {
+			if (methods[i].signatureMatches(name, parameterTypes)) {
+				return methods[i];
+			}
+		}
+		return null;
+	}
+	
 	public JavaField[] getFields() {
 		if (fieldsArray == null) {
 			fieldsArray = new JavaField[fields.size()];
 			fields.toArray(fieldsArray);
 		}
 		return fieldsArray;
+	}
+	
+	public JavaField getFieldByName(String name) {
+		JavaField[] fields = getFields();
+		for (int i = 0; i < fields.length; i++) {
+			if (fields[i].getName().equals(name)) {
+				return fields[i];
+			}
+		}
+		return null;
 	}
 
 	public void addClass(JavaClass cls) {

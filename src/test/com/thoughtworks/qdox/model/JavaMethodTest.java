@@ -1,7 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.ArrayList;
-
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.DataProvider;
@@ -142,6 +140,7 @@ public class JavaMethodTest extends TestCase {
 		assertEquals(m2, mth);
 		assertNotEquals(mth, m3);
 		assertNotEquals(mth, m4);
+		assertFalse(mth.equals(null));
 	}
 
 	public void testEqualsWithParameters() throws Exception {
@@ -223,6 +222,36 @@ public class JavaMethodTest extends TestCase {
 
 		assertEquals(mth.hashCode(), m2.hashCode());
 		assertTrue(mth.hashCode() != m3.hashCode());
+	}
+
+	public void testSignatureMatches() throws Exception {
+		mth.setName("thing");
+		mth.setParameters(new JavaParameter[] {
+			new JavaParameter(new Type("int"), "x"),
+			new JavaParameter(new Type("long", 2), "y")
+		});
+		mth.setReturns(new Type("void"));
+
+		Type[] correctTypes = new Type[] {
+			new Type("int"),
+			new Type("long", 2)
+		};
+
+		Type[] wrongTypes1 = new Type[] {
+			new Type("int", 2),
+			new Type("long")
+		};
+
+		Type[] wrongTypes2 = new Type[] {
+			new Type("int"),
+			new Type("long", 2),
+			new Type("double")
+		};
+		
+		assertTrue(mth.signatureMatches("thing", correctTypes));
+		assertFalse(mth.signatureMatches("xxx", correctTypes));
+		assertFalse(mth.signatureMatches("thing", wrongTypes1));
+		assertFalse(mth.signatureMatches("thing", wrongTypes2));
 	}
 
 	public void testParentClass() throws Exception {

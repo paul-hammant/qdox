@@ -4,8 +4,6 @@ import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.DataProvider;
 
-import java.util.Collections;
-
 public class JavaClassTest extends TestCase {
 
 	private JavaClass cls;
@@ -337,6 +335,44 @@ public class JavaClassTest extends TestCase {
 		assertEquals("x.X", cls.getSuperClass().getValue());
 	}
 
+	public void testCanGetFieldByName() throws Exception {
+		JavaField fredField = new JavaField();
+		fredField.setName("fred");
+		fredField.setType(DataProvider.createType("int", 0));
+		cls.addField(fredField);
+		
+		assertEquals(fredField, cls.getFieldByName("fred"));
+		assertEquals(null, cls.getFieldByName("barney"));
+	}
+
+	public void testCanGetMethodBySignature() {
+		JavaMethod method = new JavaMethod();
+		method.setReturns(DataProvider.createType("void", 0));
+		method.setName("doStuff");
+		JavaParameter[] parameters = {
+			new JavaParameter(new Type("int"), "x"),
+			new JavaParameter(new Type("double"), "y"),
+		};
+		method.setParameters(parameters);
+		cls.addMethod(method);
+
+		Type[] correctTypes = type(new String[] {"int", "double"});
+		assertSame(
+			method, 
+			cls.getMethodBySignature("doStuff", correctTypes)
+		);
+		assertEquals(
+			null, 
+			cls.getMethodBySignature("doStuff", new Type[0])
+		);
+		assertEquals(
+			null, 
+			cls.getMethodBySignature("sitIdlyBy", correctTypes)
+		);
+	}
+	
+	//TODO JavaClass getInnerClassByName(String name);
+	
 	private Type[] type(String[] typeNames) {
 		Type[] result = new Type[typeNames.length];
 		for (int i = 0; i < typeNames.length; i++) {

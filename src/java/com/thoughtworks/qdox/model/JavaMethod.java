@@ -3,8 +3,8 @@ package com.thoughtworks.qdox.model;
 public class JavaMethod extends AbstractJavaEntity {
 
 	protected Type returns;
-	private JavaParameter[] parameters;
-	private Type[] exceptions;
+	private JavaParameter[] parameters = JavaParameter.EMPTY_ARRAY;
+	private Type[] exceptions = Type.EMPTY_ARRAY;
 	private boolean constructor;
 
 	private JavaClass parentClass;
@@ -13,12 +13,11 @@ public class JavaMethod extends AbstractJavaEntity {
 		return returns;
 	}
 
-	/**
-	 * Return list of JavaParameters
-	 */
 	public JavaParameter[] getParameters() {
-		return parameters == null ? new JavaParameter[0] : parameters;
+		return parameters;
 	}
+
+    // TODO - JavaParameter getParameterByName(String name);
 
 	public Type[] getExceptions() {
 		return exceptions;
@@ -42,7 +41,7 @@ public class JavaMethod extends AbstractJavaEntity {
 
 		result.write(name);
 		result.write('(');
-		for (int i = 0; parameters != null && i < parameters.length; i++) {
+		for (int i = 0; i < parameters.length; i++) {
 			JavaParameter parameter = parameters[i];
 			if (i > 0) result.write(", ");
 			result.write(parameter.getType().getValue());
@@ -53,7 +52,7 @@ public class JavaMethod extends AbstractJavaEntity {
 			result.write(parameter.getName());
 		}
 		result.write(')');
-		if(exceptions != null && exceptions.length > 0) {
+		if (exceptions.length > 0) {
 			result.write(" throws ");
 			for (int i = 0; i < exceptions.length; i++) {
 				if (i > 0) result.write(", ");
@@ -84,6 +83,7 @@ public class JavaMethod extends AbstractJavaEntity {
 	}
 
 	public boolean equals(Object obj) {
+		if (obj == null) return false;
 		JavaMethod m = (JavaMethod)obj;
 		if (!m.getName().equals(getName())) return false;
 		if (!m.getReturns().equals(getReturns())) return false;
@@ -95,6 +95,17 @@ public class JavaMethod extends AbstractJavaEntity {
 			if (!otherParams[i].equals(myParams[i])) return false;
 		}
 
+		return true;
+	}
+
+	public boolean signatureMatches(String name, Type[] parameterTypes) {
+		if (! name.equals(this.name)) return false;
+		if (parameterTypes.length != this.parameters.length) return false;
+		for (int i = 0; i < parameters.length; i++) {
+			if (! parameters[i].getType().equals(parameterTypes[i])) {
+				return false;
+			}
+		}
 		return true;
 	}
 

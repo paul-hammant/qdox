@@ -94,6 +94,9 @@ public class JavaDocBuilder implements Serializable {
 		}
 	}
 
+	/**
+	 * Note that after loading JavaDocBuilder classloaders need to be re-added.
+	 */
 	public static JavaDocBuilder load(File file) throws IOException {
 		FileInputStream fis = new FileInputStream(file);
 		ObjectInputStream in = new ObjectInputStream(fis);

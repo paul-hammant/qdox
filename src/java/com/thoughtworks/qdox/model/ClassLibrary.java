@@ -21,6 +21,9 @@ public class ClassLibrary implements Serializable {
 		}
 		for (Iterator iterator = classLoaders.iterator(); iterator.hasNext();) {
 			ClassLoader classLoader = (ClassLoader)iterator.next();
+			if (classLoader == null) {
+				continue;
+			}
 			try {
 				if (classLoader.loadClass(fullClassName) != null) {
 					return true;

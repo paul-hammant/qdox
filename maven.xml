@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project xmlns:deploy="deploy" xmlns:m="maven" xmlns:j="jelly:core">
+<project xmlns:deploy="deploy" xmlns:m="maven" xmlns:j="jelly:core" xmlns:maven="jelly:org.apache.maven.jelly.tags.project.MavenTagLibrary">
 
 	<goal name="release" description="Make new release">
 		<m:user-check user="${maven.username}"/>
@@ -13,6 +13,27 @@
 
 		<attainGoal name="dist:deploy"/>
 	</goal>
+
+	<preGoal name="java:prepare-filesystem">
+		<path id="lib">
+			<fileset dir="lib"/>
+		</path>
+		<maven:addPath id="maven.dependency.classpath" refid="lib"/>
+	</preGoal>
+
+	<preGoal name="java:compile">
+		<ant target="generate"/>
+		<path id="generate.java" location="build/java"/>
+		<maven:addPath id="maven.compile.src.set" refid="generate.java"/>
+	</preGoal>
+
+	<preGoal name="test:compile">
+		<mkdir dir="target/test-src"/>
+		<copy todir="target/test-src">
+			<fileset dir="src/test"/>
+			<fileset dir="build/test"/>
+		</copy>
+	</preGoal>
 
 	<goal name="coverage">
 		<property name="maven.junit.fork" value="yes"/>

@@ -206,6 +206,19 @@ public class JavaDocBuilderTest extends TestCase {
 
     }
 
+    public void testOldfashionedExtraClassesAreSupported() throws Exception {
+        String in = ""
+                + "package oldfashioned;"
+                + "public class Foo {"
+                + "}"
+                + "class Bar {"
+                + "}";
+        builder.addSource(new StringReader(in));
+        assertEquals(2, builder.getClasses().length);
+        assertNotNull(builder.getClassByName("oldfashioned.Foo"));
+        assertNotNull(builder.getClassByName("oldfashioned.Bar"));
+    }
+
     public void testBinaryClassesAreFound() throws Exception {
 
         String in = ""
@@ -305,6 +318,20 @@ public class JavaDocBuilderTest extends TestCase {
         assertTrue(sausage.isA("food.Proteine"));
     }
 
+    public void testClassesCanBeAddedLater() throws Exception {
+        testClassCanBeTestedForNonexistantClasses();
+        assertEquals(1, builder.getClasses().length);
+        JavaClass sausage = builder.getClassByName("food.Sausage");
+
+        assertFalse(sausage.isA("global.Stuff"));
+        String in = ""
+                + "package food;"
+                + "class Meat extends global.Stuff {"
+                + "}";
+        builder.addSource(new StringReader(in));
+        assertEquals(2, builder.getClasses().length);
+        assertTrue(sausage.isA("global.Stuff"));
+    }
 
     public void testImageIconBeanProperties() {
         JavaClass imageIcon = builder.getClassByName("javax.swing.ImageIcon");

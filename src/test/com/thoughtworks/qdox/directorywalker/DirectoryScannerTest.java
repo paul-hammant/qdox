@@ -5,8 +5,9 @@ import junit.framework.TestCase;
 import java.io.File;
 
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
-public class DirectoryScannerTest extends TestCase {
+public class DirectoryScannerTest extends MockObjectTestCase {
 
     class MockFile extends File {
         boolean _isDirectory;
@@ -125,9 +126,9 @@ public class DirectoryScannerTest extends TestCase {
         rootDir.children = new File[]{new MockFile("blah.txt"), new MockFile("foo.txt"), new MockFile("pig.java")};
         DirectoryScanner scanner = new DirectoryScanner(rootDir);
         Mock mockFileVisitor = new Mock(FileVisitor.class);
-        mockFileVisitor.expect("visitFile", rootDir.children[0]);
-        mockFileVisitor.expect("visitFile", rootDir.children[1]);
-        mockFileVisitor.expect("visitFile", rootDir.children[2]);
+        mockFileVisitor.expects(once()).method("visitFile").with(same(rootDir.children[0]));
+        mockFileVisitor.expects(once()).method("visitFile").with(same(rootDir.children[1]));
+        mockFileVisitor.expects(once()).method("visitFile").with(same(rootDir.children[2]));
 
         scanner.scan((FileVisitor) mockFileVisitor.proxy());
 

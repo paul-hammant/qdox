@@ -188,7 +188,7 @@
     </dependency>
     <dependency>
       <id>jmock</id>
-      <version>usedbypico</version>
+      <version>1.0.0</version>
     </dependency>
   </dependencies>
 

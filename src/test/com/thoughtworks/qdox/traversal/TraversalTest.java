@@ -5,9 +5,9 @@ import junit.framework.TestCase;
 import java.io.File;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.JavaDocBuilder;
-import com.thoughtworks.qdox.ant.ConsoleLoggingQdoxTask;
-import com.thoughtworks.qdox.ant.AbstractQdoxTask;
 
 public class TraversalTest extends TestCase {
 
@@ -28,11 +28,11 @@ public class TraversalTest extends TestCase {
     }
 
     public void testParentClassTraversal() throws Exception {
-        JavaClass javaClass = builder.getClassByName(ConsoleLoggingQdoxTask.class.getName());
+        JavaClass javaClass = builder.getClassByName(JavaMethod.class.getName());
         JavaClass parentClass = javaClass.getSuperJavaClass();
         assertNotNull("Parent class not found", parentClass);
         assertEquals("Parent class traversal has returned the wrong parent",
-                AbstractQdoxTask.class.getName(),
+                AbstractJavaEntity.class.getName(),
                 parentClass.getFullyQualifiedName());
 
     }

@@ -49,7 +49,7 @@
                 Fixed QDOX-43:
                 Allow "$" in identifiers.
             </action>
-            <action dev="mdub" type="fix">
+            <action dev="mdub" type="add">
                 Implemented QDOX-44:
                 Added DocletTag.getNamedParameterMap().
             </action>

@@ -65,29 +65,6 @@ public abstract class AbstractDocletTagTest extends TestCase {
         assertNull(map.get("goat"));
     }
     
-    public void FIXME_OR_DEPRECATE_testInvalidNamedParameter() throws Exception {
-        DocletTag tag = createDocletTag("x", "= =z x=c y= o");
-        assertEquals("c", tag.getNamedParameter("x"));
-        assertEquals("", tag.getNamedParameter("y"));
-        assertNull(tag.getNamedParameter("z"));
-        assertNull(tag.getNamedParameter("="));
-        assertNull(tag.getNamedParameter(""));
-    }
-
-    public void FIXME_OR_DEPRECATE_testIntermingledIndexedAndNamedParameter() throws Exception {
-        DocletTag tag = createDocletTag("x", "thing hello=world duck");
-
-        assertEquals("thing", tag.getParameters()[0]);
-        assertEquals("hello=world", tag.getParameters()[1]);
-        assertEquals("duck", tag.getParameters()[2]);
-
-        assertEquals("world", tag.getNamedParameter("hello"));
-
-        assertEquals(3, tag.getParameters().length);
-        assertNull(tag.getNamedParameter("goat"));
-        assertNull(tag.getNamedParameter("duck"));
-    }
-
     public void testQuotedParameters() throws Exception {
         DocletTag tag = createDocletTag("x", "one=\"hello world bye bye\" two=hello");
         assertEquals("hello world bye bye", tag.getNamedParameter("one"));

@@ -51,7 +51,9 @@ public class ConsoleLoggingQdoxTaskTestCase extends TestCase
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return new File("../src/java");
+            File result = new File("../src/java");
+            if (result.exists()) return result;
+            return new File("src/java");
         }
 
         public DirectoryScanner getDirectoryScanner(Project project) {

@@ -18,7 +18,7 @@
 -->
 	</organization>
 
-	<shortDescription>QDox - Quick JavaDoc scanner</shortDescription>
+	<shortDescription>QDox - Quick JavaDoc Scanner</shortDescription>
 	<description>
 		QDox is a high speed, small footprint parser for extracting class/interface/method 
 		definitions from source files complete with JavaDoc @tags. It is designed to be used 
@@ -32,8 +32,8 @@
 
 	<siteAddress>qdox.sf.net</siteAddress>
 	<siteDirectory>/home/groups/q/qd/qdox/htdocs</siteDirectory>
-	<distributionDirectory></distributionDirectory>
-
+	<distributionDirectory>/home/groups/q/qd/qdox/htdocs/downloads</distributionDirectory>
+	<distributionSite>qdox.sf.net</distributionSite>
 
 	<repository>
 		<connection>scm:cvs::pserver:anonymous@cvs.sourceforge.net:/cvsroot/qdox:qdox</connection>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<document>
+
+	<properties>
+		<title>Download</title>
+		<author email="joe@truemesh.com">Joe Walnes</author>
+	</properties>
+
+	<body>
+		<section name="Downloads">
+			<p>
+				The full distribution of QDox in binary or source form is available
+				<a href="http://qdox.sourceforge.net/downloads/qdox/distributions/">here</a>.
+			</p>
+			<p>
+				Or if you know you're way around, you can download just the Jar file
+				<a href="http://qdox.sourceforge.net/downloads/qdox/jars/">here</a>.
+			</p>
+		</section>
+	</body>
+
+</document>

@@ -6,10 +6,12 @@
 		<links>
 			<item name="QDox" href="http://qdox.sourceforge.net/"/>
 			<item name="SourceForge" href="http://sourceforge.net/projects/qdox/"/>
+			<item name="Download" href="/download.html"/>
 		</links>
 		<menu name="QDox">
 			<item name="Overview"            href="/index.html"/>
 			<item name="SourceForge Project" href="http://sourceforge.net/projects/qdox/"/>
+			<item name="Download" href="/download.html"/>
 		</menu>
 	</body>
 

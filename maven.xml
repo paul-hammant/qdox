@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<project xmlns:deploy="deploy" xmlns:m="maven">
+
+	<goal name="release" description="Make new release">
+		<m:user-check user="${maven.username}"/>
+		<attainGoal name="clean"/>
+		<attainGoal name="test"/>
+		<attainGoal name="java:jar"/>
+
+		<deploy:artifact
+			artifact="target/${maven.final.name}.jar"
+			type="jars"
+			assureDirectoryCommand="mkdir -p"
+		/>
+
+		<attainGoal name="site:deploy"/>
+		<attainGoal name="dist:deploy"/>
+	</goal>
+
+</project>
+

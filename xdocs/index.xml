@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<document>
+
+	<properties>
+		<title>QDox</title>
+		<author email="joe@truemesh.com">Joe Walnes</author>
+	</properties>
+
+	<body>
+		<section name="QDox">
+			<p>Document me!</p>
+		</section>
+	</body>
+	
+</document>

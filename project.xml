@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<project>
+
+	<pomVersion>3</pomVersion>
+
+	<name>QDox</name>
+	<id>qdox</id>
+	<currentVersion>0.1</currentVersion>
+	<inceptionYear>2002</inceptionYear>
+	<package>net.sf.qdox</package>
+
+<!-- TODO
+	<logo></logo>
+-->
+
+	<organization>
+		<name>TrueMesh Toys</name>
+		<url>http://joe.truemesh.com/</url>
+<!-- TODO
+		<logo></logo>
+-->
+	</organization>
+
+	<shortDescription>QDox - Quick JavaDoc scanner</shortDescription>
+	<description>
+		QDox is a high speed, small footprint parser for extracting class/interface/method 
+		definitions from source files complete with JavaDoc @tags. It is designed to be used 
+		by active code generators or documentation tools.
+	</description>
+
+	<url>http://qdox.sourceforge.net/</url>
+<!-- TODO
+	<issueTrackingUrl>http://sf.net/projects/qdox/</issueTrackingUrl>
+-->
+
+<!-- TODO
+	<siteAddress></siteAddress>
+	<siteDirectory></siteDirectory>
+	<distributionDirectory></distributionDirectory>
+-->
+
+	<repository>
+		<connection>scm:cvs:pserver:anon@cvs.sf.net:/cvsroot/qdox:qdox</connection>
+		<url>http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/qdox</url>
+	</repository>
+
+	<versions>
+		<version>
+			<id>0.1</id>
+			<name>0.1</name>
+			<tag>HEAD</tag>
+		</version>
+	</versions>
+
+	<mailingLists>
+		<mailingList>
+			<name>QDox User List</name>
+			<subscribe>qdox-user-request@lists.sourceforge.net</subscribe>
+			<unsubscribe>qdox-user-request@lists.sourceforge.net</unsubscribe>
+			<archive>http://www.geocrawler.com/lists/3/SourceForge/23415/0/</archive>
+		</mailingList>
+	</mailingLists>
+
+	<developers>
+
+		<developer>
+			<name>Joe Walnes</name>
+			<id>joeretro</id>
+			<email>joe@truemesh.com</email>
+			<organization>ThoughtWorks</organization>
+			<roles>
+				<role>Slacker</role>
+			</roles>
+		</developer>
+
+	</developers>
+
+	<dependencies>
+		<dependency>
+			<id>antlr</id>
+			<version>2.7.1</version>
+			<url>http://www.antlr.org</url>
+		</dependency>
+		<dependency>
+			<id>junit</id>
+			<version>3.7</version>
+			<url>http://www.junit.org</url>
+		</dependency>
+		<dependency>
+			<id>commons-collections</id>
+			<version>2.0</version>
+			<url>http://jakarta.apache.org/commons/collections.html</url>
+		</dependency>
+		<dependency>
+			<id>commons-jxpath</id>
+			<version>0.1-dev</version>
+			<url>http://jakarta.apache.org/commons/jxpath/index.html</url>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<nagEmailAddress>qdox-user@lists.sourceforge.net</nagEmailAddress>
+
+		<sourceDirectory>src/java</sourceDirectory>
+		<unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+		<integrationUnitTestSourceDirectory/>
+
+		<unitTest>
+			<includes>
+				<include>**/*Test.java</include>
+			</includes>
+		</unitTest>
+
+		<jars/>
+		
+	</build>
+</project>

@@ -4,8 +4,7 @@ import junit.framework.TestCase;
 
 import java.io.File;
 
-import com.mockobjects.dynamic.Mock;
-import com.mockobjects.dynamic.CallSequence;
+import org.jmock.Mock;
 
 public class DirectoryScannerTest extends TestCase {
 
@@ -126,11 +125,9 @@ public class DirectoryScannerTest extends TestCase {
         rootDir.children = new File[]{new MockFile("blah.txt"), new MockFile("foo.txt"), new MockFile("pig.java")};
         DirectoryScanner scanner = new DirectoryScanner(rootDir);
         Mock mockFileVisitor = new Mock(FileVisitor.class);
-        CallSequence sequence = new CallSequence();
-        sequence.expectVoid(rootDir.children[0]);
-        sequence.expectVoid(rootDir.children[1]);
-        sequence.expectVoid(rootDir.children[2]);
-        mockFileVisitor.expect("visitFile", sequence);
+        mockFileVisitor.expect("visitFile", rootDir.children[0]);
+        mockFileVisitor.expect("visitFile", rootDir.children[1]);
+        mockFileVisitor.expect("visitFile", rootDir.children[2]);
 
         scanner.scan((FileVisitor) mockFileVisitor.proxy());
 

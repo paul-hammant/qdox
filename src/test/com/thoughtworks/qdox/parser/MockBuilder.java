@@ -1,9 +1,10 @@
 package com.thoughtworks.qdox.parser;
 
-import com.mockobjects.*;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
+import org.jmock.expectation.ExpectationCounter;
+import org.jmock.expectation.ExpectationList;
 
 class MockBuilder implements Builder {
     private ExpectationCounter myAddPackageCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder AddPackageCalls");

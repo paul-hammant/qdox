@@ -1,6 +1,6 @@
 package com.thoughtworks.qdox.parser;
 
-import com.mockobjects.ReturnObjectList;
+import org.jmock.expectation.ReturnObjectList;
 
 class MockLexer implements Lexer {
 

@@ -157,8 +157,8 @@
       <version>3.8.1</version>
     </dependency>
     <dependency>
-      <id>mockobjects:mockobjects-core</id>
-      <version>0.08dev-20030318</version>
+      <id>jmock</id>
+      <version>SNAPSHOT</version>
     </dependency>
   </dependencies>
 

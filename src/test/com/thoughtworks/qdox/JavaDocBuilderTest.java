@@ -379,7 +379,7 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(0, derivedClassesOfArrayList.size());
     }
 
-    public void testSourcePropertyClass() throws FileNotFoundException ,UnsupportedEncodingException {
+    public void testSourcePropertyClass() throws FileNotFoundException, UnsupportedEncodingException {
         builder.addSource(new File("src/test/com/thoughtworks/qdox/testdata/PropertyClass.java"));
         // Handy way to assert that behaviour for source and binary classes is the same.
         testPropertyClass();
@@ -587,19 +587,30 @@ public class JavaDocBuilderTest extends TestCase {
     }
 
     public void testJiraQdox27() {
-        String sourceCode = "" 
-            + "package com.acme.thing;\n"
-            + "\n"
-            + "/**"
-            + " * This class does something."
-            + " **/"
-            + "public class AClassName {\n"
-            + "}";
+        String sourceCode = ""
+                + "package com.acme.thing;\n"
+                + "\n"
+                + "/**"
+                + " * This class does something."
+                + " **/"
+                + "public class AClassName {\n"
+                + "}";
         JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
         JavaClass aClass =
-            builder.getClassByName("com.acme.thing.AClassName");
+                builder.getClassByName("com.acme.thing.AClassName");
         assertNotNull(aClass);
+    }
+
+    public void TODOtestJiraQdox39() {
+        String sourceCode = ""
+                + "public class A {\n"
+                + " int i,j=2,k;"
+                + "}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.addSource(new StringReader(sourceCode));
+        JavaClass a = builder.getClassByName("A");
+        assertEquals(3, a.getFields().length);
     }
 
 }

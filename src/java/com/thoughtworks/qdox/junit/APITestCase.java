@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.junit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,7 +55,7 @@ public abstract class APITestCase extends TestCase {
     * @param actual    the actual source
     */
    public static void assertEquals(File expected, File actual)
-      throws FileNotFoundException {
+      throws FileNotFoundException ,UnsupportedEncodingException {
       assertApiEquals(expected, actual);
    }
 
@@ -78,7 +79,7 @@ public abstract class APITestCase extends TestCase {
     * @param actual    the actual source
     */
    public static void assertApiEquals(File expected, File actual)
-      throws FileNotFoundException {
+      throws FileNotFoundException ,UnsupportedEncodingException {
       assertNotDir(expected, actual);
 
       JavaDocBuilder builder = new JavaDocBuilder();

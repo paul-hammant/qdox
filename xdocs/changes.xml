@@ -48,6 +48,10 @@
                 Fixed QDOX-16, QDOX-19.
                 More robust handling of "*" and "@" in Javadoc body.
             </action>
+            <action dev="rinkrank" type="update">
+                Applied QDOX-24.
+                Encoding support for internationalization.
+            </action>
             <action dev="rinkrank" type="add">
                 Type now has a getJavaClass() method making
                 it easier to find the JavaClass of a Type from e.g. Velocity.

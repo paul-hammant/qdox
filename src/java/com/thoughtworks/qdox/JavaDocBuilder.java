@@ -23,10 +23,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -77,6 +79,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     private ClassLibrary classLibrary;
     private List sources = new ArrayList();
     private DocletTagFactory docletTagFactory;
+    private String encoding = System.getProperty("file.encoding");
 
     public JavaDocBuilder() {
         this(new DefaultDocletTagFactory());
@@ -278,9 +281,10 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         return source;
     }
 
-    public void addSource(File file) throws FileNotFoundException {
-        JavaSource source = addSource(new FileReader(file));
+    public void addSource(File file) throws UnsupportedEncodingException, FileNotFoundException {
+        JavaSource source = addSource(new InputStreamReader(new FileInputStream(file),encoding));
         source.setFile(file);
+        source.setEncoding(encoding);
     }
 
     public JavaSource[] getSources() {
@@ -334,6 +338,8 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
                     addSource(currentFile);
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException("Cannot read file : " + currentFile.getName());
+                } catch (UnsupportedEncodingException e) {
+					throw new RuntimeException("Unsupported encoding : " + encoding);
                 }
             }
         });
@@ -382,6 +388,10 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
             fis.close();
         }
         return builder;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;		
     }
 
 }

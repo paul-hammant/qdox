@@ -26,6 +26,7 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
 
     private File file;
+    private String encoding = null;
     private String packge;
     private List imports = new LinkedList();
     private String[] importsArray;
@@ -178,6 +179,10 @@ public class JavaSource implements Serializable, JavaClassParent {
 
     public JavaSource getParentSource() {
         return this;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
     }
 
 }

@@ -379,7 +379,7 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(0, derivedClassesOfArrayList.size());
     }
 
-    public void testSourcePropertyClass() throws FileNotFoundException {
+    public void testSourcePropertyClass() throws FileNotFoundException ,UnsupportedEncodingException {
         builder.addSource(new File("src/test/com/thoughtworks/qdox/testdata/PropertyClass.java"));
         // Handy way to assert that behaviour for source and binary classes is the same.
         testPropertyClass();

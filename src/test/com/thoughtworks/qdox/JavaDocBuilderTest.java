@@ -172,13 +172,13 @@ public class JavaDocBuilderTest extends TestCase {
     public void testAddMoreClassLoaders() throws Exception {
 
         builder.getClassLibrary().addClassLoader(new ClassLoader() {
-            public Class loadClass(String name) throws ClassNotFoundException {
+            public Class loadClass(String name) {
                 return name.equals("com.thoughtworks.Spoon") ? this.getClass() : null;
             }
         });
 
         builder.getClassLibrary().addClassLoader(new ClassLoader() {
-            public Class loadClass(String name) throws ClassNotFoundException {
+            public Class loadClass(String name) {
                 return name.equals("com.thoughtworks.Fork") ? this.getClass() : null;
             }
         });
@@ -385,7 +385,7 @@ public class JavaDocBuilderTest extends TestCase {
         testPropertyClass();
     }
 
-    public void testPropertyClass() throws FileNotFoundException {
+    public void testPropertyClass() {
         JavaClass propertyClass = builder.getClassByName("com.thoughtworks.qdox.testdata.PropertyClass");
         assertEquals(1, propertyClass.getBeanProperties().length);
 

@@ -1,12 +1,11 @@
 package com.thoughtworks.qdox.model;
 
-import junit.framework.TestCase;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
-import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
-
 import java.util.Arrays;
+import junit.framework.TestCase;
 
 public class ModelBuilderTest extends TestCase {
 

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class TagParser {
     
@@ -34,7 +34,7 @@ public class TagParser {
      * Extract a Map of named parameters  
      */
     public static Map parseNamedParameters(String tagValue) {
-        Map paramMap = new HashMap();
+        Map paramMap = new TreeMap();
         StreamTokenizer tokenizer = makeTokenizer(tagValue);
         try {
             while (tokenizer.nextToken() == StreamTokenizer.TT_WORD) {

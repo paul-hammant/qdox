@@ -8,6 +8,7 @@ public class FilterTest extends TestCase {
     }
 
     public void testFilterByTestCaseJavadoc() {
+// TODO - umm, this appears to be commented out!
 //        // create a directory scanner
 //        DirectoryScanner scanner = new DirectoryScanner();
 //

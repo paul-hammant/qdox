@@ -7,7 +7,20 @@
 
     <body>
   
-        <release version="1.5" date="in CVS">
+        <release version="1.6" date="in CVS">
+            <action dev="pkaminsk" type="add">
+                Implemented QDOX-52:
+                Provide line numbers for all java entities.
+            </action>
+            <action dev="mdub" type="update">
+                Implemented QDOX-59: 
+                Ensure that things (e.g. named tag-parameters,
+                bean-properties) are consistently returned in declared
+                order.
+            </action>
+        </release>
+
+        <release version="1.5" date="2004-06-20">
             <action dev="mdub" type="fix">
                 Implement QDOX-47:
                 Refactor DocletTag handling so that all context information
@@ -21,6 +34,14 @@
                 Fix QDOX-45, QDOX-50: 
                 Improve parsing of tag parameters, particularly where
                 whitespace is involved.
+            </action>
+            <action dev="rinkrank" type="fix">
+                Fix QDOX-49:
+                Fixed generation of Eclipse ".classpath".
+            </action>
+            <action dev="rinkrank" type="fix">
+                Fix QDOX-57: 
+                Problems compiling against jmock-1.0.0.
             </action>
         </release>
 

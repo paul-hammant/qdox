@@ -1676,8 +1676,7 @@ public class ParserTest extends TestCase {
         builder.verify();
     }
 
-    // FIXMENOW
-    public void DISABLED_testFieldWithMultipleDefinitionsOnOneLine() throws Exception {
+    public void testFieldWithMultipleDefinitionsOnOneLine() throws Exception {
 
         // setup values
         setupLex(Parser.CLASS);
@@ -1699,8 +1698,8 @@ public class ParserTest extends TestCase {
         fld1.type = "String";
         builder.addExpectedAddFieldValues(fld1);
         FieldDef fld2 = new FieldDef();
-        fld1.name = "another";
-        fld1.type = "String";
+        fld2.name = "another";
+        fld2.type = "String";
         builder.addExpectedAddFieldValues(fld2);
 
         // execute

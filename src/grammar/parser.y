@@ -9,11 +9,13 @@ import java.io.IOException;
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
 %token JAVADOCSTART JAVADOCEND
-%token CODEBLOCK STRING SEMI
+%token CODEBLOCK STRING
 
 // stringly typed tokens/types
 %token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN
-%type <sval> fullidentifier modifier arrayidentifier arrayfullidentifier paramarrayidentifier paramarrayfullidentifier
+%type <sval> fullidentifier modifier
+%type <ival> dimensions
+%type <type> type arrayidentifier
 
 %%
 
@@ -62,13 +64,24 @@ javadoctag:
 // A fullidentifier is "a", "a.b", "a.b.c", "a.b.*", etc...
 fullidentifier: 
     IDENTIFIER { $$ = $1; } |
-     fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; } |
-     fullidentifier DOT STAR { $$ = $1 + ".*"; };
+    fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; } |
+    fullidentifier DOT STAR { $$ = $1 + ".*"; };
 
-// like IDENTIFIER and fullidentifer except they can contain arrays[]
-arrayidentifier: IDENTIFIER arrayparts { $$ = $1; };
-arrayfullidentifier: fullidentifier arrayparts { $$ = $1; };
-arrayparts: | arrayparts SQUAREOPEN SQUARECLOSE { dimensions++; };
+arrayidentifier: 
+    IDENTIFIER dimensions {
+        $$ = new TypeDef($1,$2); 
+    };
+
+type: 
+    fullidentifier dimensions { 
+        $$ = new TypeDef($1,$2); 
+    };
+
+dimensions: 
+    /* empty */ { $$ = 0; }
+|   dimensions SQUAREOPEN SQUARECLOSE {
+        $$ = $1 + 1; 
+    };
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
 modifier:
@@ -122,7 +135,7 @@ members: | members member;
 
 member:
     javadoc | 
-    field | 
+    fields | 
     method |
     constructor |
     modifiers CODEBLOCK | // static block
@@ -134,32 +147,38 @@ memberend: SEMI | CODEBLOCK;
 
 // ----- FIELD
 
-field:
-    modifiers arrayfullidentifier arrayidentifier extraidentifiers memberend {
-        fld.modifiers.addAll(modifiers); 
-        modifiers.clear(); 
-        fld.type = $2; fld.name = $3; fld.dimensions = getDimensions(); 
-        builder.addField(fld); 
-        fld = new FieldDef(); 
+fields:
+    modifiers type arrayidentifier {
+        fieldType = $2;
+        makeField($3);
+    }
+    extrafields memberend {
+        modifiers.clear();
     };
-
-extraidentifiers: | extraidentifiers COMMA fullidentifier;
+  
+extrafields: | 
+    extrafields COMMA arrayidentifier {
+        makeField($3);
+    };
 
 
 // ----- METHOD
 
 method:
-    modifiers arrayfullidentifier arrayidentifier methoddef memberend {
+    modifiers type IDENTIFIER methoddef memberend {
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
-        mth.returns = $2; mth.name = $3; mth.dimensions = getDimensions(); 
-        builder.addMethod(mth); mth = new MethodDef(); 
+        mth.returns = $2.name; mth.dimensions = $2.dimensions; 
+        mth.name = $3; 
+        builder.addMethod(mth);
+        mth = new MethodDef(); 
     };
 
 constructor:
-    modifiers arrayidentifier methoddef memberend { 
-            mth.modifiers.addAll(modifiers); modifiers.clear(); 
-            mth.constructor = true; mth.name = $2; 
-            builder.addMethod(mth); mth = new MethodDef(); 
+    modifiers IDENTIFIER methoddef memberend { 
+        mth.modifiers.addAll(modifiers); modifiers.clear(); 
+        mth.constructor = true; mth.name = $2; 
+        builder.addMethod(mth);
+        mth = new MethodDef(); 
     };
 
 methoddef: PARENOPEN params PARENCLOSE exceptions;
@@ -175,17 +194,15 @@ params: | param paramlist;
 paramlist: | paramlist COMMA param;
 
 param: 
-    parammodifiers paramarrayfullidentifier paramarrayidentifier { 
-        fld.name = $3; fld.type = $2; fld.dimensions = getParamDimensions(); 
-        mth.params.add(fld); fld = new FieldDef(); 
+    parammodifiers type arrayidentifier { 
+        param.name = $3.name; 
+        param.type = $2.name; 
+        param.dimensions = $2.dimensions + $3.dimensions; 
+        mth.params.add(param); param = new FieldDef(); 
     };
 
 parammodifiers: | 
-    parammodifiers modifier { fld.modifiers.add($2); };
-
-paramarrayidentifier: IDENTIFIER paramarrayparts { $$ = $1; };
-paramarrayfullidentifier: fullidentifier paramarrayparts { $$ = $1; };
-paramarrayparts: | paramarrayparts SQUAREOPEN SQUARECLOSE { paramDimensions++; };
+    parammodifiers modifier { param.modifiers.add($2); };
 
 
 %%
@@ -195,9 +212,9 @@ private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
-private FieldDef fld = new FieldDef();
+private FieldDef param = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
-private int dimensions, paramDimensions;
+private TypeDef fieldType;
 
 private String buffer() {
     if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);
@@ -236,16 +253,16 @@ private void yyerror(String msg) {
 
 private class Value {
     String sval;
+    int ival;
+    TypeDef type;
 }
 
-private int getDimensions() {
-    int r = dimensions;
-    dimensions = 0;
-    return r;
+private void makeField(TypeDef field) {
+    FieldDef fd = new FieldDef();
+    fd.modifiers.addAll(modifiers); 
+    fd.type = fieldType.name; 
+    fd.dimensions = fieldType.dimensions + field.dimensions;
+    fd.name = field.name;
+    builder.addField(fd);
 }
-
-private int getParamDimensions() {
-    int r = paramDimensions;
-    paramDimensions = 0;
-    return r;
-}
+            

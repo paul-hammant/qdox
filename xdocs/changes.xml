@@ -33,6 +33,10 @@
                 Fixed QDOX-29, QDOX-37:
                 Handle inner-classes in type-resolution.
             </action>
+            <action dev="mdub" type="add">
+                Fixed QDOX-39:
+                Support multiple fields in a single field-declaration.
+            </action>
         </release>
 
         <release version="1.3" date="2003-11-03">

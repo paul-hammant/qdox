@@ -602,15 +602,21 @@ public class JavaDocBuilderTest extends TestCase {
         assertNotNull(aClass);
     }
 
-    public void TODOtestJiraQdox39() {
+    public void testJiraQdox39() {
         String sourceCode = ""
                 + "public class A {\n"
-                + " int i,j=2,k;"
+                + " int i,j=2,k[];"
                 + "}";
         JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
         JavaClass a = builder.getClassByName("A");
         assertEquals(3, a.getFields().length);
-    }
+        assertEquals("i", a.getFields()[0].getName());
+        assertEquals("int", a.getFields()[0].getType().toString());
+        assertEquals("j", a.getFields()[1].getName());
+        assertEquals("int", a.getFields()[1].getType().toString());
+        assertEquals("k", a.getFields()[2].getName());
+        assertEquals("int[]", a.getFields()[2].getType().toString());
+       }
 
 }

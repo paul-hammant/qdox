@@ -91,7 +91,7 @@ public class LexerTest extends TestCase {
     public void testMultipleFields() throws Exception {
         String in = ""
         + "class X { "
-        + " int x = 1, y = 2; "
+        + " int x, y = 2; "
         + "} ";
 
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -102,7 +102,6 @@ public class LexerTest extends TestCase {
         assertLex(Parser.IDENTIFIER, "int", lexer);
         assertLex(Parser.IDENTIFIER, "x", lexer);
         assertLex(Parser.COMMA, lexer);
-
         assertLex(Parser.IDENTIFIER, "y", lexer);
         assertLex(Parser.SEMI, lexer);
         

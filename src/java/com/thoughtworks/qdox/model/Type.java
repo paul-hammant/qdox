@@ -17,7 +17,7 @@ public class Type implements Comparable{
     }
 
     private void resolve() {
-        if (name.indexOf(".")!=-1){
+        if (classLibrary == null || name.indexOf(".")!=-1){
             value = name;
             return;
         }

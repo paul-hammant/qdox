@@ -10,7 +10,7 @@ public class JavaClass extends AbstractJavaEntity {
 	private List fields = new LinkedList();
 	private boolean interfce;
 	private Type superClass;
-	private String[] implementz = new String[0];
+	private Type[] implementz = new Type[0];
 	private JavaSource source;
 	
 	/**
@@ -30,7 +30,7 @@ public class JavaClass extends AbstractJavaEntity {
 		return superClass;
 	}
 
-	public String[] getImplements() {
+	public Type[] getImplements() {
 		return implementz;
 	}
 
@@ -64,7 +64,7 @@ public class JavaClass extends AbstractJavaEntity {
 			result.write(interfce ? " extends " : " implements ");
 			for (int i = 0; i < implementz.length; i++) {
 				if (i > 0) result.write(", ");
-				result.write(implementz[i]);
+				result.write(implementz[i].getValue());
 			}
 		}
 		result.write(" {");
@@ -103,7 +103,7 @@ public class JavaClass extends AbstractJavaEntity {
 		superClass = type;
 	}
 
-	void setImplementz(String[] implementz) {
+	void setImplementz(Type[] implementz) {
 		this.implementz = implementz;
 	}
 

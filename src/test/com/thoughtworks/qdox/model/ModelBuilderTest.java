@@ -94,7 +94,7 @@ public class ModelBuilderTest extends TestCase {
 
 		assertEquals(0, source.getClasses()[0].getImplements().length);
 		assertEquals(1, source.getClasses()[1].getImplements().length);
-		assertEquals("Another", source.getClasses()[1].getImplements()[0]);
+		assertEquals("Another", source.getClasses()[1].getImplements()[0].getValue());
 
 		assertEquals(null, source.getClasses()[0].getSuperClass());
 		assertEquals(null, source.getClasses()[1].getSuperClass());
@@ -112,9 +112,9 @@ public class ModelBuilderTest extends TestCase {
 		// sorted
 		Arrays.sort(source.getClasses()[0].getImplements());
 		assertEquals(3, source.getClasses()[0].getImplements().length);
-		assertEquals("Another", source.getClasses()[0].getImplements()[0]);
-		assertEquals("BottleOpener", source.getClasses()[0].getImplements()[1]);
-		assertEquals("java.io.Serializable", source.getClasses()[0].getImplements()[2]);
+		assertEquals("Another", source.getClasses()[0].getImplements()[0].getValue());
+		assertEquals("BottleOpener", source.getClasses()[0].getImplements()[1].getValue());
+		assertEquals("java.io.Serializable", source.getClasses()[0].getImplements()[2].getValue());
 
 		assertEquals(null, source.getClasses()[0].getSuperClass());
 	}
@@ -131,7 +131,7 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals(0, source.getClasses()[0].getImplements().length);
 		assertEquals(1, source.getClasses()[1].getImplements().length);
 
-		assertEquals("SomeInterface", source.getClasses()[1].getImplements()[0]);
+		assertEquals("SomeInterface", source.getClasses()[1].getImplements()[0].getValue());
 
 		assertEquals(null, source.getClasses()[0].getSuperClass());
 		assertEquals(null, source.getClasses()[1].getSuperClass());
@@ -147,8 +147,8 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals(2, source.getClasses()[0].getImplements().length);
 
 		Arrays.sort(source.getClasses()[0].getImplements());
-		assertEquals("SomeInterface", source.getClasses()[0].getImplements()[0]);
-		assertEquals("XX", source.getClasses()[0].getImplements()[1]);
+		assertEquals("SomeInterface", source.getClasses()[0].getImplements()[0].getValue());
+		assertEquals("XX", source.getClasses()[0].getImplements()[1].getValue());
 	}
 
 	public void testClassExtendsAndImplements() throws Exception {
@@ -162,8 +162,8 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals(2, source.getClasses()[0].getImplements().length);
 
 		Arrays.sort(source.getClasses()[0].getImplements());
-		assertEquals("SomeInterface", source.getClasses()[0].getImplements()[0]);
-		assertEquals("XX", source.getClasses()[0].getImplements()[1]);
+		assertEquals("SomeInterface", source.getClasses()[0].getImplements()[0].getValue());
+		assertEquals("XX", source.getClasses()[0].getImplements()[1].getValue());
 
 		assertEquals("SubClass", source.getClasses()[0].getSuperClass().getValue());
 	}

@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.DataProvider;
 
+import java.util.Collections;
+
 public class JavaClassTest extends TestCase {
 
 	private JavaClass cls;
@@ -48,7 +50,7 @@ public class JavaClassTest extends TestCase {
 
 	public void testToStringInterfaceExtends() throws Exception {
 		cls.setName("MyClass");
-		cls.setImplementz(new String[] {"SomeInterface"});
+		cls.setImplementz(type(new String[] {"SomeInterface"}));
 		cls.setInterface(true);
 		String expected = ""
 			+ "interface MyClass extends SomeInterface {\n"
@@ -59,7 +61,7 @@ public class JavaClassTest extends TestCase {
 
 	public void testToStringInterfaceExtendsTwo() throws Exception {
 		cls.setName("MyClass");
-		cls.setImplementz(new String[] {"SomeInterface", "AnotherInterface"});
+		cls.setImplementz(type(new String[] {"SomeInterface", "AnotherInterface"}));
 		cls.setInterface(true);
 		String expected = ""
 			+ "interface MyClass extends SomeInterface, AnotherInterface {\n"
@@ -70,7 +72,7 @@ public class JavaClassTest extends TestCase {
 
 	public void testToStringInterfaceExtendsThree() throws Exception {
 		cls.setName("MyClass");
-		cls.setImplementz(new String[] {"SomeInterface", "AnotherInterface", "Thingy"});
+		cls.setImplementz(type(new String[] {"SomeInterface", "AnotherInterface", "Thingy"}));
 		cls.setInterface(true);
 		String expected = ""
 			+ "interface MyClass extends SomeInterface, AnotherInterface, Thingy {\n"
@@ -81,7 +83,7 @@ public class JavaClassTest extends TestCase {
 
 	public void testToStringClassImplements() throws Exception {
 		cls.setName("MyClass");
-		cls.setImplementz(new String[] {"SomeInterface"});
+		cls.setImplementz(type(new String[] {"SomeInterface"}));
 		String expected = ""
 			+ "class MyClass implements SomeInterface {\n"
 			+ "\n"
@@ -91,7 +93,7 @@ public class JavaClassTest extends TestCase {
 
 	public void testToStringClassImplementsTwo() throws Exception {
 		cls.setName("MyClass");
-		cls.setImplementz(new String[] {"SomeInterface", "AnotherInterface", "Xx"});
+		cls.setImplementz(type(new String[] {"SomeInterface", "AnotherInterface", "Xx"}));
 		String expected = ""
 			+ "class MyClass implements SomeInterface, AnotherInterface, Xx {\n"
 			+ "\n"
@@ -101,7 +103,7 @@ public class JavaClassTest extends TestCase {
 
 	public void testToStringClassImplementsAndExtends() throws Exception {
 		cls.setName("MyClass");
-		cls.setImplementz(new String[] {"SomeInterface", "AnotherInterface", "Xx"});
+		cls.setImplementz(type(new String[] {"SomeInterface", "AnotherInterface", "Xx"}));
 		cls.setSuperClass(DataProvider.createType("SubMarine"));
 		String expected = ""
 			+ "class MyClass extends SubMarine implements SomeInterface, AnotherInterface, Xx {\n"
@@ -286,5 +288,13 @@ public class JavaClassTest extends TestCase {
 		
 		assertEquals("com.thoughtworks.qdox", cls.getPackage());
 		assertEquals("com.thoughtworks.qdox.MyClass", cls.getFullyQualifiedName());
+	}
+
+	private Type[] type(String[] typeNames) {
+		Type[] result = new Type[typeNames.length];
+		for (int i = 0; i < typeNames.length; i++) {
+			result[i] = new Type(Collections.EMPTY_LIST, typeNames[i], null, "");
+		}
+		return result;
 	}
 }

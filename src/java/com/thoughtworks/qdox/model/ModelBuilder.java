@@ -58,8 +58,11 @@ public class ModelBuilder implements Builder {
 		// implements
 		{
 			Set implementSet = def.isInterface ? def.extendz : def.implementz;
-			String[] implementz = new String[implementSet.size()];
-			implementSet.toArray(implementz);
+			Iterator implementIt = implementSet.iterator();
+			Type[] implementz = new Type[implementSet.size()];
+			for (int i = 0; i < implementz.length && implementIt.hasNext(); i++) {
+				implementz[i] = createType((String)implementIt.next());
+			}
 			currentClass.setImplementz(implementz);
 		}
 

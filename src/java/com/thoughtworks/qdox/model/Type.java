@@ -81,8 +81,13 @@ public class Type implements Comparable, Serializable {
     }
 
     public JavaClass getJavaClass() {
-        if (getParentSource() == null || getParentSource().getClassLibrary() == null) {
-            throw new java.lang.UnsupportedOperationException("JavaClassCache unavailable for this JavaClass");
+        if (getParentSource() == null) {
+            System.out.println("WARNING: No source file for " + getValue());
+            return null;
+        }
+        if (getParentSource().getClassLibrary() == null) {
+            System.out.println("WARNING: No class library for " + getValue());
+            return null;
         }
         return getParentSource().getClassLibrary().getClassByName(getValue());
     }

@@ -2136,6 +2136,45 @@ public class ParserTest extends TestCase {
         builder.verify();
     }
 
+    public void testMethodWithArrayDefinedAtEnd() throws Exception {
+
+        // It is legal in Java to define a method like this:
+        //   String doStuff()[] { 
+        // ... which is equivalent to:
+        //   String[] doStuff() { 
+        // This is done in some places in the JDK.
+
+        setupLex(Parser.CLASS);
+        setupLex(Parser.IDENTIFIER, "x");
+        setupLex(Parser.BRACEOPEN);
+
+        setupLex(Parser.IDENTIFIER, "int");
+        setupLex(Parser.IDENTIFIER, "count");
+        setupLex(Parser.PARENOPEN);
+        setupLex(Parser.PARENCLOSE);
+        setupLex(Parser.SQUAREOPEN);
+        setupLex(Parser.SQUARECLOSE);
+        setupLex(Parser.SEMI);
+
+        setupLex(Parser.BRACECLOSE);
+        setupLex(0);
+
+        // expectations
+        MethodDef mth = new MethodDef();
+        mth.name = "count";
+        mth.returns = "int";
+        mth.dimensions = 1;
+
+        builder.addExpectedAddMethodValues(mth);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+    }
+
     public void testMethodReturningArrayWithParamNoArray() throws Exception {
 
         // setup values

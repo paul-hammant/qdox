@@ -222,33 +222,35 @@ extrafields: |
 // ----- METHOD
 
 method:
-    modifiers typeparams type IDENTIFIER methoddef memberend {
+    modifiers typeparams type IDENTIFIER methoddef dimensions opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
-        mth.returns = $3.name; mth.dimensions = $3.dimensions;
+        mth.returns = $3.name;
+        mth.dimensions = $6 + $3.dimensions; // return dimensions can be specified after return type OR after params
         mth.name = $4;
         builder.addMethod(mth);
         mth = new MethodDef(); 
     } |
-    modifiers type IDENTIFIER methoddef memberend {
+    modifiers type IDENTIFIER methoddef dimensions opt_exceptions memberend {
         mth.lineNumber = line;
-        mth.modifiers.addAll(modifiers); modifiers.clear(); 
-        mth.returns = $2.name; mth.dimensions = $2.dimensions;
+        mth.modifiers.addAll(modifiers); modifiers.clear();
+        mth.returns = $2.name;
+        mth.dimensions = $5 + $2.dimensions; // return dimensions can be specified after return type OR after params
         mth.name = $3;
         builder.addMethod(mth);
-        mth = new MethodDef(); 
+        mth = new MethodDef();
     };
 
 constructor:
-    modifiers IDENTIFIER methoddef memberend {
+    modifiers IDENTIFIER methoddef opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
-        mth.constructor = true; mth.name = $2; 
+        mth.constructor = true; mth.name = $2;
         builder.addMethod(mth);
         mth = new MethodDef(); 
     };
 
-methoddef: PARENOPEN opt_params PARENCLOSE opt_exceptions;
+methoddef: PARENOPEN opt_params PARENCLOSE;
 
 opt_exceptions: | THROWS exceptionlist;
 

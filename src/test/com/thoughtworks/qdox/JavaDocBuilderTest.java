@@ -89,8 +89,8 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(1, outer.getMethods().length);
         assertEquals("outerMethod", outer.getMethods()[0].getName());
 
-        assertEquals(1, outer.getInnerClasses().length);
-        JavaClass inner = outer.getInnerClasses()[0];
+        assertEquals(1, outer.getNestedClasses().length);
+        JavaClass inner = outer.getNestedClasses()[0];
         assertEquals("Inner", inner.getName());
         assertEquals("foo.bar.Outer$Inner", inner.getFullyQualifiedName());
 
@@ -528,7 +528,7 @@ public class JavaDocBuilderTest extends TestCase {
                 "";
         builder.addSource(new StringReader(source));
         JavaClass outer = builder.getClassByName("foo.Outer");
-        JavaClass inner = outer.getInnerClasses()[0];
+        JavaClass inner = outer.getNestedClasses()[0];
         assertEquals("foo.Outer$Inner", inner.getFullyQualifiedName());
 
         JavaField field1 = outer.getFieldByName("field1");
@@ -642,7 +642,7 @@ public class JavaDocBuilderTest extends TestCase {
         builder.addSource(new StringReader(sourceCode));
         JavaClass clazz = builder.getClassByName("foo.bar.Outer");
 
-        assertEquals(1, clazz.getInnerClasses().length);
+        assertEquals(1, clazz.getNestedClasses().length);
     }
 
     public void testParseErrorLocationShouldBeAvailable() {
@@ -732,7 +732,7 @@ public class JavaDocBuilderTest extends TestCase {
         );
 
         JavaClass innerClass = 
-            builder.getClassByName("p1.A").getInnerClassByName("Inner");
+            builder.getClassByName("p1.A").getNestedClassByName("Inner");
         JavaField innerField = 
             builder.getClassByName("p2.B").getFieldByName("innerField");
         assertEquals(innerClass.asType(), innerField.getType());

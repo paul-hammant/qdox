@@ -386,8 +386,8 @@ public class JavaClassTest extends TestCase {
         innerClass.setName("Inner");
         cls.addClass(innerClass);
 
-        assertEquals(innerClass, cls.getInnerClassByName("Inner"));
-        assertEquals(null, cls.getInnerClassByName("Bogus"));
+        assertEquals(innerClass, cls.getNestedClassByName("Inner"));
+        assertEquals(null, cls.getNestedClassByName("Bogus"));
     }
 
     public void testResolveTypeDefaultsToParentScope() throws Exception {

@@ -34,6 +34,10 @@
                 Fix QDOX-61:
                 Support legal Unicode characters in identifiers.
             </action>
+            <action dev="mdub" type="fix">
+                Fix QDOX-72:
+                Correct terminology re "inner" vs "nested" classes.
+            </action>
         </release>
 
         <release version="1.5" date="2004-06-20">

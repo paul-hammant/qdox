@@ -198,9 +198,9 @@ public abstract class APITestCase extends TestCase {
      */
     private static void assertInnerClassesEquals(JavaClass expected,
                                                  JavaClass actual) {
-        List expectedInnerClasses = Arrays.asList(expected.getInnerClasses());
+        List expectedInnerClasses = Arrays.asList(expected.getNestedClasses());
         Collections.sort(expectedInnerClasses, ENTITY_COMPARATOR);
-        List actualInnerClasses = Arrays.asList(actual.getInnerClasses());
+        List actualInnerClasses = Arrays.asList(actual.getNestedClasses());
         Collections.sort(actualInnerClasses, ENTITY_COMPARATOR);
 
         StringBuffer message = new StringBuffer("-> assertInnerClassesEquals");

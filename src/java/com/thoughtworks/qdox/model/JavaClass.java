@@ -200,7 +200,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public String resolveType(String typeName) {
         // Maybe it's an inner class?
-        JavaClass[] innerClasses = getInnerClasses();
+        JavaClass[] innerClasses = getNestedClasses();
         for (int i = 0; i < innerClasses.length; i++) {
             if (innerClasses[i].getName().equals(typeName)) {
                 return innerClasses[i].getFullyQualifiedName();
@@ -382,16 +382,16 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     /**
-     * @deprecated Use {@link #getInnerClasses()} instead.
+     * @deprecated Use {@link #getNestedClasses()} instead.
      */
     public JavaClass[] getClasses() {
-        return getInnerClasses();
+        return getNestedClasses();
     }
 
     /**
      * @since 1.3
      */
-    public JavaClass[] getInnerClasses() {
+    public JavaClass[] getNestedClasses() {
         if (classesArray == null) {
             classesArray = new JavaClass[classes.size()];
             classes.toArray(classesArray);
@@ -400,8 +400,8 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return classesArray;
     }
 
-    public JavaClass getInnerClassByName(String name) {
-        JavaClass[] classes = getInnerClasses();
+    public JavaClass getNestedClassByName(String name) {
+        JavaClass[] classes = getNestedClasses();
 
         for (int i = 0; i < classes.length; i++) {
             if (classes[i].getName().equals(name)) {
@@ -412,6 +412,20 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return null;
     }
 
+    /**
+     * @deprecated old name for {@link #getNestedClasses()} 
+     */
+    public JavaClass[] getInnerClasses() {
+        return getNestedClasses();
+    }
+
+    /**
+     * @deprecated old name for {@link #getNestedClassByName(String)} 
+     */
+    public JavaClass getInnerClassByName(String name) {
+       return getNestedClassByName(name);
+    }
+    
     /**
      * @since 1.3
      */

@@ -425,4 +425,39 @@ public class JavaDocBuilderTest extends TestCase {
         JavaClass cls = builder.getClassByName("x.I");
         assertNull("Should probably return null", cls.getSuperJavaClass());
     }
+
+    public void testMethodsFromSuperclassesCanBeRetrieved() {
+        String goodListSource = ""
+                + "package x;"
+                + "import java.util.*;"
+                + "/**"
+                + " * @foo bar"
+                + " */"
+                + "class GoodList extends ArrayList {"
+                + "  public void good() {}"
+                + "  private void myown() {}"
+                + "}";
+        builder.addSource(new StringReader(goodListSource));
+
+        String betterListSource = ""
+                + "package x;"
+                + "/**"
+                + " * @foo zap"
+                + " */"
+                + "class BetterList extends GoodList {"
+                + "  public void better() {}"
+                + "}";
+        builder.addSource(new StringReader(betterListSource));
+
+        JavaClass betterList = builder.getClassByName("x.BetterList");
+        assertNull( betterList.getMethodBySignature("good", null) );
+        assertNotNull( betterList.getMethodBySignature("good", null, true) );
+        assertNotNull( betterList.getMethodBySignature("size", null, true) );
+        assertNull( "Shouldn't be able to get private methods", betterList.getMethodBySignature("myown", null, true) );
+    }
+
+    public void testTagsFromSuperclassesCanBeRetrieved() {
+        testMethodsFromSuperclassesCanBeRetrieved();
+
+    }
 }

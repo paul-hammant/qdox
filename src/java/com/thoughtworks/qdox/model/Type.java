@@ -90,6 +90,9 @@ public class Type implements Comparable, Serializable {
         return getParentSource().getClassLibrary().getClassByName(getValue());
     }
 
+    /**
+     * @since 1.3
+     */ 
     public boolean isA(Type type) {
         if (this.equals(type)) {
             return true;

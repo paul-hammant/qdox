@@ -207,6 +207,43 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         return null;
     }
 
+    public JavaMethod getMethodBySignature(String name,
+                                           Type[] parameterTypes,
+                                           boolean superclasses) {
+        JavaMethod methodInThisClass = getMethodBySignature(name,parameterTypes);
+        if(methodInThisClass == null && superclasses) {
+            // only look up if we found nothing and we're allowed to look up.
+            // start with superclass, then interfaces.
+            // That way we always look upwards in the order of declaration
+
+            Type supertype = getSuperClass();
+            if (supertype != null) {
+                JavaClass superclass = supertype.getJavaClass();
+                if (superclass != null) {
+                    JavaMethod method = superclass.getMethodBySignature(name,parameterTypes,true);
+                    // todo: ideally we should check on package privacy too. oh well.
+                    if(method != null && !method.isPrivate()) {
+                        return method;
+                    }
+                }
+            }
+
+            Type[] implementz = getImplements();
+            for (int i = 0; i < implementz.length; i++) {
+                JavaClass interfaze = implementz[i].getJavaClass();
+                if(interfaze != null) {
+                    JavaMethod method = interfaze.getMethodBySignature(name,parameterTypes,true);
+                    if(method != null) {
+                        return method;
+                    }
+                }
+            }
+            return null;
+        } else {
+            return methodInThisClass;
+        }
+    }
+
     public JavaField[] getFields() {
         if (fieldsArray == null) {
             fieldsArray = new JavaField[fields.size()];

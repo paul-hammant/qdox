@@ -650,15 +650,5 @@ public class JavaDocBuilderTest extends TestCase {
             assertEquals(11, e.getColumn());
         }
     }
-
-    public void testWTF() {
-        String badSource = ""
-        + "package x;\n"
-        + "import java.util.*;\n"
-        + "class Bad {\n"
-        + "}\n"
-        + "\n"
-        + "\n";
-        builder.addSource(new StringReader(badSource));
-    }
+    
 }

@@ -33,11 +33,12 @@
 		</section>
 
 		<section name="Getting Started">
-
-			<ol>
-				<li><a href="download.html">Download</a> it.</li>
-				<li><a href="usage.html">Use</a> it.</li>
-			</ol>
+			<p>
+				<ol>
+					<li><a href="download.html">Download</a> it.</li>
+					<li><a href="usage.html">Use</a> it.</li>
+				</ol>
+			</p>
 
 		</section>
 	</body>

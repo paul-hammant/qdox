@@ -16,9 +16,9 @@
 
 			<p>To create it, all you need to do is call the default constructor.</p>
 
-<blockquote><pre><code>
+<p><blockquote><pre><code>
 JavaDocBuilder builder = new JavaDocBuilder();
-</code></pre></blockquote>
+</code></pre></blockquote></p>
 
 		</section>
 
@@ -29,7 +29,7 @@ JavaDocBuilder builder = new JavaDocBuilder();
 			Source can either beread one file at a time (using a java.io.Reader) or an entire source tree
 			can be added recursively.</p>
 
-<blockquote><pre><code>
+<p><blockquote><pre><code>
 // Reading a single source file.
 builder.addSource(new FileReader("MyFile.java"));
 
@@ -38,7 +38,7 @@ builder.addSource(new StringReader("package test; public class Hello {}"));
 
 // Adding all .java files in a source tree (recursively).
 builder.addSourceTree(new File("mysrcdir"));
-</code></pre></blockquote>
+</code></pre></blockquote></p>
 
 		</section>
 
@@ -50,11 +50,11 @@ builder.addSourceTree(new File("mysrcdir"));
 
 			<p>ClassLibrary has 3 ways to resolve classes:</p>
 
-			<ul>
+			<p><ul>
 				<li>By looking at other sources that have been added.</li>
 				<li>By looking in the current classpath (including the standard JRE classes).</li>
 				<li>By looking at additional ClassLoaders specified at runtime.</li>
-			</ul>
+			</ul></p>
 
 			<p>The first two are automaticly set by JavaDocBuilder. In most cases this shall be sufficient, however in some
 			situations you may want resolve the full classes in external libraries.</p>
@@ -62,7 +62,7 @@ builder.addSourceTree(new File("mysrcdir"));
 			<p>To resolve classes from different ClassLoaders (e.g. 3rd party Jar files), the
 			<code>addClassLoader()</code> method must be called on the ClassLibrary.</p>
 
-<blockquote><pre><code>
+<p><blockquote><pre><code>
 // Get the ClassLibrary
 ClassLibrary lib = builder.getClassLibrary();
 
@@ -71,7 +71,7 @@ lib.addClassLoader(myCustomClassLoader);
 
 // Ant example : add the &lt;classpath&gt; element's contents
 lib.addClassLoader(new AntClassLoader(getProject(), classpath));
-</code></pre></blockquote>
+</code></pre></blockquote></p>
 
 			<p>It is important that additional ClassLoaders are added before any source files are parsed.</p>
 

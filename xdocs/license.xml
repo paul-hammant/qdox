@@ -12,6 +12,7 @@
 
 			<p>The license used for QDox is derived from the Apache Software License.</p>
 
+			<p>
 <pre>
 /* ====================================================================
  * The IronSmith Software License, Version 1.1
@@ -64,6 +65,7 @@
  * ====================================================================
  */
 </pre>
+			</p>
 
 		</section>
 

@@ -10,7 +10,7 @@
 
 		<section name="Who's Using QDox?">
 
-			<table>
+			<p><table>
 				<tr>
 					<th>Project</th>
 					<th>Description</th>
@@ -86,7 +86,7 @@
 					</td>
 				</tr>
 
-			</table>
+			</table></p>
 		</section>
 
 	</body>

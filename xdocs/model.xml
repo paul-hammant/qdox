@@ -12,6 +12,7 @@
 
 			<p>After the source code has been <a href="usage.html">parsed</a>, the content of the files can be navigated using a simple to use and intuitive object model.</p>
 
+			<p>
 			<table>
 				<tr>
 					<th>Class</th>
@@ -398,6 +399,7 @@ String other = tag.getNamedParameter("blah"); // null
 					</td>
 				</tr>
 			</table>
+			</p>
 
 		</section>
 
@@ -415,18 +417,20 @@ String other = tag.getNamedParameter("blah"); // null
 			<code><a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html">JavaMethod</a></code> classes all
 			contain the following methods:</p>
 
-			<ul>
-				<li><code>String getComment()</code> - Get JavaDoc comment</li>
-				<li><code>DocletTag[] getTags()</code> - Get all doclet tags</li>
-				<li><code>DocletTag[] getTagsByName()</code> - Get all doclet tags with a particular name</li>
-				<li><code>DocletTag getTagByName()</code> - Get first doclet tag with a particular name or null if not found</li>
-			</ul>
+			<p>
+				<ul>
+					<li><code>String getComment()</code> - Get JavaDoc comment</li>
+					<li><code>DocletTag[] getTags()</code> - Get all doclet tags</li>
+					<li><code>DocletTag[] getTagsByName()</code> - Get all doclet tags with a particular name</li>
+					<li><code>DocletTag getTagByName()</code> - Get first doclet tag with a particular name or null if not found</li>
+				</ul>
+			</p>
 
 			<p>The returned <code><a href="apidocs/com/thoughtworks/qdox/model/DocletTag.html">DocletTag</a></code> carries
 			the name, value and methods for breaking up the value into specific parameters.
 			</p>
 						<h5>Example Input</h5>
-<blockquote><pre><code>
+<p><blockquote><pre><code>
 /**
  * This method does nothing at all.
  *
@@ -438,10 +442,10 @@ String other = tag.getNamedParameter("blah"); // null
  * @webservice publish=true name=myservice type=rpc
  */
 boolean doWeCare(String email, Date dob);
-</code></pre></blockquote>
+</code></pre></blockquote></p>
 
 						<h5>Example Code</h5>
-<blockquote><pre><code>
+<p><blockquote><pre><code>
 JavaMethod mth = cls.getMethods()[0];
 
 // Access the JavaDoc comment
@@ -467,7 +471,7 @@ permission.getParameter(1); // "full-access"
 DocletTag returns = mth.getTagByName("webservice");
 permission.getNamedParameter("type"); // "rpc"
 permission.getNamedParameter("name"); // "myservice"
-</code></pre></blockquote>
+</code></pre></blockquote></p>
  		</section>
 
 		<section name="Classes, Interfaces and Inheritance">
@@ -492,12 +496,14 @@ permission.getNamedParameter("name"); // "myservice"
 
 			<p>The following methods allow you to navigate back up the tree to the parent node:</p>
 
-			<ul>
-				<li><code>JavaSource JavaClass.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getParentSource()">getParentSource()</a></code></li>
-				<li><code>JavaClass JavaField.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getParentClass()">getParentClass()</a></code></li>
-				<li><code>JavaClass JavaMethod.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getParentClass()">getParentClass()</a></code></li>
-				<li><code>JavaMethod JavaParameter.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getParentMethod()">getParentMethod()</a></code></li>
-			</ul>
+			<p>
+				<ul>
+					<li><code>JavaSource JavaClass.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getParentSource()">getParentSource()</a></code></li>
+					<li><code>JavaClass JavaField.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getParentClass()">getParentClass()</a></code></li>
+					<li><code>JavaClass JavaMethod.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getParentClass()">getParentClass()</a></code></li>
+					<li><code>JavaMethod JavaParameter.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getParentMethod()">getParentMethod()</a></code></li>
+				</ul>
+			</p>
 
 		</section>
 	</body>

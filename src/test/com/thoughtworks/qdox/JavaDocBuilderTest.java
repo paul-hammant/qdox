@@ -130,8 +130,8 @@ public class JavaDocBuilderTest extends TestCase {
 
         JavaSource[] sources = builder.getSources();
         assertEquals(1, sources.length);
-        assertEquals(new File("tmp/sourcetest/com/blah/Thing.java"),
-                sources[0].getFile());
+        assertEquals(new File("tmp/sourcetest/com/blah/Thing.java").toURL(),
+                sources[0].getURL());
     }
 
     public void testSearcher() throws Exception {
@@ -379,7 +379,7 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(0, derivedClassesOfArrayList.size());
     }
 
-    public void testSourcePropertyClass() throws FileNotFoundException, UnsupportedEncodingException {
+    public void testSourcePropertyClass() throws IOException, UnsupportedEncodingException {
         builder.addSource(new File("src/test/com/thoughtworks/qdox/testdata/PropertyClass.java"));
         // Handy way to assert that behaviour for source and binary classes is the same.
         testPropertyClass();

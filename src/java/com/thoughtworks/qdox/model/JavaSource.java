@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.net.URL;
+import java.net.MalformedURLException;
 
 public class JavaSource implements Serializable, JavaClassParent {
 
@@ -25,7 +27,6 @@ public class JavaSource implements Serializable, JavaClassParent {
         PRIMITIVE_TYPES.add("void");
     }
 
-    private File file;
     private String packge;
     private List imports = new LinkedList();
     private String[] importsArray;
@@ -33,13 +34,38 @@ public class JavaSource implements Serializable, JavaClassParent {
     private JavaClass[] classesArray;
     private ClassLibrary classLibrary;
     private Map resolvedTypeCache = new HashMap();
+    private URL url;
 
-    public void setFile(File file) {
-        this.file = file;
+    /**
+     * @since 1.4
+     */
+    public void setURL(URL url) {
+        this.url = url;
     }
 
+    /**
+     * @since 1.4
+     */
+    public URL getURL() {
+        return url;
+    }
+
+    /**
+     * @deprecated use setURL
+     */
+    public void setFile(File file) {
+        try {
+            setURL(file.toURL());
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException(e.getMessage());
+        }
+    }
+
+    /**
+     * @deprecated use getURL
+     */
     public File getFile() {
-        return file;
+        return new File(url.getFile());
     }
 
     public String getPackage() {
@@ -195,5 +221,4 @@ public class JavaSource implements Serializable, JavaClassParent {
     public JavaSource getParentSource() {
         return this;
     }
-
 }

@@ -7,9 +7,10 @@ public class ParseException extends RuntimeException {
 
     private int line;
     private int column;
-    
+    private String errorMessage;
+
     public ParseException(String message, int line, int column) {
-        super(message + " @[" + line + "," + column + "]");
+        errorMessage = message + " @[" + line + "," + column + "] in ";
         this.line = line;
         this.column = column;
     }
@@ -20,6 +21,10 @@ public class ParseException extends RuntimeException {
 
     public int getColumn() {
         return column;
+    }
+
+    public void setSourceInfo(String sourceInfo) {
+        errorMessage += sourceInfo;
     }
 
 }

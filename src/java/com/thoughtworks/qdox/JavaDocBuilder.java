@@ -4,18 +4,19 @@ import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.FileVisitor;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 import com.thoughtworks.qdox.model.ClassLibrary;
+import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
+import com.thoughtworks.qdox.model.DocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassCache;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
-import com.thoughtworks.qdox.model.DocletTagFactory;
-import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
 import com.thoughtworks.qdox.parser.Lexer;
-import com.thoughtworks.qdox.parser.structs.ClassDef;
-import com.thoughtworks.qdox.parser.structs.MethodDef;
-import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
+import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.structs.MethodDef;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,20 +29,21 @@ import java.io.ObjectOutputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.Set;
-import java.util.HashSet;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Method;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Member;
-import java.lang.reflect.Field;
+import java.util.StringTokenizer;
 
 /**
  * Simple facade to QDox allowing a source tree to be parsed and the resulting object model navigated.
@@ -270,19 +272,32 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     }
 
     public JavaSource addSource(Reader reader) {
+        return addSource(reader, "UNKNOWN SOURCE");
+    }
+
+    public JavaSource addSource(Reader reader, String sourceInfo) {
         ModelBuilder builder = new ModelBuilder(classLibrary, docletTagFactory);
         Lexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
-        parser.parse();
+        try {
+            parser.parse();
+        } catch (ParseException e) {
+            e.setSourceInfo(sourceInfo);
+            throw e;
+        }
         JavaSource source = builder.getSource();
         sources.add(source);
         addClasses(source);
         return source;
     }
 
-    public JavaSource addSource(File file) throws UnsupportedEncodingException, FileNotFoundException {
-        JavaSource source = addSource(new InputStreamReader(new FileInputStream(file),encoding));
-        source.setFile(file);
+    public JavaSource addSource(File file) throws IOException, FileNotFoundException {
+        return addSource(file.toURL());
+    }
+
+    public JavaSource addSource(URL url) throws IOException, FileNotFoundException {
+        JavaSource source = addSource(new InputStreamReader(url.openStream(),encoding), url.toExternalForm());
+        source.setURL(url);
         return source;
     }
 
@@ -335,10 +350,10 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
             public void visitFile(File currentFile) {
                 try {
                     addSource(currentFile);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException("Cannot read file : " + currentFile.getName());
                 } catch (UnsupportedEncodingException e) {
 					throw new RuntimeException("Unsupported encoding : " + encoding);
+                } catch (IOException e) {
+                    throw new RuntimeException("Cannot read file : " + currentFile.getName());
                 }
             }
         });

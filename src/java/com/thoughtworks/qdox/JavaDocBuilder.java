@@ -84,7 +84,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
 
     public JavaClass getClassByName(String name) {
         if( name == null ) {
-            throw new Error("HUH?");
+            return null;
         }
 		JavaClass result = (JavaClass) classes.get(name);
         if( result == null ) {

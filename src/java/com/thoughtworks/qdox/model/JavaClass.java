@@ -33,8 +33,12 @@ public class JavaClass extends AbstractInheritableJavaEntity
     private Type[] implementz = new Type[0];
     private JavaClassCache javaClassCache;
 
+    public JavaClass(JavaClassParent parent, int lineNumber) {
+	    super(parent, lineNumber);
+    }
+
     public JavaClass(JavaClassParent parent) {
-        super(parent);
+        super(parent, 0);
     }
 
     public void setJavaClassCache(JavaClassCache javaClassCache) {

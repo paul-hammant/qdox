@@ -11,12 +11,16 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
 
+    public JavaMethod(JavaClass parent, int lineNumber) {
+        super(parent, lineNumber);
+    }
+
     public JavaMethod(JavaClass parent) {
-        super(parent);
+        super(parent, 0);
     }
 
     public JavaMethod() {
-        this(null);
+        this(null, 0);
     }
 
     public Type getReturns() {

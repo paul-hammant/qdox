@@ -13,9 +13,15 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
     private String comment;
     private DocletTag[] tags = new DocletTag[0];
     private final JavaClassParent parent;
+    private final int lineNumber;
 
-    protected AbstractJavaEntity(JavaClassParent parent) {
+    protected AbstractJavaEntity(JavaClassParent parent, int lineNumber) {
         this.parent = parent;
+        this.lineNumber = lineNumber;
+    }
+    
+    public int getLineNumber() {
+    	return lineNumber;
     }
 
     public String getName() {

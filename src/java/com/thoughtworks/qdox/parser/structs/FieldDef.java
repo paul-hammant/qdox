@@ -3,7 +3,7 @@ package com.thoughtworks.qdox.parser.structs;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FieldDef {
+public class FieldDef extends LocatedDef {
     public String name = "";
     public String type = "";
     public Set modifiers = new HashSet();

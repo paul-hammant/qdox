@@ -1,10 +1,9 @@
 package com.thoughtworks.qdox.parser.structs;
 
-public class TagDef {
+public class TagDef extends LocatedDef {
 
     public String name;
     public String text;
-    public int lineNumber;
     
     public TagDef(String name, String text, int lineNumber) {
         this.name = name;

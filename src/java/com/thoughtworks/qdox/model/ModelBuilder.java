@@ -55,7 +55,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void beginClass(ClassDef def) {
-        currentClass = new JavaClass(currentParent);
+        currentClass = new JavaClass(currentParent, def.lineNumber);
 
         // basic details
         currentClass.setName(def.name);
@@ -130,7 +130,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void addMethod(MethodDef def) {
-        JavaMethod currentMethod = new JavaMethod(currentClass);
+        JavaMethod currentMethod = new JavaMethod(currentClass, def.lineNumber);
 
         // basic details
         currentMethod.setName(def.name);
@@ -172,7 +172,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void addField(FieldDef def) {
-        JavaField currentField = new JavaField(currentClass);
+        JavaField currentField = new JavaField(currentClass, def.lineNumber);
 
         currentField.setName(def.name);
         currentField.setType(createType(def.type, def.dimensions));

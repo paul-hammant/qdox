@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MethodDef {
+public class MethodDef extends LocatedDef {
     public String name = "";
     public String returns = "";
     public Set modifiers = new HashSet();

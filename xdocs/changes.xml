@@ -17,6 +17,11 @@
                 Implement QDOX-53:
                 Add support for parsing of JSR-14 generic types.
             </action>
+            <action dev="mdub" type="fix">
+                Fix QDOX-45, QDOX-50: 
+                Improve parsing of tag parameters, particularly where
+                whitespace is involved.
+            </action>
         </release>
 
         <!-- action types are add/update/fix/remove -->

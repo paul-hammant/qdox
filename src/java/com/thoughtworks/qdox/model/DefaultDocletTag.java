@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import com.thoughtworks.qdox.model.util.TagParser;
+
 public class DefaultDocletTag implements DocletTag {
 
     private final String name;
@@ -41,46 +43,14 @@ public class DefaultDocletTag implements DocletTag {
 
     public String[] getParameters() {
         if (parameters == null) {
-            List paramsList = new ArrayList();
-            StringTokenizer tokens = new StringTokenizer(value);
-            while (tokens.hasMoreTokens()) {
-                String token = tokens.nextToken();
-                for (int i = 0; i < quotes.length; i++) {
-                    String quote = quotes[i];
-                    if (token.indexOf(quote) != -1) {
-                        while (!token.endsWith(quote)) {
-                            if (tokens.hasMoreTokens()) {
-                                token += " " + tokens.nextToken();
-                            } else {
-                                break;
-                            }
-                        }
-                        break;  // we only want to match against one type of quote
-                    }
-                }
-                paramsList.add(token);
-            }
-            parameters = new String[paramsList.size()];
-            paramsList.toArray(parameters);
+            parameters = TagParser.parseWords(value);
         }
         return parameters;
     }
 
     public Map getNamedParameterMap() {
-        if (namedParameters != null) return namedParameters;
-        namedParameters = new HashMap();
-        String[] params = getParameters();
-        for (int i = 0; i < params.length; i++) {
-            String param = params[i];
-            int eq = param.indexOf('=');
-            if (eq > -1) {
-                String k = param.substring(0, eq);
-                String v = param.substring(eq + 1);
-                v = trim(v, quotes);
-                if (k.length() > 0) {
-                    namedParameters.put(k, v);
-                }
-            }
+        if (namedParameters == null) {
+            namedParameters = TagParser.parseNamedParameters(value);
         }
         return namedParameters;
     }

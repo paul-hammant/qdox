@@ -1,6 +1,9 @@
 package com.thoughtworks.qdox;
 
 import java.io.Reader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +15,9 @@ import com.thoughtworks.qdox.model.ModelBuilder;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
+import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
+import com.thoughtworks.qdox.directorywalker.FileVisitor;
+import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 
 public class MultipleJavaDocBuilder {
 	private Map classes = new HashMap();
@@ -42,6 +48,21 @@ public class MultipleJavaDocBuilder {
 
 	public JavaSource[] getSources() {
 		return (JavaSource[])sources.toArray(new JavaSource[sources.size()]);
+	}
+
+	public void addSourceTree(File file) {
+		DirectoryScanner scanner = new DirectoryScanner(file);
+		scanner.addFilter(new SuffixFilter(".java"));
+		scanner.scan(new FileVisitor() {
+			public void visitFile(File currentFile) {
+				try {
+					addSource(new FileReader(currentFile));
+				}
+				catch (FileNotFoundException e) {
+					throw new RuntimeException("Cannot read file : " + currentFile.getName());
+				}
+			}
+		});
 	}
 
 }

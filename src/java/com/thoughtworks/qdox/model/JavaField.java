@@ -4,18 +4,6 @@ public class JavaField extends AbstractJavaEntity implements Member {
 
     private Type type;
 
-    public JavaField(JavaClass parent, int lineNumber) {
-        super(parent, lineNumber);
-    }
-
-    public JavaField(JavaClass parent) {
-        super(parent, 0);
-    }
-
-    public JavaField() {
-        this(null, 0);
-    }
-
     public Type getType() {
         return type;
     }

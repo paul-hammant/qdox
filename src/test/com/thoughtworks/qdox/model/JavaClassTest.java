@@ -14,7 +14,8 @@ public class JavaClassTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         src = new JavaSource();
-        cls = new JavaClass(src);
+        cls = new JavaClass();
+        src.addClass(cls);
     }
 
     public void testToStringSimpleClass() throws Exception {
@@ -220,7 +221,7 @@ public class JavaClassTest extends TestCase {
 
     public void testToStringClassWithInnerClass() throws Exception {
         cls.setName("Outer");
-        JavaClass innerClass = new JavaClass(null);
+        JavaClass innerClass = new JavaClass();
         innerClass.setName("Inner");
         cls.addClass(innerClass);
 
@@ -315,11 +316,11 @@ public class JavaClassTest extends TestCase {
     public void testInnerClass() throws Exception {
         src.setPackage("foo.bar");
 
-        JavaClass outer = new JavaClass(src);
+        JavaClass outer = new JavaClass();
         outer.setName("Outer");
         src.addClass(outer);
 
-        JavaClass inner = new JavaClass(outer);
+        JavaClass inner = new JavaClass();
         inner.setName("Inner");
         outer.addClass(inner);
 
@@ -381,7 +382,7 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testCanGetInnerClassByName() throws Exception {
-        JavaClass innerClass = new JavaClass(null);
+        JavaClass innerClass = new JavaClass();
         innerClass.setName("Inner");
         cls.addClass(innerClass);
 
@@ -397,7 +398,7 @@ public class JavaClassTest extends TestCase {
     public void testResolveTypeInnerClass() throws Exception {
         src.setPackage("p");
         cls.setName("X");
-        JavaClass innerClass = new JavaClass(cls);
+        JavaClass innerClass = new JavaClass();
         innerClass.setName("DogFood");
         cls.addClass(innerClass);
         assertEquals("p.X$DogFood", cls.resolveType("DogFood"));
@@ -410,7 +411,7 @@ public class JavaClassTest extends TestCase {
 
     public void testGetBeanPropertiesFindsSimpleProperties() throws Exception {
         
-        JavaMethod setFooMethod = new JavaMethod(cls);
+        JavaMethod setFooMethod = new JavaMethod();
         setFooMethod.setName("setFoo");
         setFooMethod.setParameters(
             new JavaParameter[] {
@@ -419,7 +420,7 @@ public class JavaClassTest extends TestCase {
         );
         cls.addMethod(setFooMethod);
 
-        JavaMethod getFooMethod = new JavaMethod(cls);
+        JavaMethod getFooMethod = new JavaMethod();
         getFooMethod.setName("getFoo");
         getFooMethod.setReturns(new Type("int"));
         cls.addMethod(getFooMethod);

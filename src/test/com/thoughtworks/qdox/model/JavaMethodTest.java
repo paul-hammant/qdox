@@ -15,8 +15,10 @@ public class JavaMethodTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         source = new JavaSource();
-        clazz = new JavaClass(source);
-        mth = new JavaMethod(clazz);
+        clazz = new JavaClass();
+        source.addClass(clazz);
+        mth = new JavaMethod();
+        clazz.addMethod(mth);
     }
 
     public void testDeclarationSignatureWithModifiers() {

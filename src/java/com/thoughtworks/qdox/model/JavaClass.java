@@ -33,14 +33,6 @@ public class JavaClass extends AbstractInheritableJavaEntity
     private Type[] implementz = new Type[0];
     private JavaClassCache javaClassCache;
 
-    public JavaClass(JavaClassParent parent, int lineNumber) {
-	    super(parent, lineNumber);
-    }
-
-    public JavaClass(JavaClassParent parent) {
-        super(parent, 0);
-    }
-
     public void setJavaClassCache(JavaClassCache javaClassCache) {
         this.javaClassCache = javaClassCache;
 
@@ -161,6 +153,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
     }
 
     public void addMethod(JavaMethod meth) {
+        meth.setParent(this);
         methods.add(meth);
         methodsArray = null;
     }
@@ -174,6 +167,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
     }
 
     public void addField(JavaField javaField) {
+        javaField.setParent(this);
         fields.add(javaField);
         fieldsArray = null;
     }
@@ -377,6 +371,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
     }
 
     public void addClass(JavaClass cls) {
+        cls.setParent(this);
         classes.add(cls);
         classesArray = null;
     }

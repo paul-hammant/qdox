@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Type implements Comparable, Serializable {
 
     public static final Type[] EMPTY_ARRAY = new Type[0];
+    public static final Type VOID = new Type("void");
 
     private String name;
     private JavaClassParent context;

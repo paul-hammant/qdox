@@ -6,22 +6,10 @@ import java.util.ArrayList;
 
 public class JavaMethod extends AbstractInheritableJavaEntity implements Member {
 
-    protected Type returns;
+    protected Type returns = Type.VOID;
     private JavaParameter[] parameters = JavaParameter.EMPTY_ARRAY;
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
-
-    public JavaMethod(JavaClass parent, int lineNumber) {
-        super(parent, lineNumber);
-    }
-
-    public JavaMethod(JavaClass parent) {
-        super(parent, 0);
-    }
-
-    public JavaMethod() {
-        this(null, 0);
-    }
 
     public Type getReturns() {
         return returns;
@@ -188,12 +176,8 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         return (JavaClass) getParent();
     }
 
-    /**
-     * TODO - remove
-     * @deprecated Don't call this - the parent is set in the constructor.
-     */
     public void setParentClass(JavaClass parentClass) {
-        throw new UnsupportedOperationException();
+        setParent(parentClass);
     }
 
     public boolean isPublic() {

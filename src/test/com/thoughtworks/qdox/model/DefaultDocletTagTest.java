@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 /**
- * 
+ *
  * @author Aslak Helles&oslash;y
  * @version $Revision$
  */

@@ -96,7 +96,7 @@ public class Type implements Comparable, Serializable {
         } else {
             // ask our interfaces
             JavaClass javaClass = getJavaClass();
-            if( javaClass != null ) {
+            if (javaClass != null) {
                 Type[] implementz = javaClass.getImplements();
                 for (int i = 0; i < implementz.length; i++) {
                     if (implementz[i].isA(type)) {

@@ -49,7 +49,7 @@ public final class AbstractQdoxTaskTest extends TestCase {
             // Not useful at all, only to test that we can actually plug in any tag factory.
             return new DocletTagFactory() {
                 public DocletTag createDocletTag(String tag, String text) {
-                    return new DefaultDocletTag( "aslak." + tag, text  );
+                    return new DefaultDocletTag("aslak." + tag, text);
                 }
             };
         }

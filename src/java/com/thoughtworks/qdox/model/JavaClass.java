@@ -28,12 +28,10 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
     private Type[] implementz = new Type[0];
     private JavaClassParent parent;
 
-    private JavaClassCache javaClassCache;
     private BeanProperty[] beanProperties;
     private Map beanPropertyMap;
 
     public void setJavaClassCache(JavaClassCache javaClassCache) {
-        this.javaClassCache = javaClassCache;
         // reassign OBJECT. This will make it have a "source" too,
         // causing Type.getJavaClass() to return a JavaClass, instead
         // of null.
@@ -265,8 +263,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
      * @since 1.3
      */
     public boolean isA(String fullClassName) {
-        //JavaClass javaClass = javaClassCache.getClassByName(fullClassName);
-        Type type = new Type(fullClassName,0,this.getParentSource());
+        Type type = new Type(fullClassName, 0, getParentSource());
         return asType().isA(type);
     }
 

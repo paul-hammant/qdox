@@ -46,7 +46,7 @@ public abstract class AbstractQdoxTask extends Task {
     public void execute() throws BuildException {
         validateAttributes();
         buildFileMap();
-        JavaDocBuilder builder = new JavaDocBuilder( createDocletTagFactory() );
+        JavaDocBuilder builder = new JavaDocBuilder(createDocletTagFactory());
 
         // Add a classloader that has the taskdef's classpath.
         builder.getClassLibrary().addClassLoader(getClass().getClassLoader());

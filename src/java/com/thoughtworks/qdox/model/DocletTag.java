@@ -3,7 +3,7 @@ package com.thoughtworks.qdox.model;
 import java.io.Serializable;
 
 /**
- * 
+ *
  * @author Aslak Helles&oslash;y
  * @version $Revision$
  */

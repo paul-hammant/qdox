@@ -265,6 +265,28 @@ public class LexerTest extends TestCase {
 		assertLex(0, lexer);
 	}
 
+	public void testCommentThatContainsStar() throws Exception {
+		String in = ""
+			+ "/**\n"
+			+ " * 5 * 4\n"
+			+ " * SELECT COUNT(*)\n"
+			+ " */";
+		Lexer lexer = new JFlexLexer(new StringReader(in));
+		assertLex(Parser.JAVADOCSTART, lexer);
+		assertLex(Parser.JAVADOCNEWLINE, lexer);
+
+		assertLex(Parser.JAVADOCTOKEN, "5", lexer);
+		assertLex(Parser.JAVADOCTOKEN, "*", lexer);
+		assertLex(Parser.JAVADOCTOKEN, "4", lexer);
+		assertLex(Parser.JAVADOCNEWLINE, lexer);
+		assertLex(Parser.JAVADOCTOKEN, "SELECT", lexer);
+		assertLex(Parser.JAVADOCTOKEN, "COUNT(*)", lexer);
+		assertLex(Parser.JAVADOCNEWLINE, lexer);
+
+		assertLex(Parser.JAVADOCEND, lexer);
+		assertLex(0, lexer);
+	}
+
 	public void testArrayTokens() throws Exception {
 		String in = "String[] []o[]";
 		Lexer lexer = new JFlexLexer(new StringReader(in));

@@ -15,7 +15,7 @@ public class DocletTagTest extends TestCase {
 		String in = ""
 			+ "package x;\n"
 			+ "/**\n"
-			+ " * @tag aa bbb ccc dd=e f='g' i = \"xx\"\n"
+			+ " * @tag aa count(*) bbb * ccc dd=e f='g' i = \"xx\"\n"
 			+ " */\n"
 			+ "class X {}";
 
@@ -23,7 +23,7 @@ public class DocletTagTest extends TestCase {
 		builder.addSource(new StringReader(in));
 		DocletTag tag = builder.getClassByName("x.X").getTagByName("tag");
 
-		assertEquals("aa bbb ccc dd=e f='g' i = \"xx\"", tag.getValue());
+		assertEquals("aa count(*) bbb * ccc dd=e f='g' i = \"xx\"", tag.getValue());
 	}
 
 	public void testIndexedParameter() throws Exception {

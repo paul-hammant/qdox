@@ -17,6 +17,7 @@ import com.thoughtworks.qdox.parser.*;
 	private int stateDepth = 0;
 	private int[] stateStack = new int[10];
 	private boolean javaDocNewLine;
+	private boolean javaDocStartedContent;
 
 	public String text() {
 		return yytext();
@@ -103,8 +104,9 @@ import com.thoughtworks.qdox.parser.*;
 
 <JAVADOC> {
 	"*/"               { popState(); return Parser.JAVADOCEND; }
-	\r|\n|\r\n         { javaDocNewLine = true; return Parser.JAVADOCNEWLINE; }
-	[^ \t\r\n\*@][^ \t\r\n\*]* { return Parser.JAVADOCTOKEN; }
+	\r|\n|\r\n         { javaDocNewLine = true; javaDocStartedContent = false; return Parser.JAVADOCNEWLINE; }
+	"*"                { if (javaDocStartedContent) return Parser.JAVADOCTOKEN; }
+	[^ \t\r\n\*@][^ \t\r\n]* { javaDocStartedContent = true; return Parser.JAVADOCTOKEN; }
 	"@"                { if (javaDocNewLine) return Parser.JAVADOCTAGMARK; }
 }
 

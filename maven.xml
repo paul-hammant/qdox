@@ -19,6 +19,8 @@
 	</goal>
 
 	<goal name="coverage">
+		<property name="maven.junit.fork" value="yes"/>
+
 		<delete dir="target/clover"/>
 		<delete dir="${maven.build.dest}"/>
 		<delete dir="${maven.test.dest}"/>
@@ -32,9 +34,9 @@
 
 		<attainGoal name="clover:html-report"/>
 
-		<delete dir="target/clover"/>
 		<delete dir="${maven.build.dest}"/>
 		<delete dir="${maven.test.dest}"/>
+		<echo>${maven.junit.fork}</echo>
 	</goal>
 	
 </project>

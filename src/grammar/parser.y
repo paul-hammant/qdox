@@ -154,7 +154,7 @@ private int yylex() {
 }
 
 private void yyerror(String msg) {
-	builder.fail();
+	// TODO: Implement error handling
 }
 
 private class Value {

@@ -4,7 +4,7 @@ import java.beans.Introspector;
 import java.util.List;
 import java.util.ArrayList;
 
-public class JavaMethod extends AbstractInheritableJavaEntity {
+public class JavaMethod extends AbstractInheritableJavaEntity implements Member {
 
     protected Type returns;
     private JavaParameter[] parameters = JavaParameter.EMPTY_ARRAY;

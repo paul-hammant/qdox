@@ -117,8 +117,21 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
             result = createBinaryClass(name);
             if (result != null) {
                 addClass(result);
+            } else {
+                result = createUnknownClass(name);
             }
         }
+        return result;
+    }
+
+    private JavaClass createUnknownClass(String name) {
+        ModelBuilder unknownBuilder = new ModelBuilder(classLibrary, docletTagFactory);
+        ClassDef classDef = new ClassDef();
+        classDef.name = name;
+        unknownBuilder.beginClass(classDef);
+        unknownBuilder.endClass();
+        JavaSource unknownSource = unknownBuilder.getSource();
+        JavaClass result = unknownSource.getClasses()[0];
         return result;
     }
 

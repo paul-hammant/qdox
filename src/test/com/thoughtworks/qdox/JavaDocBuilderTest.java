@@ -48,8 +48,6 @@ public class JavaDocBuilderTest extends TestCase {
 
         JavaClass testClassByName = builder.getClassByName("com.thoughtworks.util.TestClass");
         assertEquals("TestClass", testClassByName.getName());
-
-        assertNull(builder.getClassByName("this.class.should.not.Exist"));
     }
 
     private String createTestClassList() {
@@ -122,7 +120,6 @@ public class JavaDocBuilderTest extends TestCase {
         assertNotNull(builder.getClassByName("com.blah.Thing"));
         assertNotNull(builder.getClassByName("com.blah.Another"));
         assertNotNull(builder.getClassByName("com.blah.subpackage.Cheese"));
-        assertNull(builder.getClassByName("com.blah.Ignore"));
     }
 
     public void testRecordFile() throws Exception {
@@ -444,7 +441,6 @@ public class JavaDocBuilderTest extends TestCase {
 
         JavaDocBuilder newBuilder = JavaDocBuilder.load(file);
         assertNotNull(newBuilder.getClassByName("com.blah.subpackage.Cheese"));
-        assertNull(newBuilder.getClassByName("com.blah.Ignore"));
 
         newBuilder.addSource(new StringReader("package x; import java.util.*; class Z extends List{}"));
         assertEquals("java.util.List", newBuilder.getClassByName("x.Z").getSuperClass().getValue());
@@ -636,41 +632,31 @@ public class JavaDocBuilderTest extends TestCase {
 
         assertEquals(1, clazz.getInnerClasses().length);
     }
-    
-    public void testParseErrorLocationIsAvailable() {
+
+    public void testParseErrorLocationShouldBeAvailable() {
         String badSource = ""
-        + "package x;\n"
-        + "import java.util.*;\n"
-        + "class Bad [\n";
+                + "package x;\n"
+                + "import java.util.*;\n"
+                + "class Bad [\n";
         try {
             builder.addSource(new StringReader(badSource));
             fail("ParseException expected");
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             assertEquals(3, e.getLine());
             assertEquals(11, e.getColumn());
         }
     }
 
-    public void testShouldNotConfuseExtendedFileClassWithTheSuperClass() {
-        String sourceCode = "" +
-                "package x;\n" +
-                "import java.io.File;\n" +
-                "" +
-                "public class Test {\n" +
-                "    class ExtendedFile extends File {\n" +
-                "        public ExtendedFile(String pathname) {\n" +
-                "            super(pathname);\n" +
-                "        }\n" +
-                "    }\n" +
-                "    \n" +
-                "    public static File doSomething(File f) { return null; }\n" +
-                "}";
+    public void testJiraQdox35() {
+        String sourceCode = "package pack; public class Foo extends Bar implements Zap {}";
         JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
-        JavaClass test = builder.getClassByName("x.Test");
-        JavaMethod doSomething = test.getMethods(false)[0];
-        assertEquals("java.io.File", doSomething.getReturns().getValue());
-
+        JavaClass clazz = builder.getClassByName("pack.Foo");
+        assertEquals(1, clazz.getImplementedInterfaces().length);
+        // Ideally the fully qualified names should be the pack.Zap and pack.Bar,
+        // but this will do for now to fix the NPE bug.
+        assertEquals("Zap", clazz.getImplementedInterfaces()[0].getFullyQualifiedName());
+        assertEquals("Bar", clazz.getSuperJavaClass().getFullyQualifiedName());
     }
 
 }

@@ -233,11 +233,7 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
     }
 
     public JavaSource getSource() {
-        if(parent instanceof JavaSource) {
-            return (JavaSource) parent;
-        } else {
-            return parent.getParentSource();
-        }
+        return parent.getParentSource();
     }
 
 }

@@ -60,7 +60,6 @@ import com.thoughtworks.qdox.parser.*;
 	"synchronized"     { return Parser.SYNCHRONIZED; }
 	"transient"        { return Parser.TRANSIENT; }
 	"volatile"         { return Parser.VOLATILE; }
-	"interface"        { return Parser.INTERFACE; }
 	"throws"           { return Parser.THROWS; }
 	"extends"          { return Parser.EXTENDS; }
 	"implements"       { return Parser.IMPLEMENTS; }
@@ -73,6 +72,10 @@ import com.thoughtworks.qdox.parser.*;
 	"class"            {
 		classDepth++;
 		return Parser.CLASS; 
+	}
+	"interface"        { 
+		classDepth++;
+		return Parser.INTERFACE; 
 	}
 
 	"{"                {

@@ -410,9 +410,7 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetBeanPropertiesFindsSimpleProperties() throws Exception {
-        
-        JavaMethod setFooMethod = new JavaMethod();
-        setFooMethod.setName("setFoo");
+        JavaMethod setFooMethod = new JavaMethod("setFoo");
         setFooMethod.setParameters(
             new JavaParameter[] {
                 new JavaParameter(new Type("int"), "foo")
@@ -420,9 +418,7 @@ public class JavaClassTest extends TestCase {
         );
         cls.addMethod(setFooMethod);
 
-        JavaMethod getFooMethod = new JavaMethod();
-        getFooMethod.setName("getFoo");
-        getFooMethod.setReturns(new Type("int"));
+        JavaMethod getFooMethod = new JavaMethod(new Type("int"), "getFoo");
         cls.addMethod(getFooMethod);
         
         assertEquals(1, cls.getBeanProperties().length);
@@ -432,8 +428,25 @@ public class JavaClassTest extends TestCase {
         assertEquals(getFooMethod, fooProp.getAccessor());
         assertEquals(setFooMethod, fooProp.getMutator());
     }
+
+    /**
+     * @codehaus.jira QDOX-59
+     */
+    public void testBeanPropertiesAreReturnedInOrderDeclared() {
+        cls.addMethod(new JavaMethod(new Type("int"), "getFoo"));
+        cls.addMethod(new JavaMethod(new Type("int"), "getBar"));
+        cls.addMethod(new JavaMethod(new Type("String"), "getMcFnord"));
+
+        BeanProperty[] properties = cls.getBeanProperties();
+        assertEquals(3, properties.length);
+        assertEquals("foo", properties[0].getName());
+        assertEquals("bar", properties[1].getName());
+        assertEquals("mcFnord", properties[2].getName());        
+    }
     
-    // TODO - more tests for bean properties. Ref QDOX-59
+    private void addGetMethod(String name, Type returnType) {
+        
+    }
     
     private Type[] type(String[] typeNames) {
         Type[] result = new Type[typeNames.length];

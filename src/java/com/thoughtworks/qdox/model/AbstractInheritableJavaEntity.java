@@ -1,9 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-
 /**
  * @author Aslak Helles&oslash;y
  * @version $Revision$

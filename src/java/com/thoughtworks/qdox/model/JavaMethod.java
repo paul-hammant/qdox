@@ -258,16 +258,6 @@ public class JavaMethod extends AbstractInheritableJavaEntity {
         return Introspector.decapitalize(getName().substring(start));
     }
 
-    protected AbstractInheritableJavaEntity[] getSuperEntities() {
-        JavaClass clazz = getParentClass();
-        JavaParameter[] params = getParameters();
-        Type[] types = new Type[params.length];
-        for (int i = 0; i < types.length; i++) {
-            types[i] = params[i].getType();
-        }
-        return clazz.getMethodsBySignature(getName(), types, true);
-    }
-
     public DocletTag[] getTagsByName(String name, boolean inherited) {
         JavaClass clazz = getParentClass();
         JavaParameter[] params = getParameters();
@@ -276,7 +266,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity {
             types[i] = params[i].getType();
         }
         JavaMethod[] methods = clazz.getMethodsBySignature(getName(), types, true);
-        
+
         List result = new ArrayList();
         for (int i = 0; i < methods.length; i++) {
             JavaMethod method = methods[i];

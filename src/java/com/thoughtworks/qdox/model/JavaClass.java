@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.ArrayList;
-import java.beans.Introspector;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -344,16 +343,16 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         for (int i = 0; i < methods.length; i++) {
             JavaMethod method = methods[i];
             if (method.isPublic() && !method.isStatic()) {
-                if (isPropertyAccessor(method)) {
-                    String propertyName = getPropertyName(method);
+                if (method.isPropertyAccessor()) {
+                    String propertyName = method.getPropertyName();
                     BeanProperty beanProperty = getOrCreateProperty(propertyName);
                     beanProperty.setAccessor(method);
-                    beanProperty.setType(getPropertyType(method));
-                } else if (isPropertyMutator(method)) {
-                    String propertyName = getPropertyName(method);
+                    beanProperty.setType(method.getPropertyType());
+                } else if (method.isPropertyMutator()) {
+                    String propertyName = method.getPropertyName();
                     BeanProperty beanProperty = getOrCreateProperty(propertyName);
                     beanProperty.setMutator(method);
-					beanProperty.setType(getPropertyType(method));
+					beanProperty.setType(method.getPropertyType());
                 }
             }
         }
@@ -370,67 +369,8 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         return result;
     }
 
-    private boolean isPropertyAccessor(JavaMethod method) {
-        boolean signatureOk = false;
-        boolean nameOk = false;
-
-        if (method.getName().startsWith("is")) {
-            String returnType = method.getReturns().getValue();
-            signatureOk = returnType.equals("boolean") || returnType.equals("java.lang.Boolean");
-            signatureOk = signatureOk && method.getReturns().getDimensions() == 0;
-            if (getName().length() > 2) {
-                nameOk = Character.isUpperCase(method.getName().charAt(2));
-            }
-        }
-        if (method.getName().startsWith("get")) {
-            signatureOk = true;
-            if (method.getName().length() > 3) {
-                nameOk = Character.isUpperCase(method.getName().charAt(3));
-            }
-        }
-        boolean noParams = method.getParameters().length == 0;
-        return signatureOk && nameOk && noParams;
-    }
-
-    private boolean isPropertyMutator(JavaMethod method) {
-        boolean nameOk = false;
-        if (method.getName().startsWith("set")) {
-            if (method.getName().length() > 3) {
-                nameOk = Character.isUpperCase(method.getName().charAt(3));
-            }
-        }
-
-        boolean oneParam = method.getParameters().length == 1;
-        return nameOk && oneParam;
-    }
-
     // This method will fail if the method isn't an accessor or mutator, but
     // it will only be called with methods that are, so we're safe.
-    private String getPropertyName(JavaMethod method) {
-        int start = -1;
-        if (method.getName().startsWith("get") || method.getName().startsWith("set")) {
-            start = 3;
-        } else if (method.getName().startsWith("is")) {
-            start = 2;
-        } else {
-            throw new IllegalStateException("Shouldn't happen");
-        }
-        return Introspector.decapitalize(method.getName().substring(start));
-    }
-
-    // This method will fail if the method isn't an accessor or mutator, but
-    // it will only be called with methods that are, so we're safe.
-    private Type getPropertyType(JavaMethod method) {
-        Type result = null;
-        if (isPropertyAccessor(method)){
-            result = method.getReturns();
-        } else if(isPropertyMutator(method)){
-            result = method.getParameters()[0].getType();
-        } else {
-            throw new IllegalStateException("Shouldn't happen");
-        }
-        return result;
-    }
 
     public JavaClass[] getDerivedClasses() {
         List result = new ArrayList();

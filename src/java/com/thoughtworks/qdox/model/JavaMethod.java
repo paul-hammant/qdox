@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.beans.Introspector;
+
 public class JavaMethod extends AbstractJavaEntity {
 
     protected Type returns;
@@ -176,5 +178,81 @@ public class JavaMethod extends AbstractJavaEntity {
 
     public void setParentClass(JavaClass parentClass) {
         this.parentClass = parentClass;
+    }
+
+    /**
+     * @return true if this method is a Java Bean accessor
+     * @since 1.3
+     */
+    public boolean isPropertyAccessor() {
+        boolean signatureOk = false;
+        boolean nameOk = false;
+
+        if (getName().startsWith("is")) {
+            String returnType = getReturns().getValue();
+            signatureOk = returnType.equals("boolean") || returnType.equals("java.lang.Boolean");
+            signatureOk = signatureOk && getReturns().getDimensions() == 0;
+            if (getName().length() > 2) {
+                nameOk = Character.isUpperCase(getName().charAt(2));
+            }
+        }
+        if (getName().startsWith("get")) {
+            signatureOk = true;
+            if (getName().length() > 3) {
+                nameOk = Character.isUpperCase(getName().charAt(3));
+            }
+        }
+        boolean noParams = getParameters().length == 0;
+        return signatureOk && nameOk && noParams;
+    }
+
+    /**
+     * @return true if this method is a Java Bean accessor
+     * @since 1.3
+     */
+    public boolean isPropertyMutator() {
+        boolean nameOk = false;
+        if (getName().startsWith("set")) {
+            if (getName().length() > 3) {
+                nameOk = Character.isUpperCase(getName().charAt(3));
+            }
+        }
+
+        boolean oneParam = getParameters().length == 1;
+        return nameOk && oneParam;
+    }
+
+    /**
+     * @return the type of the property this method represents, or null if this method
+     * is not a property mutator or property accessor.
+     * @since 1.3
+     */
+    public Type getPropertyType() {
+        Type result = null;
+        if (isPropertyAccessor()){
+            result = getReturns();
+        } else if(isPropertyMutator()){
+            result = getParameters()[0].getType();
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
+    /**
+     * @return the name of the property this method represents, or null if this method
+     * is not a property mutator or property accessor.
+     * @since 1.3
+     */
+    public String getPropertyName() {
+        int start = -1;
+        if (getName().startsWith("get") || getName().startsWith("set")) {
+            start = 3;
+        } else if (getName().startsWith("is")) {
+            start = 2;
+        } else {
+            return null;
+        }
+        return Introspector.decapitalize(getName().substring(start));
     }
 }

@@ -281,10 +281,11 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         return source;
     }
 
-    public void addSource(File file) throws UnsupportedEncodingException, FileNotFoundException {
+    public JavaSource addSource(File file) throws UnsupportedEncodingException, FileNotFoundException {
         JavaSource source = addSource(new InputStreamReader(new FileInputStream(file),encoding));
         source.setFile(file);
         source.setEncoding(encoding);
+        return source;
     }
 
     public JavaSource[] getSources() {

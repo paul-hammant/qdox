@@ -182,11 +182,16 @@ public class JavaMethod extends AbstractInheritableJavaEntity {
         this.parentClass = parentClass;
     }
 
+    public boolean isPublic() {
+        return super.isPublic() || parentClass.isInterface();
+    }
+
     /**
      * @return true if this method is a Java Bean accessor
      * @since 1.3
      */
     public boolean isPropertyAccessor() {
+        boolean result = false;
         if( isPublic() && !isStatic() ) {
             boolean signatureOk = false;
             boolean nameOk = false;
@@ -206,10 +211,9 @@ public class JavaMethod extends AbstractInheritableJavaEntity {
                 }
             }
             boolean noParams = getParameters().length == 0;
-            return signatureOk && nameOk && noParams;
-        } else {
-            return false;
+            result = signatureOk && nameOk && noParams;
         }
+        return result;
     }
 
     /**

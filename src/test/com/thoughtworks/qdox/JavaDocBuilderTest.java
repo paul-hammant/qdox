@@ -331,8 +331,12 @@ public class JavaDocBuilderTest extends TestCase {
 
     public void testImageIconBeanProperties() {
         JavaClass imageIcon = builder.getClassByName("javax.swing.ImageIcon");
-        BeanProperty[] beanProperties = imageIcon.getBeanProperties();
-        assertEquals(7, beanProperties.length);
+
+        assertNull(imageIcon.getBeanProperty("class"));
+
+        BeanProperty clazz = imageIcon.getBeanProperty("class", true);
+        assertNotNull(clazz.getAccessor());
+        assertNull(clazz.getMutator());
 
         BeanProperty iconHeight = imageIcon.getBeanProperty("iconHeight");
         assertNotNull(iconHeight.getAccessor());

@@ -44,6 +44,10 @@
                 Implemented QDOX-18.
                 BeanProperty : support for type retrieval.
             </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-16, QDOX-19.
+                More robust handling of "*" and "@" in Javadoc body.
+            </action>
             <action dev="rinkrank" type="add">
                 Type now has a getJavaClass() method making
                 it easier to find the JavaClass of a Type from e.g. Velocity.
@@ -86,9 +90,8 @@
             <action dev="rinkrank" type="add">
                 Added boolean isInner() to JavaClass.
             </action>
-            <action dev="mdub" type="fix">
-                Fixed QDOX-16, QDOX-19.
-                More robust handling of "*" and "@" in Javadoc body.
+            <action dev="rinkrank" type="add">
+                Added JavaMethod[] getMethods(boolean superclasses) to JavaClass.
             </action>
         </release>
 

@@ -25,8 +25,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private Type[] implementz = new Type[0];
     private JavaClassParent parent;
 
-    private BeanProperty[] beanProperties;
-    private Map beanPropertyMap;
     private JavaClassCache javaClassCache;
 
     public JavaClass(JavaClassParent parent) {
@@ -57,8 +55,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     /**
-     * Shorthand for getSuperClass().getJavaClass()
-     * @return
+     * Shorthand for getSuperClass().getJavaClass() with null checking.
      */
     public JavaClass getSuperJavaClass() {
         if (getSuperClass() != null) {
@@ -144,7 +141,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         methods.add(meth);
         meth.setParentClass(this);
         methodsArray = null;
-        beanProperties = null;
     }
 
     public void setSuperClass(Type type) {
@@ -221,6 +217,49 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
             methods.toArray(methodsArray);
         }
         return methodsArray;
+    }
+
+    /**
+     * since 1.3
+     */
+    public JavaMethod[] getMethods(boolean superclasses) {
+        if(superclasses) {
+            Set signatures = new HashSet();
+            List methods = new ArrayList();
+            addMethodsFromSuperclassAndInterfaces(signatures, methods,  this);
+            return (JavaMethod[]) methods.toArray(new JavaMethod[methods.size()]);
+        } else {
+            return getMethods();
+        }
+    }
+
+    private void addMethodsFromSuperclassAndInterfaces(Set signatures, List methodList, JavaClass clazz) {
+        JavaMethod[] methods = clazz.getMethods();
+        addNewMethods(signatures, methodList, methods);
+
+        JavaClass superclass = clazz.getSuperJavaClass();
+        // TODO workaround for a bug in getSuperJavaClass
+        if (superclass != null && superclass != clazz) {
+            addMethodsFromSuperclassAndInterfaces(signatures, methodList, superclass);
+        }
+
+        JavaClass[] implementz = clazz.getImplementedInterfaces();
+        for (int i = 0; i < implementz.length; i++) {
+            addMethodsFromSuperclassAndInterfaces(signatures, methodList, implementz[i]);
+        }
+    }
+
+    private void addNewMethods(Set signatures, List methodList, JavaMethod[] methods) {
+        for (int i = 0; i < methods.length; i++) {
+            JavaMethod method = methods[i];
+            if (!method.isPrivate()) {
+                String signature = method.getDeclarationSignature(false);
+                if(!signatures.contains(signature)) {
+                    methodList.add(method);
+                    signatures.add(signature);
+                }
+            }
+        }
     }
 
     /**
@@ -343,54 +382,65 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     /**
+     * Gets bean properties without looking in superclasses or interfaces.
      * @since 1.3
      */
     public BeanProperty[] getBeanProperties() {
-        if (beanProperties == null) {
-            initialiseBeanProperties();
-        }
-        return beanProperties;
+        return getBeanProperties(false);
     }
 
     /**
      * @since 1.3
      */
-    public BeanProperty getBeanProperty(String propertyName) {
-        if (beanProperties == null) {
-            initialiseBeanProperties();
-        }
-        return (BeanProperty) beanPropertyMap.get(propertyName);
+    public BeanProperty[] getBeanProperties(boolean superclasses) {
+        Map beanPropertyMap = getBeanPropertyMap(superclasses);
+        Collection beanPropertyCollection = beanPropertyMap.values();
+        return (BeanProperty[]) beanPropertyCollection.toArray(new BeanProperty[beanPropertyCollection.size()]);
     }
 
-    private void initialiseBeanProperties() {
-        beanPropertyMap = new HashMap();
+    private Map getBeanPropertyMap(boolean superclasses) {
+        JavaMethod[] methods = getMethods(superclasses);
+        Map beanPropertyMap = new HashMap();
         // loop over the methods.
-        JavaMethod[] methods = getMethods();
         for (int i = 0; i < methods.length; i++) {
             JavaMethod method = methods[i];
             if (method.isPropertyAccessor()) {
                 String propertyName = method.getPropertyName();
-                BeanProperty beanProperty = getOrCreateProperty(propertyName);
+                BeanProperty beanProperty = getOrCreateProperty(beanPropertyMap, propertyName);
                 beanProperty.setAccessor(method);
                 beanProperty.setType(method.getPropertyType());
             } else if (method.isPropertyMutator()) {
                 String propertyName = method.getPropertyName();
-                BeanProperty beanProperty = getOrCreateProperty(propertyName);
+                BeanProperty beanProperty = getOrCreateProperty(beanPropertyMap, propertyName);
                 beanProperty.setMutator(method);
                 beanProperty.setType(method.getPropertyType());
             }
         }
-        Collection beanPropertyCollection = beanPropertyMap.values();
-        beanProperties = (BeanProperty[]) beanPropertyCollection.toArray(new BeanProperty[beanPropertyCollection.size()]);
+        return beanPropertyMap;
     }
 
-    private BeanProperty getOrCreateProperty(String propertyName) {
+    private BeanProperty getOrCreateProperty(Map beanPropertyMap, String propertyName) {
         BeanProperty result = (BeanProperty) beanPropertyMap.get(propertyName);
         if (result == null) {
             result = new BeanProperty(propertyName);
             beanPropertyMap.put(propertyName, result);
         }
         return result;
+    }
+
+    /**
+     * Gets bean property without looking in superclasses or interfaces.
+     * @since 1.3
+     */
+    public BeanProperty getBeanProperty(String propertyName) {
+        return getBeanProperty(propertyName, false);
+    }
+
+    /**
+     * @since 1.3
+     */
+    public BeanProperty getBeanProperty(String propertyName, boolean superclasses) {
+        return (BeanProperty) getBeanPropertyMap(superclasses).get(propertyName);
     }
 
     // This method will fail if the method isn't an accessor or mutator, but

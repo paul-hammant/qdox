@@ -1,0 +1,27 @@
+<project name="qdox" default="test">
+
+	<target name="generate">
+		<!--<exec executable="build-lexer.bat"/>-->
+		<exec executable="build-parser.bat"/>
+	</target>
+
+	<target name="compile" depends="generate">
+		<mkdir dir="build"/>
+		<javac srcdir="src/java" destdir="build"/>
+	</target>
+
+	<target name="test" depends="compile">
+		<!--<exec executable="build-mocks.bat"/>-->
+		<javac srcdir="src/test" destdir="build">
+			<classpath>
+				<fileset dir="bin"/>
+				<pathelement path="build"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="clean">
+		<delete dir="build"/>
+	</target>
+
+</project>

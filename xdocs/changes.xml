@@ -9,6 +9,15 @@
 	
 		<!-- action types are add/update/fix/remove -->
 		
+		<release version="1.2" date="2003-03-23">
+			<action dev="joeretro" type="fix">
+				Quoted tokens allowed in doclet tags.								
+			</action>
+			<action dev="joeretro" type="fix">
+				Asterix symbol allowed in doclet tags.								
+			</action>
+		</release>
+
 		<release version="1.1" date="2002-12-08">
 			<action dev="mdub" type="add">
 				Added support for inner classes.								

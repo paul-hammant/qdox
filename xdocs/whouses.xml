@@ -74,18 +74,6 @@
 					</td>
 				</tr>
 
-				<tr>
-					<td>QDox</td>
-					<td>
-						This is QDox!
-					</td>
-					<td>
-						QDox requires QDox to build itself! This is because mock objects are used to test QDox and
-						MockMaker (see above) is used to build these (which internally uses QDox). To make this possible, a version
-						of qdox.jar is bundled with sourcecode to bootstrap the build process. We do like our own dog food.
-					</td>
-				</tr>
-
 			</table></p>
 		</section>
 

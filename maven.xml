@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<project xmlns:j="jelly:core" xmlns:maven="jelly:maven">
+<project default="jar" xmlns:j="jelly:core" xmlns:maven="jelly:maven">
 
 	<!-- Generate lexer and parser java source code from grammars -->
-	<preGoal name="java:compile">
+	<goal name="parser" description="Generate parser">
 	
 		<!-- Generate lexer -->
 		<uptodate property="lexer.uptodate" srcfile="src/grammar/lexer.flex" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/JFlexLexer.java"/>
@@ -35,23 +35,17 @@
 		<path id="generate.java" location="target/src/java"/>
 		<maven:addPath id="maven.compile.src.set" refid="generate.java"/>
 		
+	</goal>
+	
+	<preGoal name="java:compile">
+		<attainGoal name="parser"/>
 	</preGoal>
 
-	<!-- Ensure clover coverage report and PDF documentation generated on site -->
+	<!-- Ensure clover coverage report generated on site -->
 	<preGoal name="xdoc:generate-from-pom">
+		<attainGoal name="maven-clover-plugin:register"/>
 		<attainGoal name="clover"/>
-		<attainGoal name="pdf"/>
 	</preGoal>
-	
-	<!-- Ensure java recompiled with clover compiler -->
-	<preGoal name="clover">
-		<delete dir="${maven.build.dest}"/>
-	</preGoal>
-	
-	<!-- Get rid of cloverified classes -->
-	<postGoal name="clover">
-		<delete dir="${maven.build.dest}"/>
-	</postGoal>
 	
 </project>
 

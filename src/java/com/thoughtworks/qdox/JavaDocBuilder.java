@@ -28,6 +28,34 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Simple facade to QDox allowing a source tree to be parsed and the resulting object model navigated.
+ *
+ * <h3>Example</h3>
+ * <pre><code>
+ * // -- Create JavaDocBuilder
+ *
+ * JavaDocBuilder builder = new JavaDocBuilder();
+ *
+ * // -- Add some files
+ *
+ * // Reading a single source file.
+ * builder.addSource(new FileReader("MyFile.java"));
+ *
+ * // Reading from another kind of input stream.
+ * builder.addSource(new StringReader("package test; public class Hello {}"));
+ *
+ * // Adding all .java files in a source tree (recursively).
+ * builder.addSourceTree(new File("mysrcdir"));
+ * 
+ * // -- Retrieve source files
+ *
+ * JavaSource[] source = builder.getSources();
+ *
+ * </code></pre>
+ *
+ * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
+ */
 public class JavaDocBuilder implements Serializable, JavaClassCache{
 
 	private Map classes = new HashMap();

@@ -17,8 +17,8 @@
 
 	<shortDescription>QDox - Quick JavaDoc Scanner</shortDescription>
 	<description>
-		QDox is a high speed, small footprint parser for extracting class/interface/method 
-		definitions from source files complete with JavaDoc @tags. It is designed to be used 
+		QDox is a high speed, small footprint parser for extracting class/interface/method
+		definitions from source files complete with JavaDoc @tags. It is designed to be used
 		by active code generators or documentation tools.
 	</description>
 
@@ -45,6 +45,11 @@
 			<id>1.1</id>
 			<name>1.1</name>
 			<tag>1_1</tag>
+		</version>
+		<version>
+			<id>1.2</id>
+			<name>1.2</name>
+			<tag>1_2</tag>
 		</version>
 		<version>
 			<id>current</id>
@@ -110,6 +115,18 @@
 			<name>James Strachan</name>
 			<email>jstrachan@apache.org</email>
 		</contributor>
+		<contributor>
+			<name>Nick Pomfret</name>
+			<email></email>
+		</contributor>
+		<contributor>
+			<name>Chris Stevenson</name>
+			<email>cstevenson@thoughtworks.com</email>
+		</contributor>
+		<contributor>
+			<name>Ben Hogan</name>
+			<email>ben@lizardsoftware.com</email>
+		</contributor>
 	</contributors>
 
 	<dependencies>
@@ -141,6 +158,6 @@
 		</unitTest>
 
 		<jars/>
-		
+
 	</build>
 </project>

@@ -5,7 +5,6 @@
 	<body>
 		<links>
 			<item name="QDox" href="http://qdox.sourceforge.net/"/>
-			<item name="PDF" href="/project.pdf"/>
 			<item name="SourceForge" href="http://sourceforge.net/projects/qdox/"/>
 			<item name="Download" href="/download.html"/>
 			<item name="Wiki" href="http://wiki.truemesh.com/qdox/"/>

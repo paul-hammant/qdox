@@ -477,8 +477,8 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
             }
 
             JavaClass[] implementz = getImplementedInterfaces();
-            for (int h = 0; h < implementz.length; h++) {
-                addTagsRecursive(result,superclass,name,superclasses);
+            for (int i = 0; i < implementz.length; i++) {
+                addTagsRecursive(result,implementz[i],name,superclasses);
             }
         }
     }

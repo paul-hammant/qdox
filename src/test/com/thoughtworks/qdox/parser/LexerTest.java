@@ -320,22 +320,27 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
-    public void testTrailingStar() throws Exception {
-        String in = ""  
-            + "    /**\n"
-            + "     * @y z\n"
-            + "     * \n"
-            + "     */\n";
+    public void testIgnoreStarPrefix() throws Exception {
+        String in = ""
+            + "/**\n"
+            + " * simple\n"
+            + "\t    * indented\n"
+            + " *nospace\n"
+            + " *** multistar\n"
+            + " *\n"
+            + " */";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
         
-        assertLex(Parser.JAVADOCTAG, "@y", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "z", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "simple", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "indented", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "nospace", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "multistar", lexer);
         
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
     }
-
+    
     public void testArrayTokens() throws Exception {
         String in = "String[] []o[]";
         Lexer lexer = new JFlexLexer(new StringReader(in));

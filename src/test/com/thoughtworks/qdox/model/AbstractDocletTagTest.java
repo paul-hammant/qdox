@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.JavaDocBuilder;
 
 import java.io.StringReader;
+import java.util.Map;
 
 public abstract class AbstractDocletTagTest extends TestCase {
 
@@ -38,13 +39,29 @@ public abstract class AbstractDocletTagTest extends TestCase {
     }
 
     public void testNamedParameter() throws Exception {
-        DocletTag tag = getDocletTagFactory().createDocletTag("x", "hello=world dog=cat fork=spoon");
+        DocletTag tag = 
+            getDocletTagFactory().createDocletTag(
+                "x", "hello=world dog=cat fork=spoon"
+            );
         assertEquals("world", tag.getNamedParameter("hello"));
         assertEquals("cat", tag.getNamedParameter("dog"));
         assertEquals("spoon", tag.getNamedParameter("fork"));
         assertNull(tag.getNamedParameter("goat"));
     }
 
+    public void testNamedParameterMap() throws Exception {
+        DocletTag tag = 
+        getDocletTagFactory().createDocletTag(
+                "x", "hello=world dog=cat fork=spoon"
+                );
+        Map map = tag.getNamedParameterMap();
+        assertEquals(3, map.size());
+        assertEquals("world", map.get("hello"));
+        assertEquals("cat", map.get("dog"));
+        assertEquals("spoon", map.get("fork"));
+        assertNull(map.get("goat"));
+    }
+    
     public void testInvalidNamedParameter() throws Exception {
         DocletTag tag = getDocletTagFactory().createDocletTag("x", "= =z x=c y= o");
         assertEquals("c", tag.getNamedParameter("x"));

@@ -62,24 +62,27 @@ public class DefaultDocletTag implements DocletTag {
         return parameters;
     }
 
-    public String getNamedParameter(String key) {
-        if (namedParameters == null) {
-            namedParameters = new HashMap();
-            String[] params = getParameters();
-            for (int i = 0; i < params.length; i++) {
-                String param = params[i];
-                int eq = param.indexOf('=');
-                if (eq > -1) {
-                    String k = param.substring(0, eq);
-                    String v = param.substring(eq + 1);
-                    v = trim(v, quotes);
-                    if (k.length() > 0) {
-                        namedParameters.put(k, v);
-                    }
+    public Map getNamedParameterMap() {
+        if (namedParameters != null) return namedParameters;
+        namedParameters = new HashMap();
+        String[] params = getParameters();
+        for (int i = 0; i < params.length; i++) {
+            String param = params[i];
+            int eq = param.indexOf('=');
+            if (eq > -1) {
+                String k = param.substring(0, eq);
+                String v = param.substring(eq + 1);
+                v = trim(v, quotes);
+                if (k.length() > 0) {
+                    namedParameters.put(k, v);
                 }
             }
         }
-        return (String) namedParameters.get(key);
+        return namedParameters;
+    }
+    
+    public String getNamedParameter(String key) {
+        return (String) getNamedParameterMap().get(key);
     }
 
     public int getLineNumber() {
@@ -106,6 +109,7 @@ public class DefaultDocletTag implements DocletTag {
     public void setContext(AbstractJavaEntity owner) {
         this.owner = owner;
     }
+    
 }
 
 

@@ -9,6 +9,7 @@ import com.thoughtworks.qdox.parser.*;
 %implements Lexer
 %byaccj
 %unicode
+%line
 
 %{
 
@@ -25,6 +26,10 @@ import com.thoughtworks.qdox.parser.*;
 
 	public int lex() throws java.io.IOException {
 		return yylex();
+	}
+	
+	public int getLine() {
+		return yyline;
 	}
 
 	private void pushState(int newState) {

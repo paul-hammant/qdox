@@ -7,5 +7,7 @@ public interface Lexer {
     int lex() throws IOException;
 
     String text();
+    
+    int getLine();
 
 }

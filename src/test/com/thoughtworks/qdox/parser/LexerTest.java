@@ -60,7 +60,9 @@ public class LexerTest extends TestCase {
         checkAssignment("new Thingy(\"xxx\", 3, x.getBlah())");
         checkAssignment("new Thingy(\"xx;x\", 3, x.getBlah())");
         checkAssignment("StaticClass.intance()");
-    }
+        checkAssignment("[1,2,3]");
+        checkAssignment("/* , ; } */");
+       }
 
     public void testAnonymousInnerClassAssignment() throws Exception {
         checkAssignment("new Thingifier() { void doThings(int x) { blah(); } }");
@@ -80,8 +82,30 @@ public class LexerTest extends TestCase {
 
         assertLex(Parser.IDENTIFIER, "int", lexer);
         assertLex(Parser.IDENTIFIER, "x", lexer);
-        assertLex(Parser.ASSIGNMENT, lexer);
+        assertLex(Parser.SEMI, lexer);
 
+        assertLex(Parser.BRACECLOSE, lexer);
+        assertLex(0, lexer);
+    }
+
+    public void testMultipleFields() throws Exception {
+        String in = ""
+        + "class X { "
+        + " int x = 1, y = 2; "
+        + "} ";
+
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.CLASS, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.BRACEOPEN, lexer);
+
+        assertLex(Parser.IDENTIFIER, "int", lexer);
+        assertLex(Parser.IDENTIFIER, "x", lexer);
+        assertLex(Parser.COMMA, lexer);
+
+        assertLex(Parser.IDENTIFIER, "y", lexer);
+        assertLex(Parser.SEMI, lexer);
+        
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
     }
@@ -107,7 +131,7 @@ public class LexerTest extends TestCase {
 
         assertLex(Parser.IDENTIFIER, "String", lexer);
         assertLex(Parser.IDENTIFIER, "x", lexer);
-        assertLex(Parser.ASSIGNMENT, lexer);
+        assertLex(Parser.SEMI, lexer);
 
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
@@ -131,11 +155,11 @@ public class LexerTest extends TestCase {
         assertLex(Parser.BRACEOPEN, lexer);
         assertLex(Parser.IDENTIFIER, "int", lexer);
         assertLex(Parser.IDENTIFIER, "x", lexer);
-        assertLex(Parser.ASSIGNMENT, lexer);
+        assertLex(Parser.SEMI, lexer);
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(Parser.IDENTIFIER, "int", lexer);
         assertLex(Parser.IDENTIFIER, "y", lexer);
-        assertLex(Parser.ASSIGNMENT, lexer);
+        assertLex(Parser.SEMI, lexer);
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
     }
@@ -172,7 +196,7 @@ public class LexerTest extends TestCase {
         String in = "x = '\"';";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.IDENTIFIER, "x", lexer);
-        assertLex(Parser.ASSIGNMENT, lexer);
+        assertLex(Parser.SEMI, lexer);
         assertLex(0, lexer);
     }
 
@@ -180,7 +204,7 @@ public class LexerTest extends TestCase {
         String in = "x = '\\'';";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.IDENTIFIER, "x", lexer);
-        assertLex(Parser.ASSIGNMENT, lexer);
+        assertLex(Parser.SEMI, lexer);
         assertLex(0, lexer);
     }
 
@@ -188,7 +212,7 @@ public class LexerTest extends TestCase {
         String in = "x = \"blah \\\" blah\";";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.IDENTIFIER, "x", lexer);
-        assertLex(Parser.ASSIGNMENT, lexer);
+        assertLex(Parser.SEMI, lexer);
         assertLex(0, lexer);
     }
 
@@ -211,7 +235,7 @@ public class LexerTest extends TestCase {
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.IDENTIFIER, "a", lexer);
         assertLex(Parser.IDENTIFIER, "x", lexer);
-        assertLex(Parser.ASSIGNMENT, lexer);
+        assertLex(Parser.SEMI, lexer);
         assertLex(0, lexer);
 
         in = "a z = \n"
@@ -220,7 +244,7 @@ public class LexerTest extends TestCase {
         lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.IDENTIFIER, "a", lexer);
         assertLex(Parser.IDENTIFIER, "z", lexer);
-        assertLex(Parser.ASSIGNMENT, lexer);
+        assertLex(Parser.SEMI, lexer);
         assertLex(0, lexer);
     }
 

@@ -142,11 +142,21 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 	";"                { 
 	    if (braceDepth == classDepth) { 
 			popState(); 
-			return Parser.ASSIGNMENT; 
+			return Parser.SEMI; 
+		} 
+	}
+	","                { 
+	    if (braceDepth == classDepth) { 
+			popState(); 
+			return Parser.COMMA; 
 		} 
 	}
 	"{"                { braceDepth++; }
 	"}"                { braceDepth--; }
+	"("                { braceDepth++; }
+	")"                { braceDepth--; }
+	"["                { braceDepth++; }
+	"]"                { braceDepth--; }
 }
 
 <ASSIGNMENT, CODEBLOCK, YYINITIAL> {

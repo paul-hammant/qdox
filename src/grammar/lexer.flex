@@ -18,28 +18,28 @@ package net.sf.qdox.parser;
 
 <YYINITIAL> {
 
-	";"                { return Tokens.SEMI; }
-	"."                { return Tokens.DOT; }
-	","                { return Tokens.COMMA; }
-	"*"                { return Tokens.STAR; }
-	"="                { return Tokens.EQUALS; }
+	";"                { return Parser.SEMI; }
+	"."                { return Parser.DOT; }
+	","                { return Parser.COMMA; }
+	"*"                { return Parser.STAR; }
+	"="                { return Parser.EQUALS; }
 
-	"package"          { return Tokens.PACKAGE; }
-	"import"           { return Tokens.IMPORT; }
-	"public"           { return Tokens.PUBLIC; }
-	"protected"        { return Tokens.PROTECTED; }
-	"private"          { return Tokens.PRIVATE; }
-	"static"           { return Tokens.STATIC; }
-	"final"            { return Tokens.FINAL; }
-	"abstract"         { return Tokens.ABSTRACT; }
-	"class"            { return Tokens.CLASS; }
-	"interface"        { return Tokens.INTERFACE; }
-	"throws"           { return Tokens.THROWS; }
+	"package"          { return Parser.PACKAGE; }
+	"import"           { return Parser.IMPORT; }
+	"public"           { return Parser.PUBLIC; }
+	"protected"        { return Parser.PROTECTED; }
+	"private"          { return Parser.PRIVATE; }
+	"static"           { return Parser.STATIC; }
+	"final"            { return Parser.FINAL; }
+	"abstract"         { return Parser.ABSTRACT; }
+	"class"            { return Parser.CLASS; }
+	"interface"        { return Parser.INTERFACE; }
+	"throws"           { return Parser.THROWS; }
 
-	"["                { return Tokens.SQUAREOPEN; }
-	"]"                { return Tokens.SQUARECLOSE; }
-	"("                { return Tokens.BRACKETOPEN; }
-	")"                { return Tokens.BRACKETCLOSE; }
+	"["                { return Parser.SQUAREOPEN; }
+	"]"                { return Parser.SQUARECLOSE; }
+	"("                { return Parser.BRACKETOPEN; }
+	")"                { return Parser.BRACKETCLOSE; }
 
 	"{"                {
 		parenDepth++;
@@ -47,13 +47,13 @@ package net.sf.qdox.parser;
 			yybegin(CODEBLOCK);
 		}
 		else {
-			return Tokens.PARENOPEN;
+			return Parser.PARENOPEN;
 		}
 	}
 
 	"}"                {
 		parenDepth--;
-		return Tokens.PARENCLOSE;
+		return Parser.PARENCLOSE;
 	}
 
 	"\""               { yybegin(STRING); }
@@ -63,20 +63,20 @@ package net.sf.qdox.parser;
 	"/*" [^*] ~"*/"    { }
 
 	/* javadoc */
-	"/**"              { yybegin(JAVADOC); return Tokens.JAVADOCSTART; }
+	"/**"              { yybegin(JAVADOC); return Parser.JAVADOCSTART; }
 
-	[A-Za-z_0-9]*      { return Tokens.IDENTIFIER; }
+	[A-Za-z_0-9]*      { return Parser.IDENTIFIER; }
 }
 
 <JAVADOC> {
-	"*/"               { yybegin(YYINITIAL); return Tokens.JAVADOCEND; }
-	\r|\n|\r\n         { return Tokens.JAVADOCNEWLINE; }
-	[^ \t\r\n\*@]*     { return Tokens.JAVADOCTOKEN; }
-	"@"                { return Tokens.JAVADOCTAGMARK; }
-//	[ \t\*]* "@"       { return Tokens.JAVADOCTAGMARK; }
+	"*/"               { yybegin(YYINITIAL); return Parser.JAVADOCEND; }
+	\r|\n|\r\n         { return Parser.JAVADOCNEWLINE; }
+	[^ \t\r\n\*@]*     { return Parser.JAVADOCTOKEN; }
+	"@"                { return Parser.JAVADOCTAGMARK; }
+//	[ \t\*]* "@"       { return Parser.JAVADOCTAGMARK; }
 //	[ \t\*]*           { }
-//	[^\*]*             { return Tokens.JAVADOCTOKEN; }
-//	[^ \t\r\n("*/")@]* { return Tokens.JAVADOCTOKEN; }
+//	[^\*]*             { return Parser.JAVADOCTOKEN; }
+//	[^ \t\r\n("*/")@]* { return Parser.JAVADOCTOKEN; }
 }
 
 <CODEBLOCK> {
@@ -89,14 +89,14 @@ package net.sf.qdox.parser;
 		parenDepth--;
 		if (parenDepth == 1) {
 			yybegin(YYINITIAL);
-			return Tokens.CODEBLOCK;
+			return Parser.CODEBLOCK;
 		}
 	}
 
 }
 
 <STRING> {
-  "\""               { yybegin(YYINITIAL); return Tokens.STRING; }
+  "\""               { yybegin(YYINITIAL); return Parser.STRING; }
 }
 
 .|\n                       { }

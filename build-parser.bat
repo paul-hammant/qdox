@@ -1,1 +1,4 @@
-java -cp lib/jflex.jar JFlex.Main -d src/java/net/sf/qdox/parser src/grammar/lexer.flex
+@echo off
+bin\yacc -Jnorun -Jnoconstruct -Jclass=Parser -Jpackage=net.sf.qdox.parser src\grammar\parser.y
+copy /Y Parser*.java src\java\net\sf\qdox\parser
+del Parser.java ParserVal.java

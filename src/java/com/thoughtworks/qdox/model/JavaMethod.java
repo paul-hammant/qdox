@@ -6,7 +6,6 @@ public class JavaMethod extends AbstractJavaEntity {
 	private JavaParameter[] parameters;
 	private Type[] exceptions;
 	private boolean constructor;
-	private int dimensions;
 
 	public Type getReturns() {
 		return returns;
@@ -33,7 +32,7 @@ public class JavaMethod extends AbstractJavaEntity {
 
 		if (!constructor) {
 			result.write(returns.getValue());
-			for (int i = 0; i < dimensions; i++) {
+			for (int i = 0; i < returns.getDimensions(); i++) {
 				result.write("[]");
 			}
 			result.write(' ');
@@ -45,7 +44,7 @@ public class JavaMethod extends AbstractJavaEntity {
 			JavaParameter parameter = parameters[i];
 			if (i > 0) result.write(", ");
 			result.write(parameter.getType().getValue());
-			for (int j = 0; j < parameter.getDimensions(); j++) {
+			for (int j = 0; j < parameter.getType().getDimensions(); j++) {
 				result.write("[]");
 			}
 			result.write(' ');
@@ -77,14 +76,6 @@ public class JavaMethod extends AbstractJavaEntity {
 
 	public void setConstructor(boolean constructor) {
 		this.constructor = constructor;
-	}
-
-	public void setDimensions(int dimensions) {
-		this.dimensions = dimensions;
-	}
-
-	public int getDimensions() {
-		return dimensions;
 	}
 
 	public boolean equals(Object obj) {

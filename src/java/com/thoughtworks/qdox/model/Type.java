@@ -8,24 +8,22 @@ public class Type implements Comparable{
     private ClassLibrary classLibrary;
     private String packge;
     private String value = null;
-    private boolean isArray = false;
+    private int dimensions;
 
-    public Type(String fullName) {
+    public Type(String fullName, int dimensions) {
         value = fullName;
+        this.dimensions = dimensions;
     }
 
-    public Type(List imports, String name, ClassLibrary classLibrary, String packge) {
+    public Type(List imports, String name, ClassLibrary classLibrary, String packge, int dimensions) {
         this.imports = imports;
-        isArray = name.endsWith("[]");
-        if (isArray)
-            this.name = name.substring(0, name.length() - 2);
-        else
-            this.name = name;
+        this.name = name;
         this.classLibrary = classLibrary;
         this.packge = packge;
+        this.dimensions = dimensions;
     }
 
-    private void resolve() {
+	private void resolve() {
         if (classLibrary == null || name.indexOf(".")!=-1){
             value = name;
             return;
@@ -57,12 +55,16 @@ public class Type implements Comparable{
 	}
 
 	public boolean isArray() {
-		return isArray;
+		return dimensions > 0;
+	}
+
+	public int getDimensions() {
+		return dimensions;
 	}
 
 	public boolean equals(Object obj) {
 		Type t = (Type)obj;
-		return t.getValue().equals(getValue());
+		return t.getValue().equals(getValue()) && t.getDimensions() == getDimensions();
 	}
 
 	public int hashCode() {

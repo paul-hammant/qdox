@@ -4,12 +4,10 @@ public class JavaParameter {
 
 	private String name;
 	private Type type;
-	private int dimensions;
 
-	public JavaParameter(Type type, String name, int dimensions) {
+	public JavaParameter(Type type, String name) {
 		this.name = name;
 		this.type = type;
-		this.dimensions = dimensions;
 	}
 
 	public String getName() {
@@ -20,13 +18,9 @@ public class JavaParameter {
 		return type;
 	}
 
-	public int getDimensions() {
-		return dimensions;
-	}
-
 	public boolean equals(Object obj) {
 		JavaParameter p = (JavaParameter)obj;
 		// name isn't used in equality check.
-		return getType().equals(p.getType()) && getDimensions() == p.getDimensions();
+		return getType().equals(p.getType());
 	}
 }

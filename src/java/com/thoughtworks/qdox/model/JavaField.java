@@ -3,7 +3,6 @@ package com.thoughtworks.qdox.model;
 public class JavaField extends AbstractJavaEntity {
 
 	private Type type;
-	private int dimensions;
 
 	public Type getType() {
 		return type;
@@ -12,7 +11,7 @@ public class JavaField extends AbstractJavaEntity {
 	protected void writeBody(IndentBuffer result) {
 		writeAllModifiers(result);
 		result.write(type.getValue());
-		for (int i = 0; i < dimensions; i++) {
+		for (int i = 0; i < type.getDimensions(); i++) {
 			result.write("[]");
 		}
 		result.write(' ');
@@ -23,14 +22,6 @@ public class JavaField extends AbstractJavaEntity {
 
 	public void setType(Type type) {
 		this.type = type;
-	}
-
-	public void setDimensions(int i) {
-		this.dimensions = i;
-	}
-
-	public int getDimensions() {
-		return dimensions;
 	}
 
 }

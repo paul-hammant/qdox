@@ -232,7 +232,7 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		JavaMethod result = source.getClasses()[0].getMethod(0);
-		assertEquals(0, result.getDimensions());
+		assertEquals(0, result.getReturns().getDimensions());
 	}
 
 	public void testMethod1dArray() throws Exception {
@@ -245,7 +245,7 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		JavaMethod result = source.getClasses()[0].getMethod(0);
-		assertEquals(1, result.getDimensions());
+		assertEquals(1, result.getReturns().getDimensions());
 	}
 
 	public void testMethod2dArray() throws Exception {
@@ -258,7 +258,7 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		JavaMethod result = source.getClasses()[0].getMethod(0);
-		assertEquals(2, result.getDimensions());
+		assertEquals(2, result.getReturns().getDimensions());
 	}
 
 	public void testMethodParameters() throws Exception {
@@ -308,8 +308,8 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		JavaMethod result = source.getClasses()[0].getMethod(0);
-		assertEquals(1, result.getParameters()[0].getDimensions());
-		assertEquals(2, result.getParameters()[1].getDimensions());
+		assertEquals(1, result.getParameters()[0].getType().getDimensions());
+		assertEquals(2, result.getParameters()[1].getType().getDimensions());
 	}
 
 	public void testMethodExceptions() throws Exception {
@@ -395,7 +395,7 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		JavaField result = source.getClasses()[0].getField(0);
-		assertEquals(0, result.getDimensions());
+		assertEquals(0, result.getType().getDimensions());
 
 	}
 
@@ -410,7 +410,7 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		JavaField result = source.getClasses()[0].getField(0);
-		assertEquals(1, result.getDimensions());
+		assertEquals(1, result.getType().getDimensions());
 
 	}
 
@@ -425,7 +425,7 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		JavaField result = source.getClasses()[0].getField(0);
-		assertEquals(2, result.getDimensions());
+		assertEquals(2, result.getType().getDimensions());
 	}
 
 	public void testSimpleConstructor() throws Exception {

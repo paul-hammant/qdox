@@ -52,7 +52,7 @@ public class ModelBuilder implements Builder {
 			currentClass.setSuperClass(null);
 		}
 		else {
-			currentClass.setSuperClass(def.extendz.size() > 0 ? createType((String)def.extendz.toArray()[0]) : null);
+			currentClass.setSuperClass(def.extendz.size() > 0 ? createType((String)def.extendz.toArray()[0], 0) : null);
 		}
 
 		// implements
@@ -61,7 +61,7 @@ public class ModelBuilder implements Builder {
 			Iterator implementIt = implementSet.iterator();
 			Type[] implementz = new Type[implementSet.size()];
 			for (int i = 0; i < implementz.length && implementIt.hasNext(); i++) {
-				implementz[i] = createType((String)implementIt.next());
+				implementz[i] = createType((String)implementIt.next(), 0);
 			}
 			currentClass.setImplementz(implementz);
 		}
@@ -79,9 +79,8 @@ public class ModelBuilder implements Builder {
 		classes.add(currentClass);
 	}
 
-	private Type createType(String typeName) {
-		Type superclass = new Type(imports, typeName, classLibrary, packge);
-		return superclass;
+	private Type createType(String typeName, int dimensions) {
+		return new Type(imports, typeName, classLibrary, packge, dimensions);
 	}
 
 	private void addJavaDoc(AbstractJavaEntity entity) {
@@ -97,9 +96,8 @@ public class ModelBuilder implements Builder {
 
 		// basic details
 		currentMethod.setName(def.name);
-		currentMethod.setReturns(createType(def.returns));
+		currentMethod.setReturns(createType(def.returns, def.dimensions));
 		currentMethod.setConstructor(def.constructor);
-		currentMethod.setDimensions(def.dimensions);
 
 		// parameters
 		{
@@ -107,7 +105,7 @@ public class ModelBuilder implements Builder {
 			int i = 0;
 			for (Iterator iterator = def.params.iterator(); iterator.hasNext();) {
 				FieldDef fieldDef = (FieldDef)iterator.next();
-				params[i++] = new JavaParameter(createType(fieldDef.type), fieldDef.name, fieldDef.dimensions);
+				params[i++] = new JavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name);
 			}
 			currentMethod.setParameters(params);
 		}
@@ -117,7 +115,7 @@ public class ModelBuilder implements Builder {
 			Type[] exceptions = new Type[def.exceptions.size()];
 			int index=0;
 			for (Iterator iter = def.exceptions.iterator(); iter.hasNext(); ){
-				exceptions[index++] = createType((String)iter.next());
+				exceptions[index++] = createType((String)iter.next(), 0);
 			}
 			currentMethod.setExceptions(exceptions);
 		}
@@ -138,8 +136,7 @@ public class ModelBuilder implements Builder {
 	public void addField(FieldDef def) {
 		JavaField currentField = new JavaField();
 		currentField.setName(def.name);
-		currentField.setType(createType(def.type));
-		currentField.setDimensions(def.dimensions);
+		currentField.setType(createType(def.type, def.dimensions));
 
 		// modifiers
 		{

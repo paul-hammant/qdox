@@ -14,7 +14,7 @@ public class TypeTest extends TestCase{
         List imports = new ArrayList();
         imports.add("com.thoughtworks.qdox.model.Type");
 
-        Type type = new Type(imports, "Type", new ClassLibrary(), "");
+        Type type = new Type(imports, "Type", new ClassLibrary(), "", 0);
         assertTrue(type.isResolved());
         assertEquals("com.thoughtworks.qdox.model.Type", type.getValue());
     }
@@ -24,7 +24,7 @@ public class TypeTest extends TestCase{
         imports.add("com.thoughtworks.qdox.model.Type");
         imports.add("fake.package.MyType");
 
-        Type type = new Type(imports, "Type", new ClassLibrary(), "");
+        Type type = new Type(imports, "Type", new ClassLibrary(), "", 0);
         assertTrue(type.isResolved());
         assertEquals("com.thoughtworks.qdox.model.Type", type.getValue());
     }
@@ -37,7 +37,7 @@ public class TypeTest extends TestCase{
 
         ClassLibrary classLibrary = new ClassLibrary();
 
-        Type jFlexLexerType = new Type(imports, "JFlexLexer", classLibrary, "");
+        Type jFlexLexerType = new Type(imports, "JFlexLexer", classLibrary, "", 0);
         assertTrue(!jFlexLexerType.isResolved());
         assertEquals("JFlexLexer", jFlexLexerType.getValue());
 
@@ -54,7 +54,7 @@ public class TypeTest extends TestCase{
 
         ClassLibrary classLibrary = new ClassLibrary();
 
-        Type jFlexLexerType = new Type(imports, "JFlexLexer", classLibrary, "");
+        Type jFlexLexerType = new Type(imports, "JFlexLexer", classLibrary, "", 0);
         assertTrue(!jFlexLexerType.isResolved());
         assertEquals("JFlexLexer", jFlexLexerType.getValue());
 
@@ -70,7 +70,7 @@ public class TypeTest extends TestCase{
         ClassLibrary classLibrary = new ClassLibrary();
         String packge = "com.thoughtworks.qdox.model";
 
-        Type type = new Type(imports, "ModelBuilder", classLibrary, packge);
+        Type type = new Type(imports, "ModelBuilder", classLibrary, packge, 0);
         assertTrue(!type.isResolved());
         assertEquals("ModelBuilder", type.getValue());
 
@@ -87,7 +87,7 @@ public class TypeTest extends TestCase{
         ClassLibrary classLibrary = new ClassLibrary();
         String packge = "com.thoughtworks.qdox.model";
 
-        Type type = new Type(imports, "fake.package.ModelBuilder", classLibrary, packge);
+        Type type = new Type(imports, "fake.package.ModelBuilder", classLibrary, packge, 0);
         assertTrue(type.isResolved());
         assertEquals("fake.package.ModelBuilder", type.getValue());
 
@@ -100,7 +100,7 @@ public class TypeTest extends TestCase{
         ClassLibrary classLibrary = new ClassLibrary();
         String packge = "com.thoughtworks.qdox.model";
 
-        Type type = new Type(imports, "ModelBuilder[]", classLibrary, packge);
+        Type type = new Type(imports, "ModelBuilder", classLibrary, packge, 1);
     
     	assertTrue(type.isArray());
     	assertTrue(type.isResolved());

@@ -40,7 +40,7 @@ public class JavaClassTest extends TestCase {
 
 	public void testToStringClassExtends() throws Exception {
 		cls.setName("MyClass");
-		cls.setSuperClass(DataProvider.createType("SuperClass"));
+		cls.setSuperClass(DataProvider.createType("SuperClass", 0));
 		String expected = ""
 			+ "class MyClass extends SuperClass {\n"
 			+ "\n"
@@ -104,7 +104,7 @@ public class JavaClassTest extends TestCase {
 	public void testToStringClassImplementsAndExtends() throws Exception {
 		cls.setName("MyClass");
 		cls.setImplementz(type(new String[] {"SomeInterface", "AnotherInterface", "Xx"}));
-		cls.setSuperClass(DataProvider.createType("SubMarine"));
+		cls.setSuperClass(DataProvider.createType("SubMarine", 0));
 		String expected = ""
 			+ "class MyClass extends SubMarine implements SomeInterface, AnotherInterface, Xx {\n"
 			+ "\n"
@@ -143,7 +143,7 @@ public class JavaClassTest extends TestCase {
 		cls.setName("MyClass");
 		JavaMethod mth = new JavaMethod();
 		mth.setName("doStuff");
-		mth.setReturns(DataProvider.createType("void"));
+		mth.setReturns(DataProvider.createType("void", 0));
 		cls.addMethod(mth);
 		String expected = ""
 			+ "class MyClass {\n"
@@ -160,21 +160,21 @@ public class JavaClassTest extends TestCase {
 		{
 			JavaMethod mth = new JavaMethod();
 			mth.setName("doStuff");
-			mth.setReturns(DataProvider.createType("void"));
+			mth.setReturns(DataProvider.createType("void", 0));
 			cls.addMethod(mth);
 		}
 
 		{
 			JavaMethod mth = new JavaMethod();
 			mth.setName("somethingElse");
-			mth.setReturns(DataProvider.createType("Goose"));
+			mth.setReturns(DataProvider.createType("Goose", 0));
 			cls.addMethod(mth);
 		}
 
 		{
 			JavaMethod mth = new JavaMethod();
 			mth.setName("eat");
-			mth.setReturns(DataProvider.createType("void"));
+			mth.setReturns(DataProvider.createType("void", 0));
 			cls.addMethod(mth);
 		}
 
@@ -197,14 +197,14 @@ public class JavaClassTest extends TestCase {
 		{
 			JavaField fld = new JavaField();
 			fld.setName("count");
-			fld.setType(DataProvider.createType("int"));
+			fld.setType(DataProvider.createType("int", 0));
 			cls.addField(fld);
 		}
 
 		{
 			JavaField fld = new JavaField();
 			fld.setName("thing");
-			fld.setType(DataProvider.createType("String"));
+			fld.setType(DataProvider.createType("String", 0));
 			fld.setModifiers(new String[] {"public"});
 			cls.addField(fld);
 		}
@@ -239,13 +239,13 @@ public class JavaClassTest extends TestCase {
 		cls.setComment("Hello World");
 
 		JavaMethod mth = new JavaMethod();
-		mth.setReturns(DataProvider.createType("String"));
+		mth.setReturns(DataProvider.createType("String", 0));
 		mth.setName("thingy");
 		mth.setComment("Hello Method");
 		cls.addMethod(mth);
 
 		JavaField fld = new JavaField();
-		fld.setType(DataProvider.createType("String"));
+		fld.setType(DataProvider.createType("String", 0));
 		fld.setName("thing");
 		fld.setComment("Hello Field");
 		cls.addField(fld);
@@ -293,7 +293,7 @@ public class JavaClassTest extends TestCase {
 	private Type[] type(String[] typeNames) {
 		Type[] result = new Type[typeNames.length];
 		for (int i = 0; i < typeNames.length; i++) {
-			result[i] = new Type(Collections.EMPTY_LIST, typeNames[i], null, "");
+			result[i] = new Type(Collections.EMPTY_LIST, typeNames[i], null, "", 0);
 		}
 		return result;
 	}

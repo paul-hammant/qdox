@@ -187,25 +187,29 @@ public class JavaMethod extends AbstractInheritableJavaEntity {
      * @since 1.3
      */
     public boolean isPropertyAccessor() {
-        boolean signatureOk = false;
-        boolean nameOk = false;
+        if( isPublic() && !isStatic() ) {
+            boolean signatureOk = false;
+            boolean nameOk = false;
 
-        if (getName().startsWith("is")) {
-            String returnType = getReturns().getValue();
-            signatureOk = returnType.equals("boolean") || returnType.equals("java.lang.Boolean");
-            signatureOk = signatureOk && getReturns().getDimensions() == 0;
-            if (getName().length() > 2) {
-                nameOk = Character.isUpperCase(getName().charAt(2));
+            if (getName().startsWith("is")) {
+                String returnType = getReturns().getValue();
+                signatureOk = returnType.equals("boolean") || returnType.equals("java.lang.Boolean");
+                signatureOk = signatureOk && getReturns().getDimensions() == 0;
+                if (getName().length() > 2) {
+                    nameOk = Character.isUpperCase(getName().charAt(2));
+                }
             }
-        }
-        if (getName().startsWith("get")) {
-            signatureOk = true;
-            if (getName().length() > 3) {
-                nameOk = Character.isUpperCase(getName().charAt(3));
+            if (getName().startsWith("get")) {
+                signatureOk = true;
+                if (getName().length() > 3) {
+                    nameOk = Character.isUpperCase(getName().charAt(3));
+                }
             }
+            boolean noParams = getParameters().length == 0;
+            return signatureOk && nameOk && noParams;
+        } else {
+            return false;
         }
-        boolean noParams = getParameters().length == 0;
-        return signatureOk && nameOk && noParams;
     }
 
     /**

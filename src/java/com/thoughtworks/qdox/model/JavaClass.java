@@ -355,7 +355,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     /**
      * @since 1.3
      */
-    public BeanProperty getProperty(String propertyName) {
+    public BeanProperty getBeanProperty(String propertyName) {
         if (beanProperties == null) {
             initialiseBeanProperties();
         }
@@ -368,18 +368,16 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         JavaMethod[] methods = getMethods();
         for (int i = 0; i < methods.length; i++) {
             JavaMethod method = methods[i];
-            if (method.isPublic() && !method.isStatic()) {
-                if (method.isPropertyAccessor()) {
-                    String propertyName = method.getPropertyName();
-                    BeanProperty beanProperty = getOrCreateProperty(propertyName);
-                    beanProperty.setAccessor(method);
-                    beanProperty.setType(method.getPropertyType());
-                } else if (method.isPropertyMutator()) {
-                    String propertyName = method.getPropertyName();
-                    BeanProperty beanProperty = getOrCreateProperty(propertyName);
-                    beanProperty.setMutator(method);
-                    beanProperty.setType(method.getPropertyType());
-                }
+            if (method.isPropertyAccessor()) {
+                String propertyName = method.getPropertyName();
+                BeanProperty beanProperty = getOrCreateProperty(propertyName);
+                beanProperty.setAccessor(method);
+                beanProperty.setType(method.getPropertyType());
+            } else if (method.isPropertyMutator()) {
+                String propertyName = method.getPropertyName();
+                BeanProperty beanProperty = getOrCreateProperty(propertyName);
+                beanProperty.setMutator(method);
+                beanProperty.setType(method.getPropertyType());
             }
         }
         Collection beanPropertyCollection = beanPropertyMap.values();

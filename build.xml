@@ -52,20 +52,26 @@
 
 	<target name="compile" depends="generate" description="Compile Java">
 		<mkdir dir="build/classes"/>
-		<javac srcdir="src/java;build/java" destdir="build/classes" debug="true"/>
+		<depend srcdir="src/java;build/java" 
+				destdir="build/classes" />
+		<javac srcdir="src/java;build/java" 
+			   destdir="build/classes" 
+			   debug="true"/>
 	</target>
 
 	<target name="test" depends="compile" description="Compile and run tests">
 		<mkdir dir="build/test-classes"/>
 		<depend srcdir="src/test;build/test" 
-				destdir="build/test-classes" />
-		<javac srcdir="src/test;build/test" 
-			   destdir="build/test-classes" 
-			   debug="true">
-			<classpath>
+				destdir="build/test-classes">
+			<classpath id="test.build.classpath">
 				<fileset dir="lib"/>
 				<pathelement path="build/classes"/>
 			</classpath>
+		</depend>
+		<javac srcdir="src/test;build/test" 
+			   destdir="build/test-classes" 
+			   debug="true">
+			<classpath refid="test.build.classpath" />
 		</javac>
 		<java classname="junit.textui.TestRunner" fork="yes">
 			<classpath>

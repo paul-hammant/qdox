@@ -69,6 +69,9 @@
                 Added APITestCase. This is a JUnit extension that can be used
                 to compare the equality of two Java sources on the API level.
             </action>
+            <action dev="rinkrank" type="add">
+                Added getLineNumber() to DocletTag.
+            </action>
         </release>
 
         <release version="1.2" date="2003-03-23">

@@ -12,7 +12,7 @@ public interface Builder {
 
     void addJavaDoc(String text);
 
-    void addJavaDocTag(String tag, String text);
+    void addJavaDocTag(String tag, String text, int lineNumber);
 
     void beginClass(ClassDef def);
 

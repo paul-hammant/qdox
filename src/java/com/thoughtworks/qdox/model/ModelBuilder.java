@@ -48,8 +48,8 @@ public class ModelBuilder implements Builder {
         lastTagSet = new LinkedList();
     }
 
-    public void addJavaDocTag(String tag, String text) {
-        DocletTag docletTag = docletTagFactory.createDocletTag(tag, text);
+    public void addJavaDocTag(String tag, String text, int lineNumber) {
+        DocletTag docletTag = docletTagFactory.createDocletTag(tag, text, lineNumber);
         lastTagSet.add(docletTag);
     }
 

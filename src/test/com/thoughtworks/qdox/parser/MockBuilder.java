@@ -1,7 +1,6 @@
 package com.thoughtworks.qdox.parser;
 
 import com.mockobjects.*;
-import com.thoughtworks.qdox.parser.Builder;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -72,10 +71,14 @@ class MockBuilder implements Builder {
         myAddJavaDocTagParameter1Values.addExpected(arg1);
     }
 
-    public void addJavaDocTag(String arg0, String arg1) {
+    public void addJavaDocTag(String arg0, String arg1, int lineNumber) {
         myAddJavaDocTagCalls.inc();
         myAddJavaDocTagParameter0Values.addActual(arg0);
         myAddJavaDocTagParameter1Values.addActual(arg1);
+    }
+
+    public void addJavaDocTag(String tag, String text) {
+        addJavaDocTag(tag, text, 0);
     }
 
     public void setExpectedBeginClassCalls(int calls) {

@@ -54,7 +54,7 @@ javadoctags: | javadoctags javadoctag;
 
 javadoctag: 
 	JAVADOCTAGMARK JAVADOCTOKEN javadoctokens {
-		builder.addJavaDocTag($2, buffer()); 
+		builder.addJavaDocTag($2, buffer(), lexer.getLine()); 
 	};
 
 

@@ -6,12 +6,7 @@ import java.util.Arrays;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.model.BeanProperty;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.*;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -489,8 +484,18 @@ public class JavaDocBuilderTest extends TestCase {
         assertNull( "Shouldn't be able to get private methods", betterList.getMethodBySignature("myown", null, true) );
     }
 
-    public void testTagsFromSuperclassesCanBeRetrieved() {
-        testMethodsFromSuperclassesCanBeRetrieved();
-
+    public void testTagLineNumbersAreProperlyCounted() {
+        String jallaSource = ""
+                + "package x;\n"
+                + "import java.util.*;\n"
+                + "/**\n"
+                + " * @line 4\n"
+                + " */\n"
+                + "class Jalla extends ArrayList {\n"
+                + "}\n";
+        builder.addSource(new StringReader(jallaSource));
+        JavaClass jalla = builder.getClassByName("x.Jalla");
+        DocletTag line4 = jalla.getTagByName("line");
+        assertEquals(4, line4.getLineNumber());
     }
 }

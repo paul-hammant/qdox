@@ -622,7 +622,7 @@ public class ModelBuilderTest extends TestCase {
 
     public void testDocletTag() throws Exception {
         builder.addJavaDoc("Hello");
-        builder.addJavaDocTag("cheese", "is good");
+        builder.addJavaDocTag("cheese", "is good", 0);
         builder.beginClass(new ClassDef());
 
         builder.endClass();
@@ -637,7 +637,7 @@ public class ModelBuilderTest extends TestCase {
 
     public void testDocletTagWithNoComment() throws Exception {
         builder.addJavaDoc(""); // parser will always call this method to signify start of javadoc
-        builder.addJavaDocTag("cheese", "is good");
+        builder.addJavaDocTag("cheese", "is good", 0);
         builder.beginClass(new ClassDef());
 
         builder.endClass();
@@ -652,9 +652,9 @@ public class ModelBuilderTest extends TestCase {
 
     public void testMultipleDocletTags() throws Exception {
         builder.addJavaDoc("Hello");
-        builder.addJavaDocTag("cheese", "is good");
-        builder.addJavaDocTag("food", "is great");
-        builder.addJavaDocTag("chairs", "are boring");
+        builder.addJavaDocTag("cheese", "is good", 0);
+        builder.addJavaDocTag("food", "is great", 0);
+        builder.addJavaDocTag("chairs", "are boring", 0);
         builder.beginClass(new ClassDef());
 
         builder.endClass();
@@ -673,15 +673,15 @@ public class ModelBuilderTest extends TestCase {
 
     public void testDocletTagsOnMethodsAndFields() throws Exception {
         builder.addJavaDoc("");
-        builder.addJavaDocTag("cheese", "is good");
+        builder.addJavaDocTag("cheese", "is good", 0);
         builder.beginClass(new ClassDef());
 
         builder.addJavaDoc("");
-        builder.addJavaDocTag("food", "is great");
+        builder.addJavaDocTag("food", "is great", 0);
         builder.addMethod(new MethodDef());
 
         builder.addJavaDoc("");
-        builder.addJavaDocTag("chairs", "are boring");
+        builder.addJavaDocTag("chairs", "are boring", 0);
         builder.addField(new FieldDef());
         builder.endClass();
 

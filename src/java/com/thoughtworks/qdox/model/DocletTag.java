@@ -15,4 +15,6 @@ public interface DocletTag extends Serializable {
     String[] getParameters();
 
     String getNamedParameter(String key);
+
+    int getLineNumber();
 }

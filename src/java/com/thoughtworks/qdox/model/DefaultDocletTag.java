@@ -8,15 +8,22 @@ import java.util.StringTokenizer;
 
 public class DefaultDocletTag implements DocletTag {
 
-    private String name;
-    private String value;
+    private final String name;
+    private final String value;
+    private final int lineNumber;
+
     private String[] parameters;
     private Map namedParameters;
     private String[] quotes = new String[]{"\"", "'"};
 
-    public DefaultDocletTag(String name, String value) {
+    public DefaultDocletTag(String name, String value, int lineNumber) {
         this.name = name;
         this.value = value;
+        this.lineNumber = lineNumber;
+    }
+
+    public DefaultDocletTag(String name, String value) {
+        this(name, value, 0);
     }
 
     public String getName() {
@@ -70,6 +77,10 @@ public class DefaultDocletTag implements DocletTag {
             }
         }
         return (String) namedParameters.get(key);
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
     }
 
     private String trim(String value, String[] strings) {

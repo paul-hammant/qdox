@@ -31,7 +31,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
     private Type type;
     private Type superClass;
     private Type[] implementz = new Type[0];
-    private JavaClassParent parent;
+    private final JavaClassParent parent;
     private JavaClassCache javaClassCache;
 
     public JavaClass(JavaClassParent parent) {
@@ -210,7 +210,8 @@ public class JavaClass extends AbstractInheritableJavaEntity
             JavaClass innerClass = innerClasses[i];
             String innerName = innerClass.getFullyQualifiedName();
 
-            if (innerName.endsWith(typeName)) {
+//            if (innerName.endsWith("$" + typeName)) {
+                if (innerName.endsWith(typeName)) {
                 return innerName;
             }
         }
@@ -509,8 +510,10 @@ public class JavaClass extends AbstractInheritableJavaEntity
         return (BeanProperty) getBeanPropertyMap(superclasses).get(propertyName);
     }
 
-    // This method will fail if the method isn't an accessor or mutator, but
-    // it will only be called with methods that are, so we're safe.
+    /**
+     * Gets the known derived classes. That is, subclasses or implementing classes.
+     * @return
+     */
     public JavaClass[] getDerivedClasses() {
         List result = new ArrayList();
         JavaDocBuilder builder = (JavaDocBuilder) javaClassCache;
@@ -571,6 +574,6 @@ public class JavaClass extends AbstractInheritableJavaEntity
     }
 
     public int compareTo(Object o) {
-        return getFullyQualifiedName().compareTo(((JavaClass)o).getFullyQualifiedName());
+        return getFullyQualifiedName().compareTo(((JavaClass) o).getFullyQualifiedName());
     }
 }

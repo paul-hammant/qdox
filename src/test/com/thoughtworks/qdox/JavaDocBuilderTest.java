@@ -617,6 +617,19 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals("int", a.getFields()[1].getType().toString());
         assertEquals("k", a.getFields()[2].getName());
         assertEquals("int[]", a.getFields()[2].getType().toString());
-       }
+    }
 
+    public void testJiraQdox40() {
+        String sourceCode = ""
+                + "package foo.bar;"
+                + "public class Outer {"
+                + "  class WrappedInternalContextAdapter implements InternalContextAdapter {"
+                + "  }"
+                + "}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.addSource(new StringReader(sourceCode));
+        JavaClass clazz = builder.getClassByName("foo.bar.Outer");
+
+        assertEquals(1, clazz.getInnerClasses().length);
+    }
 }

@@ -748,4 +748,36 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals("org.apache.*", result.getImports()[2]);
 	}
 
+    public void testModelHashCodes() {
+
+        ClassDef classDef = new ClassDef();
+        assertTrue(classDef.hashCode() == 0);
+        classDef.name = "hello";
+        assertTrue(classDef.hashCode() > 0);
+
+        MethodDef methodDef = new MethodDef();
+        methodDef.name = "hello";
+        assertTrue(methodDef.hashCode() > 0);
+
+        FieldDef fieldDef = new FieldDef();
+        fieldDef.name = "hello";
+        assertTrue(fieldDef.hashCode() > 0);
+
+        JavaParameter javaParameter = new JavaParameter(new Type("q",0), "w");
+        assertTrue(javaParameter.hashCode() > 0);
+
+    }
+
+
+    public void testType() {
+
+        Type type1 = new Type("fred",1);
+        Type type2 = new Type("fred",1);
+        Type type3 = new Type("wilma",2);
+        assertTrue(type1.compareTo(type2) == 0);
+        assertFalse(type1.compareTo(type3) == 0);
+        assertTrue(type1.compareTo("barney") == 0);
+    }
+
+
 }

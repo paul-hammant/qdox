@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.FileSet;
 import com.thoughtworks.qdox.model.JavaClass;
 
@@ -29,9 +30,22 @@ public final class AbstractQdoxTaskTest extends TestCase
 
         assertNotNull("Expected a JavaClass", task.allClasses.get(0));
         assertEquals("SuffixFilter", ((JavaClass) task.allClasses.get(0)).getName());
-        System.out.println("--> " + task.classes);
         assertEquals("com.thoughtworks.qdox.directorywalker.SuffixFilter", task.classes);
     }
+
+    public void testNoFileSets() {
+        OveriddenAbstractQdoxTask task = new OveriddenAbstractQdoxTask();
+        try
+        {
+            task.execute();
+            fail("Expected an empty list of classes");
+        }
+        catch (BuildException e)
+        {
+            // expected
+        }
+    }
+
 
     private class OveriddenAbstractQdoxTask extends AbstractQdoxTask {
         public String classes = "";
@@ -63,14 +77,18 @@ public final class AbstractQdoxTaskTest extends TestCase
             //} catch (IOException e) {
             //    e.printStackTrace();
             //}
-            File result = new File("../src/java");
-            if (result.exists()) return result;
-            return new File("src/java");
+            return getUnderJUnitFile("src/java");
         }
 
         public DirectoryScanner getDirectoryScanner(Project project) {
             return overidenDirectoryScanner;
         }
+    }
+
+    public static File getUnderJUnitFile(String filename) {
+        File result = new File("../" + filename);
+        if (result.exists()) return result;
+        return new File(filename);
     }
 
     private class OveridenDirectoryScanner extends DirectoryScanner {

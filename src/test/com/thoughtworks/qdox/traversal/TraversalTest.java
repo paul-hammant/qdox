@@ -2,12 +2,11 @@ package com.thoughtworks.qdox.traversal;
 
 import junit.framework.TestCase;
 
-import java.io.File;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.ant.AbstractQdoxTaskTest;
 
 public class TraversalTest extends TestCase {
 
@@ -19,12 +18,8 @@ public class TraversalTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        File javaSrc = new File("../src/java");
-        if (!javaSrc.exists()) {
-            javaSrc = new File("src/java");
-        }
         builder = new JavaDocBuilder();
-        builder.addSourceTree(javaSrc);
+        builder.addSourceTree(AbstractQdoxTaskTest.getUnderJUnitFile("src/java"));
     }
 
     public void testParentClassTraversal() throws Exception {

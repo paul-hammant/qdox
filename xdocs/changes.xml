@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<document>
+	<properties>
+		<title>Changes</title>
+		<author email="joew@thoughtworks.com">Joe Walnes</author>
+	</properties>
+
+	<body>
+	
+		<!-- action types are add/update/fix/remove -->
+		
+		<release version="1.1" date="2002-12-08">
+			<action dev="mdub" type="add">
+				Added support for inner classes.								
+			</action>
+			<action dev="joeretro" type="update">
+				Moved build system over to Maven.								
+			</action>
+		</release>
+
+		<release version="1.0" date="2002-09-25">
+			<action dev="joeretro" type="add">
+				Initial release.
+			</action>
+		</release>
+
+	</body>
+</document>
+

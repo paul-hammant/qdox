@@ -3,10 +3,11 @@
 
 	<properties>
 		<title>Tasks</title>
-		<author email="joe@truemesh.com">Joe Walnes</author>
+		<author email="joew@thoughtworks.com">Joe Walnes</author>
 	</properties>
 
 	<body>
+
 		<section name="Complete">
 			<p>
 				<ul>
@@ -38,6 +39,12 @@
 					<li>
 						Class name resolver to normalize/denormalize import statements of classes in
 						external libraries.
+					</li>
+					<li>
+						Inner class support.
+					</li>
+					<li>
+						API to hook into low level parser.
 					</li>
 				</ul>
 			</p>

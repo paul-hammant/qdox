@@ -1,8 +1,8 @@
 config.properties
 maven.log
 velocity.log
-build
 target
+build
 tmp
 .classpath
 .project

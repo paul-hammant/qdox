@@ -415,7 +415,7 @@ public class ParserTest extends TestCase {
 		// expectations
 		ClassDef cls = new ClassDef();
 		cls.name = "MyClass";
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -439,7 +439,7 @@ public class ParserTest extends TestCase {
 		ClassDef cls = new ClassDef();
 		cls.name = "MyInterface";
 		cls.isInterface = true;
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -469,7 +469,7 @@ public class ParserTest extends TestCase {
 		ClassDef cls = new ClassDef();
 		cls.name = "MySubClass";
 		cls.extendz.add("com.blah.MyBaseClass");
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -503,7 +503,7 @@ public class ParserTest extends TestCase {
 		cls.isInterface = true;
 		cls.extendz.add("com.blah.AnotherInterface");
 		cls.extendz.add("Serializable");
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -533,7 +533,7 @@ public class ParserTest extends TestCase {
 		ClassDef cls = new ClassDef();
 		cls.name = "MyClass";
 		cls.implementz.add("com.blah.AnInterface");
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -573,7 +573,7 @@ public class ParserTest extends TestCase {
 		cls.implementz.add("com.blah.AnInterface");
 		cls.implementz.add("java.io.Serializable");
 		cls.implementz.add("Eatable");
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -608,7 +608,7 @@ public class ParserTest extends TestCase {
 		cls.name = "MyClass";
 		cls.extendz.add("mypackage.BaseClass");
 		cls.implementz.add("com.blah.AnInterface");
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -653,7 +653,7 @@ public class ParserTest extends TestCase {
 		cls.implementz.add("com.blah.AnInterface");
 		cls.implementz.add("java.io.Serializable");
 		cls.implementz.add("Eatable");
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -680,7 +680,7 @@ public class ParserTest extends TestCase {
 		cls.name = "MyClass";
 		cls.modifiers.add("public");
 		cls.modifiers.add("final");
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -713,7 +713,7 @@ public class ParserTest extends TestCase {
 		cls.modifiers.add("private");
 		cls.modifiers.add("final");
 		cls.modifiers.add("abstract");
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -750,19 +750,19 @@ public class ParserTest extends TestCase {
 		ClassDef cls1 = new ClassDef();
 		cls1.name = "Class1";
 		cls1.isInterface = false;
-		builder.addExpectedAddClassValues(cls1);
+		builder.addExpectedBeginClassValues(cls1);
 
 		ClassDef cls2 = new ClassDef();
 		cls2.name = "Class2";
 		cls2.isInterface = false;
 		cls2.modifiers.add("public");
 		cls2.extendz.add("SubClass");
-		builder.addExpectedAddClassValues(cls2);
+		builder.addExpectedBeginClassValues(cls2);
 
 		ClassDef cls3 = new ClassDef();
 		cls3.name = "Intf1";
 		cls3.isInterface = true;
-		builder.addExpectedAddClassValues(cls3);
+		builder.addExpectedBeginClassValues(cls3);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);
@@ -844,7 +844,7 @@ public class ParserTest extends TestCase {
 		ClassDef cls = new ClassDef();
 		cls.name = "MyClass";
 		cls.modifiers.add("public");
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 		builder.addExpectedAddJavaDocValues("javadoc1");
 		builder.addExpectedAddJavaDocValues("javadoc2");
 		builder.addExpectedAddJavaDocValues("javadoc3");
@@ -1838,11 +1838,11 @@ public class ParserTest extends TestCase {
 		// expectations
 		ClassDef cls = new ClassDef();
 		cls.name = "MyClass";
-		builder.addExpectedAddClassValues(cls);
+		builder.addExpectedBeginClassValues(cls);
 		ClassDef cls2 = new ClassDef();
 		cls2.name = "AnotherClass";
-		builder.addExpectedAddClassValues(cls2);
-		builder.setExpectedAddClassCalls(2);
+		builder.addExpectedBeginClassValues(cls2);
+		builder.setExpectedBeginClassCalls(2);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);

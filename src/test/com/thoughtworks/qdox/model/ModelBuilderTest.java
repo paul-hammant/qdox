@@ -22,20 +22,24 @@ public class ModelBuilderTest extends TestCase {
 
 	public void testNumberOfClassesGrows() throws Exception {
 		assertEquals(0, builder.getSource().getClasses().length);
-    	builder.addClass(new ClassDef());
+    	builder.beginClass(new ClassDef());
+    	builder.endClass();
 		assertEquals(1, builder.getSource().getClasses().length);
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+    	builder.endClass();
 		assertEquals(2, builder.getSource().getClasses().length);
 	}
 
 	public void testSimpleClass() throws Exception {
 		ClassDef cls = new ClassDef();
 		cls.name = "Thingy";
-    	builder.addClass(cls);
+    	builder.beginClass(cls);
+    	builder.endClass();
 
 		ClassDef cls2 = new ClassDef();
 		cls2.name = "ThingyThing";
-    	builder.addClass(cls2);
+    	builder.beginClass(cls2);
+    	builder.endClass();
 
 		JavaSource source = builder.getSource();
 
@@ -43,14 +47,17 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals("ThingyThing", source.getClasses()[1].getName());
 		assertEquals(source, source.getClasses()[0].getParentSource());
 	}
-
+	
 	public void testInterface() throws Exception {
 		ClassDef cls = new ClassDef();
-    	builder.addClass(cls);
+    	builder.beginClass(cls);
+    	builder.endClass();
 
 		ClassDef cls2 = new ClassDef();
 		cls2.isInterface = true;
-    	builder.addClass(cls2);
+    	builder.beginClass(cls2);
+    	builder.endClass();
+		
 		JavaSource source = builder.getSource();
 
 		assertEquals(false, source.getClasses()[0].isInterface());
@@ -59,12 +66,15 @@ public class ModelBuilderTest extends TestCase {
 
 	public void testClassExtends() throws Exception {
 		ClassDef cls = new ClassDef();
-    	builder.addClass(cls);
+    	builder.beginClass(cls);
+    	builder.endClass();
 
 		ClassDef cls2 = new ClassDef();
 		cls2.extendz.add("Another");
-    	builder.addClass(cls2);
+    	builder.beginClass(cls2);
+    	builder.endClass();
     	builder.addImport("com.thoughtworks.*");
+
 		JavaSource source = builder.getSource();
 
 		assertEquals("java.lang.Object", source.getClasses()[0].getSuperClass().getValue());
@@ -77,7 +87,8 @@ public class ModelBuilderTest extends TestCase {
 		builder.addPackage("com.thoughtworks");
 		ClassDef anotherCls = new ClassDef();
 		anotherCls.name = "Another";		
-		builder.addClass(anotherCls);
+		builder.beginClass(anotherCls);
+    	builder.endClass();
 		
 		assertEquals("com.thoughtworks.Another", source.getClasses()[1].getSuperClass().getValue());
 	}
@@ -85,12 +96,15 @@ public class ModelBuilderTest extends TestCase {
 	public void testInterfaceExtends() throws Exception {
 		ClassDef cls = new ClassDef();
 		cls.isInterface = true;
-    	builder.addClass(cls);
+    	builder.beginClass(cls);
+    	builder.endClass();
 
 		ClassDef cls2 = new ClassDef();
 		cls2.isInterface = true;
 		cls2.extendz.add("Another");
-    	builder.addClass(cls2);
+    	builder.beginClass(cls2);
+    	builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertEquals(0, source.getClasses()[0].getImplements().length);
@@ -107,7 +121,9 @@ public class ModelBuilderTest extends TestCase {
 		cls.extendz.add("Another");
 		cls.extendz.add("java.io.Serializable");
 		cls.extendz.add("BottleOpener");
-    	builder.addClass(cls);
+    	builder.beginClass(cls);
+    	builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		// sorted
@@ -122,11 +138,14 @@ public class ModelBuilderTest extends TestCase {
 
 	public void testClassImplements() throws Exception {
 		ClassDef cls = new ClassDef();
-    	builder.addClass(cls);
+    	builder.beginClass(cls);
+    	builder.endClass();
 
 		ClassDef cls2 = new ClassDef();
 		cls2.implementz.add("SomeInterface");
-    	builder.addClass(cls2);
+    	builder.beginClass(cls2);
+    	builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertEquals(0, source.getClasses()[0].getImplements().length);
@@ -142,7 +161,9 @@ public class ModelBuilderTest extends TestCase {
 		ClassDef cls = new ClassDef();
 		cls.implementz.add("SomeInterface");
 		cls.implementz.add("XX");
-    	builder.addClass(cls);
+    	builder.beginClass(cls);
+    	builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertEquals(2, source.getClasses()[0].getImplements().length);
@@ -157,7 +178,9 @@ public class ModelBuilderTest extends TestCase {
 		cls.extendz.add("SubClass");
 		cls.implementz.add("SomeInterface");
 		cls.implementz.add("XX");
-    	builder.addClass(cls);
+    	builder.beginClass(cls);
+    	builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertEquals(2, source.getClasses()[0].getImplements().length);
@@ -170,12 +193,15 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testClassModifiers() throws Exception {
-    	builder.addClass(new ClassDef());
+    	builder.beginClass(new ClassDef());
+    	builder.endClass();
 
 		ClassDef cls2 = new ClassDef();
 		cls2.modifiers.add("public");
 		cls2.modifiers.add("final");
-    	builder.addClass(cls2);
+    	builder.beginClass(cls2);
+    	builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertEquals(0, source.getClasses()[0].getModifiers().length);
@@ -189,32 +215,70 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testAddMethodsToCorrectClass() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		builder.addMethod(new MethodDef());
+		builder.endClass();
+		
+		builder.beginClass(new ClassDef());
+		builder.addMethod(new MethodDef());
+		builder.addMethod(new MethodDef());
+		builder.addMethod(new MethodDef());
+		builder.endClass();
 
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		builder.addMethod(new MethodDef());
 		builder.addMethod(new MethodDef());
-		builder.addMethod(new MethodDef());
+		builder.endClass();
 
-		builder.addClass(new ClassDef());
-		builder.addMethod(new MethodDef());
-		builder.addMethod(new MethodDef());
 		JavaSource source = builder.getSource();
-
 		assertEquals(1, source.getClasses()[0].getMethods().length);
 		assertEquals(3, source.getClasses()[1].getMethods().length);
 		assertEquals(2, source.getClasses()[2].getMethods().length);
 	}
 
+	public void testInnerClass() throws Exception {
+		builder.addPackage("xyz");
+		
+		ClassDef outerDef = new ClassDef();
+		outerDef.name = "Outer";
+		builder.beginClass(outerDef);
+
+		ClassDef innerDef = new ClassDef();
+		innerDef.name = "Inner";
+		builder.beginClass(innerDef);
+		
+		MethodDef fooDef = new MethodDef();
+		fooDef.name = "foo";
+		builder.addMethod(fooDef);
+		builder.endClass();
+		
+		MethodDef barDef = new MethodDef();
+		barDef.name = "bar";
+		builder.addMethod(barDef);
+		builder.endClass();
+		
+		JavaSource source = builder.getSource();
+		assertEquals(1, source.getClasses().length);
+		JavaClass outerClass = source.getClasses()[0];
+		assertEquals("xyz.Outer", outerClass.getFullyQualifiedName());
+		assertEquals(1, outerClass.getMethods().length);
+		assertEquals("bar", outerClass.getMethods()[0].getName());
+		assertEquals(1, outerClass.getClasses().length);
+		JavaClass innerClass = outerClass.getClasses()[0];
+		assertEquals("xyz.Outer.Inner", innerClass.getFullyQualifiedName());
+		assertEquals(1, innerClass.getMethods().length);
+		assertEquals("foo", innerClass.getMethods()[0].getName());
+	}
+
 	public void testSimpleMethod() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		MethodDef mth = new MethodDef();
 		mth.name = "doSomething";
 		mth.returns = "void";
 		builder.addMethod(mth);
-		JavaSource source = builder.getSource();
+		builder.endClass();
 
+		JavaSource source = builder.getSource();
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals("doSomething", result.getName());
 		assertEquals("void", result.getReturns().getValue());
@@ -225,46 +289,49 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testMethodNoArray() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		MethodDef mth = new MethodDef();
 		mth.name = "doSomething";
 		mth.returns = "void";
 		mth.dimensions = 0;
 		builder.addMethod(mth);
-		JavaSource source = builder.getSource();
+		builder.endClass();
 
+		JavaSource source = builder.getSource();
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(0, result.getReturns().getDimensions());
 	}
 
 	public void testMethod1dArray() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		MethodDef mth = new MethodDef();
 		mth.name = "doSomething";
 		mth.returns = "void";
 		mth.dimensions = 1;
 		builder.addMethod(mth);
-		JavaSource source = builder.getSource();
+		builder.endClass();
 
+		JavaSource source = builder.getSource();
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(1, result.getReturns().getDimensions());
 	}
 
 	public void testMethod2dArray() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		MethodDef mth = new MethodDef();
 		mth.name = "doSomething";
 		mth.returns = "void";
 		mth.dimensions = 2;
 		builder.addMethod(mth);
-		JavaSource source = builder.getSource();
+		builder.endClass();
 
+		JavaSource source = builder.getSource();
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(2, result.getReturns().getDimensions());
 	}
 
 	public void testMethodParameters() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		MethodDef mth = new MethodDef();
 
 		FieldDef f1 = new FieldDef();
@@ -279,8 +346,9 @@ public class ModelBuilderTest extends TestCase {
 		mth.params.add(f2);
 
 		builder.addMethod(mth);
+		builder.endClass();
+		
 		JavaSource source = builder.getSource();
-
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(2, result.getParameters().length);
 		assertEquals("count", result.getParameters()[0].getName());
@@ -290,7 +358,7 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testMethodParametersWithArrays() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		MethodDef mth = new MethodDef();
 
 		FieldDef f1 = new FieldDef();
@@ -307,23 +375,25 @@ public class ModelBuilderTest extends TestCase {
 		mth.params.add(f2);
 
 		builder.addMethod(mth);
-		JavaSource source = builder.getSource();
+		builder.endClass();
 
+		JavaSource source = builder.getSource();
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(1, result.getParameters()[0].getType().getDimensions());
 		assertEquals(2, result.getParameters()[1].getType().getDimensions());
 	}
 
 	public void testMethodExceptions() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		MethodDef mth = new MethodDef();
 
 		mth.exceptions.add("RuntimeException");
 		mth.exceptions.add("java.io.IOException");
 
 		builder.addMethod(mth);
+		builder.endClass();
+		
 		JavaSource source = builder.getSource();
-
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(2, result.getExceptions().length);
 		// sorted
@@ -333,7 +403,7 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testMethodModifiers() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 		MethodDef mth = new MethodDef();
 
 		mth.modifiers.add("public");
@@ -341,8 +411,9 @@ public class ModelBuilderTest extends TestCase {
 		mth.modifiers.add("synchronized");
 
 		builder.addMethod(mth);
-		JavaSource source = builder.getSource();
+		builder.endClass();
 
+		JavaSource source = builder.getSource();
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(3, result.getModifiers().length);
 		// sorted
@@ -354,12 +425,14 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testSimpleField() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		FieldDef fld = new FieldDef();
 		fld.name = "count";
 		fld.type = "int";
 		builder.addField(fld);
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		JavaField result = source.getClasses()[0].getFields()[0];
@@ -370,12 +443,14 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testFieldWithModifiers() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		FieldDef fld = new FieldDef();
 		fld.modifiers.add("blah");
 		fld.modifiers.add("blah2");
 		builder.addField(fld);
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		JavaField result = source.getClasses()[0].getFields()[0];
@@ -387,13 +462,15 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testFieldNoArray() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		FieldDef fld = new FieldDef();
 		fld.name = "count";
 		fld.type = "int";
 		fld.dimensions = 0;
 		builder.addField(fld);
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		JavaField result = source.getClasses()[0].getFields()[0];
@@ -402,13 +479,15 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testField1dArray() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		FieldDef fld = new FieldDef();
 		fld.name = "count";
 		fld.type = "int";
 		fld.dimensions = 1;
 		builder.addField(fld);
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		JavaField result = source.getClasses()[0].getFields()[0];
@@ -417,13 +496,15 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testField2dArray() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		FieldDef fld = new FieldDef();
 		fld.name = "count";
 		fld.type = "int";
 		fld.dimensions = 2;
 		builder.addField(fld);
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		JavaField result = source.getClasses()[0].getFields()[0];
@@ -431,7 +512,7 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testSimpleConstructor() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		MethodDef mth = new MethodDef();
 		mth.name = "MyClass";
@@ -442,6 +523,8 @@ public class ModelBuilderTest extends TestCase {
 		mth2.name = "method";
 		mth2.returns = "void";
 		builder.addMethod(mth2);
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		JavaMethod result1 = source.getClasses()[0].getMethods()[0];
@@ -455,7 +538,9 @@ public class ModelBuilderTest extends TestCase {
 
 	public void testJavaDocOnClass() throws Exception {
 		builder.addJavaDoc("Hello");
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 		assertEquals("Hello", source.getClasses()[0].getComment());
 	}
@@ -463,12 +548,16 @@ public class ModelBuilderTest extends TestCase {
 	public void testJavaDocSpiradiclyOnManyClasses() throws Exception {
 
 		builder.addJavaDoc("Hello");
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+		builder.endClass();
 
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+		builder.endClass();
 
 		builder.addJavaDoc("World");
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertEquals("Hello", source.getClasses()[0].getComment());
@@ -477,10 +566,12 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testJavaDocOnMethod() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		builder.addJavaDoc("Hello");
 		builder.addMethod(new MethodDef());
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertNull(source.getClasses()[0].getComment());
@@ -488,10 +579,12 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testJavaDocOnField() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		builder.addJavaDoc("Hello");
 		builder.addField(new FieldDef());
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertNull(source.getClasses()[0].getComment());
@@ -500,7 +593,7 @@ public class ModelBuilderTest extends TestCase {
 
 	public void testJavaDocOnMethodsAndFields() throws Exception {
 		builder.addJavaDoc("Thing");
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		builder.addField(new FieldDef());// f0
 
@@ -515,6 +608,8 @@ public class ModelBuilderTest extends TestCase {
 		builder.addJavaDoc("World");
 		builder.addMethod(new MethodDef());//m2
 
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertEquals("Thing", source.getClasses()[0].getComment());
@@ -528,7 +623,9 @@ public class ModelBuilderTest extends TestCase {
 	public void testDocletTag() throws Exception {
 		builder.addJavaDoc("Hello");
 		builder.addJavaDocTag("cheese", "is good");
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+
+		builder.endClass();
 
 		JavaSource source = builder.getSource();
 
@@ -541,7 +638,9 @@ public class ModelBuilderTest extends TestCase {
 	public void testDocletTagWithNoComment() throws Exception {
 		builder.addJavaDoc(""); // parser will always call this method to signify start of javadoc
 		builder.addJavaDocTag("cheese", "is good");
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+
+		builder.endClass();
 
 		JavaSource source = builder.getSource();
 
@@ -556,7 +655,9 @@ public class ModelBuilderTest extends TestCase {
 		builder.addJavaDocTag("cheese", "is good");
 		builder.addJavaDocTag("food", "is great");
 		builder.addJavaDocTag("chairs", "are boring");
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+
+		builder.endClass();
 
 		JavaSource source = builder.getSource();
 
@@ -573,7 +674,7 @@ public class ModelBuilderTest extends TestCase {
 	public void testDocletTagsOnMethodsAndFields() throws Exception {
 		builder.addJavaDoc("");
 		builder.addJavaDocTag("cheese", "is good");
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
 
 		builder.addJavaDoc("");
 		builder.addJavaDocTag("food", "is great");
@@ -582,6 +683,8 @@ public class ModelBuilderTest extends TestCase {
 		builder.addJavaDoc("");
 		builder.addJavaDocTag("chairs", "are boring");
 		builder.addField(new FieldDef());
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 
 		assertEquals("cheese", source.getClasses()[0].getTags()[0].getName());
@@ -593,15 +696,20 @@ public class ModelBuilderTest extends TestCase {
 	}
 
 	public void testRetrieveJavaSource() throws Exception {
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+		builder.endClass();
+
 		JavaSource source = builder.getSource();
 		assertNotNull(source);
 	}
 
 	public void testJavaSourceClassCount() throws Exception {
-		builder.addClass(new ClassDef());
-		builder.addClass(new ClassDef());
-		builder.addClass(new ClassDef());
+		builder.beginClass(new ClassDef());
+		builder.endClass();
+		builder.beginClass(new ClassDef());
+		builder.endClass();
+		builder.beginClass(new ClassDef());
+		builder.endClass();
 		JavaSource result = builder.getSource();
 		assertEquals(3, result.getClasses().length);
 	}

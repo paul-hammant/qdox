@@ -15,7 +15,9 @@ public interface Builder {
 	void addJavaDoc(String text);
 	void addJavaDocTag(String tag, String text);
 
-	void addClass(ClassDef def);
+	void beginClass(ClassDef def);
+	void endClass();
+
 	void addMethod(MethodDef def);
 	void addField(FieldDef def);
 

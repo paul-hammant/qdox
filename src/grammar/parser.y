@@ -67,8 +67,8 @@ javadoctag: JAVADOCTAGMARK JAVADOCTOKEN javadoctokens { builder.addJavaDocTag($2
 
 
 
-class: classdefinition BRACEOPEN members BRACECLOSE;
-classdefinition: modifiers classorinterface IDENTIFIER extends implements { cls.modifiers.addAll(modifiers); modifiers.clear(); cls.name = $3; builder.addClass(cls); cls = new ClassDef(); }
+class: classdefinition BRACEOPEN members BRACECLOSE { builder.endClass(); }
+classdefinition: modifiers classorinterface IDENTIFIER extends implements { cls.modifiers.addAll(modifiers); modifiers.clear(); cls.name = $3; builder.beginClass(cls); cls = new ClassDef(); }
 classorinterface: CLASS | INTERFACE { cls.isInterface = true; };
 extends: | EXTENDS extendslist;
 extendslist: fullidentifier { cls.extendz.add($1); }

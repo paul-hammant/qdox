@@ -14,6 +14,7 @@ public class ModelBuilder implements Builder {
 
 	private ClassLibrary classLibrary;
 	private JavaSource source;
+	private JavaClassParent currentParent;
 	private JavaClass currentClass;
 	private String lastComment;
 	private List lastTagSet;
@@ -26,6 +27,7 @@ public class ModelBuilder implements Builder {
 		this.classLibrary = classLibrary;
 		source = new JavaSource();
 		source.setClassLibrary(classLibrary);
+		currentParent = source;
 	}
 
 	public void addPackage(String packageName) {
@@ -45,7 +47,7 @@ public class ModelBuilder implements Builder {
 		lastTagSet.add(new DocletTag(tag, text));
 	}
 
-	public void addClass(ClassDef def) {
+	public void beginClass(ClassDef def) {
 		currentClass = new JavaClass();
 
 		// basic details
@@ -81,8 +83,18 @@ public class ModelBuilder implements Builder {
 		// javadoc
 		addJavaDoc(currentClass);
 
-		source.addClass(currentClass);
+		currentParent.addClass(currentClass);
+		currentParent = currentClass;
 		classLibrary.add(currentClass.getFullyQualifiedName());
+	}
+
+	public void endClass() {
+		currentParent = currentClass.getParent();
+		if (currentParent instanceof JavaClass) {
+			currentClass = (JavaClass) currentParent;
+		} else {
+			currentClass = null;
+		}
 	}
 
 	private Type createType(String typeName, int dimensions) {

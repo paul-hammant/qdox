@@ -251,7 +251,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
-    public void testOneLinerDocletTag() throws Exception {
+    public void testOneLinerDocComment() throws Exception {
         String in = "/** @hello world */";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
@@ -263,7 +263,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
-    public void testCompressedDocletTag() throws Exception {
+    public void testCompressedDocComment() throws Exception {
         String in = "/**@foo bar*/";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
@@ -275,7 +275,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
-    public void testCommentThatContainsAtSymbols() throws Exception {
+    public void testDocCommentContainingAtSymbols() throws Exception {
         String in = ""
             + "/**\n"
             + " * joe@truemesh.com\n"
@@ -299,7 +299,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
-    public void testCommentThatContainsStars() throws Exception {
+    public void testDocCommentContainingStars() throws Exception {
         String in = ""
                 + "/**\n"
                 + " * 5 * 4\n"
@@ -317,6 +317,29 @@ public class LexerTest extends TestCase {
         assertLex(Parser.JAVADOCTOKEN, "**stars**everywhere**", lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);
+        assertLex(0, lexer);
+    }
+
+    public void testExtraStarsAreIgnoredAtStartAndEnd() throws Exception {
+        String in = ""
+                + "/*****\n"
+                + " * blah\n"
+                + " *****/";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.JAVADOCSTART, lexer);
+        assertLex(Parser.JAVADOCTOKEN, "blah", lexer);
+        assertLex(Parser.JAVADOCEND, lexer);
+        assertLex(0, lexer);
+    }
+
+    public void testExtraStarsCompressed() throws Exception {
+        String in = ""
+                + "/***blah***/public";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.JAVADOCSTART, lexer);
+        assertLex(Parser.JAVADOCTOKEN, "blah", lexer);
+        assertLex(Parser.JAVADOCEND, lexer);
+        assertLex(Parser.PUBLIC, lexer);
         assertLex(0, lexer);
     }
 
@@ -340,7 +363,7 @@ public class LexerTest extends TestCase {
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
     }
-    
+
     public void testArrayTokens() throws Exception {
         String in = "String[] []o[]";
         Lexer lexer = new JFlexLexer(new StringReader(in));

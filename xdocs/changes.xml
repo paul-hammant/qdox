@@ -8,6 +8,13 @@
     <body>
   
         <!-- action types are add/update/fix/remove -->
+        <release version="1.4" date="In CVS">
+            <action dev="mdub" type="fix">
+                Fixed QDOX-27:
+                Handle extra stars in Javadoc start/end tokens.
+            </action>
+        </release>
+
         <release version="1.3" date="2003-11-03">
             <action dev="rinkrank" type="add">
                 Implemented QDOX-3.

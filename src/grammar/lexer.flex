@@ -44,7 +44,7 @@ import com.thoughtworks.qdox.parser.*;
 %}
 
 Eol                     = \r|\n|\r\n
-CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/] )
+CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 
 %state JAVADOC CODEBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT
 
@@ -104,15 +104,15 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/] )
 		return Parser.BRACECLOSE; 
 	}
 
-	"/**"              { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
+	"/*" "*"+          { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
 	"="                { pushState(ASSIGNMENT); }
 	[A-Za-z_0-9]*      { return Parser.IDENTIFIER; }
 
 }
 
 <JAVADOC> {
-	"*/"               { popState(); return Parser.JAVADOCEND; }
-	^[ \t]*\*+/[^/*]   { /* ignore */ }
+	"*"+ "/"           { popState(); return Parser.JAVADOCEND; }
+	^ [ \t]* "*"+ / [^/*] { /* ignore */ }
 	{Eol}              { javaDocNewLine = true; }
 	{CommentChar}* "*"+ / [ \t\r\n] {
                 return Parser.JAVADOCTOKEN;

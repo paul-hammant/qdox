@@ -586,4 +586,20 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals("f", s.getValue());
     }
 
+    public void testJiraQdox27() {
+        String sourceCode = "" 
+            + "package com.acme.thing;\n"
+            + "\n"
+            + "/**"
+            + " * This class does something."
+            + " **/"
+            + "public class AClassName {\n"
+            + "}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.addSource(new StringReader(sourceCode));
+        JavaClass aClass =
+            builder.getClassByName("com.acme.thing.AClassName");
+        assertNotNull(aClass);
+    }
+
 }

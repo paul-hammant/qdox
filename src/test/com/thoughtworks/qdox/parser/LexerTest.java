@@ -281,6 +281,7 @@ public class LexerTest extends TestCase {
             + " * joe@truemesh.com\n"
             + " * {@link here}.\n"
             + " * me @home\n"
+            + " * geeks @ play\n"
             + " */";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
@@ -290,6 +291,9 @@ public class LexerTest extends TestCase {
         assertLex(Parser.JAVADOCTOKEN, "here}.", lexer);
         assertLex(Parser.JAVADOCTOKEN, "me", lexer);
         assertLex(Parser.JAVADOCTOKEN, "@home", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "geeks", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "@", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "play", lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);

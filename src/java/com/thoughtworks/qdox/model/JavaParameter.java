@@ -27,6 +27,10 @@ public class JavaParameter implements Serializable {
 		return getType().equals(p.getType());
 	}
 
+	public int hashCode() {
+		return getType().hashCode();
+	}
+
 	public JavaMethod getParentMethod() {
 		return parentMethod;
 	}

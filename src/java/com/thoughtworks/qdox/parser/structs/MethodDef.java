@@ -1,9 +1,9 @@
 package com.thoughtworks.qdox.parser.structs;
 
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
 
 public class MethodDef {
 	public String name = "";
@@ -23,6 +23,13 @@ public class MethodDef {
 			&& methodDef.exceptions.equals(exceptions)
 			&& methodDef.constructor == constructor
 			&& methodDef.dimensions == dimensions;
+	}
+
+	public int hashCode() {
+		return name.hashCode() + returns.hashCode() +
+			modifiers.hashCode() + params.hashCode() +
+			params.hashCode() + exceptions.hashCode() +
+			dimensions + (constructor?0:1);
 	}
 
 	public String toString() {

@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.parser.structs;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 public class ClassDef {
 	public String name = "";
@@ -17,6 +17,12 @@ public class ClassDef {
 			&& classDef.modifiers.equals(modifiers)
 			&& classDef.extendz.equals(extendz)
 			&& classDef.implementz.equals(implementz);
+	}
+
+	public int hashCode() {
+		return name.hashCode() + (isInterface?1:0) +
+			modifiers.hashCode() + extendz.hashCode() +
+			implementz.hashCode();
 	}
 
 	public String toString() {

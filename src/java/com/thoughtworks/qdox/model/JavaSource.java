@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -27,6 +27,15 @@ public class JavaSource implements Serializable {
 	private String[] imports = new String[0];
 	private ClassLibrary classLibrary;
 	private Map typeCache = new HashMap();
+	private File file;
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public File getFile() {
+		return file;
+	}
 
 	public String getPackage() {
 		return packge;
@@ -50,16 +59,16 @@ public class JavaSource implements Serializable {
 
 	public void setClasses(JavaClass[] classes) {
 		this.classes = classes;
-		
+
 		for (int classIndex = 0; classIndex < classes.length; classIndex++) {
 			JavaClass javaClass = classes[classIndex];
 			javaClass.setParentSource(this);
 		}
 	}
 
-    public ClassLibrary getClassLibrary() {
-        return classLibrary;
-    }
+	public ClassLibrary getClassLibrary() {
+		return classLibrary;
+	}
 
 	public void setClassLibrary(ClassLibrary classLibrary) {
 		this.classLibrary = classLibrary;
@@ -101,7 +110,7 @@ public class JavaSource implements Serializable {
 	 * Resolve a type-name within the context of this source-file.
 	 * @param typeName name of a type
 	 * @return the fully-qualified name of the type, or null if it cannot
-	 *   be resolved
+	 *	 be resolved
 	 */
 	public String resolveType(String typeName) {
 		String resolved = (String)typeCache.get(typeName);
@@ -129,17 +138,17 @@ public class JavaSource implements Serializable {
 		}
 
 		if (getClassLibrary() == null) return null;
-		
+
 		// check for a class in the same package
 		String potentialName = packge + "." + typeName;
 		if (getClassLibrary().contains(potentialName)) {
 			return potentialName;
 		}
-		
+
 		// check for wildcard imports
 		for (int i = 0; i < imports.length; i++) {
 			if (imports[i].endsWith(".*")) {
-				potentialName = 
+				potentialName =
 					imports[i].substring(0, imports[i].length()-1) + typeName;
 				if (getClassLibrary().contains(potentialName)) {
 					return potentialName;

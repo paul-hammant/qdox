@@ -1,10 +1,10 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public abstract class AbstractJavaEntity implements Serializable {
 
@@ -124,7 +124,7 @@ public abstract class AbstractJavaEntity implements Serializable {
 	public boolean isAbstract(){
 		return isModifierPresent("abstract");
 	}
-	
+
 	public boolean isPublic(){
 		return isModifierPresent("public");
 	}
@@ -132,11 +132,11 @@ public abstract class AbstractJavaEntity implements Serializable {
 	public boolean isPrivate(){
 		return isModifierPresent("private");
 	}
-	
+
 	public boolean isProtected(){
 		return isModifierPresent("protected");
 	}
-	
+
 	public boolean isStatic(){
 		return isModifierPresent("static");
 	}
@@ -144,15 +144,15 @@ public abstract class AbstractJavaEntity implements Serializable {
 	public boolean isFinal(){
 		return isModifierPresent("final");
 	}
-	
+
 	public boolean isSynchronized(){
 		return isModifierPresent("synchronized");
 	}
-	
+
 	private boolean isModifierPresent(String modifier) {
 		return modifiers.contains(modifier);
 	}
-	
+
 	protected void writeNonAccessibilityModifiers(IndentBuffer result) {
 		// modifiers (anything else)
 		for (Iterator iter = modifiers.iterator(); iter.hasNext();) {

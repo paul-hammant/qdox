@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.parser.structs;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 public class FieldDef {
 	public String name = "";
@@ -15,6 +15,11 @@ public class FieldDef {
 			&& paramDef.type.equals(type)
 			&& paramDef.dimensions == dimensions
 			&& paramDef.modifiers.equals(modifiers);
+	}
+
+	public int hashCode() {
+		return name.hashCode() + type.hashCode() +
+			dimensions + modifiers.hashCode();
 	}
 
 	public String toString() {

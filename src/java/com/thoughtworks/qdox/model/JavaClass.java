@@ -1,8 +1,8 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Iterator;
 
 public class JavaClass extends AbstractJavaEntity {
 
@@ -17,11 +17,11 @@ public class JavaClass extends AbstractJavaEntity {
 	private JavaSource parentSource;
 
 	public static final Type OBJECT = new Type("java.lang.Object", 0);
-    private JavaClassCache javaClassCache;
+	private JavaClassCache javaClassCache;
 
-    public void setJavaClassCache(JavaClassCache javaClassCache) {
-       this.javaClassCache = javaClassCache;
-    }
+	public void setJavaClassCache(JavaClassCache javaClassCache) {
+	   this.javaClassCache = javaClassCache;
+	}
 
 	/**
 	 * Interface or class?
@@ -37,12 +37,12 @@ public class JavaClass extends AbstractJavaEntity {
 		return superClass;
 	}
 
-    public JavaClass getSuperJavaClass() {
-        if (javaClassCache == null) {
-            throw new java.lang.UnsupportedOperationException("JavaClassCache unavailable for this JavaClass");
-        }
-        return javaClassCache.getClassByName(getSuperClass().getValue());
-    }
+	public JavaClass getSuperJavaClass() {
+		if (javaClassCache == null) {
+			throw new java.lang.UnsupportedOperationException("JavaClassCache unavailable for this JavaClass");
+		}
+		return javaClassCache.getClassByName(getSuperClass().getValue());
+	}
 
 	public Type[] getImplements() {
 		return implementz;

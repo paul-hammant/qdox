@@ -1,15 +1,32 @@
 package com.thoughtworks.qdox;
 
-import java.io.*;
-import java.util.*;
-
-import com.thoughtworks.qdox.model.*;
-import com.thoughtworks.qdox.parser.Lexer;
-import com.thoughtworks.qdox.parser.impl.JFlexLexer;
-import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.FileVisitor;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
+import com.thoughtworks.qdox.model.ClassLibrary;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaClassCache;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.parser.Lexer;
+import com.thoughtworks.qdox.parser.impl.JFlexLexer;
+import com.thoughtworks.qdox.parser.impl.Parser;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Reader;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class JavaDocBuilder implements Serializable, JavaClassCache{
 
@@ -27,7 +44,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
 		for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
 			JavaClass cls = javaClasses[classIndex];
 			classes.put(cls.getFullyQualifiedName(), cls);
-            cls.setJavaClassCache(this);
+			cls.setJavaClassCache(this);
 		}
 	}
 
@@ -36,11 +53,15 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
 	}
 
 	public void addSource(Reader reader) {
+		addSource(null, reader);
+	}
+	public void addSource(File file, Reader reader) {
 		ModelBuilder builder = new ModelBuilder(classLibrary);
 		Lexer lexer = new JFlexLexer(reader);
 		Parser parser = new Parser(lexer, builder);
 		parser.parse();
 		JavaSource source = builder.getSource();
+		source.setFile( file );
 		sources.add(source);
 		addClasses(source);
 	}
@@ -55,7 +76,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
 		scanner.scan(new FileVisitor() {
 			public void visitFile(File currentFile) {
 				try {
-					addSource(new FileReader(currentFile));
+					addSource(currentFile, new FileReader(currentFile));
 				}
 				catch (FileNotFoundException e) {
 					throw new RuntimeException("Cannot read file : " + currentFile.getName());

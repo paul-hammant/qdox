@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.parser;
 
-import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 
 /**

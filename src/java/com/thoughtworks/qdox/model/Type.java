@@ -1,38 +1,28 @@
 package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class Type implements Comparable, Serializable {
 
-    private List imports;
-    private String name;
+	private String name;
 	private JavaSource parentSource;
-    private ClassLibrary classLibrary;
-    private String packge;
-    private String fullName = null;
-    private int dimensions;
+	private String fullName;
+	private int dimensions;
 
-    public Type(String name, int dimensions, JavaSource parentSource) {
-        this.name = name;
-        this.dimensions = dimensions;
+	public Type(String name, int dimensions, JavaSource parentSource) {
+		this.name = name;
+		this.dimensions = dimensions;
 		this.parentSource = parentSource;
-    }
-	
-    public Type(String fullName, int dimensions) {
-        this.fullName = fullName;
-        this.dimensions = dimensions;
-    }
+	}
 
-    public Type(String fullName) {
-        this(fullName, 0);
-    }
+	public Type(String fullName, int dimensions) {
+		this.fullName = fullName;
+		this.dimensions = dimensions;
+	}
 
-    public ClassLibrary getClassLibrary() {
-        return classLibrary;
-    }
+	public Type(String fullName) {
+		this(fullName, 0);
+	}
 
 	public JavaSource getParentSource() {
 		return parentSource;
@@ -42,16 +32,16 @@ public class Type implements Comparable, Serializable {
 		parentSource = javaSource;
 	}
 
-    public String getValue() {
-        return isResolved() ? fullName : name;
-    }
+	public String getValue() {
+		return isResolved() ? fullName : name;
+	}
 
-    public boolean isResolved() {
-        if (fullName == null && parentSource != null) {
-            fullName = parentSource.resolveType(name);
+	public boolean isResolved() {
+		if (fullName == null && parentSource != null) {
+			fullName = parentSource.resolveType(name);
 		}
-        return (fullName != null);
-    }
+		return (fullName != null);
+	}
 
 	/**
 	 * @see java.lang.Comparable#compareTo(Object)

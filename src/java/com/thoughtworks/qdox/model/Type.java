@@ -8,10 +8,15 @@ public class Type implements Comparable{
     private ClassLibrary classLibrary;
     private String packge;
     private String value = null;
+    private boolean isArray = false;
 
     public Type(List imports, String name, ClassLibrary classLibrary, String packge) {
         this.imports = imports;
-        this.name = name;
+        isArray = name.endsWith("[]");
+        if (isArray)
+            this.name = name.substring(0, name.length() - 2);
+        else
+            this.name = name;
         this.classLibrary = classLibrary;
         this.packge = packge;
     }
@@ -45,6 +50,10 @@ public class Type implements Comparable{
 			return 0;
 			
 		return getValue().compareTo(((Type)o).getValue());
+	}
+
+	public boolean isArray() {
+		return isArray;
 	}
 
 }

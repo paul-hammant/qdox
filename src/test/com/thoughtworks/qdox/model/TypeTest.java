@@ -92,4 +92,18 @@ public class TypeTest extends TestCase{
         assertEquals("fake.package.ModelBuilder", type.getValue());
 
     }
+    
+    public void testArrayType() throws Exception {
+        List imports = new ArrayList();
+        imports.add("com.thoughtworks.qdox.parser.ModelBuilder");
+
+        ClassLibrary classLibrary = new ClassLibrary();
+        String packge = "com.thoughtworks.qdox.model";
+
+        Type type = new Type(imports, "ModelBuilder[]", classLibrary, packge);
+    
+    	assertTrue(type.isArray());
+    	assertTrue(type.isResolved());
+    	assertEquals("com.thoughtworks.qdox.parser.ModelBuilder", type.getValue());
+    }
 }

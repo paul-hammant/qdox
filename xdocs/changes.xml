@@ -41,6 +41,10 @@
                 Throw a ParseException, including location info, if a
                 syntax error is encountered.
             </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-42:
+                Fix handling of MAC line-endings.
+            </action>
         </release>
 
         <release version="1.3" date="2003-11-03">

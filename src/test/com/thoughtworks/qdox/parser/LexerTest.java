@@ -35,6 +35,21 @@ public class LexerTest extends TestCase {
         super(s);
     }
 
+    public void testEmptyInput() throws Exception {
+        String in = "";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(0, lexer);
+    }
+
+    public void testNewlines() throws Exception {
+        String in = "DOS\r\nUNIX\nMAC\r";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.IDENTIFIER, "DOS", lexer);
+        assertLex(Parser.IDENTIFIER, "UNIX", lexer);
+        assertLex(Parser.IDENTIFIER, "MAC", lexer);
+        assertLex(0, lexer);
+    }
+
     public void testStaticBlock() throws Exception {
         String in = ""
                 + "class X { "

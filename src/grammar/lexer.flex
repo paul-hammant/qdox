@@ -191,4 +191,4 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     "*/"                { popState(); }
 }
 
-.|\n                    { }
+.|\r|\n|\r\n            { }

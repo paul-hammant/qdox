@@ -1,0 +1,16 @@
+<project name="qdox" repository="qdox" href="http://qdox.sourceforge.net">
+
+	<title>QDox : Quick JavaDoc Scanner</title>
+
+	<body>
+		<links>
+			<item name="QDox" href="http://qdox.sourceforge.net/"/>
+			<item name="SourceForge" href="http://sourceforge.net/projects/qdox/"/>
+		</links>
+		<menu name="QDox">
+			<item name="Overview"            href="/index.html"/>
+			<item name="SourceForge Project" href="http://sourceforge.net/projects/qdox/"/>
+		</menu>
+	</body>
+
+</project>

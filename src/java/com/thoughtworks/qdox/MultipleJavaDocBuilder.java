@@ -9,6 +9,7 @@ import java.util.*;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
@@ -18,7 +19,7 @@ import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 
 public class MultipleJavaDocBuilder {
 	private Map classes = new HashMap();
-	private List classesParsed = new ArrayList();
+	private ClassLibrary classLibrary = new ClassLibrary();
 	private List sources = new ArrayList();
 
 	private void addClasses(JavaSource source) {
@@ -34,7 +35,7 @@ public class MultipleJavaDocBuilder {
 	}
 
 	public void addSource(Reader reader) {
-		ModelBuilder builder = new ModelBuilder(classesParsed);
+		ModelBuilder builder = new ModelBuilder(classLibrary);
 		Lexer lexer = new JFlexLexer(reader);
 		Parser parser = new Parser(lexer, builder);
 		parser.parse();
@@ -64,7 +65,7 @@ public class MultipleJavaDocBuilder {
 
 	public List search(Searcher searcher) {
 		List results = new LinkedList();
-		for (Iterator iterator = classesParsed.iterator(); iterator.hasNext();) {
+		for (Iterator iterator = classLibrary.all().iterator(); iterator.hasNext();) {
 			String clsName = (String)iterator.next();
 			JavaClass cls = getClassByName(clsName);
 			if (searcher.eval(cls)) {

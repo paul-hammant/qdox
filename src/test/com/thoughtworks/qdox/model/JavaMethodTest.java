@@ -21,20 +21,20 @@ public class JavaMethodTest extends TestCase {
 
 	public void testToStringSimple() throws Exception {
 		mth.setName("doSomething");
-		mth.setReturns(new Type(new ArrayList(), "java.lang.String", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "java.lang.String", new ClassLibrary(), ""));
 		assertEquals("java.lang.String doSomething();\n", mth.toString());
 	}
 
 	public void testToStringOneParam() throws Exception {
 		mth.setName("blah");
-		mth.setReturns(new Type(new ArrayList(), "void", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "void", new ClassLibrary(), ""));
 		mth.setParameters(new JavaParameter[]{ new JavaParameter(DataProvider.createType("String"), "thingy", 0) });
 		assertEquals("void blah(String thingy);\n", mth.toString());
 	}
 
 	public void testToStringTwoParams() throws Exception {
 		mth.setName("blah");
-		mth.setReturns(new Type(new ArrayList(), "void", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "void", new ClassLibrary(), ""));
 		mth.setParameters(new JavaParameter[]{
 			new JavaParameter(DataProvider.createType("int"), "count", 0),
 			new JavaParameter(DataProvider.createType("MyThing"), "t", 0)
@@ -44,7 +44,7 @@ public class JavaMethodTest extends TestCase {
 
 	public void testToStringThreeParams() throws Exception {
 		mth.setName("blah");
-		mth.setReturns(new Type(new ArrayList(), "void", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "void", new ClassLibrary(), ""));
 		mth.setParameters(new JavaParameter[]{
 			new JavaParameter(DataProvider.createType("int"), "count", 0),
 			new JavaParameter(DataProvider.createType("MyThing"), "t", 0),
@@ -55,28 +55,28 @@ public class JavaMethodTest extends TestCase {
 
 	public void testToStringModifiersWithAccessLevelFirst() throws Exception {
 		mth.setName("blah");
-		mth.setReturns(new Type(new ArrayList(), "void", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "void", new ClassLibrary(), ""));
 		mth.setModifiers(new String[] {"synchronized", "public", "final"});
 		assertEquals("public synchronized final void blah();\n", mth.toString());
 	}
 
 	public void testToStringOneException() throws Exception {
 		mth.setName("blah");
-		mth.setReturns(new Type(new ArrayList(), "void", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "void", new ClassLibrary(), ""));
 		mth.setExceptions(new Type[] {DataProvider.createType("RuntimeException")});
 		assertEquals("void blah() throws RuntimeException;\n", mth.toString());
 	}
 
 	public void testToStringTwoException() throws Exception {
 		mth.setName("blah");
-		mth.setReturns(new Type(new ArrayList(), "void", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "void", new ClassLibrary(), ""));
 		mth.setExceptions(new Type[] {DataProvider.createType("RuntimeException"), DataProvider.createType("java.lang.SheepException")});
 		assertEquals("void blah() throws RuntimeException, java.lang.SheepException;\n", mth.toString());
 	}
 
 	public void testToStringThreeException() throws Exception {
 		mth.setName("blah");
-		mth.setReturns(new Type(new ArrayList(), "void", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "void", new ClassLibrary(), ""));
 		mth.setExceptions(new Type[] {DataProvider.createType("RuntimeException"), DataProvider.createType("java.lang.SheepException"), DataProvider.createType("CowException")});
 		assertEquals("void blah() throws RuntimeException, java.lang.SheepException, CowException;\n", mth.toString());
 	}
@@ -90,7 +90,7 @@ public class JavaMethodTest extends TestCase {
 
 	public void testToStringWithComment() throws Exception {
 		mth.setName("blah");
-		mth.setReturns(new Type(new ArrayList(), "void", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "void", new ClassLibrary(), ""));
 		mth.setComment("Hello");
 		String expect = ""
 			+ "/**\n"
@@ -102,21 +102,21 @@ public class JavaMethodTest extends TestCase {
 
 	public void testToString1dArray() throws Exception {
 		mth.setName("doSomething");
-		mth.setReturns(new Type(new ArrayList(), "java.lang.String", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "java.lang.String", new ClassLibrary(), ""));
 		mth.setDimensions(1);
 		assertEquals("java.lang.String[] doSomething();\n", mth.toString());
 	}
 
 	public void testToString2dArray() throws Exception {
 		mth.setName("doSomething");
-		mth.setReturns(new Type(new ArrayList(), "java.lang.String", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "java.lang.String", new ClassLibrary(), ""));
 		mth.setDimensions(2);
 		assertEquals("java.lang.String[][] doSomething();\n", mth.toString());
 	}
 
 	public void testToStringParamArray() throws Exception {
 		mth.setName("blah");
-		mth.setReturns(new Type(new ArrayList(), "void", new ArrayList(), ""));
+		mth.setReturns(new Type(new ArrayList(), "void", new ClassLibrary(), ""));
 		mth.setParameters(new JavaParameter[]{
 			new JavaParameter(DataProvider.createType("int"), "count", 2),
 			new JavaParameter(DataProvider.createType("MyThing"), "t", 1)

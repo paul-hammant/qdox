@@ -6,14 +6,14 @@ import java.util.Iterator;
 public class Type implements Comparable{
     private List imports;
     private String name;
-    private List allClassNames;
+    private ClassLibrary classLibrary;
     private String packge;
     private String value = null;
 
-    public Type(List imports, String name, List allClassNames, String packge) {
+    public Type(List imports, String name, ClassLibrary classLibrary, String packge) {
         this.imports = imports;
         this.name = name;
-        this.allClassNames = allClassNames;
+        this.classLibrary = classLibrary;
         this.packge = packge;
     }
 
@@ -23,27 +23,28 @@ public class Type implements Comparable{
             return;
         }
 
-        for (Iterator iterator = this.imports.iterator(); iterator.hasNext();) {
-            String imprt = (String) iterator.next();
-            if (imprt.endsWith("." + this.name)){
-                value = imprt;
-                return;
-            }
-        }
+			value = classLibrary.findClass(imports, packge, name);
+//        for (Iterator iterator = this.imports.iterator(); iterator.hasNext();) {
+//            String imprt = (String) iterator.next();
+//            if (imprt.endsWith("." + this.name)){
+//                value = imprt;
+//                return;
+//            }
+//        }
 
-        String nameAsIfInSamePackage = packge + "." + name;
-        if (allClassNames.contains(nameAsIfInSamePackage)){
-            value = nameAsIfInSamePackage;
-            return;
-        }
+//        String nameAsIfInSamePackage = packge + "." + name;
+//        if (classLibrary.contains(nameAsIfInSamePackage)){
+//            value = nameAsIfInSamePackage;
+//            return;
+//        }
 
-        for (Iterator iterator = allClassNames.iterator(); iterator.hasNext();) {
-            String className = (String) iterator.next();
-            if (className.endsWith("." + name) && imports.contains(className.substring(0, className.lastIndexOf(".")) + ".*")){
-                value = className;
-                return;
-            }
-        }
+//        for (Iterator iterator = allClassNames.iterator(); iterator.hasNext();) {
+//            String className = (String) iterator.next();
+//            if (className.endsWith("." + name) && imports.contains(className.substring(0, className.lastIndexOf(".")) + ".*")){
+//                value = className;
+//                return;
+//            }
+//        }
     }
 
     public String getValue() {

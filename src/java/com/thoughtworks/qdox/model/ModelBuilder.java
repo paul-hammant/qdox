@@ -15,14 +15,14 @@ public class ModelBuilder implements Builder {
 	private List lastTagSet;
 	private String packge;
 	private List imports = new ArrayList();
-	private List classesParsed = new ArrayList();
+	private ClassLibrary classLibrary = new ClassLibrary();
 	
 	public ModelBuilder(){}
 
-	public ModelBuilder(List classesParsed){
-		this.classesParsed = classesParsed;
+	public ModelBuilder(ClassLibrary classLibrary) {
+		this.classLibrary = classLibrary;
 	}
-	
+
 	public void addPackage(String packageName) {
 		this.packge = packageName;
 	}
@@ -72,13 +72,12 @@ public class ModelBuilder implements Builder {
 
 		// javadoc
 		addJavaDoc(currentClass);
-		classesParsed.add(packge + "." + currentClass.getName());
+		classLibrary.add(packge + "." + currentClass.getName());
 		classes.add(currentClass);
 	}
 
-	private Type createType(String typeName)
-	{
-		Type superclass = new Type(imports, typeName, classesParsed, packge);
+	private Type createType(String typeName) {
+		Type superclass = new Type(imports, typeName, classLibrary, packge);
 		return superclass;
 	}
 

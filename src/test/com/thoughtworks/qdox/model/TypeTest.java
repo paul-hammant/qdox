@@ -14,7 +14,7 @@ public class TypeTest extends TestCase{
         List imports = new ArrayList();
         imports.add("com.thoughtworks.qdox.model.Type");
 
-        Type type = new Type(imports, "Type", new ArrayList(), "");
+        Type type = new Type(imports, "Type", new ClassLibrary(), "");
         assertTrue(type.isResolved());
         assertEquals("com.thoughtworks.qdox.model.Type", type.getValue());
     }
@@ -24,7 +24,7 @@ public class TypeTest extends TestCase{
         imports.add("com.thoughtworks.qdox.model.Type");
         imports.add("fake.package.MyType");
 
-        Type type = new Type(imports, "Type", new ArrayList(), "");
+        Type type = new Type(imports, "Type", new ClassLibrary(), "");
         assertTrue(type.isResolved());
         assertEquals("com.thoughtworks.qdox.model.Type", type.getValue());
     }
@@ -35,13 +35,13 @@ public class TypeTest extends TestCase{
         imports.add("com.thoughtworks.qdox.parser.*");
         imports.add("fake.package.MyType");
 
-        List parsedClassNames = new ArrayList();
+        ClassLibrary classLibrary = new ClassLibrary();
 
-        Type jFlexLexerType = new Type(imports, "JFlexLexer", parsedClassNames, "");
+        Type jFlexLexerType = new Type(imports, "JFlexLexer", classLibrary, "");
         assertTrue(!jFlexLexerType.isResolved());
         assertEquals("JFlexLexer", jFlexLexerType.getValue());
 
-        parsedClassNames.add("com.thoughtworks.qdox.parser.JFlexLexer");
+        classLibrary.add("com.thoughtworks.qdox.parser.JFlexLexer");
         assertTrue(jFlexLexerType.isResolved());
         assertEquals("com.thoughtworks.qdox.parser.JFlexLexer", jFlexLexerType.getValue());
     }
@@ -52,13 +52,13 @@ public class TypeTest extends TestCase{
         imports.add("com.thoughtworks.qdox.parser.*");
         imports.add("fake.package.MyType");
 
-        List parsedClassNames = new ArrayList();
+        ClassLibrary classLibrary = new ClassLibrary();
 
-        Type jFlexLexerType = new Type(imports, "JFlexLexer", parsedClassNames, "");
+        Type jFlexLexerType = new Type(imports, "JFlexLexer", classLibrary, "");
         assertTrue(!jFlexLexerType.isResolved());
         assertEquals("JFlexLexer", jFlexLexerType.getValue());
 
-        parsedClassNames.add("fake.package.JFlexLexer");
+        classLibrary.add("fake.package.JFlexLexer");
         assertTrue(!jFlexLexerType.isResolved());
         assertEquals("JFlexLexer", jFlexLexerType.getValue());
     }
@@ -67,15 +67,15 @@ public class TypeTest extends TestCase{
         List imports = new ArrayList();
         imports.add("com.thoughtworks.qdox.parser.*");
 
-        List parsedClassNames = new ArrayList();
+        ClassLibrary classLibrary = new ClassLibrary();
         String packge = "com.thoughtworks.qdox.model";
 
-        Type type = new Type(imports, "ModelBuilder", parsedClassNames, packge);
+        Type type = new Type(imports, "ModelBuilder", classLibrary, packge);
         assertTrue(!type.isResolved());
         assertEquals("ModelBuilder", type.getValue());
 
         String modelBuilderClassName = packge + ".ModelBuilder";
-        parsedClassNames.add(modelBuilderClassName);
+        classLibrary.add(modelBuilderClassName);
         assertTrue(type.isResolved());
         assertEquals(modelBuilderClassName, type.getValue());
     }
@@ -84,10 +84,10 @@ public class TypeTest extends TestCase{
         List imports = new ArrayList();
         imports.add("com.thoughtworks.qdox.parser.ModelBuilder");
 
-        List parsedClassNames = new ArrayList();
+        ClassLibrary classLibrary = new ClassLibrary();
         String packge = "com.thoughtworks.qdox.model";
 
-        Type type = new Type(imports, "fake.package.ModelBuilder", parsedClassNames, packge);
+        Type type = new Type(imports, "fake.package.ModelBuilder", classLibrary, packge);
         assertTrue(type.isResolved());
         assertEquals("fake.package.ModelBuilder", type.getValue());
 

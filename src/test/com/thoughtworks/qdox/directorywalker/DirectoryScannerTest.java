@@ -1,7 +1,5 @@
 package com.thoughtworks.qdox.directorywalker;
 
-import junit.framework.TestCase;
-
 import java.io.File;
 
 import org.jmock.Mock;

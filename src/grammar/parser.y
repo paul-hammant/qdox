@@ -54,9 +54,9 @@ javadoctoken:
 javadoctags: | javadoctags javadoctag;
 
 javadoctag: 
-    JAVADOCTAG { line = lexer.getLine(); } 
+    JAVADOCTAG { tagLine = lexer.getLine(); } 
     javadoctokens {
-        builder.addJavaDocTag(new TagDef($1.substring(1), buffer(), line)); 
+        builder.addJavaDocTag(new TagDef($1.substring(1), buffer(), tagLine)); 
     };
 
 
@@ -118,10 +118,9 @@ class:
     };
 
 classdefinition: 
-    { line = lexer.getLine(); } modifiers classorinterface IDENTIFIER typeparams extends implements {
-        cls.lineNumber = line;
+    modifiers classorinterface IDENTIFIER typeparams extends implements {
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
-        cls.name = $4; 
+        cls.name = $3; 
         builder.beginClass(cls); 
         cls = new ClassDef(); 
     };
@@ -156,7 +155,7 @@ implementslist:
     fullidentifier { cls.implementz.add($1); } | 
     implementslist COMMA fullidentifier { cls.implementz.add($3); };
 
-members: | members { line = lexer.getLine(); } member;
+members: | members member;
 
 member:
     javadoc | 
@@ -182,8 +181,8 @@ fields:
     };
   
 extrafields: | 
-    extrafields COMMA { line = lexer.getLine(); } arrayidentifier {
-        makeField($4);
+    extrafields COMMA arrayidentifier {
+        makeField($3);
     };
 
 
@@ -191,17 +190,15 @@ extrafields: |
 
 method:
     modifiers type IDENTIFIER methoddef memberend {
-    	mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.returns = $2.name; mth.dimensions = $2.dimensions; 
-        mth.name = $3;
+        mth.name = $3; 
         builder.addMethod(mth);
         mth = new MethodDef(); 
     };
 
 constructor:
-    modifiers IDENTIFIER methoddef memberend {
-    	mth.lineNumber = line;
+    modifiers IDENTIFIER methoddef memberend { 
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $2; 
         builder.addMethod(mth);
@@ -242,7 +239,7 @@ private MethodDef mth = new MethodDef();
 private FieldDef param = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
 private TypeDef fieldType;
-private int line;
+private int tagLine;
 
 private String buffer() {
     if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);
@@ -287,7 +284,6 @@ private class Value {
 
 private void makeField(TypeDef field) {
     FieldDef fd = new FieldDef();
-    fd.lineNumber = line;
     fd.modifiers.addAll(modifiers); 
     fd.type = fieldType.name; 
     fd.dimensions = fieldType.dimensions + field.dimensions;

@@ -295,11 +295,12 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
-    public void testCommentThatContainsStar() throws Exception {
+    public void testCommentThatContainsStars() throws Exception {
         String in = ""
                 + "/**\n"
                 + " * 5 * 4\n"
                 + " * SELECT COUNT(*)\n"
+                + " * **stars**everywhere** \n"
                 + " */";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
@@ -309,6 +310,7 @@ public class LexerTest extends TestCase {
         assertLex(Parser.JAVADOCTOKEN, "4", lexer);
         assertLex(Parser.JAVADOCTOKEN, "SELECT", lexer);
         assertLex(Parser.JAVADOCTOKEN, "COUNT(*)", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "**stars**everywhere**", lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);

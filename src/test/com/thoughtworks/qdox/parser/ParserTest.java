@@ -1828,8 +1828,21 @@ public class ParserTest extends TestCase {
         setupLex(Parser.STATIC);
         setupLex(Parser.CODEBLOCK);
 
+        // a random method afterwards
+        setupLex(Parser.IDENTIFIER, "void");
+        setupLex(Parser.IDENTIFIER, "doStuff");
+        setupLex(Parser.PARENOPEN);
+        setupLex(Parser.PARENCLOSE);
+        setupLex(Parser.SEMI);
+
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
+
+        // expect no the method, and it shouldn't be static.
+        MethodDef method = new MethodDef();
+        method.name = "doStuff";
+        method.returns = "void";
+        builder.addExpectedAddMethodValues(method);
 
         // execute
         Parser parser = new Parser(lexer, builder);

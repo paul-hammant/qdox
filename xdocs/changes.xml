@@ -63,6 +63,10 @@
                 Support for methods that specify array dimensions at end: String doStuff()[]
             </action>
             <action dev="joeretro" type="fix">
+                Fix QDOX-80:
+                Static blocks do not add static modifier to next method.
+            </action>
+            <action dev="joeretro" type="fix">
                 Support for trailing semicolon after class definition.
             </action>
             <action dev="joeretro" type="fix">

@@ -210,13 +210,15 @@ member:
     fields | 
     method |
     constructor |
-    modifiers CODEBLOCK | // static block
+    static_block |
     class |
 	enum |
     SEMI;
 
 memberend: SEMI | CODEBLOCK;
 
+static_block:
+    modifiers CODEBLOCK { modifiers.clear(); };
 
 // ----- FIELD
 

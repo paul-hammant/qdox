@@ -6,10 +6,9 @@ import java.io.IOException;
 
 %token SEMI DOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
-%token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS SUPER
-%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND QUERY
+%token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
+%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND QUERY AT
 %token JAVADOCSTART JAVADOCEND
-%token ANNOTATION DEFAULT
 %token CODEBLOCK 
 %token INTEGER_LITERAL FLOAT_LITERAL
 
@@ -95,7 +94,25 @@ modifier:
     TRANSIENT       { $$ = "transient"; } |
     STRICTFP        { $$ = "strictfp"; } ;
 
-modifiers: | modifiers modifier { modifiers.add($2); };
+modifiers:
+    | modifiers modifier { modifiers.add($2); }
+    | modifiers annotation 
+    ;
+
+
+// ----- ANNOTATIONS 
+
+annotation: AT IDENTIFIER opt_annotationargs;
+
+opt_annotationargs: | PARENOPEN opt_annotationarglist PARENCLOSE;
+
+opt_annotationarglist: | annotationarglist;
+
+annotationarglist:
+    annotationarg |
+    annotationarglist COMMA annotationarg;
+
+annotationarg: IDENTIFIER;
 
 
 // ----- TYPES 
@@ -155,8 +172,9 @@ classdefinition:
     };
 
 classorinterface: 
-    CLASS | 
-    INTERFACE { cls.isInterface = true; };
+    CLASS { cls.type = ClassDef.CLASS; } | 
+    INTERFACE { cls.type = ClassDef.INTERFACE; } |
+    AT INTERFACE { cls.type = ClassDef.ANNOTATION_TYPE; };
 
 opt_extends: | EXTENDS extendslist;
 

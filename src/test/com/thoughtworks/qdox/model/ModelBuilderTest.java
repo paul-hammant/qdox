@@ -54,7 +54,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.isInterface = true;
+        cls2.type = ClassDef.INTERFACE;
         builder.beginClass(cls2);
         builder.endClass();
 
@@ -62,6 +62,17 @@ public class ModelBuilderTest extends TestCase {
 
         assertEquals(false, source.getClasses()[0].isInterface());
         assertEquals(true, source.getClasses()[1].isInterface());
+    }
+
+    public void testAnnotationType() throws Exception {
+        ClassDef cls = new ClassDef();
+        cls.type = ClassDef.ANNOTATION_TYPE;
+        builder.beginClass(cls);
+        builder.endClass();
+
+        JavaSource source = builder.getSource();
+        
+        assertEquals(0, source.getClasses().length);
     }
 
     public void testClassExtends() throws Exception {
@@ -95,12 +106,12 @@ public class ModelBuilderTest extends TestCase {
 
     public void testInterfaceExtends() throws Exception {
         ClassDef cls = new ClassDef();
-        cls.isInterface = true;
+        cls.type = ClassDef.INTERFACE;
         builder.beginClass(cls);
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.isInterface = true;
+        cls2.type = ClassDef.INTERFACE;
         cls2.extendz.add("Another");
         builder.beginClass(cls2);
         builder.endClass();
@@ -117,7 +128,7 @@ public class ModelBuilderTest extends TestCase {
 
     public void testInterfaceExtendsMultiple() throws Exception {
         ClassDef cls = new ClassDef();
-        cls.isInterface = true;
+        cls.type = ClassDef.INTERFACE;
         cls.extendz.add("Another");
         cls.extendz.add("java.io.Serializable");
         cls.extendz.add("BottleOpener");
@@ -752,7 +763,6 @@ public class ModelBuilderTest extends TestCase {
     public void testModelHashCodes() {
 
         ClassDef classDef = new ClassDef();
-        assertTrue(classDef.hashCode() == 0);
         classDef.name = "hello";
         assertTrue(classDef.hashCode() > 0);
 

@@ -4,23 +4,28 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ClassDef extends LocatedDef {
+    
+    public static final String CLASS = "class";
+    public static final String INTERFACE = "interface";
+    public static final String ANNOTATION_TYPE = "@interface";
+    
     public String name = "";
     public Set modifiers = new HashSet();
     public Set extendz = new HashSet();
     public Set implementz = new HashSet();
-    public boolean isInterface;
+    public String type = CLASS;
 
     public boolean equals(Object obj) {
         ClassDef classDef = (ClassDef) obj;
         return classDef.name.equals(name)
-                && classDef.isInterface == isInterface
+                && classDef.type == type
                 && classDef.modifiers.equals(modifiers)
                 && classDef.extendz.equals(extendz)
                 && classDef.implementz.equals(implementz);
     }
 
     public int hashCode() {
-        return name.hashCode() + (isInterface ? 1 : 0) +
+        return name.hashCode() + type.hashCode() +
                 modifiers.hashCode() + extendz.hashCode() +
                 implementz.hashCode();
     }
@@ -28,7 +33,9 @@ public class ClassDef extends LocatedDef {
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append(modifiers);
-        result.append(isInterface ? " interface " : " class ");
+        result.append(" ");
+        result.append(type);
+        result.append(" ");
         result.append(name);
         result.append(" extends ");
         result.append(extendz);

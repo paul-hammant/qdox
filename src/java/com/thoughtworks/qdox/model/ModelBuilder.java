@@ -61,10 +61,10 @@ public class ModelBuilder implements Builder {
 
         // basic details
         currentClass.setName(def.name);
-        currentClass.setInterface(def.isInterface);
+        currentClass.setInterface(def.type != ClassDef.CLASS);
 
         // superclass
-        if (def.isInterface) {
+        if (currentClass.isInterface()) {
             currentClass.setSuperClass(null);
         } else {
             currentClass.setSuperClass(def.extendz.size() > 0 ? createType((String) def.extendz.toArray()[0], 0) : null);
@@ -72,7 +72,7 @@ public class ModelBuilder implements Builder {
 
         // implements
         {
-            Set implementSet = def.isInterface ? def.extendz : def.implementz;
+            Set implementSet = currentClass.isInterface() ? def.extendz : def.implementz;
             Iterator implementIt = implementSet.iterator();
             Type[] implementz = new Type[implementSet.size()];
             for (int i = 0; i < implementz.length && implementIt.hasNext(); i++) {
@@ -91,6 +91,11 @@ public class ModelBuilder implements Builder {
         // javadoc
         addJavaDoc(currentClass);
 
+        // ignore annotation types (for now)
+        if (def.type == ClassDef.ANNOTATION_TYPE) {
+            return;
+        }
+        
         currentParent.addClass(currentClass);
         currentParent = currentClass;
         classLibrary.add(currentClass.getFullyQualifiedName());

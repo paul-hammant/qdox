@@ -80,7 +80,6 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     "extends"           { return Parser.EXTENDS; }
     "implements"        { return Parser.IMPLEMENTS; }
     "super"             { return Parser.SUPER; }
-    "default"           { return Parser.DEFAULT; }
 
     "["                 { nestingDepth++; return Parser.SQUAREOPEN; }
     "]"                 { nestingDepth--; return Parser.SQUARECLOSE; }
@@ -90,6 +89,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     ">"                 { return Parser.GREATERTHAN; }
     "&"                 { return Parser.AMPERSAND; }
     "?"                 { return Parser.QUERY; }
+    "@"                 { return Parser.AT; }
 
     "class"             {
         classDepth++;
@@ -128,12 +128,13 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
         pushState(ASSIGNMENT);
     }
 
-    [:jletter:] [:jletterdigit:]* { 
-        return Parser.IDENTIFIER; 
+    "default"           { 
+        assignmentDepth = nestingDepth; 
+        pushState(ASSIGNMENT);
     }
 
-    "@" [:jletterdigit:]+ { 
-        return Parser.ANNOTATION; 
+    [:jletter:] [:jletterdigit:]* { 
+        return Parser.IDENTIFIER; 
     }
 
 }

@@ -384,7 +384,7 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyInterface";
-        cls.isInterface = true;
+        cls.type = ClassDef.INTERFACE;
         builder.addExpectedBeginClassValues(cls);
 
         // execute
@@ -446,7 +446,7 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyInterface";
-        cls.isInterface = true;
+        cls.type = ClassDef.INTERFACE;
         cls.extendz.add("com.blah.AnotherInterface");
         cls.extendz.add("Serializable");
         builder.addExpectedBeginClassValues(cls);
@@ -695,19 +695,19 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls1 = new ClassDef();
         cls1.name = "Class1";
-        cls1.isInterface = false;
+        cls1.type = ClassDef.CLASS;
         builder.addExpectedBeginClassValues(cls1);
 
         ClassDef cls2 = new ClassDef();
         cls2.name = "Class2";
-        cls2.isInterface = false;
+        cls2.type = ClassDef.CLASS;
         cls2.modifiers.add("public");
         cls2.extendz.add("SubClass");
         builder.addExpectedBeginClassValues(cls2);
 
         ClassDef cls3 = new ClassDef();
         cls3.name = "Intf1";
-        cls3.isInterface = true;
+        cls3.type = ClassDef.INTERFACE;
         builder.addExpectedBeginClassValues(cls3);
 
         // execute

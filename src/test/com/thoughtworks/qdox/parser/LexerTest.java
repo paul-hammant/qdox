@@ -484,36 +484,57 @@ public class LexerTest extends TestCase {
     }
 
     public void testAnnotationDeclarationTokens() throws Exception {
-        String in = "" + 
-            "public @interface Copyright {\n" + 
-            "   int year();\n" + 
-            "   String assignee() default \"The CodeHaus\";\n" + 
-            "}\n";
+        String in = "" 
+            + "public @interface Copyright {\n" 
+            + "    int year();\n" 
+            + "    String assignee() default \"The CodeHaus\";\n"
+            + "}\n";
         Lexer lexer = new JFlexLexer(new StringReader(in));
 
         assertLex(Parser.PUBLIC, lexer);
-        assertLex(Parser.ANNOTATION, "@interface", lexer);
+        assertLex(Parser.AT, lexer);
+        assertLex(Parser.INTERFACE, lexer);
         assertLex(Parser.IDENTIFIER, "Copyright", lexer);
-        assertLex(Parser.CODEBLOCK, lexer);
+        assertLex(Parser.BRACEOPEN, lexer);
+        assertLex(Parser.IDENTIFIER, "int", lexer);
+        assertLex(Parser.IDENTIFIER, "year", lexer);
+        assertLex(Parser.PARENOPEN, lexer);
+        assertLex(Parser.PARENCLOSE, lexer);
+        assertLex(Parser.SEMI, lexer);
+        assertLex(Parser.IDENTIFIER, "String", lexer);
+        assertLex(Parser.IDENTIFIER, "assignee", lexer);
+        assertLex(Parser.PARENOPEN, lexer);
+        assertLex(Parser.PARENCLOSE, lexer);
+        assertLex(Parser.SEMI, lexer);
+        assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
     }
 
-    public void INPROGRESS_testAnnotationTokens() throws Exception {
-        String in = "" + 
-            "@Copyright (year = 2004)\n" + 
-            "public class LexerTest extends TestCase {}\n";
+    public void testAnnotationTokens() throws Exception {
+        String in = ""
+            + "@Copyright (year = 2004, month = \"Jan\")\n" 
+            + "@Note(\"Just ignore me\")\n" 
+            + "public class LexerTest extends TestCase {}\n";
         Lexer lexer = new JFlexLexer(new StringReader(in));
 
-        assertLex(Parser.ANNOTATION, "@Copyright", lexer);
+        assertLex(Parser.AT, lexer);
+        assertLex(Parser.IDENTIFIER, "Copyright", lexer);
         assertLex(Parser.PARENOPEN, lexer);
         assertLex(Parser.IDENTIFIER, "year", lexer);
+        assertLex(Parser.COMMA, lexer);
+        assertLex(Parser.IDENTIFIER, "month", lexer);
+        assertLex(Parser.PARENCLOSE, lexer);
+        assertLex(Parser.AT, lexer);
+        assertLex(Parser.IDENTIFIER, "Note", lexer);
+        assertLex(Parser.PARENOPEN, lexer);
         assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.PUBLIC, lexer);
         assertLex(Parser.CLASS, lexer);
         assertLex(Parser.IDENTIFIER, "LexerTest", lexer);
-        assertLex(Parser.IDENTIFIER, "String", lexer);
+        assertLex(Parser.EXTENDS, lexer);
         assertLex(Parser.IDENTIFIER, "TestCase", lexer);
-        assertLex(Parser.CODEBLOCK, lexer);
+        assertLex(Parser.BRACEOPEN, lexer);
+        assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
     }
     

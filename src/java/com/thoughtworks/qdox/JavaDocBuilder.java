@@ -156,7 +156,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
             Class[] interfaces = clazz.getInterfaces();
             if (clazz.isInterface()) {
                 // It's an interface
-                classDef.isInterface = true;
+                classDef.type = ClassDef.INTERFACE;
                 for (int i = 0; i < interfaces.length; i++) {
                     Class anInterface = interfaces[i];
                     classDef.extendz.add(anInterface.getName());

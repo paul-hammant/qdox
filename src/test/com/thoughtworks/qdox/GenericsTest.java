@@ -27,4 +27,14 @@ public class GenericsTest extends TestCase {
         builder.addSource(new StringReader(source));
         assertEquals("Foo", builder.getClassByName("Foo").getName());
     }
+
+    public void testShouldUnderstandMultipleGenericsInMethodDeclarations() {
+        String source = "" +
+                "public interface Bar {" +
+                "   Foo<X,Y> zap(Zip<R,V> r);" +
+                "}";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }
 }

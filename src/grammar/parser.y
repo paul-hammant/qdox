@@ -61,6 +61,11 @@ javadoctag:
 
 
 // ----- COMMON TOKENS
+typearguments: | LESSTHAN referencetypelist GREATERTHAN
+
+referencetypelist:
+    IDENTIFIER |
+    referencetypelist COMMA IDENTIFIER
 
 // A fullidentifier is "a", "a.b", "a.b.c", "a.b.*", etc...
 fullidentifier: 
@@ -74,8 +79,8 @@ arrayidentifier:
     };
 
 type: 
-    fullidentifier dimensions { 
-        $$ = new TypeDef($1,$2); 
+    fullidentifier typearguments dimensions {
+        $$ = new TypeDef($1,$3); 
     };
 
 dimensions: 
@@ -119,12 +124,6 @@ classdefinition:
 classorinterface: 
     CLASS | 
     INTERFACE { cls.isInterface = true; };
-
-typearguments: | LESSTHAN referencetypelist GREATERTHAN
-
-referencetypelist:
-    IDENTIFIER |
-    referencetypelist COMMA IDENTIFIER
 
 extends: | EXTENDS extendslist;
 

@@ -1,5 +1,8 @@
 <project name="qdox" default="main">
 
+	<!-- user customisation -->
+	<property file="config.properties"/>
+
 	<property name="name" value="qdox"/>
 	<property name="version" value="current"/>
 	<property name="build.compiler" value="jikes"/>

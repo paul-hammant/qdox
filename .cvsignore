@@ -1,4 +1,5 @@
 build
+config.properties
 maven.log
 target
 tmp

@@ -19,34 +19,34 @@ import java.util.HashMap;
  */
 public class ClassLibrary implements Serializable {
 
-    private final Set classes = new TreeSet();
+    private final Set classNames = new TreeSet();
     private final Map classNameToClassMap = new HashMap();
-    private boolean defaultLoaders = false;
+    private boolean defaultClassLoadersAdded = false;
     private transient List classLoaders = new ArrayList();
     private JavaClassCache cache;
-
+    
     public ClassLibrary(JavaClassCache cache) {
         this.cache = cache;
     }
 
-    public void add(String fullClassName) {
-        classes.add(fullClassName);
+    public void add(String className) {
+        classNames.add(className);
     }
 
     public JavaClass getClassByName(String name) {
         return cache.getClassByName(name);
     }
 
-    public boolean contains(String fullClassName) {
-        if (classes.contains(fullClassName)) {
+    public boolean contains(String className) {
+        if (classNames.contains(className)) {
             return true;
         } else {
-            return getClass(fullClassName) != null;
+            return getClass(className) != null;
         }
     }
 
-    public Class getClass(String fullClassName) {
-        Class cachedClass = (Class) classNameToClassMap.get(fullClassName);
+    public Class getClass(String className) {
+        Class cachedClass = (Class) classNameToClassMap.get(className);
         if (cachedClass != null) {
             return cachedClass;
         } else {
@@ -56,9 +56,9 @@ public class ClassLibrary implements Serializable {
                     continue;
                 }
                 try {
-                    Class clazz = classLoader.loadClass(fullClassName);
+                    Class clazz = classLoader.loadClass(className);
                     if (clazz != null) {
-                        classNameToClassMap.put(fullClassName, clazz);
+                        classNameToClassMap.put(className, clazz);
                         return clazz;
                     }
                 } catch (ClassNotFoundException e) {
@@ -72,7 +72,7 @@ public class ClassLibrary implements Serializable {
     }
 
     public Collection all() {
-        return Collections.unmodifiableCollection(classes);
+        return Collections.unmodifiableCollection(classNames);
     }
 
     public void addClassLoader(ClassLoader classLoader) {
@@ -80,18 +80,18 @@ public class ClassLibrary implements Serializable {
     }
 
     public void addDefaultLoader() {
-        if (!defaultLoaders) {
+        if (!defaultClassLoadersAdded) {
             classLoaders.add(getClass().getClassLoader());
             classLoaders.add(Thread.currentThread().getContextClassLoader());
         }
-        defaultLoaders = true;
+        defaultClassLoadersAdded = true;
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         classLoaders = new ArrayList();
-        if (defaultLoaders) {
-            defaultLoaders = false;
+        if (defaultClassLoadersAdded) {
+            defaultClassLoadersAdded = false;
             addDefaultLoader();
         }
     }

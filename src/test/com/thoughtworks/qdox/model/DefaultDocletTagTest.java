@@ -22,4 +22,8 @@ public class DefaultDocletTagTest extends AbstractDocletTagTest {
         assertEquals("quote'ed", tag.getParameters()[0]);
     }
  
+    public void FIXME_testJiraQdox45() {
+        DefaultDocletTag tag = new DefaultDocletTag("key", "param = \"value\"");
+        assertEquals("value", tag.getNamedParameter("param"));
+    }
 }

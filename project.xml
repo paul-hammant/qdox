@@ -5,7 +5,7 @@
 
 	<name>QDox</name>
 	<id>qdox</id>
-	<currentVersion>1.0</currentVersion>
+	<currentVersion>1.1</currentVersion>
 	<inceptionYear>2002</inceptionYear>
 	<package>com.thoughtworks.qdox</package>
 	<logo>/images/qdox.gif</logo>
@@ -40,6 +40,11 @@
 			<id>1.0</id>
 			<name>1.0</name>
 			<tag>1_0</tag>
+		</version>
+		<version>
+			<id>1.1</id>
+			<name>1.1</name>
+			<tag>1_1</tag>
 		</version>
 		<version>
 			<id>current</id>
@@ -108,6 +113,18 @@
 	</contributors>
 
 	<dependencies>
+		<dependency>
+			<id>ant</id>
+			<version>1.5.1</version>
+		</dependency>
+		<dependency>
+			<id>junit</id>
+			<version>3.8.1</version>
+		</dependency>
+		<dependency>
+			<id>mmmockobjects</id>
+			<version>1.12</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -115,8 +132,7 @@
 		<nagEmailAddress>qdox-user@lists.sourceforge.net</nagEmailAddress>
 
 		<sourceDirectory>src/java</sourceDirectory>
-		<unitTestSourceDirectory>target/test-src</unitTestSourceDirectory>
-		<integrationUnitTestSourceDirectory/>
+		<unitTestSourceDirectory>target/src/test</unitTestSourceDirectory>
 
 		<unitTest>
 			<includes>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project xmlns:deploy="deploy" xmlns:m="maven" xmlns:j="jelly:core" xmlns:maven="jelly:org.apache.maven.jelly.tags.project.MavenTagLibrary">
 
-	<goal name="release" description="Make new release">
+	<!--<goal name="release" description="Make new release">
 		<m:user-check user="${maven.username}"/>
 		<attainGoal name="website"/>
 
@@ -12,66 +12,84 @@
 		/>
 
 		<attainGoal name="dist:deploy"/>
-	</goal>
+	</goal>-->
 
 	<preGoal name="java:prepare-filesystem">
-		<path id="lib">
-			<fileset dir="lib"/>
-		</path>
-		<maven:addPath id="maven.dependency.classpath" refid="lib"/>
-	</preGoal>
+		<mkdir dir="target/src/java"/>
+		<mkdir dir="target/src/test"/>
+	</preGoal>	
 
+	<!-- Generate lexer and parser java source code from grammars -->
 	<preGoal name="java:compile">
-		<ant target="generate"/>
-		<path id="generate.java" location="build/java"/>
+	
+		<!-- Generate lexer -->
+		<uptodate property="lexer.uptodate" srcfile="src/grammar/lexer.flex" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/JFlexLexer.java"/>
+		<j:set var="lexerUptodate" value="${lexer.uptodate}"/>
+		<j:if test="${lexerUptodate == null}">
+			<mkdir dir="target/src/java/com/thoughtworks/qdox/parser/impl"/>
+			<java classpath="bootstrap/jflex.jar" classname="JFlex.Main" fork="yes">
+				<arg value="-d"/>
+				<arg value="target/src/java/com/thoughtworks/qdox/parser/impl"/>
+				<arg value="src/grammar/lexer.flex"/>
+			</java>
+		</j:if>
+
+		<!-- Generete parser -->
+		<uptodate property="parser.uptodate" srcfile="src/grammar/parser.y" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/Parser.java"/>
+		<j:set var="parserUptodate" value="${parser.uptodate}"/>
+		<j:if test="${parserUptodate == null}">
+			<exec executable="${yacc.exe}" dir="target">
+				<arg value="-Jnorun"/>
+				<arg value="-Jnoconstruct"/>
+				<arg value="-Jclass=Parser"/>
+				<arg value="-Jsemantic=Value"/>
+				<arg value="-Jpackage=com.thoughtworks.qdox.parser.impl"/>
+				<arg value="../src/grammar/parser.y"/>
+			</exec>
+			<move todir="target/src/java/com/thoughtworks/qdox/parser/impl" file="target/Parser.java"/>
+		</j:if>
+	
+		<!-- Add lexer and parser to compilation path -->
+		<path id="generate.java" location="target/src/java"/>
 		<maven:addPath id="maven.compile.src.set" refid="generate.java"/>
+		
 	</preGoal>
 
+	<!-- Generate mock objects using mockmaker for tests -->		
 	<preGoal name="test:compile">
-		<mkdir dir="target/test-src"/>
-		<copy todir="target/test-src">
+		
+		<!-- Generate mockobjects -->
+		<taskdef name="mockmaker" classname="mockmaker.AntTask">
+			<classpath>
+				<fileset dir="bootstrap"/>
+			</classpath>
+		</taskdef>
+		<mkdir dir="target/src/test"/>
+		<mockmaker srcdir="src/java" destdir="target/src/test"/>	
+		
+		<!-- Merge all test code (src + mockobjects) into one dir as test:compile goal
+		     can only handle one dir. -->
+		<copy todir="target/src/test">
 			<fileset dir="src/test"/>
-			<fileset dir="build/test"/>
 		</copy>
+		
 	</preGoal>
 
-	<goal name="coverage">
-		<property name="maven.junit.fork" value="yes"/>
-
-		<delete dir="target/clover"/>
-		<delete dir="${maven.build.dest}"/>
-		<delete dir="${maven.test.dest}"/>
-
-		<attainGoal name="test:compile" />
-
-		<!-- recompile main classes cloverified -->
-		<attainGoal name="clover:on"/>
-		<delete dir="${maven.build.dest}"/>
-		<attainGoal name="java:compile" />
-
-		<attainGoal name="clover:html-report"/>
-
-		<delete dir="${maven.build.dest}"/>
-		<delete dir="${maven.test.dest}"/>
-		<echo>${maven.junit.fork}</echo>
-	</goal>
+	<!-- Ensure clover coverage report and PDF documentation generated on site -->
+	<preGoal name="xdoc:generate-from-pom">
+		<attainGoal name="clover"/>
+		<attainGoal name="pdf"/>
+	</preGoal>
 	
-	<goal name="website">
-		<attainGoal name="clean"/>
-		<attainGoal name="test"/>
-		<attainGoal name="java:jar"/>
-		<attainGoal name="statistics"/>
-		<attainGoal name="coverage"/>
-		<attainGoal name="site:generate"/>
-	</goal>
+	<!-- Ensure java recompiled with clover compiler -->
+	<preGoal name="clover">
+		<delete dir="${maven.build.dest}"/>
+	</preGoal>
 	
-	<goal name="statistics">
-		<attainGoal name="statcvs"/>
-		<mkdir dir="target/docs/statcvs"/>
-		<copy todir="target/docs/statcvs">
-			<fileset dir="target/statcvs"/>
-		</copy>
-	</goal>
+	<!-- Get rid of cloverified classes -->
+	<postGoal name="clover">
+		<delete dir="${maven.build.dest}"/>
+	</postGoal>
 	
 </project>
 

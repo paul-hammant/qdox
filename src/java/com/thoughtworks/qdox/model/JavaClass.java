@@ -155,10 +155,6 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         fieldsArray = null;
     }
 
-//    public void setParent(JavaClassParent parent) {
-//        this.parent = parent;
-//    }
-
     public JavaClassParent getParent() {
         return parent;
     }

@@ -32,7 +32,7 @@
                 Fixed QDOX-13.
                 Line numbers in the lexer.
             </action>
-            <action dev="mdub" type="rinkrank">
+            <action dev="rinkrank" type="fix">
                 Fixed QDOX-14.
                 resolveTypeInternal doesn't work for nested types.
             </action>

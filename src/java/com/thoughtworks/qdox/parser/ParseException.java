@@ -27,4 +27,7 @@ public class ParseException extends RuntimeException {
         errorMessage += sourceInfo;
     }
 
+    public String getMessage() {
+        return errorMessage;
+    }
 }

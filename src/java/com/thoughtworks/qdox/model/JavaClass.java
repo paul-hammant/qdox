@@ -1,8 +1,6 @@
 package com.thoughtworks.qdox.model;
 
-import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.util.OrderedMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -513,8 +511,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      */
     public JavaClass[] getDerivedClasses() {
         List result = new ArrayList();
-        JavaDocBuilder builder = (JavaDocBuilder) javaClassCache;
-        JavaClass[] classes = builder.getClasses();
+        JavaClass[] classes = javaClassCache.getClasses();
 
         for (int i = 0; i < classes.length; i++) {
             JavaClass clazz = classes[i];

@@ -16,6 +16,10 @@ public class ClassLibraryTest extends TestCase implements JavaClassCache {
         return clazz;
     }
 
+    public JavaClass[] getClasses() {
+        return new JavaClass[0];
+    }
+  
     public void testAdd() throws Exception {
         ClassLibrary c = new ClassLibrary(this);
         c.add("com.blah.Ping");

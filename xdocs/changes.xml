@@ -27,12 +27,17 @@
                 Support for generic-type parameters on methods.
             </action>
             <action dev="mdub" type="fix">
-                Fix uses of generic-types within expressions.
+                Fix a bug which limited usage of generic-types within
+                expressions.
+            </action>
+            <action dev="mdub" type="fix">
+                Fix QDOX-61:
+                Support legal Unicode characters in identifiers.
             </action>
         </release>
 
         <release version="1.5" date="2004-06-20">
-            <action dev="mdub" type="fix">
+            <action dev="mdub" type="update">
                 Implement QDOX-47:
                 Refactor DocletTag handling so that all context information
                 is provided via the DocletTagFactory.

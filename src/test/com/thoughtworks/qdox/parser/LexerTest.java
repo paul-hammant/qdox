@@ -138,9 +138,9 @@ public class LexerTest extends TestCase {
         assertLex(Parser.IDENTIFIER, "z80", lexer);
         assertLex(0, lexer);
     }
-    
+
     public void testUnicodeInTest() throws Exception {
-        checkAssignment("\"\u0000\"");
+        checkAssignment("\"\u0000\""); 
     }
 
     public void testUnicodeInFile() throws Exception {
@@ -164,6 +164,13 @@ public class LexerTest extends TestCase {
 
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
+    }
+
+    public void testUnicodeIdentifiers() throws Exception {
+        // \u0391 == uppercase Greek "Alpha"
+        assertSingleLex("\u0391", Parser.IDENTIFIER);
+        // \u00f6 == lowercase o + diaeresis
+        assertSingleLex("f\u00f6rnamn", Parser.IDENTIFIER); 
     }
 
     public void testInnerClass() throws Exception {

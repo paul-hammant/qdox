@@ -116,7 +116,9 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 
     "/*" "*"+           { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
     "="                 { pushState(ASSIGNMENT); }
-    [A-Za-z_$0-9]*      { return Parser.IDENTIFIER; }
+    [:jletter:] [:jletterdigit:]* { 
+        return Parser.IDENTIFIER; 
+    }
 
 }
 

@@ -6,3 +6,6 @@ build
 tmp
 .classpath
 .project
+*.iml
+*.ipr
+*.iws

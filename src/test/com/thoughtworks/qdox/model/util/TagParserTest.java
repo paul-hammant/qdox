@@ -2,6 +2,7 @@ package com.thoughtworks.qdox.model.util;
 
 import java.io.IOException;
 import java.io.StreamTokenizer;
+import java.util.Iterator;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -57,6 +58,18 @@ public class TagParserTest extends TestCase {
         assertEquals(2, paramMap.size());
         assertEquals("foo", paramMap.get("x"));
         assertEquals("bar", paramMap.get("y"));
+    }
+
+    public void testNamedParametersAreReturnedInOrderDeclared() {
+        Map paramMap = TagParser.parseNamedParameters(
+            "x=foo y=bar a=orses b=oney"
+        );
+        assertEquals(4, paramMap.size());
+        Iterator keyIterator = paramMap.keySet().iterator();
+        assertEquals("x", keyIterator.next());
+        assertEquals("y", keyIterator.next());
+        assertEquals("a", keyIterator.next());
+        assertEquals("b", keyIterator.next());
     }
 
     public void testNamedParameterValuesCanBeSingleQuoted() {

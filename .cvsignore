@@ -1,5 +1,5 @@
-config.properties
 maven.log
+config.properties
 velocity.log
 target
 build

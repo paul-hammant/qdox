@@ -52,18 +52,20 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
 		return (JavaClass) classes.get(name);
 	}
 
-	public void addSource(Reader reader) {
-		addSource(null, reader);
-	}
-	public void addSource(File file, Reader reader) {
+	public JavaSource addSource(Reader reader) {
 		ModelBuilder builder = new ModelBuilder(classLibrary);
 		Lexer lexer = new JFlexLexer(reader);
 		Parser parser = new Parser(lexer, builder);
 		parser.parse();
 		JavaSource source = builder.getSource();
-		source.setFile( file );
 		sources.add(source);
 		addClasses(source);
+		return source;
+	}
+
+	public void addSource(File file) throws FileNotFoundException {
+		JavaSource source = addSource(new FileReader(file));
+		source.setFile(file);
 	}
 
 	public JavaSource[] getSources() {
@@ -76,7 +78,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
 		scanner.scan(new FileVisitor() {
 			public void visitFile(File currentFile) {
 				try {
-					addSource(currentFile, new FileReader(currentFile));
+					addSource(currentFile);
 				}
 				catch (FileNotFoundException e) {
 					throw new RuntimeException("Cannot read file : " + currentFile.getName());

@@ -3,7 +3,7 @@ package com.thoughtworks.qdox.parser;
 import java.io.IOException;
 
 /**
- * @mock:generate
+ * @mock
  */
 public interface Lexer {
 

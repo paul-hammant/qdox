@@ -30,24 +30,24 @@ public class MultipleJavaDocBuilderTest extends TestCase {
 		builder.addSource(new StringReader(createTestClass()));
 		JavaSource[] sources = builder.getSources();
 		assertEquals(2, sources.length);
-		
+
 		JavaClass testClassList = sources[0].getClasses()[0];
 		assertEquals("TestClassList", testClassList.getName());
 		assertEquals("com.thoughtworks.util.TestClass", testClassList.getSuperClass().getValue());
-		
+
 		JavaClass testClass = sources[1].getClasses()[0];
 		assertEquals("TestClass", testClass.getName());
-		
-	
+
+
 		JavaClass testClassListByName = builder.getClassByName("com.thoughtworks.qdox.TestClassList");
 		assertEquals("TestClassList", testClassListByName.getName());
-		
+
 		JavaClass testClassByName = builder.getClassByName("com.thoughtworks.util.TestClass");
 		assertEquals("TestClass", testClassByName.getName());
-		
+
 		assertNull(builder.getClassByName("this.class.should.not.Exist"));
 	}
-	
+
 	private String createTestClassList(){
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("package com.thoughtworks.qdox;");
@@ -59,7 +59,7 @@ public class MultipleJavaDocBuilderTest extends TestCase {
 		buffer.append("}");
 		return buffer.toString();
 	}
-	
+
 	private String createTestClass(){
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("package com.thoughtworks.util;");
@@ -121,13 +121,13 @@ public class MultipleJavaDocBuilderTest extends TestCase {
 
 		builder.getClassLibrary().addClassLoader(new ClassLoader() {
 			public Class loadClass(String name) throws ClassNotFoundException {
-				return name.equals("com.thoughtworks.Spoon") ? getClass() : null;
+				return name.equals("com.thoughtworks.Spoon") ? this.getClass() : null;
 			}
 		});
 
 		builder.getClassLibrary().addClassLoader(new ClassLoader() {
 			public Class loadClass(String name) throws ClassNotFoundException {
-				return name.equals("com.thoughtworks.Fork") ? getClass() : null;
+				return name.equals("com.thoughtworks.Fork") ? this.getClass() : null;
 			}
 		});
 

@@ -1,6 +1,6 @@
 // class headers
-package net.sf.qdox.parser.impl;
-import net.sf.qdox.parser.*;
+package com.thoughtworks.qdox.parser.impl;
+import com.thoughtworks.qdox.parser.*;
 %%
 
 // class and lexer definitions

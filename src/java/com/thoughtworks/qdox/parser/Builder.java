@@ -5,7 +5,7 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 
 /**
- * @mock:generate
+ * @mock
  */
 public interface Builder {
 

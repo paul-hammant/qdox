@@ -3,7 +3,7 @@ package com.thoughtworks.qdox.directorywalker;
 import java.io.File;
 
 /**
- * @mock:generate
+ * @mock
  */
 public interface FileVisitor {
 

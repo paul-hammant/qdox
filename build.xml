@@ -1,26 +1,76 @@
-<project name="qdox" default="test">
+<project name="qdox" default="jar">
 
-	<target name="generate">
-		<exec executable="build-lexer.bat"/>
-		<exec executable="build-parser.bat"/>
+	<property name="name" value="qdox"/>
+	<property name="version" value="0.2"/>
+	<property name="build.compiler" value="jikes"/>
+
+	<taskdef name="mockmaker" classname="mockmaker.AntTask">
+		<classpath>
+			<fileset dir="bootstrap"/>
+		</classpath>
+	</taskdef>
+
+	<target name="generate" description="Perform code generation">
+		<!-- Generate Lexer -->
+		<echo>**** Generating Lexer ****</echo>
+		<mkdir dir="build/java/com/thoughtworks/qdox/parser/impl"/>
+		<java classpath="bootstrap/jflex.jar" classname="JFlex.Main" fork="yes">
+			<arg value="-d"/>
+			<arg value="build/java/com/thoughtworks/qdox/parser/impl"/>
+			<arg value="src/grammar/lexer.flex"/>
+		</java>
+
+		<!-- Generate Parser -->
+		<echo>**** Generating Parser ****</echo>
+		<exec executable="bootstrap/yacc" dir="build">
+			<arg value="-Jnorun"/>
+			<arg value="-Jnoconstruct"/>
+			<arg value="-Jclass=Parser"/>
+			<arg value="-Jsemantic=Value"/>
+			<arg value="-Jpackage=com.thoughtworks.qdox.parser.impl"/>
+			<arg value="../src/grammar/parser.y"/>
+		</exec>
+		<move todir="build/java/com/thoughtworks/qdox/parser/impl" file="build/Parser.java"/>
+
+		<!-- Generate Mock Objects -->
+		<echo>**** Generating Mock Objects ****</echo>
+		<mkdir dir="build/test"/>
+		<mockmaker srcdir="src/java" destdir="build/test"/>
 	</target>
 
-	<target name="compile" depends="generate">
-		<mkdir dir="build"/>
-		<javac srcdir="src/java" destdir="build" debug="true"/>
+	<target name="compile" depends="generate" description="Compile Java">
+		<mkdir dir="build/classes"/>
+		<javac srcdir="src/java;build/java" destdir="build/classes" debug="true"/>
 	</target>
 
-	<target name="test" depends="compile">
-		<exec executable="build-mocks.bat"/>
-		<javac srcdir="src/test" destdir="build" debug="true">
+	<target name="test" depends="compile" description="Compile and run tests">
+		<mkdir dir="build/test-classes"/>
+		<javac srcdir="src/test;build/test" destdir="build/test-classes" debug="true">
 			<classpath>
-				<fileset dir="bin"/>
-				<pathelement path="build"/>
+				<fileset dir="lib"/>
+				<pathelement path="build/classes"/>
 			</classpath>
 		</javac>
+		<java classname="junit.textui.TestRunner" fork="yes">
+			<classpath>
+				<fileset dir="lib"/>
+				<pathelement path="build/classes"/>
+				<pathelement path="build/test-classes"/>
+			</classpath>
+			<arg value="com.thoughtworks.qdox.FullTestSuite"/>
+		</java>
 	</target>
 
-	<target name="clean">
+	<target name="jar" depends="test" description="Generate redistributable jar">
+		<mkdir dir="build/classes-dist"/>
+		<javac srcdir="src/java;build/java" destdir="build/classes-dist" debug="false" optimize="true" />
+		<jar jarfile="build/${name}-${version}.jar">
+			<fileset dir="build/classes-dist"/>
+		</jar>
+		<echo>Generated build/${name}-${version}.jar</echo>
+	</target>
+
+	<target name="clean" description="Clean up built files">
 		<delete dir="build"/>
 	</target>
 

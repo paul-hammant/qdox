@@ -1,6 +1,6 @@
 %{
-import net.sf.qdox.parser.*;
-import net.sf.qdox.parser.structs.*;
+import com.thoughtworks.qdox.parser.*;
+import com.thoughtworks.qdox.parser.structs.*;
 import java.io.IOException;
 %}
 

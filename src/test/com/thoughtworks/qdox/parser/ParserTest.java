@@ -1,8 +1,8 @@
 package com.thoughtworks.qdox.parser;
 
 import junit.framework.TestCase;
-import com.thoughtworks.qdox.parser.test.MockBuilder;
-import com.thoughtworks.qdox.parser.test.MockLexer;
+import com.thoughtworks.qdox.parser.MockBuilder;
+import com.thoughtworks.qdox.parser.MockLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;

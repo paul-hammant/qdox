@@ -7,7 +7,7 @@ import java.io.File;
 import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.Filter;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
-import com.thoughtworks.qdox.directorywalker.test.MockFileVisitor;
+import com.thoughtworks.qdox.directorywalker.MockFileVisitor;
 
 public class DirectoryScannerTest extends TestCase {
 

@@ -3,25 +3,82 @@
 
 	<properties>
 		<title>QDox Usage</title>
-		<author email="joe@truemesh.com">Joe Walnes</author>
+		<author email="joew@thoughtworks.com">Joe Walnes</author>
 	</properties>
 
 	<body>
-		<section name="Parsing a Java source file">
-		
-			<blockquote><code>
-				// input file<br/>
-				Reader input = new FileInputStream("MyFile.java");<br/>
-				<br/>
-				// parse into model objects<br/>
-				JavaDocBuilder builder = new JavaDocBuilder();<br/>
-				JavaSource src = builder.build(input);<br/>
-			</code></blockquote>
 
-			<p>Now you have a JavaSource representing the contents
-			of the file. See the <a href="apidocs/net/sf/qdox/model/JavaSource.html">API</a> docs
-			for more information.</p>
-			
+		<section name="Entry Point">
+
+			<p><code><a href="apidocs/com/thoughtworks/qdox/JavaDocBuilder.html">JavaDocBuilder</a></code> is the entry point to
+			QDox. It is responsible for parsing source code, resolving imports and storing
+			the data.</p>
+
+			<p>To use it, all you need to do is call the default constructor.</p>
+
+<blockquote><pre><code>
+JavaDocBuilder builder = new JavaDocBuilder();
+</code></pre></blockquote>
+
+		</section>
+
+		<section name="Reading Source Files">
+
+			<p>Java source code can then be added to the
+			<code><a href="apidocs/com/thoughtworks/qdox/JavaDocBuilder.html">JavaDocBuilder</a></code>.
+			Source can either be read file at a time
+			through a Reader or an entire source tree can be added recursively.</p>
+
+<blockquote><pre><code>
+// Reading a single source file.
+builder.addSource(new FileReader("MyFile.java"));
+
+// Reading from another kind of input stream.
+builder.addSource(new StringReader("package test; public class Hello {}"));
+
+// Adding all .java files in a source tree (recursively).
+builder.addSourceTree(new File("mysrcdir"));
+</code></pre></blockquote>
+
+		</section>
+
+		<section name="Resolving Class Names">
+
+			<p>In order to resolve classes that have been imported using a wildcard (e.g. <code>import java.util.*;</code>), the
+			<code><a href="apidocs/com/thoughtworks/qdox/model/ClassLibrary.html">ClassLibrary</a></code>
+			must be aware of other classes used in the project.</p>
+
+			<p>ClassLibrary has 3 ways to resolve classes:</p>
+
+			<ul>
+				<li>By looking at other sources that have been added.</li>
+				<li>By looking in the current classpath (including the standard JRE classes).</li>
+				<li>By looking at additional ClassLoaders specified at runtime.</li>
+			</ul>
+
+			<p>The first two are automaticly set by JavaDocBuilder. In most cases this shall be sufficient, however in some
+			situations you may want resolve the full classes in external libraries.</p>
+
+			<p>To resolve classes from different ClassLoaders (e.g. 3rd party Jar files), the
+			<code>addClassLoader()</code> method must be called on the ClassLibrary.</p>
+
+<blockquote><pre><code>
+// Get the ClassLibrary
+ClassLibrary lib = builder.getClassLibrary();
+
+// Add a custom ClassLoader
+lib.addClassLoader(myCustomClassLoader);
+
+// Ant example : add the &lt;classpath&gt; element's contents
+lib.addClassLoader(new AntClassLoader(getProject(), classpath));
+</code></pre></blockquote>
+
+			<p>It is important that additional ClassLoaders are added before any source files are parsed.</p>
+
+		</section>
+
+		<section name="Navigating The Model">
+			<p>Now the files have been parsed, move on to <a href="model.html">navigating the model</a>.</p>
 		</section>
 
 	</body>

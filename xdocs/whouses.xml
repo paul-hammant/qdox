@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<document>
+
+	<properties>
+		<title>Who's Using QDox?</title>
+		<author email="joew@thoughtworks.com">Joe Walnes</author>
+	</properties>
+
+	<body>
+
+		<section name="Who's Using QDox?">
+
+			<table>
+				<tr>
+					<th>Project</th>
+					<th>Description</th>
+					<th>How QDox is Used</th>
+				</tr>
+
+				<tr>
+					<td><nobr><a href="http://www.mockmaker.org">Mock Maker</a></nobr></td>
+					<td>
+						Mock Maker is a tool for automatically generating mock objects from custom classes to aid in testing the
+						untestable. This supports the practises of Test Driven Development and eXtreme Programming.
+					</td>
+					<td>
+						Mock Maker scans the source repository for any class/interface marked with the @mock JavaDoc tag
+						and automatically creates the Mock Object for this that matches the class definition.
+					</td>
+				</tr>
+
+				<tr>
+					<td>QDox</td>
+					<td>
+						This is QDox!
+					</td>
+					<td>
+						QDox requires QDox to build itself! This is because mock objects are used to test QDox and
+						MockMaker (see above) is used to build these (which internally uses QDox). To make this possible, a version
+						of qdox.jar is bundled with sourcecode to bootstrap the build process. We do like our own dog food.
+					</td>
+				</tr>
+
+			</table>
+		</section>
+
+	</body>
+
+</document>

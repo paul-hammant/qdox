@@ -28,29 +28,31 @@
 					<li>
 						Human readable string representation of JavaSource file.
 					</li>
-				</ul>
-			</p>
-		</section>
-
-		<section name="In Progress">
-			<p>
-				<ul>
 					<li>
 						Directory scanner to walk a source tree and parse each file.
 					</li>
 					<li>
-						Class name resolver to normalize/denormalize import statements of classes in 
+						Class name resolver to normalize/denormalize import statements of classes in
 						source tree.
 					</li>
 					<li>
-						Class name resolver to normalize/denormalize import statements of classes in 
+						Class name resolver to normalize/denormalize import statements of classes in
 						external libraries.
 					</li>
 				</ul>
 			</p>
 		</section>
 
-		<section name="Tasks">
+		<!--
+		<section name="In Progress">
+			<p>
+				<ul>
+				</ul>
+			</p>
+		</section>
+		-->
+
+		<section name="Future">
 			<p>
 				<ul>
 					<li>

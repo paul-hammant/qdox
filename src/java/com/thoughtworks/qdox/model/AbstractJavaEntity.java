@@ -149,6 +149,10 @@ public abstract class AbstractJavaEntity implements Serializable {
 		return isModifierPresent("synchronized");
 	}
 
+	public boolean isTransient(){
+		return isModifierPresent("transient");
+	}
+
 	private boolean isModifierPresent(String modifier) {
 		return modifiers.contains(modifier);
 	}

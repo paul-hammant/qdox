@@ -186,11 +186,12 @@ public class AbstractJavaEntityTest extends TestCase {
 
 	public void testProtectedModifer() {
 		AbstractJavaEntity entity = new JavaField();
-		entity.setModifiers(new String[]{"protected", "abstract", "synchronized"});
+		entity.setModifiers(new String[]{"protected", "abstract", "synchronized", "transient"});
 		assertTrue(entity.isProtected());
 		assertTrue(entity.isSynchronized());
+		assertTrue(entity.isTransient());
 	}
-	
+
 	public void testStaticModifer() {
 		AbstractJavaEntity entity = new JavaField();
 		entity.setModifiers(new String[]{"public", "static", "final"});

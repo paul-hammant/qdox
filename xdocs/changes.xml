@@ -36,7 +36,7 @@
             </action>
             <action dev="mdub" type="add">
                 Implemented QDOX-78:
-                JavaDoc comments now preserve end of line characters. 
+                JavaDoc comments now preserve end of line characters.
             </action>
             <action dev="mdub" type="fix">
                 Fix a bug which limited usage of generic-types within
@@ -45,6 +45,10 @@
             <action dev="mdub" type="fix">
                 Fix QDOX-61:
                 Support legal Unicode characters in identifiers.
+            </action>
+            <action dev="joeretro" type="fix">
+                Fix QDOX-63:
+                Inner/nested classes are now resolved correctly between packages (Fix by Philippe Gaudin).
             </action>
             <action dev="mdub" type="fix">
                 Fix QDOX-72:

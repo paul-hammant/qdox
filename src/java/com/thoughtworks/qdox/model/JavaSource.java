@@ -183,12 +183,36 @@ public class JavaSource implements Serializable, JavaClassParent {
             }
         }
 
+        // check for inner classes of already imported classes        
+        String parent = null;
+        String dotParent = null;
+        String child = null;
+        int dollarIdx = 0;
+        if ((dollarIdx = typeName.indexOf('$')) > 0) {
+            parent = typeName.substring(0, dollarIdx);
+            dotParent = "." + parent;
+            child = typeName.substring(dollarIdx);
+        }
+        for (int i = 0; i < imports.length; i++) {
+            if (parent != null && (imports[i].equals(parent) || imports[i].endsWith(dotParent))) {
+                String fqn = imports[i] + child;
+                if (getClassLibrary().contains(fqn)) {
+                    return fqn;
+                }
+            }
+        }
+
         // check for wildcard imports
         for (int i = 0; i < imports.length; i++) {
             if (imports[i].endsWith(".*")) {
-                String fqn = 
+                String fqn =
                     imports[i].substring(0, imports[i].length() - 1)
                     + typeName;
+                if (getClassLibrary().contains(fqn)) {
+                    return fqn;
+                }
+            } else if (parent != null && (imports[i].equals(parent) || imports[i].endsWith(dotParent))) {
+                String fqn = imports[i] + child;
                 if (getClassLibrary().contains(fqn)) {
                     return fqn;
                 }

@@ -198,4 +198,9 @@ public class AbstractJavaEntityTest extends TestCase {
 		assertTrue(entity.isFinal());
 	}
 
+	public void testGetTagsReturnsEmptyArrayInsteadOfNull() throws Exception {
+		AbstractJavaEntity entity = new JavaField();
+		assertEquals(0, entity.getTags().length);
+	}
+
 }

@@ -11,7 +11,7 @@ abstract class AbstractJavaEntity implements Serializable {
 	protected String name;
 	protected List modifiers = new ArrayList();
 	private String comment;
-	private DocletTag[] tags;
+	private DocletTag[] tags = new DocletTag[0];
 
 	public String getName() {
 		return name;

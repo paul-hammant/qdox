@@ -91,7 +91,7 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(1, outer.getInnerClasses().length);
         JavaClass inner = outer.getInnerClasses()[0];
         assertEquals("Inner", inner.getName());
-        assertEquals("foo.bar.Outer.Inner", inner.getFullyQualifiedName());
+        assertEquals("foo.bar.Outer$Inner", inner.getFullyQualifiedName());
 
         assertEquals(1, inner.getMethods().length);
         assertEquals("innerMethod", inner.getMethods()[0].getName());
@@ -353,11 +353,11 @@ public class JavaDocBuilderTest extends TestCase {
          |  class extension
         ArrayList
         */
-        builder.addSource( new StringReader("public interface Collection {}"));
-        builder.addSource( new StringReader("public interface List extends Collection {}"));
+        builder.addSource(new StringReader("public interface Collection {}"));
+        builder.addSource(new StringReader("public interface List extends Collection {}"));
 
-        builder.addSource( new StringReader("public class AbstractList implements List {}"));
-        builder.addSource( new StringReader("public class ArrayList extends AbstractList {}"));
+        builder.addSource(new StringReader("public class AbstractList implements List {}"));
+        builder.addSource(new StringReader("public class ArrayList extends AbstractList {}"));
 
         JavaClass collection = builder.getClassByName("Collection");
         JavaClass list = builder.getClassByName("List");
@@ -478,10 +478,10 @@ public class JavaDocBuilderTest extends TestCase {
         builder.addSource(new StringReader(betterListSource));
 
         JavaClass betterList = builder.getClassByName("x.BetterList");
-        assertNull( betterList.getMethodBySignature("good", null) );
-        assertNotNull( betterList.getMethodBySignature("good", null, true) );
-        assertNotNull( betterList.getMethodBySignature("size", null, true) );
-        assertNull( "Shouldn't be able to get private methods", betterList.getMethodBySignature("myown", null, true) );
+        assertNull(betterList.getMethodBySignature("good", null));
+        assertNotNull(betterList.getMethodBySignature("good", null, true));
+        assertNotNull(betterList.getMethodBySignature("size", null, true));
+        assertNull("Shouldn't be able to get private methods", betterList.getMethodBySignature("myown", null, true));
     }
 
     public void testTagLineNumbersAndSourceInTags() {
@@ -499,4 +499,24 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(4, line4.getLineNumber());
         assertSame(line4.getJavaSource().getClasses()[0], jalla);
     }
+
+    public void testJiraQdox14() {
+        String source = "" +
+                "package foo; \n" +
+                "class Outer { \n" +
+                "  Inner field1; \n" +
+                "  class Inner { \n" +
+                "    Outer.Inner field2; \n" +
+                "  } \n" +
+                "} \n" +
+                "";
+        builder.addSource(new StringReader(source));
+        JavaClass outer = builder.getClassByName("foo.Outer");
+        JavaClass inner = outer.getInnerClasses()[0];
+        assertEquals("foo.Outer$Inner", inner.getFullyQualifiedName());
+
+//        JavaField field1 = outer.getFieldByName("field1");
+//        assertEquals("foo.Outer$Inner", field1.getType().getValue());
+    }
+
 }

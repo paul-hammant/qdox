@@ -333,7 +333,7 @@ public class JavaClassTest extends TestCase {
 
         assertEquals("Inner", inner.getName());
         assertEquals("foo.bar", inner.getPackage());
-        assertEquals("foo.bar.Outer.Inner",
+        assertEquals("foo.bar.Outer$Inner",
                 inner.getFullyQualifiedName());
     }
 

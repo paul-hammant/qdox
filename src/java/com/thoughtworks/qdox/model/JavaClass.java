@@ -170,11 +170,20 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
     public String getFullyQualifiedName() {
         if (getParent() != null) {
-            String pakkage = getParent().asClassNamespace();
-            return pakkage == null ? getName() : pakkage + "." + getName();
+            JavaClassParent parent = getParent();
+            String pakkage = parent.asClassNamespace();
+            char separator = isInner() ? '$' : '.';
+            return pakkage == null ? getName() : pakkage + separator + getName();
         } else {
             return null;
         }
+    }
+
+    /**
+     * @since 1.3
+     */
+    public boolean isInner() {
+        return getParent() instanceof JavaClass;
     }
 
     public String asClassNamespace() {

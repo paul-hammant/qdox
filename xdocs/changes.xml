@@ -70,10 +70,13 @@
                 to compare the equality of two Java sources on the API level.
             </action>
             <action dev="rinkrank" type="add">
-                Added getLineNumber() to DocletTag.
+                Added int getLineNumber() to DocletTag.
             </action>
             <action dev="rinkrank" type="add">
-                Added getJavaSource() to DocletTag.
+                Added JavaSource getJavaSource() to DocletTag.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added boolean isInner() to JavaClass.
             </action>
         </release>
 

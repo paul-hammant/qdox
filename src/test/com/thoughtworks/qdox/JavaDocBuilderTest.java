@@ -252,35 +252,40 @@ public class JavaDocBuilderTest extends TestCase {
     java.util.ArrayList
     */
 
-    public void testArrayListIsACollection() {
+    public void testConcreteClassCanBeTestedForImplementedClassesAndInterfaces() {
         JavaClass arrayList = builder.getClassByName("java.util.ArrayList");
-        assertTrue(arrayList.isA("java.util.Collection"));
+
+        assertTrue("should be Object",       arrayList.isA("java.lang.Object"));
+        assertTrue("should be Collection",   arrayList.isA("java.util.Collection"));
+        assertTrue("should be List",         arrayList.isA("java.util.List"));
+	    assertTrue("should be AbstractList", arrayList.isA("java.util.AbstractList"));
+	    assertTrue("should be ArrayList",    arrayList.isA("java.util.ArrayList"));
+
+        assertFalse("should not be Map", arrayList.isA("java.util.Map"));
     }
 
-    public void testArrayListIsAList() {
-        JavaClass arrayList = builder.getClassByName("java.util.ArrayList");
-        assertTrue(arrayList.isA("java.util.List"));
+	public void testAbstractClassCanBeTestedForImplementedClassesAndInterfaces() {
+        JavaClass abstractList = builder.getClassByName("java.util.AbstractList");
+
+	    assertTrue("should be Object",       abstractList.isA("java.lang.Object"));
+	    assertTrue("should be Collection",   abstractList.isA("java.util.Collection"));
+	    assertTrue("should be List",         abstractList.isA("java.util.List"));
+		assertTrue("should be AbstractList", abstractList.isA("java.util.AbstractList"));
+
+	    assertFalse("should not be ArrayList", abstractList.isA("java.util.ArrayList"));
+	    assertFalse("should not be Map",       abstractList.isA("java.util.Map"));
     }
 
-    public void testArrayListIsAnAbstractList() {
-        JavaClass arrayList = builder.getClassByName("java.util.ArrayList");
-        assertTrue(arrayList.isA("java.util.AbstractList"));
-    }
+	public void testInterfaceCanBeTestedForImplementedInterfaces() {
+		JavaClass list = builder.getClassByName("java.util.List");
 
-    public void testAbstractListIsACollection() {
-        JavaClass arrayList = builder.getClassByName("java.util.AbstractList");
-        assertTrue(arrayList.isA("java.util.Collection"));
-    }
+		assertTrue("should be Collection",   list.isA("java.util.Collection"));
+		assertTrue("should be List",         list.isA("java.util.List"));
 
-    public void testAbstractListIsAList() {
-        JavaClass arrayList = builder.getClassByName("java.util.AbstractList");
-        assertTrue(arrayList.isA("java.util.List"));
-    }
-
-    public void testListIsACollection() {
-        JavaClass arrayList = builder.getClassByName("java.util.List");
-        assertTrue(arrayList.isA("java.util.Collection"));
-    }
+		assertFalse("should not be ArrayList", list.isA("java.util.ArrayList"));
+		assertFalse("should not be Map",       list.isA("java.util.Map"));
+		assertFalse("should not be Object",    list.isA("java.lang.Object")); // I think! ;)
+	}
 
     public void testImageIconBeanProperties() {
         JavaClass imageIcon = builder.getClassByName("javax.swing.ImageIcon");

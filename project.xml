@@ -31,14 +31,16 @@
   <url>http://qdox.codehaus.org/</url>
   <issueTrackingUrl>http://jira.codehaus.org/secure/BrowseProject.jspa?id=10103</issueTrackingUrl>
 
-  <siteAddress>codehaus.org</siteAddress>
-  <siteDirectory>/www/qdox.codehaus.org/</siteDirectory>
-  <distributionDirectory>/www/qdox.codehaus.org/downloads/</distributionDirectory>
+  <siteAddress>qdox.codehaus.org</siteAddress>
+  <siteDirectory>/home/projects/qdox/public_html</siteDirectory>
+
+  <distributionDirectory>/dist/</distributionDirectory>
+  <distributionSite>beaver.codehaus.org</distributionSite>
 
   <repository>
-    <connection>scm:cvs:pserver:anonymous@cvs.codehaus.org:/cvsroot/qdox:qdox</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.codehaus.org:/cvsroot/qdox:qdox</developerConnection>
-    <url>http://cvs.codehaus.org/viewcvs.cgi/qdox/?cvsroot=qdox</url>   
+    <connection>scm:cvs:pserver:anonymous@cvs.qdox.codehaus.org:/home/projects/qdox/scm:qdox</connection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.qdox.codehaus.org:/home/projects/qdox/scm:qdox</developerConnection>
+    <url>http://cvs.qdox.codehaus.org/qdox</url>   
   </repository>
   
   <versions>
@@ -76,9 +78,27 @@
   <mailingLists>
     <mailingList>
       <name>QDox User List</name>
-      <subscribe>http://lists.codehaus.org/mailman/listinfo/qdox-user</subscribe>
-      <unsubscribe>http://lists.codehaus.org/mailman/listinfo/qdox-user</unsubscribe>
-      <archive>http://lists.codehaus.org/pipermail/qdox-user/</archive>
+      <subscribe>mailto:user-subscribe@qdox.codehaus.org</subscribe>
+      <unsubscribe>mailto:user-unsubscribe@qdox.codehaus.org</unsubscribe>
+      <archive>http://archive.qdox.codehaus.org/user</archive>
+    </mailingList>
+    <mailingList>
+      <name>QDox Announce List</name>
+      <subscribe>mailto:announce-subscribe@qdox.codehaus.org</subscribe>
+      <unsubscribe>mailto:announce-unsubscribe@qdox.codehaus.org</unsubscribe>
+      <archive>http://archive.qdox.codehaus.org/announce</archive>
+    </mailingList>
+    <mailingList>
+      <name>QDox Dev List</name>
+      <subscribe>mailto:dev-subscribe@qdox.codehaus.org</subscribe>
+      <unsubscribe>mailto:dev-unsubscribe@qdox.codehaus.org</unsubscribe>
+      <archive>http://archive.qdox.codehaus.org/dev</archive>
+    </mailingList>
+    <mailingList>
+      <name>QDox SCM List</name>
+      <subscribe>mailto:scm-subscribe@qdox.codehaus.org</subscribe>
+      <unsubscribe>mailto:scm-unsubscribe@qdox.codehaus.org</unsubscribe>
+      <archive>http://archive.qdox.codehaus.org/scm</archive>
     </mailingList>
   </mailingLists>
 
@@ -174,7 +194,7 @@
 
   <build>
 
-    <nagEmailAddress>qdox-user@lists.codehaus.org</nagEmailAddress>
+    <nagEmailAddress>dev@qdox.codehaus.org</nagEmailAddress>
 
     <sourceDirectory>src/java</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>

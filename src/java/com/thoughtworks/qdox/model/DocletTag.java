@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.model;
 
-public class DocletTag {
+import java.io.Serializable;
+
+public class DocletTag implements Serializable {
 
 	private String name;
 	private String value;

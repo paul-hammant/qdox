@@ -1,8 +1,9 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.List;
+import java.io.Serializable;
 
-public class Type implements Comparable{
+public class Type implements Comparable, Serializable {
     private List imports;
     private String name;
     private ClassLibrary classLibrary;

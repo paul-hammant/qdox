@@ -1,11 +1,15 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.*;
+import java.io.Serializable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
-public class ClassLibrary {
+public class ClassLibrary implements Serializable {
 
 	private Set classes = new TreeSet();
-	private List classLoaders = new ArrayList();
+	private boolean defaultLoaders = false;
+	private transient List classLoaders = new ArrayList();
 
 	public void add(String fullClassName) {
 		classes.add(fullClassName);
@@ -70,8 +74,20 @@ public class ClassLibrary {
 	}
 
 	public void addDefaultLoader() {
-		classLoaders.add(getClass().getClassLoader());
-		classLoaders.add(Thread.currentThread().getContextClassLoader());
+		if (!defaultLoaders) {
+			classLoaders.add(getClass().getClassLoader());
+			classLoaders.add(Thread.currentThread().getContextClassLoader());
+		}
+		defaultLoaders = true;
+	}
+
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		classLoaders = new ArrayList();
+		if (defaultLoaders) {
+			defaultLoaders = false;
+			addDefaultLoader();
+		}
 	}
 
 }

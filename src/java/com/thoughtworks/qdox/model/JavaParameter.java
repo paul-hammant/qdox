@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.model;
 
-public class JavaParameter {
+import java.io.Serializable;
+
+public class JavaParameter implements Serializable {
 
 	private String name;
 	private Type type;

@@ -1,9 +1,6 @@
 package com.thoughtworks.qdox;
 
-import java.io.Reader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 import com.thoughtworks.qdox.model.JavaClass;
@@ -17,7 +14,8 @@ import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.FileVisitor;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 
-public class JavaDocBuilder {
+public class JavaDocBuilder implements Serializable {
+
 	private Map classes = new HashMap();
 	private ClassLibrary classLibrary;
 	private List sources = new ArrayList();
@@ -30,13 +28,13 @@ public class JavaDocBuilder {
 	private void addClasses(JavaSource source) {
 		JavaClass[] javaClasses = source.getClasses();
 		for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
-			JavaClass javaClass = javaClasses[classIndex];
-			classes.put(javaClass.getFullyQualifiedName(), javaClass);
+			JavaClass cls = javaClasses[classIndex];
+			classes.put(cls.getFullyQualifiedName(), cls);
 		}
 	}
 
 	public JavaClass getClassByName(String name) {
-		return (JavaClass)classes.get(name);
+		return (JavaClass) classes.get(name);
 	}
 
 	public void addSource(Reader reader) {
@@ -82,6 +80,35 @@ public class JavaDocBuilder {
 
 	public ClassLibrary getClassLibrary() {
 		return classLibrary;
+	}
+
+	public void save(File file) throws IOException {
+		FileOutputStream fos = new FileOutputStream(file);
+		ObjectOutputStream out = new ObjectOutputStream(fos);
+		try {
+			out.writeObject(this);
+		}
+		finally {
+			out.close();
+			fos.close();
+		}
+	}
+
+	public static JavaDocBuilder load(File file) throws IOException {
+		FileInputStream fis = new FileInputStream(file);
+		ObjectInputStream in = new ObjectInputStream(fis);
+		JavaDocBuilder builder = null;
+		try {
+			builder = (JavaDocBuilder)in.readObject();
+		}
+		catch (ClassNotFoundException e) {
+			throw new Error("Couldn't load class : " + e.getMessage());
+		}
+		finally {
+			in.close();
+			fis.close();
+		}
+		return builder;
 	}
 
 }

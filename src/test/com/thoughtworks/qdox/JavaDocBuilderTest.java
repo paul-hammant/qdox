@@ -1,8 +1,6 @@
 package com.thoughtworks.qdox;
 
-import java.io.StringReader;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -147,6 +145,42 @@ public class JavaDocBuilderTest extends TestCase {
 		assertEquals("com.thoughtworks.Fork", cls.getMethod(1).getReturns().getValue());
 		// unresolved
 		assertEquals("Cabbage", cls.getMethod(2).getReturns().getValue());
+
+	}
+
+	public void testSerializable() throws Exception {
+		JavaDocBuilder builder = new JavaDocBuilder();
+		builder.addSource(new StringReader("package test; public class X{}"));
+		assertEquals("X", builder.getSources()[0].getClasses()[0].getName());
+
+		// serialize
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(buffer);
+		oos.writeObject(builder);
+		oos.close();
+		builder = null;
+
+		// unserialize
+		ByteArrayInputStream input = new ByteArrayInputStream(buffer.toByteArray());
+		ObjectInputStream ois = new ObjectInputStream(input);
+		JavaDocBuilder newBuilder = (JavaDocBuilder)ois.readObject();
+
+		assertEquals("X", newBuilder.getSources()[0].getClasses()[0].getName());
+
+	}
+
+	public void testSaveAndRestore() throws Exception {
+		JavaDocBuilder builder = new JavaDocBuilder();
+		File file = new File("tmp/sourcetest/cache.obj");
+		builder.addSourceTree(new File("tmp/sourcetest"));
+		builder.save(file);
+
+		JavaDocBuilder newBuilder = JavaDocBuilder.load(file);
+		assertNotNull(newBuilder.getClassByName("com.blah.subpackage.Cheese"));
+		assertNull(newBuilder.getClassByName("com.blah.Ignore"));
+
+		newBuilder.addSource(new StringReader("package x; import java.util.*; class Z extends List{}"));
+		assertEquals("java.util.List", newBuilder.getClassByName("x.Z").getSuperClass().getValue());
 
 	}
 

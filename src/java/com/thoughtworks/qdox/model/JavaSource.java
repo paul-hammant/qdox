@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.model;
 
-public class JavaSource {
+import java.io.Serializable;
+
+public class JavaSource implements Serializable {
 
 	private JavaClass[] classes;
 	private String packge;

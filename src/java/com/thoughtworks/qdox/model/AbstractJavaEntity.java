@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-abstract class AbstractJavaEntity {
+abstract class AbstractJavaEntity implements Serializable {
 
 	protected String name;
 	protected List modifiers = new ArrayList();

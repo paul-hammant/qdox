@@ -27,4 +27,8 @@ class MockLexer implements Lexer {
         return -1;
     }
 
+    public int getColumn() {
+        return -1;
+    }
+
 }

@@ -54,8 +54,9 @@ javadoctoken:
 javadoctags: | javadoctags javadoctag;
 
 javadoctag: 
-    JAVADOCTAG javadoctokens {
-        builder.addJavaDocTag($1.substring(1), buffer(), lexer.getLine()); 
+    JAVADOCTAG { tagLine = lexer.getLine(); } 
+    javadoctokens {
+        builder.addJavaDocTag($1.substring(1), buffer(), tagLine); 
     };
 
 
@@ -215,6 +216,7 @@ private MethodDef mth = new MethodDef();
 private FieldDef param = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
 private TypeDef fieldType;
+private int tagLine;
 
 private String buffer() {
     if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);
@@ -248,7 +250,7 @@ private int yylex() {
 }
 
 private void yyerror(String msg) {
-    // TODO: Implement error handling
+    throw new ParseException(msg, lexer.getLine(), lexer.getColumn());
 }
 
 private class Value {

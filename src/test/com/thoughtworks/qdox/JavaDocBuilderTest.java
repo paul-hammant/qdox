@@ -7,6 +7,7 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.*;
+import com.thoughtworks.qdox.parser.*;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -493,15 +494,19 @@ public class JavaDocBuilderTest extends TestCase {
                 + "package x;\n"
                 + "import java.util.*;\n"
                 + "/**\n"
-                + " * @line 4\n"
+                + " * @line4 foo\n"
+                + " * @line5 overflows onto\n"
+                + " *        line6\n"
                 + " */\n"
                 + "class Jalla extends ArrayList {\n"
                 + "}\n";
         builder.addSource(new StringReader(jallaSource));
         JavaClass jalla = builder.getClassByName("x.Jalla");
-        DocletTag line4 = jalla.getTagByName("line");
+        DocletTag line4 = jalla.getTagByName("line4");
         assertEquals(4, line4.getLineNumber());
         assertSame(line4.getContext(), jalla);
+        DocletTag line5 = jalla.getTagByName("line5");
+        assertEquals(5, line5.getLineNumber());
     }
 
     public void testJiraQdox14() {
@@ -632,4 +637,20 @@ public class JavaDocBuilderTest extends TestCase {
 
         assertEquals(1, clazz.getInnerClasses().length);
     }
+    
+    public void testParseErrorLocationIsAvailable() {
+        String badSource = ""
+        + "package x;\n"
+        + "import java.util.*;\n"
+        + "class Bad [\n";
+        try {
+            builder.addSource(new StringReader(badSource));
+            fail("ParseException expected");
+        } catch(ParseException e) {
+            System.out.println(e.getMessage());
+            assertEquals(3, e.getLine());
+            assertEquals(11, e.getColumn());
+        }
+    }
+    
 }

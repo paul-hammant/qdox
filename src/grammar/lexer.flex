@@ -10,36 +10,41 @@ import com.thoughtworks.qdox.parser.*;
 %byaccj
 %unicode
 %line
+%column
 
 %{
 
-	private int classDepth = 0;
-	private int braceDepth = 0;
-	private int stateDepth = 0;
-	private int[] stateStack = new int[10];
-	private boolean javaDocNewLine;
-	private boolean javaDocStartedContent;
+    private int classDepth = 0;
+    private int braceDepth = 0;
+    private int stateDepth = 0;
+    private int[] stateStack = new int[10];
+    private boolean javaDocNewLine;
+    private boolean javaDocStartedContent;
 
-	public String text() {
-		return yytext();
-	}
+    public String text() {
+        return yytext();
+    }
 
-	public int lex() throws java.io.IOException {
-		return yylex();
-	}
-	
-	public int getLine() {
-		return yyline;
-	}
+    public int lex() throws java.io.IOException {
+        return yylex();
+    }
+    
+    public int getLine() {
+        return yyline + 1;
+    }
 
-	private void pushState(int newState) {
-		stateStack[stateDepth++] = yy_lexical_state;
-		yybegin(newState);
-	}
+    public int getColumn() {
+        return yycolumn + 1;
+    }
 
-	private void popState() {
-		yybegin(stateStack[--stateDepth]);
-	}
+    private void pushState(int newState) {
+        stateStack[stateDepth++] = yy_lexical_state;
+        yybegin(newState);
+    }
+
+    private void popState() {
+        yybegin(stateStack[--stateDepth]);
+    }
 
 %}
 
@@ -51,139 +56,139 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 %%
 
 <YYINITIAL> {
-	";"                { return Parser.SEMI; }
-	"."                { return Parser.DOT; }
-	","                { return Parser.COMMA; }
-	"*"                { return Parser.STAR; }
+    ";"                 { return Parser.SEMI; }
+    "."                 { return Parser.DOT; }
+    ","                 { return Parser.COMMA; }
+    "*"                 { return Parser.STAR; }
 
-	"package"          { return Parser.PACKAGE; }
-	"import"           { return Parser.IMPORT; }
-	"public"           { return Parser.PUBLIC; }
-	"protected"        { return Parser.PROTECTED; }
-	"private"          { return Parser.PRIVATE; }
-	"static"           { return Parser.STATIC; }
-	"final"            { return Parser.FINAL; }
-	"abstract"         { return Parser.ABSTRACT; }
-	"native"           { return Parser.NATIVE; }
-	"strictfp"         { return Parser.STRICTFP; }
-	"synchronized"     { return Parser.SYNCHRONIZED; }
-	"transient"        { return Parser.TRANSIENT; }
-	"volatile"         { return Parser.VOLATILE; }
-	"throws"           { return Parser.THROWS; }
-	"extends"          { return Parser.EXTENDS; }
-	"implements"       { return Parser.IMPLEMENTS; }
+    "package"           { return Parser.PACKAGE; }
+    "import"            { return Parser.IMPORT; }
+    "public"            { return Parser.PUBLIC; }
+    "protected"         { return Parser.PROTECTED; }
+    "private"           { return Parser.PRIVATE; }
+    "static"            { return Parser.STATIC; }
+    "final"             { return Parser.FINAL; }
+    "abstract"          { return Parser.ABSTRACT; }
+    "native"            { return Parser.NATIVE; }
+    "strictfp"          { return Parser.STRICTFP; }
+    "synchronized"      { return Parser.SYNCHRONIZED; }
+    "transient"         { return Parser.TRANSIENT; }
+    "volatile"          { return Parser.VOLATILE; }
+    "throws"            { return Parser.THROWS; }
+    "extends"           { return Parser.EXTENDS; }
+    "implements"        { return Parser.IMPLEMENTS; }
 
-	"["                { return Parser.SQUAREOPEN; }
-	"]"                { return Parser.SQUARECLOSE; }
-	"("                { return Parser.PARENOPEN; }
-	")"                { return Parser.PARENCLOSE; }
+    "["                 { return Parser.SQUAREOPEN; }
+    "]"                 { return Parser.SQUARECLOSE; }
+    "("                 { return Parser.PARENOPEN; }
+    ")"                 { return Parser.PARENCLOSE; }
 
-	"class"            {
-		classDepth++;
-		return Parser.CLASS; 
-	}
-	"interface"        { 
-		classDepth++;
-		return Parser.INTERFACE; 
-	}
+    "class"             {
+        classDepth++;
+        return Parser.CLASS; 
+    }
+    "interface"         { 
+        classDepth++;
+        return Parser.INTERFACE; 
+    }
 
-	"{"                {
-		braceDepth++;
-		if (braceDepth == classDepth + 1) {
-			pushState(CODEBLOCK);
-		}
-		else {
-			return Parser.BRACEOPEN;
-		}
-	}
-	"}"                { 
-		braceDepth--;
-		if (braceDepth == classDepth - 1) {
-			classDepth--;
-		}
-		return Parser.BRACECLOSE; 
-	}
+    "{"                 {
+        braceDepth++;
+        if (braceDepth == classDepth + 1) {
+            pushState(CODEBLOCK);
+        }
+        else {
+            return Parser.BRACEOPEN;
+        }
+    }
+    "}"                 { 
+        braceDepth--;
+        if (braceDepth == classDepth - 1) {
+            classDepth--;
+        }
+        return Parser.BRACECLOSE; 
+    }
 
-	"/*" "*"+          { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
-	"="                { pushState(ASSIGNMENT); }
-	[A-Za-z_0-9]*      { return Parser.IDENTIFIER; }
+    "/*" "*"+           { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
+    "="                 { pushState(ASSIGNMENT); }
+    [A-Za-z_0-9]*       { return Parser.IDENTIFIER; }
 
 }
 
 <JAVADOC> {
-	"*"+ "/"           { popState(); return Parser.JAVADOCEND; }
-	^ [ \t]* "*"+ / [^/*] { /* ignore */ }
-	{Eol}              { javaDocNewLine = true; }
-	{CommentChar}* "*"+ / [ \t\r\n] {
-                return Parser.JAVADOCTOKEN;
+    "*"+ "/"            { popState(); return Parser.JAVADOCEND; }
+    ^ [ \t]* "*"+ / [^/*] { /* ignore */ }
+    {Eol}               { javaDocNewLine = true; }
+    {CommentChar}* "*"+ / [ \t\r\n] {
+        return Parser.JAVADOCTOKEN;
+    }
+    {CommentChar}+ { 
+        int token = Parser.JAVADOCTOKEN;
+        if (javaDocNewLine && yycharat(0) == '@') {
+                token = Parser.JAVADOCTAG;
         }
-	{CommentChar}+ { 
-                int token = Parser.JAVADOCTOKEN;
-                if (javaDocNewLine && yycharat(0) == '@') {
-                        token = Parser.JAVADOCTAG;
-                }
-                javaDocNewLine = false;
-                return token;
-        }
+        javaDocNewLine = false;
+        return token;
+    }
 }
 
 <CODEBLOCK> {
-	"{"                { braceDepth++; }
-	"}"                {
-		braceDepth--;
-		if (braceDepth == classDepth) {
-			popState();
-			return Parser.CODEBLOCK;
-		}
-	}
+    "{"                 { braceDepth++; }
+    "}"                 {
+        braceDepth--;
+        if (braceDepth == classDepth) {
+            popState();
+            return Parser.CODEBLOCK;
+        }
+    }
 }
 
 <ASSIGNMENT> {
-	";"                { 
-	    if (braceDepth == classDepth) { 
-			popState(); 
-			return Parser.SEMI; 
-		} 
-	}
-	","                { 
-	    if (braceDepth == classDepth) { 
-			popState(); 
-			return Parser.COMMA; 
-		} 
-	}
-	"{"                { braceDepth++; }
-	"}"                { braceDepth--; }
-	"("                { braceDepth++; }
-	")"                { braceDepth--; }
-	"["                { braceDepth++; }
-	"]"                { braceDepth--; }
+    ";"                 { 
+        if (braceDepth == classDepth) { 
+            popState(); 
+            return Parser.SEMI; 
+        } 
+    }
+    ","                 { 
+        if (braceDepth == classDepth) { 
+            popState(); 
+            return Parser.COMMA; 
+        } 
+    }
+    "{"                 { braceDepth++; }
+    "}"                 { braceDepth--; }
+    "("                 { braceDepth++; }
+    ")"                 { braceDepth--; }
+    "["                 { braceDepth++; }
+    "]"                 { braceDepth--; }
 }
 
 <ASSIGNMENT, CODEBLOCK, YYINITIAL> {
-	"\""               { pushState(STRING); }
-	\'                 { pushState(CHAR); }
-	"//"               { pushState(SINGLELINECOMMENT); }
-	"/*"               { pushState(MULTILINECOMMENT); }
+    "\""                { pushState(STRING); }
+    \'                  { pushState(CHAR); }
+    "//"                { pushState(SINGLELINECOMMENT); }
+    "/*"                { pushState(MULTILINECOMMENT); }
 }
 
 <STRING> {
-  "\""               { popState(); }
-  "\\\""             { }
-  "\\\\"             { }
+    "\""                { popState(); }
+    "\\\""              { }
+    "\\\\"              { }
 }
 
 <CHAR> {
-  \'                 { popState(); }
-  "\\'"              { }
-  "\\\\"             { }
+    \'                  { popState(); }
+    "\\'"               { }
+    "\\\\"              { }
 }
 
 <SINGLELINECOMMENT> {
-	{Eol}        { popState(); }
+    {Eol}               { popState(); }
 }
 
 <MULTILINECOMMENT> {
-	"*/"               { popState(); }
+    "*/"                { popState(); }
 }
 
-.|\n                 { }
+.|\n                    { }

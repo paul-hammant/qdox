@@ -9,6 +9,10 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
 
+/**
+ * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
+ * @author Aslak Helles&oslash;y
+ */
 public class JavaDocBuilderTest extends TestCase {
 
 	JavaDocBuilder builder = new JavaDocBuilder();

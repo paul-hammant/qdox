@@ -13,6 +13,10 @@ import java.util.TreeSet;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
+ * @author Aslak Helles&oslash;y
+ */
 public class ClassLibrary implements Serializable {
 
 	private final Set classes = new TreeSet();

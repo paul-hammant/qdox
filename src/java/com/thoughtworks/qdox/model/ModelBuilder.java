@@ -9,6 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
+ */
 public class ModelBuilder implements Builder {
 
 	private final ClassLibrary classLibrary;

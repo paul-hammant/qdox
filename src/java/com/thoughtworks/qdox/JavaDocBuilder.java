@@ -56,6 +56,7 @@ import java.util.Map;
  * </code></pre>
  *
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
+ * @author Aslak Helles&oslash;y
  */
 public class JavaDocBuilder implements Serializable, JavaClassCache{
 

@@ -12,8 +12,10 @@ import com.thoughtworks.qdox.parser.*;
 
 %{
 
-	private int braceDepth = 0, stateDepth = 0;
-	private int[] stateStack = new int[2];
+	private int classDepth = 0;
+	private int braceDepth = 0;
+	private int stateDepth = 0;
+	private int[] stateStack = new int[10];
 	private boolean javaDocNewLine;
 
 	public String text() {
@@ -58,7 +60,6 @@ import com.thoughtworks.qdox.parser.*;
 	"synchronized"     { return Parser.SYNCHRONIZED; }
 	"transient"        { return Parser.TRANSIENT; }
 	"volatile"         { return Parser.VOLATILE; }
-	"class"            { return Parser.CLASS; }
 	"interface"        { return Parser.INTERFACE; }
 	"throws"           { return Parser.THROWS; }
 	"extends"          { return Parser.EXTENDS; }
@@ -69,16 +70,27 @@ import com.thoughtworks.qdox.parser.*;
 	"("                { return Parser.PARENOPEN; }
 	")"                { return Parser.PARENCLOSE; }
 
+	"class"            {
+		classDepth++;
+		return Parser.CLASS; 
+	}
+
 	"{"                {
 		braceDepth++;
-		if (braceDepth == 2) {
+		if (braceDepth == classDepth + 1) {
 			pushState(CODEBLOCK);
 		}
 		else {
 			return Parser.BRACEOPEN;
 		}
 	}
-	"}"                { braceDepth--; return Parser.BRACECLOSE; }
+	"}"                { 
+		braceDepth--;
+		if (braceDepth == classDepth - 1) {
+			classDepth--;
+		}
+		return Parser.BRACECLOSE; 
+	}
 
 	"/**"              { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
 	"="                { pushState(ASSIGNMENT); }
@@ -97,7 +109,7 @@ import com.thoughtworks.qdox.parser.*;
 	"{"                { braceDepth++; }
 	"}"                {
 		braceDepth--;
-		if (braceDepth == 1) {
+		if (braceDepth == classDepth) {
 			popState();
 			return Parser.CODEBLOCK;
 		}
@@ -105,7 +117,12 @@ import com.thoughtworks.qdox.parser.*;
 }
 
 <ASSIGNMENT> {
-	";"                { if (braceDepth <= 1) { popState(); return Parser.ASSIGNMENT; } }
+	";"                { 
+	    if (braceDepth == classDepth) { 
+			popState(); 
+			return Parser.ASSIGNMENT; 
+		} 
+	}
 	"{"                { braceDepth++; }
 	"}"                { braceDepth--; }
 }

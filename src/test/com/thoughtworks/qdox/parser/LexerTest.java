@@ -89,8 +89,9 @@ public class LexerTest extends TestCase {
 		String in = ""
 			+ "class X { "
 			+ " class InnerClass { "
-			+ "   void String something() { a + b = c; return \"xxx\"; } "
+			+ "   int x = 1; "
 			+ " } "
+			+ " int y = 2; "
 			+ "} ";
 
 		Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -99,7 +100,14 @@ public class LexerTest extends TestCase {
 		assertLex(Parser.BRACEOPEN, lexer);
 		assertLex(Parser.CLASS, lexer);
 		assertLex(Parser.IDENTIFIER, "InnerClass", lexer);
-		assertLex(Parser.CODEBLOCK, lexer);
+		assertLex(Parser.BRACEOPEN, lexer);
+		assertLex(Parser.IDENTIFIER, "int", lexer);
+		assertLex(Parser.IDENTIFIER, "x", lexer);
+		assertLex(Parser.ASSIGNMENT, lexer);
+		assertLex(Parser.BRACECLOSE, lexer);
+		assertLex(Parser.IDENTIFIER, "int", lexer);
+		assertLex(Parser.IDENTIFIER, "y", lexer);
+		assertLex(Parser.ASSIGNMENT, lexer);
 		assertLex(Parser.BRACECLOSE, lexer);
 		assertLex(0, lexer);
 	}
@@ -126,81 +134,65 @@ public class LexerTest extends TestCase {
 	}
 
 	public void testQuoteInCharInCodeBlock() throws Exception {
-		String in = "{{'\"'}}";
+		String in = "{'\"'}";
 		Lexer lexer = new JFlexLexer(new StringReader(in));
-		assertLex(Parser.BRACEOPEN, lexer);
 		assertLex(Parser.CODEBLOCK, lexer);
-		assertLex(Parser.BRACECLOSE, lexer);
 		assertLex(0, lexer);
 	}
 
 	public void testDoubleQuotesInCharInAssignment() throws Exception {
-		String in = "{x = '\"';}";
+		String in = "x = '\"';";
 		Lexer lexer = new JFlexLexer(new StringReader(in));
-		assertLex(Parser.BRACEOPEN, lexer);
 		assertLex(Parser.IDENTIFIER, "x", lexer);
 		assertLex(Parser.ASSIGNMENT, lexer);
-		assertLex(Parser.BRACECLOSE, lexer);
 		assertLex(0, lexer);
 	}
 
 	public void testSingleQuoteInCharInAssignment() throws Exception {
-		String in = "{x = '\\'';}";
+		String in = "x = '\\'';";
 		Lexer lexer = new JFlexLexer(new StringReader(in));
-		assertLex(Parser.BRACEOPEN, lexer);
 		assertLex(Parser.IDENTIFIER, "x", lexer);
 		assertLex(Parser.ASSIGNMENT, lexer);
-		assertLex(Parser.BRACECLOSE, lexer);
 		assertLex(0, lexer);
 	}
 
 	public void testStringWithDoubleQuotesIn() throws Exception {
-		String in = "{x = \"blah \\\" blah\";}";
+		String in = "x = \"blah \\\" blah\";";
 		Lexer lexer = new JFlexLexer(new StringReader(in));
-		assertLex(Parser.BRACEOPEN, lexer);
 		assertLex(Parser.IDENTIFIER, "x", lexer);
 		assertLex(Parser.ASSIGNMENT, lexer);
-		assertLex(Parser.BRACECLOSE, lexer);
 		assertLex(0, lexer);
 	}
 
 	public void testCommentsWithSingleQuoteInCodeBlock() throws Exception {
-		String in = "{{ /* ' */ }}";
+		String in = "{ /* ' */ }";
 		Lexer lexer = new JFlexLexer(new StringReader(in));
-		assertLex(Parser.BRACEOPEN, lexer);
 		assertLex(Parser.CODEBLOCK, lexer);
-		assertLex(Parser.BRACECLOSE, lexer);
 		assertLex(0, lexer);
 	}
 
 	public void testCommentsWithDoubleQuotesInCodeBlock() throws Exception {
-		String in = "{{ /* \" */ }}";
+		String in = "{ /* \" */ }";
 		Lexer lexer = new JFlexLexer(new StringReader(in));
-		assertLex(Parser.BRACEOPEN, lexer);
 		assertLex(Parser.CODEBLOCK, lexer);
-		assertLex(Parser.BRACECLOSE, lexer);
 		assertLex(0, lexer);
 	}
 
 	public void testCommentsWithQuotesInAssignment() throws Exception {
-		String in = "{ a x = y /* don't do stuff*/; }";
+		String in = "a x = y /* don't do stuff*/;";
 		Lexer lexer = new JFlexLexer(new StringReader(in));
-		assertLex(Parser.BRACEOPEN, lexer);
 		assertLex(Parser.IDENTIFIER, "a", lexer);
 		assertLex(Parser.IDENTIFIER, "x", lexer);
 		assertLex(Parser.ASSIGNMENT, lexer);
-		assertLex(Parser.BRACECLOSE, lexer);
 		assertLex(0, lexer);
 
-		in = "{ a z = \n"
+		in = "a z = \n"
 			+ "// thing's thing \n"
-			+ "0; }";
+			+ "0;";
 		lexer = new JFlexLexer(new StringReader(in));
-		assertLex(Parser.BRACEOPEN, lexer);
 		assertLex(Parser.IDENTIFIER, "a", lexer);
 		assertLex(Parser.IDENTIFIER, "z", lexer);
 		assertLex(Parser.ASSIGNMENT, lexer);
-		assertLex(Parser.BRACECLOSE, lexer);
 		assertLex(0, lexer);
 	}
 
@@ -316,7 +308,9 @@ public class LexerTest extends TestCase {
 
 
 	private void assertLex(int expectedToken, Lexer lexer) throws IOException {
-		assertEquals(tokens.get(new Integer(expectedToken)), tokens.get(new Integer(lexer.lex())));
+		Object expected = tokens.get(new Integer(expectedToken));
+		Object actual = tokens.get(new Integer(lexer.lex()));
+		assertEquals(expected,actual);
 	}
 
 	private void assertLex(int expectedToken, String expectedText, Lexer lexer) throws IOException {

@@ -84,7 +84,7 @@ member: javadoc
 	| modifiers arrayfullidentifier arrayidentifier method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; mth.dimensions = getDimensions(); builder.addMethod(mth); mth = new MethodDef(); }; // method
 	| modifiers arrayidentifier method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new MethodDef(); }; // constructor
 	| modifiers CODEBLOCK // static block
-	| modifiers classorinterface IDENTIFIER extends implements CODEBLOCK { cls = new ClassDef(); modifiers.clear(); } // inner class
+	| class
 	| SEMI
 	;
 modifiers: | modifiers modifier { modifiers.add($2); };

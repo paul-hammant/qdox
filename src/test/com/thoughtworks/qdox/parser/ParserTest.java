@@ -1817,14 +1817,10 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "MyClass");
 		setupLex(Parser.BRACEOPEN);
 
-		setupLex(Parser.PUBLIC);
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "InnerCls");
-		setupLex(Parser.EXTENDS);
-		setupLex(Parser.IDENTIFIER, "SubInnerCls");
-		setupLex(Parser.IMPLEMENTS);
-		setupLex(Parser.IDENTIFIER, "Serializable");
-		setupLex(Parser.CODEBLOCK);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 
 		setupLex(Parser.BRACECLOSE);
 
@@ -1836,13 +1832,16 @@ public class ParserTest extends TestCase {
 		setupLex(0);
 
 		// expectations
+		builder.setExpectedBeginClassCalls(3);
 		ClassDef cls = new ClassDef();
 		cls.name = "MyClass";
 		builder.addExpectedBeginClassValues(cls);
 		ClassDef cls2 = new ClassDef();
-		cls2.name = "AnotherClass";
+		cls2.name = "InnerCls";
 		builder.addExpectedBeginClassValues(cls2);
-		builder.setExpectedBeginClassCalls(2);
+		ClassDef cls3 = new ClassDef();
+		cls3.name = "AnotherClass";
+		builder.addExpectedBeginClassValues(cls3);
 
 		// execute
 		Parser parser = new Parser(lexer, builder);

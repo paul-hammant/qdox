@@ -68,6 +68,43 @@ public class JavaDocBuilderTest extends TestCase {
 		return buffer.toString();
 	}
 
+	public void testParseWithInnerClass(){
+		builder.addSource(new StringReader(createOuter()));
+		JavaSource[] sources = builder.getSources();
+		assertEquals(1, sources.length);
+
+		JavaClass outer = sources[0].getClasses()[0];
+		assertEquals("Outer", outer.getName());
+		assertEquals("foo.bar.Outer", outer.getFullyQualifiedName());
+
+		assertEquals(1, outer.getFields().length);
+		assertEquals("int", outer.getFields()[0].getType().getValue());
+
+		assertEquals(1, outer.getMethods().length);
+		assertEquals("outerMethod", outer.getMethods()[0].getName());
+
+		assertEquals(1, outer.getClasses().length);
+		JavaClass inner = outer.getClasses()[0];
+		assertEquals("Inner", inner.getName());
+		assertEquals("foo.bar.Outer.Inner", inner.getFullyQualifiedName());
+		
+		assertEquals(1, inner.getMethods().length);
+		assertEquals("innerMethod", inner.getMethods()[0].getName());
+	}
+
+	private String createOuter(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("package foo.bar;");
+		buffer.append("public class Outer {");
+		buffer.append("  private int numberOfTests;");
+		buffer.append("  class Inner {");
+		buffer.append("    public int innerMethod(){return System.currentTimeMillis();}");
+		buffer.append("  }");
+		buffer.append("  public void outerMethod(int count){}");
+		buffer.append("}");
+		return buffer.toString();
+	}
+
 	public void testSourceTree() throws Exception {
 		builder.addSourceTree(new File("tmp/sourcetest"));
 

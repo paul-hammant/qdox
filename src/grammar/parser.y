@@ -99,31 +99,25 @@ modifier:
     STRICTFP        { $$ = "strictfp"; } ;
 
 modifiers:
-    | modifiers modifier { modifiers.add($2); }
-    | modifiers annotation 
+    modifiers modifier { modifiers.add($2); } |
+    modifiers annotation |
     ;
 
 
 // ----- ANNOTATIONS 
 
-annotation: AT IDENTIFIER opt_annotationargs;
-
-opt_annotationargs: | PARENOPEN opt_annotationarglist PARENCLOSE;
-
-opt_annotationarglist: | annotationarglist;
+annotation:
+    AT IDENTIFIER |
+    AT IDENTIFIER PARENOPEN annotationarglist PARENCLOSE;
 
 annotationarglist:
-    annotationarg |
-    annotationarglist COMMA annotationarg;
+    |
+    annotationarglist COMMA |
+    annotationarglist fullidentifier |
+    annotationarglist BRACEOPEN annotationarglist BRACECLOSE; /* array */ |
+    annotationarglist annotation;
 
-annotationarg:
-    | /* ignored token, such as string */
-    fullidentifier |
-    BRACEOPEN annotationarglist BRACECLOSE; /* array */ |
-    annotation;
-
-
-// ----- TYPES 
+// ----- TYPES
 
 type:
     classtype dimensions {
@@ -179,7 +173,7 @@ enum_value:
 // ----- CLASS
 
 class: 
-    classdefinition BRACEOPEN members BRACECLOSE opt_semi {
+    classdefinition BRACEOPEN members BRACECLOSE {
         builder.endClass(); 
     };
 
@@ -198,8 +192,6 @@ classorinterface:
     AT INTERFACE { cls.type = ClassDef.ANNOTATION_TYPE; };
 
 opt_extends: | EXTENDS extendslist;
-
-opt_semi: | SEMI;
 
 extendslist:
     classtype { cls.extendz.add($1); } |
@@ -220,7 +212,7 @@ member:
     constructor |
     modifiers CODEBLOCK | // static block
     class |
-    enum |
+	enum |
     SEMI;
 
 memberend: SEMI | CODEBLOCK;

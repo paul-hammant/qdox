@@ -36,6 +36,10 @@
 			<action dev="rinkrank" type="update">
 				DocletTag is an interface.
 			</action>
+			<action dev="rinkrank" type="add">
+				Added a getClasses() method to JavaDocBuilder that will
+				return all JavaClasses.
+			</action>
 		</release>
 		
 		<release version="1.2" date="2003-03-23">

@@ -7,12 +7,12 @@
 
 	<target name="compile" depends="generate">
 		<mkdir dir="build"/>
-		<javac srcdir="src/java" destdir="build"/>
+		<javac srcdir="src/java" destdir="build" debug="true"/>
 	</target>
 
 	<target name="test" depends="compile">
 		<!--<exec executable="build-mocks.bat"/>-->
-		<javac srcdir="src/test" destdir="build">
+		<javac srcdir="src/test" destdir="build" debug="true">
 			<classpath>
 				<fileset dir="bin"/>
 				<pathelement path="build"/>

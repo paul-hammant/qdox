@@ -22,9 +22,21 @@ package net.sf.qdox.parser;
 		return yylex();
 	}
 
+	public int line() {
+		return yyline;
+	}
+
+	public int column() {
+		return yycolumn;
+	}
+
 %}
 
-%state JAVADOC CODEBLOCK ASSIGNMENT STRING
+Comment = {SingleLineComment} | {MultiLineComment}
+SingleLineComment = "//" [^\r\n]* \r|\n|\r\n?
+MultiLineComment = "/*" [^*] ~"*/"
+
+%state JAVADOC CODEBLOCK ASSIGNMENT STRING CHAR
 
 %%
 
@@ -74,15 +86,9 @@ package net.sf.qdox.parser;
 		return Parser.PARENCLOSE;
 	}
 
-	/* comments */
-	"//" [^\r\n]* \r|\n|\r\n? { }
-	"/*" [^*] ~"*/"    { }
-
-	/* javadoc */
+	{Comment}          { }
 	"/**"              { yybegin(JAVADOC); return Parser.JAVADOCSTART; }
-
 	"="                { yybegin(ASSIGNMENT); }
-
 	[A-Za-z_0-9]*      { return Parser.IDENTIFIER; }
 }
 
@@ -94,11 +100,10 @@ package net.sf.qdox.parser;
 }
 
 <CODEBLOCK> {
-
-	"{"                {
-		parenDepth++;
-	}
-
+	{Comment}          { }
+	"\""               { yybegin(STRING); lastState = CODEBLOCK; }
+	\'                 { yybegin(CHAR); lastState = CODEBLOCK; }
+	"{"                { parenDepth++; }
 	"}"                {
 		parenDepth--;
 		if (parenDepth == 1) {
@@ -106,22 +111,25 @@ package net.sf.qdox.parser;
 			return Parser.CODEBLOCK;
 		}
 	}
-
-	"\""               { yybegin(STRING); lastState = CODEBLOCK; }
-
 }
 
 <ASSIGNMENT> {
-
+	{Comment}          { }
 	"\""               { yybegin(STRING); lastState = ASSIGNMENT; }
-	";"                { if (parenDepth == 1) { yybegin(YYINITIAL); return Parser.ASSIGNMENT; } }
+	\'                 { yybegin(CHAR); lastState = ASSIGNMENT; }
+	";"                { if (parenDepth <= 1) { yybegin(YYINITIAL); return Parser.ASSIGNMENT; } }
 	"{"                { parenDepth++; }
 	"}"                { parenDepth--; }
-
 }
 
 <STRING> {
   "\""               { yybegin(lastState); }
+  "\\\""             { }
 }
 
-.|\n                  { }
+<CHAR> {
+  \'                 { yybegin(lastState); }
+  "\\'"              { }
+}
+
+.|\n                 { }

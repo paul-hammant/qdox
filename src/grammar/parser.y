@@ -74,7 +74,7 @@ implementslist: fullidentifier { cls.implementz.add($1); }
 members: | members member;
 
 member: javadoc
-	| modifiers fullidentifier IDENTIFIER memberend { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); } // field
+	| modifiers fullidentifier IDENTIFIER extraidentifiers memberend { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); } // field
 	| modifiers fullidentifier IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); }; // method
 	| modifiers IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new Builder.MethodDef(); }; // constructor
 	| modifiers CODEBLOCK // static block
@@ -83,6 +83,7 @@ member: javadoc
 	;
 modifiers: | modifiers modifier { modifiers.add($2); };
 memberend: SEMI | CODEBLOCK | ASSIGNMENT;
+extraidentifiers: | extraidentifiers COMMA fullidentifier;
 
 method: BRACKETOPEN params BRACKETCLOSE exceptions;
 exceptions: | THROWS exceptionlist;
@@ -136,5 +137,5 @@ private int yylex() {
 }
 
 private void yyerror(String msg) {
-	builder.error(msg);
+	builder.error(lexer.line(), lexer.column(), msg);
 }

@@ -42,9 +42,16 @@ package net.sf.qdox.parser;
 	"static"           { return Parser.STATIC; }
 	"final"            { return Parser.FINAL; }
 	"abstract"         { return Parser.ABSTRACT; }
+	"native"           { return Parser.NATIVE; }
+	"strictfp"         { return Parser.STRICTFP; }
+	"synchronized"     { return Parser.SYNCHRONIZED; }
+	"transient"        { return Parser.TRANSIENT; }
+	"volatile"         { return Parser.VOLATILE; }
 	"class"            { return Parser.CLASS; }
 	"interface"        { return Parser.INTERFACE; }
 	"throws"           { return Parser.THROWS; }
+	"extends"          { return Parser.EXTENDS; }
+	"implements"       { return Parser.IMPLEMENTS; }
 
 	"["                { return Parser.SQUAREOPEN; }
 	"]"                { return Parser.SQUARECLOSE; }

@@ -3,14 +3,15 @@
 %}
 
 %token SEMI DOT COMMA STAR EQUALS
-%token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT CLASS INTERFACE THROWS
+%token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
+%token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
 %token PARENOPEN PARENCLOSE SQUAREOPEN SQUARECLOSE BRACKETOPEN BRACKETCLOSE
 %token JAVADOCSTART JAVADOCEND JAVADOCNEWLINE JAVADOCTAGMARK
 %token CODEBLOCK STRING
 
 %token <sval> IDENTIFIER JAVADOCTOKEN
 
-%type <sval> fullidentifier dotidentifier
+%type <sval> fullidentifier dotidentifier modifier
 
 %%
 
@@ -19,7 +20,8 @@
 
 
 
-file: packages imports javadoc class;
+file: | file filepart;
+filepart: package | import | javadoc | class;
 
 fullidentifier: IDENTIFIER dotidentifier { $$ = $1 + $2; };
 dotidentifier: { $$ = ""; }
@@ -27,16 +29,19 @@ dotidentifier: { $$ = ""; }
 	| dotidentifier DOT STAR { $$ = $1 + ".*"; }
 	;
 
+modifier: PUBLIC { $$ = "public"; }
+	| PROTECTED { $$ = "protected"; }
+	| PRIVATE { $$ = "private"; }
+	| STATIC { $$ = "static"; }
+	| FINAL { $$ = "final"; }
+	| ABSTRACT { $$ = "abstract"; }
+	;
 
-packages: | package;
 package: PACKAGE fullidentifier SEMI { builder.addPackage($2); };
 
-
-imports: | imports import;
 import: IMPORT fullidentifier SEMI { builder.addImport($2); };
 
-
-javadoc: | javadoc JAVADOCSTART javadocdescription javadoctags JAVADOCEND;
+javadoc: JAVADOCSTART javadocdescription javadoctags JAVADOCEND;
 javadocdescription: javadoctokens { builder.addJavaDoc(buffer()); }
 javadoctokens: | javadoctokens javadoctoken;
 javadoctoken: JAVADOCNEWLINE | JAVADOCTOKEN { textBuffer.append($1); textBuffer.append(' '); };
@@ -44,9 +49,13 @@ javadoctags: | javadoctags javadoctag;
 javadoctag: JAVADOCTAGMARK JAVADOCTOKEN javadoctokens { builder.addJavaDocTag($2, buffer()); };
 
 class: classdefinition PARENOPEN PARENCLOSE;
-classdefinition: IDENTIFIER CLASS { builder.addClass($1, Collections.EMPTY_SET, null, Collections.EMPTY_SET, false); }
-
-
+classdefinition: classmodifiers classorinterface IDENTIFIER extends implements { cls.name = $3; builder.addClass(cls); cls = new Builder.ClassDef(); }
+classorinterface: CLASS | INTERFACE { cls.isInterface = true; };
+extends: | EXTENDS extendslist;
+extendslist: fullidentifier { cls.extendz.add($1); } | extendslist COMMA fullidentifier { cls.extendz.add($3); };
+implements: | IMPLEMENTS implementslist;
+implementslist: fullidentifier { cls.implementz.add($1); } | implementslist COMMA fullidentifier { cls.implementz.add($3); };
+classmodifiers: | classmodifiers modifier { cls.modifiers.add($2); };
 
 
 %%
@@ -54,6 +63,7 @@ classdefinition: IDENTIFIER CLASS { builder.addClass($1, Collections.EMPTY_SET, 
 private Lexer lexer;
 private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
+private Builder.ClassDef cls = new Builder.ClassDef();
 
 private String buffer() {
 	if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);

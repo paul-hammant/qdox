@@ -289,7 +289,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
     }
 
     /**
-     * @param name method name
+     * @param name           method name
      * @param parameterTypes parameter types or null if there are no parameters.
      * @return the matching method or null if no match is found.
      */
@@ -425,6 +425,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
 
     /**
      * Gets bean properties without looking in superclasses or interfaces.
+     *
      * @since 1.3
      */
     public BeanProperty[] getBeanProperties() {
@@ -484,6 +485,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
 
     /**
      * Gets bean property without looking in superclasses or interfaces.
+     *
      * @since 1.3
      */
     public BeanProperty getBeanProperty(String propertyName) {
@@ -500,6 +502,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
 
     /**
      * Gets the known derived classes. That is, subclasses or implementing classes.
+     *
      * @return
      */
     public JavaClass[] getDerivedClasses() {
@@ -564,4 +567,5 @@ public class JavaClass extends AbstractInheritableJavaEntity
     public int compareTo(Object o) {
         return getFullyQualifiedName().compareTo(((JavaClass) o).getFullyQualifiedName());
     }
+
 }

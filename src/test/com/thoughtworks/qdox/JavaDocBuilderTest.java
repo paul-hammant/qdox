@@ -1,13 +1,12 @@
 package com.thoughtworks.qdox;
 
-import java.io.*;
-import java.util.List;
-import java.util.Arrays;
-
+import com.thoughtworks.qdox.model.*;
+import com.thoughtworks.qdox.parser.impl.ParseException;
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.model.*;
-import com.thoughtworks.qdox.parser.*;
+import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -647,7 +646,6 @@ public class JavaDocBuilderTest extends TestCase {
             builder.addSource(new StringReader(badSource));
             fail("ParseException expected");
         } catch(ParseException e) {
-            System.out.println(e.getMessage());
             assertEquals(3, e.getLine());
             assertEquals(11, e.getColumn());
         }

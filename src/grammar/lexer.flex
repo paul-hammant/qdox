@@ -7,6 +7,7 @@ package net.sf.qdox.parser;
 %public
 %implements Lexer
 %byaccj
+%unicode
 
 %{
 

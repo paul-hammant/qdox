@@ -85,6 +85,24 @@ public class LexerTest extends TestCase {
 		assertLex(0, lexer);
 	}
 
+	public void testUnicodeInTest() throws Exception {
+		checkAssignment("\"\u0000\"");
+	}
+
+	public void testUnicodeInFile() throws Exception {
+		Lexer lexer = new JFlexLexer(new FileReader("src/testdata/Unicode.java"));
+		assertLex(Parser.CLASS, lexer);
+		assertLex(Parser.IDENTIFIER, lexer);
+		assertLex(Parser.BRACEOPEN, lexer);
+
+		assertLex(Parser.IDENTIFIER, "int", lexer);
+		assertLex(Parser.IDENTIFIER, "x", lexer);
+		assertLex(Parser.ASSIGNMENT, lexer);
+
+		assertLex(Parser.BRACECLOSE, lexer);
+		assertLex(0, lexer);
+	}
+
 	public void testInnerClass() throws Exception {
 		String in = ""
 			+ "class X { "
@@ -301,7 +319,7 @@ public class LexerTest extends TestCase {
 		assertLex(0, lexer);
 	}
 
-  public void testKeyWords() throws Exception {
+    public void testKeyWords() throws Exception {
 		assertSingleLex("package", Parser.PACKAGE);
 		assertSingleLex("import", Parser.IMPORT);
 		assertSingleLex("public", Parser.PUBLIC);

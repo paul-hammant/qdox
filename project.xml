@@ -89,7 +89,7 @@
 		</developer>
 		<developer>
 			<name>Paul Hammant</name>
-			<id>paul-h</id>
+			<id>paul</id>
 			<email>Paul_Hammant@yahoo.com</email>
 			<organization>ThoughtWorks</organization>
 			<roles>
@@ -109,7 +109,7 @@
 	<contributors>
 		<contributor>
 			<name>Peter Donald</name>
-			<email>peter@apache.org</email>
+			<email>peter@realityforge.org</email>
 		</contributor>
 		<contributor>
 			<name>James Strachan</name>

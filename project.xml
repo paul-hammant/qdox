@@ -96,6 +96,12 @@
 			<version>0.1</version>
 			<url>http://www.mockobjects.com/</url>
 		</dependency>
+		<dependency>
+			<id>ant</id>
+			<version>1.5</version>
+			<url>http://jakarta.apache.org/ant</url>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

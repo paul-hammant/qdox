@@ -158,7 +158,7 @@ typeboundlist:
 // ----- CLASS
 
 class: 
-    classdefinition BRACEOPEN members BRACECLOSE { 
+    classdefinition BRACEOPEN members BRACECLOSE opt_semi {
         builder.endClass(); 
     };
 
@@ -178,7 +178,9 @@ classorinterface:
 
 opt_extends: | EXTENDS extendslist;
 
-extendslist: 
+opt_semi: | SEMI;
+
+extendslist:
     classtype { cls.extendz.add($1); } |
     extendslist COMMA classtype { cls.extendz.add($3); };
 

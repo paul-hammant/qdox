@@ -46,6 +46,9 @@
                 Fix QDOX-75:
                 Support for methods that specify array dimensions at end: String doStuff()[]
             </action>
+            <action dev="joeretro" type="fix">
+                Support for trailing semicolon after class definition.
+            </action>
         </release>
 
         <release version="1.5" date="2004-06-20">

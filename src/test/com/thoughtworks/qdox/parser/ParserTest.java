@@ -719,6 +719,43 @@ public class ParserTest extends TestCase {
 
     }
 
+    public void testSemiColonBetweenClass() throws Exception {
+
+        // setup values
+        setupLex(Parser.CLASS);
+        setupLex(Parser.IDENTIFIER, "Class1");
+        setupLex(Parser.BRACEOPEN);
+        setupLex(Parser.BRACECLOSE);
+        setupLex(Parser.SEMI);  // ;
+
+        setupLex(Parser.CLASS);
+        setupLex(Parser.IDENTIFIER, "Class2");
+        setupLex(Parser.BRACEOPEN);
+        setupLex(Parser.BRACECLOSE);
+        setupLex(Parser.SEMI); // ;
+
+        setupLex(0);
+
+        // expectations
+        ClassDef cls1 = new ClassDef();
+        cls1.name = "Class1";
+        cls1.type = ClassDef.CLASS;
+        builder.addExpectedBeginClassValues(cls1);
+
+        ClassDef cls2 = new ClassDef();
+        cls2.name = "Class2";
+        cls2.type = ClassDef.CLASS;
+        builder.addExpectedBeginClassValues(cls2);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+
+    }
+
     public void testJavaDocAppearingAllOverThePlace() throws Exception {
 
         // setup values

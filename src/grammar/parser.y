@@ -13,7 +13,7 @@ import java.io.IOException;
 
 // stringly typed tokens/types
 %token <sval> IDENTIFIER JAVADOCTOKEN
-%type <sval> fullidentifier modifier arrayidentifier arrayfullidentifier
+%type <sval> fullidentifier modifier arrayidentifier arrayfullidentifier paramarrayidentifier paramarrayfullidentifier
 
 %%
 
@@ -33,11 +33,6 @@ fullidentifier: IDENTIFIER { $$ = $1; }
   | fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; }
 	| fullidentifier DOT STAR { $$ = $1 + ".*"; }
 	;
-
-// like IDENTIFIER and fullidentifer except they can contain arrays[]
-arrayidentifier: IDENTIFIER arrayparts { $$ = $1; };
-arrayfullidentifier: fullidentifier arrayparts { $$ = $1; };
-arrayparts: | arrayparts SQUAREOPEN SQUARECLOSE { addDimension(); };
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
 modifier: PUBLIC { $$ = "public"; }
@@ -96,6 +91,11 @@ modifiers: | modifiers modifier { modifiers.add($2); };
 memberend: SEMI | CODEBLOCK | ASSIGNMENT;
 extraidentifiers: | extraidentifiers COMMA fullidentifier;
 
+// like IDENTIFIER and fullidentifer except they can contain arrays[]
+arrayidentifier: IDENTIFIER arrayparts { $$ = $1; };
+arrayfullidentifier: fullidentifier arrayparts { $$ = $1; };
+arrayparts: | arrayparts SQUAREOPEN SQUARECLOSE { dimensions++; };
+
 method: BRACKETOPEN params BRACKETCLOSE exceptions;
 exceptions: | THROWS exceptionlist;
 exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
@@ -103,8 +103,12 @@ exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA 
 // parameters passed to method
 params: | param paramlist;
 paramlist: | paramlist COMMA param;
-param: parammodifiers arrayfullidentifier IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new FieldDef(); };
+param: parammodifiers paramarrayfullidentifier paramarrayidentifier { fld.name = $3; fld.type = $2; fld.dimensions = getParamDimensions(); mth.params.add(fld); fld = new FieldDef(); };
 parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
+
+paramarrayidentifier: IDENTIFIER paramarrayparts { $$ = $1; };
+paramarrayfullidentifier: fullidentifier paramarrayparts { $$ = $1; };
+paramarrayparts: | paramarrayparts SQUAREOPEN SQUARECLOSE { paramDimensions++; };
 
 
 %%
@@ -116,7 +120,7 @@ private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
 private FieldDef fld = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
-private int dimensions;
+private int dimensions, paramDimensions;
 
 private String buffer() {
 	if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);
@@ -157,12 +161,14 @@ private class Value {
 	String sval;
 }
 
-private void addDimension() {
-	dimensions++;
-}
-
 private int getDimensions() {
 	int r = dimensions;
 	dimensions = 0;
+	return r;
+}
+
+private int getParamDimensions() {
+	int r = paramDimensions;
+	paramDimensions = 0;
 	return r;
 }

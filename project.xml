@@ -34,7 +34,7 @@
   <siteAddress>qdox.codehaus.org</siteAddress>
   <siteDirectory>/home/projects/qdox/public_html</siteDirectory>
 
-  <distributionDirectory>/dist/</distributionDirectory>
+  <distributionDirectory>/dist</distributionDirectory>
   <distributionSite>beaver.codehaus.org</distributionSite>
 
   <repository>

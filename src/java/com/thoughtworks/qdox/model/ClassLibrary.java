@@ -10,15 +10,24 @@ public class ClassLibrary implements Serializable {
 	private Set classes = new TreeSet();
 	private boolean defaultLoaders = false;
 	private transient List classLoaders = new ArrayList();
+	private JavaClassCache cache;
+
+	public ClassLibrary(JavaClassCache cache) {
+		this.cache = cache;
+	}
 
 	public void add(String fullClassName) {
 		classes.add(fullClassName);
 	}
 
+	public JavaClass getClassByName(String name) {
+		return cache.getClassByName(name);
+	}
+
 	public boolean contains(String fullClassName) {
 		if (classes.contains(fullClassName)) {
 			return true;
-		}	
+		}
 		for (Iterator iterator = classLoaders.iterator(); iterator.hasNext();) {
 			ClassLoader classLoader = (ClassLoader)iterator.next();
 			if (classLoader == null) {

@@ -13,7 +13,7 @@ public class JavaSourceTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		source = new JavaSource();
-		source.setClassLibrary(new ClassLibrary());
+		source.setClassLibrary(new ClassLibrary(null));
 	}
 
 	public void testToStringOneClass() throws Exception {

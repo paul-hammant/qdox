@@ -3,10 +3,7 @@ package com.thoughtworks.qdox;
 import java.io.*;
 import java.util.*;
 
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.ModelBuilder;
-import com.thoughtworks.qdox.model.ClassLibrary;
+import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
@@ -14,14 +11,14 @@ import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.FileVisitor;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 
-public class JavaDocBuilder implements Serializable {
+public class JavaDocBuilder implements Serializable, JavaClassCache{
 
 	private Map classes = new HashMap();
 	private ClassLibrary classLibrary;
 	private List sources = new ArrayList();
 
 	public JavaDocBuilder() {
-		classLibrary = new ClassLibrary();
+		classLibrary = new ClassLibrary(this);
 		classLibrary.addDefaultLoader();
 	}
 

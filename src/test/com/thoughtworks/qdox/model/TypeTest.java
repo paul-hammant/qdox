@@ -12,7 +12,7 @@ public class TypeTest extends TestCase{
     }
 
     public void testResolving() throws Exception {
-		ClassLibrary classLib = new ClassLibrary();
+		ClassLibrary classLib = new ClassLibrary(null);
 		JavaSource src = new JavaSource();
 		src.setClassLibrary(classLib);
 		src.setImports( new String[] { "foo.*" } );

@@ -19,7 +19,7 @@ public class ModelBuilder implements Builder {
 	private JavaSource result;
 
 	public ModelBuilder(){
-		this(new ClassLibrary());
+		this(new ClassLibrary(null));
 	}
 
 	public ModelBuilder(ClassLibrary classLibrary) {

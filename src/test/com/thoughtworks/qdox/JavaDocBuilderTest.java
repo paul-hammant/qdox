@@ -77,6 +77,16 @@ public class JavaDocBuilderTest extends TestCase {
 		assertNull(builder.getClassByName("com.blah.Ignore"));
 	}
 
+	public void testRecordFile() throws Exception {
+		JavaDocBuilder builder = new JavaDocBuilder();
+		builder.addSource(new File("tmp/sourcetest/com/blah/Thing.java"));
+
+		JavaSource[] sources = builder.getSources();
+		assertEquals(1, sources.length);
+		assertEquals(new File("tmp/sourcetest/com/blah/Thing.java"),
+					 sources[0].getFile());
+	}
+
 	public void testSearcher() throws Exception {
 		JavaDocBuilder builder = new JavaDocBuilder();
 		builder.addSourceTree(new File("tmp/sourcetest"));

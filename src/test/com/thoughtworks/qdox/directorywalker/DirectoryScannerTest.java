@@ -12,7 +12,7 @@ import com.thoughtworks.qdox.directorywalker.MockFileVisitor;
 public class DirectoryScannerTest extends TestCase {
 
 	class MockFile extends File {
-        boolean _isDirectory;
+		boolean _isDirectory;
 		File[] children;
 
 		public MockFile(String pathname) {

@@ -9,8 +9,7 @@ import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.ant.ConsoleLoggingQdoxTask;
 import com.thoughtworks.qdox.ant.AbstractQdoxTask;
 
-public class TraversalTest extends TestCase
-{
+public class TraversalTest extends TestCase {
 
     private JavaDocBuilder builder;
 

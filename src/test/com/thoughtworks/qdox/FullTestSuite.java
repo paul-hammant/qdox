@@ -12,7 +12,7 @@ public class FullTestSuite extends TestSuite {
 		suite.addTest(com.thoughtworks.qdox.PackageTestSuite.suite());
 		suite.addTest(com.thoughtworks.qdox.directorywalker.PackageTestSuite.suite());
 		suite.addTest(com.thoughtworks.qdox.ant.PackageTestSuite.suite());
-        suite.addTest(com.thoughtworks.qdox.traversal.PackageTestSuite.suite());
+		suite.addTest(com.thoughtworks.qdox.traversal.PackageTestSuite.suite());
 		return suite;
 	}
 

@@ -41,7 +41,7 @@ public class JavaSource implements Serializable {
 		return packge;
 	}
 
-	public void setPackge(String packge) {
+	public void setPackage(String packge) {
 		this.packge = packge;
 	}
 

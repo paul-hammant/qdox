@@ -289,7 +289,7 @@ public class JavaClassTest extends TestCase {
 
 	public void testQualifiedType() throws Exception {
 		JavaSource source = new JavaSource();
-		source.setPackge("com.thoughtworks.qdox");
+		source.setPackage("com.thoughtworks.qdox");
 
 		cls.setName("MyClass");
 

@@ -54,7 +54,7 @@ public class JavaSourceTest extends TestCase {
 		JavaClass cls = new JavaClass();
 		cls.setName("MyClass");
 		source.setClasses(new JavaClass[] {cls});
-		source.setPackge("com.thing");
+		source.setPackage("com.thing");
 		String expected = ""
 			+ "package com.thing;\n"
 			+ "\n"
@@ -99,7 +99,7 @@ public class JavaSourceTest extends TestCase {
 		cls.setName("MyClass");
 		source.setClasses(new JavaClass[] {cls});
 		source.setImports(new String[] {"java.util.*"});
-		source.setPackge("com.moo");
+		source.setPackage("com.moo");
 		String expected = ""
 			+ "package com.moo;\n"
 			+ "\n"
@@ -141,13 +141,13 @@ public class JavaSourceTest extends TestCase {
 	}
 
     public void testResolveSamePackage() throws Exception {
-		source.setPackge("foo");
+		source.setPackage("foo");
 		source.getClassLibrary().add("foo.Bar");
 		assertEquals("foo.Bar", source.resolveType("Bar"));
 	}
 
     public void testResolveFullyQualifiedOverridesSamePackage() throws Exception {
-		source.setPackge("foo");
+		source.setPackage("foo");
 		source.getClassLibrary().add("foo.Bar");
 		assertEquals("open.Bar", source.resolveType("open.Bar"));
 	}

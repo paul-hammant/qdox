@@ -161,7 +161,7 @@ public class ModelBuilder implements Builder {
 	}
 
 	public JavaSource getSource() {
-		result.setPackge(packge);
+		result.setPackage(packge);
 		JavaClass[] clsArray = new JavaClass[classes.size()];
 		classes.toArray(clsArray);
 		result.setClasses(clsArray);

@@ -43,6 +43,9 @@ public class Type implements Comparable{
         return value!=null;
     }
 
+    public ClassLibrary getClassLibrary() {
+        return classLibrary;
+    }
 
 	/**
 	 * @see java.lang.Comparable#compareTo(Object)

@@ -49,12 +49,16 @@
     <version>
       <id>1.1</id>
       <name>1.1</name>
-      <tag>1_1</tag>
+      <tag>QDox_1_1</tag>
     </version>
     <version>
       <id>1.2</id>
       <name>1.2</name>
-      <tag>1_2</tag>
+    </version>
+    <version>
+      <id>1.3</id>
+      <name>1.3</name>
+      <tag>QDOX_1_3</tag>
     </version>
     <version>
       <id>current</id>

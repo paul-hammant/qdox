@@ -9,7 +9,7 @@ public class JavaParameterTest extends TestCase {
     }
 
     public void testParentMethod() throws Exception {
-        JavaParameter p = new JavaParameter(new Type("x", 0), "x");
+        JavaParameter p = new JavaParameter(new Type("x"), "x");
         assertNull(p.getParentMethod());
 
         JavaMethod m = new JavaMethod();

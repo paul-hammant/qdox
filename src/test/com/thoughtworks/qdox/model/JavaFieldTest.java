@@ -2,8 +2,6 @@ package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.DataProvider;
-
 public class JavaFieldTest extends TestCase {
 
     public JavaFieldTest(String s) {
@@ -13,14 +11,14 @@ public class JavaFieldTest extends TestCase {
     public void testToString() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
-        fld.setType(DataProvider.createType("int", 0));
+        fld.setType(new Type("int"));
         assertEquals("int count;\n", fld.toString());
     }
 
     public void testToStringWithModifiers() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
-        fld.setType(DataProvider.createType("int", 0));
+        fld.setType(new Type("int"));
         fld.setModifiers(new String[]{"public", "final"});
         assertEquals("public final int count;\n", fld.toString());
     }
@@ -28,7 +26,7 @@ public class JavaFieldTest extends TestCase {
     public void testToStringWithComment() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
-        fld.setType(DataProvider.createType("int", 0));
+        fld.setType(new Type("int"));
         fld.setComment("Hello");
         String expected = ""
                 + "/**\n"
@@ -41,7 +39,7 @@ public class JavaFieldTest extends TestCase {
     public void testToString1dArray() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
-        fld.setType(DataProvider.createType("int", 1));
+        fld.setType(new Type("int", 1));
         String expected = "int[] count;\n";
         assertEquals(expected, fld.toString());
     }
@@ -49,7 +47,7 @@ public class JavaFieldTest extends TestCase {
     public void testToString2dArray() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
-        fld.setType(DataProvider.createType("int", 2));
+        fld.setType(new Type("int", 2));
         String expected = "int[][] count;\n";
         assertEquals(expected, fld.toString());
     }
@@ -57,7 +55,7 @@ public class JavaFieldTest extends TestCase {
     public void testShouldReturnFieldNameForCallSignature() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
-        fld.setType(DataProvider.createType("int", 0));
+        fld.setType(new Type("int"));
         fld.setModifiers(new String[]{"public", "final"});
         assertEquals("count", fld.getCallSignature());
     }
@@ -65,7 +63,7 @@ public class JavaFieldTest extends TestCase {
     public void testShouldReturnProperDeclarationSignatureWithModifiers() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
-        fld.setType(DataProvider.createType("int", 0));
+        fld.setType(new Type("int"));
         fld.setModifiers(new String[]{"public", "final"});
         assertEquals("public final int count", fld.getDeclarationSignature(true));
     }
@@ -73,7 +71,7 @@ public class JavaFieldTest extends TestCase {
     public void testShouldReturnProperDeclarationSignatureWithoutModifiers() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
-        fld.setType(DataProvider.createType("int", 0));
+        fld.setType(new Type("int"));
         fld.setModifiers(new String[]{"public", "final"});
         assertEquals("int count", fld.getDeclarationSignature(false));
     }

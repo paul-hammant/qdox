@@ -701,4 +701,5 @@ public class JavaDocBuilderTest extends TestCase {
 
         assertEquals(1, results.size());
     } 
+
 }

@@ -2,8 +2,6 @@ package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.DataProvider;
-
 public class JavaClassTest extends TestCase {
 
     private JavaClass cls;
@@ -40,7 +38,7 @@ public class JavaClassTest extends TestCase {
 
     public void testToStringClassExtends() throws Exception {
         cls.setName("MyClass");
-        cls.setSuperClass(DataProvider.createType("SuperClass", 0));
+        cls.setSuperClass(new Type("SuperClass"));
         String expected = ""
                 + "class MyClass extends SuperClass {\n"
                 + "\n"
@@ -104,7 +102,7 @@ public class JavaClassTest extends TestCase {
     public void testToStringClassImplementsAndExtends() throws Exception {
         cls.setName("MyClass");
         cls.setImplementz(type(new String[]{"SomeInterface", "AnotherInterface", "Xx"}));
-        cls.setSuperClass(DataProvider.createType("SubMarine", 0));
+        cls.setSuperClass(new Type("SubMarine"));
         String expected = ""
                 + "class MyClass extends SubMarine implements SomeInterface, AnotherInterface, Xx {\n"
                 + "\n"
@@ -143,7 +141,7 @@ public class JavaClassTest extends TestCase {
         cls.setName("MyClass");
         JavaMethod mth = new JavaMethod();
         mth.setName("doStuff");
-        mth.setReturns(DataProvider.createType("void", 0));
+        mth.setReturns(new Type("void"));
         cls.addMethod(mth);
         String expected = ""
                 + "class MyClass {\n"
@@ -160,21 +158,21 @@ public class JavaClassTest extends TestCase {
         {
             JavaMethod mth = new JavaMethod();
             mth.setName("doStuff");
-            mth.setReturns(DataProvider.createType("void", 0));
+            mth.setReturns(new Type("void"));
             cls.addMethod(mth);
         }
 
         {
             JavaMethod mth = new JavaMethod();
             mth.setName("somethingElse");
-            mth.setReturns(DataProvider.createType("Goose", 0));
+            mth.setReturns(new Type("Goose"));
             cls.addMethod(mth);
         }
 
         {
             JavaMethod mth = new JavaMethod();
             mth.setName("eat");
-            mth.setReturns(DataProvider.createType("void", 0));
+            mth.setReturns(new Type("void"));
             cls.addMethod(mth);
         }
 
@@ -197,14 +195,14 @@ public class JavaClassTest extends TestCase {
         {
             JavaField fld = new JavaField();
             fld.setName("count");
-            fld.setType(DataProvider.createType("int", 0));
+            fld.setType(new Type("int"));
             cls.addField(fld);
         }
 
         {
             JavaField fld = new JavaField();
             fld.setName("thing");
-            fld.setType(DataProvider.createType("String", 0));
+            fld.setType(new Type("String"));
             fld.setModifiers(new String[]{"public"});
             cls.addField(fld);
         }
@@ -256,13 +254,13 @@ public class JavaClassTest extends TestCase {
         cls.setComment("Hello World");
 
         JavaMethod mth = new JavaMethod();
-        mth.setReturns(DataProvider.createType("String", 0));
+        mth.setReturns(new Type("String"));
         mth.setName("thingy");
         mth.setComment("Hello Method");
         cls.addMethod(mth);
 
         JavaField fld = new JavaField();
-        fld.setType(DataProvider.createType("String", 0));
+        fld.setType(new Type("String"));
         fld.setName("thing");
         fld.setComment("Hello Field");
         cls.addField(fld);
@@ -334,7 +332,7 @@ public class JavaClassTest extends TestCase {
     public void testDefaultClassSuperclass() throws Exception {
         cls.setName("MyClass");
         assertEquals("java.lang.Object", cls.getSuperClass().getValue());
-        cls.setSuperClass(new Type("x.X", 0));
+        cls.setSuperClass(new Type("x.X"));
         assertEquals("x.X", cls.getSuperClass().getValue());
     }
 
@@ -342,14 +340,14 @@ public class JavaClassTest extends TestCase {
         cls.setName("MyInterface");
         cls.setInterface(true);
         assertNull(cls.getSuperClass());
-        cls.setSuperClass(new Type("x.X", 0));
+        cls.setSuperClass(new Type("x.X"));
         assertEquals("x.X", cls.getSuperClass().getValue());
     }
 
     public void testCanGetFieldByName() throws Exception {
         JavaField fredField = new JavaField();
         fredField.setName("fred");
-        fredField.setType(DataProvider.createType("int", 0));
+        fredField.setType(new Type("int"));
         cls.addField(fredField);
 
         assertEquals(fredField, cls.getFieldByName("fred"));
@@ -358,7 +356,7 @@ public class JavaClassTest extends TestCase {
 
     public void testCanGetMethodBySignature() {
         JavaMethod method = new JavaMethod();
-        method.setReturns(DataProvider.createType("void", 0));
+        method.setReturns(new Type("void"));
         method.setName("doStuff");
         JavaParameter[] parameters = {
             new JavaParameter(new Type("int"), "x"),

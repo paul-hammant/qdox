@@ -2,8 +2,6 @@ package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.DataProvider;
-
 public class JavaMethodTest extends TestCase {
 
     private JavaMethod mth;
@@ -44,12 +42,12 @@ public class JavaMethodTest extends TestCase {
         mth.setModifiers(new String[]{"protected", "final"});
         mth.setReturns(new Type("void"));
         mth.setExceptions(new Type[] {
-            DataProvider.createType("FishException", 0),
-            DataProvider.createType("FruitException", 0),
+            new Type("FishException"),
+            new Type("FruitException"),
         });
         mth.setParameters(new JavaParameter[]{
-            new JavaParameter(DataProvider.createType("int", 0), "count"),
-            new JavaParameter(DataProvider.createType("MyThing", 0), "t")
+            new JavaParameter(new Type("int"), "count"),
+            new JavaParameter(new Type("MyThing"), "t")
         });
     }
 
@@ -62,7 +60,7 @@ public class JavaMethodTest extends TestCase {
     public void testToStringOneParam() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
-        mth.setParameters(new JavaParameter[]{new JavaParameter(DataProvider.createType("String", 0), "thingy")});
+        mth.setParameters(new JavaParameter[]{new JavaParameter(new Type("String"), "thingy")});
         assertEquals("void blah(String thingy);\n", mth.toString());
     }
 
@@ -70,8 +68,8 @@ public class JavaMethodTest extends TestCase {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setParameters(new JavaParameter[]{
-            new JavaParameter(DataProvider.createType("int", 0), "count"),
-            new JavaParameter(DataProvider.createType("MyThing", 0), "t")
+            new JavaParameter(new Type("int"), "count"),
+            new JavaParameter(new Type("MyThing"), "t")
         });
         assertEquals("void blah(int count, MyThing t);\n", mth.toString());
     }
@@ -80,9 +78,9 @@ public class JavaMethodTest extends TestCase {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setParameters(new JavaParameter[]{
-            new JavaParameter(DataProvider.createType("int", 0), "count"),
-            new JavaParameter(DataProvider.createType("MyThing", 0), "t"),
-            new JavaParameter(DataProvider.createType("java.lang.Meat", 0), "beef")
+            new JavaParameter(new Type("int"), "count"),
+            new JavaParameter(new Type("MyThing"), "t"),
+            new JavaParameter(new Type("java.lang.Meat"), "beef")
         });
         assertEquals("void blah(int count, MyThing t, java.lang.Meat beef);\n", mth.toString());
     }
@@ -97,21 +95,21 @@ public class JavaMethodTest extends TestCase {
     public void testToStringOneException() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
-        mth.setExceptions(new Type[]{DataProvider.createType("RuntimeException", 0)});
+        mth.setExceptions(new Type[]{new Type("RuntimeException")});
         assertEquals("void blah() throws RuntimeException;\n", mth.toString());
     }
 
     public void testToStringTwoException() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
-        mth.setExceptions(new Type[]{DataProvider.createType("RuntimeException", 0), DataProvider.createType("java.lang.SheepException", 1)});
+        mth.setExceptions(new Type[]{new Type("RuntimeException"), new Type("java.lang.SheepException", 1)});
         assertEquals("void blah() throws RuntimeException, java.lang.SheepException;\n", mth.toString());
     }
 
     public void testToStringThreeException() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
-        mth.setExceptions(new Type[]{DataProvider.createType("RuntimeException", 0), DataProvider.createType("java.lang.SheepException", 1), DataProvider.createType("CowException", 1)});
+        mth.setExceptions(new Type[]{new Type("RuntimeException"), new Type("java.lang.SheepException", 1), new Type("CowException", 1)});
         assertEquals("void blah() throws RuntimeException, java.lang.SheepException, CowException;\n", mth.toString());
     }
 
@@ -150,27 +148,27 @@ public class JavaMethodTest extends TestCase {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setParameters(new JavaParameter[]{
-            new JavaParameter(DataProvider.createType("int", 2), "count"),
-            new JavaParameter(DataProvider.createType("MyThing", 1), "t")
+            new JavaParameter(new Type("int", 2), "count"),
+            new JavaParameter(new Type("MyThing", 1), "t")
         });
         assertEquals("void blah(int[][] count, MyThing[] t);\n", mth.toString());
     }
 
     public void testEquals() throws Exception {
         mth.setName("thing");
-        mth.setReturns(new Type("void", 0));
+        mth.setReturns(new Type("void"));
 
         JavaMethod m2 = new JavaMethod();
         m2.setName("thing");
-        m2.setReturns(new Type("void", 0));
+        m2.setReturns(new Type("void"));
 
         JavaMethod m3 = new JavaMethod();
         m3.setName("thingy");
-        m3.setReturns(new Type("void", 0));
+        m3.setReturns(new Type("void"));
 
         JavaMethod m4 = new JavaMethod();
         m4.setName("thing");
-        m4.setReturns(new Type("int", 0));
+        m4.setReturns(new Type("int"));
 
         JavaMethod c1 = new JavaMethod();
         c1.setName("thing");
@@ -201,7 +199,7 @@ public class JavaMethodTest extends TestCase {
             new JavaParameter(new Type("java.lang.String", 2), "thing"),
             new JavaParameter(new Type("X", 3), "")
         });
-        mth.setReturns(new Type("void", 0));
+        mth.setReturns(new Type("void"));
 
         JavaMethod m2 = new JavaMethod();
         m2.setName("thing");
@@ -210,7 +208,7 @@ public class JavaMethodTest extends TestCase {
             new JavaParameter(new Type("java.lang.String", 2), "anotherName"),
             new JavaParameter(new Type("X", 3), "blah")
         });
-        m2.setReturns(new Type("void", 0));
+        m2.setReturns(new Type("void"));
 
         JavaMethod m3 = new JavaMethod();
         m3.setName("thing");
@@ -218,7 +216,7 @@ public class JavaMethodTest extends TestCase {
             new JavaParameter(new Type("int", 1), "blah"),
             new JavaParameter(new Type("java.lang.String", 2), "thing"),
         });
-        m3.setReturns(new Type("void", 0));
+        m3.setReturns(new Type("void"));
 
         JavaMethod m4 = new JavaMethod();
         m4.setName("thing");
@@ -227,7 +225,7 @@ public class JavaMethodTest extends TestCase {
             new JavaParameter(new Type("java.lang.String", 2), "thing"),
             new JavaParameter(new Type("TTTTTTTT", 3), "blah") // name
         });
-        m4.setReturns(new Type("void", 0));
+        m4.setReturns(new Type("void"));
 
         JavaMethod m5 = new JavaMethod();
         m5.setName("thing");
@@ -236,7 +234,7 @@ public class JavaMethodTest extends TestCase {
             new JavaParameter(new Type("java.lang.String", 2), "thing"),
             new JavaParameter(new Type("X", 9), "blah") // dimension
         });
-        m5.setReturns(new Type("void", 0));
+        m5.setReturns(new Type("void"));
 
         assertEquals(mth, m2);
         assertEquals(m2, mth);
@@ -252,7 +250,7 @@ public class JavaMethodTest extends TestCase {
             new JavaParameter(new Type("java.lang.String", 2), "thing"),
             new JavaParameter(new Type("X", 3), "")
         });
-        mth.setReturns(new Type("void", 0));
+        mth.setReturns(new Type("void"));
 
         JavaMethod m2 = new JavaMethod();
         m2.setName("thing");
@@ -261,7 +259,7 @@ public class JavaMethodTest extends TestCase {
             new JavaParameter(new Type("java.lang.String", 2), "anotherName"),
             new JavaParameter(new Type("X", 3), "blah")
         });
-        m2.setReturns(new Type("void", 0));
+        m2.setReturns(new Type("void"));
 
         JavaMethod m3 = new JavaMethod();
         m3.setName("thing");
@@ -269,7 +267,7 @@ public class JavaMethodTest extends TestCase {
             new JavaParameter(new Type("int", 1), "blah"),
             new JavaParameter(new Type("java.lang.String", 2), "thing"),
         });
-        m3.setReturns(new Type("void", 0));
+        m3.setReturns(new Type("void"));
 
         JavaMethod c1 = new JavaMethod();
         c1.setName("Thong");

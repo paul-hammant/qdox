@@ -2,14 +2,12 @@ package com.thoughtworks.qdox.model;
 
 public interface JavaClassParent {
 
-	/**
-	 * Get the class "namespace" that this JavaClassParent represents.
-	 */
-	public abstract String asClassNamespace();
+	public String asClassNamespace();
 
-	/**
-	 * Get the containing JavaSource.
-	 */
-	public abstract JavaSource getParentSource();
+	public JavaSource getParentSource();
+
+	public void addClass(JavaClass cls);
+
+	public JavaClass[] getClasses();
 
 }

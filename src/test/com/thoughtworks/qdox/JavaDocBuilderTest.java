@@ -7,6 +7,8 @@ import junit.framework.TestCase;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -657,6 +659,33 @@ public class JavaDocBuilderTest extends TestCase {
         // but this will do for now to fix the NPE bug.
         assertEquals("Zap", clazz.getImplementedInterfaces()[0].getFullyQualifiedName());
         assertEquals("Bar", clazz.getSuperJavaClass().getFullyQualifiedName());
+    }
+
+    /**
+     * @french.english
+     *      cheese="fromage"
+     *      fish="poisson"
+     *
+     * @band.singer
+     *      doors=morrison
+     *      cure=smith
+     */
+    public void testShouldShouldReportTagParameterKeys() {
+        String sourceCode = "" +
+                "    /**\n" +
+                "     * @french.english\r\n" +
+                "     *      cheese=\"fromage\"\n\r" +
+                "     *      fish=\"poisson\"\r" +
+                "     */\n" +
+                "     class MultiLine{}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaClass multiline = builder.addSource(new StringReader(sourceCode)).getClasses()[0];
+        DocletTag frenchEnglish = multiline.getTagByName("french.english");
+
+        Set expected = new HashSet();
+        expected.add("cheese");
+        expected.add("fish");
+        assertEquals(expected,frenchEnglish.getNamedParameterMap().keySet());
     }
 
 }

@@ -130,5 +130,20 @@ public class TagParserTest extends TestCase {
         assertEquals("=", words[1]);
         assertEquals("c", words[2]);
     }
-    
+
+    public void testShouldParseMultiLineParameters() {
+        String[] words = TagParser.parseWords("\n" +
+                "a=c\n" +
+                "e=g\n");
+
+        assertEquals(6, words.length);
+        assertEquals("a", words[0]);
+        assertEquals("=", words[1]);
+        assertEquals("c", words[2]);
+        assertEquals("e", words[3]);
+        assertEquals("=", words[4]);
+        assertEquals("g", words[5]);
+
+    }
+
 }

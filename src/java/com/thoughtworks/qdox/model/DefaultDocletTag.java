@@ -1,12 +1,8 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
 import com.thoughtworks.qdox.model.util.TagParser;
+
+import java.util.Map;
 
 public class DefaultDocletTag implements DocletTag {
 
@@ -16,7 +12,6 @@ public class DefaultDocletTag implements DocletTag {
 
     private String[] parameters;
     private Map namedParameters;
-    private String[] quotes = new String[]{"\"", "'"};
     private AbstractJavaEntity context;
 
     public DefaultDocletTag(String name, String value, 
@@ -66,20 +61,6 @@ public class DefaultDocletTag implements DocletTag {
     public int getLineNumber() {
         return lineNumber;
     }
-
-    private String trim(String value, String[] strings) {
-        for (int i = 0; i < strings.length; i++) {
-            String string = strings[i];
-            while (value.startsWith(string)) {
-                value = value.substring(string.length(), value.length());
-            }
-            while (value.endsWith(string)) {
-                value = value.substring(0, value.length() - string.length());
-            }
-        }
-        return value;
-    }
-
 }
 
 

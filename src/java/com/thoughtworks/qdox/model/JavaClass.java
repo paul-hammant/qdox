@@ -192,10 +192,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
     }
 
     public String getFullyQualifiedName() {
-        String pakkage = getParent().asClassNamespace();
-        char separator = isInner() ? '$' : '.';
-
-        return (pakkage == null) ? getName() : (pakkage + separator + getName());
+        return getParent().getClassNamePrefix() + getName();
     }
 
     /**
@@ -225,8 +222,8 @@ public class JavaClass extends AbstractInheritableJavaEntity
         return parent.getClassLibrary();
     }
 
-    public String asClassNamespace() {
-        return getFullyQualifiedName();
+    public String getClassNamePrefix() {
+        return getFullyQualifiedName() + "$";
     }
 
     public Type asType() {

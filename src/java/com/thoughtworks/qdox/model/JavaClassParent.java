@@ -12,7 +12,7 @@ public interface JavaClassParent {
 
     public ClassLibrary getClassLibrary();
 
-    public String asClassNamespace();
+    public String getClassNamePrefix();
 
     public JavaSource getParentSource();
 

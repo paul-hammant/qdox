@@ -308,13 +308,18 @@ public class JavaClassTest extends TestCase {
         assertEquals("com.thoughtworks.qdox.MyClass", cls.asType().getValue());
     }
 
+    public void testGetClassNamePrefix() {
+        src.setPackage("foo.bar");
+        cls.setName("Stanley");
+        assertEquals("foo.bar.Stanley$", cls.getClassNamePrefix());
+    }
+    
     public void testInnerClass() throws Exception {
         src.setPackage("foo.bar");
 
         JavaClass outer = new JavaClass(src);
         outer.setName("Outer");
         src.addClass(outer);
-        assertEquals("foo.bar.Outer", outer.asClassNamespace());
 
         JavaClass inner = new JavaClass(outer);
         inner.setName("Inner");

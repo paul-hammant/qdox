@@ -173,8 +173,9 @@ public class JavaSource implements Serializable, JavaClassParent {
         return null;
     }
 
-    public String asClassNamespace() {
-        return getPackage();
+    public String getClassNamePrefix() {
+        if (getPackage() == null) return "";
+        return getPackage() + ".";
     }
 
     public JavaSource getParentSource() {

@@ -116,6 +116,12 @@ public class JavaSourceTest extends TestCase {
         assertEquals(expected, source.toString());
     }
 
+    public void testGetClassNamePrefix() {
+        assertEquals("", source.getClassNamePrefix());
+        source.setPackage("foo.bar");
+        assertEquals("foo.bar.", source.getClassNamePrefix());
+       }
+    
     public void testResolveJavaPrimitive() throws Exception {
         source.addImport("bogus.int");
         source.addImport("bogus.double");
@@ -174,6 +180,18 @@ public class JavaSourceTest extends TestCase {
     public void testResolveJavaLangClass() throws Exception {
         source.getClassLibrary().add("java.lang.System");
         assertEquals("java.lang.System", source.resolveType("System"));
+    }
+
+    public void DISABLED_testResolveFullyQualifiedInnerClass() throws Exception {
+        source.setPackage("foo");
+        source.getClassLibrary().add("foo.Bar$Fnord");
+        assertEquals("foo.Bar$Fnord", source.resolveType("foo.Bar.Fnord"));
+    }
+
+    public void DISABLED_testResolveInnerClass() throws Exception {
+        source.setPackage("foo");
+        source.getClassLibrary().add("foo.Bar$Fnord");
+        assertEquals("foo.Bar$Fnord", source.resolveType("Bar.Fnord"));
     }
 
 }

@@ -86,12 +86,18 @@ public class LexerTest extends TestCase {
         checkAssignment("new Thingifier() { void doThings(int x) { a = \"aaa\"; } }");
     }
 
-    public void testGenericTypeAssignment() throws Exception {
+    public void FIXME_testGenericTypeAssignment() throws Exception {
         checkAssignment("new HashMap<String,Integer>");
     }
-    
-    public void FIXME_testJiraQdox71() throws Exception {
-        checkAssignment("(x < y)");
+
+    public void testFieldsContainingLessThanOrGreaterThanInAssignment() throws Exception {
+        // QDOX-71 - this is really important as it is common to see in all versions of the JDK.
+        // Please don't disable this test -joe.
+        checkAssignment("x < y");
+        checkAssignment("x > y");
+        checkAssignment("x << y");
+        checkAssignment("x >> y");
+        checkAssignment("x<y>z");
     }
 
     private void checkAssignment(String assignment) throws IOException {

@@ -192,8 +192,6 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     }
     "["                 { nestingDepth++; }
     "]"                 { nestingDepth--; }
-    "<"                 { nestingDepth++; }
-    ">"                 { nestingDepth--; }
 }
 
 <ASSIGNMENT, CODEBLOCK, YYINITIAL> {

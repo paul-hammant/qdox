@@ -408,8 +408,8 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -431,8 +431,8 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.INTERFACE);
 		setupLex(Parser.IDENTIFIER, "MyInterface");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -461,8 +461,8 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "blah");
 		setupLex(Parser.DOT);
 		setupLex(Parser.IDENTIFIER, "MyBaseClass");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -493,8 +493,8 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "AnotherInterface");
 		setupLex(Parser.COMMA);
 		setupLex(Parser.IDENTIFIER, "Serializable");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -525,8 +525,8 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "blah");
 		setupLex(Parser.DOT);
 		setupLex(Parser.IDENTIFIER, "AnInterface");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -563,8 +563,8 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "Serializable");
 		setupLex(Parser.COMMA);
 		setupLex(Parser.IDENTIFIER, "Eatable");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -599,8 +599,8 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "blah");
 		setupLex(Parser.DOT);
 		setupLex(Parser.IDENTIFIER, "AnInterface");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -642,8 +642,8 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "Serializable");
 		setupLex(Parser.COMMA);
 		setupLex(Parser.IDENTIFIER, "Eatable");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -671,8 +671,8 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.FINAL);
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -701,8 +701,8 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.ABSTRACT);
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -729,21 +729,21 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "Class1");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 
 		setupLex(Parser.PUBLIC);
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "Class2");
 		setupLex(Parser.EXTENDS);
 		setupLex(Parser.IDENTIFIER, "SubClass");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 
 		setupLex(Parser.INTERFACE);
 		setupLex(Parser.IDENTIFIER, "Intf1");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -827,8 +827,8 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.PUBLIC);
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 
 		setupLex(Parser.JAVADOCSTART);
 		setupLex(Parser.JAVADOCTOKEN, "javadoc9");
@@ -870,15 +870,15 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -900,15 +900,15 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -930,15 +930,15 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "Something");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -960,7 +960,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "com");
 		setupLex(Parser.DOT);
@@ -968,11 +968,11 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.DOT);
 		setupLex(Parser.IDENTIFIER, "Something");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -994,7 +994,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.PUBLIC);
 		setupLex(Parser.PROTECTED);
@@ -1011,11 +1011,11 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.DOT);
 		setupLex(Parser.IDENTIFIER, "Something");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1046,17 +1046,17 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "numberOfTimes");
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1082,21 +1082,21 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 		setupLex(Parser.IDENTIFIER, "java");
 		setupLex(Parser.DOT);
 		setupLex(Parser.IDENTIFIER, "lang");
 		setupLex(Parser.DOT);
 		setupLex(Parser.IDENTIFIER, "String");
 		setupLex(Parser.IDENTIFIER, "numberOfTimes");
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1122,20 +1122,20 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "numberOfTimes");
 		setupLex(Parser.COMMA);
 		setupLex(Parser.IDENTIFIER, "String");
 		setupLex(Parser.IDENTIFIER, "name");
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1165,11 +1165,11 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "numberOfTimes");
 		setupLex(Parser.COMMA);
@@ -1178,10 +1178,10 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.COMMA);
 		setupLex(Parser.IDENTIFIER, "boolean");
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1215,19 +1215,19 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 		setupLex(Parser.FINAL);
 		setupLex(Parser.VOLATILE);
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "numberOfTimes");
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1255,17 +1255,17 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.THROWS);
 		setupLex(Parser.IDENTIFIER, "IOException");
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1288,19 +1288,19 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.THROWS);
 		setupLex(Parser.IDENTIFIER, "IOException");
 		setupLex(Parser.COMMA);
 		setupLex(Parser.IDENTIFIER, "MyException");
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1324,12 +1324,12 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.THROWS);
 		setupLex(Parser.IDENTIFIER, "IOException");
 		setupLex(Parser.COMMA);
@@ -1338,7 +1338,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "AnotherException");
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1363,12 +1363,12 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.THROWS);
 		setupLex(Parser.IDENTIFIER, "java");
 		setupLex(Parser.DOT);
@@ -1377,7 +1377,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "IOException");
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1400,12 +1400,12 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "void");
 		setupLex(Parser.IDENTIFIER, "doSomething");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.THROWS);
 		setupLex(Parser.IDENTIFIER, "java");
 		setupLex(Parser.DOT);
@@ -1420,7 +1420,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "RuntimeException");
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1444,14 +1444,14 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1473,17 +1473,17 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.PUBLIC);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "count");
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1511,11 +1511,11 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.PUBLIC);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "count");
 		setupLex(Parser.COMMA);
@@ -1525,10 +1525,10 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.DOT);
 		setupLex(Parser.IDENTIFIER, "String");
 		setupLex(Parser.IDENTIFIER, "thingy");
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1560,16 +1560,16 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.THROWS);
 		setupLex(Parser.IDENTIFIER, "SomeException");
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1593,11 +1593,11 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.THROWS);
 		setupLex(Parser.IDENTIFIER, "java");
 		setupLex(Parser.DOT);
@@ -1608,7 +1608,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "SomeException");
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1633,13 +1633,13 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "count");
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1662,7 +1662,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "java");
 		setupLex(Parser.DOT);
@@ -1672,7 +1672,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "count");
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1695,7 +1695,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.PUBLIC);
 		setupLex(Parser.PROTECTED);
@@ -1708,7 +1708,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "count");
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1738,13 +1738,13 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "String");
 		setupLex(Parser.IDENTIFIER, "thing");
 		setupLex(Parser.ASSIGNMENT);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1762,7 +1762,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "String");
 		setupLex(Parser.IDENTIFIER, "thing");
@@ -1770,7 +1770,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "another");
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1794,12 +1794,12 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.STATIC);
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// execute
@@ -1815,7 +1815,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.PUBLIC);
 		setupLex(Parser.CLASS);
@@ -1826,12 +1826,12 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "Serializable");
 		setupLex(Parser.CODEBLOCK);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "AnotherClass");
-		setupLex(Parser.PARENOPEN);
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACEOPEN);
+		setupLex(Parser.BRACECLOSE);
 
 		setupLex(0);
 
@@ -1857,11 +1857,11 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "MyClass");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1879,13 +1879,13 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "count");
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1909,7 +1909,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.SQUAREOPEN);
@@ -1917,7 +1917,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "count");
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1941,7 +1941,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.SQUAREOPEN);
@@ -1951,7 +1951,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "count");
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -1975,7 +1975,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "count");
@@ -1983,7 +1983,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.SQUARECLOSE);
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -2007,7 +2007,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.SQUAREOPEN);
 		setupLex(Parser.SQUARECLOSE);
@@ -2018,7 +2018,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.SQUARECLOSE);
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -2042,7 +2042,7 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "count");
@@ -2054,7 +2054,7 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.IDENTIFIER, "count2");
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -2084,15 +2084,15 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "count");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -2116,17 +2116,17 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.SQUAREOPEN);
 		setupLex(Parser.SQUARECLOSE);
 		setupLex(Parser.IDENTIFIER, "count");
-		setupLex(Parser.BRACKETOPEN);
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -2150,21 +2150,21 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.SQUAREOPEN);
 		setupLex(Parser.SQUARECLOSE);
 		setupLex(Parser.IDENTIFIER, "count");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "p1");
 
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -2193,21 +2193,21 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.IDENTIFIER, "count");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.SQUAREOPEN);
 		setupLex(Parser.SQUARECLOSE);
 		setupLex(Parser.IDENTIFIER, "p1");
 
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations
@@ -2236,13 +2236,13 @@ public class ParserTest extends TestCase {
 		// setup values
 		setupLex(Parser.CLASS);
 		setupLex(Parser.IDENTIFIER, "x");
-		setupLex(Parser.PARENOPEN);
+		setupLex(Parser.BRACEOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.SQUAREOPEN);
 		setupLex(Parser.SQUARECLOSE);
 		setupLex(Parser.IDENTIFIER, "count");
-		setupLex(Parser.BRACKETOPEN);
+		setupLex(Parser.PARENOPEN);
 
 		setupLex(Parser.IDENTIFIER, "int");
 		setupLex(Parser.SQUAREOPEN);
@@ -2251,10 +2251,10 @@ public class ParserTest extends TestCase {
 		setupLex(Parser.SQUARECLOSE);
 		setupLex(Parser.IDENTIFIER, "p1");
 
-		setupLex(Parser.BRACKETCLOSE);
+		setupLex(Parser.PARENCLOSE);
 		setupLex(Parser.SEMI);
 
-		setupLex(Parser.PARENCLOSE);
+		setupLex(Parser.BRACECLOSE);
 		setupLex(0);
 
 		// expectations

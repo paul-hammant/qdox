@@ -12,7 +12,7 @@ import com.thoughtworks.qdox.parser.*;
 
 %{
 
-	private int parenDepth = 0, stateDepth = 0;
+	private int braceDepth = 0, stateDepth = 0;
 	private int[] stateStack = new int[2];
 	private boolean javaDocNewLine;
 
@@ -66,19 +66,19 @@ import com.thoughtworks.qdox.parser.*;
 
 	"["                { return Parser.SQUAREOPEN; }
 	"]"                { return Parser.SQUARECLOSE; }
-	"("                { return Parser.BRACKETOPEN; }
-	")"                { return Parser.BRACKETCLOSE; }
+	"("                { return Parser.PARENOPEN; }
+	")"                { return Parser.PARENCLOSE; }
 
 	"{"                {
-		parenDepth++;
-		if (parenDepth == 2) {
+		braceDepth++;
+		if (braceDepth == 2) {
 			pushState(CODEBLOCK);
 		}
 		else {
-			return Parser.PARENOPEN;
+			return Parser.BRACEOPEN;
 		}
 	}
-	"}"                { parenDepth--; return Parser.PARENCLOSE; }
+	"}"                { braceDepth--; return Parser.BRACECLOSE; }
 
 	"/**"              { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
 	"="                { pushState(ASSIGNMENT); }
@@ -94,10 +94,10 @@ import com.thoughtworks.qdox.parser.*;
 }
 
 <CODEBLOCK> {
-	"{"                { parenDepth++; }
+	"{"                { braceDepth++; }
 	"}"                {
-		parenDepth--;
-		if (parenDepth == 1) {
+		braceDepth--;
+		if (braceDepth == 1) {
 			popState();
 			return Parser.CODEBLOCK;
 		}
@@ -105,9 +105,9 @@ import com.thoughtworks.qdox.parser.*;
 }
 
 <ASSIGNMENT> {
-	";"                { if (parenDepth <= 1) { popState(); return Parser.ASSIGNMENT; } }
-	"{"                { parenDepth++; }
-	"}"                { parenDepth--; }
+	";"                { if (braceDepth <= 1) { popState(); return Parser.ASSIGNMENT; } }
+	"{"                { braceDepth++; }
+	"}"                { braceDepth--; }
 }
 
 <ASSIGNMENT, CODEBLOCK, YYINITIAL> {

@@ -7,7 +7,7 @@ import java.io.IOException;
 %token SEMI DOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
-%token PARENOPEN PARENCLOSE SQUAREOPEN SQUARECLOSE BRACKETOPEN BRACKETCLOSE
+%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
 %token JAVADOCSTART JAVADOCEND JAVADOCNEWLINE JAVADOCTAGMARK
 %token CODEBLOCK STRING ASSIGNMENT
 
@@ -67,7 +67,7 @@ javadoctag: JAVADOCTAGMARK JAVADOCTOKEN javadoctokens { builder.addJavaDocTag($2
 
 
 
-class: classdefinition PARENOPEN members PARENCLOSE;
+class: classdefinition BRACEOPEN members BRACECLOSE;
 classdefinition: modifiers classorinterface IDENTIFIER extends implements { cls.modifiers.addAll(modifiers); modifiers.clear(); cls.name = $3; builder.addClass(cls); cls = new ClassDef(); }
 classorinterface: CLASS | INTERFACE { cls.isInterface = true; };
 extends: | EXTENDS extendslist;
@@ -96,7 +96,7 @@ arrayidentifier: IDENTIFIER arrayparts { $$ = $1; };
 arrayfullidentifier: fullidentifier arrayparts { $$ = $1; };
 arrayparts: | arrayparts SQUAREOPEN SQUARECLOSE { dimensions++; };
 
-method: BRACKETOPEN params BRACKETCLOSE exceptions;
+method: PARENOPEN params PARENCLOSE exceptions;
 exceptions: | THROWS exceptionlist;
 exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
 

@@ -7,11 +7,14 @@ import java.util.Iterator;
 public class JavaClass extends AbstractJavaEntity {
 
 	private List methods = new LinkedList();
+	private JavaMethod[] methodsArray;
 	private List fields = new LinkedList();
+	private JavaField[] fieldsArray;
 	private boolean interfce;
+	private Type type;
 	private Type superClass;
 	private Type[] implementz = new Type[0];
-	private JavaSource source;
+	private JavaSource parentSource;
 	
 	/**
 	 * Interface or class?
@@ -26,18 +29,6 @@ public class JavaClass extends AbstractJavaEntity {
 
 	public Type[] getImplements() {
 		return implementz;
-	}
-
-	public int getMethodCount() {
-		return methods.size();
-	}
-
-	public JavaMethod getMethod(int i) {
-		return (JavaMethod) methods.get(i);
-	}
-
-	public JavaField getField(int i) {
-		return (JavaField) fields.get(i);
 	}
 
 	protected void writeBody(IndentBuffer result) {
@@ -90,7 +81,9 @@ public class JavaClass extends AbstractJavaEntity {
 	}
 
 	public void addMethod(JavaMethod meth) {
-		this.methods.add(meth);
+		methods.add(meth);
+		meth.setParentClass(this);
+		methodsArray = null;
 	}
 
 	public void setSuperClass(Type type) {
@@ -103,22 +96,47 @@ public class JavaClass extends AbstractJavaEntity {
 
 	public void addField(JavaField javaField) {
 		fields.add(javaField);
-	}
-
-	public boolean isContainingClass() {
-		return isPublic();
+		javaField.setParentClass(this);
+		fieldsArray = null;
 	}
 
 	public String getPackage() {
-		return source.getPackage();
+		return parentSource.getPackage();
 	}
 
 	public String getFullyQualifiedName() {
-		return source.getPackage() + "." + getName();
+		return parentSource.getPackage() + "." + getName();
 	}
 
-	public void setSource(JavaSource javaSource) {
-		source = javaSource;
+	public void setParentSource(JavaSource javaSource) {
+		parentSource = javaSource;
+	}
+
+	public Type asType() {
+		if (type == null) {
+			type = new Type(parentSource.getPackage() + "." + getName(), 0);
+		}
+		return type;
+	}
+
+	public JavaMethod[] getMethods() {
+		if (methodsArray == null) {
+			methodsArray = new JavaMethod[methods.size()];
+			methods.toArray(methodsArray);
+		}
+		return methodsArray;
+	}
+
+	public JavaField[] getFields() {
+		if (fieldsArray == null) {
+			fieldsArray = new JavaField[fields.size()];
+			fields.toArray(fieldsArray);
+		}
+		return fieldsArray;
+	}
+
+	public JavaSource getParentSource() {
+		return parentSource;
 	}
 
 }

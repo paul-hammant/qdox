@@ -13,6 +13,7 @@ public class PackageTestSuite extends TestSuite {
 		suite.addTestSuite(JavaClassTest.class);
 		suite.addTestSuite(JavaFieldTest.class);
 		suite.addTestSuite(JavaMethodTest.class);
+		suite.addTestSuite(JavaParameterTest.class);
 		suite.addTestSuite(JavaSourceTest.class);
 		suite.addTestSuite(ModelBuilderTest.class);
 		suite.addTestSuite(TypeTest.class);

@@ -11,7 +11,7 @@ abstract class AbstractJavaEntity implements Serializable {
 	protected String name;
 	protected List modifiers = new ArrayList();
 	private String comment;
-	private List tags = new ArrayList();
+	private DocletTag[] tags;
 
 	public String getName() {
 		return name;
@@ -29,26 +29,23 @@ abstract class AbstractJavaEntity implements Serializable {
 		return comment;
 	}
 
-	public int getTagCount() {
-		return tags.size();
+	public DocletTag[] getTags() {
+		return tags;
 	}
 
-	public DocletTag getTag(int i) {
-		return (DocletTag)tags.get(i);
+	public DocletTag[] getTagsByName(String name) {
+		List specifiedTags = new ArrayList();
+		for (int i = 0; i < tags.length; i++) {
+			DocletTag docletTag = tags[i];
+			if (docletTag.getName().equals(name)) {
+				specifiedTags.add(docletTag);
+			}
+		}
+		return (DocletTag[]) specifiedTags.toArray(new DocletTag[specifiedTags.size()]);
 	}
-
-    public DocletTag[] getTags(String name){
-        List specifiedTags = new ArrayList();
-        for (Iterator iterator = tags.iterator(); iterator.hasNext();) {
-            DocletTag docletTag = (DocletTag) iterator.next();
-            if (docletTag.getName().equals(name))
-                specifiedTags.add(docletTag);
-        }
-        return (DocletTag[]) specifiedTags.toArray(new DocletTag[specifiedTags.size()]);
-    }
 
 	void commentHeader(IndentBuffer buffer) {
-		if (comment == null && (tags == null || tags.size() == 0)) {
+		if (comment == null && (tags == null || tags.length == 0)) {
 			return;
 		}
 		else {
@@ -61,13 +58,13 @@ abstract class AbstractJavaEntity implements Serializable {
 				buffer.newline();
 			}
 
-			if (tags != null && tags.size() > 0) {
+			if (tags != null && tags.length > 0) {
 				if (comment != null && comment.length() > 0) {
 					buffer.write(" *");
 					buffer.newline();
 				}
-				for (Iterator iterator = tags.iterator(); iterator.hasNext();) {
-					DocletTag docletTag = (DocletTag)iterator.next();
+				for (int i = 0; i < tags.length; i++) {
+					DocletTag docletTag = tags[i];
 					buffer.write(" * @");
 					buffer.write(docletTag.getName());
 					if (docletTag.getValue().length() > 0) {
@@ -109,7 +106,8 @@ abstract class AbstractJavaEntity implements Serializable {
 	}
 
 	public void setTags(List tags) {
-		this.tags = tags;
+		this.tags = new DocletTag[tags.size()];
+		tags.toArray(this.tags);
 	}
 
 	//helper methods for querying the modifiers

@@ -65,7 +65,7 @@ public class JavaSource implements Serializable {
 		
 		for (int classIndex = 0; classIndex < classes.length; classIndex++) {
 			JavaClass javaClass = classes[classIndex];
-			javaClass.setSource(this);
+			javaClass.setParentSource(this);
 		}
 	}
 

@@ -141,10 +141,10 @@ public class JavaDocBuilderTest extends TestCase {
 		builder.addSource(new StringReader(in));
 
 		JavaClass cls = builder.getClassByName("x.X");
-		assertEquals("com.thoughtworks.Spoon", cls.getMethod(0).getReturns().getValue());
-		assertEquals("com.thoughtworks.Fork", cls.getMethod(1).getReturns().getValue());
+		assertEquals("com.thoughtworks.Spoon", cls.getMethods()[0].getReturns().getValue());
+		assertEquals("com.thoughtworks.Fork", cls.getMethods()[1].getReturns().getValue());
 		// unresolved
-		assertEquals("Cabbage", cls.getMethod(2).getReturns().getValue());
+		assertEquals("Cabbage", cls.getMethods()[2].getReturns().getValue());
 
 	}
 

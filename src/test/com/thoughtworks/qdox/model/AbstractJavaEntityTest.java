@@ -19,9 +19,9 @@ public class AbstractJavaEntityTest extends TestCase {
         tags.add(new DocletTag("horse", "not so much"));
         entity.setTags(tags);
 
-        assertEquals(2, entity.getTags("monkey").length);
-        assertEquals(1, entity.getTags("horse").length);
-        assertEquals(0, entity.getTags("non existent tag").length);
+        assertEquals(2, entity.getTagsByName("monkey").length);
+        assertEquals(1, entity.getTagsByName("horse").length);
+        assertEquals(0, entity.getTagsByName("non existent tag").length);
     }
 
 	public void testCommentToString() {

@@ -7,6 +7,8 @@ public class JavaMethod extends AbstractJavaEntity {
 	private Type[] exceptions;
 	private boolean constructor;
 
+	private JavaClass parentClass;
+
 	public Type getReturns() {
 		return returns;
 	}
@@ -67,6 +69,9 @@ public class JavaMethod extends AbstractJavaEntity {
 	}
 
 	public void setParameters(JavaParameter[] parameters) {
+		for (int i = 0; i < parameters.length; i++) {
+			parameters[i].setParentMethod(this);
+		}
 		this.parameters = parameters;
 	}
 
@@ -96,4 +101,13 @@ public class JavaMethod extends AbstractJavaEntity {
 	public int hashCode() {
 		return name.hashCode() * returns.hashCode() * getParameters().length;
 	}
+
+	public JavaClass getParentClass() {
+		return parentClass;
+	}
+
+	public void setParentClass(JavaClass parentClass) {
+		this.parentClass = parentClass;
+	}
+
 }

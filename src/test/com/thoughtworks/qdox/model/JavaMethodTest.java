@@ -225,6 +225,14 @@ public class JavaMethodTest extends TestCase {
 		assertTrue(mth.hashCode() != m3.hashCode());
 	}
 
+	public void testParentClass() throws Exception {
+		assertNull(mth.getParentClass());
+
+		JavaClass cls = new JavaClass();
+		cls.addMethod(mth);
+		assertSame(cls, mth.getParentClass());
+	}
+
 	private void assertNotEquals(Object o1, Object o2) {
 		assertTrue(o1.toString() + " should not equals " + o2.toString(), !o1.equals(o2));
 	}

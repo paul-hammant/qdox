@@ -6,6 +6,7 @@ public class JavaParameter implements Serializable {
 
 	private String name;
 	private Type type;
+	private JavaMethod parentMethod;
 
 	public JavaParameter(Type type, String name) {
 		this.name = name;
@@ -24,5 +25,13 @@ public class JavaParameter implements Serializable {
 		JavaParameter p = (JavaParameter)obj;
 		// name isn't used in equality check.
 		return getType().equals(p.getType());
+	}
+
+	public JavaMethod getParentMethod() {
+		return parentMethod;
+	}
+
+	public void setParentMethod(JavaMethod parentMethod) {
+		this.parentMethod = parentMethod;
 	}
 }

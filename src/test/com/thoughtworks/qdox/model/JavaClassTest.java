@@ -270,24 +270,35 @@ public class JavaClassTest extends TestCase {
 		assertEquals(expected, cls.toString());
 	}
 	
-	public void testIsContainingClass(){
-		cls.setName("MyClass");
-		assertTrue(!cls.isContainingClass());
-		
-		cls.setModifiers(new String[]{"public"});
-		assertTrue(cls.isContainingClass());
+	public void testParentSource() throws Exception {
+		assertNull(cls.getParentSource());
+
+		JavaSource source = new JavaSource();
+		source.setClasses(new JavaClass[]{cls});
+
+		assertSame(source, cls.getParentSource());
 	}
-	
-	public void testGettingPackageFromClass() throws Exception {
+
+	public void testIsPublic(){
+		cls.setName("MyClass");
+		assertTrue(!cls.isPublic());
+
+		cls.setModifiers(new String[]{"public"});
+		assertTrue(cls.isPublic());
+	}
+
+	public void testQualifiedType() throws Exception {
 		JavaSource source = new JavaSource();
 		source.setPackge("com.thoughtworks.qdox");
 		
 		cls.setName("MyClass");
 		
 		source.setClasses(new JavaClass[]{cls});
-		
+
+		assertEquals("MyClass", cls.getName());
 		assertEquals("com.thoughtworks.qdox", cls.getPackage());
-		assertEquals("com.thoughtworks.qdox.MyClass", cls.getFullyQualifiedName());
+		assertTrue(cls.asType().isResolved());
+		assertEquals("com.thoughtworks.qdox.MyClass", cls.asType().getValue());
 	}
 
 	private Type[] type(String[] typeNames) {

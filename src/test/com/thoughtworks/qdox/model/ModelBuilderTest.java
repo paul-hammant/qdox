@@ -201,9 +201,9 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(new MethodDef());
 		JavaSource source = builder.getSource();
 
-		assertEquals(1, source.getClasses()[0].getMethodCount());
-		assertEquals(3, source.getClasses()[1].getMethodCount());
-		assertEquals(2, source.getClasses()[2].getMethodCount());
+		assertEquals(1, source.getClasses()[0].getMethods().length);
+		assertEquals(3, source.getClasses()[1].getMethods().length);
+		assertEquals(2, source.getClasses()[2].getMethods().length);
 	}
 
 	public void testSimpleMethod() throws Exception {
@@ -214,7 +214,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(mth);
 		JavaSource source = builder.getSource();
 
-		JavaMethod result = source.getClasses()[0].getMethod(0);
+		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals("doSomething", result.getName());
 		assertEquals("void", result.getReturns().getValue());
 		assertEquals(0, result.getModifiers().length);
@@ -231,7 +231,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(mth);
 		JavaSource source = builder.getSource();
 
-		JavaMethod result = source.getClasses()[0].getMethod(0);
+		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(0, result.getReturns().getDimensions());
 	}
 
@@ -244,7 +244,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(mth);
 		JavaSource source = builder.getSource();
 
-		JavaMethod result = source.getClasses()[0].getMethod(0);
+		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(1, result.getReturns().getDimensions());
 	}
 
@@ -257,7 +257,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(mth);
 		JavaSource source = builder.getSource();
 
-		JavaMethod result = source.getClasses()[0].getMethod(0);
+		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(2, result.getReturns().getDimensions());
 	}
 
@@ -279,7 +279,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(mth);
 		JavaSource source = builder.getSource();
 
-		JavaMethod result = source.getClasses()[0].getMethod(0);
+		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(2, result.getParameters().length);
 		assertEquals("count", result.getParameters()[0].getName());
 		assertEquals("int", result.getParameters()[0].getType().getValue());
@@ -307,7 +307,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(mth);
 		JavaSource source = builder.getSource();
 
-		JavaMethod result = source.getClasses()[0].getMethod(0);
+		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(1, result.getParameters()[0].getType().getDimensions());
 		assertEquals(2, result.getParameters()[1].getType().getDimensions());
 	}
@@ -322,7 +322,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(mth);
 		JavaSource source = builder.getSource();
 
-		JavaMethod result = source.getClasses()[0].getMethod(0);
+		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(2, result.getExceptions().length);
 		// sorted
 		Arrays.sort(result.getExceptions());
@@ -341,7 +341,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(mth);
 		JavaSource source = builder.getSource();
 
-		JavaMethod result = source.getClasses()[0].getMethod(0);
+		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(3, result.getModifiers().length);
 		// sorted
 		String[] modifiers = result.getModifiers();
@@ -360,7 +360,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addField(fld);
 		JavaSource source = builder.getSource();
 
-		JavaField result = source.getClasses()[0].getField(0);
+		JavaField result = source.getClasses()[0].getFields()[0];
 		assertNotNull(result);
 		assertEquals("count", result.getName());
 		assertEquals("int", result.getType().getValue());
@@ -376,7 +376,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addField(fld);
 		JavaSource source = builder.getSource();
 
-		JavaField result = source.getClasses()[0].getField(0);
+		JavaField result = source.getClasses()[0].getFields()[0];
 		assertNotNull(result);
 		assertNotNull(result.getModifiers());
 		Arrays.sort(result.getModifiers());
@@ -394,7 +394,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addField(fld);
 		JavaSource source = builder.getSource();
 
-		JavaField result = source.getClasses()[0].getField(0);
+		JavaField result = source.getClasses()[0].getFields()[0];
 		assertEquals(0, result.getType().getDimensions());
 
 	}
@@ -409,7 +409,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addField(fld);
 		JavaSource source = builder.getSource();
 
-		JavaField result = source.getClasses()[0].getField(0);
+		JavaField result = source.getClasses()[0].getFields()[0];
 		assertEquals(1, result.getType().getDimensions());
 
 	}
@@ -424,7 +424,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.addField(fld);
 		JavaSource source = builder.getSource();
 
-		JavaField result = source.getClasses()[0].getField(0);
+		JavaField result = source.getClasses()[0].getFields()[0];
 		assertEquals(2, result.getType().getDimensions());
 	}
 
@@ -442,8 +442,8 @@ public class ModelBuilderTest extends TestCase {
 		builder.addMethod(mth2);
 		JavaSource source = builder.getSource();
 
-		JavaMethod result1 = source.getClasses()[0].getMethod(0);
-		JavaMethod result2 = source.getClasses()[0].getMethod(1);
+		JavaMethod result1 = source.getClasses()[0].getMethods()[0];
+		JavaMethod result2 = source.getClasses()[0].getMethods()[1];
 
 		assertTrue(result1.isConstructor());
 		assertTrue(!result2.isConstructor());
@@ -481,7 +481,7 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		assertNull(source.getClasses()[0].getComment());
-		assertEquals("Hello", source.getClasses()[0].getMethod(0).getComment());
+		assertEquals("Hello", source.getClasses()[0].getMethods()[0].getComment());
 	}
 
 	public void testJavaDocOnField() throws Exception {
@@ -492,7 +492,7 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		assertNull(source.getClasses()[0].getComment());
-		assertEquals("Hello", source.getClasses()[0].getField(0).getComment());
+		assertEquals("Hello", source.getClasses()[0].getFields()[0].getComment());
 	}
 
 	public void testJavaDocOnMethodsAndFields() throws Exception {
@@ -515,11 +515,11 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		assertEquals("Thing", source.getClasses()[0].getComment());
-		assertNull(source.getClasses()[0].getField(0).getComment());
-		assertEquals("Hello field", source.getClasses()[0].getField(1).getComment());
-		assertEquals("Hello", source.getClasses()[0].getMethod(0).getComment());
-		assertNull(source.getClasses()[0].getMethod(1).getComment());
-		assertEquals("World", source.getClasses()[0].getMethod(2).getComment());
+		assertNull(source.getClasses()[0].getFields()[0].getComment());
+		assertEquals("Hello field", source.getClasses()[0].getFields()[1].getComment());
+		assertEquals("Hello", source.getClasses()[0].getMethods()[0].getComment());
+		assertNull(source.getClasses()[0].getMethods()[1].getComment());
+		assertEquals("World", source.getClasses()[0].getMethods()[2].getComment());
 	}
 
 	public void testDocletTag() throws Exception {
@@ -530,9 +530,9 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		assertEquals("Hello", source.getClasses()[0].getComment());
-		assertEquals(1, source.getClasses()[0].getTagCount());
-		assertEquals("cheese", source.getClasses()[0].getTag(0).getName());
-		assertEquals("is good", source.getClasses()[0].getTag(0).getValue());
+		assertEquals(1, source.getClasses()[0].getTags().length);
+		assertEquals("cheese", source.getClasses()[0].getTags()[0].getName());
+		assertEquals("is good", source.getClasses()[0].getTags()[0].getValue());
 	}
 
 	public void testDocletTagWithNoComment() throws Exception {
@@ -543,9 +543,9 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		assertEquals("", source.getClasses()[0].getComment());
-		assertEquals(1, source.getClasses()[0].getTagCount());
-		assertEquals("cheese", source.getClasses()[0].getTag(0).getName());
-		assertEquals("is good", source.getClasses()[0].getTag(0).getValue());
+		assertEquals(1, source.getClasses()[0].getTags().length);
+		assertEquals("cheese", source.getClasses()[0].getTags()[0].getName());
+		assertEquals("is good", source.getClasses()[0].getTags()[0].getValue());
 	}
 
 	public void testMultipleDocletTags() throws Exception {
@@ -558,13 +558,13 @@ public class ModelBuilderTest extends TestCase {
 		JavaSource source = builder.getSource();
 
 		assertEquals("Hello", source.getClasses()[0].getComment());
-		assertEquals(3, source.getClasses()[0].getTagCount());
-		assertEquals("cheese", source.getClasses()[0].getTag(0).getName());
-		assertEquals("is good", source.getClasses()[0].getTag(0).getValue());
-		assertEquals("food", source.getClasses()[0].getTag(1).getName());
-		assertEquals("is great", source.getClasses()[0].getTag(1).getValue());
-		assertEquals("chairs", source.getClasses()[0].getTag(2).getName());
-		assertEquals("are boring", source.getClasses()[0].getTag(2).getValue());
+		assertEquals(3, source.getClasses()[0].getTags().length);
+		assertEquals("cheese", source.getClasses()[0].getTags()[0].getName());
+		assertEquals("is good", source.getClasses()[0].getTags()[0].getValue());
+		assertEquals("food", source.getClasses()[0].getTags()[1].getName());
+		assertEquals("is great", source.getClasses()[0].getTags()[1].getValue());
+		assertEquals("chairs", source.getClasses()[0].getTags()[2].getName());
+		assertEquals("are boring", source.getClasses()[0].getTags()[2].getValue());
 	}
 
 	public void testDocletTagsOnMethodsAndFields() throws Exception {
@@ -581,12 +581,12 @@ public class ModelBuilderTest extends TestCase {
 		builder.addField(new FieldDef());
 		JavaSource source = builder.getSource();
 
-		assertEquals("cheese", source.getClasses()[0].getTag(0).getName());
-		assertEquals("is good", source.getClasses()[0].getTag(0).getValue());
-		assertEquals("food", source.getClasses()[0].getMethod(0).getTag(0).getName());
-		assertEquals("is great", source.getClasses()[0].getMethod(0).getTag(0).getValue());
-		assertEquals("chairs", source.getClasses()[0].getField(0).getTag(0).getName());
-		assertEquals("are boring", source.getClasses()[0].getField(0).getTag(0).getValue());
+		assertEquals("cheese", source.getClasses()[0].getTags()[0].getName());
+		assertEquals("is good", source.getClasses()[0].getTags()[0].getValue());
+		assertEquals("food", source.getClasses()[0].getMethods()[0].getTags()[0].getName());
+		assertEquals("is great", source.getClasses()[0].getMethods()[0].getTags()[0].getValue());
+		assertEquals("chairs", source.getClasses()[0].getFields()[0].getTags()[0].getName());
+		assertEquals("are boring", source.getClasses()[0].getFields()[0].getTags()[0].getValue());
 	}
 
 	public void testRetrieveJavaSource() throws Exception {

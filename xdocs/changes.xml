@@ -26,6 +26,10 @@
                 Implemented QDOX-67:
                 Convenience methods - Type.isPrimitive() and Type.isVoid().
             </action>
+            <action dev="joeretro" type="add">
+                Implemented QDOX-??:
+                Parser can now handle Java 5 annotations.
+            </action>
             <action dev="mdub" type="add">
                 Implemented QDOX-68: 
                 Support for generic-type parameters on methods.
@@ -37,10 +41,6 @@
             <action dev="mdub" type="add">
                 Implemented QDOX-78:
                 JavaDoc comments now preserve end of line characters.
-            </action>
-            <action dev="mdub" type="fix">
-                Fix a bug which limited usage of generic-types within
-                expressions.
             </action>
             <action dev="mdub" type="fix">
                 Fix QDOX-61:

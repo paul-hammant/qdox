@@ -17,45 +17,8 @@ public class AnnotationsTest extends TestCase {
         assertEquals("Foo", builder.getClassByName("Foo").getName());
     }
 
-    public void testShouldIgnoreComplexClassAnnotations() {
-        String source = "" 
-            + "@Fnord(pi = 3.14, e = m*c*c)\n"
-            + "public interface Foo extends Bar {}\n";
-
-        builder.addSource(new StringReader(source));
-        assertEquals("Foo", builder.getClassByName("Foo").getName());
-    }
-
-    public void testShouldIgnoreSingleMemberClassAnnotations() {
-        String source = "" 
-            + "@Fnord(\"xyz\")\n"
-            + "@Blat(Math.MAXINT)\n"
-            + "public interface Foo extends Bar {}\n";
-
-        builder.addSource(new StringReader(source));
-        assertEquals("Foo", builder.getClassByName("Foo").getName());
-    }
-
-    public void TODO_testShouldIgnoreArrayValuedSingleMemberClassAnnotations() {
-        String source = "" 
-            + "@Endorsers({\"Children\", \"Unscrupulous dentists\"})\n"
-            + "public class Lollipop {}\n";
-
-        builder.addSource(new StringReader(source));
-        assertNotNull(builder.getClassByName("Lollipop"));
-    }
-
-    public void TODO_testShouldIgnoreComplexSingleMemberClassAnnotations() {
-        String source = "" 
-            + "@Author(@Name(first = \"Joe\", last = \"Hacker\"))\n"
-            + "public class BitTwiddle {}\n";
-
-        builder.addSource(new StringReader(source));
-        assertNotNull(builder.getClassByName("BitTwiddle"));
-    }
-
     public void testShouldIgnoreSimpleMethodAnnotation() {
-        String source = "" 
+        String source = ""
             + "public class X {\n"
             + "    @Fnord public void snort() {}\n"
             + "}\n";
@@ -66,7 +29,57 @@ public class AnnotationsTest extends TestCase {
         assertEquals(1, fooClass.getMethods().length);
         assertEquals("snort", fooClass.getMethods()[0].getName());
     }
-    
+
+    public void testShouldIgnoreComplexClassAnnotations() {
+        String source = "" 
+            + "@Fnord(pi = 3.14, e = m*c*c)\n"
+            + "public interface Foo extends Bar {\n"
+            + "  @Fnord(pi = 3.14, e = m*c*c)\n"
+            + "  void doStuff() { }\n"
+            + "}\n";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }
+
+    public void testShouldIgnoreSingleMemberClassAnnotations() {
+        String source = "" 
+            + "@Fnord(\"xyz\")\n"
+            + "@Blat(Math.MAXINT)\n"
+            + "public interface Foo extends Bar {\n"
+            + "  @Fnord(\"xyz\")\n"
+            + "  @Blat(Math.MAXINT)\n"
+            + "  void doStuff() { }\n"
+            + "}\n";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }
+
+    public void testShouldIgnoreArrayValuedSingleMemberClassAnnotations() {
+        String source = "" 
+            + "@Endorsers({\"Children\", \"Unscrupulous dentists\"})\n"
+            + "public class Lollipop {\n"
+            + "  @Cheese({\"Edam\", \"Gruyere\"})\n"
+            + "  void doStuff() { }\n"
+            + "}\n";
+
+        builder.addSource(new StringReader(source));
+        assertNotNull(builder.getClassByName("Lollipop"));
+    }
+
+    public void testShouldIgnoreComplexSingleMemberClassAnnotations() {
+        String source = "" 
+            + "@Author(@Name(first = \"Joe\", last = \"Hacker\"))\n" // I won't take it personally! ;) -joe
+            + "public class BitTwiddle {\n"
+            + "  @Author(@Name(first = \"Joe\", last = \"Hacker\"))\n"
+            + "  void doStuff() { }\n"
+            + "}\n";
+
+        builder.addSource(new StringReader(source));
+        assertNotNull(builder.getClassByName("BitTwiddle"));
+    }
+
     public void testShouldIgnoreAnnotationDeclaration() {
         String source = "" 
             + "public @interface Note {\n"

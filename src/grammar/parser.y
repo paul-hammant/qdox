@@ -116,7 +116,11 @@ annotationarglist:
     annotationarg |
     annotationarglist COMMA annotationarg;
 
-annotationarg: fullidentifier;
+annotationarg:
+    | /* ignored token, such as string */
+    fullidentifier |
+    BRACEOPEN annotationarglist BRACECLOSE; /* array */ |
+    annotation;
 
 
 // ----- TYPES 

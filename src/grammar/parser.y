@@ -313,6 +313,7 @@ private FieldDef param = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
 private TypeDef fieldType;
 private int line;
+private boolean debug;
 
 private String buffer() {
     if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);
@@ -324,6 +325,10 @@ private String buffer() {
 public Parser(Lexer lexer, Builder builder) {
     this.lexer = lexer;
     this.builder = builder;
+}
+
+public void setDebug(boolean debug) {
+    this.debug = debug;
 }
 
 /**
@@ -338,6 +343,9 @@ private int yylex() {
         final int result = lexer.lex();
         yylval = new Value();
         yylval.sval = lexer.text();
+        if (debug) {
+            System.err.println("Token: " + yyname[result] + " \"" + yylval.sval + "\"");
+        }
         return result;
     }
     catch(IOException e) {

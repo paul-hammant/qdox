@@ -81,6 +81,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     private List sources = new ArrayList();
     private DocletTagFactory docletTagFactory;
     private String encoding = System.getProperty("file.encoding");
+    private boolean debugTokens;
 
     public JavaDocBuilder() {
         this(new DefaultDocletTagFactory());
@@ -292,6 +293,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         ModelBuilder builder = new ModelBuilder(classLibrary, docletTagFactory);
         Lexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
+        parser.setDebug(debugTokens);
         try {
             parser.parse();
         } catch (ParseException e) {
@@ -421,4 +423,10 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         this.encoding = encoding;		
     }
 
+    /**
+     * Forces QDox to dump tokens returned from lexer to System.err.
+     */ 
+    public void setDebugTokens(boolean debugTokens) {
+        this.debugTokens = debugTokens;
+    }
 }

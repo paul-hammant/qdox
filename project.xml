@@ -5,7 +5,7 @@
 
 	<name>QDox</name>
 	<id>qdox</id>
-	<currentVersion>0.1</currentVersion>
+	<currentVersion>0.2</currentVersion>
 	<inceptionYear>2002</inceptionYear>
 	<package>net.sf.qdox</package>
 	<logo>/images/qdox.gif</logo>
@@ -13,9 +13,6 @@
 	<organization>
 		<name>TrueMesh Toys</name>
 		<url>http://joe.truemesh.com/</url>
-<!-- TODO
-		<logo></logo>
--->
 	</organization>
 
 	<shortDescription>QDox - Quick JavaDoc Scanner</shortDescription>
@@ -42,8 +39,8 @@
 
 	<versions>
 		<version>
-			<id>0.1</id>
-			<name>0.1</name>
+			<id>0.2</id>
+			<name>0.2</name>
 			<tag>HEAD</tag>
 		</version>
 	</versions>

@@ -1,17 +1,17 @@
 package com.thoughtworks.qdox.parser;
 
 import junit.framework.TestCase;
-import com.thoughtworks.qdox.parser.MockBuilder;
-import com.thoughtworks.qdox.parser.MockLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import junit.framework.TestCase;
 
 public class ParserTest extends TestCase {
 
-	MockLexer lexer;
-	MockBuilder builder;
+	private MockLexer lexer;
+	private MockBuilder builder;
 
 	public ParserTest(String s) {
 		super(s);

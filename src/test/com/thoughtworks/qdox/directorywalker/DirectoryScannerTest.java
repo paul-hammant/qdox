@@ -7,7 +7,8 @@ import java.io.File;
 import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.Filter;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
-import com.thoughtworks.qdox.directorywalker.MockFileVisitor;
+import com.mockobjects.dynamic.Mock;
+import com.mockobjects.dynamic.CallSequence;
 
 public class DirectoryScannerTest extends TestCase {
 
@@ -127,14 +128,16 @@ public class DirectoryScannerTest extends TestCase {
 		MockFile rootDir = new MockFile("root", true);
 		rootDir.children = new File[] {new MockFile("blah.txt"), new MockFile("foo.txt"), new MockFile("pig.java")};
 		DirectoryScanner scanner = new DirectoryScanner(rootDir);
-		MockFileVisitor fileVisitor = new MockFileVisitor();
-		fileVisitor.addExpectedVisitFileValues(rootDir.children[0]);
-		fileVisitor.addExpectedVisitFileValues(rootDir.children[1]);
-		fileVisitor.addExpectedVisitFileValues(rootDir.children[2]);
+		Mock mockFileVisitor = new Mock(FileVisitor.class);
+        CallSequence sequence = new CallSequence();
+        sequence.expectVoid(rootDir.children[0]);
+        sequence.expectVoid(rootDir.children[1]);
+        sequence.expectVoid(rootDir.children[2]);
+        mockFileVisitor.expect("visitFile", sequence);
 
-		scanner.scan(fileVisitor);
+		scanner.scan((FileVisitor)mockFileVisitor.proxy());
 
-		fileVisitor.verify();
+		mockFileVisitor.verify();
 
 	}
 }

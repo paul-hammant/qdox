@@ -122,8 +122,8 @@
 			<version>3.8.1</version>
 		</dependency>
 		<dependency>
-			<id>mmmockobjects</id>
-			<version>1.12</version>
+			<id>mockobjects</id>
+			<version>DEV</version>
 		</dependency>
 	</dependencies>
 
@@ -132,7 +132,7 @@
 		<nagEmailAddress>qdox-user@lists.sourceforge.net</nagEmailAddress>
 
 		<sourceDirectory>src/java</sourceDirectory>
-		<unitTestSourceDirectory>target/src/test</unitTestSourceDirectory>
+		<unitTestSourceDirectory>src/test</unitTestSourceDirectory>
 
 		<unitTest>
 			<includes>

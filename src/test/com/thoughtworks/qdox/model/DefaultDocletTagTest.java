@@ -16,14 +16,5 @@ public class DefaultDocletTagTest extends AbstractDocletTagTest {
     protected DocletTagFactory getDocletTagFactory() {
         return docletTagFactory;
     }
-
-    public void testJiraQdox28() {
-        DefaultDocletTag tag = new DefaultDocletTag("key", "quote'ed");
-        assertEquals("quote'ed", tag.getParameters()[0]);
-    }
- 
-    public void FIXME_testJiraQdox45() {
-        DefaultDocletTag tag = new DefaultDocletTag("key", "param = \"value\"");
-        assertEquals("value", tag.getNamedParameter("param"));
-    }
+    
 }

@@ -14,6 +14,10 @@ public abstract class AbstractDocletTagTest extends TestCase {
 
     protected abstract DocletTagFactory getDocletTagFactory();
 
+    DocletTag createDocletTag(String tag, String text) {
+    	return getDocletTagFactory().createDocletTag(tag, text);
+	}
+    
     public void testValueRemainsIntact() throws Exception {
         String in = ""
                 + "package x;\n"
@@ -30,7 +34,7 @@ public abstract class AbstractDocletTagTest extends TestCase {
     }
 
     public void testIndexedParameter() throws Exception {
-        DocletTag tag = getDocletTagFactory().createDocletTag("x", "one two three four");
+        DocletTag tag = createDocletTag("x", "one two three four");
         assertEquals("one", tag.getParameters()[0]);
         assertEquals("two", tag.getParameters()[1]);
         assertEquals("three", tag.getParameters()[2]);
@@ -50,10 +54,9 @@ public abstract class AbstractDocletTagTest extends TestCase {
     }
 
     public void testNamedParameterMap() throws Exception {
-        DocletTag tag = 
-        getDocletTagFactory().createDocletTag(
-                "x", "hello=world dog=cat fork=spoon"
-                );
+        DocletTag tag = createDocletTag(
+            "x", "hello=world dog=cat fork=spoon"
+        );
         Map map = tag.getNamedParameterMap();
         assertEquals(3, map.size());
         assertEquals("world", map.get("hello"));
@@ -63,7 +66,7 @@ public abstract class AbstractDocletTagTest extends TestCase {
     }
     
     public void testInvalidNamedParameter() throws Exception {
-        DocletTag tag = getDocletTagFactory().createDocletTag("x", "= =z x=c y= o");
+        DocletTag tag = createDocletTag("x", "= =z x=c y= o");
         assertEquals("c", tag.getNamedParameter("x"));
         assertEquals("", tag.getNamedParameter("y"));
         assertNull(tag.getNamedParameter("z"));
@@ -72,7 +75,7 @@ public abstract class AbstractDocletTagTest extends TestCase {
     }
 
     public void testIntermingledIndexedAndNamedParameter() throws Exception {
-        DocletTag tag = getDocletTagFactory().createDocletTag("x", "thing hello=world duck");
+        DocletTag tag = createDocletTag("x", "thing hello=world duck");
 
         assertEquals("thing", tag.getParameters()[0]);
         assertEquals("hello=world", tag.getParameters()[1]);
@@ -86,21 +89,37 @@ public abstract class AbstractDocletTagTest extends TestCase {
     }
 
     public void testQuotedParameters() throws Exception {
-        DocletTag tag = getDocletTagFactory().createDocletTag("x", "one=\"hello world bye bye\" two=hello");
+        DocletTag tag = createDocletTag("x", "one=\"hello world bye bye\" two=hello");
         assertEquals("hello world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
 
-        tag = new DefaultDocletTag("x", "one=\"hello joe's world bye bye\" two=hello");
+        tag = createDocletTag("x", "one=\"hello joe's world bye bye\" two=hello");
         assertEquals("hello joe's world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
 
-        tag = new DefaultDocletTag("x", "one='hello joe\"s world bye bye' two=hello");
+        tag = createDocletTag("x", "one='hello joe\"s world bye bye' two=hello");
         assertEquals("hello joe\"s world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
 
-        tag = new DefaultDocletTag("x", "one=\"hello chris' world bye bye\" two=hello");
+        tag = createDocletTag("x", "one=\"hello chris' world bye bye\" two=hello");
         assertEquals("hello chris' world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
+    }
+
+
+    public void testJiraQdox28() {
+        DocletTag tag = createDocletTag("key", "quote'ed");
+        assertEquals("quote'ed", tag.getParameters()[0]);
+    }
+ 
+    public void FIXME_testJiraQdox45() {
+        DocletTag tag = createDocletTag("key", "param = \"value\"");
+        assertEquals("value", tag.getNamedParameter("param"));
+    }
+
+    public void FIXME_testJiraQdox50() {
+    	DocletTag tag = createDocletTag("key", "param=\" value\"");
+        assertEquals(" value", tag.getNamedParameter("param"));
     }
     
 }

@@ -104,6 +104,15 @@
 				<role>Developer</role>
 			</roles>
 		</developer>
+		<developer>
+			<name>Aslak Helles&oslash;y</name>
+			<id>rinkrank</id>
+			<email>nospam.aslak@thoughtworks.net</email>
+			<organization>ThoughtWorks</organization>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
 	</developers>
 
 	<contributors>

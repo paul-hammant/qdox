@@ -15,12 +15,17 @@ public class ModelBuilder implements Builder {
 	private List lastTagSet;
 	private String packge;
 	private List imports = new ArrayList();
-	private ClassLibrary classLibrary = new ClassLibrary();
-	
-	public ModelBuilder(){}
+	private ClassLibrary classLibrary;
+	private JavaSource result;
+
+	public ModelBuilder(){
+		this(new ClassLibrary());
+	}
 
 	public ModelBuilder(ClassLibrary classLibrary) {
 		this.classLibrary = classLibrary;
+		result = new JavaSource();
+		result.setClassLibrary(classLibrary);
 	}
 
 	public void addPackage(String packageName) {
@@ -80,7 +85,8 @@ public class ModelBuilder implements Builder {
 	}
 
 	private Type createType(String typeName, int dimensions) {
-		return new Type(imports, typeName, classLibrary, packge, dimensions);
+		if (typeName == null || typeName.equals("")) return null;
+		return new Type(typeName, dimensions, result);
 	}
 
 	private void addJavaDoc(AbstractJavaEntity entity) {
@@ -152,7 +158,6 @@ public class ModelBuilder implements Builder {
 	}
 
 	public JavaSource getSource() {
-		JavaSource result = new JavaSource();
 		result.setPackge(packge);
 		JavaClass[] clsArray = new JavaClass[classes.size()];
 		classes.toArray(clsArray);

@@ -96,6 +96,13 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 			javaMethod.write(result);
 		}
 
+		// inner-classes
+		for (Iterator iterator = classes.iterator(); iterator.hasNext();) {
+			JavaClass javaClass = (JavaClass)iterator.next();
+			result.newline();
+			javaClass.write(result);
+		}
+
 		result.deindent();
 		result.newline();
 		result.write('}');
@@ -208,6 +215,16 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 			classes.toArray(classesArray);
 		}
 		return classesArray;
+	}
+
+	public JavaClass getInnerClassByName(String name) {
+		JavaClass[] classes = getClasses();
+		for (int i = 0; i < classes.length; i++) {
+			if (classes[i].getName().equals(name)) {
+				return classes[i];
+			}
+		}
+		return null;
 	}
 
 }

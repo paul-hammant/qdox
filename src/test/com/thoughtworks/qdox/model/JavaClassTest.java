@@ -218,6 +218,23 @@ public class JavaClassTest extends TestCase {
 		assertEquals(expected, cls.toString());
 	}
 
+	public void testToStringClassWithInnerClass() throws Exception {
+		cls.setName("Outer");
+		JavaClass innerClass = new JavaClass();
+		innerClass.setName("Inner");
+		cls.addClass(innerClass);
+		
+		String expected = ""
+			+ "class Outer {\n"
+			+ "\n"
+			+ "\tclass Inner {\n"
+			+ "\n"
+			+ "\t}\n"
+			+ "\n"
+			+ "}\n";
+		assertEquals(expected, cls.toString());
+	}
+
 	public void testToStringClassWithComment() throws Exception {
 		cls.setName("MyClass");
 		cls.setComment("Hello World");
@@ -371,8 +388,15 @@ public class JavaClassTest extends TestCase {
 		);
 	}
 	
-	//TODO JavaClass getInnerClassByName(String name);
-	
+	public void testCanGetInnerClassByName() throws Exception {
+		JavaClass innerClass = new JavaClass();
+		innerClass.setName("Inner");
+		cls.addClass(innerClass);
+
+		assertEquals(innerClass, cls.getInnerClassByName("Inner"));
+		assertEquals(null, cls.getInnerClassByName("Bogus"));
+	}
+
 	private Type[] type(String[] typeNames) {
 		Type[] result = new Type[typeNames.length];
 		for (int i = 0; i < typeNames.length; i++) {

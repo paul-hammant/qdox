@@ -415,7 +415,7 @@ public class JavaClassTest extends TestCase {
         setFooMethod.setName("setFoo");
         setFooMethod.setParameters(
             new JavaParameter[] {
-                    new JavaParameter(new Type("int"), "foo")
+                new JavaParameter(new Type("int"), "foo")
             }
         );
         cls.addMethod(setFooMethod);
@@ -432,6 +432,8 @@ public class JavaClassTest extends TestCase {
         assertEquals(getFooMethod, fooProp.getAccessor());
         assertEquals(setFooMethod, fooProp.getMutator());
     }
+    
+    // TODO - more tests for bean properties. Ref QDOX-59
     
     private Type[] type(String[] typeNames) {
         Type[] result = new Type[typeNames.length];

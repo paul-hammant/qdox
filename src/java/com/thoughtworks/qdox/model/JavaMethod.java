@@ -6,12 +6,24 @@ import java.util.ArrayList;
 
 public class JavaMethod extends AbstractInheritableJavaEntity implements Member {
 
-    protected Type returns = Type.VOID;
+    private Type returns = Type.VOID;
     private JavaParameter[] parameters = JavaParameter.EMPTY_ARRAY;
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
     private JavaClass parent;
 
+    protected JavaMethod() {
+    }
+
+    protected JavaMethod(String name) {
+        setName(name);
+    }
+
+    protected JavaMethod(Type returns, String name) {
+        setReturns(returns);
+        setName(name);
+    }
+    
     public Type getReturns() {
         return returns;
     }

@@ -35,6 +35,13 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private Type[] implementz = new Type[0];
     private JavaClassCache javaClassCache;
 
+    protected JavaClass() {
+    }
+    
+    protected JavaClass(String name) {
+        setName(name);
+    }
+
     public void setParent(JavaClassParent parent) {
         this.parent = parent;
     }

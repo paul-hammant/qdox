@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class ClassLibraryTest extends TestCase {
 
@@ -43,9 +42,17 @@ public class ClassLibraryTest extends TestCase {
 		assertTrue(!c.contains("java.lang.String"));
 	}
 
-	public void testDefaultClassLoader() throws Exception {
+	public void testWithClassLoader() throws Exception {
 		ClassLibrary c = new ClassLibrary();
 		c.addClassLoader(getClass().getClassLoader());
+		assertTrue(c.contains("java.lang.String"));
+		assertTrue(c.contains("java.util.Collection"));
+		assertTrue(!c.contains("java.util.GoatCrusher"));
+	}
+
+	public void testDefaultClassLoader() throws Exception {
+		ClassLibrary c = new ClassLibrary();
+		c.addDefaultLoader();
 		assertTrue(c.contains("java.lang.String"));
 		assertTrue(c.contains("java.util.Collection"));
 		assertTrue(!c.contains("java.util.GoatCrusher"));
@@ -95,5 +102,6 @@ public class ClassLibraryTest extends TestCase {
 		c.addClassLoader(getClass().getClassLoader());
 		assertEquals("java.lang.String", c.findClass(new HashSet(), "com.me", "String"));
 	}
+
 
 }

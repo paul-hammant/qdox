@@ -24,8 +24,7 @@ public class MultipleJavaDocBuilder {
 
 	public MultipleJavaDocBuilder() {
 		classLibrary = new ClassLibrary();
-		classLibrary.addClassLoader(getClass().getClassLoader());
-		classLibrary.addClassLoader(Thread.currentThread().getContextClassLoader());
+		classLibrary.addDefaultLoader();
 	}
 
 	private void addClasses(JavaSource source) {
@@ -79,6 +78,10 @@ public class MultipleJavaDocBuilder {
 			}
 		}
 		return results;
+	}
+
+	public ClassLibrary getClassLibrary() {
+		return classLibrary;
 	}
 
 }

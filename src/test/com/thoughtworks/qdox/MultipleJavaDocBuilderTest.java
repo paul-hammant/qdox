@@ -116,4 +116,39 @@ public class MultipleJavaDocBuilderTest extends TestCase {
 		assertEquals("java.util.List", cls.getSuperClass().getValue());
 	}
 
+	public void testAddMoreClassLoaders() throws Exception {
+		MultipleJavaDocBuilder builder = new MultipleJavaDocBuilder();
+
+		builder.getClassLibrary().addClassLoader(new ClassLoader() {
+			public Class loadClass(String name) throws ClassNotFoundException {
+				return name.equals("com.thoughtworks.Spoon") ? getClass() : null;
+			}
+		});
+
+		builder.getClassLibrary().addClassLoader(new ClassLoader() {
+			public Class loadClass(String name) throws ClassNotFoundException {
+				return name.equals("com.thoughtworks.Fork") ? getClass() : null;
+			}
+		});
+
+		String in = ""
+			+ "package x;"
+			+ "import java.util.*;"
+			+ "import com.thoughtworks.*;"
+			+ "class X {"
+			+ " Spoon a();"
+			+ " Fork b();"
+			+ " Cabbage c();"
+			+ "}";
+		builder.addSource(new StringReader(in));
+
+		JavaClass cls = builder.getClassByName("x.X");
+		assertEquals("com.thoughtworks.Spoon", cls.getMethod(0).getReturns().getValue());
+		assertEquals("com.thoughtworks.Fork", cls.getMethod(1).getReturns().getValue());
+		// unresolved
+		assertEquals("Cabbage", cls.getMethod(2).getReturns().getValue());
+
+	}
+
+
 }

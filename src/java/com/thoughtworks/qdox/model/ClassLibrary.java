@@ -69,4 +69,9 @@ public class ClassLibrary {
 		classLoaders.add(classLoader);
 	}
 
+	public void addDefaultLoader() {
+		classLoaders.add(getClass().getClassLoader());
+		classLoaders.add(Thread.currentThread().getContextClassLoader());
+	}
+
 }

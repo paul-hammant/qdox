@@ -93,14 +93,14 @@ public class Type implements Comparable, Serializable {
 
     /**
      * @since 1.3
-     */ 
+     */
     public boolean isA(Type type) {
         if (this.equals(type)) {
             return true;
         } else {
-            // ask our interfaces
             JavaClass javaClass = getJavaClass();
             if (javaClass != null) {
+                // ask our interfaces
                 Type[] implementz = javaClass.getImplements();
                 for (int i = 0; i < implementz.length; i++) {
                     if (implementz[i].isA(type)) {

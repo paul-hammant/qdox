@@ -7,12 +7,12 @@
 	<id>qdox</id>
 	<currentVersion>0.2</currentVersion>
 	<inceptionYear>2002</inceptionYear>
-	<package>net.sf.qdox</package>
+	<package>com.thoughtworks.qdox</package>
 	<logo>/images/qdox.gif</logo>
 
 	<organization>
-		<name>TrueMesh Toys</name>
-		<url>http://joe.truemesh.com/</url>
+		<name>ThoughtWorks</name>
+		<url>http://www.thoughtworks.com/</url>
 	</organization>
 
 	<shortDescription>QDox - Quick JavaDoc Scanner</shortDescription>
@@ -59,16 +59,7 @@
 		<developer>
 			<name>Joe Walnes</name>
 			<id>joeretro</id>
-			<email>joe@truemesh.com</email>
-			<organization>ThoughtWorks</organization>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Paul Hammant</name>
-			<id>paul-h</id>
-			<email>phammant@thoughtworks.com</email>
+			<email>joew@thoughtworks.com</email>
 			<organization>ThoughtWorks</organization>
 			<roles>
 				<role>Developer</role>
@@ -83,7 +74,15 @@
 				<role>Developer</role>
 			</roles>
 		</developer>
-
+		<developer>
+			<name>Paul Hammant</name>
+			<id>paul-h</id>
+			<email>phammant@thoughtworks.com</email>
+			<organization>ThoughtWorks</organization>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
 	</developers>
 
 	<dependencies>

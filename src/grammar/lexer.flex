@@ -3,13 +3,23 @@ package net.sf.qdox.parser;
 %%
 
 // class and lexer definitions
-%class Lexer
+%class JFlexLexer
+%implements Lexer
 %byaccj
 %line
 %column
 
 %{
 	private int parenDepth = 0;
+
+	public String text() {
+		return yytext();
+	}
+
+	public int lex() throws java.io.IOException {
+		return yylex();
+	}
+
 %}
 
 %state JAVADOC CODEBLOCK STRING
@@ -73,10 +83,6 @@ package net.sf.qdox.parser;
 	\r|\n|\r\n         { return Parser.JAVADOCNEWLINE; }
 	[^ \t\r\n\*@]*     { return Parser.JAVADOCTOKEN; }
 	"@"                { return Parser.JAVADOCTAGMARK; }
-//	[ \t\*]* "@"       { return Parser.JAVADOCTAGMARK; }
-//	[ \t\*]*           { }
-//	[^\*]*             { return Parser.JAVADOCTOKEN; }
-//	[^ \t\r\n("*/")@]* { return Parser.JAVADOCTOKEN; }
 }
 
 <CODEBLOCK> {

@@ -1,4 +1,5 @@
 %{
+	import java.util.*;
 %}
 
 %token SEMI DOT COMMA STAR EQUALS
@@ -13,31 +14,57 @@
 
 %%
 
-file: packages imports class;
 
-fullidentifier: IDENTIFIER { $$ = $1; }
-	| IDENTIFIER dotidentifier { $$ = $1 + "|" + $2; }
-	| IDENTIFIER dotidentifier DOT STAR { $$ = $$ = $1 + "|" + $2 + ".*"; }
+
+
+
+
+file: packages imports javadoc class;
+
+fullidentifier: IDENTIFIER dotidentifier { $$ = $1 + $2; };
+dotidentifier: { $$ = ""; }
+	| dotidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; }
+	| dotidentifier DOT STAR { $$ = $1 + ".*"; }
 	;
 
-dotidentifier:
-	| dotidentifier DOT IDENTIFIER { $$ = $1 + "|" + $3; }
-	;
 
 packages: | package;
-package: PACKAGE fullidentifier SEMI { debug("package", null); } ;
+package: PACKAGE fullidentifier SEMI { builder.addPackage($2); };
+
 
 imports: | imports import;
-import: IMPORT fullidentifier SEMI { debug("import", null); } ;
+import: IMPORT fullidentifier SEMI { builder.addImport($2); };
 
-class: SEMI;
+
+javadoc: | javadoc JAVADOCSTART javadocdescription javadoctags JAVADOCEND;
+javadocdescription: javadoctokens { builder.addJavaDoc(buffer()); }
+javadoctokens: | javadoctokens javadoctoken;
+javadoctoken: JAVADOCNEWLINE | JAVADOCTOKEN { textBuffer.append($1); textBuffer.append(' '); };
+javadoctags: | javadoctags javadoctag;
+javadoctag: JAVADOCTAGMARK JAVADOCTOKEN javadoctokens { builder.addJavaDocTag($2, buffer()); };
+
+class: classdefinition PARENOPEN PARENCLOSE;
+classdefinition: IDENTIFIER CLASS { builder.addClass($1, Collections.EMPTY_SET, null, Collections.EMPTY_SET, false); }
+
+
+
 
 %%
 
 private Lexer lexer;
+private Builder builder;
+private StringBuffer textBuffer = new StringBuffer();
 
-public Parser(Lexer lexer) {
+private String buffer() {
+	if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);
+	String result = textBuffer.toString();
+	textBuffer.setLength(0);
+	return result;
+}
+
+public Parser(Lexer lexer, Builder builder) {
 	this.lexer = lexer;
+	this.builder = builder;
 }
 
 /**
@@ -47,13 +74,10 @@ public boolean parse() {
 	return yyparse() == 0;
 }
 
-public void setDebug(boolean debug) {
-	this.yydebug = debug;
-}
-
 private int yylex() {
 	try {
-		final int result = lexer.yylex();
+		final int result = lexer.lex();
+		yylval = new ParserVal(lexer.text());
 		return result;
 	}
 	catch(java.io.IOException e) {
@@ -62,9 +86,5 @@ private int yylex() {
 }
 
 private void yyerror(String msg) {
-	System.out.println(":::::::::::::ERROR: " + msg);
-}
-
-private void debug(String type, String val) {
-	System.out.println(":::::::::::::GOT: " + type + " [" + val + "]");
+	builder.error(msg);
 }

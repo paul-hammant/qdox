@@ -205,14 +205,9 @@ public class JavaClass extends AbstractInheritableJavaEntity
     public String resolveType(String typeName) {
         // Maybe it's an inner class?
         JavaClass[] innerClasses = getInnerClasses();
-
         for (int i = 0; i < innerClasses.length; i++) {
-            JavaClass innerClass = innerClasses[i];
-            String innerName = innerClass.getFullyQualifiedName();
-
-//            if (innerName.endsWith("$" + typeName)) {
-                if (innerName.endsWith(typeName)) {
-                return innerName;
+            if (innerClasses[i].getName().equals(typeName)) {
+                return innerClasses[i].getFullyQualifiedName();
             }
         }
 

@@ -391,6 +391,21 @@ public class JavaClassTest extends TestCase {
         assertEquals(null, cls.getInnerClassByName("Bogus"));
     }
 
+    public void testResolveTypeDefaultsToParentScope() throws Exception {
+        cls.setName("X");
+        assertEquals("int", cls.resolveType("int"));
+    }
+    
+    public void testResolveTypeInnerClass() throws Exception {
+        src.setPackage("p");
+        cls.setName("X");
+        JavaClass innerClass = new JavaClass(cls);
+        innerClass.setName("DogFood");
+        cls.addClass(innerClass);
+        assertEquals("p.X$DogFood", cls.resolveType("DogFood"));
+        assertEquals(null, cls.resolveType("Food"));
+    }
+    
     private Type[] type(String[] typeNames) {
         Type[] result = new Type[typeNames.length];
         for (int i = 0; i < typeNames.length; i++) {

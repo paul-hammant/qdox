@@ -8,7 +8,7 @@
     <body>
   
         <!-- action types are add/update/fix/remove -->
-        <release version="1.4" date="In CVS">
+        <release version="1.4" date="2004-04-29">
             <action dev="mdub" type="fix">
                 Fixed QDOX-27:
                 Handle extra stars in Javadoc start/end tokens.
@@ -34,7 +34,7 @@
                 Handle inner-classes in type-resolution.
             </action>
             <action dev="mdub" type="add">
-                Fixed QDOX-39:
+                Implemented QDOX-39:
                 Support multiple fields in a single field-declaration.
             </action>
             <action dev="mdub" type="add">
@@ -52,6 +52,10 @@
             <action dev="mdub" type="add">
                 Implemented QDOX-44:
                 Added DocletTag.getNamedParameterMap().
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-46:
+                Added JavaField.getDeclarationSignature().
             </action>
         </release>
 

@@ -60,13 +60,16 @@ implementslist: fullidentifier { cls.implementz.add($1); } | implementslist COMM
 classparts: | classparts classpart;
 classpart: javadoc | method | field;
 
+// method definition
 method: methodmodifiers fullidentifier IDENTIFIER BRACKETOPEN params BRACKETCLOSE exceptions methodend { mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
 methodmodifiers: | methodmodifiers modifier { mth.modifiers.add($2); };
 exceptions: | THROWS exceptionlist;
 exceptionlist: IDENTIFIER { mth.exceptions.add($1); } | exceptionlist COMMA IDENTIFIER { mth.exceptions.add($3); };
 methodend: SEMI | CODEBLOCK;
 
-params: | param | params COMMA param;
+// parameters passed to method
+params: | param paramlist;
+paramlist: | paramlist COMMA param;
 param: parammodifiers IDENTIFIER IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new Builder.FieldDef(); };
 parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
 

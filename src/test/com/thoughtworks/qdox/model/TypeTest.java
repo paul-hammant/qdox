@@ -25,6 +25,27 @@ public class TypeTest extends TestCase{
     	assertTrue(type.isArray());
     }
 
-	// TODO: test equals(), including comparison to null
+	public void testToString() throws Exception {
+		assertEquals("int", new Type("int").toString());
+		assertEquals("int[]", new Type("int",1).toString());
+		assertEquals("long[][][]", new Type("long",3).toString());
+	}
+
+    public void testEquals() throws Exception {
+		assertEquals(new Type("string"), 
+					 new Type("string"));
+		assertNotEquals(new Type("string"), 
+						new Type("int"));
+		assertNotEquals(new Type("long", 1), 
+						new Type("long"));
+		assertNotEquals(new Type("long"), 
+						new Type("long", 2));
+		assertFalse(new Type("int").equals(null));
+	}
+
+	private void assertNotEquals(Object o1, Object o2) {
+		assertTrue(o2.toString() + " should not equal " + o1.toString(), 
+				   !o2.equals(o1));
+	}
 	 
 }

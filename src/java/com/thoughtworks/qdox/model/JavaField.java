@@ -11,10 +11,7 @@ public class JavaField extends AbstractJavaEntity {
 
 	protected void writeBody(IndentBuffer result) {
 		writeAllModifiers(result);
-		result.write(type.getValue());
-		for (int i = 0; i < type.getDimensions(); i++) {
-			result.write("[]");
-		}
+		result.write(type.toString());
 		result.write(' ');
 		result.write(name);
 		result.write(';');

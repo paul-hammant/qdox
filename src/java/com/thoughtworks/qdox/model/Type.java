@@ -63,7 +63,15 @@ public class Type implements Comparable, Serializable {
 		return dimensions;
 	}
 
+	public String toString() {
+		if (dimensions == 0) return getValue();
+		StringBuffer buff = new StringBuffer(getValue());
+		for(int i = 0; i < dimensions; i++) buff.append("[]");
+		return buff.toString();
+	}
+	
 	public boolean equals(Object obj) {
+		if (obj == null) return false;
 		Type t = (Type)obj;
 		return t.getValue().equals(getValue()) && t.getDimensions() == getDimensions();
 	}

@@ -1,51 +1,56 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.List;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Type implements Comparable, Serializable {
+
     private List imports;
     private String name;
+	private JavaSource parentSource;
     private ClassLibrary classLibrary;
     private String packge;
-    private String value = null;
+    private String fullName = null;
     private int dimensions;
 
-    public Type(String fullName, int dimensions) {
-        value = fullName;
-        this.dimensions = dimensions;
-    }
-
-    public Type(List imports, String name, ClassLibrary classLibrary, String packge, int dimensions) {
-        this.imports = imports;
+    public Type(String name, int dimensions, JavaSource parentSource) {
         this.name = name;
-        this.classLibrary = classLibrary;
-        this.packge = packge;
+        this.dimensions = dimensions;
+		this.parentSource = parentSource;
+    }
+	
+    public Type(String fullName, int dimensions) {
+        this.fullName = fullName;
         this.dimensions = dimensions;
     }
 
-	private void resolve() {
-        if (classLibrary == null || name.indexOf(".")!=-1){
-            value = name;
-            return;
-        }
-
-        value = classLibrary.findClass(imports, packge, name);
-    }
-
-    public String getValue() {
-        return isResolved() ? value : name;
-    }
-
-    public boolean isResolved() {
-        if (value==null)
-            resolve();
-
-        return value!=null;
+    public Type(String fullName) {
+        this(fullName, 0);
     }
 
     public ClassLibrary getClassLibrary() {
         return classLibrary;
+    }
+
+	public JavaSource getParentSource() {
+		return parentSource;
+	}
+
+	public void setParentSource(JavaSource javaSource) {
+		parentSource = javaSource;
+	}
+
+    public String getValue() {
+        return isResolved() ? fullName : name;
+    }
+
+    public boolean isResolved() {
+        if (fullName == null && parentSource != null) {
+            fullName = parentSource.resolveType(name);
+		}
+        return (fullName != null);
     }
 
 	/**

@@ -65,7 +65,25 @@
 			<email>joe@truemesh.com</email>
 			<organization>ThoughtWorks</organization>
 			<roles>
-				<role>Slacker</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Paul Hammant</name>
+			<id>paul-h</id>
+			<email>phammant@thoughtworks.com</email>
+			<organization>ThoughtWorks</organization>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Mike Royle</name>
+			<id>mlroyle</id>
+			<email>mroyle@thoughtworks.com</email>
+			<organization>ThoughtWorks</organization>
+			<roles>
+				<role>Developer</role>
 			</roles>
 		</developer>
 

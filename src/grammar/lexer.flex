@@ -22,7 +22,7 @@ package net.sf.qdox.parser;
 
 %}
 
-%state JAVADOC CODEBLOCK STRING
+%state JAVADOC CODEBLOCK ASSIGNMENT STRING
 
 %%
 
@@ -32,7 +32,6 @@ package net.sf.qdox.parser;
 	"."                { return Parser.DOT; }
 	","                { return Parser.COMMA; }
 	"*"                { return Parser.STAR; }
-	"="                { return Parser.EQUALS; }
 
 	"package"          { return Parser.PACKAGE; }
 	"import"           { return Parser.IMPORT; }
@@ -73,14 +72,14 @@ package net.sf.qdox.parser;
 		return Parser.PARENCLOSE;
 	}
 
-	"\""               { yybegin(STRING); }
-
 	/* comments */
 	"//" [^\r\n]* \r|\n|\r\n? { }
 	"/*" [^*] ~"*/"    { }
 
 	/* javadoc */
 	"/**"              { yybegin(JAVADOC); return Parser.JAVADOCSTART; }
+
+	"="                { yybegin(ASSIGNMENT); }
 
 	[A-Za-z_0-9]*      { return Parser.IDENTIFIER; }
 }
@@ -108,8 +107,15 @@ package net.sf.qdox.parser;
 
 }
 
+<ASSIGNMENT> {
+
+	"\""               { yybegin(STRING); }
+	";"                { yybegin(YYINITIAL); return Parser.ASSIGNMENT; }
+
+}
+
 <STRING> {
-  "\""               { yybegin(YYINITIAL); return Parser.STRING; }
+  "\""               { yybegin(ASSIGNMENT); }
 }
 
 .|\n                       { }

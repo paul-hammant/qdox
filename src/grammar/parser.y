@@ -3,7 +3,7 @@
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
 %token PARENOPEN PARENCLOSE SQUAREOPEN SQUARECLOSE BRACKETOPEN BRACKETCLOSE
 %token JAVADOCSTART JAVADOCEND JAVADOCNEWLINE JAVADOCTAGMARK
-%token CODEBLOCK STRING
+%token CODEBLOCK STRING ASSIGNMENT
 
 // stringly typed tokens/types
 %token <sval> IDENTIFIER JAVADOCTOKEN
@@ -74,7 +74,7 @@ implementslist: fullidentifier { cls.implementz.add($1); }
 members: | members member;
 
 member: javadoc
-	| STATIC CODEBLOCK
+	| modifiers CODEBLOCK // static block
 	| modifiers fullidentifier IDENTIFIER field { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); }
 	| modifiers fullidentifier IDENTIFIER method { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
 	| modifiers IDENTIFIER method { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new Builder.MethodDef(); };
@@ -91,7 +91,7 @@ paramlist: | paramlist COMMA param;
 param: parammodifiers fullidentifier IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new Builder.FieldDef(); };
 parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
 
-field: SEMI;
+field: SEMI | ASSIGNMENT;
 
 %%
 

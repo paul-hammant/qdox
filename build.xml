@@ -1,7 +1,7 @@
 <project name="qdox" default="test">
 
 	<target name="generate">
-		<!--<exec executable="build-lexer.bat"/>-->
+		<exec executable="build-lexer.bat"/>
 		<exec executable="build-parser.bat"/>
 	</target>
 

@@ -28,6 +28,10 @@
                 and other goodies that shouldn't go directly into QDox'
                 core, but rather into pluggable extensions.
             </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-17.
+                JavaMethod.equals() failed for constructors.
+            </action>
             <action dev="rinkrank" type="add">
                 Type now has a getJavaClass() method making
                 it easier to find the JavaClass of a Type from e.g. Velocity.

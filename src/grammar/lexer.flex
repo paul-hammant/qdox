@@ -117,11 +117,13 @@ package net.sf.qdox.parser;
 <STRING> {
   "\""               { popState(); }
   "\\\""             { }
+  "\\\\"             { }
 }
 
 <CHAR> {
   \'                 { popState(); }
   "\\'"              { }
+  "\\\\"             { }
 }
 
 <SINGLELINECOMMENT> {

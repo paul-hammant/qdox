@@ -40,6 +40,17 @@
 				</tr>
 
 				<tr>
+					<td><nobr><a href="http://vdoclet.sourceforge.net/">vDoclet</a></nobr></td>
+					<td>
+						vDoclet is a framework for code-generation using Velocity templates, 
+						based on annotated Java source-code.
+					</td>
+					<td>
+						vDoclet uses QDox to produce input-data for it's templates.
+					</td>
+				</tr>
+
+				<tr>
 					<td><nobr><a href="http://nanning.sourceforge.net/">Nanning</a></nobr></td>
 					<td>
 						Nanning is an Aspect Oriented Programming (AOP) toolkit for Java that does not require

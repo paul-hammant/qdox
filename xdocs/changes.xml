@@ -28,7 +28,7 @@
                 and other goodies that shouldn't go directly into QDox'
                 core, but rather into pluggable extensions.
             </action>
-            <action dev="mdub" type="fix">
+            <action dev="pkaminsk" type="fix">
                 Fixed QDOX-13.
                 Line numbers in the lexer.
             </action>

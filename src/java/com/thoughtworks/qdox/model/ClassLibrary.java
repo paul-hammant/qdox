@@ -5,13 +5,28 @@ import java.util.*;
 public class ClassLibrary {
 
 	private Set classes = new TreeSet();
+	private List classLoaders = new ArrayList();
 
 	public void add(String fullClassName) {
 		classes.add(fullClassName);
 	}
 
 	public boolean contains(String fullClassName) {
-		return classes.contains(fullClassName);
+		if (classes.contains(fullClassName)) {
+			return true;
+		}
+		for (Iterator iterator = classLoaders.iterator(); iterator.hasNext();) {
+			ClassLoader classLoader = (ClassLoader)iterator.next();
+			try {
+				if (classLoader.loadClass(fullClassName) != null) {
+					return true;
+				}
+			}
+			catch (ClassNotFoundException e) {
+				// continue
+			}
+		}
+		return false;
 	}
 
 	public String findClass(Collection imports, String packageName, String className) {
@@ -36,6 +51,10 @@ public class ClassLibrary {
 
 	public Collection all() {
 		return Collections.unmodifiableCollection(classes);
+	}
+
+	public void addClassLoader(ClassLoader classLoader) {
+		classLoaders.add(classLoader);
 	}
 
 }

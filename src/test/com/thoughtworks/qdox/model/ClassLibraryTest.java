@@ -56,4 +56,16 @@ public class ClassLibraryTest extends TestCase {
 		assertTrue(!all.contains("com.not.True"));
 		assertEquals(4, all.size());
 	}
+
+	public void testNoClassLoaders() throws Exception {
+		ClassLibrary c = new ClassLibrary();
+		assertTrue(!c.contains("java.lang.String"));
+	}
+
+	public void testDefaultClassLoaders() throws Exception {
+		ClassLibrary c = new ClassLibrary();
+		c.addClassLoader(getClass().getClassLoader());
+		assertTrue(c.contains("java.lang.String"));
+		assertTrue(c.contains("java.util.Collection"));
+	}
 }

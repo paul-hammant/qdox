@@ -5,10 +5,12 @@
 	<body>
 		<links>
 			<item name="QDox" href="http://qdox.sourceforge.net/"/>
+			<item name="PDF" href="/project.pdf"/>
 			<item name="SourceForge" href="http://sourceforge.net/projects/qdox/"/>
 			<item name="Download" href="/download.html"/>
 			<item name="Wiki" href="http://wiki.truemesh.com/qdox/"/>
 			<item name="ThoughtWorks" href="http://www.thoughtworks.com/"/>
+			<item name="Attributes" href="http://jakarta.apache.org/commons/sandbox/attributes/"/>
 		</links>
 		<menu name="QDox">
 			<item name="Overview"            href="/index.html"/>
@@ -16,8 +18,6 @@
 			<item name="The Model"           href="/model.html"/>
 			<item name="Who's Using It"      href="/whouses.html"/>
 			<item name="License"             href="/license.html"/>
-			<!--<item name="Wiki"                href="http://wiki.truemesh.com/qdox/"/>
-			<item name="SourceForge Project" href="http://sourceforge.net/projects/qdox/"/>-->
 			<item name="Download"            href="/download.html"/>
 		</menu>
 	</body>

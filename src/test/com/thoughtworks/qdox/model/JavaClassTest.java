@@ -290,15 +290,22 @@ public class JavaClassTest extends TestCase {
 	public void testQualifiedType() throws Exception {
 		JavaSource source = new JavaSource();
 		source.setPackge("com.thoughtworks.qdox");
-		
+
 		cls.setName("MyClass");
-		
+
 		source.setClasses(new JavaClass[]{cls});
 
 		assertEquals("MyClass", cls.getName());
 		assertEquals("com.thoughtworks.qdox", cls.getPackage());
 		assertTrue(cls.asType().isResolved());
 		assertEquals("com.thoughtworks.qdox.MyClass", cls.asType().getValue());
+	}
+
+	public void testDefaultSuperclass() throws Exception {
+		cls.setName("MyClass");
+		assertEquals("java.lang.Object", cls.getSuperClass().getValue());
+		cls.setSuperClass(new Type("x.X", 0));
+		assertEquals("x.X", cls.getSuperClass().getValue());
 	}
 
 	private Type[] type(String[] typeNames) {

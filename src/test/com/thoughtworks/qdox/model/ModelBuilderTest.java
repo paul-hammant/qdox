@@ -66,7 +66,7 @@ public class ModelBuilderTest extends TestCase {
     	builder.addImport("com.thoughtworks.*");
 		JavaSource source = builder.getSource();
 
-		assertEquals(null, source.getClasses()[0].getSuperClass());
+		assertEquals("java.lang.Object", source.getClasses()[0].getSuperClass().getValue());
 		assertEquals("Another", source.getClasses()[1].getSuperClass().getValue());
 
 		assertEquals(0, source.getClasses()[0].getImplements().length);
@@ -96,8 +96,8 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals(1, source.getClasses()[1].getImplements().length);
 		assertEquals("Another", source.getClasses()[1].getImplements()[0].getValue());
 
-		assertEquals(null, source.getClasses()[0].getSuperClass());
-		assertEquals(null, source.getClasses()[1].getSuperClass());
+		assertEquals("java.lang.Object", source.getClasses()[0].getSuperClass().getValue());
+		assertEquals("java.lang.Object", source.getClasses()[1].getSuperClass().getValue());
 	}
 
 	public void testInterfaceExtendsMultiple() throws Exception {
@@ -116,7 +116,7 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals("BottleOpener", source.getClasses()[0].getImplements()[1].getValue());
 		assertEquals("java.io.Serializable", source.getClasses()[0].getImplements()[2].getValue());
 
-		assertEquals(null, source.getClasses()[0].getSuperClass());
+		assertEquals("java.lang.Object", source.getClasses()[0].getSuperClass().getValue());
 	}
 
 	public void testClassImplements() throws Exception {
@@ -133,8 +133,8 @@ public class ModelBuilderTest extends TestCase {
 
 		assertEquals("SomeInterface", source.getClasses()[1].getImplements()[0].getValue());
 
-		assertEquals(null, source.getClasses()[0].getSuperClass());
-		assertEquals(null, source.getClasses()[1].getSuperClass());
+		assertEquals("java.lang.Object", source.getClasses()[0].getSuperClass().getValue());
+		assertEquals("java.lang.Object", source.getClasses()[1].getSuperClass().getValue());
 	}
 
 	public void testClassImplementsMultiple() throws Exception {

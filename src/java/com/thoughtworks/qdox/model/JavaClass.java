@@ -24,6 +24,9 @@ public class JavaClass extends AbstractJavaEntity {
 	}
 
 	public Type getSuperClass() {
+		if (superClass == null) {
+			superClass = new Type("java.lang.Object", 0);
+		}
 		return superClass;
 	}
 

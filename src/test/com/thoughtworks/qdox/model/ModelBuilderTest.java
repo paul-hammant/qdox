@@ -279,13 +279,14 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        JavaMethod result = source.getClasses()[0].getMethods()[0];
-        assertEquals("doSomething", result.getName());
-        assertEquals("void", result.getReturns().getValue());
-        assertEquals(source, result.getReturns().getParentSource());
-        assertEquals(0, result.getModifiers().length);
-        assertEquals(0, result.getParameters().length);
-        assertEquals(0, result.getExceptions().length);
+        JavaMethod doSomething = source.getClasses()[0].getMethods()[0];
+        assertEquals("doSomething", doSomething.getName());
+        assertEquals("void", doSomething.getReturns().getValue());
+        JavaSource parentSource = doSomething.getReturns().getJavaClassParent().getParentSource();
+        assertSame(source, parentSource);
+        assertEquals(0, doSomething.getModifiers().length);
+        assertEquals(0, doSomething.getParameters().length);
+        assertEquals(0, doSomething.getExceptions().length);
     }
 
     public void testMethodNoArray() throws Exception {

@@ -34,6 +34,10 @@ public class JavaSource implements Serializable, JavaClassParent {
     private ClassLibrary classLibrary;
     private Map typeCache = new HashMap();
 
+    public JavaSource() {
+        int i = 0;
+    }
+
     public void setFile(File file) {
         this.file = file;
     }
@@ -65,7 +69,6 @@ public class JavaSource implements Serializable, JavaClassParent {
 
     public void addClass(JavaClass imp) {
         classes.add(imp);
-        imp.setParent(this);
         classesArray = null;
     }
 
@@ -119,12 +122,6 @@ public class JavaSource implements Serializable, JavaClassParent {
         return result.toString();
     }
 
-    /**
-     * Resolve a type-name within the context of this source-file.
-     * @param typeName name of a type
-     * @return the fully-qualified name of the type, or null if it cannot
-     *     be resolved
-     */
     public String resolveType(String typeName) {
         String resolved = (String) typeCache.get(typeName);
         if (resolved != null) {

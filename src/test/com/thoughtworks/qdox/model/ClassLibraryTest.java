@@ -11,7 +11,7 @@ public class ClassLibraryTest extends TestCase implements JavaClassCache {
     }
 
     public JavaClass getClassByName(String name) {
-        JavaClass clazz = new JavaClass();
+        JavaClass clazz = new JavaClass(null);
         clazz.setName("MyClass");
         return clazz;
     }

@@ -89,7 +89,9 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     }
 
     private void addClasses(JavaSource source) {
-        JavaClass[] javaClasses = source.getClasses();
+        Set resultSet = new HashSet();
+        addClassesRecursive(source, resultSet);
+        JavaClass[] javaClasses = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
         for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
             JavaClass cls = javaClasses[classIndex];
             addClass(cls);
@@ -297,14 +299,18 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         JavaSource[] javaSources = getSources();
         for (int i = 0; i < javaSources.length; i++) {
             JavaSource javaSource = javaSources[i];
-            JavaClass[] classes = javaSource.getClasses();
-            for (int j = 0; j < classes.length; j++) {
-                JavaClass javaClass = classes[j];
-                addClassesRecursive(javaClass, resultSet);
-            }
+            addClassesRecursive(javaSource, resultSet);
         }
         JavaClass[] result = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
         return result;
+    }
+
+    private void addClassesRecursive(JavaSource javaSource, Set resultSet) {
+        JavaClass[] classes = javaSource.getClasses();
+        for (int j = 0; j < classes.length; j++) {
+            JavaClass javaClass = classes[j];
+            addClassesRecursive(javaClass, resultSet);
+        }
     }
 
     private void addClassesRecursive(JavaClass javaClass, Set set) {

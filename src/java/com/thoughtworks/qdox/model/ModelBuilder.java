@@ -54,7 +54,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void beginClass(ClassDef def) {
-        currentClass = new JavaClass();
+        currentClass = new JavaClass(currentParent);
 
         // basic details
         currentClass.setName(def.name);
@@ -104,7 +104,7 @@ public class ModelBuilder implements Builder {
 
     private Type createType(String typeName, int dimensions) {
         if (typeName == null || typeName.equals("")) return null;
-        return new Type(typeName, dimensions, source);
+        return new Type(typeName, dimensions, currentClass);
     }
 
     private void addJavaDoc(AbstractJavaEntity entity) {

@@ -313,7 +313,7 @@ public class JavaMethodTest extends TestCase {
     public void testParentClass() throws Exception {
         assertNull(mth.getParentClass());
 
-        JavaClass cls = new JavaClass();
+        JavaClass cls = new JavaClass(null);
         cls.addMethod(mth);
         assertSame(cls, mth.getParentClass());
     }

@@ -17,7 +17,7 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringOneClass() throws Exception {
-        JavaClass cls = new JavaClass();
+        JavaClass cls = new JavaClass(null);
         cls.setName("MyClass");
         source.addClass(cls);
         String expected = ""
@@ -28,13 +28,13 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringMultipleClass() throws Exception {
-        JavaClass cls1 = new JavaClass();
+        JavaClass cls1 = new JavaClass(null);
         cls1.setName("MyClass1");
         source.addClass(cls1);
-        JavaClass cls2 = new JavaClass();
+        JavaClass cls2 = new JavaClass(null);
         cls2.setName("MyClass2");
         source.addClass(cls2);
-        JavaClass cls3 = new JavaClass();
+        JavaClass cls3 = new JavaClass(null);
         cls3.setName("MyClass3");
         source.addClass(cls3);
 
@@ -54,7 +54,7 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringPackage() throws Exception {
-        JavaClass cls = new JavaClass();
+        JavaClass cls = new JavaClass(null);
         cls.setName("MyClass");
         source.addClass(cls);
         source.setPackage("com.thing");
@@ -68,7 +68,7 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringImport() throws Exception {
-        JavaClass cls = new JavaClass();
+        JavaClass cls = new JavaClass(null);
         cls.setName("MyClass");
         source.addClass(cls);
         source.addImport("java.util.*");
@@ -82,7 +82,7 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringMultipleImports() throws Exception {
-        JavaClass cls = new JavaClass();
+        JavaClass cls = new JavaClass(null);
         cls.setName("MyClass");
         source.addClass(cls);
         source.addImport("java.util.*");
@@ -100,7 +100,7 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringImportAndPackage() throws Exception {
-        JavaClass cls = new JavaClass();
+        JavaClass cls = new JavaClass(null);
         cls.setName("MyClass");
         source.addClass(cls);
         source.addImport("java.util.*");

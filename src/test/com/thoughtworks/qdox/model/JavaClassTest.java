@@ -7,6 +7,7 @@ import com.thoughtworks.qdox.DataProvider;
 public class JavaClassTest extends TestCase {
 
     private JavaClass cls;
+    private JavaSource src;
 
     public JavaClassTest(String s) {
         super(s);
@@ -14,7 +15,8 @@ public class JavaClassTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        cls = new JavaClass();
+        src = new JavaSource();
+        cls = new JavaClass(src);
     }
 
     public void testToStringSimpleClass() throws Exception {
@@ -220,7 +222,7 @@ public class JavaClassTest extends TestCase {
 
     public void testToStringClassWithInnerClass() throws Exception {
         cls.setName("Outer");
-        JavaClass innerClass = new JavaClass();
+        JavaClass innerClass = new JavaClass(null);
         innerClass.setName("Inner");
         cls.addClass(innerClass);
 
@@ -285,15 +287,6 @@ public class JavaClassTest extends TestCase {
         assertEquals(expected, cls.toString());
     }
 
-    public void testParentSource() throws Exception {
-        assertNull(cls.getParentSource());
-
-        JavaSource source = new JavaSource();
-        source.addClass(cls);
-
-        assertSame(source, cls.getParentSource());
-    }
-
     public void testIsPublic() {
         cls.setName("MyClass");
         assertTrue(!cls.isPublic());
@@ -303,12 +296,9 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testQualifiedType() throws Exception {
-        JavaSource source = new JavaSource();
-        source.setPackage("com.thoughtworks.qdox");
+        src.setPackage("com.thoughtworks.qdox");
 
         cls.setName("MyClass");
-
-        source.addClass(cls);
 
         assertEquals("MyClass", cls.getName());
         assertEquals("com.thoughtworks.qdox", cls.getPackage());
@@ -319,15 +309,14 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testInnerClass() throws Exception {
-        JavaSource source = new JavaSource();
-        source.setPackage("foo.bar");
+        src.setPackage("foo.bar");
 
-        JavaClass outer = new JavaClass();
+        JavaClass outer = new JavaClass(src);
         outer.setName("Outer");
-        source.addClass(outer);
+        src.addClass(outer);
         assertEquals("foo.bar.Outer", outer.asClassNamespace());
 
-        JavaClass inner = new JavaClass();
+        JavaClass inner = new JavaClass(outer);
         inner.setName("Inner");
         outer.addClass(inner);
 
@@ -389,7 +378,7 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testCanGetInnerClassByName() throws Exception {
-        JavaClass innerClass = new JavaClass();
+        JavaClass innerClass = new JavaClass(null);
         innerClass.setName("Inner");
         cls.addClass(innerClass);
 

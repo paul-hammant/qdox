@@ -35,6 +35,10 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
     private Map beanPropertyMap;
     private JavaClassCache javaClassCache;
 
+    public JavaClass(JavaClassParent parent) {
+        this.parent = parent;
+    }
+
     public void setJavaClassCache(JavaClassCache javaClassCache) {
         this.javaClassCache = javaClassCache;
         // reassign OBJECT. This will make it have a "source" too,
@@ -151,9 +155,9 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         fieldsArray = null;
     }
 
-    public void setParent(JavaClassParent parent) {
-        this.parent = parent;
-    }
+//    public void setParent(JavaClassParent parent) {
+//        this.parent = parent;
+//    }
 
     public JavaClassParent getParent() {
         return parent;
@@ -169,14 +173,9 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
     }
 
     public String getFullyQualifiedName() {
-        if (getParent() != null) {
-            JavaClassParent parent = getParent();
-            String pakkage = parent.asClassNamespace();
-            char separator = isInner() ? '$' : '.';
-            return pakkage == null ? getName() : pakkage + separator + getName();
-        } else {
-            return null;
-        }
+        String pakkage = getParent().asClassNamespace();
+        char separator = isInner() ? '$' : '.';
+        return pakkage == null ? getName() : pakkage + separator + getName();
     }
 
     /**
@@ -186,13 +185,30 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         return getParent() instanceof JavaClass;
     }
 
+    public String resolveType(String typeName) {
+        // Maybe it's an inner class?
+        JavaClass[] innerClasses = getInnerClasses();
+        for (int i = 0; i < innerClasses.length; i++) {
+            JavaClass innerClass = innerClasses[i];
+            String innerName = innerClass.getFullyQualifiedName();
+            if(innerName.endsWith(typeName)) {
+                return innerName;
+            }
+        }
+        return parent.resolveType(typeName);
+    }
+
+    public ClassLibrary getClassLibrary() {
+        return parent.getClassLibrary() ;
+    }
+
     public String asClassNamespace() {
         return getFullyQualifiedName();
     }
 
     public Type asType() {
         if (type == null) {
-            type = new Type(getFullyQualifiedName(), 0, getParentSource());
+            type = new Type(getFullyQualifiedName(), 0, this);
         }
         return type;
     }
@@ -278,7 +294,6 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
     public void addClass(JavaClass cls) {
         classes.add(cls);
-        cls.setParent(this);
         classesArray = null;
     }
 
@@ -314,7 +329,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
      * @since 1.3
      */
     public boolean isA(String fullClassName) {
-        Type type = new Type(fullClassName, 0, getParentSource());
+        Type type = new Type(fullClassName, 0, this);
         return asType().isA(type);
     }
 

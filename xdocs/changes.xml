@@ -32,6 +32,10 @@
                 Fixed QDOX-13.
                 Line numbers in the lexer.
             </action>
+            <action dev="mdub" type="rinkrank">
+                Fixed QDOX-14.
+                resolveTypeInternal doesn't work for nested types.
+            </action>
             <action dev="mdub" type="fix">
                 Fixed QDOX-17.
                 JavaMethod.equals() failed for constructors.

@@ -515,8 +515,8 @@ public class JavaDocBuilderTest extends TestCase {
         JavaClass inner = outer.getInnerClasses()[0];
         assertEquals("foo.Outer$Inner", inner.getFullyQualifiedName());
 
-//        JavaField field1 = outer.getFieldByName("field1");
-//        assertEquals("foo.Outer$Inner", field1.getType().getValue());
+        JavaField field1 = outer.getFieldByName("field1");
+        Type type = field1.getType();
+        assertEquals("foo.Outer$Inner", type.getJavaClass().getFullyQualifiedName());
     }
-
 }

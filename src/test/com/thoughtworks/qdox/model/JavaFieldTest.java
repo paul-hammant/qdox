@@ -58,7 +58,7 @@ public class JavaFieldTest extends TestCase {
         JavaField fld = new JavaField();
         assertNull(fld.getParentClass());
 
-        JavaClass cls = new JavaClass();
+        JavaClass cls = new JavaClass(null);
         cls.addField(fld);
         assertSame(cls, fld.getParentClass());
     }

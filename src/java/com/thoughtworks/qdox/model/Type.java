@@ -7,14 +7,14 @@ public class Type implements Comparable, Serializable {
     public static final Type[] EMPTY_ARRAY = new Type[0];
 
     private String name;
-    private JavaSource parentSource;
+    private JavaClassParent javaClassParent;
     private String fullName;
     private int dimensions;
 
-    public Type(String name, int dimensions, JavaSource parentSource) {
+    public Type(String name, int dimensions, JavaClassParent javaClassParent) {
         this.name = name;
         this.dimensions = dimensions;
-        this.parentSource = parentSource;
+        this.javaClassParent = javaClassParent;
     }
 
     public Type(String fullName, int dimensions) {
@@ -26,12 +26,8 @@ public class Type implements Comparable, Serializable {
         this(fullName, 0);
     }
 
-    public JavaSource getParentSource() {
-        return parentSource;
-    }
-
-    public void setParentSource(JavaSource javaSource) {
-        parentSource = javaSource;
+    public JavaClassParent getJavaClassParent() {
+        return javaClassParent;
     }
 
     public String getValue() {
@@ -39,8 +35,8 @@ public class Type implements Comparable, Serializable {
     }
 
     public boolean isResolved() {
-        if (fullName == null && parentSource != null) {
-            fullName = parentSource.resolveType(name);
+        if (fullName == null && javaClassParent != null) {
+            fullName = javaClassParent.resolveType(name);
         }
         return (fullName != null);
     }
@@ -82,13 +78,15 @@ public class Type implements Comparable, Serializable {
     }
 
     public JavaClass getJavaClass() {
-        if (getParentSource() == null) {
+        JavaClassParent javaClassParent = getJavaClassParent();
+        if (javaClassParent == null) {
             return null;
         }
-        if (getParentSource().getClassLibrary() == null) {
+        ClassLibrary classLibrary = javaClassParent.getClassLibrary();
+        if (classLibrary == null) {
             return null;
         }
-        return getParentSource().getClassLibrary().getClassByName(getValue());
+        return classLibrary.getClassByName(getValue());
     }
 
     /**

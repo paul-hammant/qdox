@@ -17,7 +17,15 @@ public class JavaMethod extends AbstractJavaEntity {
 		return parameters;
 	}
 
-    // TODO - JavaParameter getParameterByName(String name);
+	public JavaParameter getParameterByName(String name) {
+		JavaParameter[] parameters = getParameters();
+		for (int i = 0; i < parameters.length; i++) {
+			if (parameters[i].getName().equals(name)) {
+				return parameters[i];
+			}
+		}
+		return null;
+	}
 
 	public Type[] getExceptions() {
 		return exceptions;
@@ -32,10 +40,7 @@ public class JavaMethod extends AbstractJavaEntity {
 		writeNonAccessibilityModifiers(result);
 
 		if (!constructor) {
-			result.write(returns.getValue());
-			for (int i = 0; i < returns.getDimensions(); i++) {
-				result.write("[]");
-			}
+			result.write(returns.toString());
 			result.write(' ');
 		}
 
@@ -44,10 +49,7 @@ public class JavaMethod extends AbstractJavaEntity {
 		for (int i = 0; i < parameters.length; i++) {
 			JavaParameter parameter = parameters[i];
 			if (i > 0) result.write(", ");
-			result.write(parameter.getType().getValue());
-			for (int j = 0; j < parameter.getType().getDimensions(); j++) {
-				result.write("[]");
-			}
+			result.write(parameter.getType().toString());
 			result.write(' ');
 			result.write(parameter.getName());
 		}

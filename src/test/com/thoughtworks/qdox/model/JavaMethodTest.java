@@ -262,6 +262,20 @@ public class JavaMethodTest extends TestCase {
 		assertSame(cls, mth.getParentClass());
 	}
 
+
+	public void testCanGetParameterByName() throws Exception {
+		JavaParameter paramX = 
+			new JavaParameter(new Type("int"), "x");
+		JavaParameter[] parameters = new JavaParameter[] {
+			paramX,
+			new JavaParameter(new Type("string"), "y")
+		};
+		mth.setParameters(parameters);
+		
+		assertEquals(paramX, mth.getParameterByName("x"));
+		assertEquals(null, mth.getParameterByName("z"));
+	}
+	
 	private void assertNotEquals(Object o1, Object o2) {
 		assertTrue(o1.toString() + " should not equals " + o2.toString(), !o1.equals(o2));
 	}

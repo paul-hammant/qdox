@@ -77,11 +77,6 @@
 
 	<dependencies>
 		<dependency>
-			<id>antlr</id>
-			<version>2.7.1</version>
-			<url>http://www.antlr.org</url>
-		</dependency>
-		<dependency>
 			<id>junit</id>
 			<version>3.7</version>
 			<url>http://www.junit.org</url>

@@ -348,10 +348,12 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
                     String propertyName = getPropertyName(method);
                     BeanProperty beanProperty = getOrCreateProperty(propertyName);
                     beanProperty.setAccessor(method);
+                    beanProperty.setType(getPropertyType(method));
                 } else if (isPropertyMutator(method)) {
                     String propertyName = getPropertyName(method);
                     BeanProperty beanProperty = getOrCreateProperty(propertyName);
                     beanProperty.setMutator(method);
+					beanProperty.setType(getPropertyType(method));
                 }
             }
         }
@@ -414,6 +416,20 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
             throw new IllegalStateException("Shouldn't happen");
         }
         return Introspector.decapitalize(method.getName().substring(start));
+    }
+
+    // This method will fail if the method isn't an accessor or mutator, but
+    // it will only be called with methods that are, so we're safe.
+    private Type getPropertyType(JavaMethod method) {
+        Type result = null;
+        if (isPropertyAccessor(method)){
+            result = method.getReturns();
+        } else if(isPropertyMutator(method)){
+            result = method.getParameters()[0].getType();
+        } else {
+            throw new IllegalStateException("Shouldn't happen");
+        }
+        return result;
     }
 
     public JavaClass[] getDerivedClasses() {

@@ -63,6 +63,8 @@ public class ClassLibrary implements Serializable {
                     }
                 } catch (ClassNotFoundException e) {
                     // continue
+                } catch (NoClassDefFoundError e) {
+                    // continue
                 }
             }
         }

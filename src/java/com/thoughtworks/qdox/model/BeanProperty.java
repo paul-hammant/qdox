@@ -9,6 +9,7 @@ public class BeanProperty {
     private final String name;
     private JavaMethod accessor;
     private JavaMethod mutator;
+    private Type type;
 
     public BeanProperty(String name) {
         this.name = name;
@@ -16,6 +17,14 @@ public class BeanProperty {
 
     public String getName() {
         return name;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     public JavaMethod getAccessor() {

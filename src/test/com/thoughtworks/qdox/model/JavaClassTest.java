@@ -319,7 +319,7 @@ public class JavaClassTest extends TestCase {
 	private Type[] type(String[] typeNames) {
 		Type[] result = new Type[typeNames.length];
 		for (int i = 0; i < typeNames.length; i++) {
-			result[i] = new Type(Collections.EMPTY_LIST, typeNames[i], null, "", 0);
+			result[i] = new Type(typeNames[i]);
 		}
 		return result;
 	}

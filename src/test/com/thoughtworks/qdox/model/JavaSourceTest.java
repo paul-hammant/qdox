@@ -13,6 +13,7 @@ public class JavaSourceTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		source = new JavaSource();
+		source.setClassLibrary(new ClassLibrary());
 	}
 
 	public void testToStringOneClass() throws Exception {
@@ -110,4 +111,64 @@ public class JavaSourceTest extends TestCase {
 		assertEquals(expected, source.toString());
 	}
 
+    public void testResolveJavaPrimitive() throws Exception {
+		source.setImports( new String[] { "bogus.int",
+										  "bogus.double" } );
+		String[] primitives = new String[] { 
+			"boolean", "byte", "char", "double",
+			"float", "int", "long", "short", "void"
+		};
+		for (int i = 0; i < primitives.length; i++) {
+			assertEquals(primitives[i], source.resolveType(primitives[i]));
+		}
+	}
+
+    public void testResolveFullyQualifiedName() throws Exception {
+		source.setImports( new String[] { "foo.Bar" } );
+		assertEquals("open.Bar", source.resolveType("open.Bar"));
+    }
+
+    public void testResolveFullyQualifiedImport() throws Exception {
+		source.setImports( new String[] { "foo.Bar" } );
+		assertEquals("foo.Bar", source.resolveType("Bar"));
+	}
+
+    public void testResolveChooseFirstMatchingImport() throws Exception {
+		source.setImports( new String[] { "bogus.package.MyType",
+										  "com.thoughtworks.qdox.model.Type",
+										  "another.package.Type" } );
+		assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
+	}
+
+    public void testResolveSamePackage() throws Exception {
+		source.setPackge("foo");
+		source.getClassLibrary().add("foo.Bar");
+		assertEquals("foo.Bar", source.resolveType("Bar"));
+	}
+
+    public void testResolveFullyQualifiedOverridesSamePackage() throws Exception {
+		source.setPackge("foo");
+		source.getClassLibrary().add("foo.Bar");
+		assertEquals("open.Bar", source.resolveType("open.Bar"));
+	}
+
+    public void testResolveWildcard() throws Exception {
+		source.getClassLibrary().add("foo.Bar");
+		source.setImports( new String[] { "foo.*" } );
+		assertEquals("foo.Bar", source.resolveType("Bar"));
+	}
+
+    public void testResolveWildcardsLast() throws Exception {
+		source.getClassLibrary().add("foo.Bar");
+		source.setImports( new String[] { "foo.*",
+										  "com.thoughtworks.qdox.model.Type",
+										  "another.package.Type" } );
+		assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
+	}
+
+    public void testResolveJavaLangClass() throws Exception {
+		source.getClassLibrary().add("java.lang.System");
+		assertEquals("java.lang.System", source.resolveType("System"));
+	}
+	
 }

@@ -41,6 +41,7 @@ public class ModelBuilderTest extends TestCase {
 
 		assertEquals("Thingy", source.getClasses()[0].getName());
 		assertEquals("ThingyThing", source.getClasses()[1].getName());
+		assertEquals(source, source.getClasses()[0].getParentSource());
 	}
 
 	public void testInterface() throws Exception {
@@ -217,6 +218,7 @@ public class ModelBuilderTest extends TestCase {
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals("doSomething", result.getName());
 		assertEquals("void", result.getReturns().getValue());
+		assertEquals(source, result.getReturns().getParentSource());
 		assertEquals(0, result.getModifiers().length);
 		assertEquals(0, result.getParameters().length);
 		assertEquals(0, result.getExceptions().length);
@@ -446,8 +448,9 @@ public class ModelBuilderTest extends TestCase {
 		JavaMethod result2 = source.getClasses()[0].getMethods()[1];
 
 		assertTrue(result1.isConstructor());
+		assertNull(result1.getReturns());
 		assertTrue(!result2.isConstructor());
-
+		assertNotNull(result2.getReturns());
 	}
 
 	public void testJavaDocOnClass() throws Exception {

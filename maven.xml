@@ -1,24 +1,6 @@
 <?xml version="1.0"?>
 <project xmlns:deploy="deploy" xmlns:m="maven" xmlns:j="jelly:core" xmlns:maven="jelly:org.apache.maven.jelly.tags.project.MavenTagLibrary">
 
-	<!--<goal name="release" description="Make new release">
-		<m:user-check user="${maven.username}"/>
-		<attainGoal name="website"/>
-
-		<deploy:artifact
-			artifact="target/${maven.final.name}.jar"
-			type="jars"
-			assureDirectoryCommand="mkdir -p"
-		/>
-
-		<attainGoal name="dist:deploy"/>
-	</goal>-->
-
-	<preGoal name="java:prepare-filesystem">
-		<mkdir dir="target/src/java"/>
-		<mkdir dir="target/src/test"/>
-	</preGoal>	
-
 	<!-- Generate lexer and parser java source code from grammars -->
 	<preGoal name="java:compile">
 	
@@ -72,7 +54,9 @@
 		<copy todir="target/src/test">
 			<fileset dir="src/test"/>
 		</copy>
-		
+
+		<!-- Kludge to get around problem with first build attempt -->		
+		<j:set scope="parent" var="unitTestSourcesPresent" value="true"/>
 	</preGoal>
 
 	<!-- Ensure clover coverage report and PDF documentation generated on site -->

@@ -10,7 +10,9 @@ import java.util.Map;
  */
 public interface DocletTag extends Serializable {
 
-
+    /**
+     * @return the tag name
+     */
     String getName();
 
     /**
@@ -35,16 +37,15 @@ public interface DocletTag extends Serializable {
      */
     Map getNamedParameterMap();
     
+    /**
+     * @return the line-number where the tag occurred
+     */
     int getLineNumber();
 
     /**
+     * @return the language element to which this tag applies
      * @since 1.4
      */
     AbstractJavaEntity getContext();
-
-    /**
-     * @since 1.4
-     */
-    void setContext(AbstractJavaEntity abstractJavaEntity);
 
 }

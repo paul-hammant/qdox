@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.parser;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.TagDef;
 
 public interface Builder {
 
@@ -12,7 +13,7 @@ public interface Builder {
 
     void addJavaDoc(String text);
 
-    void addJavaDocTag(String tag, String text, int lineNumber);
+    void addJavaDocTag(TagDef def);
 
     void beginClass(ClassDef def);
 

@@ -4,7 +4,9 @@ import com.thoughtworks.qdox.parser.Builder;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.TagDef;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,9 +50,8 @@ public class ModelBuilder implements Builder {
         lastTagSet = new LinkedList();
     }
 
-    public void addJavaDocTag(String tag, String text, int lineNumber) {
-        DocletTag docletTag = docletTagFactory.createDocletTag(tag, text, lineNumber);
-        lastTagSet.add(docletTag);
+    public void addJavaDocTag(TagDef tagDef) {
+        lastTagSet.add(tagDef);
     }
 
     public void beginClass(ClassDef def) {
@@ -108,10 +109,23 @@ public class ModelBuilder implements Builder {
     }
 
     private void addJavaDoc(AbstractJavaEntity entity) {
-        if (lastComment != null) {
-            entity.setComment(lastComment);
-            entity.setTags(lastTagSet);
+        if (lastComment == null) return;
+
+        entity.setComment(lastComment);
+        
+        Iterator tagDefIterator = lastTagSet.iterator();
+        List tagList = new ArrayList();
+        while (tagDefIterator.hasNext()) {
+            TagDef tagDef = (TagDef) tagDefIterator.next();
+            tagList.add( 
+                docletTagFactory.createDocletTag(
+                    tagDef.name, tagDef.text, 
+                    entity, tagDef.lineNumber
+                )
+            );
         }
+        entity.setTags(tagList);
+        
         lastComment = null;
     }
 

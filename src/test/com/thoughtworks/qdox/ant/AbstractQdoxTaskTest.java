@@ -45,10 +45,9 @@ public class AbstractQdoxTaskTest extends TestCase {
             // Tag factory that returns tags with "aslak." prefixed to their "original" name.
             // Not useful at all, only to test that we can actually plug in any tag factory.
             return new DocletTagFactory() {
-                public DocletTag createDocletTag(String tag, String text, int lineNumber) {
+                public DocletTag createDocletTag(String tag, String text, AbstractJavaEntity context, int lineNumber) {
                     return new DefaultDocletTag("aslak." + tag, text);
                 }
-
                 public DocletTag createDocletTag(String tag, String text) {
                     fail();
                     return null;

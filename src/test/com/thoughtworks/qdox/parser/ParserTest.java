@@ -5,6 +5,7 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.TagDef;
 
 public class ParserTest extends TestCase {
 
@@ -194,7 +195,7 @@ public class ParserTest extends TestCase {
         setupLex(0);
 
         // expectations
-        builder.addExpectedAddJavaDocTagValues("This", "is great!");
+        builder.addExpectedAddJavaDocTagValues(new TagDef("This", "is great!"));
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -214,7 +215,7 @@ public class ParserTest extends TestCase {
         setupLex(0);
 
         // expectations
-        builder.addExpectedAddJavaDocTagValues("eatme", "");
+        builder.addExpectedAddJavaDocTagValues(new TagDef("eatme", ""));
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -238,7 +239,9 @@ public class ParserTest extends TestCase {
 
         // expectations
         builder.addExpectedAddJavaDocValues("");
-        builder.addExpectedAddJavaDocTagValues("This", "is great! Mmmkay.");
+        builder.addExpectedAddJavaDocTagValues(
+            new TagDef("This", "is great! Mmmkay.")
+        );
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -263,8 +266,8 @@ public class ParserTest extends TestCase {
 
         // expectations
         builder.addExpectedAddJavaDocValues("");
-        builder.addExpectedAddJavaDocTagValues("This", "is great!");
-        builder.addExpectedAddJavaDocTagValues("mock", "generate");
+        builder.addExpectedAddJavaDocTagValues(new TagDef("This", "is great!"));
+        builder.addExpectedAddJavaDocTagValues(new TagDef("mock", "generate"));
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -294,8 +297,8 @@ public class ParserTest extends TestCase {
 
         // expectations
         builder.addExpectedAddJavaDocValues("Welcome! Here is my class.");
-        builder.addExpectedAddJavaDocTagValues("This", "is great!");
-        builder.addExpectedAddJavaDocTagValues("mock", "generate");
+        builder.addExpectedAddJavaDocTagValues(new TagDef("This", "is great!"));
+        builder.addExpectedAddJavaDocTagValues(new TagDef("mock", "generate"));
 
         // execute
         Parser parser = new Parser(lexer, builder);

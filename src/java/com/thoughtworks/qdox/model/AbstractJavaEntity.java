@@ -134,11 +134,8 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
     }
 
     public void setTags(List tagList) {
-        tags = new DocletTag[tagList.size()];
-        tagList.toArray(tags);
-        for (int i = 0; i < tags.length; i++) {
-              tags[i].setContext(this);
-        }
+        this.tags = new DocletTag[tagList.size()];
+        tagList.toArray(this.tags);
     }
 
     //helper methods for querying the modifiers

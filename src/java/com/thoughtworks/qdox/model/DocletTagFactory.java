@@ -7,9 +7,18 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public interface DocletTagFactory extends Serializable {
+
     /**
-     * @since 1.3
+     * @since 1.5
      */ 
-    DocletTag createDocletTag(String tag, String text, int lineNumber);
+    DocletTag createDocletTag(
+        String tag, String text, 
+        AbstractJavaEntity context, int lineNumber
+    );
+
+    /**
+     * @deprecated please provide 
+     */
     DocletTag createDocletTag(String tag, String text);
+
 }

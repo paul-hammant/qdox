@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.structs.TagDef;
 
 import java.util.Arrays;
 
@@ -623,7 +624,7 @@ public class ModelBuilderTest extends TestCase {
 
     public void testDocletTag() throws Exception {
         builder.addJavaDoc("Hello");
-        builder.addJavaDocTag("cheese", "is good", 0);
+        builder.addJavaDocTag(new TagDef("cheese", "is good"));
         builder.beginClass(new ClassDef());
 
         builder.endClass();
@@ -638,7 +639,7 @@ public class ModelBuilderTest extends TestCase {
 
     public void testDocletTagWithNoComment() throws Exception {
         builder.addJavaDoc(""); // parser will always call this method to signify start of javadoc
-        builder.addJavaDocTag("cheese", "is good", 0);
+        builder.addJavaDocTag(new TagDef("cheese", "is good"));
         builder.beginClass(new ClassDef());
 
         builder.endClass();
@@ -653,9 +654,9 @@ public class ModelBuilderTest extends TestCase {
 
     public void testMultipleDocletTags() throws Exception {
         builder.addJavaDoc("Hello");
-        builder.addJavaDocTag("cheese", "is good", 0);
-        builder.addJavaDocTag("food", "is great", 0);
-        builder.addJavaDocTag("chairs", "are boring", 0);
+        builder.addJavaDocTag(new TagDef("cheese", "is good"));
+        builder.addJavaDocTag(new TagDef("food", "is great"));
+        builder.addJavaDocTag(new TagDef("chairs", "are boring"));
         builder.beginClass(new ClassDef());
 
         builder.endClass();
@@ -674,15 +675,15 @@ public class ModelBuilderTest extends TestCase {
 
     public void testDocletTagsOnMethodsAndFields() throws Exception {
         builder.addJavaDoc("");
-        builder.addJavaDocTag("cheese", "is good", 0);
+        builder.addJavaDocTag(new TagDef("cheese", "is good"));
         builder.beginClass(new ClassDef());
 
         builder.addJavaDoc("");
-        builder.addJavaDocTag("food", "is great", 0);
+        builder.addJavaDocTag(new TagDef("food", "is great"));
         builder.addMethod(new MethodDef());
 
         builder.addJavaDoc("");
-        builder.addJavaDocTag("chairs", "are boring", 0);
+        builder.addJavaDocTag(new TagDef("chairs", "are boring"));
         builder.addField(new FieldDef());
         builder.endClass();
 

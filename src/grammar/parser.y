@@ -56,7 +56,7 @@ javadoctags: | javadoctags javadoctag;
 javadoctag: 
     JAVADOCTAG { tagLine = lexer.getLine(); } 
     javadoctokens {
-        builder.addJavaDocTag($1.substring(1), buffer(), tagLine); 
+        builder.addJavaDocTag(new TagDef($1.substring(1), buffer(), tagLine)); 
     };
 
 

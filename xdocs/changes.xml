@@ -7,6 +7,14 @@
 
     <body>
   
+        <release version="1.5" date="in CVS">
+            <action dev="mdub" type="fix">
+                Implement QDOX-47:
+                Refactor DocletTag handling so that all context information
+                is provided via the DocletTagFactory.
+            </action>
+        </release>
+
         <!-- action types are add/update/fix/remove -->
         <release version="1.4" date="2004-04-29">
             <action dev="mdub" type="fix">

@@ -10,6 +10,9 @@ import java.io.StringReader;
  */
 public class GenericsTest extends TestCase {
 
+    // TODO: these should really be replaced by equivalent 
+    // parser unit-tests
+    
     private JavaDocBuilder builder = new JavaDocBuilder();
 
     public void testShouldUnderstandSingleGenericClassDeclarations() {
@@ -68,11 +71,27 @@ public class GenericsTest extends TestCase {
         assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
     
-    public void testShouldUnderstandFullyQualifiedTypeParameters() {
+    public void testShouldUnderstandFullyQualifiedTypeArguments() {
         String source = "" +
                 "public class Bar {" +
                 "   private List<java.util.Date> listOfDates;" +
                 "}";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Bar", builder.getClassByName("Bar").getName());
+    }
+
+    public void testShouldUnderstandBoundTypeParameters() {
+        String source = "" +
+                "public class Bar<T extends Date> {}";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Bar", builder.getClassByName("Bar").getName());
+    }
+
+    public void testShouldUnderstandComplexBoundTypeParameters() {
+        String source = "" +
+                "public class Bar<T extends Date & Serializable> {}";
 
         builder.addSource(new StringReader(source));
         assertEquals("Bar", builder.getClassByName("Bar").getName());

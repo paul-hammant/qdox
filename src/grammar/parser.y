@@ -7,7 +7,7 @@ import java.io.IOException;
 %token SEMI DOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
-%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN
+%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND
 %token JAVADOCSTART JAVADOCEND
 %token CODEBLOCK STRING
 
@@ -61,11 +61,6 @@ javadoctag:
 
 
 // ----- COMMON TOKENS
-typearguments: | LESSTHAN referencetypelist GREATERTHAN
-
-referencetypelist:
-    type |
-    referencetypelist COMMA type
 
 // A fullidentifier is "a", "a.b", "a.b.c", "a.b.*", etc...
 fullidentifier: 
@@ -76,11 +71,6 @@ fullidentifier:
 arrayidentifier: 
     IDENTIFIER dimensions {
         $$ = new TypeDef($1,$2); 
-    };
-
-type: 
-    fullidentifier typearguments dimensions {
-        $$ = new TypeDef($1,$3); 
     };
 
 dimensions: 
@@ -106,6 +96,20 @@ modifier:
 modifiers: | modifiers modifier { modifiers.add($2); };
 
 
+// ----- TYPES 
+
+type: 
+    fullidentifier typearguments dimensions {
+        $$ = new TypeDef($1,$3); 
+    };
+
+typearguments: | LESSTHAN typelist GREATERTHAN
+
+typelist:
+    type |
+    typelist COMMA type
+
+
 // ----- CLASS
 
 class: 
@@ -114,7 +118,7 @@ class:
     };
 
 classdefinition: 
-    modifiers classorinterface IDENTIFIER typearguments extends implements {
+    modifiers classorinterface IDENTIFIER typeparams extends implements {
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
         cls.name = $3; 
         builder.beginClass(cls); 
@@ -124,6 +128,20 @@ classdefinition:
 classorinterface: 
     CLASS | 
     INTERFACE { cls.isInterface = true; };
+
+typeparams: | LESSTHAN typeparamlist GREATERTHAN
+
+typeparamlist:
+    typeparam |
+    typelist COMMA typeparam
+
+typeparam: IDENTIFIER typebounds
+
+typebounds: | EXTENDS typeboundlist
+
+typeboundlist:
+    type | 
+    typelist AMPERSAND type
 
 extends: | EXTENDS extendslist;
 

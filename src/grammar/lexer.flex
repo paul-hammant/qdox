@@ -84,6 +84,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     ")"                 { return Parser.PARENCLOSE; }
     "<"                 { return Parser.LESSTHAN; }
     ">"                 { return Parser.GREATERTHAN; }
+    "&"                 { return Parser.AMPERSAND; }
 
     "class"             {
         classDepth++;

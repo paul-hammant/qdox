@@ -3,7 +3,7 @@
 
 	<!-- Generate lexer and parser java source code from grammars -->
 	<goal name="parser" description="Generate parser">
-	
+
 		<!-- Generate lexer -->
 		<uptodate property="lexer.uptodate" srcfile="src/grammar/lexer.flex" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/JFlexLexer.java"/>
 		<j:set var="lexerUptodate" value="${lexer.uptodate}"/>
@@ -20,7 +20,9 @@
 		<uptodate property="parser.uptodate" srcfile="src/grammar/parser.y" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/Parser.java"/>
 		<j:set var="parserUptodate" value="${parser.uptodate}"/>
 		<j:if test="${parserUptodate == null}">
-			<exec executable="${yacc.exe}" dir="target">
+			<echo>Note: If the next step fails, update the yacc.exe property</echo>
+			<echo>in build.properties to point to the correct binary.</echo>
+			<exec executable="${yacc.exe}" dir="target" failonerror="true">
 				<arg value="-Jnorun"/>
 				<arg value="-Jnoconstruct"/>
 				<arg value="-Jclass=Parser"/>

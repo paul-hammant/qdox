@@ -14,7 +14,15 @@
 		</classpath>
 	</taskdef>
 
-	<target name="generate" description="Perform code generation">
+	<target name="generate-check">
+		<uptodate property="generate.skip" 
+				  targetfile="build/java/com/thoughtworks/qdox/parser/impl/Parser.java" >
+			<srcfiles dir="src/grammar"/>
+		</uptodate>
+	</target>
+
+	<target name="generate" description="Perform code generation"
+			depends="generate-check" unless="generate.skip">
 		<!-- Generate Lexer -->
 		<echo>**** Generating Lexer ****</echo>
 		<mkdir dir="build/java/com/thoughtworks/qdox/parser/impl"/>

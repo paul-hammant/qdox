@@ -57,4 +57,18 @@ public class GenericsTest extends TestCase {
         builder.addSource(new StringReader(source));
         assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
+
+    // http://madbean.com/blog/12/
+    public void FIXME_OR_DELETEME_MIKE_testShouldUnderstandNestedGenerics() {
+        String source = "" +
+                "public class Bar {" +
+                "   private List < List < String > > list1;" +
+                "   private List<List<String>> list2;" +
+                "}";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Bar", builder.getClassByName("Bar").getName());
+    }
+
+
 }

@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox;
 
 import com.thoughtworks.qdox.model.*;
-import com.thoughtworks.qdox.parser.impl.ParseException;
+import com.thoughtworks.qdox.parser.ParseException;
 import junit.framework.TestCase;
 
 import java.io.*;

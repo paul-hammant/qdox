@@ -4,13 +4,13 @@ import com.thoughtworks.qdox.JavaDocBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -449,7 +449,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
 
     private Map getBeanPropertyMap(boolean superclasses) {
         JavaMethod[] methods = getMethods(superclasses);
-        Map beanPropertyMap = new HashMap();
+        Map beanPropertyMap = new TreeMap();
 
         // loop over the methods.
         for (int i = 0; i < methods.length; i++) {

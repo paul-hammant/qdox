@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Set;
+import java.util.Collections;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
@@ -73,8 +74,14 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     private Map classes = new HashMap();
     private ClassLibrary classLibrary;
     private List sources = new ArrayList();
+    private Map properties;
 
     public JavaDocBuilder() {
+        this(Collections.EMPTY_MAP);
+    }
+
+    public JavaDocBuilder(Map properties) {
+        this.properties = properties;
         classLibrary = new ClassLibrary(this);
         classLibrary.addDefaultLoader();
     }
@@ -115,7 +122,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         } else {
             // Create a new builder and mimic the behaviour of the parser.
             // We're getting all the information we need via reflection instead.
-            ModelBuilder binaryBuilder = new ModelBuilder(classLibrary);
+            ModelBuilder binaryBuilder = new ModelBuilder(classLibrary, properties);
 
             // Set the package name and class name
             String packageName = getPackageName(name);
@@ -257,7 +264,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     }
 
     public JavaSource addSource(Reader reader) {
-        ModelBuilder builder = new ModelBuilder(classLibrary);
+        ModelBuilder builder = new ModelBuilder(classLibrary, properties);
         Lexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
         parser.parse();

@@ -36,7 +36,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         this.javaClassCache = javaClassCache;
         // reassign OBJECT. This will make it have a "source" too,
         // causing Type.getJavaClass() to return a JavaClass, instead
-        // of null. 
+        // of null.
         OBJECT = javaClassCache.getClassByName("java.lang.Object").asType();
     }
 

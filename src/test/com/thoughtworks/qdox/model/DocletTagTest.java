@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.JavaDocBuilder;
 
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DocletTagTest extends TestCase {
 
@@ -11,7 +13,7 @@ public class DocletTagTest extends TestCase {
         super(s);
     }
 
-    public void testValueRemainsInTact() throws Exception {
+    public void testValueRemainsIntact() throws Exception {
         String in = ""
                 + "package x;\n"
                 + "/**\n"
@@ -84,5 +86,17 @@ public class DocletTagTest extends TestCase {
         assertEquals("hello", tag.getNamedParameter("two"));
     }
 
+    public void testPropertySubstitution() {
+        Map properties = new HashMap();
+        properties.put("one", "un");
+        properties.put("two", "deux");
+        properties.put("three", "trois");
 
+        DocletTag tag = new DocletTag("x", "one=\"${one}\" two=${two} three='${three}' four=${four}", properties);
+        assertEquals("un", tag.getNamedParameter("one"));
+        assertEquals("deux", tag.getNamedParameter("two"));
+        assertEquals("trois", tag.getNamedParameter("three"));
+        // no value for this one, so leaving unchanged
+        assertEquals("${four}", tag.getNamedParameter("four"));
+    }
 }

@@ -26,6 +26,10 @@
 				it easier to find the JavaClass of a Type in e.g. Velocity:
 				$method.returns.javaClass
 			</action>
+			<action dev="rinkrank" type="add">
+				Implemented QDOX-11
+				Add support for ${property} in tags.
+			</action>
 		</release>
 		
 		<release version="1.2" date="2003-03-23">

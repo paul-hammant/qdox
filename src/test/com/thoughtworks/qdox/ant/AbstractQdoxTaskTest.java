@@ -9,6 +9,7 @@ import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.FileSet;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.DocletTag;
 
 // Not really abstract, but a test of the abstract.
 
@@ -23,11 +24,14 @@ public final class AbstractQdoxTaskTest extends TestCase {
         task.addFileset(new OveriddenFileSet(new String[]{"com/thoughtworks/qdox/directorywalker/SuffixFilter.java"}));
         task.execute();
 
-        // fix me!
+        JavaClass hopefullySuffixFilter = ((JavaClass) task.allClasses.get(0));
 
         assertNotNull("Expected a JavaClass", task.allClasses.get(0));
-        assertEquals("SuffixFilter", ((JavaClass) task.allClasses.get(0)).getName());
+        assertEquals("SuffixFilter", hopefullySuffixFilter.getName());
         assertEquals("com.thoughtworks.qdox.directorywalker.SuffixFilter", task.classes);
+
+        DocletTag author = hopefullySuffixFilter.getTagByName("author");
+        assertEquals("yippee", author.getNamedParameter("dummy"));
     }
 
     public void testNoFileSets() {
@@ -40,9 +44,16 @@ public final class AbstractQdoxTaskTest extends TestCase {
         }
     }
 
-
     private class OveriddenAbstractQdoxTask extends AbstractQdoxTask {
         public String classes = "";
+
+
+        public OveriddenAbstractQdoxTask() {
+            Project project = new Project();
+            // see testBasic() and SuffixFilter's class level tag
+            project.setUserProperty("replaceme", "yippee");
+            setProject(project);
+        }
 
         public void execute() {
             super.execute();

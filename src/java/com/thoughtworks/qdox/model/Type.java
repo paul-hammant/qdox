@@ -82,14 +82,38 @@ public class Type implements Comparable, Serializable {
 
     public JavaClass getJavaClass() {
         if (getParentSource() == null) {
-            System.out.println("WARNING: No source file for " + getValue());
             return null;
         }
         if (getParentSource().getClassLibrary() == null) {
-            System.out.println("WARNING: No class library for " + getValue());
             return null;
         }
         return getParentSource().getClassLibrary().getClassByName(getValue());
     }
 
+    public boolean isA(Type type) {
+        if (this.equals(type)) {
+            return true;
+        } else {
+            // ask our interfaces
+            JavaClass javaClass = getJavaClass();
+            if( javaClass != null ) {
+                Type[] implementz = javaClass.getImplements();
+                for (int i = 0; i < implementz.length; i++) {
+                    if (implementz[i].isA(type)) {
+                        return true;
+                    }
+                }
+
+                // ask our superclass
+                Type supertype = javaClass.getSuperClass();
+                if (supertype != null) {
+                    if (supertype.isA(type)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        // We'we walked up the hierarchy and found nothing.
+        return false;
+    }
 }

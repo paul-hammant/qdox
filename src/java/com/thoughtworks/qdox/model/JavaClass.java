@@ -180,7 +180,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
     public Type asType() {
         if (type == null) {
-            type = new Type(getFullyQualifiedName(), 0);
+            type = new Type(getFullyQualifiedName(), 0, getParentSource());
         }
         return type;
     }
@@ -265,37 +265,13 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
      * @since 1.3
      */
     public boolean isA(String fullClassName) {
-        JavaClass javaClass = javaClassCache.getClassByName(fullClassName);
-        return isA(javaClass);
+        //JavaClass javaClass = javaClassCache.getClassByName(fullClassName);
+        Type type = new Type(fullClassName,0,this.getParentSource());
+        return asType().isA(type);
     }
 
-    /**
-     * @since 1.3
-     */
     public boolean isA(JavaClass javaClass) {
-        if (this.equals(javaClass)) {
-            return true;
-        } else {
-            // ask our interfaces
-            Type[] implementz = getImplements();
-            for (int i = 0; i < implementz.length; i++) {
-                JavaClass interfaze = implementz[i].getJavaClass();
-                if (interfaze.isA(javaClass)) {
-                    return true;
-                }
-            }
-
-            // ask our superclass
-            Type supertype = getSuperClass();
-            if (supertype != null) {
-                JavaClass superclass = supertype.getJavaClass();
-                if (superclass.isA(javaClass)) {
-                    return true;
-                }
-            }
-        }
-        // We'we walked up the hierarchy and found nothing.
-        return false;
+        return asType().isA(javaClass.asType());
     }
 
     /**

@@ -293,6 +293,19 @@ public class JavaDocBuilderTest extends TestCase {
         assertFalse("should not be Object",    list.isA("java.lang.Object")); // I think! ;)
     }
 
+    public void testClassCanBeTestedForNonexistantClasses() throws Exception {
+        String in = ""
+                + "package food;"
+                + "class Sausage extends food.Meat implements food.Proteine {"
+                + "}";
+        builder.addSource(new StringReader(in));
+
+        JavaClass sausage = builder.getClassByName("food.Sausage");
+        assertTrue(sausage.isA("food.Meat"));
+        assertTrue(sausage.isA("food.Proteine"));
+    }
+
+
     public void testImageIconBeanProperties() {
         JavaClass imageIcon = builder.getClassByName("javax.swing.ImageIcon");
         BeanProperty[] beanProperties = imageIcon.getBeanProperties();

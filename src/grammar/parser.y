@@ -38,6 +38,8 @@ modifier: PUBLIC { $$ = "public"; }
 	| NATIVE { $$ = "native"; }
 	| SYNCHRONIZED { $$ = "synchronized"; }
 	| VOLATILE { $$ = "volatile"; }
+	| TRANSIENT { $$ = "transient"; }
+	| STRICTFP { $$ = "strictfp"; }
 	;
 
 
@@ -59,26 +61,24 @@ javadoctag: JAVADOCTAGMARK JAVADOCTOKEN javadoctokens { builder.addJavaDocTag($2
 
 
 
-class: classdefinition PARENOPEN classparts PARENCLOSE;
-classdefinition: classmodifiers classorinterface IDENTIFIER extends implements { cls.name = $3; builder.addClass(cls); cls = new Builder.ClassDef(); }
-classmodifiers: | classmodifiers modifier { cls.modifiers.add($2); };
+class: classdefinition PARENOPEN members PARENCLOSE;
+classdefinition: modifiers classorinterface IDENTIFIER extends implements { cls.modifiers.addAll(modifiers); modifiers.clear(); cls.name = $3; builder.addClass(cls); cls = new Builder.ClassDef(); }
 classorinterface: CLASS | INTERFACE { cls.isInterface = true; };
 extends: | EXTENDS extendslist;
-extendslist: fullidentifier { cls.extendz.add($1); } | extendslist COMMA fullidentifier { cls.extendz.add($3); };
+extendslist: fullidentifier { cls.extendz.add($1); }
+	| extendslist COMMA fullidentifier { cls.extendz.add($3); };
 implements: | IMPLEMENTS implementslist;
-implementslist: fullidentifier { cls.implementz.add($1); } | implementslist COMMA fullidentifier { cls.implementz.add($3); };
+implementslist: fullidentifier { cls.implementz.add($1); }
+	| implementslist COMMA fullidentifier { cls.implementz.add($3); };
 
-classparts: | classparts classpart;
-classpart: javadoc | member;
+members: | members member;
 
-member: modifiers fullidentifier IDENTIFIER field { fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); };
-	| modifiers fullidentifier IDENTIFIER method { mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
+member: javadoc
+	| modifiers fullidentifier IDENTIFIER field { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); }
+	| modifiers fullidentifier IDENTIFIER method { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
+modifiers: | modifiers modifier { modifiers.add($2); };
 
-modifiers: | modifiers modifier { mth.modifiers.add($2); };
-
-// method definition
-method: BRACKETOPEN params BRACKETCLOSE exceptions methodend {  }
-//methodmodifiers: | methodmodifiers modifier { mth.modifiers.add($2); };
+method: BRACKETOPEN params BRACKETCLOSE exceptions methodend;
 exceptions: | THROWS exceptionlist;
 exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
 methodend: SEMI | CODEBLOCK;
@@ -99,6 +99,7 @@ private StringBuffer textBuffer = new StringBuffer();
 private Builder.ClassDef cls = new Builder.ClassDef();
 private Builder.MethodDef mth = new Builder.MethodDef();
 private Builder.FieldDef fld = new Builder.FieldDef();
+private java.util.Set modifiers = new java.util.HashSet();
 
 private String buffer() {
 	if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);

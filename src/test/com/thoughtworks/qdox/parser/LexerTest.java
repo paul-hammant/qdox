@@ -87,6 +87,7 @@ public class LexerTest extends TestCase {
     }
 
     public void FIXME_testGenericTypeAssignment() throws Exception {
+        // QDOX-77
         checkAssignment("new HashMap<String,Integer>");
     }
 

@@ -123,6 +123,7 @@ public class GenericsTest extends TestCase {
     }
     
     public void FIXME_testJiraQdox66() {
+        // Also see QDOX-77
         String source = "" +
             "public class Foo {\n" +
             "    protected Map<String, Object> m_env = new HashMap<String, Object>();\n" +

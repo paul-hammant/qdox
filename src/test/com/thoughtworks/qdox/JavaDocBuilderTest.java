@@ -556,6 +556,18 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals("Hello \nworld!", x.getComment());
     }
 
+    public void testJiraQdox82() {
+        String source = "" +
+                "/**\n" +
+                " * @bar.baz foo=\"this is \n" + 
+                " *       multilined\"\n" +
+                " */\n" +
+                "class x{}";
+        builder.addSource(new StringReader(source));
+        JavaClass x = builder.getClassByName("x");
+        assertEquals("foo=\"this is \nmultilined\"", x.getTagByName("bar.baz").getValue());
+    }
+
     public void testJiraQdox19() {
         String source = "" +
                 "class x { \n" +

@@ -14,6 +14,7 @@ import net.sf.qdox.parser.*;
 
 	private int parenDepth = 0, stateDepth = 0;
 	private int[] stateStack = new int[2];
+	private boolean javaDocNewLine;
 
 	public String text() {
 		return yytext();
@@ -79,7 +80,7 @@ import net.sf.qdox.parser.*;
 	}
 	"}"                { parenDepth--; return Parser.PARENCLOSE; }
 
-	"/**"              { pushState(JAVADOC); return Parser.JAVADOCSTART; }
+	"/**"              { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
 	"="                { pushState(ASSIGNMENT); }
 	[A-Za-z_0-9]*      { return Parser.IDENTIFIER; }
 
@@ -87,9 +88,9 @@ import net.sf.qdox.parser.*;
 
 <JAVADOC> {
 	"*/"               { popState(); return Parser.JAVADOCEND; }
-	\r|\n|\r\n         { return Parser.JAVADOCNEWLINE; }
-	[^ \t\r\n\*@]*     { return Parser.JAVADOCTOKEN; }
-	"@"                { return Parser.JAVADOCTAGMARK; }
+	\r|\n|\r\n         { javaDocNewLine = true; return Parser.JAVADOCNEWLINE; }
+	[^ \t\r\n\*@][^ \t\r\n\*]* { return Parser.JAVADOCTOKEN; }
+	"@"                { if (javaDocNewLine) return Parser.JAVADOCTAGMARK; }
 }
 
 <CODEBLOCK> {

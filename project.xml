@@ -40,7 +40,7 @@
   <repository>
     <connection>scm:cvs:pserver:anonymous@cvs.qdox.codehaus.org:/home/projects/qdox/scm:qdox</connection>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.qdox.codehaus.org:/home/projects/qdox/scm:qdox</developerConnection>
-    <url>http://cvs.qdox.codehaus.org/qdox</url>   
+    <url>http://cvs.qdox.codehaus.org/viewrep/qdox</url>   
   </repository>
   
   <mailingLists>

@@ -13,7 +13,7 @@ import java.io.IOException;
 
 // stringly typed tokens/types
 %token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN
-%type <sval> fullidentifier modifier
+%type <sval> fullidentifier modifier classtype
 %type <ival> dimensions
 %type <type> type arrayidentifier
 
@@ -99,11 +99,16 @@ modifiers: | modifiers modifier { modifiers.add($2); };
 // ----- TYPES 
 
 type: 
-    fullidentifier typearguments dimensions {
-        $$ = new TypeDef($1,$3); 
+    classtype dimensions {
+        $$ = new TypeDef($1,$2); 
     };
 
-typearguments: | LESSTHAN typearglist GREATERTHAN;
+classtype: 
+    fullidentifier opt_typearguments {
+        $$ = $1; 
+    };
+
+opt_typearguments: | LESSTHAN typearglist GREATERTHAN;
 
 typearglist:
     typearg |
@@ -115,7 +120,7 @@ typearg:
     QUERY EXTENDS type |
     QUERY SUPER type;
 
-typeparams: | LESSTHAN typeparamlist GREATERTHAN;
+opt_typeparams: | LESSTHAN typeparamlist GREATERTHAN;
 
 typeparamlist:
     typeparam |
@@ -137,7 +142,7 @@ class:
     };
 
 classdefinition: 
-    modifiers classorinterface IDENTIFIER typeparams extends implements {
+    modifiers classorinterface IDENTIFIER opt_typeparams opt_extends opt_implements {
         cls.lineNumber = line;
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
         cls.name = $3;
@@ -149,17 +154,17 @@ classorinterface:
     CLASS | 
     INTERFACE { cls.isInterface = true; };
 
-extends: | EXTENDS extendslist;
+opt_extends: | EXTENDS extendslist;
 
 extendslist: 
-    fullidentifier { cls.extendz.add($1); } typearguments |
-    extendslist COMMA fullidentifier { cls.extendz.add($3); };
+    classtype { cls.extendz.add($1); } |
+    extendslist COMMA classtype { cls.extendz.add($3); };
 
-implements: | IMPLEMENTS implementslist;
+opt_implements: | IMPLEMENTS implementslist;
 
 implementslist: 
-    fullidentifier { cls.implementz.add($1); } | 
-    implementslist COMMA fullidentifier { cls.implementz.add($3); };
+    classtype { cls.implementz.add($1); } | 
+    implementslist COMMA classtype { cls.implementz.add($3); };
 
 members: | members { line = lexer.getLine(); } member;
 
@@ -213,30 +218,30 @@ constructor:
         mth = new MethodDef(); 
     };
 
-methoddef: PARENOPEN params PARENCLOSE exceptions;
+methoddef: PARENOPEN opt_params PARENCLOSE opt_exceptions;
 
-exceptions: | THROWS exceptionlist;
+opt_exceptions: | THROWS exceptionlist;
 
 exceptionlist: 
     fullidentifier { mth.exceptions.add($1); } | 
     exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
 
-params: | paramlist;
+opt_params: | paramlist;
 
 paramlist: 
     param | 
     paramlist COMMA param;
 
 param: 
-    parammodifiers type arrayidentifier { 
+    opt_parammodifiers type arrayidentifier { 
         param.name = $3.name; 
         param.type = $2.name; 
         param.dimensions = $2.dimensions + $3.dimensions; 
         mth.params.add(param); param = new FieldDef(); 
     };
 
-parammodifiers: | 
-    parammodifiers modifier { param.modifiers.add($2); };
+opt_parammodifiers: | 
+    opt_parammodifiers modifier { param.modifiers.add($2); };
 
 
 %%

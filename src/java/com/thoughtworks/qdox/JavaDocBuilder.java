@@ -9,6 +9,7 @@ import com.thoughtworks.qdox.model.JavaClassCache;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
 import com.thoughtworks.qdox.parser.Lexer;
+import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
 import java.io.File;
@@ -71,16 +72,83 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
 		JavaClass[] javaClasses = source.getClasses();
 		for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
 			JavaClass cls = javaClasses[classIndex];
-			classes.put(cls.getFullyQualifiedName(), cls);
-			cls.setJavaClassCache(this);
-		}
+            addClass(cls);
+        }
 	}
 
-	public JavaClass getClassByName(String name) {
-		return (JavaClass) classes.get(name);
+    private void addClass(JavaClass cls) {
+        classes.put(cls.getFullyQualifiedName(), cls);
+        cls.setJavaClassCache(this);
+    }
+
+    public JavaClass getClassByName(String name) {
+		JavaClass result = (JavaClass) classes.get(name);
+        if( result == null ) {
+            // Try to make a binary class out of it
+            result = createBinaryClass(name);
+            if( result != null ) {
+                addClass(result);
+            }
+        }
+        return result;
 	}
 
-	public JavaSource addSource(Reader reader) {
+    private JavaClass createBinaryClass(String name) {
+        // First see if the class exists at all.
+        Class clazz = classLibrary.getClass(name);
+        if (clazz == null) {
+            return null;
+        } else {
+            ModelBuilder binaryBuilder = new ModelBuilder(classLibrary);
+
+            // Set the package name and class name
+            String packageName = getPackageName(name);
+            binaryBuilder.addPackage(packageName);
+
+            ClassDef classDef = new ClassDef();
+            classDef.name = getClassName(name);
+
+            // Set the extended class and interfaces.
+            Class[] interfaces = clazz.getInterfaces();
+            if (clazz.isInterface()) {
+                classDef.isInterface = true;
+                for (int i = 0; i < interfaces.length; i++) {
+                    Class anInterface = interfaces[i];
+                    classDef.extendz.add(anInterface.getName());
+                }
+            } else {
+                for (int i = 0; i < interfaces.length; i++) {
+                    Class anInterface = interfaces[i];
+                    classDef.implementz.add(anInterface.getName());
+                    Class superclass = clazz.getSuperclass();
+                    if(superclass != null) {
+                        classDef.extendz.add(superclass.getName());
+                    }
+                }
+            }
+            binaryBuilder.beginClass(classDef);
+
+            // We don't care about methods, fields and ctor. At least not atm.
+
+            binaryBuilder.endClass();
+            JavaSource binarySource = binaryBuilder.getSource();
+            // There is always only one class in a "binary" source.
+            JavaClass result = binarySource.getClasses()[0];
+            return result;
+        }
+    }
+
+    private String getPackageName(String fullClassName) {
+        int lastDot = fullClassName.lastIndexOf('.');
+        return lastDot == -1 ? "" : fullClassName.substring(0, lastDot);
+    }
+
+    private String getClassName(String fullClassName) {
+        int lastDot = fullClassName.lastIndexOf('.');
+        return lastDot == -1 ? fullClassName : fullClassName.substring(lastDot + 1);
+    }
+
+    public JavaSource addSource(Reader reader) {
 		ModelBuilder builder = new ModelBuilder(classLibrary);
 		Lexer lexer = new JFlexLexer(reader);
 		Parser parser = new Parser(lexer, builder);

@@ -11,8 +11,8 @@ import java.util.Set;
 
 public class ModelBuilder implements Builder {
 
-	private ClassLibrary classLibrary;
-	private JavaSource source;
+	private final ClassLibrary classLibrary;
+	private final JavaSource source;
 	private JavaClassParent currentParent;
 	private JavaClass currentClass;
 	private String lastComment;

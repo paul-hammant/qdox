@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.Type;
 
 public class JavaDocBuilderTest extends TestCase {
 
@@ -158,38 +159,83 @@ public class JavaDocBuilderTest extends TestCase {
 		assertEquals("java.util.List", cls.getSuperClass().getValue());
 	}
 
-	public void testAddMoreClassLoaders() throws Exception {
+    public void testAddMoreClassLoaders() throws Exception {
 
-		builder.getClassLibrary().addClassLoader(new ClassLoader() {
-			public Class loadClass(String name) throws ClassNotFoundException {
-				return name.equals("com.thoughtworks.Spoon") ? this.getClass() : null;
-			}
-		});
+        builder.getClassLibrary().addClassLoader(new ClassLoader() {
+            public Class loadClass(String name) throws ClassNotFoundException {
+                return name.equals("com.thoughtworks.Spoon") ? this.getClass() : null;
+            }
+        });
 
-		builder.getClassLibrary().addClassLoader(new ClassLoader() {
-			public Class loadClass(String name) throws ClassNotFoundException {
-				return name.equals("com.thoughtworks.Fork") ? this.getClass() : null;
-			}
-		});
+        builder.getClassLibrary().addClassLoader(new ClassLoader() {
+            public Class loadClass(String name) throws ClassNotFoundException {
+                return name.equals("com.thoughtworks.Fork") ? this.getClass() : null;
+            }
+        });
 
-		String in = ""
-			+ "package x;"
-			+ "import java.util.*;"
-			+ "import com.thoughtworks.*;"
-			+ "class X {"
-			+ " Spoon a();"
-			+ " Fork b();"
-			+ " Cabbage c();"
-			+ "}";
-		builder.addSource(new StringReader(in));
+        String in = ""
+            + "package x;"
+            + "import java.util.*;"
+            + "import com.thoughtworks.*;"
+            + "class X {"
+            + " Spoon a();"
+            + " Fork b();"
+            + " Cabbage c();"
+            + "}";
+        builder.addSource(new StringReader(in));
 
-		JavaClass cls = builder.getClassByName("x.X");
-		assertEquals("com.thoughtworks.Spoon", cls.getMethods()[0].getReturns().getValue());
-		assertEquals("com.thoughtworks.Fork", cls.getMethods()[1].getReturns().getValue());
-		// unresolved
-		assertEquals("Cabbage", cls.getMethods()[2].getReturns().getValue());
+        JavaClass cls = builder.getClassByName("x.X");
+        assertEquals("com.thoughtworks.Spoon", cls.getMethods()[0].getReturns().getValue());
+        assertEquals("com.thoughtworks.Fork", cls.getMethods()[1].getReturns().getValue());
+        // unresolved
+        assertEquals("Cabbage", cls.getMethods()[2].getReturns().getValue());
 
-	}
+    }
+
+    public void testBinaryClassesAreFound() throws Exception {
+
+        builder.getClassLibrary().addClassLoader(new ClassLoader() {
+            public Class loadClass(String name) throws ClassNotFoundException {
+                return name.equals("com.thoughtworks.Spoon") ? this.getClass() : null;
+            }
+        });
+
+        builder.getClassLibrary().addClassLoader(new ClassLoader() {
+            public Class loadClass(String name) throws ClassNotFoundException {
+                return name.equals("com.thoughtworks.Fork") ? this.getClass() : null;
+            }
+        });
+
+        String in = ""
+            + "package x;"
+            + "import java.util.*;"
+            + "class X {"
+            + " ArrayList a();"
+            + "}";
+        builder.addSource(new StringReader(in));
+
+        JavaClass cls = builder.getClassByName("x.X");
+        Type returnType = cls.getMethods()[0].getReturns();
+        JavaClass returnClass = builder.getClassByName(returnType.getValue());
+
+        assertEquals("java.util.ArrayList", returnClass.getFullyQualifiedName());
+
+        Type[] returnImplementz = returnClass.getImplements();
+        boolean foundList = false;
+        for (int i = 0; i < returnImplementz.length; i++) {
+            Type type = returnImplementz[i];
+            if( type.getValue().equals("java.util.List") ) {
+                foundList = true;
+            }
+        }
+        assertTrue(foundList);
+
+        // See if interfaces work too.
+        JavaClass list = builder.getClassByName("java.util.List");
+        assertTrue(list.isInterface());
+        assertNull(list.getSuperClass());
+        assertEquals("java.util.Collection", list.getImplements()[0].getValue());
+    }
 
 	public void testSerializable() throws Exception {
 		builder.addSource(new StringReader("package test; public class X{}"));

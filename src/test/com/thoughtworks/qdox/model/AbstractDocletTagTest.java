@@ -85,4 +85,5 @@ public abstract class AbstractDocletTagTest extends TestCase {
         assertEquals("hello chris' world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
     }
+    
 }

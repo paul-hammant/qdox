@@ -48,6 +48,8 @@ public class DefaultDocletTag implements DocletTag {
                         while (!token.endsWith(quote)) {
                             if (tokens.hasMoreTokens()) {
                                 token += " " + tokens.nextToken();
+                            } else {
+                                break;
                             }
                         }
                         break;  // we only want to match against one type of quote

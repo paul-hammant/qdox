@@ -7,8 +7,6 @@ import com.thoughtworks.qdox.parser.structs.FieldDef;
 
 import java.util.*;
 
-import sun.security.action.GetPropertyAction;
-
 public class ModelBuilder implements Builder {
 
 	private List classes = new ArrayList();
@@ -21,13 +19,10 @@ public class ModelBuilder implements Builder {
 	
 	public ModelBuilder(){}
 
-	public ModelBuilder (List classesParsed){
+	public ModelBuilder(List classesParsed){
 		this.classesParsed = classesParsed;
 	}
 	
-	public void fail() {
-	}
-
 	public void addPackage(String packageName) {
 		this.packge = packageName;
 	}

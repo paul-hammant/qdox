@@ -45,7 +45,7 @@ public class ConsoleLoggingQdoxTaskTestCase extends TestCase
 
         public File getDir(Project project) {
             try {
-                FileOutputStream fos = new FileOutputStream("ZZZZ");
+                FileOutputStream fos = new FileOutputStream("build/ZZZZ");
                 fos.write(12);
                 fos.close();
             } catch (IOException e) {

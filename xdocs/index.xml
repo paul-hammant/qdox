@@ -8,7 +8,40 @@
 
 	<body>
 		<section name="QDox">
-			<p>Document me!</p>
+			<p>
+				QDox is a high speed, small footprint parser for extracting class/interface/method
+				definitions from source files complete with JavaDoc @tags. It is designed to be used
+				by active code generators or documentation tools.
+			</p>
+		</section>
+		<section name="The Plan">
+			<p>
+				A custom built parser is to be built. JFlex and BYacc/J have been chosen because of their p
+				roven performance and they require no external libraries at runtime.
+			</p>
+			<p>
+				The parser skims the source files only looking for things of interest such as
+				class/interface definitions, import statements, JavaDoc and member declarations. The parser ignores things
+				such as actual method implementations to avoid overhead (while in method blocks, curly brace counting
+				suffices).
+			</p>
+			<p>
+				The end result of the parser is a very simple document model containing enough information to be useful.
+			</p>
+			<p>
+				When the initial header of a source file has been parsed (the class/interface level JavaDoc) the parser can
+				make a callback to determine whether the client is interested in this file. If not, the parsing can be aborted.
+				This is useful in situations where you have a large source tree but you only need to obtain details on classes
+				with a particular JavaDoc tag in the header.
+			</p>
+			<p>
+				A cache of the last parsed model is kept on the local filesystem. When reinvoking the parser it can check to
+				see whether it's already in the cache to prevent re-parsing.
+			</p>
+			<p>
+				File modifications can be detected by checking the last-modified timestamp against the cache. In the event of
+				using version control systems that don't play friendly with the timestamps, a checksum can be used instead.
+			</p>
 		</section>
 	</body>
 	

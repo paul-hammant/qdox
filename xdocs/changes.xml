@@ -22,6 +22,10 @@
                 Implemented QDOX-66: 
                 Support for wildcard generic-type arguments.
             </action>
+            <action dev="joeretro" type="add">
+                Implemented QDOX-67:
+                Convenience methods - Type.isPrimitive() and Type.isVoid().
+            </action>
             <action dev="mdub" type="add">
                 Implemented QDOX-68: 
                 Support for generic-type parameters on methods.

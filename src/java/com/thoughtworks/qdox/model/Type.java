@@ -127,4 +127,32 @@ public class Type implements Comparable, Serializable {
         // We'we walked up the hierarchy and found nothing.
         return false;
     }
+
+    /**
+     * @since 1.6
+     */
+    public boolean isPrimitive() {
+        String value = getValue();
+        if (value == null || value.length() == 0 || value.indexOf('.') > -1) {
+            return false;
+        } else {
+           return "boolean".equals(value)
+            || "byte".equals(value)
+            || "char".equals(value)
+            || "short".equals(value)
+            || "int".equals(value)
+            || "long".equals(value)
+            || "float".equals(value)
+            || "double".equals(value);
+        }
+    }
+
+    /**
+     * @since 1.6
+     */
+    public boolean isVoid() {
+        return "void".equals(getValue());
+    }
+
+
 }

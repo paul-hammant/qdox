@@ -4,12 +4,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class JavaClass extends AbstractJavaEntity {
+public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
 	private List methods = new LinkedList();
 	private JavaMethod[] methodsArray;
 	private List fields = new LinkedList();
 	private JavaField[] fieldsArray;
+	private List classes = new LinkedList();
+	private JavaClass[] classesArray;
 	private boolean interfce;
 	private Type type;
 	private Type superClass;
@@ -135,7 +137,7 @@ public class JavaClass extends AbstractJavaEntity {
 	}
 	
 	public String getFullyQualifiedName() {
-		return getParentSource().asClassNamespace() + "." + getName();
+		return getParent().asClassNamespace() + "." + getName();
 	}
 	
 	public String asClassNamespace() {
@@ -163,6 +165,20 @@ public class JavaClass extends AbstractJavaEntity {
 			fields.toArray(fieldsArray);
 		}
 		return fieldsArray;
+	}
+
+	public void addClass(JavaClass cls) {
+		classes.add(cls);
+		cls.setParent(this);
+		classesArray = null;
+	}
+
+	public JavaClass[] getClasses() {
+		if (classesArray == null) {
+			classesArray = new JavaClass[classes.size()];
+			classes.toArray(classesArray);
+		}
+		return classesArray;
 	}
 
 }

@@ -303,6 +303,25 @@ public class JavaClassTest extends TestCase {
 		assertEquals("com.thoughtworks.qdox.MyClass", cls.asType().getValue());
 	}
 
+	public void testInnerClass() throws Exception {
+		JavaSource source = new JavaSource();
+		source.setPackage("foo.bar");
+
+		JavaClass outer = new JavaClass();
+		outer.setName("Outer");
+		source.setClasses(new JavaClass[]{outer});
+		assertEquals("foo.bar.Outer", outer.asClassNamespace());
+		
+		JavaClass inner = new JavaClass();
+		inner.setName("Inner");
+		outer.addClass(inner);
+		
+		assertEquals("Inner", inner.getName());
+		assertEquals("foo.bar", inner.getPackage());
+		assertEquals("foo.bar.Outer.Inner", 
+					 inner.getFullyQualifiedName());
+	}
+
 	public void testDefaultClassSuperclass() throws Exception {
 		cls.setName("MyClass");
 		assertEquals("java.lang.Object", cls.getSuperClass().getValue());

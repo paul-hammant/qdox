@@ -43,6 +43,9 @@ import com.thoughtworks.qdox.parser.*;
 
 %}
 
+Eol                     = \r|\n|\r\n
+CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/] )
+
 %state JAVADOC CODEBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT
 
 %%
@@ -109,10 +112,19 @@ import com.thoughtworks.qdox.parser.*;
 
 <JAVADOC> {
 	"*/"               { popState(); return Parser.JAVADOCEND; }
-	\r|\n|\r\n         { javaDocNewLine = true; javaDocStartedContent = false; return Parser.JAVADOCNEWLINE; }
-	"*"                { if (javaDocStartedContent) return Parser.JAVADOCTOKEN; }
-	[^ \t\r\n\*@][^ \t\r\n]* { javaDocStartedContent = true; return Parser.JAVADOCTOKEN; }
-	"@"                { if (javaDocNewLine) return Parser.JAVADOCTAGMARK; }
+	^[ \t] "*" [ \t]   { /* ignore */ }
+	{Eol}              { javaDocNewLine = true; return Parser.JAVADOCNEWLINE; }
+	{CommentChar}* "*"+ / [ \t\r\n] {
+                return Parser.JAVADOCTOKEN;
+        }
+	{CommentChar}+ { 
+                int token = Parser.JAVADOCTOKEN;
+                if (javaDocNewLine && yycharat(0) == '@') {
+                        token = Parser.JAVADOCTAG;
+                }
+                javaDocNewLine = false;
+                return token;
+        }
 }
 
 <CODEBLOCK> {
@@ -157,7 +169,7 @@ import com.thoughtworks.qdox.parser.*;
 }
 
 <SINGLELINECOMMENT> {
-	\r|\n|\r\n         { popState(); }
+	{Eol}        { popState(); }
 }
 
 <MULTILINECOMMENT> {

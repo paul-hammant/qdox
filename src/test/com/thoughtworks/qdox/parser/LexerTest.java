@@ -2,7 +2,9 @@ package com.thoughtworks.qdox.parser;
 
 import junit.framework.TestCase;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -234,24 +236,20 @@ public class LexerTest extends TestCase {
         assertLex(Parser.JAVADOCSTART, lexer);
         assertLex(Parser.JAVADOCNEWLINE, lexer);
 
-        assertLex(Parser.JAVADOCTAGMARK, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "hello", lexer);
+        assertLex(Parser.JAVADOCTAG, "@hello", lexer);
         assertLex(Parser.JAVADOCTOKEN, "world", lexer);
         assertLex(Parser.JAVADOCNEWLINE, lexer);
 
-        assertLex(Parser.JAVADOCTAGMARK, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "a", lexer);
+        assertLex(Parser.JAVADOCTAG, "@a", lexer);
         assertLex(Parser.JAVADOCTOKEN, "b", lexer);
         assertLex(Parser.JAVADOCTOKEN, "c", lexer);
         assertLex(Parser.JAVADOCTOKEN, "d", lexer);
         assertLex(Parser.JAVADOCNEWLINE, lexer);
 
-        assertLex(Parser.JAVADOCTAGMARK, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "bye", lexer);
+        assertLex(Parser.JAVADOCTAG, "@bye", lexer);
         assertLex(Parser.JAVADOCNEWLINE, lexer);
 
-        assertLex(Parser.JAVADOCTAGMARK, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "bye:bye", lexer);
+        assertLex(Parser.JAVADOCTAG, "@bye:bye", lexer);
         assertLex(Parser.JAVADOCNEWLINE, lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);
@@ -263,20 +261,32 @@ public class LexerTest extends TestCase {
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
 
-        assertLex(Parser.JAVADOCTAGMARK, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "hello", lexer);
+        assertLex(Parser.JAVADOCTAG, "@hello", lexer);
         assertLex(Parser.JAVADOCTOKEN, "world", lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
     }
 
-    public void testCommentThatContainsAtSymbol() throws Exception {
+    public void testCompressedDocletTag() throws Exception {
+        String in = "/**@foo bar*/";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.JAVADOCSTART, lexer);
+        
+        assertLex(Parser.JAVADOCTAG, "@foo", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "bar", lexer);
+        
+        assertLex(Parser.JAVADOCEND, lexer);
+        assertLex(0, lexer);
+    }
+
+    public void testCommentThatContainsAtSymbols() throws Exception {
         String in = ""
-                + "/**\n"
-                + " * joe@truemesh.com\n"
-                + " * {@link here}.\n"
-                + " */";
+            + "/**\n"
+            + " * joe@truemesh.com\n"
+            + " * {@link here}.\n"
+            + " * me @home\n"
+            + " */";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
         assertLex(Parser.JAVADOCNEWLINE, lexer);
@@ -285,6 +295,9 @@ public class LexerTest extends TestCase {
         assertLex(Parser.JAVADOCNEWLINE, lexer);
         assertLex(Parser.JAVADOCTOKEN, "{@link", lexer);
         assertLex(Parser.JAVADOCTOKEN, "here}.", lexer);
+        assertLex(Parser.JAVADOCNEWLINE, lexer);
+        assertLex(Parser.JAVADOCTOKEN, "me", lexer);
+        assertLex(Parser.JAVADOCTOKEN, "@home", lexer);
         assertLex(Parser.JAVADOCNEWLINE, lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);

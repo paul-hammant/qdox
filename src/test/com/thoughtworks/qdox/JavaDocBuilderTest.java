@@ -520,12 +520,13 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals("foo.Outer$Inner", type.getJavaClass().getFullyQualifiedName());
     }
 
-//    public void testJiraQdox16() {
-//        String source = "" +
-//                "/**Hip hop won*t stop*/" +
-//                "class x{}";
-//        builder.addSource(new StringReader(source));
-//        JavaClass x = builder.getClassByName("x");
-//        assertEquals("Hip hop won*t stop", x.getComment());
-//    }
+    public void testJiraQdox16() {
+        String source = "" +
+                "/**Hip hop won*t stop*/" +
+                "class x{}";
+        builder.addSource(new StringReader(source));
+        JavaClass x = builder.getClassByName("x");
+        assertEquals("Hip hop won*t stop", x.getComment());
+    }
+
 }

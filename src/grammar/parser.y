@@ -8,11 +8,11 @@ import java.io.IOException;
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
-%token JAVADOCSTART JAVADOCEND JAVADOCNEWLINE JAVADOCTAGMARK
+%token JAVADOCSTART JAVADOCEND JAVADOCNEWLINE
 %token CODEBLOCK STRING ASSIGNMENT
 
 // stringly typed tokens/types
-%token <sval> IDENTIFIER JAVADOCTOKEN
+%token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN
 %type <sval> fullidentifier modifier arrayidentifier arrayfullidentifier paramarrayidentifier paramarrayfullidentifier
 
 %%
@@ -53,8 +53,8 @@ javadoctoken:
 javadoctags: | javadoctags javadoctag;
 
 javadoctag: 
-	JAVADOCTAGMARK JAVADOCTOKEN javadoctokens {
-		builder.addJavaDocTag($2, buffer(), lexer.getLine()); 
+	JAVADOCTAG javadoctokens {
+		builder.addJavaDocTag($1.substring(1), buffer(), lexer.getLine()); 
 	};
 
 

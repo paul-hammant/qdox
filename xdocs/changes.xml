@@ -82,6 +82,10 @@
             <action dev="rinkrank" type="add">
                 Added boolean isInner() to JavaClass.
             </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-16.
+                More robust handling of "*" and "@" in Javadoc body.
+            </action>
         </release>
 
         <release version="1.2" date="2003-03-23">

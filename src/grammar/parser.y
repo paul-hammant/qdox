@@ -6,7 +6,7 @@ import java.io.IOException;
 
 %token SEMI DOT DOTDOTDOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
-%token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
+%token CLASS INTERFACE ENUM THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND QUERY AT
 %token JAVADOCSTART JAVADOCEND JAVADOCEOL
 %token CODEBLOCK 
@@ -28,7 +28,7 @@ import java.io.IOException;
 file: | file { line = lexer.getLine(); } filepart;
 
 // And a filepart is a package/import statement, javadoc comment, or class declaration.
-filepart: package | import | javadoc | class;
+filepart: package | import | javadoc | class | enum;
 
 // Package statement
 package: PACKAGE fullidentifier SEMI { builder.addPackage($2); };
@@ -159,6 +159,19 @@ typeboundlist:
     type | 
     typeboundlist AMPERSAND type;
 
+// ----- ENUM
+
+enum:
+    modifiers ENUM IDENTIFIER BRACEOPEN enum_values BRACECLOSE;
+
+enum_values:
+    enum_value|
+    enum_values COMMA enum_value;
+
+enum_value:
+    javadoc IDENTIFIER |
+    IDENTIFIER;
+
 // ----- CLASS
 
 class: 
@@ -202,7 +215,8 @@ member:
     method |
     constructor |
     modifiers CODEBLOCK | // static block
-    class | 
+    class |
+    enum |
     SEMI;
 
 memberend: SEMI | CODEBLOCK;

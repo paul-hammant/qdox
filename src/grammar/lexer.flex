@@ -100,6 +100,10 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
         classDepth++;
         return Parser.INTERFACE; 
     }
+    "enum"              {
+        classDepth++;
+        return Parser.ENUM;
+    }
 
     "{"                 {
         nestingDepth++;

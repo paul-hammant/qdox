@@ -6,175 +6,179 @@
 
 <project>
 
-	<pomVersion>3</pomVersion>
+  <pomVersion>3</pomVersion>
 
-	<name>QDox</name>
-	<id>qdox</id>
-	<currentVersion>1.3-SNAPSHOT</currentVersion>
-	<inceptionYear>2002</inceptionYear>
-	<package>com.thoughtworks.qdox</package>
-	<logo>/images/qdox.gif</logo>
+  <name>QDox</name>
+  <id>qdox</id>
+  <currentVersion>1.3-SNAPSHOT</currentVersion>
+  <inceptionYear>2002</inceptionYear>
+  <package>com.thoughtworks.qdox</package>
+  <logo>/images/qdox.gif</logo>
 
-	<organization>
-		<name>ThoughtWorks, Inc</name>
-		<url>http://www.thoughtworks.com/</url>
-	</organization>
+  <organization>
+    <name>ThoughtWorks, Inc</name>
+    <url>http://www.thoughtworks.com/</url>
+  </organization>
 
-	<shortDescription>QDox - Quick JavaDoc Scanner</shortDescription>
-	<description>
-		QDox is a high speed, small footprint parser for extracting class/interface/method
-		definitions from source files complete with JavaDoc @tags. It is designed to be used
-		by active code generators or documentation tools.
-	</description>
+  <shortDescription>QDox - Quick JavaDoc Scanner</shortDescription>
+  <description>
+    QDox is a high speed, small footprint parser for extracting class/interface/method
+    definitions from source files complete with JavaDoc @tags. It is designed to be used
+    by active code generators or documentation tools.
+  </description>
 
-	<url>http://qdox.codehaus.org/</url>
-	<issueTrackingUrl>http://jira.codehaus.org/secure/BrowseProject.jspa?id=10103</issueTrackingUrl>
+  <url>http://qdox.codehaus.org/</url>
+  <issueTrackingUrl>http://jira.codehaus.org/secure/BrowseProject.jspa?id=10103</issueTrackingUrl>
 
-	<siteAddress>codehaus.org</siteAddress>
-	<siteDirectory>/www/qdox.codehaus.org/</siteDirectory>
-	<distributionDirectory>/www/qdox.codehaus.org/downloads/</distributionDirectory>
+  <siteAddress>codehaus.org</siteAddress>
+  <siteDirectory>/www/qdox.codehaus.org/</siteDirectory>
+  <distributionDirectory>/www/qdox.codehaus.org/downloads/</distributionDirectory>
 
-	<repository>
-		<connection>scm:cvs:pserver:anonymous@cvs.codehaus.org:/cvsroot/qdox:qdox</connection>
-		<developerConnection>scm:cvs:ext:${maven.username}@cvs.codehaus.org:/cvsroot/qdox:qdox</developerConnection>
-		<url>http://cvs.codehaus.org/viewcvs.cgi/qdox/?cvsroot=qdox</url>		
-	</repository>
-	
-	<versions>
-		<version>
-			<id>1.0</id>
-			<name>1.0</name>
-			<tag>1_0</tag>
-		</version>
-		<version>
-			<id>1.1</id>
-			<name>1.1</name>
-			<tag>1_1</tag>
-		</version>
-		<version>
-			<id>1.2</id>
-			<name>1.2</name>
-			<tag>1_2</tag>
-		</version>
-		<version>
-			<id>current</id>
-			<name>Current</name>
-			<tag>HEAD</tag>
-		</version>
-	</versions>
+  <repository>
+    <connection>scm:cvs:pserver:anonymous@cvs.codehaus.org:/cvsroot/qdox:qdox</connection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.codehaus.org:/cvsroot/qdox:qdox</developerConnection>
+    <url>http://cvs.codehaus.org/viewcvs.cgi/qdox/?cvsroot=qdox</url>   
+  </repository>
+  
+  <versions>
+    <version>
+      <id>1.0</id>
+      <name>1.0</name>
+      <tag>1_0</tag>
+    </version>
+    <version>
+      <id>1.1</id>
+      <name>1.1</name>
+      <tag>1_1</tag>
+    </version>
+    <version>
+      <id>1.2</id>
+      <name>1.2</name>
+      <tag>1_2</tag>
+    </version>
+    <version>
+      <id>current</id>
+      <name>Current</name>
+      <tag>HEAD</tag>
+    </version>
+  </versions>
 
-	<mailingLists>
-		<mailingList>
-			<name>QDox User List</name>
-			<subscribe>http://lists.codehaus.org/mailman/listinfo/qdox-user</subscribe>
-			<unsubscribe>http://lists.codehaus.org/mailman/listinfo/qdox-user</unsubscribe>
-			<archive>http://lists.codehaus.org/pipermail/qdox-user/</archive>
-		</mailingList>
-	</mailingLists>
+  <mailingLists>
+    <mailingList>
+      <name>QDox User List</name>
+      <subscribe>http://lists.codehaus.org/mailman/listinfo/qdox-user</subscribe>
+      <unsubscribe>http://lists.codehaus.org/mailman/listinfo/qdox-user</unsubscribe>
+      <archive>http://lists.codehaus.org/pipermail/qdox-user/</archive>
+    </mailingList>
+  </mailingLists>
 
-	<developers>
+  <developers>
 
-		<developer>
-			<name>Joe Walnes</name>
-			<id>joeretro</id>
-			<email>joew@thoughtworks.com</email>
-			<organization>ThoughtWorks</organization>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Mike Royle</name>
-			<id>mlroyle</id>
-			<email>mroyle@thoughtworks.com</email>
-			<organization>ThoughtWorks</organization>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Paul Hammant</name>
-			<id>paul</id>
-			<email>Paul_Hammant@yahoo.com</email>
-			<organization>ThoughtWorks</organization>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Mike Williams</name>
-			<id>mdub</id>
-			<email>mdub@dogbiscuit.org</email>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Aslak Helles&oslash;y</name>
-			<id>rinkrank</id>
-			<email>nospam.aslak@thoughtworks.net</email>
-			<organization>ThoughtWorks</organization>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-	</developers>
+    <developer>
+      <name>Joe Walnes</name>
+      <id>joeretro</id>
+      <email>joew@thoughtworks.com</email>
+      <organization>ThoughtWorks</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Mike Royle</name>
+      <id>mlroyle</id>
+      <email>mroyle@thoughtworks.com</email>
+      <organization>ThoughtWorks</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Paul Hammant</name>
+      <id>paul</id>
+      <email>Paul_Hammant@yahoo.com</email>
+      <organization>ThoughtWorks</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Mike Williams</name>
+      <id>mdub</id>
+      <email>mdub@dogbiscuit.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Aslak Helles&oslash;y</name>
+      <id>rinkrank</id>
+      <email>nospam.aslak@thoughtworks.net</email>
+      <organization>ThoughtWorks</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
 
-	<contributors>
-		<contributor>
-			<name>Peter Donald</name>
-			<email>peter@realityforge.org</email>
-		</contributor>
-		<contributor>
-			<name>James Strachan</name>
-			<email>jstrachan@apache.org</email>
-		</contributor>
-		<contributor>
-			<name>Nick Pomfret</name>
-			<email></email>
-		</contributor>
-		<contributor>
-			<name>Chris Stevenson</name>
-			<email>cstevenson@thoughtworks.com</email>
-		</contributor>
-		<contributor>
-			<name>Ben Hogan</name>
-			<email>ben@lizardsoftware.com</email>
-		</contributor>
-	</contributors>
+  <contributors>
+    <contributor>
+      <name>Peter Donald</name>
+      <email>peter@realityforge.org</email>
+    </contributor>
+    <contributor>
+      <name>James Strachan</name>
+      <email>jstrachan@apache.org</email>
+    </contributor>
+    <contributor>
+      <name>Nick Pomfret</name>
+      <email></email>
+    </contributor>
+    <contributor>
+      <name>Chris Stevenson</name>
+      <email>cstevenson@thoughtworks.com</email>
+    </contributor>
+    <contributor>
+      <name>Ben Hogan</name>
+      <email>ben@lizardsoftware.com</email>
+    </contributor>
+    <contributor>
+      <name>Laurent Etiemble</name>
+      <email></email>
+    </contributor>
+  </contributors>
 
-	<dependencies>
-		<dependency>
-			<id>ant</id>
-			<version>1.5.1</version>
-		</dependency>
-		<dependency>
-			<id>junit</id>
-			<version>3.8.1</version>
-		</dependency>
-		<dependency>
-			<id>mockobjects:mockobjects-core</id>
-			<version>0.08dev-20030318</version>
-		</dependency>
-	</dependencies>
+  <dependencies>
+    <dependency>
+      <id>ant</id>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <id>junit</id>
+      <version>3.8.1</version>
+    </dependency>
+    <dependency>
+      <id>mockobjects:mockobjects-core</id>
+      <version>0.08dev-20030318</version>
+    </dependency>
+  </dependencies>
 
-	<build>
+  <build>
 
-		<nagEmailAddress>qdox-user@lists.codehaus.org</nagEmailAddress>
+    <nagEmailAddress>qdox-user@lists.codehaus.org</nagEmailAddress>
 
-		<sourceDirectory>src/java</sourceDirectory>
-		<unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
 
-		<unitTest>
-			<includes>
-				<include>**/*Test.java</include>
-			</includes>
-			<excludes>
-				<exclude>**/Abstract*.java</exclude>
-			</excludes>
-		</unitTest>
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+      <excludes>
+        <exclude>**/Abstract*.java</exclude>
+      </excludes>
+    </unitTest>
 
-		<jars/>
+    <jars/>
 
-	</build>
+  </build>
 </project>

@@ -8,10 +8,7 @@
 	<currentVersion>0.1</currentVersion>
 	<inceptionYear>2002</inceptionYear>
 	<package>net.sf.qdox</package>
-
-<!-- TODO
-	<logo></logo>
--->
+	<logo>/images/qdox.gif</logo>
 
 	<organization>
 		<name>TrueMesh Toys</name>
@@ -33,15 +30,14 @@
 	<issueTrackingUrl>http://sf.net/projects/qdox/</issueTrackingUrl>
 -->
 
-<!-- TODO
-	<siteAddress></siteAddress>
-	<siteDirectory></siteDirectory>
+	<siteAddress>qdox.sf.net</siteAddress>
+	<siteDirectory>/home/groups/q/qd/qdox/htdocs</siteDirectory>
 	<distributionDirectory></distributionDirectory>
--->
+
 
 	<repository>
-		<connection>scm:cvs:pserver:anon@cvs.sf.net:/cvsroot/qdox:qdox</connection>
-		<url>http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/qdox</url>
+		<connection>scm:cvs::pserver:anonymous@cvs.sourceforge.net:/cvsroot/qdox:qdox</connection>
+		<url>http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/qdox/</url>
 	</repository>
 
 	<versions>
@@ -82,14 +78,9 @@
 			<url>http://www.junit.org</url>
 		</dependency>
 		<dependency>
-			<id>commons-collections</id>
-			<version>2.0</version>
-			<url>http://jakarta.apache.org/commons/collections.html</url>
-		</dependency>
-		<dependency>
-			<id>commons-jxpath</id>
-			<version>0.1-dev</version>
-			<url>http://jakarta.apache.org/commons/jxpath/index.html</url>
+			<id>mockobjects</id>
+			<version>0.1</version>
+			<url>http://www.mockobjects.com/</url>
 		</dependency>
 	</dependencies>
 

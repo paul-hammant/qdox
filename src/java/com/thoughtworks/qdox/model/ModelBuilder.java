@@ -12,12 +12,11 @@ import java.util.Set;
 
 public class ModelBuilder implements Builder {
 
+	private ClassLibrary classLibrary;
+	private JavaSource source;
 	private JavaClass currentClass;
 	private String lastComment;
 	private List lastTagSet;
-	private String packge;
-	private ClassLibrary classLibrary;
-	private JavaSource result;
 
 	public ModelBuilder(){
 		this(new ClassLibrary(null));
@@ -25,16 +24,16 @@ public class ModelBuilder implements Builder {
 
 	public ModelBuilder(ClassLibrary classLibrary) {
 		this.classLibrary = classLibrary;
-		result = new JavaSource();
-		result.setClassLibrary(classLibrary);
+		source = new JavaSource();
+		source.setClassLibrary(classLibrary);
 	}
 
 	public void addPackage(String packageName) {
-		this.packge = packageName;
+		source.setPackage(packageName);
 	}
 
 	public void addImport(String importName) {
-		result.addImport(importName);
+		source.addImport(importName);
 	}
 
 	public void addJavaDoc(String text) {
@@ -81,13 +80,14 @@ public class ModelBuilder implements Builder {
 
 		// javadoc
 		addJavaDoc(currentClass);
-		classLibrary.add(packge + "." + currentClass.getName());
-		result.addClass(currentClass);
+
+		source.addClass(currentClass);
+		classLibrary.add(currentClass.getFullyQualifiedName());
 	}
 
 	private Type createType(String typeName, int dimensions) {
 		if (typeName == null || typeName.equals("")) return null;
-		return new Type(typeName, dimensions, result);
+		return new Type(typeName, dimensions, source);
 	}
 
 	private void addJavaDoc(AbstractJavaEntity entity) {
@@ -159,13 +159,7 @@ public class ModelBuilder implements Builder {
 	}
 
 	public JavaSource getSource() {
-		result.setPackage(packge);
-// 		JavaClass[] clsArray = new JavaClass[classes.size()];
-// 		classes.toArray(clsArray);
-// 		result.setClasses(clsArray);
-// 		String[] impArray = new String[imports.size()];
-// 		imports.toArray(impArray);
-// 		result.setImports(impArray);
-		return result;
+		return source;
 	}
+	
 }

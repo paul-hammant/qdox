@@ -14,11 +14,11 @@
 				by active code generators or documentation tools.
 			</p>
 		</section>
-		<section name="The Plan">
+		<section name="In A Nutshell">
 			<p>
-				A custom built parser is to be built. <a href="http://www.jflex.de/">JFlex</a>
-				and <a href="http://troi.lincom-asg.com/~rjamison/byacc/">BYacc/J</a>
-				have been chosen because of their 
+				A custom built parser has been built using <a href="http://www.jflex.de/">JFlex</a>
+				and <a href="http://troi.lincom-asg.com/~rjamison/byacc/">BYacc/J</a>.
+				These have been chosen because of their
 				proven performance and they require no external libraries at runtime.
 			</p>
 			<p>
@@ -30,20 +30,15 @@
 			<p>
 				The end result of the parser is a very simple document model containing enough information to be useful.
 			</p>
-			<p>
-				When the initial header of a source file has been parsed (the class/interface level JavaDoc) the parser can
-				make a callback to determine whether the client is interested in this file. If not, the parsing can be aborted.
-				This is useful in situations where you have a large source tree but you only need to obtain details on classes
-				with a particular JavaDoc tag in the header.
-			</p>
-			<p>
-				A cache of the last parsed model is kept on the local filesystem. When reinvoking the parser it can check to
-				see whether it's already in the cache to prevent re-parsing.
-			</p>
-			<p>
-				File modifications can be detected by checking the last-modified timestamp against the cache. In the event of
-				using version control systems that don't play friendly with the timestamps, a checksum can be used instead.
-			</p>
+		</section>
+
+		<section name="Getting Started">
+
+			<ol>
+				<li><a href="download.html">Download</a> it.</li>
+				<li><a href="usage.html">Use</a> it.</li>
+			</ol>
+
 		</section>
 	</body>
 	

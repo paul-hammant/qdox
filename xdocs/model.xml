@@ -88,8 +88,9 @@ public abstract class MyClass extends SubClass
             implements Serializable, CustomInterface  {
 
   private String name;
-	public void doStuff() { ... }
-	private int getNumber() { ... }
+  public void doStuff() { ... }
+  private int getNumber() { ... }
+
 }
 </code></pre></blockquote>
 

@@ -14,7 +14,7 @@
 			QDox. It is responsible for parsing source code, resolving imports and storing
 			the data.</p>
 
-			<p>To use it, all you need to do is call the default constructor.</p>
+			<p>To create it, all you need to do is call the default constructor.</p>
 
 <blockquote><pre><code>
 JavaDocBuilder builder = new JavaDocBuilder();
@@ -26,8 +26,8 @@ JavaDocBuilder builder = new JavaDocBuilder();
 
 			<p>Java source code can then be added to the
 			<code><a href="apidocs/com/thoughtworks/qdox/JavaDocBuilder.html">JavaDocBuilder</a></code>.
-			Source can either be read file at a time
-			through a Reader or an entire source tree can be added recursively.</p>
+			Source can either beread one file at a time (using a java.io.Reader) or an entire source tree
+			can be added recursively.</p>
 
 <blockquote><pre><code>
 // Reading a single source file.

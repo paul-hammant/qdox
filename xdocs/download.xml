@@ -3,7 +3,7 @@
 
 	<properties>
 		<title>Download</title>
-		<author email="joe@truemesh.com">Joe Walnes</author>
+		<author email="joew@thoughtworks.com">Joe Walnes</author>
 	</properties>
 
 	<body>
@@ -13,7 +13,7 @@
 				<a href="http://qdox.sourceforge.net/downloads/qdox/distributions/">here</a>.
 			</p>
 			<p>
-				Or if you know you're way around, you can download just the Jar file
+				Or, if you're happy at just looking at all the documentation online, you can just get the precompiled Jar
 				<a href="http://qdox.sourceforge.net/downloads/qdox/jars/">here</a>.
 			</p>
 		</section>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project xmlns:deploy="deploy" xmlns:m="maven">
+<project xmlns:deploy="deploy" xmlns:m="maven" xmlns:j="jelly:core">
 
 	<goal name="release" description="Make new release">
 		<m:user-check user="${maven.username}"/>
@@ -13,9 +13,29 @@
 			assureDirectoryCommand="mkdir -p"
 		/>
 
+		<attainGoal name="coverage"/>
 		<attainGoal name="site:deploy"/>
 		<attainGoal name="dist:deploy"/>
 	</goal>
 
+	<goal name="coverage">
+		<delete dir="target/clover"/>
+		<delete dir="${maven.build.dest}"/>
+		<delete dir="${maven.test.dest}"/>
+
+		<attainGoal name="test:compile" />
+
+		<!-- recompile main classes cloverified -->
+		<attainGoal name="clover:on"/>
+		<delete dir="${maven.build.dest}"/>
+		<attainGoal name="java:compile" />
+
+		<attainGoal name="clover:html-report"/>
+
+		<delete dir="target/clover"/>
+		<delete dir="${maven.build.dest}"/>
+		<delete dir="${maven.test.dest}"/>
+	</goal>
+	
 </project>
 

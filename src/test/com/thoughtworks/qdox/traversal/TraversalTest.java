@@ -12,8 +12,7 @@ public class TraversalTest extends TestCase {
 
     private JavaDocBuilder builder;
 
-    public TraversalTest(String name)
-    {
+    public TraversalTest(String name) {
         super(name);
     }
 

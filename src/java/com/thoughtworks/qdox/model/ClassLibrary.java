@@ -19,31 +19,31 @@ import java.util.HashMap;
  */
 public class ClassLibrary implements Serializable {
 
-	private final Set classes = new TreeSet();
+    private final Set classes = new TreeSet();
     private final Map classNameToClassMap = new HashMap();
-	private boolean defaultLoaders = false;
-	private transient List classLoaders = new ArrayList();
-	private JavaClassCache cache;
+    private boolean defaultLoaders = false;
+    private transient List classLoaders = new ArrayList();
+    private JavaClassCache cache;
 
-	public ClassLibrary(JavaClassCache cache) {
-		this.cache = cache;
-	}
+    public ClassLibrary(JavaClassCache cache) {
+        this.cache = cache;
+    }
 
-	public void add(String fullClassName) {
-		classes.add(fullClassName);
-	}
+    public void add(String fullClassName) {
+        classes.add(fullClassName);
+    }
 
-	public JavaClass getClassByName(String name) {
-		return cache.getClassByName(name);
-	}
+    public JavaClass getClassByName(String name) {
+        return cache.getClassByName(name);
+    }
 
-	public boolean contains(String fullClassName) {
-		if (classes.contains(fullClassName)) {
-			return true;
-		} else {
+    public boolean contains(String fullClassName) {
+        if (classes.contains(fullClassName)) {
+            return true;
+        } else {
             return getClass(fullClassName) != null;
         }
-	}
+    }
 
     public Class getClass(String fullClassName) {
         Class cachedClass = (Class) classNameToClassMap.get(fullClassName);
@@ -51,7 +51,7 @@ public class ClassLibrary implements Serializable {
             return cachedClass;
         } else {
             for (Iterator iterator = classLoaders.iterator(); iterator.hasNext();) {
-                ClassLoader classLoader = (ClassLoader)iterator.next();
+                ClassLoader classLoader = (ClassLoader) iterator.next();
                 if (classLoader == null) {
                     continue;
                 }
@@ -61,8 +61,7 @@ public class ClassLibrary implements Serializable {
                         classNameToClassMap.put(fullClassName, clazz);
                         return clazz;
                     }
-                }
-                catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException e) {
                     // continue
                 }
             }
@@ -70,29 +69,29 @@ public class ClassLibrary implements Serializable {
         return null;
     }
 
-	public Collection all() {
-		return Collections.unmodifiableCollection(classes);
-	}
+    public Collection all() {
+        return Collections.unmodifiableCollection(classes);
+    }
 
-	public void addClassLoader(ClassLoader classLoader) {
-		classLoaders.add(classLoader);
-	}
+    public void addClassLoader(ClassLoader classLoader) {
+        classLoaders.add(classLoader);
+    }
 
-	public void addDefaultLoader() {
-		if (!defaultLoaders) {
-			classLoaders.add(getClass().getClassLoader());
-			classLoaders.add(Thread.currentThread().getContextClassLoader());
-		}
-		defaultLoaders = true;
-	}
+    public void addDefaultLoader() {
+        if (!defaultLoaders) {
+            classLoaders.add(getClass().getClassLoader());
+            classLoaders.add(Thread.currentThread().getContextClassLoader());
+        }
+        defaultLoaders = true;
+    }
 
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
-		classLoaders = new ArrayList();
-		if (defaultLoaders) {
-			defaultLoaders = false;
-			addDefaultLoader();
-		}
-	}
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        classLoaders = new ArrayList();
+        if (defaultLoaders) {
+            defaultLoaders = false;
+            addDefaultLoader();
+        }
+    }
 
 }

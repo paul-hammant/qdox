@@ -4,6 +4,6 @@ import com.thoughtworks.qdox.model.JavaClass;
 
 public interface Searcher {
 
-	boolean eval(JavaClass cls);
+    boolean eval(JavaClass cls);
 
 }

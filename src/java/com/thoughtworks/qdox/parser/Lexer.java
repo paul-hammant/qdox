@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public interface Lexer {
 
-	int lex() throws IOException;
+    int lex() throws IOException;
 
-	String text();
+    String text();
 
 }

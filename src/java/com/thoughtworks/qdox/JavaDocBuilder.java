@@ -14,6 +14,7 @@ import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -57,7 +58,7 @@ import java.lang.reflect.Field;
  *
  * // Adding all .java files in a source tree (recursively).
  * builder.addSourceTree(new File("mysrcdir"));
- * 
+ *
  * // -- Retrieve source files
  *
  * JavaSource[] source = builder.getSources();
@@ -67,24 +68,24 @@ import java.lang.reflect.Field;
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  */
-public class JavaDocBuilder implements Serializable, JavaClassCache{
+public class JavaDocBuilder implements Serializable, JavaClassCache {
 
-	private Map classes = new HashMap();
-	private ClassLibrary classLibrary;
-	private List sources = new ArrayList();
+    private Map classes = new HashMap();
+    private ClassLibrary classLibrary;
+    private List sources = new ArrayList();
 
-	public JavaDocBuilder() {
-		classLibrary = new ClassLibrary(this);
-		classLibrary.addDefaultLoader();
-	}
+    public JavaDocBuilder() {
+        classLibrary = new ClassLibrary(this);
+        classLibrary.addDefaultLoader();
+    }
 
-	private void addClasses(JavaSource source) {
-		JavaClass[] javaClasses = source.getClasses();
-		for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
-			JavaClass cls = javaClasses[classIndex];
+    private void addClasses(JavaSource source) {
+        JavaClass[] javaClasses = source.getClasses();
+        for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
+            JavaClass cls = javaClasses[classIndex];
             addClass(cls);
         }
-	}
+    }
 
     private void addClass(JavaClass cls) {
         classes.put(cls.getFullyQualifiedName(), cls);
@@ -92,19 +93,19 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
     }
 
     public JavaClass getClassByName(String name) {
-        if( name == null ) {
+        if (name == null) {
             return null;
         }
-		JavaClass result = (JavaClass) classes.get(name);
-        if( result == null ) {
+        JavaClass result = (JavaClass) classes.get(name);
+        if (result == null) {
             // Try to make a binary class out of it
             result = createBinaryClass(name);
-            if( result != null ) {
+            if (result != null) {
                 addClass(result);
             }
         }
         return result;
-	}
+    }
 
     private JavaClass createBinaryClass(String name) {
         // First see if the class exists at all.
@@ -139,7 +140,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
                     classDef.implementz.add(anInterface.getName());
                 }
                 Class superclass = clazz.getSuperclass();
-                if(superclass != null) {
+                if (superclass != null) {
                     classDef.extendz.add(superclass.getName());
                 }
             }
@@ -158,14 +159,14 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
             Method[] methods = clazz.getMethods();
             for (int i = 0; i < methods.length; i++) {
                 // Ignore methods defined in superclasses
-                if(methods[i].getDeclaringClass() == clazz) {
+                if (methods[i].getDeclaringClass() == clazz) {
                     addMethodOrConstructor(methods[i], binaryBuilder);
                 }
             }
 
             Field[] fields = clazz.getFields();
             for (int i = 0; i < fields.length; i++) {
-                if( fields[i].getDeclaringClass() == clazz ) {
+                if (fields[i].getDeclaringClass() == clazz) {
                     addField(fields[i], binaryBuilder);
                 }
             }
@@ -181,7 +182,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
     private void addModifiers(Set set, int modifier) {
         String modifierString = Modifier.toString(modifier);
         for (StringTokenizer stringTokenizer = new StringTokenizer(modifierString); stringTokenizer.hasMoreTokens();) {
-            set.add( stringTokenizer.nextToken() );
+            set.add(stringTokenizer.nextToken());
         }
     }
 
@@ -204,23 +205,23 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
         addModifiers(methodDef.modifiers, member.getModifiers());
         Class[] exceptions;
         Class[] parameterTypes;
-        if(member instanceof Method) {
+        if (member instanceof Method) {
             methodDef.constructor = false;
 
             // For some stupid reason, these methods are not defined in Member,
             // but in both Method and Construcotr.
-            exceptions = ((Method)member).getExceptionTypes();
-            parameterTypes = ((Method)member).getParameterTypes();
+            exceptions = ((Method) member).getExceptionTypes();
+            parameterTypes = ((Method) member).getParameterTypes();
 
-            Class returnType = ((Method)member).getReturnType();
+            Class returnType = ((Method) member).getReturnType();
             methodDef.returns = getTypeName(returnType);
             methodDef.dimensions = getDimension(returnType);
 
         } else {
             methodDef.constructor = true;
 
-            exceptions = ((Constructor)member).getExceptionTypes();
-            parameterTypes = ((Constructor)member).getParameterTypes();
+            exceptions = ((Constructor) member).getExceptionTypes();
+            parameterTypes = ((Constructor) member).getParameterTypes();
         }
         for (int j = 0; j < exceptions.length; j++) {
             Class exception = exceptions[j];
@@ -237,11 +238,11 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
         binaryBuilder.addMethod(methodDef);
     }
 
-    private static final int getDimension( Class c ) {
-        return c.getName().lastIndexOf( '[' ) + 1;
+    private static final int getDimension(Class c) {
+        return c.getName().lastIndexOf('[') + 1;
     }
 
-    private static String getTypeName( Class c ) {
+    private static String getTypeName(Class c) {
         return c.getComponentType() != null ? c.getComponentType().getName() : c.getName();
     }
 
@@ -256,86 +257,82 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
     }
 
     public JavaSource addSource(Reader reader) {
-		ModelBuilder builder = new ModelBuilder(classLibrary);
-		Lexer lexer = new JFlexLexer(reader);
-		Parser parser = new Parser(lexer, builder);
-		parser.parse();
-		JavaSource source = builder.getSource();
-		sources.add(source);
-		addClasses(source);
-		return source;
-	}
+        ModelBuilder builder = new ModelBuilder(classLibrary);
+        Lexer lexer = new JFlexLexer(reader);
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+        JavaSource source = builder.getSource();
+        sources.add(source);
+        addClasses(source);
+        return source;
+    }
 
-	public void addSource(File file) throws FileNotFoundException {
-		JavaSource source = addSource(new FileReader(file));
-		source.setFile(file);
-	}
+    public void addSource(File file) throws FileNotFoundException {
+        JavaSource source = addSource(new FileReader(file));
+        source.setFile(file);
+    }
 
-	public JavaSource[] getSources() {
-		return (JavaSource[])sources.toArray(new JavaSource[sources.size()]);
-	}
+    public JavaSource[] getSources() {
+        return (JavaSource[]) sources.toArray(new JavaSource[sources.size()]);
+    }
 
-	public void addSourceTree(File file) {
-		DirectoryScanner scanner = new DirectoryScanner(file);
-		scanner.addFilter(new SuffixFilter(".java"));
-		scanner.scan(new FileVisitor() {
-			public void visitFile(File currentFile) {
-				try {
-					addSource(currentFile);
-				}
-				catch (FileNotFoundException e) {
-					throw new RuntimeException("Cannot read file : " + currentFile.getName());
-				}
-			}
-		});
-	}
+    public void addSourceTree(File file) {
+        DirectoryScanner scanner = new DirectoryScanner(file);
+        scanner.addFilter(new SuffixFilter(".java"));
+        scanner.scan(new FileVisitor() {
+            public void visitFile(File currentFile) {
+                try {
+                    addSource(currentFile);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException("Cannot read file : " + currentFile.getName());
+                }
+            }
+        });
+    }
 
-	public List search(Searcher searcher) {
-		List results = new LinkedList();
-		for (Iterator iterator = classLibrary.all().iterator(); iterator.hasNext();) {
-			String clsName = (String)iterator.next();
-			JavaClass cls = getClassByName(clsName);
-			if (searcher.eval(cls)) {
-				results.add(cls);
-			}
-		}
-		return results;
-	}
+    public List search(Searcher searcher) {
+        List results = new LinkedList();
+        for (Iterator iterator = classLibrary.all().iterator(); iterator.hasNext();) {
+            String clsName = (String) iterator.next();
+            JavaClass cls = getClassByName(clsName);
+            if (searcher.eval(cls)) {
+                results.add(cls);
+            }
+        }
+        return results;
+    }
 
-	public ClassLibrary getClassLibrary() {
-		return classLibrary;
-	}
+    public ClassLibrary getClassLibrary() {
+        return classLibrary;
+    }
 
-	public void save(File file) throws IOException {
-		FileOutputStream fos = new FileOutputStream(file);
-		ObjectOutputStream out = new ObjectOutputStream(fos);
-		try {
-			out.writeObject(this);
-		}
-		finally {
-			out.close();
-			fos.close();
-		}
-	}
+    public void save(File file) throws IOException {
+        FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream out = new ObjectOutputStream(fos);
+        try {
+            out.writeObject(this);
+        } finally {
+            out.close();
+            fos.close();
+        }
+    }
 
-	/**
-	 * Note that after loading JavaDocBuilder classloaders need to be re-added.
-	 */
-	public static JavaDocBuilder load(File file) throws IOException {
-		FileInputStream fis = new FileInputStream(file);
-		ObjectInputStream in = new ObjectInputStream(fis);
-		JavaDocBuilder builder = null;
-		try {
-			builder = (JavaDocBuilder)in.readObject();
-		}
-		catch (ClassNotFoundException e) {
-			throw new Error("Couldn't load class : " + e.getMessage());
-		}
-		finally {
-			in.close();
-			fis.close();
-		}
-		return builder;
-	}
+    /**
+     * Note that after loading JavaDocBuilder classloaders need to be re-added.
+     */
+    public static JavaDocBuilder load(File file) throws IOException {
+        FileInputStream fis = new FileInputStream(file);
+        ObjectInputStream in = new ObjectInputStream(fis);
+        JavaDocBuilder builder = null;
+        try {
+            builder = (JavaDocBuilder) in.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new Error("Couldn't load class : " + e.getMessage());
+        } finally {
+            in.close();
+            fis.close();
+        }
+        return builder;
+    }
 
 }

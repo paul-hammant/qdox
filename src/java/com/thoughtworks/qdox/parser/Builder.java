@@ -6,16 +6,20 @@ import com.thoughtworks.qdox.parser.structs.MethodDef;
 
 public interface Builder {
 
-	void addPackage(String packageName);
-	void addImport(String importName);
+    void addPackage(String packageName);
 
-	void addJavaDoc(String text);
-	void addJavaDocTag(String tag, String text);
+    void addImport(String importName);
 
-	void beginClass(ClassDef def);
-	void endClass();
+    void addJavaDoc(String text);
 
-	void addMethod(MethodDef def);
-	void addField(FieldDef def);
+    void addJavaDocTag(String tag, String text);
+
+    void beginClass(ClassDef def);
+
+    void endClass();
+
+    void addMethod(MethodDef def);
+
+    void addField(FieldDef def);
 
 }

@@ -11,179 +11,180 @@ import java.util.Set;
 
 public class JavaSource implements Serializable, JavaClassParent {
 
-	private static final Set PRIMITIVE_TYPES = new HashSet();
-	static {
-		PRIMITIVE_TYPES.add( "boolean" );
-		PRIMITIVE_TYPES.add( "byte" );
-		PRIMITIVE_TYPES.add( "char" );
-		PRIMITIVE_TYPES.add( "double" );
-		PRIMITIVE_TYPES.add( "float" );
-		PRIMITIVE_TYPES.add( "int" );
-		PRIMITIVE_TYPES.add( "long" );
-		PRIMITIVE_TYPES.add( "short" );
-		PRIMITIVE_TYPES.add( "void" );
-	}
+    private static final Set PRIMITIVE_TYPES = new HashSet();
 
-	private File file;
-	private String packge;
-	private List imports = new LinkedList();
-	private String[] importsArray;
-	private List classes = new LinkedList();
-	private JavaClass[] classesArray;
-	private ClassLibrary classLibrary;
-	private Map typeCache = new HashMap();
-	
-	public void setFile(File file) {
-		this.file = file;
-	}
+    static {
+        PRIMITIVE_TYPES.add("boolean");
+        PRIMITIVE_TYPES.add("byte");
+        PRIMITIVE_TYPES.add("char");
+        PRIMITIVE_TYPES.add("double");
+        PRIMITIVE_TYPES.add("float");
+        PRIMITIVE_TYPES.add("int");
+        PRIMITIVE_TYPES.add("long");
+        PRIMITIVE_TYPES.add("short");
+        PRIMITIVE_TYPES.add("void");
+    }
 
-	public File getFile() {
-		return file;
-	}
+    private File file;
+    private String packge;
+    private List imports = new LinkedList();
+    private String[] importsArray;
+    private List classes = new LinkedList();
+    private JavaClass[] classesArray;
+    private ClassLibrary classLibrary;
+    private Map typeCache = new HashMap();
 
-	public String getPackage() {
-		return packge;
-	}
+    public void setFile(File file) {
+        this.file = file;
+    }
 
-	public void setPackage(String packge) {
-		this.packge = packge;
-	}
+    public File getFile() {
+        return file;
+    }
 
-	public void addImport(String imp) {
-		imports.add(imp);
-		importsArray = null;
-	}
+    public String getPackage() {
+        return packge;
+    }
 
-	public String[] getImports() {
-		if (importsArray == null) {
-			importsArray = new String[imports.size()];
-			imports.toArray(importsArray);
-		}
-		return importsArray;
-	}
-	
-	public void addClass(JavaClass imp) {
-		classes.add(imp);
-		imp.setParent(this);
-		classesArray = null;
-	}
+    public void setPackage(String packge) {
+        this.packge = packge;
+    }
 
-	public JavaClass[] getClasses() {
-		if (classesArray == null) {
-			classesArray = new JavaClass[classes.size()];
-			classes.toArray(classesArray);
-		}
-		return classesArray;
-	}
-	
-	public ClassLibrary getClassLibrary() {
-		return classLibrary;
-	}
+    public void addImport(String imp) {
+        imports.add(imp);
+        importsArray = null;
+    }
 
-	public void setClassLibrary(ClassLibrary classLibrary) {
-		this.classLibrary = classLibrary;
-	}
+    public String[] getImports() {
+        if (importsArray == null) {
+            importsArray = new String[imports.size()];
+            imports.toArray(importsArray);
+        }
+        return importsArray;
+    }
 
-	public String toString() {
-		IndentBuffer result = new IndentBuffer();
+    public void addClass(JavaClass imp) {
+        classes.add(imp);
+        imp.setParent(this);
+        classesArray = null;
+    }
 
-		// package statement
-		if (packge != null) {
-			result.write("package ");
-			result.write(packge);
-			result.write(';');
-			result.newline();
-			result.newline();
-		}
+    public JavaClass[] getClasses() {
+        if (classesArray == null) {
+            classesArray = new JavaClass[classes.size()];
+            classes.toArray(classesArray);
+        }
+        return classesArray;
+    }
 
-		// import statement
-		String[] imports = getImports();
-		for (int i = 0; imports != null && i < imports.length; i++) {
-			result.write("import ");
-			result.write(imports[i]);
-			result.write(';');
-			result.newline();
-		}
-		if (imports != null && imports.length > 0) {
-			result.newline();
-		}
+    public ClassLibrary getClassLibrary() {
+        return classLibrary;
+    }
 
-		// classes
-		JavaClass[] classes = getClasses();
-		for (int i = 0; i < classes.length; i++) {
-			if (i > 0) result.newline();
-			classes[i].write(result);
-		}
+    public void setClassLibrary(ClassLibrary classLibrary) {
+        this.classLibrary = classLibrary;
+    }
 
-		return result.toString();
-	}
+    public String toString() {
+        IndentBuffer result = new IndentBuffer();
 
-	/**
-	 * Resolve a type-name within the context of this source-file.
-	 * @param typeName name of a type
-	 * @return the fully-qualified name of the type, or null if it cannot
-	 *	 be resolved
-	 */
-	public String resolveType(String typeName) {
-		String resolved = (String)typeCache.get(typeName);
-		if (resolved != null) {
-			return resolved;
-		}
-		resolved = resolveTypeInternal(typeName);
-		if (resolved != null) {
-			typeCache.put(typeName,resolved);
-		}
-		return resolved;
-	}
+        // package statement
+        if (packge != null) {
+            result.write("package ");
+            result.write(packge);
+            result.write(';');
+            result.newline();
+            result.newline();
+        }
 
-	private String resolveTypeInternal(String typeName) {
-		if (typeName.indexOf('.') != -1) return typeName;
+        // import statement
+        String[] imports = getImports();
+        for (int i = 0; imports != null && i < imports.length; i++) {
+            result.write("import ");
+            result.write(imports[i]);
+            result.write(';');
+            result.newline();
+        }
+        if (imports != null && imports.length > 0) {
+            result.newline();
+        }
 
-		// primitive types
-		if (PRIMITIVE_TYPES.contains(typeName)) return typeName;
+        // classes
+        JavaClass[] classes = getClasses();
+        for (int i = 0; i < classes.length; i++) {
+            if (i > 0) result.newline();
+            classes[i].write(result);
+        }
 
-		// check if a matching fully-qualified import
-		String[] imports = getImports();
-		for (int i = 0; i < imports.length; i++) {
-			if (imports[i].endsWith("." + typeName)){
-				return imports[i];
-			}
-		}
+        return result.toString();
+    }
 
-		if (getClassLibrary() == null) return null;
+    /**
+     * Resolve a type-name within the context of this source-file.
+     * @param typeName name of a type
+     * @return the fully-qualified name of the type, or null if it cannot
+     *     be resolved
+     */
+    public String resolveType(String typeName) {
+        String resolved = (String) typeCache.get(typeName);
+        if (resolved != null) {
+            return resolved;
+        }
+        resolved = resolveTypeInternal(typeName);
+        if (resolved != null) {
+            typeCache.put(typeName, resolved);
+        }
+        return resolved;
+    }
 
-		// check for a class in the same package
-		String potentialName = packge + "." + typeName;
-		if (getClassLibrary().contains(potentialName)) {
-			return potentialName;
-		}
+    private String resolveTypeInternal(String typeName) {
+        if (typeName.indexOf('.') != -1) return typeName;
 
-		// check for wildcard imports
-		for (int i = 0; i < imports.length; i++) {
-			if (imports[i].endsWith(".*")) {
-				potentialName =
-					imports[i].substring(0, imports[i].length()-1) + typeName;
-				if (getClassLibrary().contains(potentialName)) {
-					return potentialName;
-				}
-			}
-		}
+        // primitive types
+        if (PRIMITIVE_TYPES.contains(typeName)) return typeName;
 
-		// try java.lang.*
-		potentialName = "java.lang." + typeName;
-		if (getClassLibrary().contains(potentialName)) {
-			return potentialName;
-		}
+        // check if a matching fully-qualified import
+        String[] imports = getImports();
+        for (int i = 0; i < imports.length; i++) {
+            if (imports[i].endsWith("." + typeName)) {
+                return imports[i];
+            }
+        }
 
-		return null;
-	}
+        if (getClassLibrary() == null) return null;
 
-	public String asClassNamespace() {
-		return getPackage();
-	}
+        // check for a class in the same package
+        String potentialName = packge + "." + typeName;
+        if (getClassLibrary().contains(potentialName)) {
+            return potentialName;
+        }
 
-	public JavaSource getParentSource() {
-		return this;
-	}
+        // check for wildcard imports
+        for (int i = 0; i < imports.length; i++) {
+            if (imports[i].endsWith(".*")) {
+                potentialName =
+                        imports[i].substring(0, imports[i].length() - 1) + typeName;
+                if (getClassLibrary().contains(potentialName)) {
+                    return potentialName;
+                }
+            }
+        }
+
+        // try java.lang.*
+        potentialName = "java.lang." + typeName;
+        if (getClassLibrary().contains(potentialName)) {
+            return potentialName;
+        }
+
+        return null;
+    }
+
+    public String asClassNamespace() {
+        return getPackage();
+    }
+
+    public JavaSource getParentSource() {
+        return this;
+    }
 
 }

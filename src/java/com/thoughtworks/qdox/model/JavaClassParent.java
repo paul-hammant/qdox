@@ -2,12 +2,12 @@ package com.thoughtworks.qdox.model;
 
 public interface JavaClassParent {
 
-	public String asClassNamespace();
+    public String asClassNamespace();
 
-	public JavaSource getParentSource();
+    public JavaSource getParentSource();
 
-	public void addClass(JavaClass cls);
+    public void addClass(JavaClass cls);
 
-	public JavaClass[] getClasses();
+    public JavaClass[] getClasses();
 
 }

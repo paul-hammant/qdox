@@ -14,239 +14,238 @@ import java.beans.Introspector;
  */
 public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
-	public static final Type OBJECT = new Type("java.lang.Object", 0);
+    public static final Type OBJECT = new Type("java.lang.Object", 0);
 
-	private List methods = new LinkedList();
-	private JavaMethod[] methodsArray;
-	private List fields = new LinkedList();
-	private JavaField[] fieldsArray;
-	private List classes = new LinkedList();
-	private JavaClass[] classesArray;
-	private boolean interfce;
+    private List methods = new LinkedList();
+    private JavaMethod[] methodsArray;
+    private List fields = new LinkedList();
+    private JavaField[] fieldsArray;
+    private List classes = new LinkedList();
+    private JavaClass[] classesArray;
+    private boolean interfce;
     // Don't access this directly. Use asType() to get my Type
-	private Type type;
-	private Type superClass;
-	private Type[] implementz = new Type[0];
-	private JavaClassParent parent;
+    private Type type;
+    private Type superClass;
+    private Type[] implementz = new Type[0];
+    private JavaClassParent parent;
 
-	private JavaClassCache javaClassCache;
+    private JavaClassCache javaClassCache;
     private BeanProperty[] beanProperties;
     private Map beanPropertyMap;
 
     public void setJavaClassCache(JavaClassCache javaClassCache) {
-		this.javaClassCache = javaClassCache;
-	}
+        this.javaClassCache = javaClassCache;
+    }
 
-	/**
-	 * Interface or class?
-	 */
-	public boolean isInterface() {
-		return interfce;
-	}
+    /**
+     * Interface or class?
+     */
+    public boolean isInterface() {
+        return interfce;
+    }
 
-	public Type getSuperClass() {
+    public Type getSuperClass() {
         boolean iAmJavaLangObject = OBJECT.equals(asType());
-		if (!interfce && superClass == null && !iAmJavaLangObject) {
-			return OBJECT;
-		}
-		return superClass;
-	}
+        if (!interfce && superClass == null && !iAmJavaLangObject) {
+            return OBJECT;
+        }
+        return superClass;
+    }
 
     /**
      * Shorthand for getSuperClass().getJavaClass()
      * @return
      */
-	public JavaClass getSuperJavaClass() {
-        if( getSuperClass() != null ) {
-    		return getSuperClass().getJavaClass();
+    public JavaClass getSuperJavaClass() {
+        if (getSuperClass() != null) {
+            return getSuperClass().getJavaClass();
         } else {
             return null;
         }
-	}
+    }
 
-	public Type[] getImplements() {
-		return implementz;
-	}
+    public Type[] getImplements() {
+        return implementz;
+    }
 
-	protected void writeBody(IndentBuffer result) {
+    protected void writeBody(IndentBuffer result) {
 
-		writeAccessibilityModifier(result);
-		writeNonAccessibilityModifiers(result);
+        writeAccessibilityModifier(result);
+        writeNonAccessibilityModifiers(result);
 
-		result.write(interfce ? "interface " : "class ");
-		result.write(name);
+        result.write(interfce ? "interface " : "class ");
+        result.write(name);
 
-		// subclass
-		if (superClass != null) {
-			result.write(" extends ");
-			result.write(superClass.getValue());
-		}
-		// implements
-		if (implementz.length > 0) {
-			result.write(interfce ? " extends " : " implements ");
-			for (int i = 0; i < implementz.length; i++) {
-				if (i > 0) result.write(", ");
-				result.write(implementz[i].getValue());
-			}
-		}
-		result.write(" {");
-		result.newline();
-		result.indent();
+        // subclass
+        if (superClass != null) {
+            result.write(" extends ");
+            result.write(superClass.getValue());
+        }
+        // implements
+        if (implementz.length > 0) {
+            result.write(interfce ? " extends " : " implements ");
+            for (int i = 0; i < implementz.length; i++) {
+                if (i > 0) result.write(", ");
+                result.write(implementz[i].getValue());
+            }
+        }
+        result.write(" {");
+        result.newline();
+        result.indent();
 
-		// fields
-		for (Iterator iterator = fields.iterator(); iterator.hasNext();) {
-			JavaField javaField = (JavaField)iterator.next();
-			result.newline();
-			javaField.write(result);
-		}
+        // fields
+        for (Iterator iterator = fields.iterator(); iterator.hasNext();) {
+            JavaField javaField = (JavaField) iterator.next();
+            result.newline();
+            javaField.write(result);
+        }
 
-		// methods
-		for (Iterator iterator = methods.iterator(); iterator.hasNext();) {
-			JavaMethod javaMethod = (JavaMethod)iterator.next();
-			result.newline();
-			javaMethod.write(result);
-		}
+        // methods
+        for (Iterator iterator = methods.iterator(); iterator.hasNext();) {
+            JavaMethod javaMethod = (JavaMethod) iterator.next();
+            result.newline();
+            javaMethod.write(result);
+        }
 
-		// inner-classes
-		for (Iterator iterator = classes.iterator(); iterator.hasNext();) {
-			JavaClass javaClass = (JavaClass)iterator.next();
-			result.newline();
-			javaClass.write(result);
-		}
+        // inner-classes
+        for (Iterator iterator = classes.iterator(); iterator.hasNext();) {
+            JavaClass javaClass = (JavaClass) iterator.next();
+            result.newline();
+            javaClass.write(result);
+        }
 
-		result.deindent();
-		result.newline();
-		result.write('}');
-		result.newline();
-	}
+        result.deindent();
+        result.newline();
+        result.write('}');
+        result.newline();
+    }
 
-	public void setInterface(boolean interfce) {
-		this.interfce = interfce;
-	}
+    public void setInterface(boolean interfce) {
+        this.interfce = interfce;
+    }
 
-	public void addMethod(JavaMethod meth) {
-		methods.add(meth);
-		meth.setParentClass(this);
-		methodsArray = null;
-	}
+    public void addMethod(JavaMethod meth) {
+        methods.add(meth);
+        meth.setParentClass(this);
+        methodsArray = null;
+    }
 
-	public void setSuperClass(Type type) {
-		superClass = type;
-	}
+    public void setSuperClass(Type type) {
+        superClass = type;
+    }
 
-	public void setImplementz(Type[] implementz) {
-		this.implementz = implementz;
-	}
+    public void setImplementz(Type[] implementz) {
+        this.implementz = implementz;
+    }
 
-	public void addField(JavaField javaField) {
-		fields.add(javaField);
-		javaField.setParentClass(this);
-		fieldsArray = null;
-	}
+    public void addField(JavaField javaField) {
+        fields.add(javaField);
+        javaField.setParentClass(this);
+        fieldsArray = null;
+    }
 
-	public void setParent(JavaClassParent parent) {
-		this.parent = parent;
-	}
+    public void setParent(JavaClassParent parent) {
+        this.parent = parent;
+    }
 
-	public JavaClassParent getParent() {
-		return parent;
-	}
+    public JavaClassParent getParent() {
+        return parent;
+    }
 
-	public JavaSource getParentSource() {
-		JavaClassParent parent = getParent();
-		return (parent == null ? null : parent.getParentSource());
-	}
+    public JavaSource getParentSource() {
+        JavaClassParent parent = getParent();
+        return (parent == null ? null : parent.getParentSource());
+    }
 
-	public String getPackage() {
-		return getParentSource().getPackage();
-	}
+    public String getPackage() {
+        return getParentSource().getPackage();
+    }
 
-	public String getFullyQualifiedName() {
-        if( getParent() != null ) {
+    public String getFullyQualifiedName() {
+        if (getParent() != null) {
             String pakkage = getParent().asClassNamespace();
-    		return pakkage == null ? getName() : pakkage + "." + getName();
+            return pakkage == null ? getName() : pakkage + "." + getName();
         } else {
             return null;
         }
-	}
+    }
 
-	public String asClassNamespace() {
-		return getFullyQualifiedName();
-	}
+    public String asClassNamespace() {
+        return getFullyQualifiedName();
+    }
 
-	public Type asType() {
-		if (type == null) {
-			type = new Type(getFullyQualifiedName(), 0);
-		}
-		return type;
-	}
+    public Type asType() {
+        if (type == null) {
+            type = new Type(getFullyQualifiedName(), 0);
+        }
+        return type;
+    }
 
-	public JavaMethod[] getMethods() {
-		if (methodsArray == null) {
-			methodsArray = new JavaMethod[methods.size()];
-			methods.toArray(methodsArray);
-		}
-		return methodsArray;
-	}
+    public JavaMethod[] getMethods() {
+        if (methodsArray == null) {
+            methodsArray = new JavaMethod[methods.size()];
+            methods.toArray(methodsArray);
+        }
+        return methodsArray;
+    }
 
     /**
      * @param name method name
      * @param parameterTypes parameter types or null if there are no parameters.
      * @return the matching method or null if no match is found.
      */
-	public JavaMethod getMethodBySignature(String name,
-										   Type[] parameterTypes) 
-	{
-		JavaMethod[] methods = getMethods();
-		for (int i = 0; i < methods.length; i++) {
-			if (methods[i].signatureMatches(name, parameterTypes)) {
-				return methods[i];
-			}
-		}
-		return null;
-	}
-	
-	public JavaField[] getFields() {
-		if (fieldsArray == null) {
-			fieldsArray = new JavaField[fields.size()];
-			fields.toArray(fieldsArray);
-		}
-		return fieldsArray;
-	}
-	
-	public JavaField getFieldByName(String name) {
-		JavaField[] fields = getFields();
-		for (int i = 0; i < fields.length; i++) {
-			if (fields[i].getName().equals(name)) {
-				return fields[i];
-			}
-		}
-		return null;
-	}
+    public JavaMethod getMethodBySignature(String name,
+                                           Type[] parameterTypes) {
+        JavaMethod[] methods = getMethods();
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].signatureMatches(name, parameterTypes)) {
+                return methods[i];
+            }
+        }
+        return null;
+    }
 
-	public void addClass(JavaClass cls) {
-		classes.add(cls);
-		cls.setParent(this);
-		classesArray = null;
-	}
+    public JavaField[] getFields() {
+        if (fieldsArray == null) {
+            fieldsArray = new JavaField[fields.size()];
+            fields.toArray(fieldsArray);
+        }
+        return fieldsArray;
+    }
 
-	public JavaClass[] getClasses() {
-		if (classesArray == null) {
-			classesArray = new JavaClass[classes.size()];
-			classes.toArray(classesArray);
-		}
-		return classesArray;
-	}
+    public JavaField getFieldByName(String name) {
+        JavaField[] fields = getFields();
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].getName().equals(name)) {
+                return fields[i];
+            }
+        }
+        return null;
+    }
 
-	public JavaClass getInnerClassByName(String name) {
-		JavaClass[] classes = getClasses();
-		for (int i = 0; i < classes.length; i++) {
-			if (classes[i].getName().equals(name)) {
-				return classes[i];
-			}
-		}
-		return null;
-	}
+    public void addClass(JavaClass cls) {
+        classes.add(cls);
+        cls.setParent(this);
+        classesArray = null;
+    }
+
+    public JavaClass[] getClasses() {
+        if (classesArray == null) {
+            classesArray = new JavaClass[classes.size()];
+            classes.toArray(classesArray);
+        }
+        return classesArray;
+    }
+
+    public JavaClass getInnerClassByName(String name) {
+        JavaClass[] classes = getClasses();
+        for (int i = 0; i < classes.length; i++) {
+            if (classes[i].getName().equals(name)) {
+                return classes[i];
+            }
+        }
+        return null;
+    }
 
     public boolean isA(String fullClassName) {
         JavaClass javaClass = javaClassCache.getClassByName(fullClassName);
@@ -254,23 +253,23 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
     }
 
     public boolean isA(JavaClass javaClass) {
-        if( this.equals(javaClass)) {
+        if (this.equals(javaClass)) {
             return true;
         } else {
             // ask our interfaces
             Type[] implementz = getImplements();
             for (int i = 0; i < implementz.length; i++) {
                 JavaClass interfaze = implementz[i].getJavaClass();
-                if( interfaze.isA(javaClass) ) {
+                if (interfaze.isA(javaClass)) {
                     return true;
                 }
             }
 
             // ask our superclass
             Type supertype = getSuperClass();
-            if( supertype != null ) {
+            if (supertype != null) {
                 JavaClass superclass = supertype.getJavaClass();
-                if( superclass.isA(javaClass) ) {
+                if (superclass.isA(javaClass)) {
                     return true;
                 }
             }
@@ -287,7 +286,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
     }
 
     public BeanProperty getProperty(String propertyName) {
-        if(beanProperties == null) {
+        if (beanProperties == null) {
             initialiseBeanProperties();
         }
         return (BeanProperty) beanPropertyMap.get(propertyName);
@@ -299,12 +298,12 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         JavaMethod[] methods = getMethods();
         for (int i = 0; i < methods.length; i++) {
             JavaMethod method = methods[i];
-            if( method.isPublic() && !method.isStatic() ) {
-                if(isPropertyAccessor(method)) {
+            if (method.isPublic() && !method.isStatic()) {
+                if (isPropertyAccessor(method)) {
                     String propertyName = getPropertyName(method);
                     BeanProperty beanProperty = getOrCreateProperty(propertyName);
                     beanProperty.setAccessor(method);
-                } else if(isPropertyMutator(method)) {
+                } else if (isPropertyMutator(method)) {
                     String propertyName = getPropertyName(method);
                     BeanProperty beanProperty = getOrCreateProperty(propertyName);
                     beanProperty.setMutator(method);
@@ -317,9 +316,9 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
     private BeanProperty getOrCreateProperty(String propertyName) {
         BeanProperty result = (BeanProperty) beanPropertyMap.get(propertyName);
-        if( result == null ) {
+        if (result == null) {
             result = new BeanProperty(propertyName);
-            beanPropertyMap.put(propertyName,result);
+            beanPropertyMap.put(propertyName, result);
         }
         return result;
     }
@@ -328,18 +327,18 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         boolean signatureOk = false;
         boolean nameOk = false;
 
-        if( method.getName().startsWith( "is" ) ) {
+        if (method.getName().startsWith("is")) {
             String returnType = method.getReturns().getValue();
-            signatureOk = returnType.equals( "boolean" ) || returnType.equals( "java.lang.Boolean" );
+            signatureOk = returnType.equals("boolean") || returnType.equals("java.lang.Boolean");
             signatureOk = signatureOk && method.getReturns().getDimensions() == 0;
-            if( getName().length() > 2 ) {
-                nameOk = Character.isUpperCase( method.getName().charAt( 2 ) );
+            if (getName().length() > 2) {
+                nameOk = Character.isUpperCase(method.getName().charAt(2));
             }
         }
-        if( method.getName().startsWith( "get" ) ) {
+        if (method.getName().startsWith("get")) {
             signatureOk = true;
-            if( method.getName().length() > 3 ) {
-                nameOk = Character.isUpperCase( method.getName().charAt( 3 ) );
+            if (method.getName().length() > 3) {
+                nameOk = Character.isUpperCase(method.getName().charAt(3));
             }
         }
         boolean noParams = method.getParameters().length == 0;
@@ -348,9 +347,9 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
     private boolean isPropertyMutator(JavaMethod method) {
         boolean nameOk = false;
-        if( method.getName().startsWith( "set" ) ) {
-            if( method.getName().length() > 3 ) {
-                nameOk = Character.isUpperCase( method.getName().charAt( 3 ) );
+        if (method.getName().startsWith("set")) {
+            if (method.getName().length() > 3) {
+                nameOk = Character.isUpperCase(method.getName().charAt(3));
             }
         }
 
@@ -362,13 +361,13 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
     // it will only be called with methods that are, so we're safe.
     private String getPropertyName(JavaMethod method) {
         int start = -1;
-        if( method.getName().startsWith( "get" ) || method.getName().startsWith( "set" ) ) {
+        if (method.getName().startsWith("get") || method.getName().startsWith("set")) {
             start = 3;
-        } else if( method.getName().startsWith( "is" ) ) {
+        } else if (method.getName().startsWith("is")) {
             start = 2;
         } else {
             throw new IllegalStateException("Shouldn't happen");
         }
-        return Introspector.decapitalize( method.getName().substring( start ) );
+        return Introspector.decapitalize(method.getName().substring(start));
     }
 }

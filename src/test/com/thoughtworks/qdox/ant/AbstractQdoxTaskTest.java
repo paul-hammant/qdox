@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.ant;
 import junit.framework.TestCase;
 
 import java.io.File;
+
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.BuildException;
@@ -10,17 +11,16 @@ import org.apache.tools.ant.types.FileSet;
 import com.thoughtworks.qdox.model.JavaClass;
 
 // Not really abstract, but a test of the abstract.
-public final class AbstractQdoxTaskTest extends TestCase
-{
 
-    public AbstractQdoxTaskTest(String name)
-    {
+public final class AbstractQdoxTaskTest extends TestCase {
+
+    public AbstractQdoxTaskTest(String name) {
         super(name);
     }
 
     public void testBasic() throws Exception {
         OveriddenAbstractQdoxTask task = new OveriddenAbstractQdoxTask();
-        task.addFileset(new OveriddenFileSet(new String[] {"com/thoughtworks/qdox/directorywalker/SuffixFilter.java"}));
+        task.addFileset(new OveriddenFileSet(new String[]{"com/thoughtworks/qdox/directorywalker/SuffixFilter.java"}));
         task.execute();
 
         // fix me!
@@ -32,13 +32,10 @@ public final class AbstractQdoxTaskTest extends TestCase
 
     public void testNoFileSets() {
         OveriddenAbstractQdoxTask task = new OveriddenAbstractQdoxTask();
-        try
-        {
+        try {
             task.execute();
             fail("Expected an empty list of classes");
-        }
-        catch (BuildException e)
-        {
+        } catch (BuildException e) {
             // expected
         }
     }
@@ -46,14 +43,15 @@ public final class AbstractQdoxTaskTest extends TestCase
 
     private class OveriddenAbstractQdoxTask extends AbstractQdoxTask {
         public String classes = "";
+
         public void execute() {
             super.execute();
 
             for (int i = 0; i < allClasses.size(); i++) {
                 JavaClass javaClass = (JavaClass) allClasses.get(i);
                 classes = classes + javaClass.getFullyQualifiedName();
-        // Interested in seeing output? Uncomment this.
-        //        System.out.println("Class:" + javaClass.getName());
+                // Interested in seeing output? Uncomment this.
+                //        System.out.println("Class:" + javaClass.getName());
             }
         }
     }

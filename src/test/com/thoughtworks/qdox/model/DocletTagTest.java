@@ -7,82 +7,82 @@ import java.io.StringReader;
 
 public class DocletTagTest extends TestCase {
 
-	public DocletTagTest(String s) {
-		super(s);
-	}
+    public DocletTagTest(String s) {
+        super(s);
+    }
 
-  public void testValueRemainsInTact() throws Exception {
-		String in = ""
-			+ "package x;\n"
-			+ "/**\n"
-			+ " * @tag aa count(*) bbb * ccc dd=e f='g' i = \"xx\"\n"
-			+ " */\n"
-			+ "class X {}";
+    public void testValueRemainsInTact() throws Exception {
+        String in = ""
+                + "package x;\n"
+                + "/**\n"
+                + " * @tag aa count(*) bbb * ccc dd=e f='g' i = \"xx\"\n"
+                + " */\n"
+                + "class X {}";
 
-		JavaDocBuilder builder = new JavaDocBuilder();
-		builder.addSource(new StringReader(in));
-		DocletTag tag = builder.getClassByName("x.X").getTagByName("tag");
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.addSource(new StringReader(in));
+        DocletTag tag = builder.getClassByName("x.X").getTagByName("tag");
 
-		assertEquals("aa count(*) bbb * ccc dd=e f='g' i = \"xx\"", tag.getValue());
-	}
+        assertEquals("aa count(*) bbb * ccc dd=e f='g' i = \"xx\"", tag.getValue());
+    }
 
-	public void testIndexedParameter() throws Exception {
-		DocletTag tag = new DocletTag("x", "one two three four");
-		assertEquals("one", tag.getParameters()[0]);
-		assertEquals("two", tag.getParameters()[1]);
-		assertEquals("three", tag.getParameters()[2]);
-		assertEquals("four", tag.getParameters()[3]);
-		assertEquals(4, tag.getParameters().length);
-	}
+    public void testIndexedParameter() throws Exception {
+        DocletTag tag = new DocletTag("x", "one two three four");
+        assertEquals("one", tag.getParameters()[0]);
+        assertEquals("two", tag.getParameters()[1]);
+        assertEquals("three", tag.getParameters()[2]);
+        assertEquals("four", tag.getParameters()[3]);
+        assertEquals(4, tag.getParameters().length);
+    }
 
-	public void testNamedParameter() throws Exception {
-		DocletTag tag = new DocletTag("x", "hello=world dog=cat fork=spoon");
-		assertEquals("world", tag.getNamedParameter("hello"));
-		assertEquals("cat", tag.getNamedParameter("dog"));
-		assertEquals("spoon", tag.getNamedParameter("fork"));
-		assertNull(tag.getNamedParameter("goat"));
-	}
+    public void testNamedParameter() throws Exception {
+        DocletTag tag = new DocletTag("x", "hello=world dog=cat fork=spoon");
+        assertEquals("world", tag.getNamedParameter("hello"));
+        assertEquals("cat", tag.getNamedParameter("dog"));
+        assertEquals("spoon", tag.getNamedParameter("fork"));
+        assertNull(tag.getNamedParameter("goat"));
+    }
 
-	public void testInvalidNamedParameter() throws Exception {
-		DocletTag tag = new DocletTag("x", "= =z x=c y= o");
-		assertEquals("c", tag.getNamedParameter("x"));
-		assertEquals("", tag.getNamedParameter("y"));
-		assertNull(tag.getNamedParameter("z"));
-		assertNull(tag.getNamedParameter("="));
-		assertNull(tag.getNamedParameter(""));
-	}
+    public void testInvalidNamedParameter() throws Exception {
+        DocletTag tag = new DocletTag("x", "= =z x=c y= o");
+        assertEquals("c", tag.getNamedParameter("x"));
+        assertEquals("", tag.getNamedParameter("y"));
+        assertNull(tag.getNamedParameter("z"));
+        assertNull(tag.getNamedParameter("="));
+        assertNull(tag.getNamedParameter(""));
+    }
 
-	public void testIntermingledIndexedAndNamedParameter() throws Exception {
-		DocletTag tag = new DocletTag("x", "thing hello=world duck");
+    public void testIntermingledIndexedAndNamedParameter() throws Exception {
+        DocletTag tag = new DocletTag("x", "thing hello=world duck");
 
-		assertEquals("thing", tag.getParameters()[0]);
-		assertEquals("hello=world", tag.getParameters()[1]);
-		assertEquals("duck", tag.getParameters()[2]);
+        assertEquals("thing", tag.getParameters()[0]);
+        assertEquals("hello=world", tag.getParameters()[1]);
+        assertEquals("duck", tag.getParameters()[2]);
 
-		assertEquals("world", tag.getNamedParameter("hello"));
+        assertEquals("world", tag.getNamedParameter("hello"));
 
-		assertEquals(3, tag.getParameters().length);
-		assertNull(tag.getNamedParameter("goat"));
-		assertNull(tag.getNamedParameter("duck"));
-	}
+        assertEquals(3, tag.getParameters().length);
+        assertNull(tag.getNamedParameter("goat"));
+        assertNull(tag.getNamedParameter("duck"));
+    }
 
-	public void testQuotedParameters() throws Exception {
-		DocletTag tag = new DocletTag("x", "one=\"hello world bye bye\" two=hello");
-		assertEquals("hello world bye bye", tag.getNamedParameter("one"));
-		assertEquals("hello", tag.getNamedParameter("two"));
+    public void testQuotedParameters() throws Exception {
+        DocletTag tag = new DocletTag("x", "one=\"hello world bye bye\" two=hello");
+        assertEquals("hello world bye bye", tag.getNamedParameter("one"));
+        assertEquals("hello", tag.getNamedParameter("two"));
 
-		tag = new DocletTag("x", "one=\"hello joe's world bye bye\" two=hello");
-		assertEquals("hello joe's world bye bye", tag.getNamedParameter("one"));
-		assertEquals("hello", tag.getNamedParameter("two"));
+        tag = new DocletTag("x", "one=\"hello joe's world bye bye\" two=hello");
+        assertEquals("hello joe's world bye bye", tag.getNamedParameter("one"));
+        assertEquals("hello", tag.getNamedParameter("two"));
 
-		tag = new DocletTag("x", "one='hello joe\"s world bye bye' two=hello");
-		assertEquals("hello joe\"s world bye bye", tag.getNamedParameter("one"));
-		assertEquals("hello", tag.getNamedParameter("two"));
+        tag = new DocletTag("x", "one='hello joe\"s world bye bye' two=hello");
+        assertEquals("hello joe\"s world bye bye", tag.getNamedParameter("one"));
+        assertEquals("hello", tag.getNamedParameter("two"));
 
-		tag = new DocletTag("x", "one=\"hello chris' world bye bye\" two=hello");
-		assertEquals("hello chris' world bye bye", tag.getNamedParameter("one"));
-		assertEquals("hello", tag.getNamedParameter("two"));
-	}
+        tag = new DocletTag("x", "one=\"hello chris' world bye bye\" two=hello");
+        assertEquals("hello chris' world bye bye", tag.getNamedParameter("one"));
+        assertEquals("hello", tag.getNamedParameter("two"));
+    }
 
 
 }

@@ -96,8 +96,8 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals(1, source.getClasses()[1].getImplements().length);
 		assertEquals("Another", source.getClasses()[1].getImplements()[0].getValue());
 
-		assertEquals("java.lang.Object", source.getClasses()[0].getSuperClass().getValue());
-		assertEquals("java.lang.Object", source.getClasses()[1].getSuperClass().getValue());
+		assertNull(source.getClasses()[0].getSuperClass());
+		assertNull(source.getClasses()[1].getSuperClass());
 	}
 
 	public void testInterfaceExtendsMultiple() throws Exception {
@@ -116,7 +116,7 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals("BottleOpener", source.getClasses()[0].getImplements()[1].getValue());
 		assertEquals("java.io.Serializable", source.getClasses()[0].getImplements()[2].getValue());
 
-		assertEquals("java.lang.Object", source.getClasses()[0].getSuperClass().getValue());
+		assertNull(source.getClasses()[0].getSuperClass());
 	}
 
 	public void testClassImplements() throws Exception {

@@ -15,7 +15,9 @@ public class JavaClass extends AbstractJavaEntity {
 	private Type superClass;
 	private Type[] implementz = new Type[0];
 	private JavaSource parentSource;
-	
+
+	public static final Type OBJECT = new Type("java.lang.Object", 0);
+
 	/**
 	 * Interface or class?
 	 */
@@ -24,8 +26,8 @@ public class JavaClass extends AbstractJavaEntity {
 	}
 
 	public Type getSuperClass() {
-		if (superClass == null) {
-			superClass = new Type("java.lang.Object", 0);
+		if (!interfce && superClass == null) {
+			return OBJECT;
 		}
 		return superClass;
 	}

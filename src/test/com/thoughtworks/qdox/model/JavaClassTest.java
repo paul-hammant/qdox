@@ -301,9 +301,17 @@ public class JavaClassTest extends TestCase {
 		assertEquals("com.thoughtworks.qdox.MyClass", cls.asType().getValue());
 	}
 
-	public void testDefaultSuperclass() throws Exception {
+	public void testDefaultClassSuperclass() throws Exception {
 		cls.setName("MyClass");
 		assertEquals("java.lang.Object", cls.getSuperClass().getValue());
+		cls.setSuperClass(new Type("x.X", 0));
+		assertEquals("x.X", cls.getSuperClass().getValue());
+	}
+
+	public void testDefaultInterfaceSuperclass() throws Exception {
+		cls.setName("MyInterface");
+		cls.setInterface(true);
+		assertNull(cls.getSuperClass());
 		cls.setSuperClass(new Type("x.X", 0));
 		assertEquals("x.X", cls.getSuperClass().getValue());
 	}

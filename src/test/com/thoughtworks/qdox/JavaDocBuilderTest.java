@@ -92,13 +92,19 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(1, outer.getMethods().length);
         assertEquals("outerMethod", outer.getMethods()[0].getName());
 
-        assertEquals(1, outer.getClasses().length);
-        JavaClass inner = outer.getClasses()[0];
+        assertEquals(1, outer.getInnerClasses().length);
+        JavaClass inner = outer.getInnerClasses()[0];
         assertEquals("Inner", inner.getName());
         assertEquals("foo.bar.Outer.Inner", inner.getFullyQualifiedName());
 
         assertEquals(1, inner.getMethods().length);
         assertEquals("innerMethod", inner.getMethods()[0].getName());
+    }
+
+    public void testGetClasses() {
+        builder.addSource(new StringReader(createOuter()));
+        JavaClass[] classes = builder.getClasses();
+        assertEquals(2, classes.length);
     }
 
     private String createOuter() {

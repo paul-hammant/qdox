@@ -263,8 +263,8 @@ public class ModelBuilderTest extends TestCase {
         assertEquals("xyz.Outer", outerClass.getFullyQualifiedName());
         assertEquals(1, outerClass.getMethods().length);
         assertEquals("bar", outerClass.getMethods()[0].getName());
-        assertEquals(1, outerClass.getClasses().length);
-        JavaClass innerClass = outerClass.getClasses()[0];
+        assertEquals(1, outerClass.getInnerClasses().length);
+        JavaClass innerClass = outerClass.getInnerClasses()[0];
         assertEquals("xyz.Outer.Inner", innerClass.getFullyQualifiedName());
         assertEquals(1, innerClass.getMethods().length);
         assertEquals("foo", innerClass.getMethods()[0].getName());

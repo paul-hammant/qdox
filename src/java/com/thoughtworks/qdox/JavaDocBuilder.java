@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
@@ -282,6 +284,40 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
 
     public JavaSource[] getSources() {
         return (JavaSource[]) sources.toArray(new JavaSource[sources.size()]);
+    }
+
+    /**
+     * Returns all the classes found in all the sources, including inner classes
+     * and "extra" classes (multiple outer classes defined in the same source file).
+     *
+     * @return all the classes found in all the sources.
+     * @since 1.3
+     */
+    public JavaClass[] getClasses() {
+        Set resultSet = new HashSet();
+        JavaSource[] javaSources = getSources();
+        for (int i = 0; i < javaSources.length; i++) {
+            JavaSource javaSource = javaSources[i];
+            JavaClass[] classes = javaSource.getClasses();
+            for (int j = 0; j < classes.length; j++) {
+                JavaClass javaClass = classes[j];
+                addClassesRecursive(javaClass, resultSet);
+            }
+        }
+        JavaClass[] result = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
+        return result;
+    }
+
+    private void addClassesRecursive(JavaClass javaClass, Set set) {
+        // Add the class...
+        set.add(javaClass);
+
+        // And recursively all of its inner classes
+        JavaClass[] innerClasses = javaClass.getInnerClasses();
+        for (int i = 0; i < innerClasses.length; i++) {
+            JavaClass innerClass = innerClasses[i];
+            addClassesRecursive(innerClass, set);
+        }
     }
 
     public void addSourceTree(File file) {

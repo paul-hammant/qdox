@@ -233,7 +233,17 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         classesArray = null;
     }
 
+    /**
+     * @deprecated Use {@link #getInnerClasses()} instead.
+     */
     public JavaClass[] getClasses() {
+        return getInnerClasses();
+    }
+
+    /**
+     * @since 1.3
+     */
+    public JavaClass[] getInnerClasses() {
         if (classesArray == null) {
             classesArray = new JavaClass[classes.size()];
             classes.toArray(classesArray);
@@ -242,7 +252,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
     }
 
     public JavaClass getInnerClassByName(String name) {
-        JavaClass[] classes = getClasses();
+        JavaClass[] classes = getInnerClasses();
         for (int i = 0; i < classes.length; i++) {
             if (classes[i].getName().equals(name)) {
                 return classes[i];
@@ -251,11 +261,17 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         return null;
     }
 
+    /**
+     * @since 1.3
+     */
     public boolean isA(String fullClassName) {
         JavaClass javaClass = javaClassCache.getClassByName(fullClassName);
         return isA(javaClass);
     }
 
+    /**
+     * @since 1.3
+     */
     public boolean isA(JavaClass javaClass) {
         if (this.equals(javaClass)) {
             return true;
@@ -282,6 +298,9 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         return false;
     }
 
+    /**
+     * @since 1.3
+     */
     public BeanProperty[] getBeanProperties() {
         if (beanProperties == null) {
             initialiseBeanProperties();
@@ -289,6 +308,9 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         return beanProperties;
     }
 
+    /**
+     * @since 1.3
+     */
     public BeanProperty getProperty(String propertyName) {
         if (beanProperties == null) {
             initialiseBeanProperties();

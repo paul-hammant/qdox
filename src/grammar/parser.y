@@ -69,11 +69,16 @@ implements: | IMPLEMENTS implementslist;
 implementslist: fullidentifier { cls.implementz.add($1); } | implementslist COMMA fullidentifier { cls.implementz.add($3); };
 
 classparts: | classparts classpart;
-classpart: javadoc | method | field;
+classpart: javadoc | member;
+
+member: modifiers fullidentifier IDENTIFIER field { fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); };
+	| modifiers fullidentifier IDENTIFIER method { mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
+
+modifiers: | modifiers modifier { mth.modifiers.add($2); };
 
 // method definition
-method: methodmodifiers fullidentifier IDENTIFIER BRACKETOPEN params BRACKETCLOSE exceptions methodend { mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
-methodmodifiers: | methodmodifiers modifier { mth.modifiers.add($2); };
+method: BRACKETOPEN params BRACKETCLOSE exceptions methodend {  }
+//methodmodifiers: | methodmodifiers modifier { mth.modifiers.add($2); };
 exceptions: | THROWS exceptionlist;
 exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
 methodend: SEMI | CODEBLOCK;

@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox;
 
 import com.thoughtworks.qdox.model.*;
+import com.thoughtworks.qdox.model.util.SerializationUtils;
 import com.thoughtworks.qdox.parser.ParseException;
 import junit.framework.TestCase;
 
@@ -420,17 +421,7 @@ public class JavaDocBuilderTest extends TestCase {
         builder.addSource(new StringReader("package test; public class X{}"));
         assertEquals("X", builder.getSources()[0].getClasses()[0].getName());
 
-        // serialize
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(buffer);
-        oos.writeObject(builder);
-        oos.close();
-        builder = null;
-
-        // unserialize
-        ByteArrayInputStream input = new ByteArrayInputStream(buffer.toByteArray());
-        ObjectInputStream ois = new ObjectInputStream(input);
-        JavaDocBuilder newBuilder = (JavaDocBuilder) ois.readObject();
+        JavaDocBuilder newBuilder = (JavaDocBuilder) SerializationUtils.serializedCopy(builder);
 
         assertEquals("X", newBuilder.getSources()[0].getClasses()[0].getName());
 
@@ -746,6 +737,6 @@ public class JavaDocBuilderTest extends TestCase {
             builder.getClassByName("p2.B").getFieldByName("innerField");
         assertEquals(innerClass.asType(), innerField.getType());
         assertEquals("p1.A$Inner", innerField.getType().getValue());
-    } 
+    }
 
 }

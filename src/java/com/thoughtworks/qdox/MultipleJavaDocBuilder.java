@@ -4,10 +4,7 @@ import java.io.Reader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -63,6 +60,18 @@ public class MultipleJavaDocBuilder {
 				}
 			}
 		});
+	}
+
+	public List search(Searcher searcher) {
+		List results = new LinkedList();
+		for (Iterator iterator = classesParsed.iterator(); iterator.hasNext();) {
+			String clsName = (String)iterator.next();
+			JavaClass cls = getClassByName(clsName);
+			if (searcher.eval(cls)) {
+				results.add(cls);
+			}
+		}
+		return results;
 	}
 
 }

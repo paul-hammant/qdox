@@ -3,6 +3,7 @@ package com.thoughtworks.qdox;
 import java.io.StringReader;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -13,6 +14,14 @@ public class MultipleJavaDocBuilderTest extends TestCase {
 
 	public MultipleJavaDocBuilderTest(String name) {
 		super(name);
+	}
+
+	protected void setUp() throws Exception {
+		super.setUp();
+		createFile("tmp/sourcetest/com/blah/Thing.java", "com.blah", "Thing");
+		createFile("tmp/sourcetest/com/blah/Another.java", "com.blah", "Another");
+		createFile("tmp/sourcetest/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");
+		createFile("tmp/sourcetest/com/blah/Ignore.notjava", "com.blah", "Ignore");
 	}
 
 	public void testParsingMultipleJavaFiles(){
@@ -61,11 +70,6 @@ public class MultipleJavaDocBuilderTest extends TestCase {
 	}
 
 	public void testSourceTree() throws Exception {
-		createFile("tmp/sourcetest/com/blah/Thing.java", "com.blah", "Thing");
-		createFile("tmp/sourcetest/com/blah/Another.java", "com.blah", "Another");
-		createFile("tmp/sourcetest/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");
-		createFile("tmp/sourcetest/com/blah/Ignore.notjava", "com.blah", "Ignore");
-
 		MultipleJavaDocBuilder builder = new MultipleJavaDocBuilder();
 		builder.addSourceTree(new File("tmp/sourcetest"));
 
@@ -73,6 +77,21 @@ public class MultipleJavaDocBuilderTest extends TestCase {
 		assertNotNull(builder.getClassByName("com.blah.Another"));
 		assertNotNull(builder.getClassByName("com.blah.subpackage.Cheese"));
 		assertNull(builder.getClassByName("com.blah.Ignore"));
+	}
+
+	public void testSearcher() throws Exception {
+		MultipleJavaDocBuilder builder = new MultipleJavaDocBuilder();
+		builder.addSourceTree(new File("tmp/sourcetest"));
+
+		List results = builder.search(new Searcher() {
+			public boolean eval(JavaClass cls) {
+				return cls.getPackage().equals("com.blah");
+			}
+		});
+
+		assertEquals(2, results.size());
+		assertEquals("Another", ((JavaClass)results.get(0)).getName());
+		assertEquals("Thing", ((JavaClass)results.get(1)).getName());
 	}
 
 	private void createFile(String fileName, String packageName, String className) throws Exception {

@@ -8,7 +8,7 @@ http://jakarta.apache.org/maven/
 This is the parser generator used to create an effecitive parser for JavaDoc.
 If using Windows, no additional installation is needed as yacc.exe is supplied
 in the bootstrap directory. If using any other platform, download BYacc/J from
-the site below and update build.properties.
+the site below and update project.properties.
 http://byaccj.sourceforge.net/
 
 Common build goals:

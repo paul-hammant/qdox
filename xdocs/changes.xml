@@ -38,6 +38,10 @@
                 Fix QDOX-72:
                 Correct terminology re "inner" vs "nested" classes.
             </action>
+            <action dev="mdub" type="fix">
+                Fix QDOX-73:
+                Reinstate public constructors on concrete model classes.
+            </action>
         </release>
 
         <release version="1.5" date="2004-06-20">

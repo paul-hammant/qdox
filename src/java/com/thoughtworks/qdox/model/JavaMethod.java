@@ -11,14 +11,14 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
 
-    protected JavaMethod() {
+    public JavaMethod() {
     }
 
-    protected JavaMethod(String name) {
+    public JavaMethod(String name) {
         setName(name);
     }
 
-    protected JavaMethod(Type returns, String name) {
+    public JavaMethod(Type returns, String name) {
         setReturns(returns);
         setName(name);
     }

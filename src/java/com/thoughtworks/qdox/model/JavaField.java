@@ -4,14 +4,14 @@ public class JavaField extends AbstractJavaEntity implements Member {
 
     private Type type;
 
-    protected JavaField() {
+    public JavaField() {
     }
 
-    protected JavaField(String name) {
+    public JavaField(String name) {
         setName(name);
     }
 
-    protected JavaField(Type type, String name) {
+    public JavaField(Type type, String name) {
         setType(type);
         setName(name);
     }

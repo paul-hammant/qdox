@@ -120,7 +120,9 @@ typearg:
     QUERY EXTENDS type |
     QUERY SUPER type;
 
-opt_typeparams: | LESSTHAN typeparamlist GREATERTHAN;
+opt_typeparams: | typeparams;
+
+typeparams: LESSTHAN typeparamlist GREATERTHAN;
 
 typeparamlist:
     typeparam |
@@ -200,6 +202,14 @@ extrafields: |
 // ----- METHOD
 
 method:
+    modifiers typeparams type IDENTIFIER methoddef memberend {
+        mth.lineNumber = line;
+        mth.modifiers.addAll(modifiers); modifiers.clear(); 
+        mth.returns = $3.name; mth.dimensions = $3.dimensions;
+        mth.name = $4;
+        builder.addMethod(mth);
+        mth = new MethodDef(); 
+    } |
     modifiers type IDENTIFIER methoddef memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 

@@ -167,6 +167,8 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     ")"                 { braceDepth--; }
     "["                 { braceDepth++; }
     "]"                 { braceDepth--; }
+    "<"                 { braceDepth++; }
+    ">"                 { braceDepth--; }
 }
 
 <ASSIGNMENT, CODEBLOCK, YYINITIAL> {

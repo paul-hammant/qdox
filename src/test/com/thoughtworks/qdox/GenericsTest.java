@@ -111,7 +111,7 @@ public class GenericsTest extends TestCase {
         assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
 
-    public void DISABLED_testShouldUnderstandMethodTypeParameters() {
+    public void testShouldUnderstandMethodTypeParameters() {
         String source = "" +
                 "public class Bar {" +
                 "    public static <T extends Comparable<T>> T max(Collection<T> collection) {" +
@@ -122,18 +122,21 @@ public class GenericsTest extends TestCase {
         assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
     
-    public void DISABLED_testJiraQdox66() {
+    public void testJiraQdox66() {
         String source = "" +
-            "public class Foo {" +
-            "    private Map<String, Object> m_env = new HashMap<String, Object>();" +
-            "    public <T extends Object> T retrieve(Class<T> klass, Object key) {" +
-            "        return x;" +
-            "    }" +
-            "}";
+            "public class Foo {\n" +
+            "    protected Map<String, Object> m_env = new HashMap<String, Object>();\n" +
+            "    public <T extends Object> T retrieve(Class<T> klass, Object key) {\n" +
+            "        return x;\n" +
+            "    }\n" +
+            "}\n";
         builder.addSource(new StringReader(source));
-        JavaClass barClass = builder.getClassByName("Bar");
-        assertEquals("Bar", barClass.getName());
-        JavaField envField = barClass.getFieldByName("m_env");
+        
+        JavaClass fooClass = builder.getClassByName("Foo");
+        assertNotNull(fooClass);
+        assertEquals("Foo", fooClass.getName());
+        
+        JavaField envField = fooClass.getFieldByName("m_env");
         assertNotNull(envField);
         assertEquals("Map", envField.getType().getValue());
     } 

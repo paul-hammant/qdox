@@ -69,6 +69,8 @@ public class LexerTest extends TestCase {
     }
 
     public void testFieldAssignment() throws Exception {
+        checkAssignment("x");
+        checkAssignment("(map.isEmpty ? 1 : -1)");
         checkAssignment("0");
         checkAssignment("\"hello\"");
         checkAssignment("new Thingy()");
@@ -77,11 +79,15 @@ public class LexerTest extends TestCase {
         checkAssignment("StaticClass.intance()");
         checkAssignment("[1,2,3]");
         checkAssignment("/* , ; } */");
-       }
+    }
 
     public void testAnonymousInnerClassAssignment() throws Exception {
         checkAssignment("new Thingifier() { void doThings(int x) { blah(); } }");
         checkAssignment("new Thingifier() { void doThings(int x) { a = \"aaa\"; } }");
+    }
+
+    public void testGenericTypeAssignment() throws Exception {
+        checkAssignment("new HashMap<String,Integer>");
     }
 
     private void checkAssignment(String assignment) throws IOException {

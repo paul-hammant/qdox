@@ -87,7 +87,7 @@ public class JavaDocBuilderTest extends TestCase {
 		JavaClass inner = outer.getClasses()[0];
 		assertEquals("Inner", inner.getName());
 		assertEquals("foo.bar.Outer.Inner", inner.getFullyQualifiedName());
-		
+
 		assertEquals(1, inner.getMethods().length);
 		assertEquals("innerMethod", inner.getMethods()[0].getName());
 	}
@@ -223,6 +223,13 @@ public class JavaDocBuilderTest extends TestCase {
 		newBuilder.addSource(new StringReader("package x; import java.util.*; class Z extends List{}"));
 		assertEquals("java.util.List", newBuilder.getClassByName("x.Z").getSuperClass().getValue());
 
+	}
+
+	public void testSuperClassOfAnInterfaceReturnsNull() throws Exception {
+		String in = "package x; interface I {}";
+		builder.addSource(new StringReader(in));
+		JavaClass cls = builder.getClassByName("x.I");
+		assertNull("Should probably return null", cls.getSuperJavaClass());
 	}
 
 

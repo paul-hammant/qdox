@@ -47,7 +47,7 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals("ThingyThing", source.getClasses()[1].getName());
 		assertEquals(source, source.getClasses()[0].getParentSource());
 	}
-	
+
 	public void testInterface() throws Exception {
 		ClassDef cls = new ClassDef();
     	builder.beginClass(cls);
@@ -57,7 +57,7 @@ public class ModelBuilderTest extends TestCase {
 		cls2.isInterface = true;
     	builder.beginClass(cls2);
     	builder.endClass();
-		
+
 		JavaSource source = builder.getSource();
 
 		assertEquals(false, source.getClasses()[0].isInterface());
@@ -86,10 +86,10 @@ public class ModelBuilderTest extends TestCase {
 		//Add another class and see if Another gets resolved
 		builder.addPackage("com.thoughtworks");
 		ClassDef anotherCls = new ClassDef();
-		anotherCls.name = "Another";		
+		anotherCls.name = "Another";
 		builder.beginClass(anotherCls);
     	builder.endClass();
-		
+
 		assertEquals("com.thoughtworks.Another", source.getClasses()[1].getSuperClass().getValue());
 	}
 
@@ -218,7 +218,7 @@ public class ModelBuilderTest extends TestCase {
 		builder.beginClass(new ClassDef());
 		builder.addMethod(new MethodDef());
 		builder.endClass();
-		
+
 		builder.beginClass(new ClassDef());
 		builder.addMethod(new MethodDef());
 		builder.addMethod(new MethodDef());
@@ -238,7 +238,7 @@ public class ModelBuilderTest extends TestCase {
 
 	public void testInnerClass() throws Exception {
 		builder.addPackage("xyz");
-		
+
 		ClassDef outerDef = new ClassDef();
 		outerDef.name = "Outer";
 		builder.beginClass(outerDef);
@@ -246,17 +246,17 @@ public class ModelBuilderTest extends TestCase {
 		ClassDef innerDef = new ClassDef();
 		innerDef.name = "Inner";
 		builder.beginClass(innerDef);
-		
+
 		MethodDef fooDef = new MethodDef();
 		fooDef.name = "foo";
 		builder.addMethod(fooDef);
 		builder.endClass();
-		
+
 		MethodDef barDef = new MethodDef();
 		barDef.name = "bar";
 		builder.addMethod(barDef);
 		builder.endClass();
-		
+
 		JavaSource source = builder.getSource();
 		assertEquals(1, source.getClasses().length);
 		JavaClass outerClass = source.getClasses()[0];
@@ -347,7 +347,7 @@ public class ModelBuilderTest extends TestCase {
 
 		builder.addMethod(mth);
 		builder.endClass();
-		
+
 		JavaSource source = builder.getSource();
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(2, result.getParameters().length);
@@ -392,7 +392,7 @@ public class ModelBuilderTest extends TestCase {
 
 		builder.addMethod(mth);
 		builder.endClass();
-		
+
 		JavaSource source = builder.getSource();
 		JavaMethod result = source.getClasses()[0].getMethods()[0];
 		assertEquals(2, result.getExceptions().length);

@@ -43,7 +43,13 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 		if (javaClassCache == null) {
 			throw new java.lang.UnsupportedOperationException("JavaClassCache unavailable for this JavaClass");
 		}
-		return javaClassCache.getClassByName(getSuperClass().getValue());
+		Type superType = getSuperClass();
+		if (superType == null) {
+			return null;
+		}
+		else {
+			return javaClassCache.getClassByName(superType.getValue());
+		}
 	}
 
 	public Type[] getImplements() {
@@ -98,7 +104,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 	public void setInterface(boolean interfce) {
 		this.interfce = interfce;
 	}
-	
+
 	public void addMethod(JavaMethod meth) {
 		methods.add(meth);
 		meth.setParentClass(this);
@@ -122,11 +128,11 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 	public void setParent(JavaClassParent parent) {
 		this.parent = parent;
 	}
-	
+
 	public JavaClassParent getParent() {
 		return parent;
 	}
-	
+
 	public JavaSource getParentSource() {
 		JavaClassParent parent = getParent();
 		return (parent == null ? null : parent.getParentSource());
@@ -135,15 +141,15 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 	public String getPackage() {
 		return getParentSource().getPackage();
 	}
-	
+
 	public String getFullyQualifiedName() {
 		return getParent().asClassNamespace() + "." + getName();
 	}
-	
+
 	public String asClassNamespace() {
 		return getFullyQualifiedName();
 	}
-	
+
 	public Type asType() {
 		if (type == null) {
 			type = new Type(getFullyQualifiedName(), 0);

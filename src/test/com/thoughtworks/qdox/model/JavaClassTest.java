@@ -269,7 +269,7 @@ public class JavaClassTest extends TestCase {
 			+ "}\n";
 		assertEquals(expected, cls.toString());
 	}
-	
+
 	public void testParentSource() throws Exception {
 		assertNull(cls.getParentSource());
 
@@ -292,12 +292,12 @@ public class JavaClassTest extends TestCase {
 		source.setPackage("com.thoughtworks.qdox");
 
 		cls.setName("MyClass");
-		
+
 		source.addClass(cls);
 
 		assertEquals("MyClass", cls.getName());
 		assertEquals("com.thoughtworks.qdox", cls.getPackage());
-		assertEquals("com.thoughtworks.qdox.MyClass", 
+		assertEquals("com.thoughtworks.qdox.MyClass",
 					 cls.getFullyQualifiedName());
 		assertTrue(cls.asType().isResolved());
 		assertEquals("com.thoughtworks.qdox.MyClass", cls.asType().getValue());
@@ -311,14 +311,14 @@ public class JavaClassTest extends TestCase {
 		outer.setName("Outer");
 		source.addClass(outer);
 		assertEquals("foo.bar.Outer", outer.asClassNamespace());
-		
+
 		JavaClass inner = new JavaClass();
 		inner.setName("Inner");
 		outer.addClass(inner);
-		
+
 		assertEquals("Inner", inner.getName());
 		assertEquals("foo.bar", inner.getPackage());
-		assertEquals("foo.bar.Outer.Inner", 
+		assertEquals("foo.bar.Outer.Inner",
 					 inner.getFullyQualifiedName());
 	}
 

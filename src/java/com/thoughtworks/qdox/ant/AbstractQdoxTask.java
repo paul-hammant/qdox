@@ -11,6 +11,7 @@ import java.util.Vector;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.types.FileSet;
 
 public abstract class AbstractQdoxTask extends Task {
@@ -43,12 +44,15 @@ public abstract class AbstractQdoxTask extends Task {
 		validateAttributes();
 		buildFileMap();
 		JavaDocBuilder builder = new JavaDocBuilder();
+
+        // Add a classloader that has the taskdef's classpath.
+        builder.getClassLibrary().addClassLoader(getClass().getClassLoader());
 		mergeBuilderSources(builder);
 		JavaSource[] sources = builder.getSources();
 		processSources(sources);
 	}
 
-	private void mergeBuilderSources(JavaDocBuilder builder) {
+    private void mergeBuilderSources(JavaDocBuilder builder) {
 		for (Iterator iterator = fileMap.keySet().iterator(); iterator.hasNext();) {
 			String sourceFile = (String) iterator.next();
 			builder.addSourceTree((File)fileMap.get(sourceFile));

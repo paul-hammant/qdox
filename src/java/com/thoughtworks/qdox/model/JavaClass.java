@@ -20,7 +20,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     private static Type OBJECT = new Type("java.lang.Object");
     
-    private JavaClassParent parent;
     private List methods = new LinkedList();
     private JavaMethod[] methodsArray;
     private List fields = new LinkedList();
@@ -40,14 +39,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     
     protected JavaClass(String name) {
         setName(name);
-    }
-
-    public void setParent(JavaClassParent parent) {
-        this.parent = parent;
-    }
-
-    public JavaClassParent getParent() {
-        return parent;
     }
 
     public void setJavaClassCache(JavaClassCache javaClassCache) {

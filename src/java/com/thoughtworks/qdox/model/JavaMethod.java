@@ -10,7 +10,6 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     private JavaParameter[] parameters = JavaParameter.EMPTY_ARRAY;
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
-    private JavaClass parent;
 
     protected JavaMethod() {
     }
@@ -292,11 +291,4 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         return getDeclarationSignature(false).compareTo(((JavaMethod)o).getDeclarationSignature(false));
     }
 
-    public JavaClass getParent() {
-        return parent;
-    }
-
-    public void setParent(JavaClass parent) {
-        this.parent = parent;
-    }
 }

@@ -211,5 +211,14 @@ public class AbstractJavaEntityTest extends TestCase {
         AbstractJavaEntity entity = new JavaField();
         assertEquals(0, entity.getTags().length);
     }
+    
+    public void testGetSource() {
+        JavaSource source = new JavaSource();
+        JavaClass clazz = new JavaClass();
+        source.addClass(clazz);
+        JavaField field = new JavaField();
+        clazz.addField(field);
+        assertEquals(source, field.getSource());
+    }
 
 }

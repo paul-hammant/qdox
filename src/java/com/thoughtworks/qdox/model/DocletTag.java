@@ -13,6 +13,7 @@ public class DocletTag implements Serializable {
 	private String value;
 	private String[] parameters;
 	private Map namedParameters;
+	private String[] quotes = new String[] {"\"", "'"};
 
 	public DocletTag(String name, String value) {
 		this.name = name;
@@ -30,9 +31,21 @@ public class DocletTag implements Serializable {
 	public String[] getParameters() {
 		if (parameters == null) {
 			List paramsList = new ArrayList();
-			StringTokenizer tokens = new StringTokenizer(value, " ");
+			StringTokenizer tokens = new StringTokenizer(value);
 			while(tokens.hasMoreTokens()) {
-				paramsList.add(tokens.nextToken());
+				String token = tokens.nextToken();
+				for (int i = 0; i < quotes.length; i++) {
+					String quote = quotes[i];
+					if(token.indexOf(quote) != -1) {
+						while(!token.endsWith(quote)) {
+							if (tokens.hasMoreTokens()) {
+								token += " " + tokens.nextToken();
+							}
+						}
+						break;  // we only want to match against one type of quote
+					}
+				}
+				paramsList.add(token);
 			}
 			parameters = new String[paramsList.size()];
 			paramsList.toArray(parameters);
@@ -50,6 +63,7 @@ public class DocletTag implements Serializable {
 				if (eq > -1) {
 					String k = param.substring(0, eq);
 					String v = param.substring(eq + 1);
+					v = trim(v, quotes);
 					if (k.length() > 0) {
 						namedParameters.put(k, v);
 					}
@@ -59,4 +73,18 @@ public class DocletTag implements Serializable {
 		return (String)namedParameters.get(key);
 	}
 
+	private String trim(String value, String[] strings) {
+		for (int i = 0; i < strings.length; i++) {
+			String string = strings[i];
+			while(value.startsWith(string)) {
+				value = value.substring(string.length(), value.length());
+			}
+			while(value.endsWith(string)) {
+				value = value.substring(0, value.length() - string.length());
+			}
+		}
+		return value;
+	}
 }
+
+

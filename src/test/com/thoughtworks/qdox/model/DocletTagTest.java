@@ -66,5 +66,23 @@ public class DocletTagTest extends TestCase {
 		assertNull(tag.getNamedParameter("duck"));
 	}
 
+	public void testQuotedParameters() throws Exception {
+		DocletTag tag = new DocletTag("x", "one=\"hello world bye bye\" two=hello");
+		assertEquals("hello world bye bye", tag.getNamedParameter("one"));
+		assertEquals("hello", tag.getNamedParameter("two"));
+
+		tag = new DocletTag("x", "one=\"hello joe's world bye bye\" two=hello");
+		assertEquals("hello joe's world bye bye", tag.getNamedParameter("one"));
+		assertEquals("hello", tag.getNamedParameter("two"));
+
+		tag = new DocletTag("x", "one='hello joe\"s world bye bye' two=hello");
+		assertEquals("hello joe\"s world bye bye", tag.getNamedParameter("one"));
+		assertEquals("hello", tag.getNamedParameter("two"));
+
+		tag = new DocletTag("x", "one=\"hello chris' world bye bye\" two=hello");
+		assertEquals("hello chris' world bye bye", tag.getNamedParameter("one"));
+		assertEquals("hello", tag.getNamedParameter("two"));
+	}
+
 
 }

@@ -16,8 +16,10 @@
 		</section>
 		<section name="The Plan">
 			<p>
-				A custom built parser is to be built. JFlex and BYacc/J have been chosen because of their p
-				roven performance and they require no external libraries at runtime.
+				A custom built parser is to be built. <a href="http://www.jflex.de/">JFlex</a>
+				and <a href="http://troi.lincom-asg.com/~rjamison/byacc/">BYacc/J</a>
+				have been chosen because of their 
+				proven performance and they require no external libraries at runtime.
 			</p>
 			<p>
 				The parser skims the source files only looking for things of interest such as

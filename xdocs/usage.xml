@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<document>
+
+	<properties>
+		<title>QDox Usage</title>
+		<author email="joe@truemesh.com">Joe Walnes</author>
+	</properties>
+
+	<body>
+		<section name="Parsing a Java source file">
+		
+			<blockquote><code>
+				// input file<br/>
+				Reader input = new FileInputStream("MyFile.java");<br/>
+				<br/>
+				// parse into model objects<br/>
+				JavaDocBuilder builder = new JavaDocBuilder();<br/>
+				JavaSource src = builder.build(input);<br/>
+			</code></blockquote>
+
+			<p>Now you have a JavaSource representing the contents
+			of the file. See the <a href="apidocs/net/sf/qdox/model/JavaSource.html">API</a> docs
+			for more information.</p>
+			
+		</section>
+
+	</body>
+	
+</document>

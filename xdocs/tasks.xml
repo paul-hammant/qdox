@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<document>
+
+	<properties>
+		<title>Tasks</title>
+		<author email="joe@truemesh.com">Joe Walnes</author>
+	</properties>
+
+	<body>
+		<section name="Tasks">
+			<p>
+				<ul>
+					<li>
+						Database of parsed source tree and incremental reparsing of modified files.
+					</li>
+					<li>
+						Directory watcher daemon that constantly keeps the database up to date as modifications
+						are made and fires events to notify anything that has registered an interest.
+					</li>
+					<li>
+						Integration with XDoclet and XJavaDoc.
+					</li>
+					<li>
+						IDE plugins for Eclipse and IDEA to perform background code-generation.
+					</li>
+					<li>
+						Error handling callback mechanism.
+					</li>
+					<li>
+						XML writer to export sourcetree representation of classes, members and JavaDoc as
+						XML.
+					</li>
+					<li>
+						Sun JavaDoc Doclet API adapter to allow applications that make use of the API to be
+						compatible with JavaDoc.
+					</li>
+					<li>
+						Indexing of class level definitions and JavaDoc tags to allow fast queries on large
+						source trees such as 'all classes that extend/implement a certain class' or 'all 
+						classes containing a @blah tag'.
+					</li>
+					<li>
+						Source skipping. Files that don't match a certain criteria early on in the parse can
+						have the parse aborted to speed activity up.
+					</li>
+				</ul>
+			</p>
+		</section>
+
+		<section name="In Progress">
+			<p>
+				<ul>
+					<li>
+						Directory scanner to walk a source tree and parse each file.
+					</li>
+					<li>
+						Class name resolver to normalize/denormalize import statements of classes in 
+						source tree.
+					</li>
+					<li>
+						Class name resolver to normalize/denormalize import statements of classes in 
+						external libraries.
+					</li>
+				</ul>
+			</p>
+		</section>
+
+		<section name="Complete">
+			<p>
+				<ul>
+					<li>
+						Full parsing of Java source files providing callbacks for packages, imports, 
+						class/method/field definitions and JavaDoc.
+					</li>
+					<li>
+						Parser to skip method bodies.
+					</li>
+					<li>
+						Easy to use object model structure to be built from parser to allow traversal
+						of a source file.
+					</li>
+					<li>
+						Simple JavaBean facade to parser to allow user to provide a streap and get
+						back the object model of the file.
+					</li>
+					<li>
+						Human readable string representation of JavaSource file.
+					</li>
+				</ul>
+			</p>
+		</section>
+
+	</body>
+</document>

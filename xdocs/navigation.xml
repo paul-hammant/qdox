@@ -10,8 +10,9 @@
 		</links>
 		<menu name="QDox">
 			<item name="Overview"            href="/index.html"/>
+			<item name="Usage"               href="/usage.html"/>
 			<item name="SourceForge Project" href="http://sourceforge.net/projects/qdox/"/>
-			<item name="Download" href="/download.html"/>
+			<item name="Download"            href="/download.html"/>
 		</menu>
 	</body>
 

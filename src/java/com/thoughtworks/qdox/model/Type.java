@@ -1,7 +1,6 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.List;
-import java.util.Iterator;
 
 public class Type implements Comparable{
     private List imports;
@@ -23,28 +22,7 @@ public class Type implements Comparable{
             return;
         }
 
-			value = classLibrary.findClass(imports, packge, name);
-//        for (Iterator iterator = this.imports.iterator(); iterator.hasNext();) {
-//            String imprt = (String) iterator.next();
-//            if (imprt.endsWith("." + this.name)){
-//                value = imprt;
-//                return;
-//            }
-//        }
-
-//        String nameAsIfInSamePackage = packge + "." + name;
-//        if (classLibrary.contains(nameAsIfInSamePackage)){
-//            value = nameAsIfInSamePackage;
-//            return;
-//        }
-
-//        for (Iterator iterator = allClassNames.iterator(); iterator.hasNext();) {
-//            String className = (String) iterator.next();
-//            if (className.endsWith("." + name) && imports.contains(className.substring(0, className.lastIndexOf(".")) + ".*")){
-//                value = className;
-//                return;
-//            }
-//        }
+        value = classLibrary.findClass(imports, packge, name);
     }
 
     public String getValue() {

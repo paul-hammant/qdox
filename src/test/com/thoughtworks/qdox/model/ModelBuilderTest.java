@@ -181,9 +181,10 @@ public class ModelBuilderTest extends TestCase {
 		assertEquals(2, source.getClasses()[1].getModifiers().length);
 
 		// sorted
-		Arrays.sort(source.getClasses()[1].getModifiers());
-		assertEquals("final", source.getClasses()[1].getModifiers()[0]);
-		assertEquals("public", source.getClasses()[1].getModifiers()[1]);
+		String[] modifiers = source.getClasses()[1].getModifiers();
+		Arrays.sort(modifiers);
+		assertEquals("final", modifiers[0]);
+		assertEquals("public", modifiers[1]);
 	}
 
 	public void testAddMethodsToCorrectClass() throws Exception {
@@ -343,10 +344,11 @@ public class ModelBuilderTest extends TestCase {
 		JavaMethod result = source.getClasses()[0].getMethod(0);
 		assertEquals(3, result.getModifiers().length);
 		// sorted
-		Arrays.sort(result.getModifiers());
-		assertEquals("synchronized", result.getModifiers()[0]);
-		assertEquals("final", result.getModifiers()[1]);
-		assertEquals("public", result.getModifiers()[2]);
+		String[] modifiers = result.getModifiers();
+		Arrays.sort(modifiers);
+		assertEquals("final", modifiers[0]);
+		assertEquals("public", modifiers[1]);
+		assertEquals("synchronized", modifiers[2]);
 	}
 
 	public void testSimpleField() throws Exception {

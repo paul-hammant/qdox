@@ -127,7 +127,13 @@ public class JavaMethod extends AbstractJavaEntity {
     public boolean equals(Object obj) {
         if (obj == null) return false;
         JavaMethod m = (JavaMethod) obj;
+
+        if (m.isConstructor() != isConstructor()) return false;
+
+        if (m.getName() == null) return (getName() == null);
         if (!m.getName().equals(getName())) return false;
+        
+        if (m.getReturns() == null) return (getReturns() == null);
         if (!m.getReturns().equals(getReturns())) return false;
 
         JavaParameter[] myParams = getParameters();
@@ -158,7 +164,10 @@ public class JavaMethod extends AbstractJavaEntity {
     }
 
     public int hashCode() {
-        return name.hashCode() * returns.hashCode() * getParameters().length;
+        int hashCode = name.hashCode();
+        if (returns != null) hashCode *= returns.hashCode();
+        hashCode *= getParameters().length;
+        return hashCode;
     }
 
     public JavaClass getParentClass() {

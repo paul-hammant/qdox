@@ -168,10 +168,25 @@ public class JavaMethodTest extends TestCase {
         m4.setName("thing");
         m4.setReturns(new Type("int", 0));
 
+        JavaMethod c1 = new JavaMethod();
+        c1.setName("thing");
+        c1.setConstructor(true);
+        
+        JavaMethod c2 = new JavaMethod();
+        c2.setName("Thong");
+        c2.setConstructor(true);
+        
+        JavaMethod c3 = new JavaMethod();
+        c3.setName("Thong");
+        c3.setConstructor(true);
+        
         assertEquals(mth, m2);
         assertEquals(m2, mth);
         assertNotEquals(mth, m3);
         assertNotEquals(mth, m4);
+        assertNotEquals(m4, c1);
+        assertNotEquals(c1, c2);
+        assertEquals(c2, c3);
         assertFalse(mth.equals(null));
     }
 
@@ -252,8 +267,17 @@ public class JavaMethodTest extends TestCase {
         });
         m3.setReturns(new Type("void", 0));
 
+        JavaMethod c1 = new JavaMethod();
+        c1.setName("Thong");
+        c1.setConstructor(true);
+        
+        JavaMethod c2 = new JavaMethod();
+        c2.setName("Thong");
+        c2.setConstructor(true);
+        
         assertEquals(mth.hashCode(), m2.hashCode());
         assertTrue(mth.hashCode() != m3.hashCode());
+        assertEquals(c1.hashCode(), c2.hashCode());
     }
 
     public void testSignatureMatches() throws Exception {

@@ -296,7 +296,7 @@ public class JavaDocBuilderTest extends TestCase {
     public void testClassCanBeTestedForNonexistantClasses() throws Exception {
         String in = ""
                 + "package food;"
-                + "class Sausage extends food.Meat implements Proteine {"
+                + "class Sausage extends food.Meat implements food.Proteine {"
                 + "}";
         builder.addSource(new StringReader(in));
 

@@ -51,10 +51,10 @@
 				</tr>
 
 				<tr>
-					<td><nobr><a href="http://nanning.sourceforge.net/">Nanning</a></nobr></td>
+					<td><nobr><a href="http://nanning.codehaus.org/">Nanning</a></nobr></td>
 					<td>
 						Nanning is an Aspect Oriented Programming (AOP) toolkit for Java that does not require
-						a custom compiler.
+						a custom compiler. It uses dynamic proxies to weave in interceptors and mixins at runtime.
 					</td>
 					<td>
 						QDox is used to allow aspects to be applied to classes by specifiying meta-data in doclet tags.
@@ -62,15 +62,60 @@
 				</tr>
 
 				<tr>
-					<td><nobr><a href="http://jakarta.apache.org/avalon/phoenix">Phoenix</a></nobr></td>
+					<td><nobr><a href="http://avalon.apache.org/phoenix/">Avalon Phoenix</a></nobr></td>
 					<td>
-						Avalon-Phoenix is a container for containers or a server for servers that is part of Apache's
-						Jakarta project.
+						 Phoenix is a micro-kernel designed and implemented on top of the Avalon framework. It provides a number 
+						 of facilities to manage the environment of Server Applications. 
 					</td>
 					<td>
 						'MetaGenerate' is part of the Phoenix toolset and picks up @phoenix prefixed JavaDoc tags
 						to make XML manifests for the components that will be laced together in more XML to make 
 						a complete server application.
+					</td>
+				</tr>
+
+				<tr>
+					<td><nobr><a href="http://ivory.codehaus.org/">Ivory</a></nobr></td>
+					<td>
+						Ivory provides easy integration between your exiting Java classes, Avalon services, and Axis. 
+						It allows easy deployment of soap services with none of the WSDD configuration that Axis normally mandates. 
+					</td>
+					<td>
+						Attributes are used to provide additional hints to Ivory about Java classes that cannot be determined via reflection.
+					</td>
+				</tr>
+
+				<tr>
+					<td><nobr><a href="http://voruta.sourceforge.net/">Voruta</a></nobr></td>
+					<td>
+						Voruta is a data access framework for embedding SQL statements in Java methods using custom JavaDoc 
+						tags and dynamic code generation at runtime.
+					</td>
+					<td>
+						QDox is used to parse metadata and CGLib to generate implementation at runtime.
+					</td>
+				</tr>
+
+				<tr>
+					<td><nobr><a href="http://aspectwerkz.codehaus.org/">AspectWerkz</a></nobr></td>
+					<td>
+						AspectWerkz is an Aspect Oriented Programming (AOP) toolkit for Java that modifies byte-code to 
+						weave in interceptors and mixins.
+					</td>
+					<td>
+						Attributes can be used to associate interceptors and mixins with a specific class.
+					</td>
+				</tr>
+
+				<tr>
+					<td><nobr><a href="http://cocoon.apache.org/">Cocoon</a></nobr></td>
+					<td>
+						Apache Cocoon is an XML publishing framework that raises the usage of XML and XSLT technologies for server applications
+						to a new level. Designed for performance and scalability around pipelined SAX processing, Cocoon offers a flexible
+						environment based on a separation of concerns between content, logic, and style. 
+					</td>
+					<td>
+						The QDox Block reads in Java source files and fires out SAX events enabling processing by standard XML tools (such as XSLT).
 					</td>
 				</tr>
 

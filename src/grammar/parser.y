@@ -28,7 +28,7 @@ import java.io.IOException;
 file: | file { line = lexer.getLine(); } filepart;
 
 // And a filepart is a package/import statement, javadoc comment, or class declaration.
-filepart: package | import | javadoc | class | enum;
+filepart: package | import | javadoc | class | enum | SEMI;
 
 // Package statement
 package: PACKAGE fullidentifier SEMI { builder.addPackage($2); };

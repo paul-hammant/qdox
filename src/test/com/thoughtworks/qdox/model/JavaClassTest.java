@@ -274,7 +274,7 @@ public class JavaClassTest extends TestCase {
 		assertNull(cls.getParentSource());
 
 		JavaSource source = new JavaSource();
-		source.setClasses(new JavaClass[]{cls});
+		source.addClass(cls);
 
 		assertSame(source, cls.getParentSource());
 	}
@@ -293,7 +293,7 @@ public class JavaClassTest extends TestCase {
 
 		cls.setName("MyClass");
 		
-		source.setClasses(new JavaClass[]{cls});
+		source.addClass(cls);
 
 		assertEquals("MyClass", cls.getName());
 		assertEquals("com.thoughtworks.qdox", cls.getPackage());
@@ -309,7 +309,7 @@ public class JavaClassTest extends TestCase {
 
 		JavaClass outer = new JavaClass();
 		outer.setName("Outer");
-		source.setClasses(new JavaClass[]{outer});
+		source.addClass(outer);
 		assertEquals("foo.bar.Outer", outer.asClassNamespace());
 		
 		JavaClass inner = new JavaClass();

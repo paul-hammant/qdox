@@ -12,12 +12,10 @@ import java.util.Set;
 
 public class ModelBuilder implements Builder {
 
-	private List classes = new ArrayList();
 	private JavaClass currentClass;
 	private String lastComment;
 	private List lastTagSet;
 	private String packge;
-	private List imports = new ArrayList();
 	private ClassLibrary classLibrary;
 	private JavaSource result;
 
@@ -36,7 +34,7 @@ public class ModelBuilder implements Builder {
 	}
 
 	public void addImport(String importName) {
-		imports.add(importName);
+		result.addImport(importName);
 	}
 
 	public void addJavaDoc(String text) {
@@ -84,7 +82,7 @@ public class ModelBuilder implements Builder {
 		// javadoc
 		addJavaDoc(currentClass);
 		classLibrary.add(packge + "." + currentClass.getName());
-		classes.add(currentClass);
+		result.addClass(currentClass);
 	}
 
 	private Type createType(String typeName, int dimensions) {
@@ -162,12 +160,12 @@ public class ModelBuilder implements Builder {
 
 	public JavaSource getSource() {
 		result.setPackage(packge);
-		JavaClass[] clsArray = new JavaClass[classes.size()];
-		classes.toArray(clsArray);
-		result.setClasses(clsArray);
-		String[] impArray = new String[imports.size()];
-		imports.toArray(impArray);
-		result.setImports(impArray);
+// 		JavaClass[] clsArray = new JavaClass[classes.size()];
+// 		classes.toArray(clsArray);
+// 		result.setClasses(clsArray);
+// 		String[] impArray = new String[imports.size()];
+// 		imports.toArray(impArray);
+// 		result.setImports(impArray);
 		return result;
 	}
 }

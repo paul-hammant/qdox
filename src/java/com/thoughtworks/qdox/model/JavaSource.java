@@ -1,9 +1,11 @@
 package com.thoughtworks.qdox.model;
 
-import java.io.Serializable;
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,13 +24,15 @@ public class JavaSource implements Serializable, JavaClassParent {
 		PRIMITIVE_TYPES.add( "void" );
 	}
 
-	private JavaClass[] classes = new JavaClass[0];
+	private File file;
 	private String packge;
-	private String[] imports = new String[0];
+	private List imports = new LinkedList();
+	private String[] importsArray;
+	private List classes = new LinkedList();
+	private JavaClass[] classesArray;
 	private ClassLibrary classLibrary;
 	private Map typeCache = new HashMap();
-	private File file;
-
+	
 	public void setFile(File file) {
 		this.file = file;
 	}
@@ -45,26 +49,33 @@ public class JavaSource implements Serializable, JavaClassParent {
 		this.packge = packge;
 	}
 
-	public String[] getImports() {
-		return imports;
+	public void addImport(String imp) {
+		imports.add(imp);
+		importsArray = null;
 	}
 
-	public void setImports(String[] imports) {
-		this.imports = imports;
+	public String[] getImports() {
+		if (importsArray == null) {
+			importsArray = new String[imports.size()];
+			imports.toArray(importsArray);
+		}
+		return importsArray;
+	}
+	
+	public void addClass(JavaClass imp) {
+		classes.add(imp);
+		imp.setParent(this);
+		classesArray = null;
 	}
 
 	public JavaClass[] getClasses() {
-		return classes;
-	}
-
-	public void setClasses(JavaClass[] classes) {
-		this.classes = classes;
-		for (int classIndex = 0; classIndex < classes.length; classIndex++) {
-			JavaClass javaClass = classes[classIndex];
-			javaClass.setParent(this);
+		if (classesArray == null) {
+			classesArray = new JavaClass[classes.size()];
+			classes.toArray(classesArray);
 		}
+		return classesArray;
 	}
-
+	
 	public ClassLibrary getClassLibrary() {
 		return classLibrary;
 	}
@@ -86,6 +97,7 @@ public class JavaSource implements Serializable, JavaClassParent {
 		}
 
 		// import statement
+		String[] imports = getImports();
 		for (int i = 0; imports != null && i < imports.length; i++) {
 			result.write("import ");
 			result.write(imports[i]);
@@ -97,6 +109,7 @@ public class JavaSource implements Serializable, JavaClassParent {
 		}
 
 		// classes
+		JavaClass[] classes = getClasses();
 		for (int i = 0; i < classes.length; i++) {
 			if (i > 0) result.newline();
 			classes[i].write(result);
@@ -130,6 +143,7 @@ public class JavaSource implements Serializable, JavaClassParent {
 		if (PRIMITIVE_TYPES.contains(typeName)) return typeName;
 
 		// check if a matching fully-qualified import
+		String[] imports = getImports();
 		for (int i = 0; i < imports.length; i++) {
 			if (imports[i].endsWith("." + typeName)){
 				return imports[i];

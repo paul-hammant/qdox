@@ -19,7 +19,7 @@ public class JavaSourceTest extends TestCase {
 	public void testToStringOneClass() throws Exception {
 		JavaClass cls = new JavaClass();
 		cls.setName("MyClass");
-		source.setClasses(new JavaClass[] {cls});
+		source.addClass(cls);
 		String expected = ""
 			+ "class MyClass {\n"
 			+ "\n"
@@ -30,11 +30,14 @@ public class JavaSourceTest extends TestCase {
 	public void testToStringMultipleClass() throws Exception {
 		JavaClass cls1 = new JavaClass();
 		cls1.setName("MyClass1");
+		source.addClass(cls1);
 		JavaClass cls2 = new JavaClass();
 		cls2.setName("MyClass2");
+		source.addClass(cls2);
 		JavaClass cls3 = new JavaClass();
 		cls3.setName("MyClass3");
-		source.setClasses(new JavaClass[] {cls1, cls2, cls3});
+		source.addClass(cls3);
+		
 		String expected = ""
 			+ "class MyClass1 {\n"
 			+ "\n"
@@ -53,7 +56,7 @@ public class JavaSourceTest extends TestCase {
 	public void testToStringPackage() throws Exception {
 		JavaClass cls = new JavaClass();
 		cls.setName("MyClass");
-		source.setClasses(new JavaClass[] {cls});
+		source.addClass(cls);
 		source.setPackage("com.thing");
 		String expected = ""
 			+ "package com.thing;\n"
@@ -67,8 +70,8 @@ public class JavaSourceTest extends TestCase {
 	public void testToStringImport() throws Exception {
 		JavaClass cls = new JavaClass();
 		cls.setName("MyClass");
-		source.setClasses(new JavaClass[] {cls});
-		source.setImports(new String[] {"java.util.*"});
+		source.addClass(cls);
+		source.addImport("java.util.*");
 		String expected = ""
 			+ "import java.util.*;\n"
 			+ "\n"
@@ -81,8 +84,10 @@ public class JavaSourceTest extends TestCase {
 	public void testToStringMultipleImports() throws Exception {
 		JavaClass cls = new JavaClass();
 		cls.setName("MyClass");
-		source.setClasses(new JavaClass[] {cls});
-		source.setImports(new String[] {"java.util.*", "com.blah.Thing", "xxx"});
+		source.addClass(cls);
+		source.addImport("java.util.*");
+		source.addImport("com.blah.Thing");
+		source.addImport("xxx");
 		String expected = ""
 			+ "import java.util.*;\n"
 			+ "import com.blah.Thing;\n"
@@ -97,8 +102,8 @@ public class JavaSourceTest extends TestCase {
 	public void testToStringImportAndPackage() throws Exception {
 		JavaClass cls = new JavaClass();
 		cls.setName("MyClass");
-		source.setClasses(new JavaClass[] {cls});
-		source.setImports(new String[] {"java.util.*"});
+		source.addClass(cls);
+		source.addImport("java.util.*");
 		source.setPackage("com.moo");
 		String expected = ""
 			+ "package com.moo;\n"
@@ -112,8 +117,8 @@ public class JavaSourceTest extends TestCase {
 	}
 
     public void testResolveJavaPrimitive() throws Exception {
-		source.setImports( new String[] { "bogus.int",
-										  "bogus.double" } );
+		source.addImport("bogus.int");
+		source.addImport("bogus.double");
 		String[] primitives = new String[] { 
 			"boolean", "byte", "char", "double",
 			"float", "int", "long", "short", "void"
@@ -124,19 +129,19 @@ public class JavaSourceTest extends TestCase {
 	}
 
     public void testResolveFullyQualifiedName() throws Exception {
-		source.setImports( new String[] { "foo.Bar" } );
+		source.addImport("foo.Bar");
 		assertEquals("open.Bar", source.resolveType("open.Bar"));
     }
 
     public void testResolveFullyQualifiedImport() throws Exception {
-		source.setImports( new String[] { "foo.Bar" } );
+		source.addImport("foo.Bar");
 		assertEquals("foo.Bar", source.resolveType("Bar"));
 	}
 
     public void testResolveChooseFirstMatchingImport() throws Exception {
-		source.setImports( new String[] { "bogus.package.MyType",
-										  "com.thoughtworks.qdox.model.Type",
-										  "another.package.Type" } );
+		source.addImport("bogus.package.MyType");
+		source.addImport("com.thoughtworks.qdox.model.Type");
+		source.addImport("another.package.Type");
 		assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
 	}
 
@@ -154,15 +159,15 @@ public class JavaSourceTest extends TestCase {
 
     public void testResolveWildcard() throws Exception {
 		source.getClassLibrary().add("foo.Bar");
-		source.setImports( new String[] { "foo.*" } );
+		source.addImport( "foo.*" );
 		assertEquals("foo.Bar", source.resolveType("Bar"));
 	}
 
     public void testResolveWildcardsLast() throws Exception {
 		source.getClassLibrary().add("foo.Bar");
-		source.setImports( new String[] { "foo.*",
-										  "com.thoughtworks.qdox.model.Type",
-										  "another.package.Type" } );
+		source.addImport( "foo.*" );
+		source.addImport( "com.thoughtworks.qdox.model.Type" );
+		source.addImport( "another.package.Type" );
 		assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
 	}
 

@@ -53,6 +53,10 @@
                 convenience method to AbstractJavaEntity for easier retrieval
                 of tag parameters without having to null-check the tag.
             </action>
+            <action dev="rinkrank" type="add">
+                Added APITestCase. This is a JUnit extension that can be used
+                to compare the equality of two Java sources on the API level.
+            </action>
         </release>
 
         <release version="1.2" date="2003-03-23">

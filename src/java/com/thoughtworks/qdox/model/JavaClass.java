@@ -14,7 +14,7 @@ import java.beans.Introspector;
  */
 public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
-    public static Type OBJECT = new Type("java.lang.Object");
+    private static Type OBJECT = new Type("java.lang.Object");
     private List methods = new LinkedList();
     private JavaMethod[] methodsArray;
     private List fields = new LinkedList();

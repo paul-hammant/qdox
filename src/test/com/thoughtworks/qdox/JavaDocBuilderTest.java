@@ -545,6 +545,17 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals("Hip hop won*t stop", x.getComment());
     }
 
+    public void testCommentsCanHaveNewlines() {
+        String source = "" +
+                "/** Hello\n"
+                + "* world!"
+                + "*/" +
+                "class x{}";
+        builder.addSource(new StringReader(source));
+        JavaClass x = builder.getClassByName("x");
+        assertEquals("Hello \nworld!", x.getComment());
+    }
+
     public void testJiraQdox19() {
         String source = "" +
                 "class x { \n" +

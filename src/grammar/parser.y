@@ -8,7 +8,7 @@ import java.io.IOException;
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND QUERY AT
-%token JAVADOCSTART JAVADOCEND
+%token JAVADOCSTART JAVADOCEND JAVADOCEOL
 %token CODEBLOCK 
 %token INTEGER_LITERAL FLOAT_LITERAL
 
@@ -49,8 +49,11 @@ javadocdescription:
 javadoctokens: | javadoctokens javadoctoken;
 
 javadoctoken: 
-     JAVADOCTOKEN { 
-        textBuffer.append($1); textBuffer.append(' '); 
+    JAVADOCTOKEN {
+        textBuffer.append($1); textBuffer.append(' ');
+    } |
+    JAVADOCEOL {
+        textBuffer.append('\n');
     };
 
 javadoctags: | javadoctags javadoctag;
@@ -301,7 +304,7 @@ private String buffer() {
     if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);
     String result = textBuffer.toString();
     textBuffer.setLength(0);
-    return result;
+    return result.trim();
 }
 
 public Parser(Lexer lexer, Builder builder) {

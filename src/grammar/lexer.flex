@@ -143,7 +143,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 <JAVADOC> {
     "*"+ "/"            { popState(); return Parser.JAVADOCEND; }
     ^ [ \t]* "*"+ / [^/*] { /* ignore */ }
-    {Eol}               { javaDocNewLine = true; }
+    {Eol}               { javaDocNewLine = true; return Parser.JAVADOCEOL; }
     {CommentChar}* "*"+ / [ \t\r\n] {
         return Parser.JAVADOCTOKEN;
     }

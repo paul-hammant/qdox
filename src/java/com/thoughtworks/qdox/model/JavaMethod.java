@@ -8,12 +8,6 @@ public class JavaMethod extends AbstractJavaEntity {
 	private boolean constructor;
 	private int dimensions;
 
-	/**
-	 * Constructor not public.
-	 */
-	JavaMethod() {
-	}
-
 	public Type getReturns() {
 		return returns;
 	}
@@ -69,23 +63,23 @@ public class JavaMethod extends AbstractJavaEntity {
 		result.newline();
 	}
 
-	void setReturns(Type returns) {
+	public void setReturns(Type returns) {
 		this.returns = returns;
 	}
 
-	void setParameters(JavaParameter[] parameters) {
+	public void setParameters(JavaParameter[] parameters) {
 		this.parameters = parameters;
 	}
 
-	void setExceptions(Type[] exceptions) {
+	public void setExceptions(Type[] exceptions) {
 		this.exceptions = exceptions;
 	}
 
-	void setConstructor(boolean constructor) {
+	public void setConstructor(boolean constructor) {
 		this.constructor = constructor;
 	}
 
-	void setDimensions(int dimensions) {
+	public void setDimensions(int dimensions) {
 		this.dimensions = dimensions;
 	}
 

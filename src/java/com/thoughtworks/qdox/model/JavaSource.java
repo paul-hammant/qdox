@@ -6,12 +6,6 @@ public class JavaSource {
 	private String packge;
 	private String[] imports;
 
-	/**
-	 * Constructor not public.
-	 */
-	JavaSource() {
-	}
-
 	public String getPackage() {
 		return packge;
 	}
@@ -56,15 +50,15 @@ public class JavaSource {
 		return result.toString();
 	}
 
-	void setPackge(String packge) {
+	public void setPackge(String packge) {
 		this.packge = packge;
 	}
 
-	void setImports(String[] imports) {
+	public void setImports(String[] imports) {
 		this.imports = imports;
 	}
 
-	void setClasses(JavaClass[] classes) {
+	public void setClasses(JavaClass[] classes) {
 		this.classes = classes;
 		
 		for (int classIndex = 0; classIndex < classes.length; classIndex++) {

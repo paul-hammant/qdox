@@ -14,12 +14,6 @@ public class JavaClass extends AbstractJavaEntity {
 	private JavaSource source;
 	
 	/**
-	 * Constructor not public.
-	 */
-	JavaClass() {
-	}
-
-	/**
 	 * Interface or class?
 	 */
 	public boolean isInterface() {
@@ -91,23 +85,23 @@ public class JavaClass extends AbstractJavaEntity {
 		result.newline();
 	}
 
-	void setInterface(boolean interfce) {
+	public void setInterface(boolean interfce) {
 		this.interfce = interfce;
 	}
 
-	void addMethod(JavaMethod meth) {
+	public void addMethod(JavaMethod meth) {
 		this.methods.add(meth);
 	}
 
-	void setSuperClass(Type type) {
+	public void setSuperClass(Type type) {
 		superClass = type;
 	}
 
-	void setImplementz(Type[] implementz) {
+	public void setImplementz(Type[] implementz) {
 		this.implementz = implementz;
 	}
 
-	void addField(JavaField javaField) {
+	public void addField(JavaField javaField) {
 		fields.add(javaField);
 	}
 

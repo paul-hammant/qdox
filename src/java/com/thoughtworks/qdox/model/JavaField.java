@@ -1,7 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.Iterator;
-
 public class JavaField extends AbstractJavaEntity {
 
 	private Type type;
@@ -23,11 +21,11 @@ public class JavaField extends AbstractJavaEntity {
 		result.newline();
 	}
 
-	void setType(Type type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 
-	void setDimensions(int i) {
+	public void setDimensions(int i) {
 		this.dimensions = i;
 	}
 

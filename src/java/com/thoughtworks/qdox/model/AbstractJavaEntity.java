@@ -1,7 +1,6 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -96,19 +95,19 @@ abstract class AbstractJavaEntity {
 
 	protected abstract void writeBody(IndentBuffer result);
 
-	void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	void setModifiers(String[] modifiers) {
+	public void setModifiers(String[] modifiers) {
 		this.modifiers= Arrays.asList(modifiers);
 	}
 
-	void setComment(String comment) {
+	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
-	void setTags(List tags) {
+	public void setTags(List tags) {
 		this.tags = tags;
 	}
 
@@ -173,10 +172,5 @@ abstract class AbstractJavaEntity {
 				result.write(' ');
 		}
 	}
-
-
-
-
-
 
 }

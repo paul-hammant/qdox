@@ -6,10 +6,7 @@ public class JavaParameter {
 	private Type type;
 	private int dimensions;
 
-	/**
-	 * Constructor not public.
-	 */
-	JavaParameter(Type type, String name, int dimensions) {
+	public JavaParameter(Type type, String name, int dimensions) {
 		this.name = name;
 		this.type = type;
 		this.dimensions = dimensions;

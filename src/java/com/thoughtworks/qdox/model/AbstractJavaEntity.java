@@ -12,6 +12,11 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
     protected List modifiers = new ArrayList();
     private String comment;
     private DocletTag[] tags = new DocletTag[0];
+    private final JavaClassParent parent;
+
+    protected AbstractJavaEntity(JavaClassParent parent) {
+        this.parent = parent;
+    }
 
     public String getName() {
         return name;
@@ -128,9 +133,12 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
         this.comment = comment;
     }
 
-    public void setTags(List tags) {
-        this.tags = new DocletTag[tags.size()];
-        tags.toArray(this.tags);
+    public void setTags(List tagList) {
+        tags = new DocletTag[tagList.size()];
+        tagList.toArray(tags);
+        for (int i = 0; i < tags.length; i++) {
+              tags[i].setContext(this);
+        }
     }
 
     //helper methods for querying the modifiers
@@ -217,6 +225,18 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
             String modifier = (String) iter.next();
             result.write(modifier);
             result.write(' ');
+        }
+    }
+
+    public JavaClassParent getParent() {
+        return parent;
+    }
+
+    public JavaSource getSource() {
+        if(parent instanceof JavaSource) {
+            return (JavaSource) parent;
+        } else {
+            return parent.getParentSource();
         }
     }
 

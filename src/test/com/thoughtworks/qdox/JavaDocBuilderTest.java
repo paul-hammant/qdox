@@ -501,7 +501,7 @@ public class JavaDocBuilderTest extends TestCase {
         JavaClass jalla = builder.getClassByName("x.Jalla");
         DocletTag line4 = jalla.getTagByName("line");
         assertEquals(4, line4.getLineNumber());
-        assertSame(line4.getJavaSource().getClasses()[0], jalla);
+        assertSame(line4.getContext(), jalla);
     }
 
     public void testJiraQdox14() {

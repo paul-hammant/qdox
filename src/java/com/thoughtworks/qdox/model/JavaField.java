@@ -3,7 +3,14 @@ package com.thoughtworks.qdox.model;
 public class JavaField extends AbstractJavaEntity {
 
     private Type type;
-    private JavaClass parentClass;
+
+    public JavaField(JavaClass parent) {
+        super(parent);
+    }
+
+    public JavaField() {
+        this(null);
+    }
 
     public Type getType() {
         return type;
@@ -20,14 +27,6 @@ public class JavaField extends AbstractJavaEntity {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public JavaClass getParentClass() {
-        return parentClass;
-    }
-
-    public void setParentClass(JavaClass parentClass) {
-        this.parentClass = parentClass;
     }
 
     public int compareTo(Object o) {

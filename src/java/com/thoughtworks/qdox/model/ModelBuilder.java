@@ -49,7 +49,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void addJavaDocTag(String tag, String text, int lineNumber) {
-        DocletTag docletTag = docletTagFactory.createDocletTag(tag, text, lineNumber, source);
+        DocletTag docletTag = docletTagFactory.createDocletTag(tag, text, lineNumber);
         lastTagSet.add(docletTag);
     }
 
@@ -116,7 +116,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void addMethod(MethodDef def) {
-        JavaMethod currentMethod = new JavaMethod();
+        JavaMethod currentMethod = new JavaMethod(currentClass);
 
         // basic details
         currentMethod.setName(def.name);
@@ -158,7 +158,8 @@ public class ModelBuilder implements Builder {
     }
 
     public void addField(FieldDef def) {
-        JavaField currentField = new JavaField();
+        JavaField currentField = new JavaField(currentClass);
+
         currentField.setName(def.name);
         currentField.setType(createType(def.type, def.dimensions));
 

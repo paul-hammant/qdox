@@ -7,6 +7,8 @@ import com.thoughtworks.qdox.DataProvider;
 public class JavaMethodTest extends TestCase {
 
     private JavaMethod mth;
+    private JavaSource source;
+    private JavaClass clazz;
 
     public JavaMethodTest(String s) {
         super(s);
@@ -14,7 +16,9 @@ public class JavaMethodTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        mth = new JavaMethod();
+        source = new JavaSource();
+        clazz = new JavaClass(source);
+        mth = new JavaMethod(clazz);
     }
 
     public void testDeclarationSignatureWithModifiers() {
@@ -311,13 +315,8 @@ public class JavaMethodTest extends TestCase {
     }
 
     public void testParentClass() throws Exception {
-        assertNull(mth.getParentClass());
-
-        JavaClass cls = new JavaClass(null);
-        cls.addMethod(mth);
-        assertSame(cls, mth.getParentClass());
+        assertSame(clazz, mth.getParentClass());
     }
-
 
     public void testCanGetParameterByName() throws Exception {
         JavaParameter paramX =

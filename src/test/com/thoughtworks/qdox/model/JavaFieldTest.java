@@ -53,14 +53,4 @@ public class JavaFieldTest extends TestCase {
         String expected = "int[][] count;\n";
         assertEquals(expected, fld.toString());
     }
-
-    public void testParentClass() throws Exception {
-        JavaField fld = new JavaField();
-        assertNull(fld.getParentClass());
-
-        JavaClass cls = new JavaClass(null);
-        cls.addField(fld);
-        assertSame(cls, fld.getParentClass());
-    }
-
 }

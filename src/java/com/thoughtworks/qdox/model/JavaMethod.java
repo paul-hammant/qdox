@@ -11,7 +11,13 @@ public class JavaMethod extends AbstractInheritableJavaEntity {
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
 
-    private JavaClass parentClass;
+    public JavaMethod(JavaClass parent) {
+        super(parent);
+    }
+
+    public JavaMethod() {
+        this(null);
+    }
 
     public Type getReturns() {
         return returns;
@@ -175,15 +181,18 @@ public class JavaMethod extends AbstractInheritableJavaEntity {
     }
 
     public JavaClass getParentClass() {
-        return parentClass;
+        return (JavaClass) getParent();
     }
 
+    /**
+     * @deprecated Don't call this - the parent is set in the constructor.
+     */
     public void setParentClass(JavaClass parentClass) {
-        this.parentClass = parentClass;
+        throw new UnsupportedOperationException();
     }
 
     public boolean isPublic() {
-        return super.isPublic() || parentClass.isInterface();
+        return super.isPublic() || getParentClass().isInterface();
     }
 
     /**

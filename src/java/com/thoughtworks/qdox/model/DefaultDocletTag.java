@@ -11,21 +11,20 @@ public class DefaultDocletTag implements DocletTag {
     private final String name;
     private final String value;
     private final int lineNumber;
-    private final JavaSource javaSource;
 
     private String[] parameters;
     private Map namedParameters;
     private String[] quotes = new String[]{"\"", "'"};
+    private AbstractJavaEntity owner;
 
-    public DefaultDocletTag(String name, String value, int lineNumber, JavaSource javaSource) {
+    public DefaultDocletTag(String name, String value, int lineNumber) {
         this.name = name;
         this.value = value;
         this.lineNumber = lineNumber;
-        this.javaSource = javaSource;
     }
 
     public DefaultDocletTag(String name, String value) {
-        this(name, value, 0, null);
+        this(name, value, 0);
     }
 
     public String getName() {
@@ -87,10 +86,6 @@ public class DefaultDocletTag implements DocletTag {
         return lineNumber;
     }
 
-    public JavaSource getJavaSource() {
-        return javaSource;
-    }
-
     private String trim(String value, String[] strings) {
         for (int i = 0; i < strings.length; i++) {
             String string = strings[i];
@@ -102,6 +97,14 @@ public class DefaultDocletTag implements DocletTag {
             }
         }
         return value;
+    }
+
+    public final AbstractJavaEntity getContext() {
+        return owner;
+    }
+
+    public void setContext(AbstractJavaEntity owner) {
+        this.owner = owner;
     }
 }
 

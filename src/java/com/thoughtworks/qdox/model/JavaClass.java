@@ -31,11 +31,10 @@ public class JavaClass extends AbstractInheritableJavaEntity
     private Type type;
     private Type superClass;
     private Type[] implementz = new Type[0];
-    private final JavaClassParent parent;
     private JavaClassCache javaClassCache;
 
     public JavaClass(JavaClassParent parent) {
-        this.parent = parent;
+        super(parent);
     }
 
     public void setJavaClassCache(JavaClassCache javaClassCache) {
@@ -159,7 +158,6 @@ public class JavaClass extends AbstractInheritableJavaEntity
 
     public void addMethod(JavaMethod meth) {
         methods.add(meth);
-        meth.setParentClass(this);
         methodsArray = null;
     }
 
@@ -173,12 +171,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
 
     public void addField(JavaField javaField) {
         fields.add(javaField);
-        javaField.setParentClass(this);
         fieldsArray = null;
-    }
-
-    public JavaClassParent getParent() {
-        return parent;
     }
 
     public JavaSource getParentSource() {
@@ -211,11 +204,11 @@ public class JavaClass extends AbstractInheritableJavaEntity
             }
         }
 
-        return parent.resolveType(typeName);
+        return getParent().resolveType(typeName);
     }
 
     public ClassLibrary getClassLibrary() {
-        return parent.getClassLibrary();
+        return getParent().getClassLibrary();
     }
 
     public String getClassNamePrefix() {
@@ -240,7 +233,7 @@ public class JavaClass extends AbstractInheritableJavaEntity
     }
 
     /**
-     * since 1.3
+     * @since 1.3
      */
     public JavaMethod[] getMethods(boolean superclasses) {
         if (superclasses) {

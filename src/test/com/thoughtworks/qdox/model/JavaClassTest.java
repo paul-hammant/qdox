@@ -403,6 +403,34 @@ public class JavaClassTest extends TestCase {
         assertEquals("p.X$DogFood", cls.resolveType("DogFood"));
         assertEquals(null, cls.resolveType("Food"));
     }
+
+    public void testGetBeanPropertiesReturnsEmptyForEmptyClass() throws Exception {
+        assertEquals(0, cls.getBeanProperties().length);
+    }
+
+    public void testGetBeanPropertiesFindsSimpleProperties() throws Exception {
+        
+        JavaMethod setFooMethod = new JavaMethod(cls);
+        setFooMethod.setName("setFoo");
+        setFooMethod.setParameters(
+            new JavaParameter[] {
+                    new JavaParameter(new Type("int"), "foo")
+            }
+        );
+        cls.addMethod(setFooMethod);
+
+        JavaMethod getFooMethod = new JavaMethod(cls);
+        getFooMethod.setName("getFoo");
+        getFooMethod.setReturns(new Type("int"));
+        cls.addMethod(getFooMethod);
+        
+        assertEquals(1, cls.getBeanProperties().length);
+        BeanProperty fooProp = cls.getBeanProperties()[0];
+        assertEquals("foo", fooProp.getName());
+        assertEquals(new Type("int"), fooProp.getType());
+        assertEquals(getFooMethod, fooProp.getAccessor());
+        assertEquals(setFooMethod, fooProp.getMutator());
+    }
     
     private Type[] type(String[] typeNames) {
         Type[] result = new Type[typeNames.length];

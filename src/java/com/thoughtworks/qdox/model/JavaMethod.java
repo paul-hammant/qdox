@@ -189,6 +189,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     }
 
     /**
+     * TODO - remove
      * @deprecated Don't call this - the parent is set in the constructor.
      */
     public void setParentClass(JavaClass parentClass) {
@@ -204,29 +205,19 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
      * @since 1.3
      */
     public boolean isPropertyAccessor() {
-        boolean result = false;
-        if( isPublic() && !isStatic() ) {
-            boolean signatureOk = false;
-            boolean nameOk = false;
-
-            if (getName().startsWith("is")) {
-                String returnType = getReturns().getValue();
-                signatureOk = returnType.equals("boolean") || returnType.equals("java.lang.Boolean");
-                signatureOk = signatureOk && getReturns().getDimensions() == 0;
-                if (getName().length() > 2) {
-                    nameOk = Character.isUpperCase(getName().charAt(2));
-                }
-            }
-            if (getName().startsWith("get")) {
-                signatureOk = true;
-                if (getName().length() > 3) {
-                    nameOk = Character.isUpperCase(getName().charAt(3));
-                }
-            }
-            boolean noParams = getParameters().length == 0;
-            result = signatureOk && nameOk && noParams;
+        if (isStatic()) return false;
+        if (getParameters().length != 0) return false;
+        
+        if (getName().startsWith("is")) {
+            return (getName().length() > 2
+                    && Character.isUpperCase(getName().charAt(2)));
         }
-        return result;
+        if (getName().startsWith("get")) {
+            return (getName().length() > 3
+                    && Character.isUpperCase(getName().charAt(3)));
+        }
+        
+        return false;
     }
 
     /**
@@ -234,15 +225,15 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
      * @since 1.3
      */
     public boolean isPropertyMutator() {
-        boolean nameOk = false;
+        if (isStatic()) return false;
+        if (getParameters().length != 1) return false;
+        
         if (getName().startsWith("set")) {
-            if (getName().length() > 3) {
-                nameOk = Character.isUpperCase(getName().charAt(3));
-            }
+            return (getName().length() > 3
+                    && Character.isUpperCase(getName().charAt(3)));
         }
 
-        boolean oneParam = getParameters().length == 1;
-        return nameOk && oneParam;
+        return false;
     }
 
     /**
@@ -251,15 +242,13 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
      * @since 1.3
      */
     public Type getPropertyType() {
-        Type result = null;
-        if (isPropertyAccessor()){
-            result = getReturns();
-        } else if(isPropertyMutator()){
-            result = getParameters()[0].getType();
-        } else {
-            result = null;
+        if (isPropertyAccessor()) {
+            return getReturns();
         }
-        return result;
+        if (isPropertyMutator()) {
+            return getParameters()[0].getType();
+        } 
+        return null;
     }
 
     /**

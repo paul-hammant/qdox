@@ -6,6 +6,7 @@ package com.thoughtworks.qdox.model;
  * @version $Revision$
  */
 public class BeanProperty {
+    
     private final String name;
     private JavaMethod accessor;
     private JavaMethod mutator;

@@ -326,6 +326,25 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+	public void testTrailingStar() throws Exception {
+		String in = ""  
+				+ "    /**\n"
+                + "     * @y z\n"
+                + "     * \n"
+                + "     */\n";
+		Lexer lexer = new JFlexLexer(new StringReader(in));
+		assertLex(Parser.JAVADOCSTART, lexer);
+
+		assertLex(Parser.JAVADOCNEWLINE, lexer);
+		assertLex(Parser.JAVADOCTAG, "@y", lexer);
+		assertLex(Parser.JAVADOCTOKEN, "z", lexer);
+		assertLex(Parser.JAVADOCNEWLINE, lexer);
+		assertLex(Parser.JAVADOCNEWLINE, lexer);
+
+		assertLex(Parser.JAVADOCEND, lexer);
+		assertLex(0, lexer);
+	}
+
     public void testArrayTokens() throws Exception {
         String in = "String[] []o[]";
         Lexer lexer = new JFlexLexer(new StringReader(in));

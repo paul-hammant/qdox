@@ -529,7 +529,6 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals("Hip hop won*t stop", x.getComment());
     }
 
-    // http://jira.codehaus.org/secure/ViewIssue.jspa?key=QDOX-19
     public void testJiraQdox19() {
         String source = "" +
                 "class x { \n" +

@@ -60,6 +60,7 @@ public class ClassLibraryTest extends TestCase implements JavaClassCache {
         c.addDefaultLoader();
         assertTrue(c.contains("java.lang.String"));
         assertTrue(c.contains("java.util.Collection"));
+        assertTrue(c.contains("java.util.Map$Entry"));
         assertTrue(!c.contains("java.util.GoatCrusher"));
     }
 

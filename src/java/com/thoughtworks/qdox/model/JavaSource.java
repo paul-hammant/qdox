@@ -33,7 +33,7 @@ public class JavaSource implements Serializable, JavaClassParent {
     private List classes = new LinkedList();
     private JavaClass[] classesArray;
     private ClassLibrary classLibrary;
-    private Map typeCache = new HashMap();
+    private Map resolvedTypeCache = new HashMap();
 
     public void setFile(File file) {
         this.file = file;
@@ -120,13 +120,12 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
 
     public String resolveType(String typeName) {
-        String resolved = (String) typeCache.get(typeName);
-        if (resolved != null) {
-            return resolved;
+        if (resolvedTypeCache.containsKey(typeName)) {
+            return (String) resolvedTypeCache.get(typeName);
         }
-        resolved = resolveTypeInternal(typeName);
+        String resolved = resolveTypeInternal(typeName);
         if (resolved != null) {
-            typeCache.put(typeName, resolved);
+            resolvedTypeCache.put(typeName, resolved);
         }
         return resolved;
     }
@@ -178,6 +177,14 @@ public class JavaSource implements Serializable, JavaClassParent {
             }
         }
 
+        // maybe it's an inner-class reference
+        int indexOfLastDot = typeName.lastIndexOf('.');
+        if (indexOfLastDot != -1) {
+            String root = typeName.substring(0,indexOfLastDot);
+            String leaf = typeName.substring(indexOfLastDot+1);
+            return resolveType(root + "$" + leaf);
+        }
+        
         return null;
     }
 

@@ -186,16 +186,19 @@ public class JavaSourceTest extends TestCase {
         assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
     }
 
-    public void DISABLED_testResolveFullyQualifiedInnerClass() throws Exception {
+    public void testResolveFullyQualifiedInnerClass() throws Exception {
         source.setPackage("foo");
         source.getClassLibrary().add("foo.Bar$Fnord");
         assertEquals("foo.Bar$Fnord", source.resolveType("foo.Bar.Fnord"));
     }
 
-    public void DISABLED_testResolveInnerClass() throws Exception {
+    public void testResolvePartiallySpecifiedInnerClass() throws Exception {
         source.setPackage("foo");
+        source.addImport("java.util.*");
         source.getClassLibrary().add("foo.Bar$Fnord");
+        source.getClassLibrary().addDefaultLoader();
         assertEquals("foo.Bar$Fnord", source.resolveType("Bar.Fnord"));
+        assertEquals("java.util.Map$Entry", source.resolveType("Map.Entry"));
     }
 
 }

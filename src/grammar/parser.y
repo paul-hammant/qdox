@@ -22,34 +22,9 @@ import java.io.IOException;
 
 // A file consists of 0-n fileparts...
 file: | file filepart;
+
 // And a filepart is a package/import statement, javadoc comment, or class declaration.
 filepart: package | import | javadoc | class;
-
-
-// ----- COMMON TOKENS
-
-// A fullidentifier is "a", "a.b", "a.b.c", "a.b.*", etc...
-fullidentifier: IDENTIFIER { $$ = $1; }
-  | fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; }
-	| fullidentifier DOT STAR { $$ = $1 + ".*"; }
-	;
-
-// Modifiers to methods, fields, classes, interfaces, parameters, etc...
-modifier: PUBLIC { $$ = "public"; }
-	| PROTECTED { $$ = "protected"; }
-	| PRIVATE { $$ = "private"; }
-	| STATIC { $$ = "static"; }
-	| FINAL { $$ = "final"; }
-	| ABSTRACT { $$ = "abstract"; }
-	| NATIVE { $$ = "native"; }
-	| SYNCHRONIZED { $$ = "synchronized"; }
-	| VOLATILE { $$ = "volatile"; }
-	| TRANSIENT { $$ = "transient"; }
-	| STRICTFP { $$ = "strictfp"; }
-	;
-
-
-// ----- FILE PARTS
 
 // Package statement
 package: PACKAGE fullidentifier SEMI { builder.addPackage($2); };
@@ -57,54 +32,157 @@ package: PACKAGE fullidentifier SEMI { builder.addPackage($2); };
 // Import statement
 import: IMPORT fullidentifier SEMI { builder.addImport($2); };
 
-// Javadoc comment
+
+// ----- JAVADOC
+
 javadoc: JAVADOCSTART javadocdescription javadoctags JAVADOCEND;
-javadocdescription: javadoctokens { builder.addJavaDoc(buffer()); }
+
+javadocdescription: 
+	javadoctokens { 
+		builder.addJavaDoc(buffer()); 
+	};
+
 javadoctokens: | javadoctokens javadoctoken;
-javadoctoken: JAVADOCNEWLINE | JAVADOCTOKEN { textBuffer.append($1); textBuffer.append(' '); };
+
+javadoctoken: 
+	JAVADOCNEWLINE |
+ 	JAVADOCTOKEN { 
+		textBuffer.append($1); textBuffer.append(' '); 
+	};
+
 javadoctags: | javadoctags javadoctag;
-javadoctag: JAVADOCTAGMARK JAVADOCTOKEN javadoctokens { builder.addJavaDocTag($2, buffer()); };
+
+javadoctag: 
+	JAVADOCTAGMARK JAVADOCTOKEN javadoctokens {
+		builder.addJavaDocTag($2, buffer()); 
+	};
 
 
+// ----- COMMON TOKENS
 
-class: classdefinition BRACEOPEN members BRACECLOSE { builder.endClass(); }
-classdefinition: modifiers classorinterface IDENTIFIER extends implements { cls.modifiers.addAll(modifiers); modifiers.clear(); cls.name = $3; builder.beginClass(cls); cls = new ClassDef(); }
-classorinterface: CLASS | INTERFACE { cls.isInterface = true; };
-extends: | EXTENDS extendslist;
-extendslist: fullidentifier { cls.extendz.add($1); }
-	| extendslist COMMA fullidentifier { cls.extendz.add($3); };
-implements: | IMPLEMENTS implementslist;
-implementslist: fullidentifier { cls.implementz.add($1); }
-	| implementslist COMMA fullidentifier { cls.implementz.add($3); };
-
-members: | members member;
-
-member: javadoc
-	| modifiers arrayfullidentifier arrayidentifier extraidentifiers memberend { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; fld.dimensions = getDimensions(); builder.addField(fld); fld = new FieldDef(); } // field
-	| modifiers arrayfullidentifier arrayidentifier method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; mth.dimensions = getDimensions(); builder.addMethod(mth); mth = new MethodDef(); }; // method
-	| modifiers arrayidentifier method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new MethodDef(); }; // constructor
-	| modifiers CODEBLOCK // static block
-	| class
-	| SEMI
-	;
-modifiers: | modifiers modifier { modifiers.add($2); };
-memberend: SEMI | CODEBLOCK | ASSIGNMENT;
-extraidentifiers: | extraidentifiers COMMA fullidentifier;
+// A fullidentifier is "a", "a.b", "a.b.c", "a.b.*", etc...
+fullidentifier: 
+	IDENTIFIER { $$ = $1; } |
+ 	fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; } |
+ 	fullidentifier DOT STAR { $$ = $1 + ".*"; };
 
 // like IDENTIFIER and fullidentifer except they can contain arrays[]
 arrayidentifier: IDENTIFIER arrayparts { $$ = $1; };
 arrayfullidentifier: fullidentifier arrayparts { $$ = $1; };
 arrayparts: | arrayparts SQUAREOPEN SQUARECLOSE { dimensions++; };
 
-method: PARENOPEN params PARENCLOSE exceptions;
-exceptions: | THROWS exceptionlist;
-exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
+// Modifiers to methods, fields, classes, interfaces, parameters, etc...
+modifier:
+	PUBLIC		{ $$ = "public"; } |
+ 	PROTECTED 	{ $$ = "protected"; } |
+ 	PRIVATE 	{ $$ = "private"; } |
+ 	STATIC 		{ $$ = "static"; } |
+ 	FINAL 		{ $$ = "final"; } |
+ 	ABSTRACT 	{ $$ = "abstract"; } |
+ 	NATIVE 		{ $$ = "native"; } |
+ 	SYNCHRONIZED { $$ = "synchronized"; } |
+ 	VOLATILE 	{ $$ = "volatile"; } |
+ 	TRANSIENT 	{ $$ = "transient"; } |
+ 	STRICTFP 	{ $$ = "strictfp"; } ;
 
-// parameters passed to method
+modifiers: | modifiers modifier { modifiers.add($2); };
+
+
+// ----- CLASS
+
+class: 
+	classdefinition BRACEOPEN members BRACECLOSE { 
+		builder.endClass(); 
+	};
+
+classdefinition: 
+	modifiers classorinterface IDENTIFIER extends implements { 
+		cls.modifiers.addAll(modifiers); modifiers.clear(); 
+		cls.name = $3; 
+		builder.beginClass(cls); 
+		cls = new ClassDef(); 
+	};
+
+classorinterface: 
+	CLASS | 
+	INTERFACE { cls.isInterface = true; };
+
+extends: | EXTENDS extendslist;
+
+extendslist: 
+	fullidentifier { cls.extendz.add($1); } | 
+	extendslist COMMA fullidentifier { cls.extendz.add($3); };
+
+implements: | IMPLEMENTS implementslist;
+
+implementslist: 
+	fullidentifier { cls.implementz.add($1); } | 
+	implementslist COMMA fullidentifier { cls.implementz.add($3); };
+
+members: | members member;
+
+member:
+	javadoc | 
+	field | 
+	method |
+	constructor |
+	modifiers CODEBLOCK | // static block
+	class | 
+	SEMI;
+
+memberend: SEMI | CODEBLOCK | ASSIGNMENT;
+
+
+// ----- FIELD
+
+field:
+	modifiers arrayfullidentifier arrayidentifier extraidentifiers memberend {
+		fld.modifiers.addAll(modifiers); 
+		modifiers.clear(); 
+		fld.type = $2; fld.name = $3; fld.dimensions = getDimensions(); 
+		builder.addField(fld); 
+		fld = new FieldDef(); 
+	};
+
+extraidentifiers: | extraidentifiers COMMA fullidentifier;
+
+
+// ----- METHOD
+
+method:
+	modifiers arrayfullidentifier arrayidentifier methoddef memberend {
+		mth.modifiers.addAll(modifiers); modifiers.clear(); 
+		mth.returns = $2; mth.name = $3; mth.dimensions = getDimensions(); 
+		builder.addMethod(mth); mth = new MethodDef(); 
+	};
+
+constructor:
+	modifiers arrayidentifier methoddef memberend { 
+			mth.modifiers.addAll(modifiers); modifiers.clear(); 
+			mth.constructor = true; mth.name = $2; 
+			builder.addMethod(mth); mth = new MethodDef(); 
+	};
+
+methoddef: PARENOPEN params PARENCLOSE exceptions;
+
+exceptions: | THROWS exceptionlist;
+
+exceptionlist: 
+	fullidentifier { mth.exceptions.add($1); } | 
+	exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
+
+// formal parameters
 params: | param paramlist;
 paramlist: | paramlist COMMA param;
-param: parammodifiers paramarrayfullidentifier paramarrayidentifier { fld.name = $3; fld.type = $2; fld.dimensions = getParamDimensions(); mth.params.add(fld); fld = new FieldDef(); };
-parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
+
+param: 
+	parammodifiers paramarrayfullidentifier paramarrayidentifier { 
+		fld.name = $3; fld.type = $2; fld.dimensions = getParamDimensions(); 
+		mth.params.add(fld); fld = new FieldDef(); 
+	};
+
+parammodifiers: | 
+	parammodifiers modifier { fld.modifiers.add($2); };
 
 paramarrayidentifier: IDENTIFIER paramarrayparts { $$ = $1; };
 paramarrayfullidentifier: fullidentifier paramarrayparts { $$ = $1; };

@@ -10,6 +10,10 @@ public class Type implements Comparable{
     private String value = null;
     private boolean isArray = false;
 
+    public Type(String fullName) {
+        value = fullName;
+    }
+
     public Type(List imports, String name, ClassLibrary classLibrary, String packge) {
         this.imports = imports;
         isArray = name.endsWith("[]");
@@ -48,12 +52,21 @@ public class Type implements Comparable{
 	public int compareTo(Object o) {
 		if (!(o instanceof Type))
 			return 0;
-			
+
 		return getValue().compareTo(((Type)o).getValue());
 	}
 
 	public boolean isArray() {
 		return isArray;
+	}
+
+	public boolean equals(Object obj) {
+		Type t = (Type)obj;
+		return t.getValue().equals(getValue());
+	}
+
+	public int hashCode() {
+		return getValue().hashCode();
 	}
 
 }

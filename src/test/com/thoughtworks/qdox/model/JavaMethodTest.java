@@ -124,5 +124,111 @@ public class JavaMethodTest extends TestCase {
 		assertEquals("void blah(int[][] count, MyThing[] t);\n", mth.toString());
 	}
 
+	public void testEquals() throws Exception {
+		mth.setName("thing");
+		mth.setReturns(new Type("void"));
+
+		JavaMethod m2 = new JavaMethod();
+		m2.setName("thing");
+		m2.setReturns(new Type("void"));
+
+		JavaMethod m3 = new JavaMethod();
+		m3.setName("thingy");
+		m3.setReturns(new Type("void"));
+
+		JavaMethod m4 = new JavaMethod();
+		m4.setName("thing");
+		m4.setReturns(new Type("int"));
+
+		assertEquals(mth, m2);
+		assertEquals(m2, mth);
+		assertNotEquals(mth, m3);
+		assertNotEquals(mth, m4);
+	}
+
+	public void testEqualsWithParameters() throws Exception {
+		mth.setName("thing");
+		mth.setParameters(new JavaParameter[] {
+			new JavaParameter(new Type("int"), "blah", 1),
+			new JavaParameter(new Type("java.lang.String"), "thing", 2),
+			new JavaParameter(new Type("X"), "", 3)
+		});
+		mth.setReturns(new Type("void"));
+
+		JavaMethod m2 = new JavaMethod();
+		m2.setName("thing");
+		m2.setParameters(new JavaParameter[] {
+			new JavaParameter(new Type("int"), "blah", 1),
+			new JavaParameter(new Type("java.lang.String"), "anotherName", 2),
+			new JavaParameter(new Type("X"), "blah", 3)
+		});
+		m2.setReturns(new Type("void"));
+
+		JavaMethod m3 = new JavaMethod();
+		m3.setName("thing");
+		m3.setParameters(new JavaParameter[] {
+			new JavaParameter(new Type("int"), "blah", 1),
+			new JavaParameter(new Type("java.lang.String"), "thing", 2),
+		});
+		m3.setReturns(new Type("void"));
+
+		JavaMethod m4 = new JavaMethod();
+		m4.setName("thing");
+		m4.setParameters(new JavaParameter[] {
+			new JavaParameter(new Type("int"), "blah", 1),
+			new JavaParameter(new Type("java.lang.String"), "thing", 2),
+			new JavaParameter(new Type("TTTTTTTT"), "blah", 3) // name
+		});
+		m4.setReturns(new Type("void"));
+
+		JavaMethod m5 = new JavaMethod();
+		m5.setName("thing");
+		m5.setParameters(new JavaParameter[] {
+			new JavaParameter(new Type("int"), "blah", 1),
+			new JavaParameter(new Type("java.lang.String"), "thing", 2),
+			new JavaParameter(new Type("X"), "blah", 9) // dimension
+		});
+		m5.setReturns(new Type("void"));
+
+		assertEquals(mth, m2);
+		assertEquals(m2, mth);
+		assertNotEquals(mth, m3);
+		assertNotEquals(mth, m4);
+		assertNotEquals(mth, m5);
+	}
+
+	public void testHashCode() throws Exception {
+		mth.setName("thing");
+		mth.setParameters(new JavaParameter[] {
+			new JavaParameter(new Type("int"), "blah", 1),
+			new JavaParameter(new Type("java.lang.String"), "thing", 2),
+			new JavaParameter(new Type("X"), "", 3)
+		});
+		mth.setReturns(new Type("void"));
+
+		JavaMethod m2 = new JavaMethod();
+		m2.setName("thing");
+		m2.setParameters(new JavaParameter[] {
+			new JavaParameter(new Type("int"), "blah", 1),
+			new JavaParameter(new Type("java.lang.String"), "anotherName", 2),
+			new JavaParameter(new Type("X"), "blah", 3)
+		});
+		m2.setReturns(new Type("void"));
+
+		JavaMethod m3 = new JavaMethod();
+		m3.setName("thing");
+		m3.setParameters(new JavaParameter[] {
+			new JavaParameter(new Type("int"), "blah", 1),
+			new JavaParameter(new Type("java.lang.String"), "thing", 2),
+		});
+		m3.setReturns(new Type("void"));
+
+		assertEquals(mth.hashCode(), m2.hashCode());
+		assertTrue(mth.hashCode() != m3.hashCode());
+	}
+
+	private void assertNotEquals(Object o1, Object o2) {
+		assertTrue(o1.toString() + " should not equals " + o2.toString(), !o1.equals(o2));
+	}
 
 }

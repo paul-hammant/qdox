@@ -24,4 +24,9 @@ public class JavaParameter {
 		return dimensions;
 	}
 
+	public boolean equals(Object obj) {
+		JavaParameter p = (JavaParameter)obj;
+		// name isn't used in equality check.
+		return getType().equals(p.getType()) && getDimensions() == p.getDimensions();
+	}
 }

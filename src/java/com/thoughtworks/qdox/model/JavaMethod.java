@@ -16,7 +16,7 @@ public class JavaMethod extends AbstractJavaEntity {
 	 * Return list of JavaParameters
 	 */
 	public JavaParameter[] getParameters() {
-		return parameters;
+		return parameters == null ? new JavaParameter[0] : parameters;
 	}
 
 	public Type[] getExceptions() {
@@ -87,4 +87,22 @@ public class JavaMethod extends AbstractJavaEntity {
 		return dimensions;
 	}
 
+	public boolean equals(Object obj) {
+		JavaMethod m = (JavaMethod)obj;
+		if (!m.getName().equals(getName())) return false;
+		if (!m.getReturns().equals(getReturns())) return false;
+
+		JavaParameter[] myParams = getParameters();
+		JavaParameter[] otherParams = m.getParameters();
+		if (otherParams.length != myParams.length) return false;
+		for (int i = 0; i < myParams.length; i++) {
+			if (!otherParams[i].equals(myParams[i])) return false;
+		}
+
+		return true;
+	}
+
+	public int hashCode() {
+		return name.hashCode() * returns.hashCode() * getParameters().length;
+	}
 }

@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 public interface JavaClassParent {
+
     /**
      * Resolve a type-name within the context of this source or class.
      * @param typeName name of a type
@@ -16,7 +17,5 @@ public interface JavaClassParent {
     public JavaSource getParentSource();
 
     public void addClass(JavaClass cls);
-
-    public JavaClass[] getClasses();
 
 }

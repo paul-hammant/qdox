@@ -64,8 +64,8 @@
     <attainGoal name="parser"/>
   </preGoal>
   
-  <preGoal name="eclipse">
-  	<attainGoal name="parser"/>
+  <preGoal name=" ">
+    <attainGoal name="parser"/>
   </preGoal>
 </project>
 

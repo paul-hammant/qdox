@@ -10,7 +10,7 @@
 
   <name>QDox</name>
   <id>qdox</id>
-  <currentVersion>1.5-SNAPSHOT</currentVersion>
+  <currentVersion>1.5</currentVersion>
   <inceptionYear>2002</inceptionYear>
   <package>com.thoughtworks.qdox</package>
   <logo>/images/qdox.gif</logo>
@@ -43,38 +43,6 @@
     <url>http://cvs.qdox.codehaus.org/qdox</url>   
   </repository>
   
-  <versions>
-    <version>
-      <id>1.0</id>
-      <name>1.0</name>
-      <tag>1_0</tag>
-    </version>
-    <version>
-      <id>1.1</id>
-      <name>1.1</name>
-      <tag>QDox_1_1</tag>
-    </version>
-    <version>
-      <id>1.2</id>
-      <name>1.2</name>
-    </version>
-    <version>
-      <id>1.3</id>
-      <name>1.3</name>
-      <tag>QDOX_1_3</tag>
-    </version>
-    <version>
-      <id>1.4</id>
-      <name>1.4</name>
-      <tag>QDOX_1_4</tag>
-    </version>
-    <version>
-      <id>current</id>
-      <name>Current</name>
-      <tag>HEAD</tag>
-    </version>
-  </versions>
-
   <mailingLists>
     <mailingList>
       <name>QDox User List</name>

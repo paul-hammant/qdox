@@ -27,6 +27,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
 		for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
 			JavaClass cls = javaClasses[classIndex];
 			classes.put(cls.getFullyQualifiedName(), cls);
+            cls.setJavaClassCache(this);
 		}
 	}
 

@@ -17,6 +17,11 @@ public class JavaClass extends AbstractJavaEntity {
 	private JavaSource parentSource;
 
 	public static final Type OBJECT = new Type("java.lang.Object", 0);
+    private JavaClassCache javaClassCache;
+
+    public void setJavaClassCache(JavaClassCache javaClassCache) {
+       this.javaClassCache = javaClassCache;
+    }
 
 	/**
 	 * Interface or class?
@@ -31,6 +36,13 @@ public class JavaClass extends AbstractJavaEntity {
 		}
 		return superClass;
 	}
+
+    public JavaClass getSuperJavaClass() {
+        if (javaClassCache == null) {
+            throw new java.lang.UnsupportedOperationException("JavaClassCache unavailable for this JavaClass");
+        }
+        return javaClassCache.getClassByName(getSuperClass().getValue());
+    }
 
 	public Type[] getImplements() {
 		return implementz;

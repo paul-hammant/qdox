@@ -13,7 +13,7 @@ import java.io.IOException;
 
 // stringly typed tokens/types
 %token <sval> IDENTIFIER JAVADOCTOKEN
-%type <sval> fullidentifier  modifier
+%type <sval> fullidentifier modifier arrayidentifier arrayfullidentifier
 
 %%
 
@@ -33,6 +33,11 @@ fullidentifier: IDENTIFIER { $$ = $1; }
   | fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; }
 	| fullidentifier DOT STAR { $$ = $1 + ".*"; }
 	;
+
+// like IDENTIFIER and fullidentifer except they can contain arrays[]
+arrayidentifier: IDENTIFIER arrayparts { $$ = $1; };
+arrayfullidentifier: fullidentifier arrayparts { $$ = $1; };
+arrayparts: | arrayparts SQUAREOPEN SQUARECLOSE { addDimension(); };
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
 modifier: PUBLIC { $$ = "public"; }
@@ -80,9 +85,9 @@ implementslist: fullidentifier { cls.implementz.add($1); }
 members: | members member;
 
 member: javadoc
-	| modifiers fullidentifier IDENTIFIER extraidentifiers memberend { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new FieldDef(); } // field
-	| modifiers fullidentifier IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new MethodDef(); }; // method
-	| modifiers IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new MethodDef(); }; // constructor
+	| modifiers arrayfullidentifier arrayidentifier extraidentifiers memberend { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; fld.dimensions = getDimensions(); builder.addField(fld); fld = new FieldDef(); } // field
+	| modifiers arrayfullidentifier arrayidentifier method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; mth.dimensions = getDimensions(); builder.addMethod(mth); mth = new MethodDef(); }; // method
+	| modifiers arrayidentifier method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new MethodDef(); }; // constructor
 	| modifiers CODEBLOCK // static block
 	| modifiers classorinterface IDENTIFIER extends implements CODEBLOCK { cls = new ClassDef(); modifiers.clear(); } // inner class
 	| SEMI
@@ -98,7 +103,7 @@ exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA 
 // parameters passed to method
 params: | param paramlist;
 paramlist: | paramlist COMMA param;
-param: parammodifiers fullidentifier IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new FieldDef(); };
+param: parammodifiers arrayfullidentifier IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new FieldDef(); };
 parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
 
 
@@ -111,6 +116,7 @@ private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
 private FieldDef fld = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
+private int dimensions;
 
 private String buffer() {
 	if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);
@@ -151,3 +157,12 @@ private class Value {
 	String sval;
 }
 
+private void addDimension() {
+	dimensions++;
+}
+
+private int getDimensions() {
+	int r = dimensions;
+	dimensions = 0;
+	return r;
+}

@@ -64,8 +64,8 @@ import net.sf.qdox.parser.*;
 	"extends"          { return Parser.EXTENDS; }
 	"implements"       { return Parser.IMPLEMENTS; }
 
-//	"["                { return Parser.SQUAREOPEN; }
-//	"]"                { return Parser.SQUARECLOSE; }
+	"["                { return Parser.SQUAREOPEN; }
+	"]"                { return Parser.SQUARECLOSE; }
 	"("                { return Parser.BRACKETOPEN; }
 	")"                { return Parser.BRACKETCLOSE; }
 

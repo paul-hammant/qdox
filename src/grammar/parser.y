@@ -50,7 +50,7 @@ javadoctokens: | javadoctokens javadoctoken;
 
 javadoctoken: 
     JAVADOCTOKEN {
-        textBuffer.append($1); textBuffer.append(' ');
+        appendToBuffer($1);
     } |
     JAVADOCEOL {
         textBuffer.append('\n');
@@ -313,11 +313,20 @@ private TypeDef fieldType;
 private int line;
 private boolean debugLexer;
 
+private void appendToBuffer(String word) {
+    if (textBuffer.length() > 0) {
+        char lastChar = textBuffer.charAt(textBuffer.length() - 1);
+        if (!Character.isWhitespace(lastChar)) {
+            textBuffer.append(' ');
+        }
+    }
+    textBuffer.append(word);
+}
+
 private String buffer() {
-    if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);
-    String result = textBuffer.toString();
+    String result = textBuffer.toString().trim();
     textBuffer.setLength(0);
-    return result.trim();
+    return result;
 }
 
 public Parser(Lexer lexer, Builder builder) {

@@ -553,19 +553,21 @@ public class JavaDocBuilderTest extends TestCase {
                 "class x{}";
         builder.addSource(new StringReader(source));
         JavaClass x = builder.getClassByName("x");
-        assertEquals("Hello \nworld!", x.getComment());
+        assertEquals("Hello\nworld!", x.getComment());
     }
 
-    public void testJiraQdox82() {
+    public void testTagValuesCanSpanMultipleLines() {
         String source = "" +
                 "/**\n" +
-                " * @bar.baz foo=\"this is \n" + 
+                " * @bar.baz foo=\"this is\\\n" + 
                 " *       multilined\"\n" +
                 " */\n" +
                 "class x{}";
         builder.addSource(new StringReader(source));
         JavaClass x = builder.getClassByName("x");
-        assertEquals("foo=\"this is \nmultilined\"", x.getTagByName("bar.baz").getValue());
+        DocletTag tag = x.getTagByName("bar.baz");
+        assertEquals("foo=\"this is\\\nmultilined\"", tag.getValue());
+        assertEquals("this is\nmultilined", tag.getNamedParameter("foo"));
     }
 
     public void testJiraQdox19() {

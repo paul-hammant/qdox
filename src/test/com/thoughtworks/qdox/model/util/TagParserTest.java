@@ -23,7 +23,7 @@ public class TagParserTest extends TestCase {
 
     public void testMyUnderstandingOfStreamTokenizer() throws IOException {
         String input = 
-            "x=y 'foo' \" bar \" 234 " + 
+            "x=y 'foo' \" bar \" 234\t'multi\\\nline'\n" + 
             "dotted.words hypen-ated under_scored";
         StreamTokenizer tokenizer = TagParser.makeTokenizer(input);
         assertEquals(StreamTokenizer.TT_WORD, tokenizer.nextToken());
@@ -37,6 +37,8 @@ public class TagParserTest extends TestCase {
         assertEquals(" bar ", tokenizer.sval);
         assertEquals(StreamTokenizer.TT_WORD, tokenizer.nextToken());
         assertEquals("234", tokenizer.sval);
+        assertEquals('\'', tokenizer.nextToken());
+        assertEquals("multi\nline", tokenizer.sval);
         assertEquals(StreamTokenizer.TT_WORD, tokenizer.nextToken());
         assertEquals("dotted.words", tokenizer.sval);
         assertEquals(StreamTokenizer.TT_WORD, tokenizer.nextToken());
@@ -111,6 +113,13 @@ public class TagParserTest extends TestCase {
         assertEquals(2, paramMap.size());
         assertEquals("1", paramMap.get("x"));
         assertEquals("2", paramMap.get("y"));
+    }
+
+    public void testNamedParameterValuesCanSpanLinesIfBackslashIsUsed() {
+        Map paramMap = TagParser.parseNamedParameters("x='multiline\\\nvalue'");
+        assertNotNull(paramMap);
+        assertEquals(1, paramMap.size());
+        assertEquals("multiline\nvalue", paramMap.get("x"));
     }
 
     //---( Parse into "words": positional parameters )---

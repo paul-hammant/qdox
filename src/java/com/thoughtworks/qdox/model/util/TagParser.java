@@ -24,8 +24,10 @@ public class TagParser {
         tokenizer.quoteChar('\'');
         tokenizer.quoteChar('"');
         tokenizer.whitespaceChars(' ',' ');
+        tokenizer.whitespaceChars('\t','\t');
         tokenizer.whitespaceChars('\n','\n');
         tokenizer.whitespaceChars('\r','\r');
+        tokenizer.eolIsSignificant(false);
         return tokenizer;
     }
     

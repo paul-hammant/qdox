@@ -86,12 +86,24 @@
 				<role>Developer</role>
 			</roles>
 		</developer>
+		<developer>
+			<name>Mike Williams</name>
+			<id>mdub</id>
+			<email>mdub@bigfoot.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
 	</developers>
 
 	<contributors>
 		<contributor>
-			<name>Mike Williams</name>
-			<email>mdub@bigfoot.com</email>
+			<name>Peter Donald</name>
+			<email>peter@apache.org</email>
+		</contributor>
+		<contributor>
+			<name>James Strachan</name>
+			<email>jstrachan@apache.org</email>
 		</contributor>
 	</contributors>
 

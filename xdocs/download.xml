@@ -9,12 +9,12 @@
 	<body>
 		<section name="Downloads">
 			<p>
-				The full distribution of QDox in binary or source form is available
-				<a href="http://qdox.sourceforge.net/downloads/qdox/distributions/">here</a>.
+				The latest released binary is available to
+				<a href="http://sourceforge.net/project/showfiles.php?group_id=55918&release_id=112753">download here</a>.
 			</p>
 			<p>
-				Or, if you're happy at just looking at all the documentation online, you can just get the precompiled Jar
-				<a href="http://qdox.sourceforge.net/downloads/qdox/jars/">here</a>.
+				The current development version can be obtained from 
+				<a href="http://sourceforge.net/cvs/?group_id=55918">CVS</a>.
 			</p>
 		</section>
 	</body>

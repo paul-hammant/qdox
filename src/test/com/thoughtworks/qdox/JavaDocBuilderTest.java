@@ -529,4 +529,22 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals("Hip hop won*t stop", x.getComment());
     }
 
+    // http://jira.codehaus.org/secure/ViewIssue.jspa?key=QDOX-19
+    public void testJiraQdox19() {
+        String source = "" +
+                "class x { \n" +
+                "    /**\n" +
+                "     * @y z\n" +
+                "     * \n" +
+                "     */\n" +
+                "    String m();\n" +
+                "}\n" +
+                "";
+
+        builder.addSource(new StringReader(source));
+        JavaClass x = builder.getClassByName("x");
+        JavaMethod m = x.getMethods()[0];
+        DocletTag foo = m.getTagByName("y");
+        assertEquals("z", foo.getValue());
+    }
 }

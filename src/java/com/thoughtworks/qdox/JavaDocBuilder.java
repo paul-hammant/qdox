@@ -17,12 +17,12 @@ import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.FileVisitor;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 
-public class MultipleJavaDocBuilder {
+public class JavaDocBuilder {
 	private Map classes = new HashMap();
 	private ClassLibrary classLibrary;
 	private List sources = new ArrayList();
 
-	public MultipleJavaDocBuilder() {
+	public JavaDocBuilder() {
 		classLibrary = new ClassLibrary();
 		classLibrary.addDefaultLoader();
 	}

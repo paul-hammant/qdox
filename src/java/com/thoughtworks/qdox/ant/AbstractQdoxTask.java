@@ -10,7 +10,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
-import com.thoughtworks.qdox.MultipleJavaDocBuilder;
+import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaClass;
 
@@ -45,13 +45,13 @@ public abstract class AbstractQdoxTask extends Task {
     public void execute() throws BuildException {
         validateAttributes();
         buildFileMap();
-        MultipleJavaDocBuilder builder = new MultipleJavaDocBuilder();
+        JavaDocBuilder builder = new JavaDocBuilder();
         mergeBuilderSources(builder);
         JavaSource[] sources = builder.getSources();
         processSources(sources);
     }
 
-    private void mergeBuilderSources(MultipleJavaDocBuilder builder) {
+    private void mergeBuilderSources(JavaDocBuilder builder) {
         for (Iterator iterator = fileMap.keySet().iterator(); iterator.hasNext();) {
             String sourceFile = (String) iterator.next();
             builder.addSourceTree((File)fileMap.get(sourceFile));

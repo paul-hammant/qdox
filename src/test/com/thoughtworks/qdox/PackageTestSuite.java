@@ -7,7 +7,7 @@ public class PackageTestSuite extends TestSuite {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
-		suite.addTestSuite(MultipleJavaDocBuilderTest.class);
+		suite.addTestSuite(JavaDocBuilderTest.class);
 		return suite;
 	}
 

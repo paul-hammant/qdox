@@ -20,9 +20,30 @@
     <uptodate property="parser.uptodate" srcfile="src/grammar/parser.y" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/Parser.java"/>
     <j:set var="parserUptodate" value="${parser.uptodate}"/>
     <j:if test="${parserUptodate == null}">
-      <echo>Note: If the next step fails, update the yacc.exe property</echo>
-      <echo>in build.properties to point to the correct binary.</echo>
-      <exec executable="${yacc.exe}" dir="target" failonerror="true">
+      <j:set var="os">${os.name}</j:set>
+      <j:choose>
+        <j:when test="${os.startsWith('Windows')}">
+          <property name="qdox.byaccj.executable" 
+                    value="${basedir}/bootstrap/yacc.exe" />
+        </j:when>
+        <j:when test="${os.startsWith('Linux')}">
+          <property name="qdox.byaccj.executable" 
+                    value="${basedir}/bootstrap/yacc.linux" />
+        </j:when>
+        <j:when test="${os.startsWith('SunOS')}">
+          <property name="qdox.byaccj.executable" 
+                    value="${basedir}/bootstrap/yacc.solaris" />
+        </j:when>
+        <j:otherwise>
+          <property name="qdox.byaccj.executable" 
+                    value="byaccj" />
+          <echo>Note: The next step may fail if BYacc/J cannot be located.  If so, </echo>
+          <echo>please edit ~/build.properties and set the qdox.byaccj.executable</echo>
+          <echo>property to point to the BYacc/J binary.</echo>
+        </j:otherwise>
+      </j:choose>
+      <echo>(Using byaccj = ${qdox.byaccj.executable})</echo>
+      <exec executable="${qdox.byaccj.executable}" dir="target" failonerror="true">
         <arg value="-Jnorun"/>
         <arg value="-Jnoconstruct"/>
         <arg value="-Jclass=Parser"/>

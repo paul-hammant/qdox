@@ -1,5 +1,6 @@
 %{
 import net.sf.qdox.parser.*;
+import net.sf.qdox.parser.structs.*;
 import java.io.IOException;
 %}
 
@@ -67,7 +68,7 @@ javadoctag: JAVADOCTAGMARK JAVADOCTOKEN javadoctokens { builder.addJavaDocTag($2
 
 
 class: classdefinition PARENOPEN members PARENCLOSE;
-classdefinition: modifiers classorinterface IDENTIFIER extends implements { cls.modifiers.addAll(modifiers); modifiers.clear(); cls.name = $3; builder.addClass(cls); cls = new Builder.ClassDef(); }
+classdefinition: modifiers classorinterface IDENTIFIER extends implements { cls.modifiers.addAll(modifiers); modifiers.clear(); cls.name = $3; builder.addClass(cls); cls = new ClassDef(); }
 classorinterface: CLASS | INTERFACE { cls.isInterface = true; };
 extends: | EXTENDS extendslist;
 extendslist: fullidentifier { cls.extendz.add($1); }
@@ -79,11 +80,11 @@ implementslist: fullidentifier { cls.implementz.add($1); }
 members: | members member;
 
 member: javadoc
-	| modifiers fullidentifier IDENTIFIER extraidentifiers memberend { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); } // field
-	| modifiers fullidentifier IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); }; // method
-	| modifiers IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new Builder.MethodDef(); }; // constructor
+	| modifiers fullidentifier IDENTIFIER extraidentifiers memberend { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new FieldDef(); } // field
+	| modifiers fullidentifier IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new MethodDef(); }; // method
+	| modifiers IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new MethodDef(); }; // constructor
 	| modifiers CODEBLOCK // static block
-	| modifiers classorinterface IDENTIFIER extends implements CODEBLOCK { cls = new Builder.ClassDef(); modifiers.clear(); } // inner class
+	| modifiers classorinterface IDENTIFIER extends implements CODEBLOCK { cls = new ClassDef(); modifiers.clear(); } // inner class
 	| SEMI
 	;
 modifiers: | modifiers modifier { modifiers.add($2); };
@@ -97,7 +98,7 @@ exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA 
 // parameters passed to method
 params: | param paramlist;
 paramlist: | paramlist COMMA param;
-param: parammodifiers fullidentifier IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new Builder.FieldDef(); };
+param: parammodifiers fullidentifier IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new FieldDef(); };
 parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
 
 
@@ -106,9 +107,9 @@ parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
 private Lexer lexer;
 private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
-private Builder.ClassDef cls = new Builder.ClassDef();
-private Builder.MethodDef mth = new Builder.MethodDef();
-private Builder.FieldDef fld = new Builder.FieldDef();
+private ClassDef cls = new ClassDef();
+private MethodDef mth = new MethodDef();
+private FieldDef fld = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
 
 private String buffer() {

@@ -3,9 +3,7 @@
 
 	<goal name="release" description="Make new release">
 		<m:user-check user="${maven.username}"/>
-		<attainGoal name="clean"/>
-		<attainGoal name="test"/>
-		<attainGoal name="java:jar"/>
+		<attainGoal name="website"/>
 
 		<deploy:artifact
 			artifact="target/${maven.final.name}.jar"
@@ -13,8 +11,6 @@
 			assureDirectoryCommand="mkdir -p"
 		/>
 
-		<attainGoal name="coverage"/>
-		<attainGoal name="site:deploy"/>
 		<attainGoal name="dist:deploy"/>
 	</goal>
 
@@ -37,6 +33,23 @@
 		<delete dir="${maven.build.dest}"/>
 		<delete dir="${maven.test.dest}"/>
 		<echo>${maven.junit.fork}</echo>
+	</goal>
+	
+	<goal name="website">
+		<attainGoal name="clean"/>
+		<attainGoal name="test"/>
+		<attainGoal name="java:jar"/>
+		<attainGoal name="statistics"/>
+		<attainGoal name="coverage"/>
+		<attainGoal name="site:generate"/>
+	</goal>
+	
+	<goal name="statistics">
+		<attainGoal name="statcvs"/>
+		<mkdir dir="target/docs/statcvs"/>
+		<copy todir="target/docs/statcvs">
+			<fileset dir="target/statcvs"/>
+		</copy>
 	</goal>
 	
 </project>

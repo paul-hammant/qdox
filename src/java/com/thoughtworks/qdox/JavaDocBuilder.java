@@ -83,6 +83,9 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
     }
 
     public JavaClass getClassByName(String name) {
+        if( name == null ) {
+            throw new Error("HUH?");
+        }
 		JavaClass result = (JavaClass) classes.get(name);
         if( result == null ) {
             // Try to make a binary class out of it
@@ -112,19 +115,21 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
             // Set the extended class and interfaces.
             Class[] interfaces = clazz.getInterfaces();
             if (clazz.isInterface()) {
+                // It's an interface
                 classDef.isInterface = true;
                 for (int i = 0; i < interfaces.length; i++) {
                     Class anInterface = interfaces[i];
                     classDef.extendz.add(anInterface.getName());
                 }
             } else {
+                // It's a class
                 for (int i = 0; i < interfaces.length; i++) {
                     Class anInterface = interfaces[i];
                     classDef.implementz.add(anInterface.getName());
-                    Class superclass = clazz.getSuperclass();
-                    if(superclass != null) {
-                        classDef.extendz.add(superclass.getName());
-                    }
+                }
+                Class superclass = clazz.getSuperclass();
+                if(superclass != null) {
+                    classDef.extendz.add(superclass.getName());
                 }
             }
             binaryBuilder.beginClass(classDef);

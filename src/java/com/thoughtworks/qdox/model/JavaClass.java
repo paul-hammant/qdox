@@ -4,6 +4,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
+ * @author Aslak Helles&oslash;y
+ */
 public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
 	public static final Type OBJECT = new Type("java.lang.Object", 0);
@@ -15,6 +19,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 	private List classes = new LinkedList();
 	private JavaClass[] classesArray;
 	private boolean interfce;
+    // Don't access this directly. Use asType() to get my Type
 	private Type type;
 	private Type superClass;
 	private Type[] implementz = new Type[0];
@@ -34,7 +39,8 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 	}
 
 	public Type getSuperClass() {
-		if (!interfce && superClass == null) {
+        boolean iAmJavaLangObject = OBJECT.equals(asType());
+		if (!interfce && superClass == null && !iAmJavaLangObject) {
 			return OBJECT;
 		}
 		return superClass;
@@ -151,7 +157,11 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 	}
 
 	public String getFullyQualifiedName() {
-		return getParent().asClassNamespace() + "." + getName();
+        if( getParent() != null ) {
+    		return getParent().asClassNamespace() + "." + getName();
+        } else {
+            return null;
+        }
 	}
 
 	public String asClassNamespace() {

@@ -198,18 +198,6 @@ public class JavaDocBuilderTest extends TestCase {
 
     public void testBinaryClassesAreFound() throws Exception {
 
-        builder.getClassLibrary().addClassLoader(new ClassLoader() {
-            public Class loadClass(String name) throws ClassNotFoundException {
-                return name.equals("com.thoughtworks.Spoon") ? this.getClass() : null;
-            }
-        });
-
-        builder.getClassLibrary().addClassLoader(new ClassLoader() {
-            public Class loadClass(String name) throws ClassNotFoundException {
-                return name.equals("com.thoughtworks.Fork") ? this.getClass() : null;
-            }
-        });
-
         String in = ""
             + "package x;"
             + "import java.util.*;"
@@ -237,8 +225,14 @@ public class JavaDocBuilderTest extends TestCase {
         // See if interfaces work too.
         JavaClass list = builder.getClassByName("java.util.List");
         assertTrue(list.isInterface());
-        assertNull(list.getSuperClass());
+        assertNull(list.getSuperJavaClass());
         assertEquals("java.util.Collection", list.getImplements()[0].getValue());
+    }
+
+    public void testSuperclassOfObjectIsNull() throws Exception {
+        JavaClass object = builder.getClassByName("java.lang.Object");
+        JavaClass objectSuper = object.getSuperJavaClass();
+        assertNull(objectSuper);
     }
 
 	public void testSerializable() throws Exception {

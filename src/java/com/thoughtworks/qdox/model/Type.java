@@ -73,7 +73,7 @@ public class Type implements Comparable, Serializable {
 	public boolean equals(Object obj) {
 		if (obj == null) return false;
 		Type t = (Type)obj;
-		return t.getValue().equals(getValue()) && t.getDimensions() == getDimensions();
+		return getValue().equals(t.getValue()) && t.getDimensions() == getDimensions();
 	}
 
 	public int hashCode() {

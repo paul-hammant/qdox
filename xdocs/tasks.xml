@@ -7,6 +7,49 @@
 	</properties>
 
 	<body>
+		<section name="Complete">
+			<p>
+				<ul>
+					<li>
+						Full parsing of Java source files providing callbacks for packages, imports, 
+						class/method/field definitions and JavaDoc.
+					</li>
+					<li>
+						Parser to skip method bodies.
+					</li>
+					<li>
+						Easy to use object model structure to be built from parser to allow traversal
+						of a source file.
+					</li>
+					<li>
+						Simple JavaBean facade to parser to allow user to provide a streap and get
+						back the object model of the file.
+					</li>
+					<li>
+						Human readable string representation of JavaSource file.
+					</li>
+				</ul>
+			</p>
+		</section>
+
+		<section name="In Progress">
+			<p>
+				<ul>
+					<li>
+						Directory scanner to walk a source tree and parse each file.
+					</li>
+					<li>
+						Class name resolver to normalize/denormalize import statements of classes in 
+						source tree.
+					</li>
+					<li>
+						Class name resolver to normalize/denormalize import statements of classes in 
+						external libraries.
+					</li>
+				</ul>
+			</p>
+		</section>
+
 		<section name="Tasks">
 			<p>
 				<ul>
@@ -47,48 +90,6 @@
 			</p>
 		</section>
 
-		<section name="In Progress">
-			<p>
-				<ul>
-					<li>
-						Directory scanner to walk a source tree and parse each file.
-					</li>
-					<li>
-						Class name resolver to normalize/denormalize import statements of classes in 
-						source tree.
-					</li>
-					<li>
-						Class name resolver to normalize/denormalize import statements of classes in 
-						external libraries.
-					</li>
-				</ul>
-			</p>
-		</section>
-
-		<section name="Complete">
-			<p>
-				<ul>
-					<li>
-						Full parsing of Java source files providing callbacks for packages, imports, 
-						class/method/field definitions and JavaDoc.
-					</li>
-					<li>
-						Parser to skip method bodies.
-					</li>
-					<li>
-						Easy to use object model structure to be built from parser to allow traversal
-						of a source file.
-					</li>
-					<li>
-						Simple JavaBean facade to parser to allow user to provide a streap and get
-						back the object model of the file.
-					</li>
-					<li>
-						Human readable string representation of JavaSource file.
-					</li>
-				</ul>
-			</p>
-		</section>
 
 	</body>
 </document>

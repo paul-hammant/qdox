@@ -14,8 +14,7 @@ import java.beans.Introspector;
  */
 public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
-    public static final Type OBJECT = new Type("java.lang.Object", 0);
-
+    public static Type OBJECT = new Type("java.lang.Object");
     private List methods = new LinkedList();
     private JavaMethod[] methodsArray;
     private List fields = new LinkedList();
@@ -35,6 +34,10 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
     public void setJavaClassCache(JavaClassCache javaClassCache) {
         this.javaClassCache = javaClassCache;
+        // reassign OBJECT. This will make it have a "source" too,
+        // causing Type.getJavaClass() to return a JavaClass, instead
+        // of null. 
+        OBJECT = javaClassCache.getClassByName("java.lang.Object").asType();
     }
 
     /**
@@ -128,6 +131,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         methods.add(meth);
         meth.setParentClass(this);
         methodsArray = null;
+        beanProperties = null;
     }
 
     public void setSuperClass(Type type) {

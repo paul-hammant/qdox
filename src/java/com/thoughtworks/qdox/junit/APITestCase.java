@@ -48,7 +48,7 @@ public abstract class APITestCase extends TestCase {
    }
 
    /**
-    * Compares two source files.
+    * Compares API of both sources in the files.
     *
     * @param expected  the expected source
     * @param actual    the actual source
@@ -59,7 +59,7 @@ public abstract class APITestCase extends TestCase {
    }
 
    /**
-    * Compares two source readers.
+    * Compares API of both sources in the readers.
     *
     * @param expected  the expected source
     * @param actual    the actual source
@@ -69,7 +69,7 @@ public abstract class APITestCase extends TestCase {
    }
 
    /**
-    * Compares API of both source files.
+    * Compares API of both sources in the files.
     *
     * <p><b>Note:</b> This method is for backward naming compatiblity
     * with xjavadoc.codeunit.CodeTestCase.</p>
@@ -92,7 +92,7 @@ public abstract class APITestCase extends TestCase {
    }
 
    /**
-    * Compares API of both source readers.
+    * Compares API of both sources in the readers.
     *
     * <p><b>Note:</b> This method is for backward naming compatiblity
     * with xjavadoc.codeunit.CodeTestCase.</p>

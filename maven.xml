@@ -1,53 +1,47 @@
 <?xml version="1.0"?>
 <project default="jar" xmlns:j="jelly:core" xmlns:maven="jelly:maven">
 
-	<!-- Generate lexer and parser java source code from grammars -->
-	<goal name="parser" description="Generate parser">
+  <!-- Generate lexer and parser java source code from grammars -->
+  <goal name="parser" description="Generate parser">
 
-		<!-- Generate lexer -->
-		<uptodate property="lexer.uptodate" srcfile="src/grammar/lexer.flex" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/JFlexLexer.java"/>
-		<j:set var="lexerUptodate" value="${lexer.uptodate}"/>
-		<j:if test="${lexerUptodate == null}">
-			<mkdir dir="target/src/java/com/thoughtworks/qdox/parser/impl"/>
-			<java classpath="bootstrap/jflex.jar" classname="JFlex.Main" fork="yes">
-				<arg value="-d"/>
-				<arg value="target/src/java/com/thoughtworks/qdox/parser/impl"/>
-				<arg value="src/grammar/lexer.flex"/>
-			</java>
-		</j:if>
+    <!-- Generate lexer -->
+    <uptodate property="lexer.uptodate" srcfile="src/grammar/lexer.flex" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/JFlexLexer.java"/>
+    <j:set var="lexerUptodate" value="${lexer.uptodate}"/>
+    <j:if test="${lexerUptodate == null}">
+      <mkdir dir="target/src/java/com/thoughtworks/qdox/parser/impl"/>
+      <java classpath="bootstrap/jflex.jar" classname="JFlex.Main" fork="yes">
+        <arg value="-d"/>
+        <arg value="target/src/java/com/thoughtworks/qdox/parser/impl"/>
+        <arg value="src/grammar/lexer.flex"/>
+      </java>
+    </j:if>
 
-		<!-- Generete parser -->
-		<uptodate property="parser.uptodate" srcfile="src/grammar/parser.y" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/Parser.java"/>
-		<j:set var="parserUptodate" value="${parser.uptodate}"/>
-		<j:if test="${parserUptodate == null}">
-			<echo>Note: If the next step fails, update the yacc.exe property</echo>
-			<echo>in build.properties to point to the correct binary.</echo>
-			<exec executable="${yacc.exe}" dir="target" failonerror="true">
-				<arg value="-Jnorun"/>
-				<arg value="-Jnoconstruct"/>
-				<arg value="-Jclass=Parser"/>
-				<arg value="-Jsemantic=Value"/>
-				<arg value="-Jpackage=com.thoughtworks.qdox.parser.impl"/>
-				<arg value="../src/grammar/parser.y"/>
-			</exec>
-			<move todir="target/src/java/com/thoughtworks/qdox/parser/impl" file="target/Parser.java"/>
-		</j:if>
-	
-		<!-- Add lexer and parser to compilation path -->
-		<path id="generate.java" location="target/src/java"/>
-		<maven:addPath id="maven.compile.src.set" refid="generate.java"/>
-		
-	</goal>
-	
-	<preGoal name="java:compile">
-		<attainGoal name="parser"/>
-	</preGoal>
-
-	<!-- Ensure clover coverage report generated on site -->
-	<preGoal name="xdoc:generate-from-pom">
-		<attainGoal name="maven-clover-plugin:register"/>
-		<attainGoal name="clover"/>
-	</preGoal>
-	
+    <!-- Generete parser -->
+    <uptodate property="parser.uptodate" srcfile="src/grammar/parser.y" targetfile="target/src/java/com/thoughtworks/qdox/parser/impl/Parser.java"/>
+    <j:set var="parserUptodate" value="${parser.uptodate}"/>
+    <j:if test="${parserUptodate == null}">
+      <echo>Note: If the next step fails, update the yacc.exe property</echo>
+      <echo>in build.properties to point to the correct binary.</echo>
+      <exec executable="${yacc.exe}" dir="target" failonerror="true">
+        <arg value="-Jnorun"/>
+        <arg value="-Jnoconstruct"/>
+        <arg value="-Jclass=Parser"/>
+        <arg value="-Jsemantic=Value"/>
+        <arg value="-Jpackage=com.thoughtworks.qdox.parser.impl"/>
+        <arg value="../src/grammar/parser.y"/>
+      </exec>
+      <move todir="target/src/java/com/thoughtworks/qdox/parser/impl" file="target/Parser.java"/>
+    </j:if>
+  
+    <!-- Add lexer and parser to compilation path -->
+    <path id="generate.java" location="${basedir}/target/src/java"/>
+    <maven:addPath id="maven.compile.src.set" refid="generate.java"/>
+    
+  </goal>
+  
+  <preGoal name="java:compile">
+    <attainGoal name="parser"/>
+  </preGoal>
+  
 </project>
 

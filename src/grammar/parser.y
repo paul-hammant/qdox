@@ -1,4 +1,3 @@
-
 %token SEMI DOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
@@ -6,26 +5,30 @@
 %token JAVADOCSTART JAVADOCEND JAVADOCNEWLINE JAVADOCTAGMARK
 %token CODEBLOCK STRING
 
+// stringly typed tokens/types
 %token <sval> IDENTIFIER JAVADOCTOKEN
-
-%type <sval> fullidentifier dotidentifier modifier
+%type <sval> fullidentifier  modifier
 
 %%
 
 
+// ----- TOP LEVEL
 
-
-
-
+// A file consists of 0-n fileparts...
 file: | file filepart;
+// And a filepart is a package/import statement, javadoc comment, or class declaration.
 filepart: package | import | javadoc | class;
 
-fullidentifier: IDENTIFIER dotidentifier { $$ = $1 + $2; };
-dotidentifier: { $$ = ""; }
-	| dotidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; }
-	| dotidentifier DOT STAR { $$ = $1 + ".*"; }
+
+// ----- COMMON TOKENS
+
+// A fullidentifier is "a", "a.b", "a.b.c", "a.b.*", etc...
+fullidentifier: IDENTIFIER { $$ = $1; }
+  | fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; }
+	| fullidentifier DOT STAR { $$ = $1 + ".*"; }
 	;
 
+// Modifiers to methods, fields, classes, interfaces, parameters, etc...
 modifier: PUBLIC { $$ = "public"; }
 	| PROTECTED { $$ = "protected"; }
 	| PRIVATE { $$ = "private"; }
@@ -37,16 +40,24 @@ modifier: PUBLIC { $$ = "public"; }
 	| VOLATILE { $$ = "volatile"; }
 	;
 
+
+// ----- FILE PARTS
+
+// Package statement
 package: PACKAGE fullidentifier SEMI { builder.addPackage($2); };
 
+// Import statement
 import: IMPORT fullidentifier SEMI { builder.addImport($2); };
 
+// Javadoc comment
 javadoc: JAVADOCSTART javadocdescription javadoctags JAVADOCEND;
 javadocdescription: javadoctokens { builder.addJavaDoc(buffer()); }
 javadoctokens: | javadoctokens javadoctoken;
 javadoctoken: JAVADOCNEWLINE | JAVADOCTOKEN { textBuffer.append($1); textBuffer.append(' '); };
 javadoctags: | javadoctags javadoctag;
 javadoctag: JAVADOCTAGMARK JAVADOCTOKEN javadoctokens { builder.addJavaDocTag($2, buffer()); };
+
+
 
 class: classdefinition PARENOPEN classparts PARENCLOSE;
 classdefinition: classmodifiers classorinterface IDENTIFIER extends implements { cls.name = $3; builder.addClass(cls); cls = new Builder.ClassDef(); }
@@ -64,13 +75,13 @@ classpart: javadoc | method | field;
 method: methodmodifiers fullidentifier IDENTIFIER BRACKETOPEN params BRACKETCLOSE exceptions methodend { mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
 methodmodifiers: | methodmodifiers modifier { mth.modifiers.add($2); };
 exceptions: | THROWS exceptionlist;
-exceptionlist: IDENTIFIER { mth.exceptions.add($1); } | exceptionlist COMMA IDENTIFIER { mth.exceptions.add($3); };
+exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
 methodend: SEMI | CODEBLOCK;
 
 // parameters passed to method
 params: | param paramlist;
 paramlist: | paramlist COMMA param;
-param: parammodifiers IDENTIFIER IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new Builder.FieldDef(); };
+param: parammodifiers fullidentifier IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new Builder.FieldDef(); };
 parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
 
 field: SEMI;

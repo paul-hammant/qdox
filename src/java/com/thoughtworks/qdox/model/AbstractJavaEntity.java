@@ -12,7 +12,6 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
     protected List modifiers = new ArrayList();
     private String comment;
     private DocletTag[] tags = new DocletTag[0];
-    private JavaClassParent parent;
     private int lineNumber = -1;
 
     public int getLineNumber() {
@@ -226,20 +225,8 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
         }
     }
 
-    public JavaClassParent getParent() {
-        return parent;
-    }
-
-    public JavaSource getSource() {
-        return parent.getParentSource();
-    }
-    
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
-    }
-    
-    public void setParent(JavaClassParent parent) {
-        this.parent = parent;
     }
     
 }

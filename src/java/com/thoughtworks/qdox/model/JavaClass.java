@@ -16,9 +16,11 @@ import java.util.TreeMap;
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  */
-public class JavaClass extends AbstractInheritableJavaEntity
-        implements JavaClassParent {
+public class JavaClass extends AbstractInheritableJavaEntity implements JavaClassParent {
+
     private static Type OBJECT = new Type("java.lang.Object");
+    
+    private JavaClassParent parent;
     private List methods = new LinkedList();
     private JavaMethod[] methodsArray;
     private List fields = new LinkedList();
@@ -32,6 +34,14 @@ public class JavaClass extends AbstractInheritableJavaEntity
     private Type superClass;
     private Type[] implementz = new Type[0];
     private JavaClassCache javaClassCache;
+
+    public void setParent(JavaClassParent parent) {
+        this.parent = parent;
+    }
+
+    public JavaClassParent getParent() {
+        return parent;
+    }
 
     public void setJavaClassCache(JavaClassCache javaClassCache) {
         this.javaClassCache = javaClassCache;
@@ -174,7 +184,6 @@ public class JavaClass extends AbstractInheritableJavaEntity
 
     public JavaSource getParentSource() {
         JavaClassParent parent = getParent();
-
         return ((parent == null) ? null : parent.getParentSource());
     }
 

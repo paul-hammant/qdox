@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.model;
 public class JavaField extends AbstractJavaEntity implements Member {
 
     private Type type;
+    private JavaClass parent;
 
     public Type getType() {
         return type;
@@ -38,6 +39,14 @@ public class JavaField extends AbstractJavaEntity implements Member {
 
     public String getCallSignature() {
         return getName();
+    }
+
+    public JavaClass getParent() {
+        return parent;
+    }
+    
+    public void setParent(JavaClass parent) {
+        this.parent = parent;
     }
 
 }

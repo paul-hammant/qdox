@@ -76,6 +76,7 @@ members: | members member;
 member: javadoc
 	| modifiers fullidentifier IDENTIFIER field { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); }
 	| modifiers fullidentifier IDENTIFIER method { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
+	| modifiers IDENTIFIER method { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new Builder.MethodDef(); };
 modifiers: | modifiers modifier { modifiers.add($2); };
 
 method: BRACKETOPEN params BRACKETCLOSE exceptions methodend;

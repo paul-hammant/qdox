@@ -9,6 +9,7 @@ public class PackageTestSuite extends TestSuite {
     TestSuite suite = new TestSuite();
 		suite.addTestSuite(AbstractJavaEntityTest.class);
 		suite.addTestSuite(ClassLibraryTest.class);
+		suite.addTestSuite(DocletTagTest.class);
 		suite.addTestSuite(IndentBufferTest.class);
 		suite.addTestSuite(JavaClassTest.class);
 		suite.addTestSuite(JavaFieldTest.class);

@@ -75,12 +75,21 @@
   <developers>
 
     <developer>
+      <name>Aslak Helles&oslash;y</name>
+      <id>rinkrank</id>
+      <email>nospam.aslak@thoughtworks.net</email>
+      <organization>ThoughtWorks</organization>
+      <roles>
+        <role>Administrator</role>
+      </roles>
+    </developer>
+    <developer>
       <name>Joe Walnes</name>
       <id>joeretro</id>
       <email>joew@thoughtworks.com</email>
       <organization>ThoughtWorks</organization>
       <roles>
-        <role>Developer</role>
+        <role>Founder</role>
       </roles>
     </developer>
     <developer>
@@ -105,15 +114,6 @@
       <name>Mike Williams</name>
       <id>mdub</id>
       <email>mdub@dogbiscuit.org</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Aslak Helles&oslash;y</name>
-      <id>rinkrank</id>
-      <email>nospam.aslak@thoughtworks.net</email>
-      <organization>ThoughtWorks</organization>
       <roles>
         <role>Developer</role>
       </roles>

@@ -10,6 +10,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.FileSet;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.DocletTagFactory;
 
 // Not really abstract, but a test of the abstract.
 
@@ -21,7 +22,7 @@ public final class AbstractQdoxTaskTest extends TestCase {
 
     public void testBasic() throws Exception {
         OveriddenAbstractQdoxTask task = new OveriddenAbstractQdoxTask();
-        task.addFileset(new OveriddenFileSet(new String[]{"com/thoughtworks/qdox/directorywalker/SuffixFilter.java"}));
+        task.addFileset(new OveriddenFileSet("src/java", new String[]{"com/thoughtworks/qdox/directorywalker/SuffixFilter.java"}));
         task.execute();
 
         JavaClass hopefullySuffixFilter = ((JavaClass) task.allClasses.get(0));
@@ -29,9 +30,37 @@ public final class AbstractQdoxTaskTest extends TestCase {
         assertNotNull("Expected a JavaClass", task.allClasses.get(0));
         assertEquals("SuffixFilter", hopefullySuffixFilter.getName());
         assertEquals("com.thoughtworks.qdox.directorywalker.SuffixFilter", task.classes);
+    }
 
-        DocletTag author = hopefullySuffixFilter.getTagByName("author");
-        assertEquals("yippee", author.getNamedParameter("dummy"));
+    public void testPluggableTagFactory() {
+        OwnTagFactoryUsingQdoxTask task = new OwnTagFactoryUsingQdoxTask();
+        task.execute();
+    }
+
+    private class OwnTagFactoryUsingQdoxTask extends AbstractQdoxTask {
+
+        public OwnTagFactoryUsingQdoxTask() {
+            addFileset(new OveriddenFileSet("src/test", new String[]{"com/thoughtworks/qdox/testdata/PropertyClass.java"}));
+        }
+
+        protected DocletTagFactory createDocletTagFactory() {
+            // Tag factory that returns tags with "aslak." prefixed to their "original" name.
+            // Not useful at all, only to test that we can actually plug in any tag factory.
+            return new DocletTagFactory() {
+                public DocletTag createDocletTag(String tag, String text) {
+                    return new DocletTag( "aslak." + tag, text  );
+                }
+            };
+        }
+
+        public void execute() {
+            super.execute();
+
+            JavaClass hopefullyPropertyClass = (JavaClass) allClasses.get(0);
+            DocletTag hopefullyAslakDotFoo = hopefullyPropertyClass.getTagByName("aslak.foo");
+            assertNotNull(hopefullyAslakDotFoo);
+            assertEquals("zap", hopefullyAslakDotFoo.getNamedParameter("bar"));
+        }
     }
 
     public void testNoFileSets() {
@@ -47,14 +76,6 @@ public final class AbstractQdoxTaskTest extends TestCase {
     private class OveriddenAbstractQdoxTask extends AbstractQdoxTask {
         public String classes = "";
 
-
-        public OveriddenAbstractQdoxTask() {
-            Project project = new Project();
-            // see testBasic() and SuffixFilter's class level tag
-            project.setUserProperty("replaceme", "yippee");
-            setProject(project);
-        }
-
         public void execute() {
             super.execute();
 
@@ -69,8 +90,10 @@ public final class AbstractQdoxTaskTest extends TestCase {
 
     private class OveriddenFileSet extends FileSet {
         private OveridenDirectoryScanner overidenDirectoryScanner;
+        private String dir;
 
-        public OveriddenFileSet(String[] includedFiles) {
+        public OveriddenFileSet(String dir, String[] includedFiles) {
+            this.dir = dir;
             overidenDirectoryScanner = new OveridenDirectoryScanner(includedFiles);
         }
 
@@ -83,7 +106,7 @@ public final class AbstractQdoxTaskTest extends TestCase {
             //} catch (IOException e) {
             //    e.printStackTrace();
             //}
-            return getUnderJUnitFile("src/java");
+            return getUnderJUnitFile(dir);
         }
 
         public DirectoryScanner getDirectoryScanner(Project project) {

@@ -18,17 +18,20 @@
 				Support for bean properties. 
 			</action>
 			<action dev="rinkrank" type="add">
-				Implemented QDOX-7
+				Implemented QDOX-7.
 				New isA(String fullyQualifiedName) method in JavaClass.
 			</action>
 			<action dev="rinkrank" type="add">
 				Type now has a getJavaClass() method making
-				it easier to find the JavaClass of a Type in e.g. Velocity:
-				$method.returns.javaClass
+				it easier to find the JavaClass of a Type in e.g. Velocity.
+				Example: $method.returns.javaClass
 			</action>
 			<action dev="rinkrank" type="add">
-				Implemented QDOX-11
-				Add support for ${property} in tags.
+				Implemented QDOX-12.
+				Pluggable DocletTag implementations via DocletTagFactory.
+				This opens up for tag validation, ${property} substitution
+				and other goodies that shouldn't go directly into QDox'
+				core, but rather into pluggable extensions.
 			</action>
 		</release>
 		

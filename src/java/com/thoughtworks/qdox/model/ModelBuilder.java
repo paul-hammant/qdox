@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.Map;
-import java.util.Collections;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -23,15 +21,15 @@ public class ModelBuilder implements Builder {
     private JavaClass currentClass;
     private String lastComment;
     private List lastTagSet;
-    private Map properties;
+    private DocletTagFactory docletTagFactory;
 
     public ModelBuilder() {
-        this(new ClassLibrary(null), Collections.EMPTY_MAP);
+        this(new ClassLibrary(null), new DefaultDocletTagFactory());
     }
 
-    public ModelBuilder(ClassLibrary classLibrary, Map properties) {
+    public ModelBuilder(ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.classLibrary = classLibrary;
-        this.properties = properties;
+        this.docletTagFactory = docletTagFactory;
         source = new JavaSource();
         source.setClassLibrary(classLibrary);
         currentParent = source;
@@ -51,7 +49,8 @@ public class ModelBuilder implements Builder {
     }
 
     public void addJavaDocTag(String tag, String text) {
-        lastTagSet.add(new DocletTag(tag, text, properties));
+        DocletTag docletTag = docletTagFactory.createDocletTag(tag, text);
+        lastTagSet.add(docletTag);
     }
 
     public void beginClass(ClassDef def) {

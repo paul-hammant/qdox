@@ -1,7 +1,11 @@
 package com.thoughtworks.qdox.testdata;
 
-// used as test data for properties and binary support
+// used as test data for properties and binary support and other tests
 
+/**
+ * @foo bar="zap"
+ * @aslak.foo bar="dodgeme"
+ */
 public class PropertyClass extends Superclass {
     public static boolean aField;
 

@@ -85,18 +85,4 @@ public class DocletTagTest extends TestCase {
         assertEquals("hello chris' world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
     }
-
-    public void testPropertySubstitution() {
-        Map properties = new HashMap();
-        properties.put("one", "un");
-        properties.put("two", "deux");
-        properties.put("three", "trois");
-
-        DocletTag tag = new DocletTag("x", "one=\"${one}\" two=${two} three='${three}' four=${four}", properties);
-        assertEquals("un", tag.getNamedParameter("one"));
-        assertEquals("deux", tag.getNamedParameter("two"));
-        assertEquals("trois", tag.getNamedParameter("three"));
-        // no value for this one, so leaving unchanged
-        assertEquals("${four}", tag.getNamedParameter("four"));
-    }
 }

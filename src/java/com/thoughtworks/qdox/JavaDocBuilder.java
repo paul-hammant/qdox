@@ -8,6 +8,8 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassCache;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -33,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Set;
-import java.util.Collections;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
@@ -74,14 +75,14 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     private Map classes = new HashMap();
     private ClassLibrary classLibrary;
     private List sources = new ArrayList();
-    private Map properties;
+    private DocletTagFactory docletTagFactory;
 
     public JavaDocBuilder() {
-        this(Collections.EMPTY_MAP);
+        this(new DefaultDocletTagFactory());
     }
 
-    public JavaDocBuilder(Map properties) {
-        this.properties = properties;
+    public JavaDocBuilder(DocletTagFactory docletTagFactory) {
+        this.docletTagFactory = docletTagFactory;
         classLibrary = new ClassLibrary(this);
         classLibrary.addDefaultLoader();
     }
@@ -122,7 +123,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         } else {
             // Create a new builder and mimic the behaviour of the parser.
             // We're getting all the information we need via reflection instead.
-            ModelBuilder binaryBuilder = new ModelBuilder(classLibrary, properties);
+            ModelBuilder binaryBuilder = new ModelBuilder(classLibrary, docletTagFactory);
 
             // Set the package name and class name
             String packageName = getPackageName(name);
@@ -264,7 +265,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     }
 
     public JavaSource addSource(Reader reader) {
-        ModelBuilder builder = new ModelBuilder(classLibrary, properties);
+        ModelBuilder builder = new ModelBuilder(classLibrary, docletTagFactory);
         Lexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
         parser.parse();

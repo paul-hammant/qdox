@@ -3,6 +3,8 @@ package com.thoughtworks.qdox.ant;
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,13 +46,17 @@ public abstract class AbstractQdoxTask extends Task {
     public void execute() throws BuildException {
         validateAttributes();
         buildFileMap();
-        JavaDocBuilder builder = new JavaDocBuilder(getProject().getProperties());
+        JavaDocBuilder builder = new JavaDocBuilder( createDocletTagFactory() );
 
         // Add a classloader that has the taskdef's classpath.
         builder.getClassLibrary().addClassLoader(getClass().getClassLoader());
         mergeBuilderSources(builder);
         JavaSource[] sources = builder.getSources();
         processSources(sources);
+    }
+
+    protected DocletTagFactory createDocletTagFactory() {
+        return new DefaultDocletTagFactory();
     }
 
     private void mergeBuilderSources(JavaDocBuilder builder) {

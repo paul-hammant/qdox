@@ -24,6 +24,21 @@ public class AbstractJavaEntityTest extends TestCase {
         assertEquals(0, entity.getTagsByName("non existent tag").length);
     }
 
+	public void testGetSingleTagByName() throws Exception {
+
+		AbstractJavaEntity entity = new JavaField();
+		List tags = new LinkedList();
+		tags.add(new DocletTag("monkey", "is good"));
+		tags.add(new DocletTag("monkey", "is funny"));
+		tags.add(new DocletTag("horse", "not so much"));
+		entity.setTags(tags);
+
+		assertEquals("is good", entity.getTagByName("monkey").getValue());
+		assertEquals("not so much", entity.getTagByName("horse").getValue());
+		assertNull(entity.getTagByName("cow"));
+
+	}
+
 	public void testCommentToString() {
 		// setup
 		AbstractJavaEntity entity = new JavaField();

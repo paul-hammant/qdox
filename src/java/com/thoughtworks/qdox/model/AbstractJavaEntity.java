@@ -44,6 +44,16 @@ abstract class AbstractJavaEntity implements Serializable {
 		return (DocletTag[]) specifiedTags.toArray(new DocletTag[specifiedTags.size()]);
 	}
 
+	public DocletTag getTagByName(String name) {
+		for (int i = 0; i < tags.length; i++) {
+			DocletTag docletTag = tags[i];
+			if (docletTag.getName().equals(name)) {
+				return docletTag;
+			}
+		}
+		return null;
+	}
+
 	void commentHeader(IndentBuffer buffer) {
 		if (comment == null && (tags == null || tags.length == 0)) {
 			return;

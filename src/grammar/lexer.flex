@@ -15,7 +15,8 @@ import com.thoughtworks.qdox.parser.*;
 %{
 
     private int classDepth = 0;
-    private int braceDepth = 0;
+    private int nestingDepth = 0;
+    private int assignmentDepth = 0;
     private int stateDepth = 0;
     private int[] stateStack = new int[10];
     private boolean javaDocNewLine;
@@ -81,10 +82,10 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     "super"             { return Parser.SUPER; }
     "default"           { return Parser.DEFAULT; }
 
-    "["                 { return Parser.SQUAREOPEN; }
-    "]"                 { return Parser.SQUARECLOSE; }
-    "("                 { return Parser.PARENOPEN; }
-    ")"                 { return Parser.PARENCLOSE; }
+    "["                 { nestingDepth++; return Parser.SQUAREOPEN; }
+    "]"                 { nestingDepth--; return Parser.SQUARECLOSE; }
+    "("                 { nestingDepth++; return Parser.PARENOPEN; }
+    ")"                 { nestingDepth--; return Parser.PARENCLOSE; }
     "<"                 { return Parser.LESSTHAN; }
     ">"                 { return Parser.GREATERTHAN; }
     "&"                 { return Parser.AMPERSAND; }
@@ -100,8 +101,8 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     }
 
     "{"                 {
-        braceDepth++;
-        if (braceDepth == classDepth + 1) {
+        nestingDepth++;
+        if (nestingDepth == classDepth + 1) {
             pushState(CODEBLOCK);
         }
         else {
@@ -109,16 +110,23 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
         }
     }
     "}"                 { 
-        braceDepth--;
-        if (braceDepth == classDepth - 1) {
+        nestingDepth--;
+        if (nestingDepth == classDepth - 1) {
             classDepth--;
         }
         return Parser.BRACECLOSE; 
     }
 
-    "/*" "*"+           { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
+    "/*" "*"+           { 
+        pushState(JAVADOC); 
+        javaDocNewLine = true; 
+        return Parser.JAVADOCSTART;
+    }
 
-    "="                 { pushState(ASSIGNMENT); }
+    "="                 { 
+        assignmentDepth = nestingDepth; 
+        pushState(ASSIGNMENT);
+    }
 
     [:jletter:] [:jletterdigit:]* { 
         return Parser.IDENTIFIER; 
@@ -148,10 +156,10 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 }
 
 <CODEBLOCK> {
-    "{"                 { braceDepth++; }
+    "{"                 { nestingDepth++; }
     "}"                 {
-        braceDepth--;
-        if (braceDepth == classDepth) {
+        nestingDepth--;
+        if (nestingDepth == classDepth) {
             popState();
             return Parser.CODEBLOCK;
         }
@@ -160,25 +168,31 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 
 <ASSIGNMENT> {
     ";"                 { 
-        if (braceDepth == classDepth) { 
+        if (nestingDepth == assignmentDepth) { 
             popState(); 
             return Parser.SEMI; 
         } 
     }
-    ","                 { 
-        if (braceDepth == classDepth) { 
+    ","                 {
+        if (nestingDepth == assignmentDepth) { 
             popState(); 
             return Parser.COMMA; 
         } 
     }
-    "{"                 { braceDepth++; }
-    "}"                 { braceDepth--; }
-    "("                 { braceDepth++; }
-    ")"                 { braceDepth--; }
-    "["                 { braceDepth++; }
-    "]"                 { braceDepth--; }
-    "<"                 { braceDepth++; }
-    ">"                 { braceDepth--; }
+    "{"                 { nestingDepth++; }
+    "}"                 { nestingDepth--; }
+    "("                 { nestingDepth++; }
+    ")"                 { 
+        nestingDepth--; 
+        if (nestingDepth < assignmentDepth) { 
+            popState(); 
+            return Parser.PARENCLOSE; 
+        }
+    }
+    "["                 { nestingDepth++; }
+    "]"                 { nestingDepth--; }
+    "<"                 { nestingDepth++; }
+    ">"                 { nestingDepth--; }
 }
 
 <ASSIGNMENT, CODEBLOCK, YYINITIAL> {

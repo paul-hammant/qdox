@@ -210,13 +210,13 @@ public class JavaDocBuilderTest extends TestCase {
     public void testOldfashionedExtraClassesAreSupported() throws Exception {
         String in = ""
                 + "package oldfashioned;"
-                + "public class Foo {"
+                + "public class Ping {"
                 + "}"
                 + "class Bar {"
                 + "}";
         builder.addSource(new StringReader(in));
         assertEquals(2, builder.getClasses().length);
-        assertNotNull(builder.getClassByName("oldfashioned.Foo"));
+        assertNotNull(builder.getClassByName("oldfashioned.Ping"));
         assertNotNull(builder.getClassByName("oldfashioned.Bar"));
     }
 

@@ -17,6 +17,38 @@ public class JavaMethodTest extends TestCase {
         mth = new JavaMethod();
     }
 
+    public void testDeclarationSignatureWithModifiers() {
+        createSignatureTestMethod();
+        String signature = mth.getDeclarationSignature(true);
+        assertEquals("protected final void blah(int count, MyThing t) throws FishException, FruitException", signature);
+    }
+
+    public void testDeclarationSignatureWithoutModifiers() {
+        createSignatureTestMethod();
+        String signature = mth.getDeclarationSignature(false);
+        assertEquals("void blah(int count, MyThing t) throws FishException, FruitException", signature);
+    }
+
+    public void testCallSignature() {
+        createSignatureTestMethod();
+        String signature = mth.getCallSignature();
+        assertEquals("blah(count, t)", signature);
+    }
+
+    private void createSignatureTestMethod() {
+        mth.setName("blah");
+        mth.setModifiers(new String[]{"protected", "final"});
+        mth.setReturns(new Type("void"));
+        mth.setExceptions(new Type[] {
+            DataProvider.createType("FishException", 0),
+            DataProvider.createType("FruitException", 0),
+        });
+        mth.setParameters(new JavaParameter[]{
+            new JavaParameter(DataProvider.createType("int", 0), "count"),
+            new JavaParameter(DataProvider.createType("MyThing", 0), "t")
+        });
+    }
+
     public void testToStringSimple() throws Exception {
         mth.setName("doSomething");
         mth.setReturns(new Type("java.lang.String"));

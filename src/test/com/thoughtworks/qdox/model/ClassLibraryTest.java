@@ -18,23 +18,23 @@ public class ClassLibraryTest extends TestCase implements JavaClassCache {
 
     public void testAdd() throws Exception {
         ClassLibrary c = new ClassLibrary(this);
-        c.add("com.blah.Foo");
+        c.add("com.blah.Ping");
         c.add("com.moo.Poo");
-        assertTrue(c.contains("com.blah.Foo"));
+        assertTrue(c.contains("com.blah.Ping"));
         assertTrue(c.contains("com.moo.Poo"));
         assertTrue(!c.contains("com.not.You"));
     }
 
     public void testListAll() throws Exception {
         ClassLibrary c = new ClassLibrary(this);
-        c.add("com.blah.Foo");
-        c.add("com.thing.Foo");
+        c.add("com.blah.Ping");
+        c.add("com.thing.Ping");
         c.add("com.x.Goat");
         c.add("com.y.Goat");
 
         Collection all = c.all();
-        assertTrue(all.contains("com.blah.Foo"));
-        assertTrue(all.contains("com.thing.Foo"));
+        assertTrue(all.contains("com.blah.Ping"));
+        assertTrue(all.contains("com.thing.Ping"));
         assertTrue(all.contains("com.x.Goat"));
         assertTrue(all.contains("com.y.Goat"));
 

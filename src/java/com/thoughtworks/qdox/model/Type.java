@@ -67,7 +67,8 @@ public class Type implements Comparable, Serializable {
         if (dimensions == 0) return getValue();
         StringBuffer buff = new StringBuffer(getValue());
         for (int i = 0; i < dimensions; i++) buff.append("[]");
-        return buff.toString();
+        String result = buff.toString();
+        return result;
     }
 
     public boolean equals(Object obj) {

@@ -4,9 +4,6 @@ import junit.framework.TestCase;
 
 import java.io.File;
 
-import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
-import com.thoughtworks.qdox.directorywalker.Filter;
-import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 import com.mockobjects.dynamic.Mock;
 import com.mockobjects.dynamic.CallSequence;
 

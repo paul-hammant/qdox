@@ -54,6 +54,20 @@ public abstract class AbstractJavaEntity implements Serializable {
         return null;
     }
 
+    /**
+     * Convenience method for <code>getTagByName(String).getNamedParameter(String)</code>
+     * that also checks for null tag.
+     * @since 1.3
+     */
+    public String getNamedParameter(String tagName, String parameterName) {
+        DocletTag tag = getTagByName(tagName);
+        if(tag != null) {
+            return tag.getNamedParameter(parameterName);
+        } else {
+            return null;
+        }
+    }
+
     void commentHeader(IndentBuffer buffer) {
         if (comment == null && (tags == null || tags.length == 0)) {
             return;

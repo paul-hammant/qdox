@@ -1,26 +1,26 @@
 <?xml version="1.0"?>
 <document>
-	<properties>
-		<title>Changes</title>
-		<author email="joew@thoughtworks.com">Joe Walnes</author>
-	</properties>
+    <properties>
+        <title>Changes</title>
+        <author email="joew@thoughtworks.com">Joe Walnes</author>
+    </properties>
 
-	<body>
-	
-		<!-- action types are add/update/fix/remove -->
-		<release version="1.3" date="In CVS">
-			<action dev="rinkrank" type="add">
-				Implemented QDOX-3.
-				Support for binary classes. 
-			</action>
-			<action dev="rinkrank" type="add">
-				Implemented QDOX-7.
-				New isA(String fullyQualifiedName) method in JavaClass.
-			</action>
-			<action dev="rinkrank" type="add">
-				Implemented QDOX-6.
-				Support for bean properties. 
-			</action>
+    <body>
+  
+        <!-- action types are add/update/fix/remove -->
+        <release version="1.3" date="In CVS">
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-3.
+                Support for binary classes. 
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-6.
+                Support for bean properties. 
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-7.
+                New isA(String fullyQualifiedName) method in JavaClass.
+            </action>
             <action dev="rinkrank" type="add">
                 Implemented QDOX-12.
                 Pluggable DocletTag implementations via DocletTagFactory.
@@ -28,14 +28,14 @@
                 and other goodies that shouldn't go directly into QDox'
                 core, but rather into pluggable extensions.
             </action>
-			<action dev="rinkrank" type="add">
-				Type now has a getJavaClass() method making
-				it easier to find the JavaClass of a Type in e.g. Velocity.
-				Example: $method.returns.javaClass
-			</action>
-			<action dev="rinkrank" type="update">
-				DocletTag is an interface.
-			</action>
+            <action dev="rinkrank" type="add">
+                Type now has a getJavaClass() method making
+                it easier to find the JavaClass of a Type from e.g. Velocity.
+                Example: $method.returns.javaClass
+            </action>
+            <action dev="rinkrank" type="update">
+                DocletTag is an interface.
+            </action>
             <action dev="rinkrank" type="add">
                 Added a getClasses() method to JavaDocBuilder that will
                 return all JavaClasses.
@@ -44,32 +44,41 @@
                 Added a getDerivedClasses() method to JavaClass that will
                 return all derived classes, i.e. subclasses or subinterfaces.
             </action>
-		</release>
-		
-		<release version="1.2" date="2003-03-23">
-			<action dev="joeretro" type="fix">
-				Quoted tokens allowed in doclet tags.								
-			</action>
-			<action dev="joeretro" type="fix">
-				Asterix symbol allowed in doclet tags.								
-			</action>
-		</release>
+            <action dev="rinkrank" type="add">
+                Added getDeclarationSignature() and getCallSignature() methods
+                to JavaMethod.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added a getNamedParameter(String tagName, String parameterName)
+                convenience method to AbstractJavaEntity for easier retrieval
+                of tag parameters without having to null-check the tag.
+            </action>
+        </release>
 
-		<release version="1.1" date="2002-12-08">
-			<action dev="mdub" type="add">
-				Added support for inner classes.								
-			</action>
-			<action dev="joeretro" type="update">
-				Moved build system over to Maven.								
-			</action>
-		</release>
+        <release version="1.2" date="2003-03-23">
+            <action dev="joeretro" type="fix">
+                Quoted tokens allowed in doclet tags.                
+            </action>
+            <action dev="joeretro" type="fix">
+                Asterix symbol allowed in doclet tags.                
+            </action>
+        </release>
 
-		<release version="1.0" date="2002-09-25">
-			<action dev="joeretro" type="add">
-				Initial release.
-			</action>
-		</release>
+        <release version="1.1" date="2002-12-08">
+            <action dev="mdub" type="add">
+                Added support for inner classes.                
+            </action>
+            <action dev="joeretro" type="update">
+                Moved build system over to Maven.                
+            </action>
+        </release>
 
-	</body>
+        <release version="1.0" date="2002-09-25">
+            <action dev="joeretro" type="add">
+                Initial release.
+            </action>
+        </release>
+
+    </body>
 </document>
 

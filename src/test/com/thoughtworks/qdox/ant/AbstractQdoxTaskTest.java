@@ -15,7 +15,7 @@ import com.thoughtworks.qdox.model.DefaultDocletTag;
 
 // Not really abstract, but a test of the abstract.
 
-public final class AbstractQdoxTaskTest extends TestCase {
+public class AbstractQdoxTaskTest extends TestCase {
 
     public AbstractQdoxTaskTest(String name) {
         super(name);

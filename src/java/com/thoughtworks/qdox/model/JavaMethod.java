@@ -36,12 +36,23 @@ public class JavaMethod extends AbstractJavaEntity {
     }
 
     protected void writeBody(IndentBuffer result) {
-        writeAccessibilityModifier(result);
-        writeNonAccessibilityModifiers(result);
+        writeBody(result, true, true, true);
+    }
+
+    /**
+     * @since 1.3
+     */
+    protected void writeBody(IndentBuffer result, boolean withModifiers, boolean isDeclaration, boolean isPrettyPrint) {
+        if (withModifiers) {
+            writeAccessibilityModifier(result);
+            writeNonAccessibilityModifiers(result);
+        }
 
         if (!constructor) {
-            result.write(returns.toString());
-            result.write(' ');
+            if(isDeclaration) {
+                result.write(returns.toString());
+                result.write(' ');
+            }
         }
 
         result.write(name);
@@ -49,20 +60,49 @@ public class JavaMethod extends AbstractJavaEntity {
         for (int i = 0; i < parameters.length; i++) {
             JavaParameter parameter = parameters[i];
             if (i > 0) result.write(", ");
-            result.write(parameter.getType().toString());
-            result.write(' ');
+            if (isDeclaration) {
+                result.write(parameter.getType().toString());
+                result.write(' ');
+            }
             result.write(parameter.getName());
         }
         result.write(')');
-        if (exceptions.length > 0) {
-            result.write(" throws ");
-            for (int i = 0; i < exceptions.length; i++) {
-                if (i > 0) result.write(", ");
-                result.write(exceptions[i].getValue());
+        if (isDeclaration) {
+            if (exceptions.length > 0) {
+                result.write(" throws ");
+                for (int i = 0; i < exceptions.length; i++) {
+                    if (i > 0) result.write(", ");
+                    result.write(exceptions[i].getValue());
+                }
             }
         }
-        result.write(';');
-        result.newline();
+        if (isPrettyPrint) {
+            result.write(';');
+            result.newline();
+        }
+    }
+
+    /**
+     * @since 1.3
+     */
+    private String getSignature(boolean withModifiers, boolean isDeclaration) {
+        IndentBuffer result = new IndentBuffer();
+        writeBody(result, withModifiers, isDeclaration, false);
+        return result.toString();
+    }
+
+    /**
+     * @since 1.3
+     */
+    public String getDeclarationSignature(boolean withModifiers) {
+        return getSignature(withModifiers, true);
+    }
+
+    /**
+     * @since 1.3
+     */
+    public String getCallSignature() {
+        return getSignature(false, false);
     }
 
     public void setReturns(Type returns) {
@@ -128,5 +168,4 @@ public class JavaMethod extends AbstractJavaEntity {
     public void setParentClass(JavaClass parentClass) {
         this.parentClass = parentClass;
     }
-
 }

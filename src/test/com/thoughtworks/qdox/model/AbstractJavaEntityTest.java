@@ -14,9 +14,9 @@ public class AbstractJavaEntityTest extends TestCase {
     public void testGetTagsByNameMethod() throws Exception {
         AbstractJavaEntity entity = new JavaField();
         List tags = new LinkedList();
-        tags.add(new DocletTag("monkey", "is good"));
-        tags.add(new DocletTag("monkey", "is funny"));
-        tags.add(new DocletTag("horse", "not so much"));
+        tags.add(new DefaultDocletTag("monkey", "is good"));
+        tags.add(new DefaultDocletTag("monkey", "is funny"));
+        tags.add(new DefaultDocletTag("horse", "not so much"));
         entity.setTags(tags);
 
         assertEquals(2, entity.getTagsByName("monkey").length);
@@ -28,9 +28,9 @@ public class AbstractJavaEntityTest extends TestCase {
 
         AbstractJavaEntity entity = new JavaField();
         List tags = new LinkedList();
-        tags.add(new DocletTag("monkey", "is good"));
-        tags.add(new DocletTag("monkey", "is funny"));
-        tags.add(new DocletTag("horse", "not so much"));
+        tags.add(new DefaultDocletTag("monkey", "is good"));
+        tags.add(new DefaultDocletTag("monkey", "is funny"));
+        tags.add(new DefaultDocletTag("horse", "not so much"));
         entity.setTags(tags);
 
         assertEquals("is good", entity.getTagByName("monkey").getValue());
@@ -79,7 +79,7 @@ public class AbstractJavaEntityTest extends TestCase {
         IndentBuffer buffer = new IndentBuffer();
         entity.setComment("Hello");
         List tags = new LinkedList();
-        tags.add(new DocletTag("monkey", "is in the tree"));
+        tags.add(new DefaultDocletTag("monkey", "is in the tree"));
         entity.setTags(tags);
 
         // expectation
@@ -103,8 +103,8 @@ public class AbstractJavaEntityTest extends TestCase {
         IndentBuffer buffer = new IndentBuffer();
         entity.setComment("Hello");
         List tags = new LinkedList();
-        tags.add(new DocletTag("monkey", "is in the tree"));
-        tags.add(new DocletTag("see", "the doctor"));
+        tags.add(new DefaultDocletTag("monkey", "is in the tree"));
+        tags.add(new DefaultDocletTag("see", "the doctor"));
         entity.setTags(tags);
 
         // expectation
@@ -128,7 +128,7 @@ public class AbstractJavaEntityTest extends TestCase {
         AbstractJavaEntity entity = new JavaField();
         IndentBuffer buffer = new IndentBuffer();
         List tags = new LinkedList();
-        tags.add(new DocletTag("monkey", "is in the tree"));
+        tags.add(new DefaultDocletTag("monkey", "is in the tree"));
         entity.setTags(tags);
 
         // expectation
@@ -149,7 +149,7 @@ public class AbstractJavaEntityTest extends TestCase {
         AbstractJavaEntity entity = new JavaField();
         IndentBuffer buffer = new IndentBuffer();
         List tags = new LinkedList();
-        tags.add(new DocletTag("monkey", ""));
+        tags.add(new DefaultDocletTag("monkey", ""));
         entity.setTags(tags);
 
         // expectation

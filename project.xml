@@ -169,6 +169,9 @@
 			<includes>
 				<include>**/*Test.java</include>
 			</includes>
+			<excludes>
+				<exclude>**/Abstract*.java</exclude>
+			</excludes>
 		</unitTest>
 
 		<jars/>

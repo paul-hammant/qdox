@@ -5,10 +5,7 @@ package com.thoughtworks.qdox.model;
  * @version $Revision$
  */
 public class DefaultDocletTagFactory implements DocletTagFactory {
-    public DefaultDocletTagFactory() {
-    }
-
     public DocletTag createDocletTag(String tag, String text) {
-        return new DocletTag(tag, text);
+        return new DefaultDocletTag(tag, text);
     }
 }

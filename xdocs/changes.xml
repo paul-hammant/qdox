@@ -14,12 +14,12 @@
 				Support for binary classes. 
 			</action>
 			<action dev="rinkrank" type="add">
-				Implemented QDOX-6.
-				Support for bean properties. 
-			</action>
-			<action dev="rinkrank" type="add">
 				Implemented QDOX-7.
 				New isA(String fullyQualifiedName) method in JavaClass.
+			</action>
+			<action dev="rinkrank" type="add">
+				Implemented QDOX-6.
+				Support for bean properties. 
 			</action>
 			<action dev="rinkrank" type="add">
 				Type now has a getJavaClass() method making
@@ -32,6 +32,9 @@
 				This opens up for tag validation, ${property} substitution
 				and other goodies that shouldn't go directly into QDox'
 				core, but rather into pluggable extensions.
+			</action>
+			<action dev="rinkrank" type="update">
+				DocletTag is an interface.
 			</action>
 		</release>
 		

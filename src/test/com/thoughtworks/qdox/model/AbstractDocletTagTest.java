@@ -4,14 +4,14 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.JavaDocBuilder;
 
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
 
-public class DocletTagTest extends TestCase {
+public abstract class AbstractDocletTagTest extends TestCase {
 
-    public DocletTagTest(String s) {
+    public AbstractDocletTagTest(String s) {
         super(s);
     }
+
+    protected abstract DocletTagFactory getDocletTagFactory();
 
     public void testValueRemainsIntact() throws Exception {
         String in = ""
@@ -21,7 +21,7 @@ public class DocletTagTest extends TestCase {
                 + " */\n"
                 + "class X {}";
 
-        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaDocBuilder builder = new JavaDocBuilder(getDocletTagFactory());
         builder.addSource(new StringReader(in));
         DocletTag tag = builder.getClassByName("x.X").getTagByName("tag");
 
@@ -29,7 +29,7 @@ public class DocletTagTest extends TestCase {
     }
 
     public void testIndexedParameter() throws Exception {
-        DocletTag tag = new DocletTag("x", "one two three four");
+        DocletTag tag = getDocletTagFactory().createDocletTag("x", "one two three four");
         assertEquals("one", tag.getParameters()[0]);
         assertEquals("two", tag.getParameters()[1]);
         assertEquals("three", tag.getParameters()[2]);
@@ -38,7 +38,7 @@ public class DocletTagTest extends TestCase {
     }
 
     public void testNamedParameter() throws Exception {
-        DocletTag tag = new DocletTag("x", "hello=world dog=cat fork=spoon");
+        DocletTag tag = getDocletTagFactory().createDocletTag("x", "hello=world dog=cat fork=spoon");
         assertEquals("world", tag.getNamedParameter("hello"));
         assertEquals("cat", tag.getNamedParameter("dog"));
         assertEquals("spoon", tag.getNamedParameter("fork"));
@@ -46,7 +46,7 @@ public class DocletTagTest extends TestCase {
     }
 
     public void testInvalidNamedParameter() throws Exception {
-        DocletTag tag = new DocletTag("x", "= =z x=c y= o");
+        DocletTag tag = getDocletTagFactory().createDocletTag("x", "= =z x=c y= o");
         assertEquals("c", tag.getNamedParameter("x"));
         assertEquals("", tag.getNamedParameter("y"));
         assertNull(tag.getNamedParameter("z"));
@@ -55,7 +55,7 @@ public class DocletTagTest extends TestCase {
     }
 
     public void testIntermingledIndexedAndNamedParameter() throws Exception {
-        DocletTag tag = new DocletTag("x", "thing hello=world duck");
+        DocletTag tag = getDocletTagFactory().createDocletTag("x", "thing hello=world duck");
 
         assertEquals("thing", tag.getParameters()[0]);
         assertEquals("hello=world", tag.getParameters()[1]);
@@ -69,19 +69,19 @@ public class DocletTagTest extends TestCase {
     }
 
     public void testQuotedParameters() throws Exception {
-        DocletTag tag = new DocletTag("x", "one=\"hello world bye bye\" two=hello");
+        DocletTag tag = getDocletTagFactory().createDocletTag("x", "one=\"hello world bye bye\" two=hello");
         assertEquals("hello world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
 
-        tag = new DocletTag("x", "one=\"hello joe's world bye bye\" two=hello");
+        tag = new DefaultDocletTag("x", "one=\"hello joe's world bye bye\" two=hello");
         assertEquals("hello joe's world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
 
-        tag = new DocletTag("x", "one='hello joe\"s world bye bye' two=hello");
+        tag = new DefaultDocletTag("x", "one='hello joe\"s world bye bye' two=hello");
         assertEquals("hello joe\"s world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
 
-        tag = new DocletTag("x", "one=\"hello chris' world bye bye\" two=hello");
+        tag = new DefaultDocletTag("x", "one=\"hello chris' world bye bye\" two=hello");
         assertEquals("hello chris' world bye bye", tag.getNamedParameter("one"));
         assertEquals("hello", tag.getNamedParameter("two"));
     }

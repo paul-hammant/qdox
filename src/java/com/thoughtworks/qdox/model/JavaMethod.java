@@ -288,4 +288,8 @@ public class JavaMethod extends AbstractInheritableJavaEntity {
         }
         return (DocletTag[]) result.toArray(new DocletTag[result.size()]);
     }
+
+    public int compareTo(Object o) {
+        return getDeclarationSignature(false).compareTo(((JavaMethod)o).getDeclarationSignature(false));
+    }
 }

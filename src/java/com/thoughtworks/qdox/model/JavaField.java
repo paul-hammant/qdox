@@ -30,4 +30,8 @@ public class JavaField extends AbstractJavaEntity {
         this.parentClass = parentClass;
     }
 
+    public int compareTo(Object o) {
+        return getName().compareTo(((JavaField)o).getName());
+    }
+
 }

@@ -21,6 +21,14 @@
                 Fixed QDOX-30:
                 Support for strictfp modifier (and volatile and native).
             </action>
+            <action dev="rinkrank" type="fix">
+                Fixed QDOX-33:
+                JavaClass.getTagsByName() is buggy.
+            </action>
+            <action dev="rinkrank" type="fix">
+                Fixed QDOX-34:
+                recursive retrieval of tags from superclasses got a bug.
+            </action>
         </release>
 
         <release version="1.3" date="2003-11-03">

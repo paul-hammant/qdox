@@ -28,13 +28,17 @@
                 and other goodies that shouldn't go directly into QDox'
                 core, but rather into pluggable extensions.
             </action>
-            <action dev="rinkrank" type="add">
-                Implemented QDOX-18.
-                BeanProperty : support for type retrieval.
+            <action dev="mdub" type="fix">
+                Fixed QDOX-13.
+                Line numbers in the lexer.
             </action>
             <action dev="mdub" type="fix">
                 Fixed QDOX-17.
                 JavaMethod.equals() failed for constructors.
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-18.
+                BeanProperty : support for type retrieval.
             </action>
             <action dev="rinkrank" type="add">
                 Type now has a getJavaClass() method making

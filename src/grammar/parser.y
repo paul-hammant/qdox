@@ -112,7 +112,7 @@ annotationarglist:
     annotationarg |
     annotationarglist COMMA annotationarg;
 
-annotationarg: IDENTIFIER;
+annotationarg: fullidentifier;
 
 
 // ----- TYPES 

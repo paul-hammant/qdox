@@ -29,10 +29,29 @@ public class AnnotationsTest extends TestCase {
     public void testShouldIgnoreSingleMemberClassAnnotations() {
         String source = "" 
             + "@Fnord(\"xyz\")\n"
+            + "@Blat(Math.MAXINT)\n"
             + "public interface Foo extends Bar {}\n";
 
         builder.addSource(new StringReader(source));
         assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }
+
+    public void TODO_testShouldIgnoreArrayValuedSingleMemberClassAnnotations() {
+        String source = "" 
+            + "@Endorsers({\"Children\", \"Unscrupulous dentists\"})\n"
+            + "public class Lollipop {}\n";
+
+        builder.addSource(new StringReader(source));
+        assertNotNull(builder.getClassByName("Lollipop"));
+    }
+
+    public void TODO_testShouldIgnoreComplexSingleMemberClassAnnotations() {
+        String source = "" 
+            + "@Author(@Name(first = \"Joe\", last = \"Hacker\"))\n"
+            + "public class BitTwiddle {}\n";
+
+        builder.addSource(new StringReader(source));
+        assertNotNull(builder.getClassByName("BitTwiddle"));
     }
 
     public void testShouldIgnoreSimpleMethodAnnotation() {
@@ -47,7 +66,7 @@ public class AnnotationsTest extends TestCase {
         assertEquals(1, fooClass.getMethods().length);
         assertEquals("snort", fooClass.getMethods()[0].getName());
     }
-
+    
     public void testShouldIgnoreAnnotationDeclaration() {
         String source = "" 
             + "public @interface Note {\n"

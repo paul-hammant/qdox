@@ -23,4 +23,8 @@ class MockLexer implements Lexer {
         return (String) textReturn.nextReturnObject();
     }
 
+    public int getLine() {
+        return -1;
+    }
+
 }

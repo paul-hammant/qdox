@@ -74,16 +74,18 @@ implementslist: fullidentifier { cls.implementz.add($1); }
 members: | members member;
 
 member: javadoc
+	| modifiers fullidentifier IDENTIFIER memberend { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); } // field
+	| modifiers fullidentifier IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); }; // method
+	| modifiers IDENTIFIER method memberend { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new Builder.MethodDef(); }; // constructor
 	| modifiers CODEBLOCK // static block
-	| modifiers fullidentifier IDENTIFIER field { fld.modifiers.addAll(modifiers); modifiers.clear(); fld.type = $2; fld.name = $3; builder.addField(fld); fld = new Builder.FieldDef(); }
-	| modifiers fullidentifier IDENTIFIER method { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
-	| modifiers IDENTIFIER method { mth.modifiers.addAll(modifiers); modifiers.clear(); mth.constructor = true; mth.name = $2; builder.addMethod(mth); mth = new Builder.MethodDef(); };
+	| modifiers classorinterface IDENTIFIER extends implements CODEBLOCK { cls = new Builder.ClassDef(); modifiers.clear(); } // inner class
+	;
 modifiers: | modifiers modifier { modifiers.add($2); };
+memberend: SEMI | CODEBLOCK | ASSIGNMENT;
 
-method: BRACKETOPEN params BRACKETCLOSE exceptions methodend;
+method: BRACKETOPEN params BRACKETCLOSE exceptions;
 exceptions: | THROWS exceptionlist;
 exceptionlist: fullidentifier { mth.exceptions.add($1); } | exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
-methodend: SEMI | CODEBLOCK;
 
 // parameters passed to method
 params: | param paramlist;
@@ -91,7 +93,6 @@ paramlist: | paramlist COMMA param;
 param: parammodifiers fullidentifier IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new Builder.FieldDef(); };
 parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
 
-field: SEMI | ASSIGNMENT;
 
 %%
 

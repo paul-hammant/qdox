@@ -5,7 +5,7 @@
 
 	<name>QDox</name>
 	<id>qdox</id>
-	<currentVersion>1.1</currentVersion>
+	<currentVersion>1.2</currentVersion>
 	<inceptionYear>2002</inceptionYear>
 	<package>com.thoughtworks.qdox</package>
 	<logo>/images/qdox.gif</logo>

@@ -1713,6 +1713,74 @@ public class ParserTest extends TestCase {
         builder.verify();
     }
 
+    public void testFieldWithSimpleGenericType() throws Exception {
+
+        // setup values
+        setupLex(Parser.CLASS);
+        setupLex(Parser.IDENTIFIER, "MyClass");
+        setupLex(Parser.BRACEOPEN);
+
+        setupLex(Parser.IDENTIFIER, "List");
+        setupLex(Parser.LESSTHAN);
+        setupLex(Parser.IDENTIFIER, "String");
+        setupLex(Parser.GREATERTHAN);
+        
+        setupLex(Parser.IDENTIFIER, "l");
+        setupLex(Parser.SEMI);
+
+        setupLex(Parser.BRACECLOSE);
+        setupLex(0);
+
+        // expectations
+        FieldDef fld = new FieldDef();
+        fld.name = "l";
+        fld.type = "List";
+
+        builder.addExpectedAddFieldValues(fld);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+    }
+
+    public void testFieldWithWildcardGenericType() throws Exception {
+
+        // setup values
+        setupLex(Parser.CLASS);
+        setupLex(Parser.IDENTIFIER, "MyClass");
+        setupLex(Parser.BRACEOPEN);
+
+        setupLex(Parser.IDENTIFIER, "List");
+        setupLex(Parser.LESSTHAN);
+        setupLex(Parser.QUERY);
+        setupLex(Parser.EXTENDS);
+        setupLex(Parser.IDENTIFIER, "A");
+        setupLex(Parser.GREATERTHAN);
+        
+        setupLex(Parser.IDENTIFIER, "l");
+        setupLex(Parser.SEMI);
+
+        setupLex(Parser.BRACECLOSE);
+        setupLex(0);
+
+        // expectations
+        FieldDef fld = new FieldDef();
+        fld.name = "l";
+        fld.type = "List";
+
+        builder.addExpectedAddFieldValues(fld);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+    }
+
     public void testStaticBlock() throws Exception {
 
         // setup values

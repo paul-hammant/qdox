@@ -18,6 +18,10 @@
                 bean-properties) are consistently returned in declared
                 order.
             </action>
+            <action dev="mdub" type="add">
+                Implemented QDOX-66: 
+                Support for wildcard generic-type arguments.
+            </action>
         </release>
 
         <release version="1.5" date="2004-06-20">

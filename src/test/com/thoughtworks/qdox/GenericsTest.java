@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox;
 
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
 import junit.framework.TestCase;
 
 import java.io.StringReader;
@@ -7,11 +9,9 @@ import java.io.StringReader;
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
+ * @author Mike Williams
  */
 public class GenericsTest extends TestCase {
-
-    // TODO: these should really be replaced by equivalent 
-    // parser unit-tests
     
     private JavaDocBuilder builder = new JavaDocBuilder();
 
@@ -81,7 +81,7 @@ public class GenericsTest extends TestCase {
         assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
 
-    public void testShouldUnderstandBoundTypeParameters() {
+    public void testShouldUnderstandBoundedTypeParameters() {
         String source = "" +
                 "public class Bar<T extends Date> {}";
 
@@ -89,7 +89,7 @@ public class GenericsTest extends TestCase {
         assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
 
-    public void testShouldUnderstandComplexBoundTypeParameters() {
+    public void testShouldUnderstandComplexBoundedTypeParameters() {
         String source = "" +
                 "public class Bar<T extends Date & Serializable> {}";
 
@@ -97,4 +97,45 @@ public class GenericsTest extends TestCase {
         assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
     
+    public void testShouldUnderstandWildcardTypeArguments() {
+        String source = "" +
+                "public class Bar { private Class<? extends Date> klass; }";
+        builder.addSource(new StringReader(source));
+        assertEquals("Bar", builder.getClassByName("Bar").getName());
+    }
+    
+    public void testShouldUnderstandBoundedWildcardTypeArguments() {
+        String source = "" +
+                "public class Bar { Map<? super String, ? extends Date> klass; }";
+        builder.addSource(new StringReader(source));
+        assertEquals("Bar", builder.getClassByName("Bar").getName());
+    }
+
+    public void DISABLED_testShouldUnderstandMethodTypeParameters() {
+        String source = "" +
+                "public class Bar {" +
+                "    public static <T extends Comparable<T>> T max(Collection<T> collection) {" +
+                "        throw new UnsupportedOperationException();" +
+                "    }" +
+                "}";
+        builder.addSource(new StringReader(source));
+        assertEquals("Bar", builder.getClassByName("Bar").getName());
+    }
+    
+    public void DISABLED_testJiraQdox66() {
+        String source = "" +
+            "public class Foo {" +
+            "    private Map<String, Object> m_env = new HashMap<String, Object>();" +
+            "    public <T extends Object> T retrieve(Class<T> klass, Object key) {" +
+            "        return x;" +
+            "    }" +
+            "}";
+        builder.addSource(new StringReader(source));
+        JavaClass barClass = builder.getClassByName("Bar");
+        assertEquals("Bar", barClass.getName());
+        JavaField envField = barClass.getFieldByName("m_env");
+        assertNotNull(envField);
+        assertEquals("Map", envField.getType().getValue());
+    } 
+
 }

@@ -6,8 +6,8 @@ import java.io.IOException;
 
 %token SEMI DOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
-%token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS
-%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND
+%token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS SUPER
+%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND QUERY
 %token JAVADOCSTART JAVADOCEND
 %token CODEBLOCK STRING
 
@@ -103,12 +103,31 @@ type:
         $$ = new TypeDef($1,$3); 
     };
 
-typearguments: | LESSTHAN typelist GREATERTHAN
+typearguments: | LESSTHAN typearglist GREATERTHAN;
 
-typelist:
+typearglist:
+    typearg |
+    typearglist COMMA typearg;
+
+typearg:
     type |
-    typelist COMMA type
+    QUERY |
+    QUERY EXTENDS type |
+    QUERY SUPER type;
 
+typeparams: | LESSTHAN typeparamlist GREATERTHAN;
+
+typeparamlist:
+    typeparam |
+    typeparamlist COMMA typeparam;
+
+typeparam: 
+    IDENTIFIER |
+    IDENTIFIER EXTENDS typeboundlist;
+
+typeboundlist:
+    type | 
+    typeboundlist AMPERSAND type;
 
 // ----- CLASS
 
@@ -129,20 +148,6 @@ classdefinition:
 classorinterface: 
     CLASS | 
     INTERFACE { cls.isInterface = true; };
-
-typeparams: | LESSTHAN typeparamlist GREATERTHAN
-
-typeparamlist:
-    typeparam |
-    typelist COMMA typeparam
-
-typeparam: IDENTIFIER typebounds
-
-typebounds: | EXTENDS typeboundlist
-
-typeboundlist:
-    type | 
-    typelist AMPERSAND type
 
 extends: | EXTENDS extendslist;
 
@@ -193,7 +198,7 @@ method:
     modifiers type IDENTIFIER methoddef memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
-        mth.returns = $2.name; mth.dimensions = $2.dimensions; 
+        mth.returns = $2.name; mth.dimensions = $2.dimensions;
         mth.name = $3;
         builder.addMethod(mth);
         mth = new MethodDef(); 
@@ -216,9 +221,11 @@ exceptionlist:
     fullidentifier { mth.exceptions.add($1); } | 
     exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
 
-// formal parameters
-params: | param paramlist;
-paramlist: | paramlist COMMA param;
+params: | paramlist;
+
+paramlist: 
+    param | 
+    paramlist COMMA param;
 
 param: 
     parammodifiers type arrayidentifier { 

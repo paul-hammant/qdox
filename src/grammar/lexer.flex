@@ -77,6 +77,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     "throws"            { return Parser.THROWS; }
     "extends"           { return Parser.EXTENDS; }
     "implements"        { return Parser.IMPLEMENTS; }
+    "super"             { return Parser.SUPER; }
 
     "["                 { return Parser.SQUAREOPEN; }
     "]"                 { return Parser.SQUARECLOSE; }
@@ -85,6 +86,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     "<"                 { return Parser.LESSTHAN; }
     ">"                 { return Parser.GREATERTHAN; }
     "&"                 { return Parser.AMPERSAND; }
+    "?"                 { return Parser.QUERY; }
 
     "class"             {
         classDepth++;

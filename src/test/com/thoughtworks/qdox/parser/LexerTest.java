@@ -204,8 +204,8 @@ public class LexerTest extends TestCase {
     }
 
     public void testFunnyCharsInStringsOrChars() throws Exception {
-        checkAssignment("\"Åäöæøåüß§ÆØ\"");
-        checkAssignment("'Åäöæøåüß§ÆØ'");
+        checkAssignment("\"???????????\"");
+        checkAssignment("'???????????'");
     }
 
     public void testQuoteInCharInCodeBlock() throws Exception {
@@ -444,6 +444,26 @@ public class LexerTest extends TestCase {
         assertSingleLex("throws", Parser.THROWS);
         assertSingleLex("extends", Parser.EXTENDS);
         assertSingleLex("implements", Parser.IMPLEMENTS);
+        assertSingleLex("super", Parser.SUPER);
+    }
+
+    public void testTypeTokens() throws Exception {
+        String in = "Map<? extends A & B, List<String>>";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.IDENTIFIER, "Map", lexer);
+        assertLex(Parser.LESSTHAN, lexer);
+        assertLex(Parser.QUERY, lexer);
+        assertLex(Parser.EXTENDS, lexer);
+        assertLex(Parser.IDENTIFIER, "A", lexer);
+        assertLex(Parser.AMPERSAND, lexer);
+        assertLex(Parser.IDENTIFIER, "B", lexer);
+        assertLex(Parser.COMMA, lexer);
+        assertLex(Parser.IDENTIFIER, "List", lexer);
+        assertLex(Parser.LESSTHAN, lexer);
+        assertLex(Parser.IDENTIFIER, "String", lexer);
+        assertLex(Parser.GREATERTHAN, lexer);
+        assertLex(Parser.GREATERTHAN, lexer);
+        assertLex(0, lexer);
     }
 
     private void assertSingleLex(String in, short expectedLex) throws Exception {

@@ -16,9 +16,9 @@
 
 			<p>To create it, all you need to do is call the default constructor.</p>
 
-<p><blockquote><pre><code>
+<source><![CDATA[
 JavaDocBuilder builder = new JavaDocBuilder();
-</code></pre></blockquote></p>
+]]></source>
 
 		</section>
 
@@ -29,7 +29,7 @@ JavaDocBuilder builder = new JavaDocBuilder();
 			Source can either beread one file at a time (using a java.io.Reader) or an entire source tree
 			can be added recursively.</p>
 
-<p><blockquote><pre><code>
+<source><![CDATA[
 // Reading a single source file.
 builder.addSource(new FileReader("MyFile.java"));
 
@@ -38,7 +38,7 @@ builder.addSource(new StringReader("package test; public class Hello {}"));
 
 // Adding all .java files in a source tree (recursively).
 builder.addSourceTree(new File("mysrcdir"));
-</code></pre></blockquote></p>
+]]></source>
 
 		</section>
 
@@ -62,7 +62,7 @@ builder.addSourceTree(new File("mysrcdir"));
 			<p>To resolve classes from different ClassLoaders (e.g. 3rd party Jar files), the
 			<code>addClassLoader()</code> method must be called on the ClassLibrary.</p>
 
-<p><blockquote><pre><code>
+<source><![CDATA[
 // Get the ClassLibrary
 ClassLibrary lib = builder.getClassLibrary();
 
@@ -71,7 +71,7 @@ lib.addClassLoader(myCustomClassLoader);
 
 // Ant example : add the &lt;classpath&gt; element's contents
 lib.addClassLoader(new AntClassLoader(getProject(), classpath));
-</code></pre></blockquote></p>
+]]></source>
 
 			<p>It is important that additional ClassLoaders are added before any source files are parsed.</p>
 

@@ -25,7 +25,7 @@
 						<p>Represents a complete .java file. This contains a collection of classes.</p>
 
 						<h5>Example Input</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 package com.blah.foo;
 
 import java.awt.*;
@@ -40,10 +40,10 @@ class Class2 {
 
 interface Interface1 {
 }
-</code></pre></blockquote>
+]]></source>
 
 						<h5>Example Code</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 JavaDocBuilder builder = new JavaDocBuilder();
 builder.addSource(myReader);
 
@@ -56,7 +56,7 @@ String[] imports = src.getImports(); // {"java.awt.*",
 JavaClass class1     = src.getClasses()[0];
 JavaClass class2     = src.getClasses()[1];
 JavaClass interface1 = src.getClasses()[2];
-</code></pre></blockquote>
+]]></source>
 
 					</td>
 					<td>
@@ -75,7 +75,7 @@ JavaClass interface1 = src.getClasses()[2];
 						definition is available, such as which classes are extended, which interfaces implemented and modifiers.</p>
 
 						<h5>Example Input</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 package com.blah.foo;
 
 import java.io.*;
@@ -93,10 +93,10 @@ public abstract class MyClass extends SubClass
   private int getNumber() { ... }
 
 }
-</code></pre></blockquote>
+]]></source>
 
 						<h5>Example Code</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 JavaDocBuilder builder = new JavaDocBuilder();
 builder.addSource(myReader);
 
@@ -120,7 +120,7 @@ String author = cls.getTagByName("author").getValue(); // "joe"
 JavaField nameField = cls.getFields()[0];
 JavaMethod doStuff = cls.getMethods()[0];
 JavaMethod getNumber = cls.getMethods()[1];
-</code></pre></blockquote>
+]]></source>
 					</td>
 					<td>
 						<code>
@@ -152,7 +152,7 @@ JavaMethod getNumber = cls.getMethods()[1];
 						<p>Represents a field in a class. This has doclet tags, a name and a type.</p>
 
 						<h5>Example Input</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 import java.util.Date;
 
 public class MyClass  {
@@ -165,10 +165,10 @@ public class MyClass  {
   public static Date[][] dates;
 
 }
-</code></pre></blockquote>
+]]></source>
 
 						<h5>Example Code</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 JavaField e = cls.getFields()[0];
 
 Type eType     = e.getType(); // "java.lang.String";
@@ -184,7 +184,7 @@ DocletTag dTag = d.getTagsByName("magic"); // null
 boolean dArray = d.isArray(); // true;
 int dDimensions= d.getDimensions(); // 2;
 boolean dStatic= d.isStatic(); // true;
-</code></pre></blockquote>
+]]></source>
 					</td>
 					<td>
 						<code>
@@ -207,7 +207,7 @@ boolean dStatic= d.isStatic(); // true;
 						<p>Represents a method in a class. This has doclet tags, a name, return type, parameters and exceptions.</p>
 
 						<h5>Example Input</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 import java.util.Date;
 import java.io.*;
 
@@ -223,10 +223,10 @@ public class MyClass  {
   }
 
 }
-</code></pre></blockquote>
+]]></source>
 
 						<h5>Example Code</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 JavaMethod m = cls.getMethods()[0];
 
 String mName = m.getName(); // "doStuff";
@@ -243,7 +243,7 @@ Type[] exceptions = m.getExceptions();
 
 JavaParameter numberParam = m.getParameters()[0];
 JavaParameter stuffParam = m.getParameters()[1];
-</code></pre></blockquote>
+]]></source>
 					</td>
 					<td>
 						<code>
@@ -269,7 +269,7 @@ JavaParameter stuffParam = m.getParameters()[1];
 
 
 						<h5>Example Input</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 public class MyClass  {
 
   public void stuff(int n, Object[] objects) {
@@ -277,10 +277,10 @@ public class MyClass  {
   }
 
 }
-</code></pre></blockquote>
+]]></source>
 
 						<h5>Example Code</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 JavaMethod m = cls.getMethods()[0];
 
 JavaParameter n = m.getParameters()[0];
@@ -292,7 +292,7 @@ JavaParameter o = m.getParameters()[1];
 String oName   = o.getName(); // "objects"
 Type oType     = o.getType(); // "java.lang.Object";
 boolean oArray = o.getType().isArray(); // true
-</code></pre></blockquote>
+]]></source>
 					</td>
 					<td>
 						<code>
@@ -310,7 +310,7 @@ boolean oArray = o.getType().isArray(); // true
 
 
 						<h5>Example Input</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 import java.util.*;
 
 public class MyClass  {
@@ -321,10 +321,10 @@ public class MyClass  {
   }
 
 }
-</code></pre></blockquote>
+]]></source>
 
 						<h5>Example Code</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 JavaMethod m = cls.getMethods()[0];
 
 Type returns = m.getReturns();
@@ -346,7 +346,7 @@ Type dates = m.getParameters()[1].getType();
 dates.getValue(); // "java.util.Date"
 dates.getArray(); // true
 dates.getDimensions(); // 2
-</code></pre></blockquote>
+]]></source>
 
 					</td>
 					<td>
@@ -365,14 +365,14 @@ dates.getDimensions(); // 2
 						tokens accessed by index or name.</p>
 
 						<h5>Example Input</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 /**
  * @ejb MyEJB MyInterface local=true version=2.0
  */
-</code></pre></blockquote>
+]]></source>
 
 						<h5>Example Code</h5>
-<blockquote><pre><code>
+<source><![CDATA[
 DocletTag tag = cls.getTagByName("ejb");
 
 String value = tag.getValue();
@@ -384,7 +384,7 @@ String p2 = tag.getParameters()[1]; // "MyInterface";
 String local = tag.getNamedParameter("local"); // "true";
 String ver   = tag.getNamedParameter("version"); // "2.0";
 String other = tag.getNamedParameter("blah"); // null
-</code></pre></blockquote>
+]]></source>
 
 
 					</td>
@@ -430,7 +430,7 @@ String other = tag.getNamedParameter("blah"); // null
 			the name, value and methods for breaking up the value into specific parameters.
 			</p>
 						<h5>Example Input</h5>
-<p><blockquote><pre><code>
+<source><![CDATA[
 /**
  * This method does nothing at all.
  *
@@ -442,10 +442,10 @@ String other = tag.getNamedParameter("blah"); // null
  * @webservice publish=true name=myservice type=rpc
  */
 boolean doWeCare(String email, Date dob);
-</code></pre></blockquote></p>
+]]></source>
 
 						<h5>Example Code</h5>
-<p><blockquote><pre><code>
+<source><![CDATA[
 JavaMethod mth = cls.getMethods()[0];
 
 // Access the JavaDoc comment
@@ -471,7 +471,7 @@ permission.getParameter(1); // "full-access"
 DocletTag returns = mth.getTagByName("webservice");
 permission.getNamedParameter("type"); // "rpc"
 permission.getNamedParameter("name"); // "myservice"
-</code></pre></blockquote></p>
+]]></source>
  		</section>
 
 		<section name="Classes, Interfaces and Inheritance">

@@ -18,6 +18,16 @@
 				</tr>
 
 				<tr>
+					<td><nobr><a href="http://jakarta.apache.org/commons/sandbox/attributes/">Commons Attributes</a></nobr></td>
+					<td>
+						Jakarta Commons Attributes provides an API to runtime metadata attributes. Attributes are specified as doclet tags and then compiled into the classpath where they can be accessed at runtime (without requiring the source). The aim is to provide a framework similar to .NET attributes.
+					</td>
+					<td>
+						QDox is used to extract the JavaDoc tags from the source files.
+					</td>
+				</tr>
+				
+				<tr>
 					<td><nobr><a href="http://www.mockmaker.org">Mock Maker</a></nobr></td>
 					<td>
 						Mock Maker is a tool for automatically generating mock objects from custom classes to aid in testing the

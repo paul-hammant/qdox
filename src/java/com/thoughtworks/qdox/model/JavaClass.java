@@ -14,7 +14,7 @@ public class JavaClass extends AbstractJavaEntity {
 	private Type type;
 	private Type superClass;
 	private Type[] implementz = new Type[0];
-	private JavaSource parentSource;
+	private JavaClassParent parent;
 
 	public static final Type OBJECT = new Type("java.lang.Object", 0);
 	private JavaClassCache javaClassCache;
@@ -96,7 +96,7 @@ public class JavaClass extends AbstractJavaEntity {
 	public void setInterface(boolean interfce) {
 		this.interfce = interfce;
 	}
-
+	
 	public void addMethod(JavaMethod meth) {
 		methods.add(meth);
 		meth.setParentClass(this);
@@ -117,21 +117,34 @@ public class JavaClass extends AbstractJavaEntity {
 		fieldsArray = null;
 	}
 
+	public void setParent(JavaClassParent parent) {
+		this.parent = parent;
+	}
+	
+	public JavaClassParent getParent() {
+		return parent;
+	}
+	
+	public JavaSource getParentSource() {
+		JavaClassParent parent = getParent();
+		return (parent == null ? null : parent.getParentSource());
+	}
+
 	public String getPackage() {
-		return parentSource.getPackage();
+		return getParentSource().getPackage();
 	}
-
+	
 	public String getFullyQualifiedName() {
-		return parentSource.getPackage() + "." + getName();
+		return getParentSource().asClassNamespace() + "." + getName();
 	}
-
-	public void setParentSource(JavaSource javaSource) {
-		parentSource = javaSource;
+	
+	public String asClassNamespace() {
+		return getFullyQualifiedName();
 	}
-
+	
 	public Type asType() {
 		if (type == null) {
-			type = new Type(parentSource.getPackage() + "." + getName(), 0);
+			type = new Type(getFullyQualifiedName(), 0);
 		}
 		return type;
 	}
@@ -150,10 +163,6 @@ public class JavaClass extends AbstractJavaEntity {
 			fields.toArray(fieldsArray);
 		}
 		return fieldsArray;
-	}
-
-	public JavaSource getParentSource() {
-		return parentSource;
 	}
 
 }

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class JavaSource implements Serializable {
+public class JavaSource implements Serializable, JavaClassParent {
 
 	private static final Set PRIMITIVE_TYPES = new HashSet();
 	static {
@@ -59,10 +59,9 @@ public class JavaSource implements Serializable {
 
 	public void setClasses(JavaClass[] classes) {
 		this.classes = classes;
-
 		for (int classIndex = 0; classIndex < classes.length; classIndex++) {
 			JavaClass javaClass = classes[classIndex];
-			javaClass.setParentSource(this);
+			javaClass.setParent(this);
 		}
 	}
 
@@ -163,6 +162,14 @@ public class JavaSource implements Serializable {
 		}
 
 		return null;
+	}
+
+	public String asClassNamespace() {
+		return getPackage();
+	}
+
+	public JavaSource getParentSource() {
+		return this;
 	}
 
 }

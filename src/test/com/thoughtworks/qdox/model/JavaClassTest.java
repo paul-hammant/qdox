@@ -292,11 +292,13 @@ public class JavaClassTest extends TestCase {
 		source.setPackage("com.thoughtworks.qdox");
 
 		cls.setName("MyClass");
-
+		
 		source.setClasses(new JavaClass[]{cls});
 
 		assertEquals("MyClass", cls.getName());
 		assertEquals("com.thoughtworks.qdox", cls.getPackage());
+		assertEquals("com.thoughtworks.qdox.MyClass", 
+					 cls.getFullyQualifiedName());
 		assertTrue(cls.asType().isResolved());
 		assertEquals("com.thoughtworks.qdox.MyClass", cls.asType().getValue());
 	}

@@ -29,7 +29,7 @@
   </description>
 
   <url>http://qdox.codehaus.org/</url>
-  <issueTrackingUrl>http://jira.codehaus.org/secure/BrowseProject.jspa?id=10103</issueTrackingUrl>
+  <issueTrackingUrl>http://jira.codehaus.org/browse/QDOX</issueTrackingUrl>
 
   <siteAddress>qdox.codehaus.org</siteAddress>
   <siteDirectory>/home/projects/qdox/public_html</siteDirectory>

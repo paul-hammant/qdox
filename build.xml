@@ -1,9 +1,10 @@
-<project name="qdox" default="jar">
+<project name="qdox" default="main">
 
 	<property name="name" value="qdox"/>
 	<property name="version" value="current"/>
 	<property name="build.compiler" value="jikes"/>
-
+	<property name="yacc.exe" value="bootstrap/yacc"/>
+ 
 	<taskdef name="mockmaker" classname="mockmaker.AntTask">
 		<classpath>
 			<fileset dir="bootstrap"/>
@@ -22,7 +23,7 @@
 
 		<!-- Generate Parser -->
 		<echo>**** Generating Parser ****</echo>
-		<exec executable="bootstrap/yacc" dir="build">
+		<exec executable="${yacc.exe}" dir="build">
 			<arg value="-Jnorun"/>
 			<arg value="-Jnoconstruct"/>
 			<arg value="-Jclass=Parser"/>
@@ -61,7 +62,7 @@
 		</java>
 	</target>
 
-	<target name="jar" depends="test" description="Generate redistributable jar">
+	<target name="jar" depends="compile" description="Generate redistributable jar">
 		<mkdir dir="build/classes-dist"/>
 		<javac srcdir="src/java;build/java" destdir="build/classes-dist" debug="false" optimize="true" />
 		<jar jarfile="build/${name}-${version}.jar">
@@ -69,6 +70,9 @@
 		</jar>
 		<echo>Generated build/${name}-${version}.jar</echo>
 	</target>
+	
+	<target name="main" depends="jar,test" description="Build jar and run unit tests."/>
+
 
 	<target name="clean" description="Clean up built files">
 		<delete dir="build"/>

@@ -101,14 +101,6 @@ public class AbstractQdoxTaskTest extends TestCase {
         }
 
         public File getDir(Project project) {
-            // TODO What is this for? It affects coverage without results. PH
-            //try {
-            //    FileOutputStream fos = new FileOutputStream("build/ZZZZ");
-            //    fos.write(12);
-            //    fos.close();
-            //} catch (IOException e) {
-            //    e.printStackTrace();
-            //}
             return getUnderJUnitFile(dir);
         }
 

@@ -30,11 +30,31 @@ public class GenericsTest extends TestCase {
 
     public void testShouldUnderstandMultipleGenericsInMethodDeclarations() {
         String source = "" +
-                "public interface Bar {" +
-                "   Foo<X,Y> zap(Zip<R,V> r);" +
+                "public interface Foo {" +
+                "   Bar<X,Y> zap(Zip<R,V> r);" +
                 "}";
 
         builder.addSource(new StringReader(source));
         assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }
+
+    public void testShouldUnderstandMultipleGenericsInConstructorDeclarations() {
+        String source = "" +
+                "public class Bar {" +
+                "   public Bar(Zip<R,V> r) {}" +
+                "}";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Bar", builder.getClassByName("Bar").getName());
+    }
+
+    public void testShouldUnderstandMultipleGenericsInFieldDeclarations() {
+        String source = "" +
+                "public class Bar {" +
+                "   private Foo<R,V> foo;" +
+                "}";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
 }

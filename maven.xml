@@ -44,6 +44,7 @@
       </j:choose>
       <echo>(Using byaccj = ${qdox.byaccj.executable})</echo>
       <exec executable="${qdox.byaccj.executable}" dir="target" failonerror="true">
+        <arg value="-v"/>
         <arg value="-Jnorun"/>
         <arg value="-Jnoconstruct"/>
         <arg value="-Jclass=Parser"/>
@@ -52,6 +53,7 @@
         <arg value="../src/grammar/parser.y"/>
       </exec>
       <move todir="target/src/java/com/thoughtworks/qdox/parser/impl" file="target/Parser.java"/>
+      <move tofile="target/yacc-states.txt" file="target/y"/> <!-- rename states file to something obvious -->
     </j:if>
   
     <!-- Add lexer and parser to compilation path -->

@@ -30,7 +30,7 @@
                 recursive retrieval of tags from superclasses got a bug.
             </action>
             <action dev="mdub" type="fix">
-                Fixed QDOX-29:
+                Fixed QDOX-29, QDOX-37:
                 Handle inner-classes in type-resolution.
             </action>
         </release>

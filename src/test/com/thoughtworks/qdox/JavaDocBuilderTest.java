@@ -10,6 +10,8 @@ import com.thoughtworks.qdox.model.JavaSource;
 
 public class JavaDocBuilderTest extends TestCase {
 
+	JavaDocBuilder builder = new JavaDocBuilder();
+
 	public JavaDocBuilderTest(String name) {
 		super(name);
 	}
@@ -23,7 +25,6 @@ public class JavaDocBuilderTest extends TestCase {
 	}
 
 	public void testParsingMultipleJavaFiles(){
-		JavaDocBuilder builder = new JavaDocBuilder();
 		builder.addSource(new StringReader(createTestClassList()));
 		builder.addSource(new StringReader(createTestClass()));
 		JavaSource[] sources = builder.getSources();
@@ -68,7 +69,6 @@ public class JavaDocBuilderTest extends TestCase {
 	}
 
 	public void testSourceTree() throws Exception {
-		JavaDocBuilder builder = new JavaDocBuilder();
 		builder.addSourceTree(new File("tmp/sourcetest"));
 
 		assertNotNull(builder.getClassByName("com.blah.Thing"));
@@ -78,7 +78,6 @@ public class JavaDocBuilderTest extends TestCase {
 	}
 
 	public void testRecordFile() throws Exception {
-		JavaDocBuilder builder = new JavaDocBuilder();
 		builder.addSource(new File("tmp/sourcetest/com/blah/Thing.java"));
 
 		JavaSource[] sources = builder.getSources();
@@ -88,7 +87,6 @@ public class JavaDocBuilderTest extends TestCase {
 	}
 
 	public void testSearcher() throws Exception {
-		JavaDocBuilder builder = new JavaDocBuilder();
 		builder.addSourceTree(new File("tmp/sourcetest"));
 
 		List results = builder.search(new Searcher() {
@@ -113,7 +111,6 @@ public class JavaDocBuilderTest extends TestCase {
 	}
 
 	public void testDefaultClassLoader() throws Exception {
-		JavaDocBuilder builder = new JavaDocBuilder();
 		String in = ""
 			+ "package x;"
 			+ "import java.util.*;"
@@ -125,7 +122,6 @@ public class JavaDocBuilderTest extends TestCase {
 	}
 
 	public void testAddMoreClassLoaders() throws Exception {
-		JavaDocBuilder builder = new JavaDocBuilder();
 
 		builder.getClassLibrary().addClassLoader(new ClassLoader() {
 			public Class loadClass(String name) throws ClassNotFoundException {
@@ -159,7 +155,6 @@ public class JavaDocBuilderTest extends TestCase {
 	}
 
 	public void testSerializable() throws Exception {
-		JavaDocBuilder builder = new JavaDocBuilder();
 		builder.addSource(new StringReader("package test; public class X{}"));
 		assertEquals("X", builder.getSources()[0].getClasses()[0].getName());
 
@@ -180,7 +175,6 @@ public class JavaDocBuilderTest extends TestCase {
 	}
 
 	public void testSaveAndRestore() throws Exception {
-		JavaDocBuilder builder = new JavaDocBuilder();
 		File file = new File("tmp/sourcetest/cache.obj");
 		builder.addSourceTree(new File("tmp/sourcetest"));
 		builder.save(file);

@@ -270,6 +270,13 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    public void testCommentsThatEndImmediately() throws Exception {
+        String in = "/**/ class";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.CLASS, lexer);
+        assertLex(0, lexer);
+    }
+
     public void testCommentsWithQuotesInAssignment() throws Exception {
         String in = "a x = y /* don't do stuff*/;";
         Lexer lexer = new JFlexLexer(new StringReader(in));

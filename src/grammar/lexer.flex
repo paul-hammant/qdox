@@ -201,6 +201,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     \'                  { pushState(CHAR); }
     "//"                { pushState(SINGLELINECOMMENT); }
     "/*"                { pushState(MULTILINECOMMENT); }
+    "/**/"              { }
 }
 
 <STRING> {

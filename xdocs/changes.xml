@@ -49,6 +49,9 @@
             <action dev="joeretro" type="fix">
                 Support for trailing semicolon after class definition.
             </action>
+            <action dev="joeretro" type="fix">
+                Bugfix: Support for empty /**/ comments.
+            </action>
         </release>
 
         <release version="1.5" date="2004-06-20">

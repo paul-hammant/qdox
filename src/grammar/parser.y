@@ -1,6 +1,3 @@
-%{
-	import java.util.*;
-%}
 
 %token SEMI DOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
@@ -61,7 +58,7 @@ implements: | IMPLEMENTS implementslist;
 implementslist: fullidentifier { cls.implementz.add($1); } | implementslist COMMA fullidentifier { cls.implementz.add($3); };
 
 classparts: | classparts classpart;
-classpart: javadoc | method;
+classpart: javadoc | method | field;
 
 method: methodmodifiers fullidentifier IDENTIFIER BRACKETOPEN params BRACKETCLOSE exceptions methodend { mth.returns = $2; mth.name = $3; builder.addMethod(mth); mth = new Builder.MethodDef(); };
 methodmodifiers: | methodmodifiers modifier { mth.modifiers.add($2); };
@@ -70,8 +67,10 @@ exceptionlist: IDENTIFIER { mth.exceptions.add($1); } | exceptionlist COMMA IDEN
 methodend: SEMI | CODEBLOCK;
 
 params: | param | params COMMA param;
-param: parammodifiers IDENTIFIER IDENTIFIER { par.name = $3; par.type = $2; mth.params.add(par); par = new Builder.ParamDef(); };
-parammodifiers: | parammodifiers modifier { par.modifiers.add($2); };
+param: parammodifiers IDENTIFIER IDENTIFIER { fld.name = $3; fld.type = $2; mth.params.add(fld); fld = new Builder.FieldDef(); };
+parammodifiers: | parammodifiers modifier { fld.modifiers.add($2); };
+
+field: SEMI;
 
 %%
 
@@ -80,7 +79,7 @@ private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
 private Builder.ClassDef cls = new Builder.ClassDef();
 private Builder.MethodDef mth = new Builder.MethodDef();
-private Builder.ParamDef par = new Builder.ParamDef();
+private Builder.FieldDef fld = new Builder.FieldDef();
 
 private String buffer() {
 	if (textBuffer.length() > 0) textBuffer.deleteCharAt(textBuffer.length() - 1);

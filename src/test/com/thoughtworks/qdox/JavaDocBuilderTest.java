@@ -739,4 +739,14 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals("p1.A$Inner", innerField.getType().getValue());
     }
 
+    public void FIXME_testJiraQdox71() {
+        String sourceCode = ""
+                + "package foo;"
+                + "public class C {"
+                + "  boolean flag = (X < Y);"
+                + "}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.addSource(new StringReader(sourceCode));
+    }
+
 }

@@ -89,6 +89,10 @@ public class LexerTest extends TestCase {
     public void testGenericTypeAssignment() throws Exception {
         checkAssignment("new HashMap<String,Integer>");
     }
+    
+    public void FIXME_testJiraQdox71() throws Exception {
+        checkAssignment("(x < y)");
+    }
 
     private void checkAssignment(String assignment) throws IOException {
         String in = ""
@@ -479,6 +483,40 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    public void testAnnotationDeclarationTokens() throws Exception {
+        String in = "" + 
+            "public @interface Copyright {\n" + 
+            "   int year();\n" + 
+            "   String assignee() default \"The CodeHaus\";\n" + 
+            "}\n";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+
+        assertLex(Parser.PUBLIC, lexer);
+        assertLex(Parser.ANNOTATION, "@interface", lexer);
+        assertLex(Parser.IDENTIFIER, "Copyright", lexer);
+        assertLex(Parser.CODEBLOCK, lexer);
+        assertLex(0, lexer);
+    }
+
+    public void INPROGRESS_testAnnotationTokens() throws Exception {
+        String in = "" + 
+            "@Copyright (year = 2004)\n" + 
+            "public class LexerTest extends TestCase {}\n";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+
+        assertLex(Parser.ANNOTATION, "@Copyright", lexer);
+        assertLex(Parser.PARENOPEN, lexer);
+        assertLex(Parser.IDENTIFIER, "year", lexer);
+        assertLex(Parser.PARENCLOSE, lexer);
+        assertLex(Parser.PUBLIC, lexer);
+        assertLex(Parser.CLASS, lexer);
+        assertLex(Parser.IDENTIFIER, "LexerTest", lexer);
+        assertLex(Parser.IDENTIFIER, "String", lexer);
+        assertLex(Parser.IDENTIFIER, "TestCase", lexer);
+        assertLex(Parser.CODEBLOCK, lexer);
+        assertLex(0, lexer);
+    }
+    
     private void assertSingleLex(String in, short expectedLex) throws Exception {
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(expectedLex, lexer);

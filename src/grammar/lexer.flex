@@ -49,6 +49,7 @@ import com.thoughtworks.qdox.parser.*;
 %}
 
 Eol                     = \r|\n|\r\n
+WhiteSpace              = {Eol} | [ \t\f]
 CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 
 %state JAVADOC CODEBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT
@@ -78,6 +79,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     "extends"           { return Parser.EXTENDS; }
     "implements"        { return Parser.IMPLEMENTS; }
     "super"             { return Parser.SUPER; }
+    "default"           { return Parser.DEFAULT; }
 
     "["                 { return Parser.SQUAREOPEN; }
     "]"                 { return Parser.SQUARECLOSE; }
@@ -115,9 +117,15 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     }
 
     "/*" "*"+           { pushState(JAVADOC); javaDocNewLine = true; return Parser.JAVADOCSTART; }
+
     "="                 { pushState(ASSIGNMENT); }
+
     [:jletter:] [:jletterdigit:]* { 
         return Parser.IDENTIFIER; 
+    }
+
+    "@" [:jletterdigit:]+ { 
+        return Parser.ANNOTATION; 
     }
 
 }

@@ -28,8 +28,13 @@
 	<siteAddress>codehaus.org</siteAddress>
 	<siteDirectory>/www/qdox.codehaus.org/</siteDirectory>
 	<distributionDirectory>/www/qdox.codehaus.org/downloads/</distributionDirectory>
-	<cvsWebUrl>http://cvs.codehaus.org/viewcvs.cgi/qdox/?cvsroot=qdox</cvsWebUrl>
 
+	<repository>
+		<connection>scm:cvs:pserver:anonymous@cvs.codehaus.org:/cvsroot/qdox:qdox</connection>
+		<developerConnection>scm:cvs:ext:${maven.username}@cvs.codehaus.org:/cvsroot/qdox:qdox</developerConnection>
+		<url>http://cvs.codehaus.org/viewcvs.cgi/qdox/?cvsroot=qdox</url>		
+	</repository>
+	
 	<versions>
 		<version>
 			<id>1.0</id>
@@ -54,12 +59,12 @@
 	</versions>
 
 	<mailingLists>
-		<!--<mailingList>
+		<mailingList>
 			<name>QDox User List</name>
-			<subscribe>qdox-user-request@lists.sourceforge.net</subscribe>
-			<unsubscribe>qdox-user-request@lists.sourceforge.net</unsubscribe>
-			<archive>http://www.geocrawler.com/lists/3/SourceForge/23415/0/</archive>
-		</mailingList>-->
+			<subscribe>http://lists.codehaus.org/mailman/listinfo/qdox-user</subscribe>
+			<unsubscribe>http://lists.codehaus.org/mailman/listinfo/qdox-user</unsubscribe>
+			<archive>http://lists.codehaus.org/pipermail/qdox-user/</archive>
+		</mailingList>
 	</mailingLists>
 
 	<developers>

@@ -10,11 +10,10 @@
 		<section name="Downloads">
 			<p>
 				The latest released binary is available to
-				<a href="http://sourceforge.net/project/showfiles.php?group_id=55918">download here</a>.
+				<a href="http://qdox.codehaus.org/downloads/qdox-1.2.jar">download here</a>.
 			</p>
 			<p>
-				The current development version can be obtained from 
-				<a href="http://sourceforge.net/cvs/?group_id=55918">CVS</a>.
+				The current development version can be obtained from <a href="cvs-usage.html">CVS</a>.
 			</p>
 		</section>
 	</body>

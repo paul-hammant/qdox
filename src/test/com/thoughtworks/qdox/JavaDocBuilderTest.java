@@ -701,5 +701,32 @@ public class JavaDocBuilderTest extends TestCase {
 
         assertEquals(1, results.size());
     } 
+    
+    public void FIXME_testJiraQdox63() {
+        builder.addSource(
+            new StringReader(
+                "package p1;\n" +
+                "class A {\n" +
+                "  static class Inner {}\n" +
+                "}"
+            )
+        );
+        builder.addSource(
+            new StringReader(
+                "package p2;\n" +
+                "import p1.A;\n" +
+                "class B {\n" +
+                "  A.Inner innerField;\n" +
+                "}"
+            )
+        );
+
+        JavaClass innerClass = 
+            builder.getClassByName("p1.A").getInnerClassByName("Inner");
+        JavaField innerField = 
+            builder.getClassByName("p2.B").getFieldByName("innerField");
+        assertEquals(innerClass.asType(), innerField.getType());
+        assertEquals("p1.A$Inner", innerField.getType().getValue());
+    } 
 
 }

@@ -15,22 +15,8 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 
 public class MultipleJavaDocBuilder {
 	private Map classes = new HashMap();
-	
-	public JavaSource[] build(Reader[] files){
-		List classesParsed = new ArrayList();
-		List sources = new ArrayList();
-		for (int readerIndex=0; readerIndex<files.length; readerIndex++){
-		ModelBuilder builder = new ModelBuilder(classesParsed);
-			Lexer lexer = new JFlexLexer(files[readerIndex]);
-			Parser parser = new Parser(lexer, builder);
-			parser.parse();
-			JavaSource source = builder.getSource();
-			sources.add(source);
-			addClasses(source);
-		}
-
-		return (JavaSource[])sources.toArray(new JavaSource[sources.size()]);
-	}
+	private List classesParsed = new ArrayList();
+	private List sources = new ArrayList();
 
 	private void addClasses(JavaSource source) {
 		JavaClass[] javaClasses = source.getClasses();
@@ -40,9 +26,22 @@ public class MultipleJavaDocBuilder {
 		}
 	}
 
-
 	public JavaClass getClassByName(String name) {
 		return (JavaClass)classes.get(name);
+	}
+
+	public void addSource(Reader reader) {
+		ModelBuilder builder = new ModelBuilder(classesParsed);
+		Lexer lexer = new JFlexLexer(reader);
+		Parser parser = new Parser(lexer, builder);
+		parser.parse();
+		JavaSource source = builder.getSource();
+		sources.add(source);
+		addClasses(source);
+	}
+
+	public JavaSource[] getSources() {
+		return (JavaSource[])sources.toArray(new JavaSource[sources.size()]);
 	}
 
 }

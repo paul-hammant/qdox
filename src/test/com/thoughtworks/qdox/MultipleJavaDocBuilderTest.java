@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox;
 
-import java.io.Reader;
 import java.io.StringReader;
 
 import junit.framework.TestCase;
@@ -16,7 +15,9 @@ public class MultipleJavaDocBuilderTest extends TestCase {
 
 	public void testParsingMultipleJavaFiles(){
 		MultipleJavaDocBuilder builder = new MultipleJavaDocBuilder();
-		JavaSource[] sources = builder.build(new Reader[]{new StringReader(createTestClassList()), new StringReader(createTestClass())});
+		builder.addSource(new StringReader(createTestClassList()));
+		builder.addSource(new StringReader(createTestClass()));
+		JavaSource[] sources = builder.getSources();
 		assertEquals(2, sources.length);
 		
 		JavaClass testClassList = sources[0].getClasses()[0];

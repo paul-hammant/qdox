@@ -152,7 +152,7 @@ public class ModelBuilder implements Builder {
             int i = 0;
             for (Iterator iterator = def.params.iterator(); iterator.hasNext();) {
                 FieldDef fieldDef = (FieldDef) iterator.next();
-                params[i++] = new JavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name);
+                params[i++] = new JavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name, fieldDef.isVarArgs);
             }
             currentMethod.setParameters(params);
         }

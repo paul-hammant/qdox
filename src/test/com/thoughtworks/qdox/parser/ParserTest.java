@@ -2345,6 +2345,47 @@ public class ParserTest extends TestCase {
         builder.verify();
     }
 
+    public void testMethodWithVarArgsParameter() throws Exception {
+
+        // setup values
+        setupLex(Parser.CLASS);
+        setupLex(Parser.IDENTIFIER, "x");
+        setupLex(Parser.BRACEOPEN);
+
+        setupLex(Parser.IDENTIFIER, "void");
+        setupLex(Parser.IDENTIFIER, "doStuff");
+        setupLex(Parser.PARENOPEN);
+
+        setupLex(Parser.IDENTIFIER, "int");
+        setupLex(Parser.DOTDOTDOT);
+        setupLex(Parser.IDENTIFIER, "stuff");
+
+        setupLex(Parser.PARENCLOSE);
+        setupLex(Parser.SEMI);
+
+        setupLex(Parser.BRACECLOSE);
+        setupLex(0);
+
+        // expectations
+        MethodDef mth = new MethodDef();
+        mth.name = "doStuff";
+        mth.returns = "void";
+        FieldDef p1 = new FieldDef();
+        p1.name = "stuff";
+        p1.type = "int";
+        p1.dimensions = 0;
+        p1.isVarArgs = true;
+        mth.params.add(p1);
+
+        builder.addExpectedAddMethodValues(mth);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+    }
 
     private void setupLex(int token, String value) {
         lexer.setupLex(token);

@@ -76,6 +76,9 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
             if (i > 0) result.write(", ");
             if (isDeclaration) {
                 result.write(parameter.getType().toString());
+                if (parameter.isVarArgs()) {
+                    result.write("...");
+                }
                 result.write(' ');
             }
             result.write(parameter.getName());

@@ -8,18 +8,20 @@ public class FieldDef extends LocatedDef {
     public String type = "";
     public Set modifiers = new HashSet();
     public int dimensions;
+    public boolean isVarArgs;
 
     public boolean equals(Object obj) {
         FieldDef paramDef = (FieldDef) obj;
         return paramDef.name.equals(name)
                 && paramDef.type.equals(type)
                 && paramDef.dimensions == dimensions
-                && paramDef.modifiers.equals(modifiers);
+                && paramDef.modifiers.equals(modifiers)
+                && paramDef.isVarArgs == isVarArgs;
     }
 
     public int hashCode() {
         return name.hashCode() + type.hashCode() +
-                dimensions + modifiers.hashCode();
+                dimensions + modifiers.hashCode() + (isVarArgs ? 79769989 : 0);
     }
 
     public String toString() {

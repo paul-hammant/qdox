@@ -10,10 +10,16 @@ public class JavaParameter implements Serializable {
     private String name;
     private Type type;
     private JavaMethod parentMethod;
+    private boolean varArgs;
 
     public JavaParameter(Type type, String name) {
+        this(type, name, false);
+    }
+
+    public JavaParameter(Type type, String name, boolean varArgs) {
         this.name = name;
         this.type = type;
+        this.varArgs = varArgs;
     }
 
     public String getName() {
@@ -41,4 +47,13 @@ public class JavaParameter implements Serializable {
     public void setParentMethod(JavaMethod parentMethod) {
         this.parentMethod = parentMethod;
     }
+
+    /**
+     * Is this a Java 5 var args type specified using three dots. e.g. void doStuff(Object... thing)
+     * @since 1.6
+     */
+    public boolean isVarArgs() {
+        return varArgs;
+    }
+
 }

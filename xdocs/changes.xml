@@ -30,6 +30,10 @@
                 Implemented QDOX-68: 
                 Support for generic-type parameters on methods.
             </action>
+            <action dev="mdub" type="add">
+                Implemented QDOX-70:
+                Support for Java 5 varargs syntax: "printf(Object... stuff)". New method, JavaParameter.isVarArgs(). 
+            </action>
             <action dev="mdub" type="fix">
                 Fix a bug which limited usage of generic-types within
                 expressions.

@@ -60,6 +60,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 <YYINITIAL> {
     ";"                 { return Parser.SEMI; }
     "."                 { return Parser.DOT; }
+    "..."               { return Parser.DOTDOTDOT; }
     ","                 { return Parser.COMMA; }
     "*"                 { return Parser.STAR; }
 

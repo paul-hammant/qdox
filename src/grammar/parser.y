@@ -4,7 +4,7 @@ import com.thoughtworks.qdox.parser.structs.*;
 import java.io.IOException;
 %}
 
-%token SEMI DOT COMMA STAR EQUALS
+%token SEMI DOT DOTDOTDOT COMMA STAR EQUALS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND QUERY AT
@@ -12,10 +12,11 @@ import java.io.IOException;
 %token CODEBLOCK 
 %token INTEGER_LITERAL FLOAT_LITERAL
 
-// stringly typed tokens/types
+// strongly typed tokens/types
 %token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN
 %type <sval> fullidentifier modifier classtype
 %type <ival> dimensions
+%type <bval> varargs
 %type <type> type arrayidentifier
 
 %%
@@ -71,10 +72,10 @@ fullidentifier:
 
 arrayidentifier: 
     IDENTIFIER dimensions {
-        $$ = new TypeDef($1,$2); 
+        $$ = new TypeDef($1,$2);
     };
 
-dimensions: 
+dimensions:
     /* empty */ { $$ = 0; }
 |   dimensions SQUAREOPEN SQUARECLOSE {
         $$ = $1 + 1; 
@@ -117,12 +118,12 @@ annotationarg: fullidentifier;
 
 // ----- TYPES 
 
-type: 
+type:
     classtype dimensions {
-        $$ = new TypeDef($1,$2); 
+        $$ = new TypeDef($1,$2);
     };
 
-classtype: 
+classtype:
     fullidentifier opt_typearguments {
         $$ = $1; 
     };
@@ -267,12 +268,18 @@ paramlist:
     paramlist COMMA param;
 
 param: 
-    opt_parammodifiers type arrayidentifier { 
-        param.name = $3.name; 
+    opt_parammodifiers type varargs arrayidentifier {
+        param.name = $4.name;
         param.type = $2.name; 
-        param.dimensions = $2.dimensions + $3.dimensions; 
-        mth.params.add(param); param = new FieldDef(); 
+        param.dimensions = $2.dimensions + $4.dimensions;
+        param.isVarArgs = $3;
+        mth.params.add(param);
+        param = new FieldDef();
     };
+
+varargs:
+    /* empty */ { $$ = false; } |
+    DOTDOTDOT   { $$ = true; } ;
 
 opt_parammodifiers: | 
     opt_parammodifiers modifier { param.modifiers.add($2); };
@@ -328,6 +335,7 @@ private void yyerror(String msg) {
 private class Value {
     String sval;
     int ival;
+    boolean bval;
     TypeDef type;
 }
 

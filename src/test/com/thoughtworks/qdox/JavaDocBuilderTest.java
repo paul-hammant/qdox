@@ -650,5 +650,27 @@ public class JavaDocBuilderTest extends TestCase {
             assertEquals(11, e.getColumn());
         }
     }
-    
+
+    public void testShouldNotConfuseExtendedFileClassWithTheSuperClass() {
+        String sourceCode = "" +
+                "package x;\n" +
+                "import java.io.File;\n" +
+                "" +
+                "public class Test {\n" +
+                "    class ExtendedFile extends File {\n" +
+                "        public ExtendedFile(String pathname) {\n" +
+                "            super(pathname);\n" +
+                "        }\n" +
+                "    }\n" +
+                "    \n" +
+                "    public static File doSomething(File f) { return null; }\n" +
+                "}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.addSource(new StringReader(sourceCode));
+        JavaClass test = builder.getClassByName("x.Test");
+        JavaMethod doSomething = test.getMethods(false)[0];
+        assertEquals("java.io.File", doSomething.getReturns().getValue());
+
+    }
+
 }

@@ -19,8 +19,14 @@ import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 
 public class MultipleJavaDocBuilder {
 	private Map classes = new HashMap();
-	private ClassLibrary classLibrary = new ClassLibrary();
+	private ClassLibrary classLibrary;
 	private List sources = new ArrayList();
+
+	public MultipleJavaDocBuilder() {
+		classLibrary = new ClassLibrary();
+		classLibrary.addClassLoader(getClass().getClassLoader());
+		classLibrary.addClassLoader(Thread.currentThread().getContextClassLoader());
+	}
 
 	private void addClasses(JavaSource source) {
 		JavaClass[] javaClasses = source.getClasses();

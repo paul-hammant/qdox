@@ -104,5 +104,16 @@ public class MultipleJavaDocBuilderTest extends TestCase {
 		writer.close();
 	}
 
+	public void testDefaultClassLoader() throws Exception {
+		MultipleJavaDocBuilder builder = new MultipleJavaDocBuilder();
+		String in = ""
+			+ "package x;"
+			+ "import java.util.*;"
+			+ "import java.awt.*;"
+			+ "class X extends List {}";
+		builder.addSource(new StringReader(in));
+		JavaClass cls = builder.getClassByName("x.X");
+		assertEquals("java.util.List", cls.getSuperClass().getValue());
+	}
 
 }

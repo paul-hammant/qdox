@@ -137,5 +137,5 @@ private int yylex() {
 }
 
 private void yyerror(String msg) {
-	builder.error(lexer.line(), lexer.column(), msg);
+	builder.fail();
 }

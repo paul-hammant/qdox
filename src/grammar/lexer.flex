@@ -7,12 +7,11 @@ package net.sf.qdox.parser;
 %public
 %implements Lexer
 %byaccj
-%line
-%column
 
 %{
-	private int parenDepth = 0;
-	private int lastState;
+
+	private int parenDepth = 0, stateDepth = 0;
+	private int[] stateStack = new int[2];
 
 	public String text() {
 		return yytext();
@@ -22,26 +21,22 @@ package net.sf.qdox.parser;
 		return yylex();
 	}
 
-	public int line() {
-		return yyline;
+	private void pushState(int newState) {
+		stateStack[stateDepth++] = yy_lexical_state;
+		yybegin(newState);
 	}
 
-	public int column() {
-		return yycolumn;
+	private void popState() {
+		yybegin(stateStack[--stateDepth]);
 	}
 
 %}
 
-Comment = {SingleLineComment} | {MultiLineComment}
-SingleLineComment = "//" [^\r\n]* \r|\n|\r\n?
-MultiLineComment = "/*" [^*] ~"*/"
-
-%state JAVADOC CODEBLOCK ASSIGNMENT STRING CHAR
+%state JAVADOC CODEBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT
 
 %%
 
 <YYINITIAL> {
-
 	";"                { return Parser.SEMI; }
 	"."                { return Parser.DOT; }
 	","                { return Parser.COMMA; }
@@ -74,62 +69,67 @@ MultiLineComment = "/*" [^*] ~"*/"
 	"{"                {
 		parenDepth++;
 		if (parenDepth == 2) {
-			yybegin(CODEBLOCK);
+			pushState(CODEBLOCK);
 		}
 		else {
 			return Parser.PARENOPEN;
 		}
 	}
+	"}"                { parenDepth--; return Parser.PARENCLOSE; }
 
-	"}"                {
-		parenDepth--;
-		return Parser.PARENCLOSE;
-	}
-
-	{Comment}          { }
-	"/**"              { yybegin(JAVADOC); return Parser.JAVADOCSTART; }
-	"="                { yybegin(ASSIGNMENT); }
+	"/**"              { pushState(JAVADOC); return Parser.JAVADOCSTART; }
+	"="                { pushState(ASSIGNMENT); }
 	[A-Za-z_0-9]*      { return Parser.IDENTIFIER; }
+
 }
 
 <JAVADOC> {
-	"*/"               { yybegin(YYINITIAL); return Parser.JAVADOCEND; }
+	"*/"               { popState(); return Parser.JAVADOCEND; }
 	\r|\n|\r\n         { return Parser.JAVADOCNEWLINE; }
 	[^ \t\r\n\*@]*     { return Parser.JAVADOCTOKEN; }
 	"@"                { return Parser.JAVADOCTAGMARK; }
 }
 
 <CODEBLOCK> {
-	{Comment}          { }
-	"\""               { yybegin(STRING); lastState = CODEBLOCK; }
-	\'                 { yybegin(CHAR); lastState = CODEBLOCK; }
 	"{"                { parenDepth++; }
 	"}"                {
 		parenDepth--;
 		if (parenDepth == 1) {
-			yybegin(YYINITIAL);
+			popState();
 			return Parser.CODEBLOCK;
 		}
 	}
 }
 
 <ASSIGNMENT> {
-	{Comment}          { }
-	"\""               { yybegin(STRING); lastState = ASSIGNMENT; }
-	\'                 { yybegin(CHAR); lastState = ASSIGNMENT; }
-	";"                { if (parenDepth <= 1) { yybegin(YYINITIAL); return Parser.ASSIGNMENT; } }
+	";"                { if (parenDepth <= 1) { popState(); return Parser.ASSIGNMENT; } }
 	"{"                { parenDepth++; }
 	"}"                { parenDepth--; }
 }
 
+<ASSIGNMENT, CODEBLOCK, YYINITIAL> {
+	"\""               { pushState(STRING); }
+	\'                 { pushState(CHAR); }
+	"//"               { pushState(SINGLELINECOMMENT); }
+	"/*"               { pushState(MULTILINECOMMENT); }
+}
+
 <STRING> {
-  "\""               { yybegin(lastState); }
+  "\""               { popState(); }
   "\\\""             { }
 }
 
 <CHAR> {
-  \'                 { yybegin(lastState); }
+  \'                 { popState(); }
   "\\'"              { }
+}
+
+<SINGLELINECOMMENT> {
+	\r|\n|\r\n         { popState(); }
+}
+
+<MULTILINECOMMENT> {
+	"*/"               { popState(); }
 }
 
 .|\n                 { }

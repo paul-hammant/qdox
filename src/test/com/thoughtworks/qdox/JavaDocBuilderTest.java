@@ -546,4 +546,40 @@ public class JavaDocBuilderTest extends TestCase {
         DocletTag foo = m.getTagByName("y");
         assertEquals("z", foo.getValue());
     }
+
+    public void testTagInheritance() {
+        String X = "" +
+                "/** @c x */" +
+                "class X {" +
+                "  /** " +
+                "   * @m x \n" +
+                "   * @s f\n" +
+                "   */" +
+                "  void i(){}" +
+                "}";
+        String Y = "" +
+                "/** @c y */" +
+                "class Y extends X {" +
+                "  /** @m y */" +
+                "  void i(){}" +
+                "}";
+        builder.addSource(new StringReader(X));
+        builder.addSource(new StringReader(Y));
+
+        JavaClass y = builder.getClassByName("Y");
+        DocletTag[] c = y.getTagsByName("c", true);
+        assertEquals(2, c.length);
+        assertEquals("y", c[0].getValue());
+        assertEquals("x", c[1].getValue());
+
+        JavaMethod i = y.getMethodBySignature("i", null);
+        DocletTag[] m = i.getTagsByName("m", true);
+        assertEquals(2, m.length);
+        assertEquals("y", m[0].getValue());
+        assertEquals("x", m[1].getValue());
+
+        DocletTag s = i.getTagByName("s", true);
+        assertEquals("f", s.getValue());
+    }
+
 }

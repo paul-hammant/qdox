@@ -1,8 +1,10 @@
 package com.thoughtworks.qdox.model;
 
 import java.beans.Introspector;
+import java.util.List;
+import java.util.ArrayList;
 
-public class JavaMethod extends AbstractJavaEntity {
+public class JavaMethod extends AbstractInheritableJavaEntity {
 
     protected Type returns;
     private JavaParameter[] parameters = JavaParameter.EMPTY_ARRAY;
@@ -254,5 +256,38 @@ public class JavaMethod extends AbstractJavaEntity {
             return null;
         }
         return Introspector.decapitalize(getName().substring(start));
+    }
+
+    protected AbstractInheritableJavaEntity[] getSuperEntities() {
+        JavaClass clazz = getParentClass();
+        JavaParameter[] params = getParameters();
+        Type[] types = new Type[params.length];
+        for (int i = 0; i < types.length; i++) {
+            types[i] = params[i].getType();
+        }
+        return clazz.getMethodsBySignature(getName(), types, true);
+    }
+
+    public DocletTag[] getTagsByName(String name, boolean inherited) {
+        JavaClass clazz = getParentClass();
+        JavaParameter[] params = getParameters();
+        Type[] types = new Type[params.length];
+        for (int i = 0; i < types.length; i++) {
+            types[i] = params[i].getType();
+        }
+        JavaMethod[] methods = clazz.getMethodsBySignature(getName(), types, true);
+        
+        List result = new ArrayList();
+        for (int i = 0; i < methods.length; i++) {
+            JavaMethod method = methods[i];
+            DocletTag[] tags = method.getTagsByName(name);
+            for (int j = 0; j < tags.length; j++) {
+                DocletTag tag = tags[j];
+                if(!result.contains(tag)) {
+                    result.add(tag);
+                }
+            }
+        }
+        return (DocletTag[]) result.toArray(new DocletTag[result.size()]);
     }
 }

@@ -49,6 +49,10 @@
                 it easier to find the JavaClass of a Type from e.g. Velocity.
                 Example: $method.returns.javaClass
             </action>
+            <action dev="rinkrank" type="add">
+                Implemented tag inheritance on classes and methods. (It makes no sense
+                to have it on fields or constructors). Accessed with clazz|method.getTag[s]ByName(String name, boolean superclasses).
+            </action>
             <action dev="rinkrank" type="update">
                 DocletTag is an interface.
             </action>

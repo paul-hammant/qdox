@@ -2,19 +2,13 @@ package com.thoughtworks.qdox.model;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  */
-public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
+public class JavaClass extends AbstractInheritableJavaEntity implements JavaClassParent {
 
     private static Type OBJECT = new Type("java.lang.Object");
 
@@ -76,6 +70,18 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
     public Type[] getImplements() {
         return implementz;
+    }
+
+    /**
+     * @since 1.3
+     */
+    public JavaClass[] getImplementedInterfaces() {
+        Type[] type = getImplements();
+        JavaClass[] result = new JavaClass[type.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = type[i].getJavaClass();
+        }
+        return result;
     }
 
     protected void writeBody(IndentBuffer result) {
@@ -187,7 +193,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         for (int i = 0; i < innerClasses.length; i++) {
             JavaClass innerClass = innerClasses[i];
             String innerName = innerClass.getFullyQualifiedName();
-            if(innerName.endsWith(typeName)) {
+            if (innerName.endsWith(typeName)) {
                 return innerName;
             }
         }
@@ -195,7 +201,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
     }
 
     public ClassLibrary getClassLibrary() {
-        return parent.getClassLibrary() ;
+        return parent.getClassLibrary();
     }
 
     public String asClassNamespace() {
@@ -236,38 +242,38 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
     public JavaMethod getMethodBySignature(String name,
                                            Type[] parameterTypes,
                                            boolean superclasses) {
-        JavaMethod methodInThisClass = getMethodBySignature(name,parameterTypes);
-        if(methodInThisClass == null && superclasses) {
-            // only look up if we found nothing and we're allowed to look up.
-            // start with superclass, then interfaces.
-            // That way we always look upwards in the order of declaration
+        JavaMethod[] result = getMethodsBySignature(name, parameterTypes, superclasses);
+        return result.length > 0 ? result[0] : null;
+    }
 
-            Type supertype = getSuperClass();
-            if (supertype != null) {
-                JavaClass superclass = supertype.getJavaClass();
-                if (superclass != null) {
-                    JavaMethod method = superclass.getMethodBySignature(name,parameterTypes,true);
-                    // todo: ideally we should check on package privacy too. oh well.
-                    if(method != null && !method.isPrivate()) {
-                        return method;
-                    }
-                }
-            }
+    public JavaMethod[] getMethodsBySignature(String name,
+                                              Type[] parameterTypes,
+                                              boolean superclasses) {
+        List result = new ArrayList();
 
-            Type[] implementz = getImplements();
-            for (int i = 0; i < implementz.length; i++) {
-                JavaClass interfaze = implementz[i].getJavaClass();
-                if(interfaze != null) {
-                    JavaMethod method = interfaze.getMethodBySignature(name,parameterTypes,true);
-                    if(method != null) {
-                        return method;
-                    }
-                }
-            }
-            return null;
-        } else {
-            return methodInThisClass;
+        JavaMethod methodInThisClass = getMethodBySignature(name, parameterTypes);
+        if (methodInThisClass != null) {
+            result.add(methodInThisClass);
         }
+        if (superclasses) {
+            JavaClass superclass = getSuperJavaClass();
+            if (superclass != null) {
+                JavaMethod method = superclass.getMethodBySignature(name, parameterTypes, true);
+                // todo: ideally we should check on package privacy too. oh well.
+                if (method != null && !method.isPrivate()) {
+                    result.add(method);
+                }
+            }
+
+            JavaClass[] implementz = getImplementedInterfaces();
+            for (int i = 0; i < implementz.length; i++) {
+                JavaMethod method = implementz[i].getMethodBySignature(name, parameterTypes, true);
+                if (method != null) {
+                    result.add(method);
+                }
+            }
+        }
+        return (JavaMethod[]) result.toArray(new JavaMethod[result.size()]);
     }
 
     public JavaField[] getFields() {
@@ -372,7 +378,7 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
                     String propertyName = method.getPropertyName();
                     BeanProperty beanProperty = getOrCreateProperty(propertyName);
                     beanProperty.setMutator(method);
-					beanProperty.setType(method.getPropertyType());
+                    beanProperty.setType(method.getPropertyType());
                 }
             }
         }
@@ -398,10 +404,43 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
         JavaClass[] classes = builder.getClasses();
         for (int i = 0; i < classes.length; i++) {
             JavaClass clazz = classes[i];
-            if( clazz.isA(this) && !(clazz == this) ) {
+            if (clazz.isA(this) && !(clazz == this)) {
                 result.add(clazz);
             }
         }
         return (JavaClass[]) result.toArray(new JavaClass[result.size()]);
+    }
+
+    public DocletTag[] getTagsByName(String name, boolean superclasses) {
+        List result = new ArrayList();
+        addTagsRecursive(result, this, name, superclasses);
+        return (DocletTag[]) result.toArray(new DocletTag[result.size()]);
+    }
+
+    private void addTagsRecursive(List result, JavaClass javaClass, String name, boolean superclasses) {
+        DocletTag[] tags = javaClass.getTagsByName(name);
+        addNewTags(result, tags);
+        if (superclasses) {
+            JavaClass superclass = getSuperJavaClass();
+            // THIS IS A HACK AROUND A BUG THAT MUST BE SOLVED!!!
+            // SOMETIMES A CLASS RETURNS ITSELF AS SUPER ?!?!?!?!?!
+            if (superclass != null && superclass != javaClass) {
+                addTagsRecursive(result,superclass,name,superclasses);
+            }
+
+            JavaClass[] implementz = getImplementedInterfaces();
+            for (int h = 0; h < implementz.length; h++) {
+                addTagsRecursive(result,superclass,name,superclasses);
+            }
+        }
+    }
+
+    private void addNewTags(List list, DocletTag[] tags) {
+        for (int i = 0; i < tags.length; i++) {
+            DocletTag superTag = tags[i];
+            if (!list.contains(superTag)) {
+                list.add(superTag);
+            }
+        }
     }
 }

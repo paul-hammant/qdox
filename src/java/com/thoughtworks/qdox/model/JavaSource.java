@@ -34,6 +34,9 @@ public class JavaSource implements Serializable, JavaClassParent {
     private ClassLibrary classLibrary;
     private Map typeCache = new HashMap();
 
+    public JavaSource() {
+    }
+
     public void setFile(File file) {
         this.file = file;
     }

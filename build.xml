@@ -57,7 +57,11 @@
 
 	<target name="test" depends="compile" description="Compile and run tests">
 		<mkdir dir="build/test-classes"/>
-		<javac srcdir="src/test;build/test" destdir="build/test-classes" debug="true">
+		<depend srcdir="src/test;build/test" 
+				destdir="build/test-classes" />
+		<javac srcdir="src/test;build/test" 
+			   destdir="build/test-classes" 
+			   debug="true">
 			<classpath>
 				<fileset dir="lib"/>
 				<pathelement path="build/classes"/>

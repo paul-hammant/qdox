@@ -30,6 +30,24 @@
 				</tr>
 
 				<tr>
+					<td><nobr><a href="http://jakarta.apache.org/avalon/phoenix">Phoenix</a></nobr></td>
+					<td>
+						Avalon-Phoenix is a container for containers or a server for servers that is part of Apache's
+						Jakarta project.
+					</td>
+					<td>
+						'MetaGenerate' is part of the Phoenix toolset and picks up @phoenix prefixed JavaDoc tags
+						to make XML manifests for the components that will be laced together in more XML to make 
+						a complete server application.
+					</td>
+					<td>						
+						Testing of MetaGenerate is performed by integration tests that leverate the JUnit framework.
+						An end-to-end generation of XML manifests is performed, then checked in test methods against
+						expected results.
+					</td>
+				</tr>
+
+				<tr>
 					<td>QDox</td>
 					<td>
 						This is QDox!

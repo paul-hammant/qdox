@@ -10,6 +10,8 @@ import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
 import java.io.File;
@@ -28,6 +30,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Set;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Member;
+import java.lang.reflect.Field;
 
 /**
  * Simple facade to QDox allowing a source tree to be parsed and the resulting object model navigated.
@@ -103,6 +112,8 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
         if (clazz == null) {
             return null;
         } else {
+            // Create a new builder and mimic the behaviour of the parser.
+            // We're getting all the information we need via reflection instead.
             ModelBuilder binaryBuilder = new ModelBuilder(classLibrary);
 
             // Set the package name and class name
@@ -132,9 +143,32 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
                     classDef.extendz.add(superclass.getName());
                 }
             }
+
+            addModifiers(classDef.modifiers, clazz.getModifiers());
+
             binaryBuilder.beginClass(classDef);
 
-            // We don't care about methods, fields and ctor. At least not atm.
+            // add the constructors
+            Constructor[] constructors = clazz.getConstructors();
+            for (int i = 0; i < constructors.length; i++) {
+                addMethodOrConstructor(constructors[i], binaryBuilder);
+            }
+
+            // add the methods
+            Method[] methods = clazz.getMethods();
+            for (int i = 0; i < methods.length; i++) {
+                // Ignore methods defined in superclasses
+                if(methods[i].getDeclaringClass() == clazz) {
+                    addMethodOrConstructor(methods[i], binaryBuilder);
+                }
+            }
+
+            Field[] fields = clazz.getFields();
+            for (int i = 0; i < fields.length; i++) {
+                if( fields[i].getDeclaringClass() == clazz ) {
+                    addField(fields[i], binaryBuilder);
+                }
+            }
 
             binaryBuilder.endClass();
             JavaSource binarySource = binaryBuilder.getSource();
@@ -142,6 +176,73 @@ public class JavaDocBuilder implements Serializable, JavaClassCache{
             JavaClass result = binarySource.getClasses()[0];
             return result;
         }
+    }
+
+    private void addModifiers(Set set, int modifier) {
+        String modifierString = Modifier.toString(modifier);
+        for (StringTokenizer stringTokenizer = new StringTokenizer(modifierString); stringTokenizer.hasMoreTokens();) {
+            set.add( stringTokenizer.nextToken() );
+        }
+    }
+
+    private void addField(Field field, ModelBuilder binaryBuilder) {
+        FieldDef fieldDef = new FieldDef();
+        Class fieldType = field.getType();
+        fieldDef.name = field.getName();
+        fieldDef.type = getTypeName(fieldType);
+        fieldDef.dimensions = getDimension(fieldType);
+        binaryBuilder.addField(fieldDef);
+    }
+
+    private void addMethodOrConstructor(Member member, ModelBuilder binaryBuilder) {
+        MethodDef methodDef = new MethodDef();
+        // The name of constructors are qualified. Need to strip it.
+        // This will work for regular methods too, since -1 + 1 = 0
+        int lastDot = member.getName().lastIndexOf('.');
+        methodDef.name = member.getName().substring(lastDot + 1);
+
+        addModifiers(methodDef.modifiers, member.getModifiers());
+        Class[] exceptions;
+        Class[] parameterTypes;
+        if(member instanceof Method) {
+            methodDef.constructor = false;
+
+            // For some stupid reason, these methods are not defined in Member,
+            // but in both Method and Construcotr.
+            exceptions = ((Method)member).getExceptionTypes();
+            parameterTypes = ((Method)member).getParameterTypes();
+
+            Class returnType = ((Method)member).getReturnType();
+            methodDef.returns = getTypeName(returnType);
+            methodDef.dimensions = getDimension(returnType);
+
+        } else {
+            methodDef.constructor = true;
+
+            exceptions = ((Constructor)member).getExceptionTypes();
+            parameterTypes = ((Constructor)member).getParameterTypes();
+        }
+        for (int j = 0; j < exceptions.length; j++) {
+            Class exception = exceptions[j];
+            methodDef.exceptions.add(exception.getName());
+        }
+        for (int j = 0; j < parameterTypes.length; j++) {
+            FieldDef param = new FieldDef();
+            Class parameterType = parameterTypes[j];
+            param.name = "p" + j;
+            param.type = getTypeName(parameterType);
+            param.dimensions = getDimension(parameterType);
+            methodDef.params.add(param);
+        }
+        binaryBuilder.addMethod(methodDef);
+    }
+
+    private static final int getDimension( Class c ) {
+        return c.getName().lastIndexOf( '[' ) + 1;
+    }
+
+    private static String getTypeName( Class c ) {
+        return c.getComponentType() != null ? c.getComponentType().getName() : c.getName();
     }
 
     private String getPackageName(String fullClassName) {

@@ -100,8 +100,14 @@ public class JavaMethod extends AbstractJavaEntity {
 		return true;
 	}
 
+    /**
+     * @param name method name
+     * @param parameterTypes parameter types or null if there are no parameters.
+     * @return true if the signature and parameters match.
+     */
 	public boolean signatureMatches(String name, Type[] parameterTypes) {
 		if (! name.equals(this.name)) return false;
+        parameterTypes = parameterTypes == null ? new Type[0] : parameterTypes;
 		if (parameterTypes.length != this.parameters.length) return false;
 		for (int i = 0; i < parameters.length; i++) {
 			if (! parameters[i].getType().equals(parameterTypes[i])) {

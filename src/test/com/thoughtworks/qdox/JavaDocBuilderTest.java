@@ -8,6 +8,9 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.BeanProperty;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaField;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -15,7 +18,7 @@ import com.thoughtworks.qdox.model.Type;
  */
 public class JavaDocBuilderTest extends TestCase {
 
-	JavaDocBuilder builder = new JavaDocBuilder();
+	private JavaDocBuilder builder;
 
 	public JavaDocBuilderTest(String name) {
 		super(name);
@@ -23,7 +26,8 @@ public class JavaDocBuilderTest extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		createFile("tmp/sourcetest/com/blah/Thing.java", "com.blah", "Thing");
+        builder = new JavaDocBuilder();
+        createFile("tmp/sourcetest/com/blah/Thing.java", "com.blah", "Thing");
 		createFile("tmp/sourcetest/com/blah/Another.java", "com.blah", "Another");
 		createFile("tmp/sourcetest/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");
 		createFile("tmp/sourcetest/com/blah/Ignore.notjava", "com.blah", "Ignore");
@@ -235,6 +239,105 @@ public class JavaDocBuilderTest extends TestCase {
         assertNull(objectSuper);
     }
 
+    /*
+    Various test for isA. Tests interface extension, interface implementation and
+    class extension. Immediate and chained.
+
+    java.util.Collection
+             |  interface extension
+    java.util.List
+             |  interface implemention
+    java.util.AbstractList
+             |  class extension
+    java.util.ArrayList
+    */
+
+    public void testArrayListIsACollection() {
+        JavaClass arrayList = builder.getClassByName("java.util.ArrayList");
+        assertTrue(arrayList.isA("java.util.Collection"));
+    }
+
+    public void testArrayListIsAList() {
+        JavaClass arrayList = builder.getClassByName("java.util.ArrayList");
+        assertTrue(arrayList.isA("java.util.List"));
+    }
+
+    public void testArrayListIsAnAbstractList() {
+        JavaClass arrayList = builder.getClassByName("java.util.ArrayList");
+        assertTrue(arrayList.isA("java.util.AbstractList"));
+    }
+
+    public void testAbstractListIsACollection() {
+        JavaClass arrayList = builder.getClassByName("java.util.AbstractList");
+        assertTrue(arrayList.isA("java.util.Collection"));
+    }
+
+    public void testAbstractListIsAList() {
+        JavaClass arrayList = builder.getClassByName("java.util.AbstractList");
+        assertTrue(arrayList.isA("java.util.List"));
+    }
+
+    public void testListIsACollection() {
+        JavaClass arrayList = builder.getClassByName("java.util.List");
+        assertTrue(arrayList.isA("java.util.Collection"));
+    }
+
+    public void testImageIconBeanProperties() {
+        JavaClass imageIcon = builder.getClassByName("javax.swing.ImageIcon");
+        BeanProperty[] beanProperties = imageIcon.getBeanProperties();
+        for (int i = 0; i < beanProperties.length; i++) {
+            BeanProperty beanProperty = beanProperties[i];
+            System.out.println(beanProperty.getName());
+        }
+        assertEquals(7, beanProperties.length);
+
+        BeanProperty iconHeight = imageIcon.getProperty("iconHeight");
+        assertNotNull(iconHeight.getAccessor());
+        assertNull(iconHeight.getMutator());
+
+        BeanProperty image = imageIcon.getProperty("image");
+        assertNotNull(image.getAccessor());
+        assertNotNull(image.getMutator());
+    }
+
+    public void testSourcePropertyClass() throws FileNotFoundException {
+        builder.addSource(new File("src/test/com/thoughtworks/qdox/testdata/PropertyClass.java"));
+        // Handy way to assert that behaviour for source and binary classes is the same.
+        testPropertyClass();
+    }
+
+    public void testPropertyClass() throws FileNotFoundException {
+        JavaClass propertyClass = builder.getClassByName("com.thoughtworks.qdox.testdata.PropertyClass");
+        assertEquals(1, propertyClass.getBeanProperties().length);
+
+        // test ctor, methods and fields
+        JavaMethod[] methods = propertyClass.getMethods();
+        assertEquals(5, methods.length);
+
+        JavaMethod ctor = propertyClass.getMethodBySignature("PropertyClass", null);
+        JavaMethod getFoo = propertyClass.getMethodBySignature("getFoo", null);
+        JavaMethod isBar = propertyClass.getMethodBySignature("isBar", null);
+        JavaMethod get = propertyClass.getMethodBySignature("get", null);
+        JavaMethod set = propertyClass.getMethodBySignature("set", new Type[]{new Type("int")});
+
+        assertTrue(ctor.isConstructor());
+        assertFalse(getFoo.isConstructor());
+        assertFalse(isBar.isConstructor());
+        assertFalse(get.isConstructor());
+        assertFalse(set.isConstructor());
+
+        assertTrue(getFoo.isStatic());
+        assertFalse(isBar.isStatic());
+        assertFalse(get.isStatic());
+        assertFalse(set.isStatic());
+
+        assertTrue(get.isFinal());
+        assertFalse(set.isStatic());
+
+        JavaField[] fields = propertyClass.getFields();
+        assertEquals(1,fields.length);
+    }
+
 	public void testSerializable() throws Exception {
 		builder.addSource(new StringReader("package test; public class X{}"));
 		assertEquals("X", builder.getSources()[0].getClasses()[0].getName());
@@ -275,6 +378,4 @@ public class JavaDocBuilderTest extends TestCase {
 		JavaClass cls = builder.getClassByName("x.I");
 		assertNull("Should probably return null", cls.getSuperJavaClass());
 	}
-
-
 }

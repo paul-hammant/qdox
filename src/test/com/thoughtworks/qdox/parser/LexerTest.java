@@ -90,12 +90,21 @@ public class LexerTest extends TestCase {
 	}
 
 	public void testUnicodeInFile() throws Exception {
-		Lexer lexer = new JFlexLexer(new FileReader("src/testdata/Unicode.java"));
-		assertLex(Parser.CLASS, lexer);
+		Lexer lexer = new JFlexLexer(new FileReader("src/test/com/thoughtworks/qdox/testdata/Unicode.java"));
+        assertLex(Parser.PACKAGE, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.DOT, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.DOT, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.DOT, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.SEMI, lexer);
+        assertLex(Parser.CLASS, lexer);
 		assertLex(Parser.IDENTIFIER, lexer);
 		assertLex(Parser.BRACEOPEN, lexer);
 
-		assertLex(Parser.IDENTIFIER, "int", lexer);
+		assertLex(Parser.IDENTIFIER, "String", lexer);
 		assertLex(Parser.IDENTIFIER, "x", lexer);
 		assertLex(Parser.ASSIGNMENT, lexer);
 

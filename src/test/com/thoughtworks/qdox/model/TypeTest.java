@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
+import com.thoughtworks.qdox.JavaDocBuilder;
 
 public class TypeTest extends TestCase{
 
@@ -39,9 +40,18 @@ public class TypeTest extends TestCase{
 		assertNotEquals(new Type("long", 1), 
 						new Type("long"));
 		assertNotEquals(new Type("long"), 
-						new Type("long", 2));
+						new Type("long", 2));   
 		assertFalse(new Type("int").equals(null));
 	}
+
+    public void testTypeHasJavaClass() {
+        JavaSource javaSource = new JavaSource();
+        javaSource.setClassLibrary(new ClassLibrary(new JavaDocBuilder()) );
+        Type type = new Type("java.util.HashSet",0,javaSource);
+        JavaClass clazz = type.getJavaClass();
+        JavaClass superClass = clazz.getSuperJavaClass();
+        assertEquals("java.util.AbstractSet", superClass.getFullyQualifiedName());
+    }
 
 	private void assertNotEquals(Object o1, Object o2) {
 		assertTrue(o2.toString() + " should not equal " + o1.toString(), 

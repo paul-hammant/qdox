@@ -80,4 +80,11 @@ public class Type implements Comparable, Serializable {
 		return getValue().hashCode();
 	}
 
+    public JavaClass getJavaClass() {
+        if (getParentSource() == null || getParentSource().getClassLibrary() == null) {
+            throw new java.lang.UnsupportedOperationException("JavaClassCache unavailable for this JavaClass");
+        }
+        return getParentSource().getClassLibrary().getClassByName(getValue());
+    }
+
 }

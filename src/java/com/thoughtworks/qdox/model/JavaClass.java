@@ -3,6 +3,10 @@ package com.thoughtworks.qdox.model;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collection;
+import java.beans.Introspector;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -26,8 +30,10 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 	private JavaClassParent parent;
 
 	private JavaClassCache javaClassCache;
+    private BeanProperty[] beanProperties;
+    private Map beanPropertyMap;
 
-	public void setJavaClassCache(JavaClassCache javaClassCache) {
+    public void setJavaClassCache(JavaClassCache javaClassCache) {
 		this.javaClassCache = javaClassCache;
 	}
 
@@ -46,17 +52,16 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 		return superClass;
 	}
 
+    /**
+     * Shorthand for getSuperClass().getJavaClass()
+     * @return
+     */
 	public JavaClass getSuperJavaClass() {
-		if (javaClassCache == null) {
-			throw new java.lang.UnsupportedOperationException("JavaClassCache unavailable for this JavaClass");
-		}
-		Type superType = getSuperClass();
-		if (superType == null) {
-			return null;
-		}
-		else {
-			return javaClassCache.getClassByName(superType.getValue());
-		}
+        if( getSuperClass() != null ) {
+    		return getSuperClass().getJavaClass();
+        } else {
+            return null;
+        }
 	}
 
 	public Type[] getImplements() {
@@ -158,7 +163,8 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 
 	public String getFullyQualifiedName() {
         if( getParent() != null ) {
-    		return getParent().asClassNamespace() + "." + getName();
+            String pakkage = getParent().asClassNamespace();
+    		return pakkage == null ? getName() : pakkage + "." + getName();
         } else {
             return null;
         }
@@ -183,7 +189,12 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 		return methodsArray;
 	}
 
-	public JavaMethod getMethodBySignature(String name, 
+    /**
+     * @param name method name
+     * @param parameterTypes parameter types or null if there are no parameters.
+     * @return the matching method or null if no match is found.
+     */
+	public JavaMethod getMethodBySignature(String name,
 										   Type[] parameterTypes) 
 	{
 		JavaMethod[] methods = getMethods();
@@ -237,4 +248,127 @@ public class JavaClass extends AbstractJavaEntity implements JavaClassParent {
 		return null;
 	}
 
+    public boolean isA(String fullClassName) {
+        JavaClass javaClass = javaClassCache.getClassByName(fullClassName);
+        return isA(javaClass);
+    }
+
+    public boolean isA(JavaClass javaClass) {
+        if( this.equals(javaClass)) {
+            return true;
+        } else {
+            // ask our interfaces
+            Type[] implementz = getImplements();
+            for (int i = 0; i < implementz.length; i++) {
+                JavaClass interfaze = implementz[i].getJavaClass();
+                if( interfaze.isA(javaClass) ) {
+                    return true;
+                }
+            }
+
+            // ask our superclass
+            Type supertype = getSuperClass();
+            if( supertype != null ) {
+                JavaClass superclass = supertype.getJavaClass();
+                if( superclass.isA(javaClass) ) {
+                    return true;
+                }
+            }
+        }
+        // We'we walked up the hierarchy and found nothing.
+        return false;
+    }
+
+    public BeanProperty[] getBeanProperties() {
+        if (beanProperties == null) {
+            initialiseBeanProperties();
+        }
+        return beanProperties;
+    }
+
+    public BeanProperty getProperty(String propertyName) {
+        if(beanProperties == null) {
+            initialiseBeanProperties();
+        }
+        return (BeanProperty) beanPropertyMap.get(propertyName);
+    }
+
+    private void initialiseBeanProperties() {
+        beanPropertyMap = new HashMap();
+        // loop over the methods.
+        JavaMethod[] methods = getMethods();
+        for (int i = 0; i < methods.length; i++) {
+            JavaMethod method = methods[i];
+            if( method.isPublic() && !method.isStatic() ) {
+                if(isPropertyAccessor(method)) {
+                    String propertyName = getPropertyName(method);
+                    BeanProperty beanProperty = getOrCreateProperty(propertyName);
+                    beanProperty.setAccessor(method);
+                } else if(isPropertyMutator(method)) {
+                    String propertyName = getPropertyName(method);
+                    BeanProperty beanProperty = getOrCreateProperty(propertyName);
+                    beanProperty.setMutator(method);
+                }
+            }
+        }
+        Collection beanPropertyCollection = beanPropertyMap.values();
+        beanProperties = (BeanProperty[]) beanPropertyCollection.toArray(new BeanProperty[beanPropertyCollection.size()]);
+    }
+
+    private BeanProperty getOrCreateProperty(String propertyName) {
+        BeanProperty result = (BeanProperty) beanPropertyMap.get(propertyName);
+        if( result == null ) {
+            result = new BeanProperty(propertyName);
+            beanPropertyMap.put(propertyName,result);
+        }
+        return result;
+    }
+
+    private boolean isPropertyAccessor(JavaMethod method) {
+        boolean signatureOk = false;
+        boolean nameOk = false;
+
+        if( method.getName().startsWith( "is" ) ) {
+            String returnType = method.getReturns().getValue();
+            signatureOk = returnType.equals( "boolean" ) || returnType.equals( "java.lang.Boolean" );
+            signatureOk = signatureOk && method.getReturns().getDimensions() == 0;
+            if( getName().length() > 2 ) {
+                nameOk = Character.isUpperCase( method.getName().charAt( 2 ) );
+            }
+        }
+        if( method.getName().startsWith( "get" ) ) {
+            signatureOk = true;
+            if( method.getName().length() > 3 ) {
+                nameOk = Character.isUpperCase( method.getName().charAt( 3 ) );
+            }
+        }
+        boolean noParams = method.getParameters().length == 0;
+        return signatureOk && nameOk && noParams;
+    }
+
+    private boolean isPropertyMutator(JavaMethod method) {
+        boolean nameOk = false;
+        if( method.getName().startsWith( "set" ) ) {
+            if( method.getName().length() > 3 ) {
+                nameOk = Character.isUpperCase( method.getName().charAt( 3 ) );
+            }
+        }
+
+        boolean oneParam = method.getParameters().length == 1;
+        return nameOk && oneParam;
+    }
+
+    // This method will fail if the method isn't an accessor or mutator, but
+    // it will only be called with methods that are, so we're safe.
+    private String getPropertyName(JavaMethod method) {
+        int start = -1;
+        if( method.getName().startsWith( "get" ) || method.getName().startsWith( "set" ) ) {
+            start = 3;
+        } else if( method.getName().startsWith( "is" ) ) {
+            start = 2;
+        } else {
+            throw new IllegalStateException("Shouldn't happen");
+        }
+        return Introspector.decapitalize( method.getName().substring( start ) );
+    }
 }

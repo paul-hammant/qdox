@@ -506,6 +506,25 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(5, line5.getLineNumber());
     }
 
+    public void testGetLineNumberForAbstractEntities() {
+        String src = ""
+            + "package x;\n"
+            + "import java.util.*;\n"
+            + "\n"
+            + "class Foo {\n"
+            + "  int i;\n"
+            + "  int getI() { return i; }\n"
+            + "}\n";
+        builder.addSource(new StringReader(src));
+        JavaClass fooClass = builder.getClassByName("x.Foo");
+        assertEquals(4, fooClass.getLineNumber());
+        JavaField iField = fooClass.getFieldByName("i");
+        assertEquals(5, iField.getLineNumber());
+        JavaMethod getIMethod = 
+            fooClass.getMethodBySignature("getI", Type.EMPTY_ARRAY);
+        assertEquals(6, getIMethod.getLineNumber());
+    }
+    
     public void testJiraQdox14() {
         String source = "" +
                 "package foo; \n" +

@@ -124,6 +124,15 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    public void testSpecialCharsInIdentifier() throws Exception {
+        String in = "a_b x$y z80";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.IDENTIFIER, "a_b", lexer);
+        assertLex(Parser.IDENTIFIER, "x$y", lexer);
+        assertLex(Parser.IDENTIFIER, "z80", lexer);
+        assertLex(0, lexer);
+    }
+    
     public void testUnicodeInTest() throws Exception {
         checkAssignment("\"\u0000\"");
     }

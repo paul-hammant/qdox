@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.io.Serializable;
 
-abstract class AbstractJavaEntity implements Serializable {
+public abstract class AbstractJavaEntity implements Serializable {
 
 	protected String name;
 	protected List modifiers = new ArrayList();

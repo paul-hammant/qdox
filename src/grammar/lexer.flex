@@ -21,6 +21,7 @@ import com.thoughtworks.qdox.parser.*;
     private int[] stateStack = new int[10];
     private boolean javaDocNewLine;
     private boolean javaDocStartedContent;
+    private boolean newMode;
 
     public String text() {
         return yytext();
@@ -197,6 +198,24 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     }
     "["                 { nestingDepth++; }
     "]"                 { nestingDepth--; }
+    "new"               { 
+        if (nestingDepth==assignmentDepth) {
+            newMode=true;
+        } 
+    }
+    "<"                 { 
+        if (newMode) { 
+            nestingDepth++; 
+        } 
+    }
+    ">"                 {
+        if (newMode) {
+            nestingDepth--;
+        	if (nestingDepth==assignmentDepth) { 
+                newMode=false;
+            }
+        }
+    } 
 }
 
 <ASSIGNMENT, CODEBLOCK, YYINITIAL> {

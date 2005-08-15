@@ -1,10 +1,11 @@
 package com.thoughtworks.qdox;
 
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
+import java.io.StringReader;
+
 import junit.framework.TestCase;
 
-import java.io.StringReader;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -122,6 +123,106 @@ public class GenericsTest extends TestCase {
         assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
     
+    public void testGenericField() {
+        // Also see QDOX-77
+        String source = "" +
+            "public class Foo {\n" +
+            "    protected Map<String, Object> m_env = new HashMap();\n" +
+            "    public Object retrieve(Class klass, Object key) {\n" +
+            "        return x;\n" +
+            "    }\n" +
+            "}\n";
+        builder.addSource(new StringReader(source));
+        
+        JavaClass fooClass = builder.getClassByName("Foo");
+        assertNotNull(fooClass);
+        assertEquals("Foo", fooClass.getName());
+        
+        JavaField envField = fooClass.getFieldByName("m_env");
+        assertNotNull(envField);
+        assertEquals("Map", envField.getType().getValue());
+    } 
+
+    public void testGenericFieldInstantiation() {
+        // Also see QDOX-77
+        String source = "" +
+            "public class Foo {\n" +
+            "    protected Map<String, Object> m_env = new HashMap<String, Object>();\n" +
+            "    public Object retrieve(Class klass, Object key) {\n" +
+            "        return x;\n" +
+            "    }\n" +
+            "}\n";
+        builder.addSource(new StringReader(source));
+        
+        JavaClass fooClass = builder.getClassByName("Foo");
+        assertNotNull(fooClass);
+        assertEquals("Foo", fooClass.getName());
+        
+        JavaField envField = fooClass.getFieldByName("m_env");
+        assertNotNull(envField);
+        assertEquals("Map", envField.getType().getValue());
+    } 
+
+    public void testGenericFieldInstantiationHalfComplex() {
+        // Also see QDOX-77
+        String source = "" +
+            "public class Foo {\n" +
+            "    protected Map<Class<?>, Object> m_env = new HashMap<Class<?>, Object>();\n" +
+            "    public Object retrieve(Class klass, Object key) {\n" +
+            "        return x;\n" +
+            "    }\n" +
+            "}\n";
+        builder.addSource(new StringReader(source));
+        
+        JavaClass fooClass = builder.getClassByName("Foo");
+        assertNotNull(fooClass);
+        assertEquals("Foo", fooClass.getName());
+        
+        JavaField envField = fooClass.getFieldByName("m_env");
+        assertNotNull(envField);
+        assertEquals("Map", envField.getType().getValue());
+    }
+
+    public void testGenericFieldInstantiationComplex() {
+        // Also see QDOX-77
+        String source = "" +
+            "public class Foo {\n" +
+            "    protected Map<Class<? extends Serializable>, Object> m_env = new HashMap<Class<? extends Serializable>, Object>();\n" +
+            "    public Object retrieve(Class klass, Object key) {\n" +
+            "        return x;\n" +
+            "    }\n" +
+            "}\n";
+        builder.addSource(new StringReader(source));
+        
+        JavaClass fooClass = builder.getClassByName("Foo");
+        assertNotNull(fooClass);
+        assertEquals("Foo", fooClass.getName());
+        
+        JavaField envField = fooClass.getFieldByName("m_env");
+        assertNotNull(envField);
+        assertEquals("Map", envField.getType().getValue());
+    }
+
+    public void testGenericFieldInstantiationVeryComplex() {
+        // Also see QDOX-77
+        String source = "" +
+            "public class Foo {\n" +
+            "    protected Map<Map<Class<? extends Serializable>, ?>, Object> m_env = new HashMap<? extends Map<Class<? extends Serializable>, Object>, Object>();\n" +
+            "    public Object retrieve(Class klass, Object key) {\n" +
+            "        return x;\n" +
+            "    }\n" +
+            "}\n";
+        builder.addSource(new StringReader(source));
+        
+        JavaClass fooClass = builder.getClassByName("Foo");
+        assertNotNull(fooClass);
+        assertEquals("Foo", fooClass.getName());
+        
+        JavaField envField = fooClass.getFieldByName("m_env");
+        assertNotNull(envField);
+        assertEquals("Map", envField.getType().getValue());
+    }
+
     public void FIXME_testJiraQdox66() {
         // Also see QDOX-77
         String source = "" +

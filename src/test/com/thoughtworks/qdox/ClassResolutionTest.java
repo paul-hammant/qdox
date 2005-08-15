@@ -41,4 +41,23 @@ public class ClassResolutionTest extends TestCase {
         // verify
         assertEquals("Should include fully qualified name", "package1.Class1$NestedClass", type.getValue());
     }
+    
+    public void testSurvivesStaticImports() {
+
+        // input sources
+        String source = ""
+                + "package package2;"
+                + "import static package1.Class1.VALUE;"
+                + "public class Class2 {"
+                + " public void doStuff(String arg) {}"
+                + "}";
+
+        // parse
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.addSource(new StringReader(source));
+
+        // find the parameter
+        JavaClass class2 = builder.getClassByName("package2.Class2");
+        assertNotNull(class2);
+    }
 }

@@ -86,7 +86,7 @@ public class LexerTest extends TestCase {
         checkAssignment("new Thingifier() { void doThings(int x) { a = \"aaa\"; } }");
     }
 
-    public void FIXME_testGenericTypeAssignment() throws Exception {
+    public void testGenericTypeAssignment() throws Exception {
         // QDOX-77
         checkAssignment("new HashMap<String,Integer>");
     }
@@ -100,7 +100,7 @@ public class LexerTest extends TestCase {
         checkAssignment("x >> y");
         checkAssignment("x<y>z");
     }
-
+    
     private void checkAssignment(String assignment) throws IOException {
         String in = ""
                 + "class X { "

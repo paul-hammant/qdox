@@ -34,7 +34,8 @@ filepart: package | import | javadoc | class | enum | SEMI;
 package: PACKAGE fullidentifier SEMI { builder.addPackage($2); };
 
 // Import statement
-import: IMPORT fullidentifier SEMI { builder.addImport($2); };
+import: IMPORT fullidentifier SEMI { builder.addImport($2); } |
+		IMPORT STATIC fullidentifier SEMI { builder.addImport($3); };
 
 
 // ----- JAVADOC
@@ -109,19 +110,20 @@ modifiers:
 annotation:
     AT IDENTIFIER |
     AT IDENTIFIER PARENOPEN annotationarglist PARENCLOSE;
-
+    
 annotationarglist:
     |
     annotationarglist COMMA |
     annotationarglist fullidentifier |
+    annotationarglist fullidentifier DOT CLASS |
     annotationarglist BRACEOPEN annotationarglist BRACECLOSE; /* array */ |
     annotationarglist annotation;
 
 // ----- TYPES
 
 type:
-    classtype dimensions {
-        $$ = new TypeDef($1,$2);
+    classtype opt_typearguments dimensions {
+        $$ = new TypeDef($1,$3);
     };
 
 classtype:
@@ -164,7 +166,8 @@ enum:
 
 enum_values:
     enum_value|
-    enum_values COMMA enum_value;
+    enum_values COMMA enum_value|
+    enum_values SEMI;
 
 enum_value:
     javadoc IDENTIFIER |

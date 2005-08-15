@@ -89,5 +89,13 @@ public class AnnotationsTest extends TestCase {
         builder.addSource(new StringReader(source));
         assertEquals(0, builder.getClasses().length);
     }
-    
+
+    public void testShouldIgnoreAnnotationWithClassType() {
+        String source = "" 
+            + "@Fnord(String.class)\n"
+            + "public interface Foo extends Bar {}\n";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }    
 }

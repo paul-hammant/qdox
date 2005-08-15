@@ -72,6 +72,13 @@
             <action dev="joeretro" type="fix">
                 Bugfix: Support for empty /**/ comments.
             </action>
+            <action dev="mdub" type="fix">
+                Patch from Mario Siegenthaler and Daniel Müller to improve
+                tolerance of Java 5 syntax, including: annotations with
+                classes as parameters, generic field initialization, static
+                imports and enums with enumeration ending with a semicolon.
+                Fixes QDOX-77.
+            </action>
         </release>
 
         <release version="1.5" date="2004-06-20">

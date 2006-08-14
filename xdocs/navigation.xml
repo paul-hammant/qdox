@@ -8,9 +8,7 @@
       <item name="Codehaus" href="http://www.codehaus.org/"/>
       <item name="Download" href="/download.html"/>
       <item name="ThoughtWorks" href="http://www.thoughtworks.com/"/>
-      <item name="Attributes" href="http://jakarta.apache.org/commons/sandbox/attributes/"/>
-      <item name="Nanning" href="http://nanning.sourceforge.net/"/>
-      <item name="Joe" href="http://joe.truemesh.com"/>
+      <item name="Joe Walnes" href="http://joe.truemesh.com"/>
     </links>
     <menu name="QDox">
       <item name="Overview"            href="/index.html"/>

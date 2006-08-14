@@ -3,7 +3,7 @@
 
 	<properties>
 		<title>QDox</title>
-		<author email="joe@truemesh.com">Joe Walnes</author>
+		<author>Joe Walnes</author>
 	</properties>
 
 	<body>
@@ -17,7 +17,7 @@
 		<section name="In A Nutshell">
 			<p>
 				A custom built parser has been built using <a href="http://www.jflex.de/">JFlex</a>
-				and <a href="http://troi.lincom-asg.com/~rjamison/byacc/">BYacc/J</a>.
+				and <a href="http://byaccj.sourceforge.net/">BYacc/J</a>.
 				These have been chosen because of their
 				proven performance and they require no external libraries at runtime.
 			</p>

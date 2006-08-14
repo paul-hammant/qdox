@@ -2,7 +2,7 @@
 <document>
     <properties>
         <title>Changes</title>
-        <author email="joew@thoughtworks.com">Joe Walnes</author>
+        <author>Joe Walnes</author>
     </properties>
 
     <body>
@@ -12,7 +12,7 @@
         </release>
         -->
         <release version="1.6" date="2006-08-14">
-            <action dev="joeretro" type="update">
+            <action dev="joe" type="update">
                 Switched license from 'Ironsmith' Apache license clone to genuine Apache 2 license.
             </action>
             <action dev="pkaminsk" type="add">
@@ -29,11 +29,11 @@
                 Implemented QDOX-66: 
                 Support for wildcard generic-type arguments.
             </action>
-            <action dev="joeretro" type="add">
+            <action dev="joe" type="add">
                 Implemented QDOX-67:
                 Convenience methods - Type.isPrimitive() and Type.isVoid().
             </action>
-            <action dev="joeretro" type="add">
+            <action dev="joe" type="add">
                 Parser can now handle Java 5 annotations.
             </action>
             <action dev="mdub" type="add">
@@ -52,7 +52,7 @@
                 Fix QDOX-61:
                 Support legal Unicode characters in identifiers.
             </action>
-            <action dev="joeretro" type="fix">
+            <action dev="joe" type="fix">
                 Fix QDOX-63:
                 Inner/nested classes are now resolved correctly between packages (Fix by Philippe Gaudin).
             </action>
@@ -64,18 +64,18 @@
                 Fix QDOX-73:
                 Reinstate public constructors on concrete model classes.
             </action>
-            <action dev="joeretro" type="fix">
+            <action dev="joe" type="fix">
                 Fix QDOX-75:
                 Support for methods that specify array dimensions at end: String doStuff()[]
             </action>
-            <action dev="joeretro" type="fix">
+            <action dev="joe" type="fix">
                 Fix QDOX-80:
                 Static blocks do not add static modifier to next method.
             </action>
-            <action dev="joeretro" type="fix">
+            <action dev="joe" type="fix">
                 Support for trailing semicolon after class definition.
             </action>
-            <action dev="joeretro" type="fix">
+            <action dev="joe" type="fix">
                 Bugfix: Support for empty /**/ comments.
             </action>
             <action dev="mdub" type="fix">
@@ -85,7 +85,7 @@
                 imports and enums with enumeration ending with a semicolon.
                 Fixes QDOX-77.
             </action>
-            <action dev="joeretro" type="add">
+            <action dev="joe" type="add">
                 Added QDoxTester to test that QDox can successfully parse a load of Java source.
             </action>
         </release>
@@ -259,10 +259,10 @@
         </release>
 
         <release version="1.2" date="2003-03-23">
-            <action dev="joeretro" type="fix">
+            <action dev="joe" type="fix">
                 Quoted tokens allowed in doclet tags.                
             </action>
-            <action dev="joeretro" type="fix">
+            <action dev="joe" type="fix">
                 Asterix symbol allowed in doclet tags.                
             </action>
         </release>
@@ -271,13 +271,13 @@
             <action dev="mdub" type="add">
                 Added support for inner classes.                
             </action>
-            <action dev="joeretro" type="update">
+            <action dev="joe" type="update">
                 Moved build system over to Maven.                
             </action>
         </release>
 
         <release version="1.0" date="2002-09-25">
-            <action dev="joeretro" type="add">
+            <action dev="joe" type="add">
                 Initial release.
             </action>
         </release>

@@ -38,62 +38,41 @@
   <distributionSite>beaver.codehaus.org</distributionSite>
 
   <repository>
-    <connection>scm:cvs:pserver:anonymous@cvs.qdox.codehaus.org:/home/projects/qdox/scm:qdox</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.qdox.codehaus.org:/home/projects/qdox/scm:qdox</developerConnection>
-    <url>http://cvs.qdox.codehaus.org/viewrep/qdox</url>   
+    <connection>scm:cvs:pserver:anonymous@cvs.qdox.codehaus.org:/cvs/qdox:qdox</connection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.qdox.codehaus.org:/cvs/qdox:qdox</developerConnection>
+    <url>http://cvs.qdox.codehaus.org/</url>
   </repository>
   
   <mailingLists>
     <mailingList>
       <name>QDox User List</name>
-      <subscribe>mailto:user-subscribe@qdox.codehaus.org</subscribe>
-      <unsubscribe>mailto:user-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://archive.qdox.codehaus.org/user</archive>
-    </mailingList>
-    <mailingList>
-      <name>QDox Announce List</name>
-      <subscribe>mailto:announce-subscribe@qdox.codehaus.org</subscribe>
-      <unsubscribe>mailto:announce-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://archive.qdox.codehaus.org/announce</archive>
+      <subscribe>http://xircles.codehaus.org/projects/qdox/lists</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email</unsubscribe>
     </mailingList>
     <mailingList>
       <name>QDox Dev List</name>
-      <subscribe>mailto:dev-subscribe@qdox.codehaus.org</subscribe>
-      <unsubscribe>mailto:dev-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://archive.qdox.codehaus.org/dev</archive>
+      <subscribe>http://xircles.codehaus.org/projects/qdox/lists</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email</unsubscribe>
     </mailingList>
     <mailingList>
       <name>QDox SCM List</name>
-      <subscribe>mailto:scm-subscribe@qdox.codehaus.org</subscribe>
-      <unsubscribe>mailto:scm-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://archive.qdox.codehaus.org/scm</archive>
+      <subscribe>http://xircles.codehaus.org/projects/qdox/lists</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email</unsubscribe>
     </mailingList>
   </mailingLists>
 
   <developers>
 
     <developer>
+      <name>Joe Walnes</name>
+      <id>joe</id>
+      <roles>
+        <role>Founder and Project Lead</role>
+      </roles>
+    </developer>
+    <developer>
       <name>Aslak Helles&oslash;y</name>
       <id>rinkrank</id>
-      <email>nospam.aslak@thoughtworks.net</email>
-      <organization>ThoughtWorks</organization>
-      <roles>
-        <role>Administrator</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Joe Walnes</name>
-      <id>joeretro</id>
-      <email>joew@thoughtworks.com</email>
-      <organization>ThoughtWorks</organization>
-      <roles>
-        <role>Founder</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Mike Royle</name>
-      <id>mlroyle</id>
-      <email>mroyle@thoughtworks.com</email>
       <organization>ThoughtWorks</organization>
       <roles>
         <role>Developer</role>
@@ -102,7 +81,6 @@
     <developer>
       <name>Paul Hammant</name>
       <id>paul</id>
-      <email>Paul_Hammant@yahoo.com</email>
       <organization>ThoughtWorks</organization>
       <roles>
         <role>Developer</role>
@@ -111,7 +89,6 @@
     <developer>
       <name>Mike Williams</name>
       <id>mdub</id>
-      <email>mdub@dogbiscuit.org</email>
       <roles>
         <role>Developer</role>
       </roles>
@@ -120,28 +97,25 @@
 
   <contributors>
     <contributor>
+      <name>Mike Royle</name>
+    </contributor>
+    <contributor>
       <name>Peter Donald</name>
-      <email>peter@realityforge.org</email>
     </contributor>
     <contributor>
       <name>James Strachan</name>
-      <email>jstrachan@apache.org</email>
     </contributor>
     <contributor>
       <name>Nick Pomfret</name>
-      <email></email>
     </contributor>
     <contributor>
       <name>Chris Stevenson</name>
-      <email>cstevenson@thoughtworks.com</email>
     </contributor>
     <contributor>
       <name>Ben Hogan</name>
-      <email>ben@lizardsoftware.com</email>
     </contributor>
     <contributor>
       <name>Laurent Etiemble</name>
-      <email></email>
     </contributor>
   </contributors>
 

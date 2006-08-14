@@ -12,6 +12,9 @@
         </release>
         -->
         <release version="1.6" date="2006-08-14">
+            <action dev="joeretro" type="update">
+                Switched license from 'Ironsmith' Apache license clone to genuine Apache 2 license.
+            </action>
             <action dev="pkaminsk" type="add">
                 Implemented QDOX-52:
                 Provide line numbers for all java entities.

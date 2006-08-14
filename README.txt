@@ -17,7 +17,7 @@ we would be grateful to receive a copy of your binary).
 Common build goals:
 
 maven test      - Run all unit tests
-maven java:jar  - Create qdox.jar
+maven jar       - Create qdox.jar
 maven site      - Build the QDox website
 maven clean     - Clean up build files
 

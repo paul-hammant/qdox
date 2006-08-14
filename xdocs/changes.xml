@@ -7,7 +7,11 @@
 
     <body>
   
-        <release version="1.6" date="in CVS">
+        <!--
+        <release version="1.7" date="in CVS">
+        </release>
+        -->
+        <release version="1.6" date="2006-08-14">
             <action dev="pkaminsk" type="add">
                 Implemented QDOX-52:
                 Provide line numbers for all java entities.
@@ -27,7 +31,6 @@
                 Convenience methods - Type.isPrimitive() and Type.isVoid().
             </action>
             <action dev="joeretro" type="add">
-                Implemented QDOX-??:
                 Parser can now handle Java 5 annotations.
             </action>
             <action dev="mdub" type="add">

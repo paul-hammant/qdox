@@ -82,6 +82,9 @@
                 imports and enums with enumeration ending with a semicolon.
                 Fixes QDOX-77.
             </action>
+            <action dev="joeretro" type="add">
+                Added QDoxTester to test that QDox can successfully parse a load of Java source.
+            </action>
         </release>
 
         <release version="1.5" date="2004-06-20">

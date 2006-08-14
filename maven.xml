@@ -34,6 +34,10 @@
           <property name="qdox.byaccj.executable" 
                     value="${basedir}/bootstrap/yacc.solaris" />
         </j:when>
+        <j:when test="${os.startsWith('Mac OS X')}">
+          <property name="qdox.byaccj.executable" 
+                    value="${basedir}/bootstrap/yacc.macosx" />
+        </j:when>
         <j:otherwise>
           <property name="qdox.byaccj.executable" 
                     value="byaccj" />

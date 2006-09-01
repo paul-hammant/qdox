@@ -110,5 +110,20 @@ public class AnnotationsTest extends TestCase {
 
         builder.addSource(new StringReader(source));
         assertEquals("Foo", builder.getClassByName("Foo").getName());
-    }    
+    }
+
+
+    // from QDOX-97
+    public void testShouldIgnoreAttributeAnnotation() {
+        String source = ""
+            + "public interface Foo {\n"
+            + "   String echo(@WebParam java.lang.String msg);\n"
+            + "}\n";
+        builder.addSource(new StringReader(source));
+        assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }
+
+
+
+
 }

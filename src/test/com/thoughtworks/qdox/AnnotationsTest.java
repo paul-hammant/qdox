@@ -123,6 +123,20 @@ public class AnnotationsTest extends TestCase {
         assertEquals("Foo", builder.getClassByName("Foo").getName());
     }
 
+    // from QDOX-101
+    public void todo_testShouldNotChokeOnDoubleAttributeAnnotationAndGenerics() {
+        String source = ""
+            + "public class Person {\n" +
+              "    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)\n" +
+              "    @XmlID\n" +
+              "    protected String name;\n" +
+              "    public List<String> getAddress() {\n" +
+              "        return address;\n" +
+              "    }" +
+              "}\n";
+        builder.addSource(new StringReader(source));
+        assertEquals("Person", builder.getClassByName("Person").getName());
+    }
 
 
 

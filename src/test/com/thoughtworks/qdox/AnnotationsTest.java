@@ -30,6 +30,19 @@ public class AnnotationsTest extends TestCase {
         assertEquals("snort", fooClass.getMethods()[0].getName());
     }
 
+    public void testShouldIgnoreMethodParameterAnnotation() {
+        String source = ""
+            + "public class X {\n"
+            + "    public void setX(@name String x) {}\n"
+            + "}\n";
+
+        builder.addSource(new StringReader(source));
+        JavaClass fooClass = builder.getClassByName("X");
+        assertEquals("X", fooClass.getName());
+        assertEquals(1, fooClass.getMethods().length);
+        assertEquals("setX", fooClass.getMethods()[0].getName());
+    }
+
     public void testShouldIgnoreComplexClassAnnotations() {
         String source = "" 
             + "@Fnord(pi = 3.14, e = m*c*c)\n"

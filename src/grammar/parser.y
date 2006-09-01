@@ -286,11 +286,11 @@ paramlist:
     paramlist COMMA param;
 
 param: 
-    opt_parammodifiers type varargs arrayidentifier {
-        param.name = $4.name;
-        param.type = $2.name; 
-        param.dimensions = $2.dimensions + $4.dimensions;
-        param.isVarArgs = $3;
+    opt_annotations opt_parammodifiers type varargs arrayidentifier {
+        param.name = $5.name;
+        param.type = $3.name;
+        param.dimensions = $3.dimensions + $5.dimensions;
+        param.isVarArgs = $4;
         mth.params.add(param);
         param = new FieldDef();
     };
@@ -299,9 +299,10 @@ varargs:
     /* empty */ { $$ = false; } |
     DOTDOTDOT   { $$ = true; } ;
 
-opt_parammodifiers: | 
-    opt_parammodifiers modifier { param.modifiers.add($2); };
+opt_annotations: | opt_annotations annotation;
 
+opt_parammodifiers: |
+    opt_parammodifiers modifier { param.modifiers.add($2); };
 
 %%
 

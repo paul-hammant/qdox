@@ -36,9 +36,9 @@
   <distributionSite>beaver.codehaus.org</distributionSite>
 
   <repository>
-    <connection>scm:cvs:pserver:anonymous@cvs.qdox.codehaus.org:/cvs/qdox:qdox</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.qdox.codehaus.org:/cvs/qdox:qdox</developerConnection>
-    <url>http://cvs.qdox.codehaus.org/</url>
+    <connection>scm:svn:https://svn.codehaus.org/qdox/trunk</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk</developerConnection>
+    <url>http://svn.qdox.codehaus.org/</url>
   </repository>
   
   <mailingLists>

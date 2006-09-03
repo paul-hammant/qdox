@@ -64,6 +64,22 @@ public class ModelBuilderTest extends TestCase {
         assertEquals(true, source.getClasses()[1].isInterface());
     }
 
+    public void testEnum() throws Exception {
+        ClassDef cls = new ClassDef();
+        builder.beginClass(cls);
+        builder.endClass();
+
+        ClassDef cls2 = new ClassDef();
+        cls2.type = ClassDef.ENUM;
+        builder.beginClass(cls2);
+        builder.endClass();
+
+        JavaSource source = builder.getSource();
+
+        assertEquals(false, source.getClasses()[0].isEnum());
+        assertEquals(true, source.getClasses()[1].isEnum());
+    }
+
     public void testAnnotationType() throws Exception {
         ClassDef cls = new ClassDef();
         cls.type = ClassDef.ANNOTATION_TYPE;

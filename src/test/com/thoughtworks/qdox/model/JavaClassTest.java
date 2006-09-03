@@ -37,6 +37,16 @@ public class JavaClassTest extends TestCase {
         assertEquals(expected, cls.toString());
     }
 
+    public void testToStringSimpleEnum() throws Exception {
+        cls.setName("MyEnum");
+        cls.setEnum(true);
+        String expected = ""
+                + "enum MyEnum {\n"
+                + "\n"
+                + "}\n";
+        assertEquals(expected, cls.toString());
+    }
+
     public void testToStringClassExtends() throws Exception {
         cls.setName("MyClass");
         cls.setSuperClass(new Type("SuperClass"));
@@ -236,6 +246,43 @@ public class JavaClassTest extends TestCase {
         assertEquals(expected, cls.toString());
     }
 
+    public void testToStringClassWithInnerEnum() throws Exception {
+        cls.setName("Outer");
+        JavaClass innerEnum = new JavaClass();
+        innerEnum.setEnum(true);
+        innerEnum.setName("Inner");
+        cls.addClass(innerEnum);
+
+        String expected = ""
+                + "class Outer {\n"
+                + "\n"
+                + "\tenum Inner {\n"
+                + "\n"
+                + "\t}\n"
+                + "\n"
+                + "}\n";
+        assertEquals(expected, cls.toString());
+    }
+
+    public void testToStringEnumWithInnerClass() throws Exception {
+        cls.setName("Outer");
+        cls.setEnum(true);
+        JavaClass innerClass = new JavaClass();
+        innerClass.setName("Inner");
+        cls.addClass(innerClass);
+
+        String expected = ""
+                + "enum Outer {\n"
+                + "\n"
+                + "\tclass Inner {\n"
+                + "\n"
+                + "\t}\n"
+                + "\n"
+                + "}\n";
+        assertEquals(expected, cls.toString());
+    }
+
+
     public void testToStringClassWithComment() throws Exception {
         cls.setName("MyClass");
         cls.setComment("Hello World");
@@ -345,6 +392,23 @@ public class JavaClassTest extends TestCase {
         assertEquals("x.X", cls.getSuperClass().getValue());
     }
 
+    public void testEnumSuperclass() throws Exception {
+        cls.setName("MyEnum");
+        cls.setEnum(true);
+        assertEquals("java.lang.Enum", cls.getSuperClass().getValue());
+    }
+
+    public void testEnumCannotExtendAnythingElse() throws Exception {
+        cls.setName("MyEnum");
+        cls.setEnum(true);
+        try {
+            cls.setSuperClass(new Type("x.X"));
+            fail("expected an exception");
+        } catch (IllegalArgumentException e) {
+            assertEquals("enums cannot extend other classes", e.getMessage());
+        }
+    }
+
     public void testCanGetFieldByName() throws Exception {
         JavaField fredField = new JavaField();
         fredField.setName("fred");
@@ -442,10 +506,6 @@ public class JavaClassTest extends TestCase {
         assertEquals("foo", properties[0].getName());
         assertEquals("bar", properties[1].getName());
         assertEquals("mcFnord", properties[2].getName());        
-    }
-    
-    private void addGetMethod(String name, Type returnType) {
-        
     }
     
     private Type[] type(String[] typeNames) {

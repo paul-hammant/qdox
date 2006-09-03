@@ -17,7 +17,8 @@ import java.util.Set;
 public class JavaClass extends AbstractInheritableJavaEntity implements JavaClassParent {
 
     private static Type OBJECT = new Type("java.lang.Object");
-    
+    private static Type ENUM = new Type("java.lang.Enum");
+
     private List methods = new LinkedList();
     private JavaMethod[] methodsArray;
     private List fields = new LinkedList();
@@ -25,6 +26,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private List classes = new LinkedList();
     private JavaClass[] classesArray;
     private boolean interfce;
+    private boolean isEnum;
 
     // Don't access this directly. Use asType() to get my Type
     private Type type;
@@ -49,16 +51,25 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     /**
-     * Interface or class?
+     * is interface?  (otherwise enum or class)
      */
     public boolean isInterface() {
         return interfce;
     }
 
+    /**
+     * is enum?  (otherwise class or interface)
+     */
+    public boolean isEnum() {
+        return isEnum;
+    }
+
     public Type getSuperClass() {
         boolean iAmJavaLangObject = OBJECT.equals(asType());
 
-        if (!interfce && (superClass == null) && !iAmJavaLangObject) {
+        if (isEnum) {
+            return ENUM;
+        } else if (!interfce && (superClass == null) && !iAmJavaLangObject) {
             return OBJECT;
         }
 
@@ -98,7 +109,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         writeAccessibilityModifier(result);
         writeNonAccessibilityModifiers(result);
 
-        result.write(interfce ? "interface " : "class ");
+        result.write(isEnum ? "enum " : interfce ? "interface " : "class ");
         result.write(name);
 
         // subclass
@@ -158,6 +169,10 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         this.interfce = interfce;
     }
 
+    public void setEnum(boolean isEnum) {
+        this.isEnum = isEnum;
+    }
+
     public void addMethod(JavaMethod meth) {
         meth.setParent(this);
         methods.add(meth);
@@ -165,6 +180,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public void setSuperClass(Type type) {
+        if (isEnum) throw new IllegalArgumentException("enums cannot extend other classes");
         superClass = type;
     }
 
@@ -520,8 +536,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     /**
      * Gets the known derived classes. That is, subclasses or implementing classes.
-     *
-     * @return
      */
     public JavaClass[] getDerivedClasses() {
         List result = new ArrayList();

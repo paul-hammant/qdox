@@ -22,6 +22,7 @@ import com.thoughtworks.qdox.parser.*;
     private boolean javaDocNewLine;
     private boolean javaDocStartedContent;
     private boolean newMode;
+    private boolean enumMode;
 
     public String text() {
         return yytext();
@@ -54,12 +55,12 @@ Eol                     = \r|\n|\r\n
 WhiteSpace              = {Eol} | [ \t\f]
 CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 
-%state JAVADOC CODEBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT
+%state JAVADOC CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT
 
 %%
 
 <YYINITIAL> {
-    ";"                 { return Parser.SEMI; }
+    ";"                 { enumMode = false; return Parser.SEMI; }
     "."                 { return Parser.DOT; }
     "..."               { return Parser.DOTDOTDOT; }
     ","                 { return Parser.COMMA; }
@@ -85,7 +86,15 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 
     "["                 { nestingDepth++; return Parser.SQUAREOPEN; }
     "]"                 { nestingDepth--; return Parser.SQUARECLOSE; }
-    "("                 { nestingDepth++; return Parser.PARENOPEN; }
+    "("                 {
+        nestingDepth++;
+        if (enumMode) {
+          pushState(PARENBLOCK);
+        } else {
+          return Parser.PARENOPEN;
+        }
+    }
+
     ")"                 { nestingDepth--; return Parser.PARENCLOSE; }
     "<"                 { return Parser.LESSTHAN; }
     ">"                 { return Parser.GREATERTHAN; }
@@ -103,6 +112,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     }
     "enum"              {
         classDepth++;
+        enumMode = true;
         return Parser.ENUM;
     }
 
@@ -173,6 +183,17 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     }
 }
 
+<PARENBLOCK> {
+    "("                 { nestingDepth++; }
+    ")"                 {
+        nestingDepth--;
+        if (nestingDepth == classDepth) {
+            popState();
+            return Parser.PARENBLOCK;
+        }
+    }
+}
+
 <ASSIGNMENT> {
     ";"                 { 
         if (nestingDepth == assignmentDepth) { 
@@ -218,7 +239,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     } 
 }
 
-<ASSIGNMENT, CODEBLOCK, YYINITIAL> {
+<ASSIGNMENT, CODEBLOCK, YYINITIAL, PARENBLOCK> {
     "\""                { pushState(STRING); }
     \'                  { pushState(CHAR); }
     "//"                { pushState(SINGLELINECOMMENT); }

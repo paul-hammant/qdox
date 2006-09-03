@@ -396,6 +396,30 @@ public class ParserTest extends TestCase {
 
     }
 
+    public void testEmptyVanillaEnum() throws Exception {
+
+        // setup values
+        setupLex(Parser.ENUM);
+        setupLex(Parser.IDENTIFIER, "MyEnum");
+        setupLex(Parser.BRACEOPEN);
+        setupLex(Parser.BRACECLOSE);
+        setupLex(0);
+
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyEnum";
+        cls.type = ClassDef.ENUM;
+        builder.addExpectedBeginClassValues(cls);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+
+    }
+
     public void testEmptyClassExtendsAnotherClass() throws Exception {
 
         // setup values
@@ -2391,6 +2415,30 @@ public class ParserTest extends TestCase {
         mth.params.add(p1);
 
         builder.addExpectedAddMethodValues(mth);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+    }
+
+    public void testEnumWithConstructors() throws Exception {
+        setupLex(Parser.ENUM);
+        setupLex(Parser.IDENTIFIER, "x");
+        setupLex(Parser.BRACEOPEN);
+
+        setupLex(Parser.IDENTIFIER, "a");
+        setupLex(Parser.PARENBLOCK);
+        setupLex(Parser.SEMI);
+
+        setupLex(Parser.IDENTIFIER, "int");
+        setupLex(Parser.IDENTIFIER, "someField");
+        setupLex(Parser.SEMI);
+
+        setupLex(Parser.BRACECLOSE);
+        setupLex(0);
 
         // execute
         Parser parser = new Parser(lexer, builder);

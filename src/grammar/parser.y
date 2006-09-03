@@ -9,7 +9,7 @@ import java.io.IOException;
 %token CLASS INTERFACE ENUM THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND QUERY AT
 %token JAVADOCSTART JAVADOCEND JAVADOCEOL
-%token CODEBLOCK 
+%token CODEBLOCK PARENBLOCK
 %token INTEGER_LITERAL FLOAT_LITERAL
 
 // strongly typed tokens/types
@@ -161,17 +161,33 @@ typeboundlist:
 
 // ----- ENUM
 
-enum:
-    modifiers ENUM IDENTIFIER BRACEOPEN enum_values BRACECLOSE;
+enum: enum_definition BRACEOPEN enum_body BRACECLOSE {
+  builder.endClass();
+};
 
-enum_values:
-    enum_value|
-    enum_values COMMA enum_value|
-    enum_values SEMI;
+enum_definition: modifiers ENUM IDENTIFIER {
+    cls.lineNumber = line;
+    cls.modifiers.addAll(modifiers); modifiers.clear();
+    cls.name = $3;
+    cls.type = ClassDef.ENUM;
+    builder.beginClass(cls);
+    cls = new ClassDef();
+};
+
+enum_body: enum_values | enum_values SEMI members;
+
+enum_values: | enum_value | enum_values COMMA enum_value;
 
 enum_value:
-    javadoc IDENTIFIER |
-    IDENTIFIER;
+    javadoc enum_constructor |
+    enum_constructor;
+
+enum_constructor:
+    IDENTIFIER |
+    IDENTIFIER CODEBLOCK |
+    IDENTIFIER PARENBLOCK |
+    IDENTIFIER PARENBLOCK CODEBLOCK;
+
 
 // ----- CLASS
 

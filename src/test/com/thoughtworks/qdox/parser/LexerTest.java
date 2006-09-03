@@ -573,7 +573,36 @@ public class LexerTest extends TestCase {
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
     }
-    
+
+    public void testEnumConstructor() throws Exception {
+        String in = "enum Foo { a(\"hello\"); int someField; }";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.ENUM, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.BRACEOPEN, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.PARENBLOCK, lexer);
+        assertLex(Parser.SEMI, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.SEMI, lexer);
+        assertLex(Parser.BRACECLOSE, lexer);
+    }
+
+    public void testEnumWithMethods() throws Exception {
+        String in = ""
+                + "enum Animal {"
+                + " DUCK { public void speak() { System.out.println(\"quack!\"); } }"
+                + "}";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.ENUM, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.BRACEOPEN, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.CODEBLOCK, lexer);
+        assertLex(Parser.BRACECLOSE, lexer);
+    }
+
     private void assertSingleLex(String in, short expectedLex) throws Exception {
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(expectedLex, lexer);

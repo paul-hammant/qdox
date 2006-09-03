@@ -61,12 +61,13 @@ public class ModelBuilder implements Builder {
 
         // basic details
         currentClass.setName(def.name);
-        currentClass.setInterface(def.type != ClassDef.CLASS);
+        currentClass.setInterface(def.type == ClassDef.INTERFACE);
+        currentClass.setEnum(def.type == ClassDef.ENUM);
 
         // superclass
         if (currentClass.isInterface()) {
             currentClass.setSuperClass(null);
-        } else {
+        } else if (!currentClass.isEnum()) {
             currentClass.setSuperClass(def.extendz.size() > 0 ? createType((String) def.extendz.toArray()[0], 0) : null);
         }
 

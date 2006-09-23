@@ -774,4 +774,30 @@ public class JavaDocBuilderTest extends TestCase {
         builder.addSource(new StringReader(sourceCode));
     }
 
+    public void testReadMultipleMethodAnnotations() {
+        String sourceCode = ""
+                + "public class C {"
+                + "  @Annotation\n"
+                + "  @AnotherAnnotation\n"
+                + "  public void aMethod() {}\n"
+                + "}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
+        JavaMethod javaMethod = javaSource.getClasses()[0].getMethods()[0];
+        assertEquals("aMethod", javaMethod.getName());
+    }
+
+    public void testReadMultipleClassAnnotations() {
+        String sourceCode = ""
+                + "@Annotation\n"
+                + "@AnotherAnnotation\n"
+                + "public class C {"
+                + "  public void aMethod() {}\n"
+                + "}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
+        JavaClass javaClass = javaSource.getClasses()[0];
+        assertEquals("C", javaClass.getName());
+    }
+
 }

@@ -14,7 +14,7 @@ import java.io.IOException;
 
 // strongly typed tokens/types
 %token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN
-%type <sval> fullidentifier modifier classtype
+%type <sval> fullidentifier modifier classtype memberend
 %type <ival> dimensions
 %type <bval> varargs
 %type <type> type arrayidentifier
@@ -234,7 +234,13 @@ member:
 	enum |
     SEMI;
 
-memberend: SEMI | CODEBLOCK;
+memberend:
+    SEMI {
+      $$ = "";
+    }
+    | CODEBLOCK {
+	  $$ = lexer.getCodeBody();
+    };
 
 static_block:
     modifiers CODEBLOCK { modifiers.clear(); };
@@ -244,7 +250,7 @@ static_block:
 fields:
     modifiers type arrayidentifier {
         fieldType = $2;
-        makeField($3);
+        makeField($3, lexer.getCodeBody());
     }
     extrafields memberend {
         modifiers.clear();
@@ -252,7 +258,7 @@ fields:
   
 extrafields: | 
     extrafields COMMA { line = lexer.getLine(); } arrayidentifier {
-        makeField($4);
+        makeField($4, lexer.getCodeBody());
     };
 
 
@@ -265,6 +271,7 @@ method:
         mth.returns = $3.name;
         mth.dimensions = $6 + $3.dimensions; // return dimensions can be specified after return type OR after params
         mth.name = $4;
+        mth.body = $8;
         builder.addMethod(mth);
         mth = new MethodDef(); 
     } |
@@ -274,6 +281,7 @@ method:
         mth.returns = $2.name;
         mth.dimensions = $5 + $2.dimensions; // return dimensions can be specified after return type OR after params
         mth.name = $3;
+        mth.body = $7;
         builder.addMethod(mth);
         mth = new MethodDef();
     };
@@ -283,6 +291,7 @@ constructor:
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $2;
+        mth.body = $5;
         builder.addMethod(mth);
         mth = new MethodDef(); 
     };
@@ -331,6 +340,7 @@ private FieldDef param = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
 private TypeDef fieldType;
 private int line;
+private int column;
 private boolean debugLexer;
 
 private void appendToBuffer(String word) {
@@ -395,13 +405,14 @@ private class Value {
     TypeDef type;
 }
 
-private void makeField(TypeDef field) {
+private void makeField(TypeDef field, String body) {
     FieldDef fd = new FieldDef();
     fd.lineNumber = line;
     fd.modifiers.addAll(modifiers); 
     fd.type = fieldType.name; 
     fd.dimensions = fieldType.dimensions + field.dimensions;
     fd.name = field.name;
+    fd.body = body;
     builder.addField(fd);
 }
             

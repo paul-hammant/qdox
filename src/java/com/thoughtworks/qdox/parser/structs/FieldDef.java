@@ -9,6 +9,7 @@ public class FieldDef extends LocatedDef {
     public Set modifiers = new HashSet();
     public int dimensions;
     public boolean isVarArgs;
+    public String body = "";
 
     public boolean equals(Object obj) {
         FieldDef paramDef = (FieldDef) obj;
@@ -32,6 +33,9 @@ public class FieldDef extends LocatedDef {
         for (int i = 0; i < dimensions; i++) result.append("[]");
         result.append(' ');
         result.append(name);
+        if(body.length() > 0){
+            result.append(" = ").append(body);
+        }
         return result.toString();
     }
 }

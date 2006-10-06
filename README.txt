@@ -1,12 +1,13 @@
 To build QDox there are two prerequisites:
 
-* Maven (beta 8 or later)
+* Maven 1 (not Maven 2)
 This is the build system used instead of Ant. 
 http://jakarta.apache.org/maven/
    
 * BYacc/J (1.8 or later)
 This is the parser generator used to create an effecitive parser for JavaDoc.
-If using Windows, no additional installation is needed as yacc.exe is supplied
+If using Windows, Linux, Solaris or OS-X, no additional installation is 
+needed as yacc binaries are supplied
 in the bootstrap directory. If using any other platform, download BYacc/J from
 the site below and update build.properties.
 http://byaccj.sourceforge.net/
@@ -20,5 +21,4 @@ maven test      - Run all unit tests
 maven jar       - Create qdox.jar
 maven site      - Build the QDox website
 maven clean     - Clean up build files
-
-Tip: using 'maven console' can greatly improve build time.
+maven parser    - Generate the Java parser only (allowing you to develop in an IDE).

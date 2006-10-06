@@ -800,4 +800,56 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals("C", javaClass.getName());
     }
 
+    public void testMethodBody() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        String sourceCode = "" +
+                "public class X {\n" +
+                "  public void doStuff() {\n" +
+                "    System.out.println(\"hi\"); // comment\n" +
+                "    Foo<X> x = new Cheese().get()[4]; /*x*/\n" +
+                "  } // not this \n" +
+                "}";
+        JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
+        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaMethod javaMethod = javaClass.getMethods()[0];
+        String expected = "" +
+                "    System.out.println(\"hi\"); // comment\n" +
+                "    Foo<X> x = new Cheese().get()[4]; /*x*/";
+        assertEquals(expected.trim(), javaMethod.getSourceCode().trim());
+    }
+
+    public void testMethodBodyWithConfusingCurlies() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        String sourceCode = "" +
+                "public class X {\n" +
+                "  public void doStuff() {\n" +
+                "    System.out.println(\"}}} \\\"\"); // }\n" +
+                "    Foo<X> x = new Cheese().get()[4]; /*}}*/ /etc\n" +
+                "  } // not this \n" +
+                "}";
+        JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
+        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaMethod javaMethod = javaClass.getMethods()[0];
+        String expected = "" +
+                "    System.out.println(\"}}} \\\"\"); // }\n" +
+                "    Foo<X> x = new Cheese().get()[4]; /*}}*/ /etc\n";
+        assertEquals(expected.trim(), javaMethod.getSourceCode().trim());
+    }
+
+    public void testFieldDefinition() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        String sourceCode = "" +
+                "public class X {\n" +
+                "  int x = new FlubberFactory<Y>(\"}\"){}.doCheese(spam/*c*/)\n" +
+                "    [9] /*comment*/ //more\n; /*somethingelse*/" +
+                "}";
+        JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
+        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaField javaField = javaClass.getFields()[0];
+        String expected = "" +
+                "new FlubberFactory<Y>(\"}\"){}.doCheese(spam/*c*/)\n" +
+                "    [9] /*comment*/ //more";
+        assertEquals(expected.trim(), javaField.getInitializationExpression().trim());
+    }
+
 }

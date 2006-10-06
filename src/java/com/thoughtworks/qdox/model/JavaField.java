@@ -3,7 +3,8 @@ package com.thoughtworks.qdox.model;
 public class JavaField extends AbstractJavaEntity implements Member {
 
     private Type type;
-
+    private String initializationExpression;
+    	
     public JavaField() {
     }
 
@@ -25,6 +26,10 @@ public class JavaField extends AbstractJavaEntity implements Member {
         result.write(type.toString());
         result.write(' ');
         result.write(name);
+        if(initializationExpression != null && initializationExpression.length() > 0){
+          result.write(" = ");
+          result.write(initializationExpression);
+        }
         result.write(';');
         result.newline();
     }
@@ -50,6 +55,19 @@ public class JavaField extends AbstractJavaEntity implements Member {
 
     public String getCallSignature() {
         return getName();
+    }
+
+    /**
+     * Get the original expression used to initialize the field.
+     *
+     * @return initialization as string.
+     */
+    public String getInitializationExpression(){
+    	return initializationExpression;
+    }
+    
+    public void setInitializationExpression(String initializationExpression){
+    	this.initializationExpression = initializationExpression;
     }
 
 }

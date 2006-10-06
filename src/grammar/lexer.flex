@@ -21,8 +21,15 @@ import com.thoughtworks.qdox.parser.*;
     private int[] stateStack = new int[10];
     private boolean javaDocNewLine;
     private boolean javaDocStartedContent;
+    private StringBuffer codeBody = new StringBuffer(8192);
     private boolean newMode;
     private boolean enumMode;
+    private boolean appendingToCodeBody;
+    private boolean shouldCaptureCodeBody;
+
+    public void setCaptureCodeBody(boolean shouldCaptureCodeBody) {
+        this.shouldCaptureCodeBody = shouldCaptureCodeBody;
+    }
 
     public String text() {
         return yytext();
@@ -47,6 +54,12 @@ import com.thoughtworks.qdox.parser.*;
 
     private void popState() {
         yybegin(stateStack[--stateDepth]);
+    }
+    
+    public String getCodeBody(){
+        String s = codeBody.toString();
+        codeBody = new StringBuffer(8192);
+        return s;
     }
 
 %}
@@ -119,6 +132,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     "{"                 {
         nestingDepth++;
         if (nestingDepth == classDepth + 1) {
+            appendingToCodeBody = true;
             pushState(CODEBLOCK);
         }
         else {
@@ -140,12 +154,14 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     }
 
     "="                 { 
-        assignmentDepth = nestingDepth; 
+        assignmentDepth = nestingDepth;
+        appendingToCodeBody = true;
         pushState(ASSIGNMENT);
     }
 
     "default"           { 
-        assignmentDepth = nestingDepth; 
+        assignmentDepth = nestingDepth;
+        appendingToCodeBody = true;
         pushState(ASSIGNMENT);
     }
 
@@ -173,12 +189,15 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 }
 
 <CODEBLOCK> {
-    "{"                 { nestingDepth++; }
-    "}"                 {
+     "{"                 { codeBody.append('{'); nestingDepth++; }
+     "}"                 {
         nestingDepth--;
         if (nestingDepth == classDepth) {
             popState();
+            appendingToCodeBody = false;
             return Parser.CODEBLOCK;
+        } else {
+            codeBody.append('}');
         }
     }
 }
@@ -196,75 +215,90 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 
 <ASSIGNMENT> {
     ";"                 { 
-        if (nestingDepth == assignmentDepth) { 
+        if (nestingDepth == assignmentDepth) {
+            appendingToCodeBody = true;
             popState(); 
             return Parser.SEMI; 
-        } 
+        } else {
+            codeBody.append(';');
+        }
     }
     ","                 {
-        if (nestingDepth == assignmentDepth) { 
+        if (nestingDepth == assignmentDepth) {
+            appendingToCodeBody = true;
             popState(); 
             return Parser.COMMA; 
-        } 
+        } else {
+            codeBody.append(',');
+        }
     }
-    "{"                 { nestingDepth++; }
-    "}"                 { nestingDepth--; }
-    "("                 { nestingDepth++; }
-    ")"                 { 
+    "{"                 { codeBody.append('{'); nestingDepth++; }
+    "}"                 { codeBody.append('}'); nestingDepth--; }
+    "("                 { codeBody.append('('); nestingDepth++; }
+    ")"                 {
+        codeBody.append(')');
         nestingDepth--; 
-        if (nestingDepth < assignmentDepth) { 
+        if (nestingDepth < assignmentDepth) {
+            appendingToCodeBody = true; 
             popState(); 
             return Parser.PARENCLOSE; 
         }
     }
-    "["                 { nestingDepth++; }
-    "]"                 { nestingDepth--; }
-    "new"               { 
+    "["                 { codeBody.append('['); nestingDepth++; }
+    "]"                 { codeBody.append(']'); nestingDepth--; }
+    "new"               {
+        codeBody.append("new");
         if (nestingDepth==assignmentDepth) {
             newMode=true;
         } 
     }
-    "<"                 { 
+    "<"                 {
+        codeBody.append('<');
         if (newMode) { 
             nestingDepth++; 
         } 
     }
     ">"                 {
+        codeBody.append('>');
         if (newMode) {
             nestingDepth--;
         	if (nestingDepth==assignmentDepth) { 
                 newMode=false;
             }
         }
-    } 
+    }
 }
 
-<ASSIGNMENT, CODEBLOCK, YYINITIAL, PARENBLOCK> {
-    "\""                { pushState(STRING); }
-    \'                  { pushState(CHAR); }
-    "//"                { pushState(SINGLELINECOMMENT); }
-    "/*"                { pushState(MULTILINECOMMENT); }
-    "/**/"              { }
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK> {
+    "\""                { if (appendingToCodeBody) { codeBody.append('"');  } pushState(STRING); }
+    \'                  { if (appendingToCodeBody) { codeBody.append('\''); } pushState(CHAR); }
+    "//"                { if (appendingToCodeBody) { codeBody.append("//"); } pushState(SINGLELINECOMMENT); }
+    "/*"                { if (appendingToCodeBody) { codeBody.append("/*"); } pushState(MULTILINECOMMENT); }
+    "/**/"              { if (appendingToCodeBody) { codeBody.append("/**/"); } }
+}
+
+<CODEBLOCK, ASSIGNMENT> { 
+    .|{WhiteSpace}	    { codeBody.append(yytext()); }
 }
 
 <STRING> {
-    "\""                { popState(); }
-    "\\\""              { }
-    "\\\\"              { }
+    "\""                { if (appendingToCodeBody) { codeBody.append('"');    } popState(); }
+    "\\\""              { if (appendingToCodeBody) { codeBody.append("\\\""); } }
+    "\\\\"              { if (appendingToCodeBody) { codeBody.append("\\\\"); } }
 }
 
 <CHAR> {
-    \'                  { popState(); }
-    "\\'"               { }
-    "\\\\"              { }
+    \'                  { if (appendingToCodeBody) { codeBody.append('"');    } popState(); }
+    "\\'"               { if (appendingToCodeBody) { codeBody.append("\\'");  } }
+    "\\\\"              { if (appendingToCodeBody) { codeBody.append("\\\\"); } }
 }
 
 <SINGLELINECOMMENT> {
-    {Eol}               { popState(); }
+    {Eol}               { if (appendingToCodeBody) { codeBody.append(yytext()); } popState(); }
 }
 
 <MULTILINECOMMENT> {
-    "*/"                { popState(); }
+    "*/"                { if (appendingToCodeBody) { codeBody.append("*/"); } popState(); }
 }
 
-.|\r|\n|\r\n            { }
+.|\r|\n|\r\n            { if (appendingToCodeBody) { codeBody.append(yytext()); } }

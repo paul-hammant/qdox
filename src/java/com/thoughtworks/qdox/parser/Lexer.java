@@ -11,5 +11,7 @@ public interface Lexer {
     int getLine();
 
     int getColumn();
+
+    String getCodeBody();
     
 }

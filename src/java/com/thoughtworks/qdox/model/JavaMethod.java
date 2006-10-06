@@ -10,6 +10,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     private JavaParameter[] parameters = JavaParameter.EMPTY_ARRAY;
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
+    private String sourceCode;
 
     public JavaMethod() {
     }
@@ -92,6 +93,9 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
                     result.write(exceptions[i].getValue());
                 }
             }
+        }
+        if (sourceCode != null) {
+            result.write(sourceCode);
         }
         if (isPrettyPrint) {
             result.write(';');
@@ -294,4 +298,16 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         return getDeclarationSignature(false).compareTo(((JavaMethod)o).getDeclarationSignature(false));
     }
 
+    /**
+     * Get the original source code of the body of this method.
+     *
+     * @return Code as string.
+     */
+    public String getSourceCode(){
+    	return sourceCode;
+    }
+
+    public void setSourceCode(String sourceCode){
+    	this.sourceCode = sourceCode;
+    }
 }

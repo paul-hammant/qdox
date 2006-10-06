@@ -13,6 +13,7 @@ public class MethodDef extends LocatedDef {
     public Set exceptions = new HashSet();
     public boolean constructor = false;
     public int dimensions;
+    public String body;
 
     public boolean equals(Object obj) {
         MethodDef methodDef = (MethodDef) obj;
@@ -45,6 +46,7 @@ public class MethodDef extends LocatedDef {
         result.append(')');
         result.append(" throws ");
         result.append(exceptions);
+        result.append(body);
         return result.toString();
     }
 }

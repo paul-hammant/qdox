@@ -61,8 +61,8 @@ public class ModelBuilder implements Builder {
 
         // basic details
         currentClass.setName(def.name);
-        currentClass.setInterface(def.type == ClassDef.INTERFACE);
-        currentClass.setEnum(def.type == ClassDef.ENUM);
+        currentClass.setInterface(ClassDef.INTERFACE.equals(def.type));
+        currentClass.setEnum(ClassDef.ENUM.equals(def.type));
 
         // superclass
         if (currentClass.isInterface()) {
@@ -93,7 +93,7 @@ public class ModelBuilder implements Builder {
         addJavaDoc(currentClass);
 
         // ignore annotation types (for now)
-        if (def.type == ClassDef.ANNOTATION_TYPE) {
+        if (ClassDef.ANNOTATION_TYPE.equals(def.type)) {
             return;
         }
         
@@ -174,6 +174,8 @@ public class ModelBuilder implements Builder {
             def.modifiers.toArray(modifiers);
             currentMethod.setModifiers(modifiers);
         }
+        
+        currentMethod.setSourceCode(def.body);
 
         // javadoc
         addJavaDoc(currentMethod);
@@ -195,7 +197,10 @@ public class ModelBuilder implements Builder {
             def.modifiers.toArray(modifiers);
             currentField.setModifiers(modifiers);
         }
-
+	
+        // code body
+        currentField.setInitializationExpression(def.body);
+	
         // javadoc
         addJavaDoc(currentField);
 

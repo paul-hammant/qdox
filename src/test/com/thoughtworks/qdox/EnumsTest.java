@@ -47,6 +47,30 @@ public class EnumsTest extends TestCase {
         assertTrue(enum2.isEnum());
     }
     
+    public void testAddEnumImplementingInterfaceToModel() {
+        String source = ""
+                + "public enum Enum1 implements java.io.Serializable { a, b }";
+
+        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        javaDocBuilder.addSource(new StringReader(source));
+
+        JavaClass cls = javaDocBuilder.getClassByName("Enum1");
+        assertTrue(cls.isEnum());
+        assertTrue(cls.isA("java.io.Serializable"));
+    }
+
+    public void testAddEnumWithAnnotationToModel() {
+        String source = ""
+                + "public enum Enum1 implements java.io.Serializable { a, @Deprecated b }";
+
+        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        javaDocBuilder.addSource(new StringReader(source));
+
+        JavaClass cls = javaDocBuilder.getClassByName("Enum1");
+        assertTrue(cls.isEnum());
+        assertTrue(cls.isA("java.io.Serializable"));
+    }
+
     public void testAddEnumWithFieldAndConstructorsToModel() {
 
         String source = ""

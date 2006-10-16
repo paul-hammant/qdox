@@ -13,7 +13,10 @@
                 Implemented QDOX-83:
                 Original body of method can be obtained using JavaMethod.getSourceCode().
                 Original field initialization expression can be obtained by JavaField.getInitializationExpression().
-                (Much of the work done by Shawn Chain.
+                (Much of the work done by Shawn Chain).
+            </action>
+            <action dev="joe" type="updated">
+                Improved Enum parsing support (thanks to Brian Slesinsky and James Lee).
             </action>
         </release>
         -->

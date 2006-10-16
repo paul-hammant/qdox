@@ -165,7 +165,7 @@ enum: enum_definition BRACEOPEN enum_body BRACECLOSE {
   builder.endClass();
 };
 
-enum_definition: modifiers ENUM IDENTIFIER {
+enum_definition: modifiers ENUM IDENTIFIER opt_implements {
     cls.lineNumber = line;
     cls.modifiers.addAll(modifiers); modifiers.clear();
     cls.name = $3;
@@ -176,11 +176,11 @@ enum_definition: modifiers ENUM IDENTIFIER {
 
 enum_body: enum_values | enum_values SEMI members;
 
-enum_values: | enum_value | enum_values COMMA enum_value;
+enum_values: | enum_value | enum_value COMMA enum_values;
 
 enum_value:
     javadoc enum_constructor |
-    enum_constructor;
+    opt_annotations enum_constructor;
 
 enum_constructor:
     IDENTIFIER |

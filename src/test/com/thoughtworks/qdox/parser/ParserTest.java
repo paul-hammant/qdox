@@ -2447,6 +2447,25 @@ public class ParserTest extends TestCase {
         // verify
         builder.verify();
     }
+    
+    public void testEnumEndingWithExtraComma() throws Exception {
+        setupLex(Parser.ENUM);
+        setupLex(Parser.IDENTIFIER, "x");
+        setupLex(Parser.BRACEOPEN);
+
+        setupLex(Parser.IDENTIFIER, "a");
+        setupLex(Parser.COMMA);
+
+        setupLex(Parser.BRACECLOSE);
+        setupLex(0);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+    }
 
     private void setupLex(int token, String value) {
         lexer.setupLex(token);

@@ -7,8 +7,7 @@
 
     <body>
   
-        <!--
-        <release version="1.7" date="in CVS">
+        <release version="1.6.1" date="2006-10-28">
             <action dev="joe" type="add">
                 Implemented QDOX-83:
                 Original body of method can be obtained using JavaMethod.getSourceCode().
@@ -19,7 +18,7 @@
                 Improved Enum parsing support (thanks to Brian Slesinsky and James Lee).
             </action>
         </release>
-        -->
+        
         <release version="1.6" date="2006-08-14">
             <action dev="joe" type="update">
                 Switched license from 'Ironsmith' Apache license clone to genuine Apache 2 license.

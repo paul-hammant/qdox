@@ -6,7 +6,15 @@
     </properties>
 
     <body>
-  
+ 
+        <!-- 
+        <release version="1.6.2" date="???">
+            <action dev="joe" type="updated">
+                Improved generic parsing support (thanks to Brian Slesinsky).
+            </action>
+        </release>
+        -->
+        
         <release version="1.6.1" date="2006-10-28">
             <action dev="joe" type="add">
                 Implemented QDOX-83:

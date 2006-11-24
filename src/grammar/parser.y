@@ -14,7 +14,7 @@ import java.io.IOException;
 
 // strongly typed tokens/types
 %token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN
-%type <sval> fullidentifier modifier classtype memberend
+%type <sval> fullidentifier modifier classtype typedeclspecifier typename memberend
 %type <ival> dimensions
 %type <bval> varargs
 %type <type> type arrayidentifier
@@ -127,9 +127,17 @@ type:
     };
 
 classtype:
-    fullidentifier opt_typearguments {
+    typedeclspecifier opt_typearguments {
         $$ = $1; 
     };
+
+typedeclspecifier:
+    typename { $$ = $1; } |
+    classtype DOT IDENTIFIER { $$ = $1 + '.' + $3; };
+
+typename: 
+    IDENTIFIER { $$ = $1; } |
+    typename DOT IDENTIFIER { $$ = $1 + '.' + $3; }; 
 
 opt_typearguments: | LESSTHAN typearglist GREATERTHAN;
 

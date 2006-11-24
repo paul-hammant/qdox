@@ -1,11 +1,10 @@
 package com.thoughtworks.qdox;
 
-import java.io.StringReader;
-
-import junit.framework.TestCase;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import junit.framework.TestCase;
+
+import java.io.StringReader;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -37,6 +36,16 @@ public class GenericsTest extends TestCase {
                 "public interface Foo {" +
                 "   Bar<X,Y> zap(Zip<R,V> r);" +
                 "}";
+
+        builder.addSource(new StringReader(source));
+        assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }
+
+    public void testShouldUnderstandOuterAndInnerClassGenericsInMethodDeclarations() {
+        String source = "" +
+                "    public interface Foo {\n" +
+                "       <A,B> void zap(Outer<A>.Inner<B> arg);\n" +
+                "    }";
 
         builder.addSource(new StringReader(source));
         assertEquals("Foo", builder.getClassByName("Foo").getName());

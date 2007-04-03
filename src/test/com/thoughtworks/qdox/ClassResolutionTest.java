@@ -1,8 +1,8 @@
 package com.thoughtworks.qdox;
 
-import junit.framework.TestCase;
-
 import java.io.StringReader;
+
+import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -41,7 +41,7 @@ public class ClassResolutionTest extends TestCase {
         // verify
         assertEquals("Should include fully qualified name", "package1.Class1$NestedClass", type.getValue());
     }
-    
+
     public void testSurvivesStaticImports() {
 
         // input sources
@@ -59,5 +59,22 @@ public class ClassResolutionTest extends TestCase {
         // find the parameter
         JavaClass class2 = builder.getClassByName("package2.Class2");
         assertNotNull(class2);
+    }
+
+    public void testAnonymousClass() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+
+    	String source = ""
+        	+ "public class AnimatedAlgorithm {\n"
+        	+ "    private SelectionListener mySelectionListener = new SelectionListenerAdapter() {\n"
+        	+ "        public void selectionEvent() {\n"
+        	+ "            for (int i = 0; i < recalcers.size(); i++) {\n"
+        	+ "              int something = 5;"
+        	+ "            }\n"
+        	+ "        }\n"
+        	+ "    };\n"
+        	+ "}";
+
+        builder.addSource(new StringReader(source));
     }
 }

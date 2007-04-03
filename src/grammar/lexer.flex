@@ -24,6 +24,7 @@ import com.thoughtworks.qdox.parser.*;
     private StringBuffer codeBody = new StringBuffer(8192);
 	private boolean annoExpected;
     private boolean newMode;
+    private boolean anonymousMode;
     private boolean enumMode;
     private boolean appendingToCodeBody;
     private boolean shouldCaptureCodeBody;
@@ -300,8 +301,23 @@ Id						= [:jletter:] [:jletterdigit:]*
             codeBody.append(',');
         }
     }
-    "{"                 { codeBody.append('{'); nestingDepth++; }
-    "}"                 { codeBody.append('}'); nestingDepth--; }
+    "{"                 {
+        codeBody.append('{');
+		anonymousMode = newMode;
+        if (anonymousMode) {
+	        nestingDepth++;
+        }
+    }
+    "}"                 {
+		codeBody.append('}');
+        if (anonymousMode) {
+            nestingDepth--;
+        	if (nestingDepth==assignmentDepth) { 
+                anonymousMode=false;
+            }
+        }
+    }
+
     "("                 { codeBody.append('('); nestingDepth++; }
     ")"                 {
         codeBody.append(')');
@@ -322,17 +338,19 @@ Id						= [:jletter:] [:jletterdigit:]*
     }
     "<"                 {
         codeBody.append('<');
-        if (newMode) { 
+        if (newMode && !anonymousMode) { 
             nestingDepth++; 
-        } 
+        }
     }
     ">"                 {
         codeBody.append('>');
-        if (newMode) {
-            nestingDepth--;
-        	if (nestingDepth==assignmentDepth) { 
-                newMode=false;
-            }
+        if (!anonymousMode) {
+	        if (newMode) {
+    	        nestingDepth--;
+    	    	if (nestingDepth==assignmentDepth) { 
+    	            newMode=false;
+    	        }
+        	}
         }
     }
 }

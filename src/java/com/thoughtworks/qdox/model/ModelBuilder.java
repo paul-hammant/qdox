@@ -1,16 +1,19 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.thoughtworks.qdox.parser.Builder;
+import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -21,6 +24,7 @@ public class ModelBuilder implements Builder {
     private final JavaSource source;
     private JavaClassParent currentParent;
     private JavaClass currentClass;
+    private List currentAnnoDefs;
     private String lastComment;
     private List lastTagSet;
     private DocletTagFactory docletTagFactory;
@@ -35,6 +39,7 @@ public class ModelBuilder implements Builder {
         source = new JavaSource();
         source.setClassLibrary(classLibrary);
         currentParent = source;
+        currentAnnoDefs = new ArrayList();
     }
 
     public void addPackage(String packageName) {
@@ -63,6 +68,8 @@ public class ModelBuilder implements Builder {
         currentClass.setName(def.name);
         currentClass.setInterface(ClassDef.INTERFACE.equals(def.type));
         currentClass.setEnum(ClassDef.ENUM.equals(def.type));
+        currentClass.setAnnotation(ClassDef.ANNOTATION_TYPE.equals(def.type));
+
 
         // superclass
         if (currentClass.isInterface()) {
@@ -92,11 +99,15 @@ public class ModelBuilder implements Builder {
         // javadoc
         addJavaDoc(currentClass);
 
-        // ignore annotation types (for now)
-        if (ClassDef.ANNOTATION_TYPE.equals(def.type)) {
-            return;
-        }
-        
+//        // ignore annotation types (for now)
+//        if (ClassDef.ANNOTATION_TYPE.equals(def.type)) {
+//        	System.out.println( currentClass.getFullyQualifiedName() );
+//            return;
+//        }
+
+        // annotations
+        setAnnotations( currentClass );
+
         currentParent.addClass(currentClass);
         currentParent = currentClass;
         classLibrary.add(currentClass.getFullyQualifiedName());
@@ -180,6 +191,9 @@ public class ModelBuilder implements Builder {
         // javadoc
         addJavaDoc(currentMethod);
 
+        // annotations
+        setAnnotations( currentMethod );
+
         currentClass.addMethod(currentMethod);
     }
 
@@ -204,7 +218,57 @@ public class ModelBuilder implements Builder {
         // javadoc
         addJavaDoc(currentField);
 
+        // annotations
+        setAnnotations( currentField );
+
         currentClass.addField(currentField);
+    }
+
+    private void setAnnotations( AbstractJavaEntity entity ) {
+        if( !currentAnnoDefs.isEmpty() ) {
+            Annotation[] annotations = new Annotation[currentAnnoDefs.size()];
+            int index = 0;
+            for (Iterator iter = currentAnnoDefs.iterator(); iter.hasNext();) {
+            	AnnoDef def = (AnnoDef)iter.next();
+            	annotations[index++] = buildAnnotation( def, entity );
+            }
+
+            entity.setAnnotations( annotations );
+            currentAnnoDefs.clear();
+        }
+    }
+
+    private Annotation buildAnnotation( AnnoDef def, AbstractJavaEntity entity ) {
+    	Type annoType = createType(def.name, 0);
+
+    	Map args = new HashMap();
+        for (Iterator iter = def.args.entrySet().iterator(); iter.hasNext();) {
+        	Map.Entry entry = (Map.Entry)iter.next();
+        	Object value = entry.getValue();
+
+        	if( value instanceof AnnoDef ) {
+        		args.put( entry.getKey(), buildAnnotation( (AnnoDef)value, entity ) );
+        	}
+        	else if( value instanceof List ) {
+        		List values = (List)value;
+        		if( values.size() == 1 ) {
+        			// TODO: what about types?
+        			args.put( entry.getKey(), values.get( 0 ) );
+        		}
+        		else {
+        			args.put( entry.getKey(), values );
+        		}
+        	}
+        }
+
+    	Annotation anno = new Annotation( annoType, entity, args, def.lineNumber );
+        return anno;
+    }
+
+
+    // Don't resolve until we need it... class hasn't been defined yet.
+    public void addAnnotation( AnnoDef def ) {
+    	currentAnnoDefs.add( def );
     }
 
     public JavaSource getSource() {

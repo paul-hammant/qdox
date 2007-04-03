@@ -1,12 +1,21 @@
 package com.thoughtworks.qdox;
 
-import com.thoughtworks.qdox.model.JavaClass;
 import java.io.StringReader;
+
 import junit.framework.TestCase;
+
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.Type;
 
 public class AnnotationsTest extends TestCase {
 
-    private JavaDocBuilder builder = new JavaDocBuilder();
+    private JavaDocBuilder builder;
+    public AnnotationsTest()
+    {
+        builder = new JavaDocBuilder();
+        //builder.setDebugLexer( true );
+        //builder.setDebugParser( true );
+    }
 
     public void testShouldIgnoreSimpleClassAnnotation() {
         String source = "" 
@@ -33,6 +42,7 @@ public class AnnotationsTest extends TestCase {
     public void testShouldIgnoreMethodParameterAnnotation() {
         String source = ""
             + "public class X {\n"
+            + "    String field = new String( \"hey\" );\n"
             + "    public void setX(@name String x) {}\n"
             + "}\n";
 
@@ -70,10 +80,10 @@ public class AnnotationsTest extends TestCase {
     }
 
     public void testShouldIgnoreArrayValuedSingleMemberClassAnnotations() {
-        String source = "" 
-            + "@Endorsers({\"Children\", \"Unscrupulous dentists\"})\n"
+        String source = "" /** @hey=\"yo\" someval = \"yep\" */
+            + "@ Endorsers({(\"Children\"), \"Unscrupulous dentists\"})\n"
             + "public class Lollipop {\n"
-            + "  @Cheese({\"Edam\", \"Gruyere\"})\n"
+            + "  @Cheese( hey=@ano({\"Edam\", \"Gruyere\", 2}), t=5.5f, c=4)\n"
             + "  void doStuff() { }\n"
             + "}\n";
 
@@ -83,24 +93,29 @@ public class AnnotationsTest extends TestCase {
 
     public void testShouldIgnoreComplexSingleMemberClassAnnotations() {
         String source = "" 
-            + "@Author(@Name(first = \"Joe\", last = \"Hacker\"))\n" // I won't take it personally! ;) -joe
+            + "@Author(@Name(first = \"Joe\", last = true))\n" // I won't take it personally! ;) -joe
             + "public class BitTwiddle {\n"
-            + "  @Author(@Name(first = \"Joe\", last = \"Hacker\"))\n"
+            + "  @Author(@Name(first = \'c\', last = 2.5e3f))\n"
             + "  void doStuff() { }\n"
             + "}\n";
 
         builder.addSource(new StringReader(source));
         assertNotNull(builder.getClassByName("BitTwiddle"));
+        assertNotNull( builder.getClassByName("BitTwiddle").getAnnotations()[0].getNamedParameter("value") );
+        assertEquals( "Author", builder.getClassByName("BitTwiddle")
+        	.getMethodBySignature("doStuff", new Type[] {})
+        		.getAnnotations()[0].getType().getValue() );
     }
 
     public void testShouldIgnoreAnnotationDeclaration() {
-        String source = "" 
+        String source = "package org.jabba;\n"
+        	+ "@MyAnno\n"
             + "public @interface Note {\n"
             + "    String text;\n"
             + "}\n";
 
         builder.addSource(new StringReader(source));
-        assertEquals(0, builder.getClasses().length);
+        assertEquals(1, builder.getClasses().length);
     }
 
     public void testShouldIgnoreAnnotationWithClassType() {
@@ -138,6 +153,13 @@ public class AnnotationsTest extends TestCase {
         assertEquals("Person", builder.getClassByName("Person").getName());
     }
 
+    // from QDOX-108
+    public void testFQNAnnotations() {
+        String source = "" 
+            + "@com.mycompany.Fnord(a=1)\n"
+            + "public interface Foo extends Bar {}\n";
 
-
+        builder.addSource(new StringReader(source));
+        assertEquals("Foo", builder.getClassByName("Foo").getName());
+    }
 }

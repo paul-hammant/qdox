@@ -2,19 +2,22 @@
 import com.thoughtworks.qdox.parser.*;
 import com.thoughtworks.qdox.parser.structs.*;
 import java.io.IOException;
+import java.util.LinkedList;
 %}
 
-%token SEMI DOT DOTDOTDOT COMMA STAR EQUALS
+%token SEMI DOT DOTDOTDOT COMMA STAR EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
-%token CLASS INTERFACE ENUM THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
+%token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND QUERY AT
 %token JAVADOCSTART JAVADOCEND JAVADOCEOL
 %token CODEBLOCK PARENBLOCK
-%token INTEGER_LITERAL FLOAT_LITERAL
 
 // strongly typed tokens/types
-%token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN
+%token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN ANNOTATION
+%token <sval> BOOLEAN_LITERAL INTEGER_LITERAL FLOAT_LITERAL
 %type <sval> fullidentifier modifier classtype typedeclspecifier typename memberend
+%type <sval> annotationValueConstant annotationSymConstant
+%type <oval> annoElementValue
 %type <ival> dimensions
 %type <bval> varargs
 %type <type> type arrayidentifier
@@ -81,7 +84,7 @@ arrayidentifier:
 
 dimensions:
     /* empty */ { $$ = 0; }
-|   dimensions SQUAREOPEN SQUARECLOSE {
+	|   dimensions SQUAREOPEN SQUARECLOSE {
         $$ = $1 + 1; 
     };
 
@@ -105,19 +108,81 @@ modifiers:
     ;
 
 
-// ----- ANNOTATIONS 
+// ----- ANNOTATIONS
+
+annotationValueConstant:
+	FLOAT_LITERAL		{ $$ = $1; } |
+	INTEGER_LITERAL		{ $$ = $1; } |
+	BOOLEAN_LITERAL		{ $$ = $1; } |
+	fullidentifier		{ $$ = $1; } |
+	fullidentifier DOT CLASS { $$ = $1 + ".class"; } |
+	ANNOSTRING			{
+		// would prefer to set this as a returned token in flex... how?
+		String str = lexer.getCodeBody();
+		str = str.substring( 1, str.length() - 1 );
+		$$ = str;
+	} |
+	ANNOCHAR			{
+		String str = lexer.getCodeBody();
+		str = str.substring( 1, str.length() - 1 );
+		$$ = str;
+	};
+
+annotationSymConstant:
+	LESSTHAN	{ $$ = "<"; } |
+	GREATERTHAN	{ $$ = ">"; } |
+	STAR		{ $$ = "*"; } |
+	SLASH		{ $$ = "/"; } |
+	PLUS		{ $$ = "+"; } |
+	MINUS		{ $$ = "/"; };
+
+annotationValueConstants:
+	annotationValueConstant {
+		annoConstants.add( $1 );
+	} | annotationValueConstants annotationSymConstant annotationValueConstant {
+		annoConstants.add( $2 );
+		annoConstants.add( $3 );
+	};
 
 annotation:
-    AT IDENTIFIER |
-    AT IDENTIFIER PARENOPEN annotationarglist PARENCLOSE;
-    
-annotationarglist:
-    |
-    annotationarglist COMMA |
-    annotationarglist fullidentifier |
-    annotationarglist fullidentifier DOT CLASS |
-    annotationarglist BRACEOPEN annotationarglist BRACECLOSE; /* array */ |
-    annotationarglist annotation;
+	{ ano = new AnnoDef(); } annotationWork { builder.addAnnotation(ano); };
+
+annotationWork:
+	ANNOTATION {
+        ano.lineNumber = line;
+		ano.name = $1.substring(1).trim();
+	} annoParens;
+
+annoParens:
+	|
+	PARENOPEN annoParenContents PARENCLOSE;
+
+annoParenContents:
+	annoElementValue { ano.args.put( "value", $1 ); } |
+	annoElementValuePairs;
+
+annoElementValuePairs:
+	annoElementValuePair |
+	annoElementValuePairs COMMA annoElementValuePair;
+
+annoElementValuePair:
+	IDENTIFIER EQUALS annoElementValue { ano.args.put( $1, $3 ); };
+
+annoElementValue:
+	PARENOPEN annoElementValue PARENCLOSE { $$ = $2; } |
+	annotationValueConstants { $$ = annoConstants; annoConstants = new LinkedList(); } |
+	{	AnnoDef tmpAno = new AnnoDef();
+		tmpAno.tempAnno = ano;
+		ano = tmpAno;
+	} annotationWork { $$ = ano; ano = ano.tempAnno; } |
+	annoElementValueArrayInitializer { $$ = annoValues; annoValues = new LinkedList(); };
+
+annoElementValueArrayInitializer:
+    BRACEOPEN annoElementValues BRACECLOSE;
+
+annoElementValues:
+	annoElementValue { annoValues.add( $1 ); } |
+	annoElementValues COMMA annoElementValue { annoValues.add( $3 ); };
 
 // ----- TYPES
 
@@ -216,7 +281,7 @@ classdefinition:
 classorinterface: 
     CLASS { cls.type = ClassDef.CLASS; } | 
     INTERFACE { cls.type = ClassDef.INTERFACE; } |
-    AT INTERFACE { cls.type = ClassDef.ANNOTATION_TYPE; };
+    ANNOINTERFACE { cls.type = ClassDef.ANNOTATION_TYPE; };
 
 opt_extends: | EXTENDS extendslist;
 
@@ -344,12 +409,16 @@ private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
+private AnnoDef ano = new AnnoDef();
 private FieldDef param = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
 private TypeDef fieldType;
 private int line;
 private int column;
 private boolean debugLexer;
+
+private LinkedList annoConstants = new LinkedList();
+private LinkedList annoValues = new LinkedList();
 
 private void appendToBuffer(String word) {
     if (textBuffer.length() > 0) {
@@ -407,9 +476,10 @@ private void yyerror(String msg) {
 }
 
 private class Value {
+	Object oval;
     String sval;
     int ival;
-    boolean bval;
+	boolean bval;
     TypeDef type;
 }
 
@@ -423,4 +493,4 @@ private void makeField(TypeDef field, String body) {
     fd.body = body;
     builder.addField(fd);
 }
-            
+

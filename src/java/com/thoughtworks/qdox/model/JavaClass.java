@@ -18,6 +18,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     private static Type OBJECT = new Type("java.lang.Object");
     private static Type ENUM = new Type("java.lang.Enum");
+    private static Type ANNOTATION = new Type("java.lang.annotation.Annotation");
 
     private List methods = new LinkedList();
     private JavaMethod[] methodsArray;
@@ -27,6 +28,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private JavaClass[] classesArray;
     private boolean interfce;
     private boolean isEnum;
+    private boolean isAnnotation;
 
     // Don't access this directly. Use asType() to get my Type
     private Type type;
@@ -69,7 +71,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
         if (isEnum) {
             return ENUM;
-        } else if (!interfce && (superClass == null) && !iAmJavaLangObject) {
+        } else if (!interfce && !isAnnotation && (superClass == null) && !iAmJavaLangObject) {
             return OBJECT;
         }
 
@@ -109,7 +111,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         writeAccessibilityModifier(result);
         writeNonAccessibilityModifiers(result);
 
-        result.write(isEnum ? "enum " : interfce ? "interface " : "class ");
+        result.write(isEnum ? "enum " : interfce ? "interface " : isAnnotation ? "@interface " : "class ");
         result.write(name);
 
         // subclass
@@ -171,6 +173,10 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public void setEnum(boolean isEnum) {
         this.isEnum = isEnum;
+    }
+
+    public void setAnnotation(boolean isAnnotation) {
+        this.isAnnotation = isAnnotation;
     }
 
     public void addMethod(JavaMethod meth) {

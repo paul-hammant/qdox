@@ -22,6 +22,7 @@ import com.thoughtworks.qdox.parser.*;
     private boolean javaDocNewLine;
     private boolean javaDocStartedContent;
     private StringBuffer codeBody = new StringBuffer(8192);
+	private boolean annoExpected;
     private boolean newMode;
     private boolean enumMode;
     private boolean appendingToCodeBody;
@@ -67,8 +68,15 @@ import com.thoughtworks.qdox.parser.*;
 Eol                     = \r|\n|\r\n
 WhiteSpace              = {Eol} | [ \t\f]
 CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
+IntegerLiteral			= (( [1-9] ([0-9])* ) | ( "0" [xX] ([0-9]|[a-f]|[A-F])+ ) | ( "0" ([0-7])* )) ([lL])?
+Exponent				= [eE] [+-]? ([0-9])+
+FloatLiteral			= ( [0-9]+ ("." [0-9]+)? ({Exponent})? ([fFdD])? ) |
+						  ( "." [0-9]+ ({Exponent})? ([fFdD])? ) |
+						  ( ([0-9])+ {Exponent} ([fFdD])? ) |
+						  ( ([0-9])+ ({Exponent})? [fFdD] )
+Id						= [:jletter:] [:jletterdigit:]*
 
-%state JAVADOC CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT
+%state JAVADOC CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR
 
 %%
 
@@ -101,6 +109,7 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     "]"                 { nestingDepth--; return Parser.SQUARECLOSE; }
     "("                 {
         nestingDepth++;
+		if( annoExpected ) { pushState(ANNOTATION); }
         if (enumMode) {
           pushState(PARENBLOCK);
         } else {
@@ -113,7 +122,10 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     ">"                 { return Parser.GREATERTHAN; }
     "&"                 { return Parser.AMPERSAND; }
     "?"                 { return Parser.QUERY; }
-    "@"                 { return Parser.AT; }
+
+    "@"                 {
+		return Parser.AT;
+	}
 
     "class"             {
         classDepth++;
@@ -121,13 +133,17 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     }
     "interface"         { 
         classDepth++;
-        return Parser.INTERFACE; 
+        return Parser.INTERFACE;
     }
     "enum"              {
         classDepth++;
         enumMode = true;
         return Parser.ENUM;
     }
+	"@" {WhiteSpace}* "interface"		{
+        classDepth++;
+        return Parser.ANNOINTERFACE;
+	}
 
     "{"                 {
         nestingDepth++;
@@ -165,10 +181,15 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
         pushState(ASSIGNMENT);
     }
 
-    [:jletter:] [:jletterdigit:]* { 
-        return Parser.IDENTIFIER; 
+    [:jletter:] [:jletterdigit:]* {
+		annoExpected = false;
+        return Parser.IDENTIFIER;
     }
 
+	"@" {WhiteSpace}* {Id} ( {WhiteSpace}* "." {WhiteSpace}* {Id} )* {
+		annoExpected = true;
+		return Parser.ANNOTATION;
+	}
 }
 
 <JAVADOC> {
@@ -202,13 +223,60 @@ CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
     }
 }
 
+<ANNOTATION> {
+	"("                 { nestingDepth++; return Parser.PARENOPEN; }
+    ")"                 { if( --nestingDepth == classDepth) { popState(); } return Parser.PARENCLOSE; }
+
+	","                 { return Parser.COMMA; }
+    "="                 { return Parser.EQUALS; }
+
+	"{"                 { nestingDepth++; return Parser.BRACEOPEN; }
+    "}"                 { nestingDepth--; return Parser.BRACECLOSE; }
+
+	"\""                { appendingToCodeBody=true; codeBody.append("\""); pushState(ANNOSTRING); }
+    \'                  { appendingToCodeBody=true; codeBody.append("\'"); pushState(ANNOCHAR); }
+
+	"."                 { return Parser.DOT; }
+
+    "<"                 { return Parser.LESSTHAN; }
+    ">"                 { return Parser.GREATERTHAN; }
+    "*"                 { return Parser.STAR; }
+    "/"                 { return Parser.SLASH; }
+    "+"                 { return Parser.PLUS; }
+    "-"                 { return Parser.MINUS; }
+
+	{IntegerLiteral}	{ return Parser.INTEGER_LITERAL; }
+	{FloatLiteral}		{ return Parser.FLOAT_LITERAL; }
+	"true" | "false"	{ return Parser.BOOLEAN_LITERAL; }
+
+	[:jletter:] [:jletterdigit:]* {
+        return Parser.IDENTIFIER;
+    }
+
+	"@" {WhiteSpace}* [:jletter:] [:jletterdigit:]* {
+		return Parser.ANNOTATION;
+	}
+
+	<ANNOSTRING> {
+		"\""            { codeBody.append("\""); popState(); appendingToCodeBody=false; return Parser.ANNOSTRING; }
+		"\\\""          { codeBody.append("\\\""); }
+		"\\\\"          { codeBody.append("\\\\"); }
+	}
+
+	<ANNOCHAR> {
+		\'              { codeBody.append("\'"); popState(); appendingToCodeBody=false; return Parser.ANNOCHAR; }
+		"\\'"           { codeBody.append("\\'"); }
+		"\\\\"          { codeBody.append("\\\\"); }
+	}
+}
+
 <PARENBLOCK> {
     "("                 { nestingDepth++; }
     ")"                 {
-        nestingDepth--;
+		nestingDepth--;
         if (nestingDepth == classDepth) {
             popState();
-            return Parser.PARENBLOCK;
+			return Parser.PARENBLOCK;
         }
     }
 }

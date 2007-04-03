@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.parser;
 
+import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -23,4 +24,5 @@ public interface Builder {
 
     void addField(FieldDef def);
 
+    void addAnnotation(AnnoDef def);
 }

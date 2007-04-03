@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.parser;
 
+import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -124,6 +125,10 @@ class MockBuilder implements Builder {
         myAddFieldParameter0Values.addActual(arg0);
     }
 
+    public void addAnnotation( AnnoDef def ) {
+        
+    }
+    
     public void verify() {
         myAddPackageCalls.verify();
         myAddPackageParameter0Values.verify();

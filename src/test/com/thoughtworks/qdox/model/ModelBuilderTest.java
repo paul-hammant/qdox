@@ -88,7 +88,7 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
         
-        assertEquals(0, source.getClasses().length);
+        assertEquals(1, source.getClasses().length);
     }
 
     public void testClassExtends() throws Exception {

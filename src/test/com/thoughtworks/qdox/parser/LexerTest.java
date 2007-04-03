@@ -528,8 +528,7 @@ public class LexerTest extends TestCase {
         Lexer lexer = new JFlexLexer(new StringReader(in));
 
         assertLex(Parser.PUBLIC, lexer);
-        assertLex(Parser.AT, lexer);
-        assertLex(Parser.INTERFACE, lexer);
+        assertLex(Parser.ANNOINTERFACE, lexer);
         assertLex(Parser.IDENTIFIER, "Copyright", lexer);
         assertLex(Parser.BRACEOPEN, lexer);
         assertLex(Parser.IDENTIFIER, "int", lexer);
@@ -553,16 +552,19 @@ public class LexerTest extends TestCase {
             + "public class LexerTest extends TestCase {}\n";
         Lexer lexer = new JFlexLexer(new StringReader(in));
 
-        assertLex(Parser.AT, lexer);
-        assertLex(Parser.IDENTIFIER, "Copyright", lexer);
+        assertLex(Parser.ANNOTATION, "@Copyright", lexer);
         assertLex(Parser.PARENOPEN, lexer);
         assertLex(Parser.IDENTIFIER, "year", lexer);
+        assertLex(Parser.EQUALS, lexer);
+        assertLex(Parser.INTEGER_LITERAL, "2004", lexer);
         assertLex(Parser.COMMA, lexer);
         assertLex(Parser.IDENTIFIER, "month", lexer);
+        assertLex(Parser.EQUALS, lexer);
+        assertLex(Parser.ANNOSTRING, lexer);
         assertLex(Parser.PARENCLOSE, lexer);
-        assertLex(Parser.AT, lexer);
-        assertLex(Parser.IDENTIFIER, "Note", lexer);
+        assertLex(Parser.ANNOTATION, "@Note", lexer);
         assertLex(Parser.PARENOPEN, lexer);
+        assertLex(Parser.ANNOSTRING, lexer);
         assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.PUBLIC, lexer);
         assertLex(Parser.CLASS, lexer);

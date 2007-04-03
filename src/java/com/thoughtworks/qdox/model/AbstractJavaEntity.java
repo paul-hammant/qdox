@@ -12,6 +12,7 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
     protected List modifiers = new ArrayList();
     private String comment;
     private DocletTag[] tags = new DocletTag[0];
+    private Annotation[] annotations = new Annotation[0];
     private JavaClassParent parent;
     private int lineNumber = -1;
 
@@ -37,6 +38,11 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
 
     public DocletTag[] getTags() {
         return tags;
+    }
+
+    public Annotation[] getAnnotations()
+    {
+        return annotations;
     }
 
     public DocletTag[] getTagsByName(String name) {
@@ -137,6 +143,10 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
     public void setTags(List tagList) {
         this.tags = new DocletTag[tagList.size()];
         tagList.toArray(this.tags);
+    }
+
+    public void setAnnotations(Annotation[] annotations) {
+        this.annotations = annotations;
     }
 
     //helper methods for querying the modifiers

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>qdox</groupId>
+  <artifactId>qdox</artifactId>
+  <version>1.7-SNAPSHOT</version>
+
+  <build>
+    <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+	    <configuration>
+	      <tasks>
+	        <java classpath="bootstrap/jflex.jar" classname="JFlex.Main" fork="true">
+	          <arg value="-d"/>
+	          <arg value="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl"/>
+	          <arg value="src/grammar/lexer.flex"/>
+	        </java>
+	        <exec executable="${qdox.byaccj.executable}" 
+	        	dir="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" failonerror="true">
+	          <arg value="-v"/>
+	          <arg value="-Jnorun"/>
+	          <arg value="-Jnoconstruct"/>
+	          <arg value="-Jclass=Parser"/>
+	          <arg value="-Jsemantic=Value"/>
+	          <arg value="-Jpackage=com.thoughtworks.qdox.parser.impl"/>
+	          <arg value="${basedir}/src/grammar/parser.y"/>
+	        </exec>
+	        <move tofile="${project.build.directory}/yacc-states.txt"
+	        	file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y"/>
+	      </tasks>
+	      <sourceRoot>${project.build.directory}/generated-sources/parser</sourceRoot>
+	    </configuration>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+    </dependency>
+    <dependency>
+      <groupId>jmock</groupId>
+      <artifactId>jmock</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <family>Linux</family>
+        </os>
+      </activation>
+      <properties>
+        <qdox.byaccj.executable>${basedir}/bootstrap/yacc.linux</qdox.byaccj.executable>
+      </properties>
+    </profile>
+    <profile>
+      <id>solaris</id>
+      <activation>
+        <os>
+          <family>SunOS</family>
+        </os>
+      </activation>
+      <properties>
+        <qdox.byaccj.executable>${basedir}/bootstrap/yacc.solaris</qdox.byaccj.executable>
+      </properties>
+    </profile>
+    <profile>
+      <id>macosx</id>
+      <activation>
+        <os>
+          <family>Mac</family>
+        </os>
+      </activation>
+      <properties>
+        <qdox.byaccj.executable>${basedir}/bootstrap/yacc.macosx</qdox.byaccj.executable>
+      </properties>
+    </profile>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <qdox.byaccj.executable>${basedir}/bootstrap/yacc.exe</qdox.byaccj.executable>
+      </properties>
+    </profile>
+  </profiles>
+</project>

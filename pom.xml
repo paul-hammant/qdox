@@ -1,39 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>qdox</groupId>
+  <groupId>com.thoughtworks.qdox</groupId>
   <artifactId>qdox</artifactId>
   <version>1.7-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <url>http://qdoox.codehaus.org</url>
 
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+    </extensions>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
-	    <configuration>
-	      <tasks>
-	        <java classpath="bootstrap/jflex.jar" classname="JFlex.Main" fork="true">
-	          <arg value="-d"/>
-	          <arg value="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl"/>
-	          <arg value="src/grammar/lexer.flex"/>
-	        </java>
-	        <exec executable="${qdox.byaccj.executable}" 
-	        	dir="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" failonerror="true">
-	          <arg value="-v"/>
-	          <arg value="-Jnorun"/>
-	          <arg value="-Jnoconstruct"/>
-	          <arg value="-Jclass=Parser"/>
-	          <arg value="-Jsemantic=Value"/>
-	          <arg value="-Jpackage=com.thoughtworks.qdox.parser.impl"/>
-	          <arg value="${basedir}/src/grammar/parser.y"/>
-	        </exec>
-	        <move tofile="${project.build.directory}/yacc-states.txt"
-	        	file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y"/>
-	      </tasks>
-	      <sourceRoot>${project.build.directory}/generated-sources/parser</sourceRoot>
-	    </configuration>
+        <configuration>
+          <tasks>
+            <java classpath="bootstrap/jflex.jar" classname="JFlex.Main" fork="true">
+              <arg value="-d" />
+              <arg value="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" />
+              <arg value="src/grammar/lexer.flex" />
+            </java>
+            <exec executable="${qdox.byaccj.executable}"
+              dir="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl"
+              failonerror="true">
+              <arg value="-v" />
+              <arg value="-Jnorun" />
+              <arg value="-Jnoconstruct" />
+              <arg value="-Jclass=Parser" />
+              <arg value="-Jsemantic=Value" />
+              <arg value="-Jpackage=com.thoughtworks.qdox.parser.impl" />
+              <arg value="${basedir}/src/grammar/parser.y" />
+            </exec>
+            <move tofile="${project.build.directory}/yacc-states.txt"
+              file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y" />
+          </tasks>
+          <sourceRoot>${project.build.directory}/generated-sources/parser</sourceRoot>
+        </configuration>
         <executions>
           <execution>
             <id>generate-sources</id>
@@ -46,22 +52,7 @@
       </plugin>
     </plugins>
   </build>
-  <distributionManagement>
-      <repository>
-          <id>codehaus.org</id>
-          <name>Codehaus</name>
-          <url>
-              dav:https://dav.codehaus.org/repository/qdox/
-          </url>
-      </repository>
-      <snapshotRepository>
-          <id>codehaus.org</id>
-          <name>Codehaus Snapshot</name>
-          <url>
-              dav:https://dav.codehaus.org/snapshots.repository/qdox/
-          </url>
-      </snapshotRepository>
-  </distributionManagement>
+
   <dependencies>
     <dependency>
       <groupId>ant</groupId>
@@ -79,6 +70,24 @@
       <version>1.0.0</version>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>codehaus.org</id>
+      <name>QDox Central Repository</name>
+      <url>dav:https://dav.codehaus.org/repository/qdox/</url>
+    </repository>
+    <snapshotRepository>
+      <id>codehaus.org</id>
+      <name>QDox Central Development Repository</name>
+      <url>dav:https://dav.codehaus.org/snapshots.repository/qdox/</url>
+    </snapshotRepository>
+    <site>
+      <id>codehaus.org</id>
+      <name>ParaNamer Maven site</name>
+      <url>dav:https://dav.codehaus.org/qdox/</url>
+    </site>
+  </distributionManagement>
 
   <profiles>
     <profile>

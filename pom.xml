@@ -3,6 +3,8 @@
   <groupId>qdox</groupId>
   <artifactId>qdox</artifactId>
   <version>1.7-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <url>http://qdoox.codehaus.org</url>
 
   <build>
     <sourceDirectory>src/java</sourceDirectory>
@@ -44,7 +46,22 @@
       </plugin>
     </plugins>
   </build>
-
+  <distributionManagement>
+      <repository>
+          <id>codehaus.org</id>
+          <name>Codehaus</name>
+          <url>
+              dav:https://dav.codehaus.org/repository/qdox/
+          </url>
+      </repository>
+      <snapshotRepository>
+          <id>codehaus.org</id>
+          <name>Codehaus Snapshot</name>
+          <url>
+              dav:https://dav.codehaus.org/snapshots.repository/qdox/
+          </url>
+      </snapshotRepository>
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>ant</groupId>

@@ -3,7 +3,7 @@
   <name>QDox</name>
   <groupId>com.thoughtworks.qdox</groupId>
   <artifactId>qdox</artifactId>
-  <version>1.6.2</version>
+  <version>1.7-SNAPSHOT</version>
   <packaging>jar</packaging>
   <url>http://qdox.codehaus.org</url>
   <description>QDox is a high speed, small footprint parser for extracting
@@ -12,9 +12,9 @@
     documentation tools.</description>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/qdox/tags/QDOX_1_6_2</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/tags/QDOX_1_6_2</developerConnection>
-    <url>https://svn.codehaus.org/qdox/tags/QDOX_1_6_2</url>
+    <connection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</developerConnection>
+    <url>http://svn.qdox.codehaus.org/trunk/qdox</url>
   </scm>
     
   <build>

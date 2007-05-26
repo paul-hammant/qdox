@@ -5,6 +5,12 @@
   <artifactId>qdox</artifactId>
   <version>1.7-SNAPSHOT</version>
 
+  <scm>
+    <connection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</developerConnection>
+    <url>http://svn.qdox.codehaus.org/trunk/qdox</url>
+  </scm>
+  
   <build>
     <extensions>
       <extension>

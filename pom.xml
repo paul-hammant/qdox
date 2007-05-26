@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
   <modelVersion>4.0.0</modelVersion>
+  <name>QDox</name>
   <groupId>com.thoughtworks.qdox</groupId>
   <artifactId>qdox</artifactId>
   <version>1.7-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <url>http://qdox.codehaus.org</url>
+  <description>QDox is a high speed, small footprint parser for extracting
+    class/interface/method definitions from source files complete with
+    JavaDoc @tags. It is designed to be used by active code generators or
+    documentation tools.</description>
 
   <scm>
     <connection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</developerConnection>
     <url>http://svn.qdox.codehaus.org/trunk/qdox</url>
   </scm>
-  
+    
   <build>
     <extensions>
       <extension>

@@ -7,8 +7,7 @@
 
     <body>
  
-        <!-- 
-        <release version="1.6.2" date="???">
+        <release version="1.6.2" date="2007-05-26">
             <action dev="joe" type="updated">
                 Improved generic parsing support (thanks to Brian Slesinsky).
             </action>
@@ -18,11 +17,10 @@
             <action dev="paul" type="updated">
                 Improved anon inner class parsing support (thanks to Eric Redmond).
             </action>
-            <action dev="paul" type="updated">
-                Maven2 pom (thanks to Eric Redmond).
+            <action dev="mauro" type="updated">
+                Maven2 support (original contribution by Eric Redmond).
             </action>
         </release>
-        -->
         
         <release version="1.6.1" date="2006-10-28">
             <action dev="joe" type="add">

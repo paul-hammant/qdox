@@ -10,15 +10,15 @@
     <section name="Downloads">
       <p>
         The latest released binary is available to <a
-        href="http://dist.codehaus.org/qdox/jars/qdox-1.6.1.jar">download
+        href="http://repository.codehaus.org/com/thoughtworks/qdox/qdox/1.6.2/qdox-1.6.2.jar">download
+        here</a>.
+      </p>
+      <p>
+        The latest snapshot binary is available from <a
+        href="http://snapshots.repository.codehaus.org/com/thoughtworks/qdox/qdox/1.7-SNAPSHOT">download 
         here</a>.
       </p>
       <!--
-      <p>
-        The latest nightly snapshot binary is available to <a
-        href="http://dist.codehaus.org/qdox/jars/qdox-1.7-SNAPSHOT.jar">download
-        here</a>.
-      </p>
       <p>
         The current development sources can be obtained from <a
         href="cvs-usage.html">CVS</a>.

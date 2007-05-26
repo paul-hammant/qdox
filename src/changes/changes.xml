@@ -1,0 +1,310 @@
+<?xml version="1.0"?>
+<document>
+    <properties>
+        <title>Changes</title>
+        <author>Joe Walnes</author>
+    </properties>
+
+    <body>
+ 
+        <release version="1.6.2" date="2007-05-26">
+            <action dev="joe" type="updated">
+                Improved generic parsing support (thanks to Brian Slesinsky).
+            </action>
+            <action dev="paul" type="updated">
+                Improved annotation parsing support (thanks to Eric Redmond).
+            </action>
+            <action dev="paul" type="updated">
+                Improved anon inner class parsing support (thanks to Eric Redmond).
+            </action>
+            <action dev="mauro" type="updated">
+                Maven2 support (original contribution by Eric Redmond).
+            </action>
+        </release>
+        
+        <release version="1.6.1" date="2006-10-28">
+            <action dev="joe" type="add">
+                Implemented QDOX-83:
+                Original body of method can be obtained using JavaMethod.getSourceCode().
+                Original field initialization expression can be obtained by JavaField.getInitializationExpression().
+                (Much of the work done by Shawn Chain).
+            </action>
+            <action dev="joe" type="updated">
+                Improved Enum parsing support (thanks to Brian Slesinsky and James Lee).
+            </action>
+        </release>
+        
+        <release version="1.6" date="2006-08-14">
+            <action dev="joe" type="update">
+                Switched license from 'Ironsmith' Apache license clone to genuine Apache 2 license.
+            </action>
+            <action dev="pkaminsk" type="add">
+                Implemented QDOX-52:
+                Provide line numbers for all java entities.
+            </action>
+            <action dev="mdub" type="update">
+                Implemented QDOX-59: 
+                Ensure that things (e.g. named tag-parameters,
+                bean-properties) are consistently returned in declared
+                order.
+            </action>
+            <action dev="mdub" type="add">
+                Implemented QDOX-66: 
+                Support for wildcard generic-type arguments.
+            </action>
+            <action dev="joe" type="add">
+                Implemented QDOX-67:
+                Convenience methods - Type.isPrimitive() and Type.isVoid().
+            </action>
+            <action dev="joe" type="add">
+                Parser can now handle Java 5 annotations.
+            </action>
+            <action dev="mdub" type="add">
+                Implemented QDOX-68: 
+                Support for generic-type parameters on methods.
+            </action>
+            <action dev="mdub" type="add">
+                Implemented QDOX-70:
+                Support for Java 5 varargs syntax: "printf(Object... stuff)". New method, JavaParameter.isVarArgs().
+            </action>
+            <action dev="mdub" type="add">
+                Implemented QDOX-78:
+                JavaDoc comments now preserve end of line characters.
+            </action>
+            <action dev="mdub" type="fix">
+                Fix QDOX-61:
+                Support legal Unicode characters in identifiers.
+            </action>
+            <action dev="joe" type="fix">
+                Fix QDOX-63:
+                Inner/nested classes are now resolved correctly between packages (Fix by Philippe Gaudin).
+            </action>
+            <action dev="mdub" type="fix">
+                Fix QDOX-72:
+                Correct terminology re "inner" vs "nested" classes.
+            </action>
+            <action dev="mdub" type="fix">
+                Fix QDOX-73:
+                Reinstate public constructors on concrete model classes.
+            </action>
+            <action dev="joe" type="fix">
+                Fix QDOX-75:
+                Support for methods that specify array dimensions at end: String doStuff()[]
+            </action>
+            <action dev="joe" type="fix">
+                Fix QDOX-80:
+                Static blocks do not add static modifier to next method.
+            </action>
+            <action dev="joe" type="fix">
+                Support for trailing semicolon after class definition.
+            </action>
+            <action dev="joe" type="fix">
+                Bugfix: Support for empty /**/ comments.
+            </action>
+            <action dev="mdub" type="fix">
+                Patch from Mario Siegenthaler and Daniel Müller to improve
+                tolerance of Java 5 syntax, including: annotations with
+                classes as parameters, generic field initialization, static
+                imports and enums with enumeration ending with a semicolon.
+                Fixes QDOX-77.
+            </action>
+            <action dev="joe" type="add">
+                Added QDoxTester to test that QDox can successfully parse a load of Java source.
+            </action>
+        </release>
+
+        <release version="1.5" date="2004-06-20">
+            <action dev="mdub" type="update">
+                Implement QDOX-47:
+                Refactor DocletTag handling so that all context information
+                is provided via the DocletTagFactory.
+            </action>
+            <action dev="rinkrank" type="add">
+                Implement QDOX-53:
+                Add support for parsing of JSR-14 generic types.
+            </action>
+            <action dev="mdub" type="fix">
+                Fix QDOX-45, QDOX-50: 
+                Improve parsing of tag parameters, particularly where
+                whitespace is involved.
+            </action>
+            <action dev="rinkrank" type="fix">
+                Fix QDOX-49:
+                Fixed generation of Eclipse ".classpath".
+            </action>
+            <action dev="rinkrank" type="fix">
+                Fix QDOX-57: 
+                Problems compiling against jmock-1.0.0.
+            </action>
+        </release>
+
+        <!-- action types are add/update/fix/remove -->
+        <release version="1.4" date="2004-04-29">
+            <action dev="mdub" type="fix">
+                Fixed QDOX-27:
+                Handle extra stars in Javadoc start/end tokens.
+            </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-28:
+                Handle unclosed quotes in tag values.
+            </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-30:
+                Support for strictfp modifier (and volatile and native).
+            </action>
+            <action dev="rinkrank" type="fix">
+                Fixed QDOX-33:
+                JavaClass.getTagsByName() is buggy.
+            </action>
+            <action dev="rinkrank" type="fix">
+                Fixed QDOX-34:
+                recursive retrieval of tags from superclasses got a bug.
+            </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-29, QDOX-37:
+                Handle inner-classes in type-resolution.
+            </action>
+            <action dev="mdub" type="add">
+                Implemented QDOX-39:
+                Support multiple fields in a single field-declaration.
+            </action>
+            <action dev="mdub" type="add">
+                Throw a ParseException, including location info, if a
+                syntax error is encountered.
+            </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-42:
+                Fix handling of MAC line-endings.
+            </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-43:
+                Allow "$" in identifiers.
+            </action>
+            <action dev="mdub" type="add">
+                Implemented QDOX-44:
+                Added DocletTag.getNamedParameterMap().
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-46:
+                Added JavaField.getDeclarationSignature().
+            </action>
+        </release>
+
+        <release version="1.3" date="2003-11-03">
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-3.
+                Support for binary classes. 
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-6.
+                Support for bean properties. 
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-7.
+                New isA(String fullyQualifiedName) method in JavaClass.
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-12.
+                Pluggable DocletTag implementations via DocletTagFactory.
+                This opens up for tag validation, ${property} substitution
+                and other goodies that shouldn't go directly into QDox'
+                core, but rather into pluggable extensions.
+            </action>
+            <action dev="pkaminsk" type="fix">
+                Fixed QDOX-13.
+                Line numbers in the lexer.
+            </action>
+            <action dev="rinkrank" type="fix">
+                Fixed QDOX-14.
+                resolveTypeInternal doesn't work for nested types.
+            </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-17.
+                JavaMethod.equals() failed for constructors.
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented QDOX-18.
+                BeanProperty : support for type retrieval.
+            </action>
+            <action dev="mdub" type="fix">
+                Fixed QDOX-16, QDOX-19.
+                More robust handling of "*" and "@" in Javadoc body.
+            </action>
+            <action dev="rinkrank" type="update">
+                Applied QDOX-24.
+                Encoding support for internationalization.
+            </action>
+            <action dev="rinkrank" type="add">
+                Type now has a getJavaClass() method making
+                it easier to find the JavaClass of a Type from e.g. Velocity.
+                Example: $method.returns.javaClass
+            </action>
+            <action dev="rinkrank" type="add">
+                Implemented tag inheritance on classes and methods. (It makes no sense
+                to have it on fields or constructors). Accessed with clazz|method.getTag[s]ByName(String name, boolean superclasses).
+            </action>
+            <action dev="rinkrank" type="update">
+                DocletTag is an interface.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added a getClasses() method to JavaDocBuilder that will
+                return all JavaClasses.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added a getDerivedClasses() method to JavaClass that will
+                return all derived classes, i.e. subclasses or subinterfaces.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added getDeclarationSignature() and getCallSignature() methods
+                to JavaMethod.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added a getNamedParameter(String tagName, String parameterName)
+                convenience method to AbstractJavaEntity for easier retrieval
+                of tag parameters without having to null-check the tag.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added APITestCase. This is a JUnit extension that can be used
+                to compare the equality of two Java sources on the API level.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added int getLineNumber() to DocletTag.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added JavaSource getJavaSource() to DocletTag.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added boolean isInner() to JavaClass.
+            </action>
+            <action dev="rinkrank" type="add">
+                Added JavaMethod[] getMethods(boolean superclasses) to JavaClass.
+            </action>
+        </release>
+
+        <release version="1.2" date="2003-03-23">
+            <action dev="joe" type="fix">
+                Quoted tokens allowed in doclet tags.                
+            </action>
+            <action dev="joe" type="fix">
+                Asterix symbol allowed in doclet tags.                
+            </action>
+        </release>
+
+        <release version="1.1" date="2002-12-08">
+            <action dev="mdub" type="add">
+                Added support for inner classes.                
+            </action>
+            <action dev="joe" type="update">
+                Moved build system over to Maven.                
+            </action>
+        </release>
+
+        <release version="1.0" date="2002-09-25">
+            <action dev="joe" type="add">
+                Initial release.
+            </action>
+        </release>
+
+    </body>
+</document>
+

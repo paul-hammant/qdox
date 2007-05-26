@@ -19,5 +19,4 @@ Build goals:
 
 mvn install				- Create qdox jar
 mvn generate-sources 	- Generate the Java parser code (allowing you to develop in an IDE).
-
-maven site      - Build the QDox website
+mvn site      			- Build the QDox website

@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>QDox Upgrade</title>
+    <author>Mike Williams</author>
+    <author>Aslak Hellesoy</author>
+  </properties>
+
+  <body>
+
+    <section name="Upgrading to 1.6">
+      <p>
+        This section describes what needs to be done when upgrading to QDox
+        1.5.  For an extensive list of changes (most of them backwards
+        compatible), please see the <a href="changes-report.html">Changes
+        Report</a>.
+      </p>
+      <subsection name="Things that might break your code">
+        <p>
+          In <a
+          href="/apidocs/com/thoughtworks/qdox/model/JavaClass.html">JavaClass</a>
+          the getInnerClasses() method has been renamed to
+          getNestedClasses().  The old name remains as a (deprecated)
+          synonym.
+        </p>
+        <p>
+          With support for generic types, we've introduced a bug affecting
+          the use of "&lt;" and "&gt;" in initialisers (see <a
+          href="http://jira.codehaus.org/browse/QDOX-71">QDOX-71</a>).
+        </p>
+      </subsection>
+    </section>
+
+    <section name="Upgrading to 1.5">
+      <p>
+        This section describes what needs to be done when upgrading to QDox
+        1.5.  For an extensive list of changes (most of them backwards
+        compatible), please see the <a href="changes-report.html">Changes
+        Report</a>.
+      </p>
+      <subsection name="Things that might break your code">
+        <p>
+          The <a href="/apidocs/com/thoughtworks/qdox/model/DocletTag.html">DocletTag</a>
+          interface no longer contains a setContext() method.  That information is now provided via 
+          <a href="/apidocs/com/thoughtworks/qdox/model/DocletTagFactory.html">DocletTagFactory</a>, 
+          where createDocletTag() now requires an additional "context" parameter.
+        </p>
+        <p>
+          The parser now passes tag-data to 
+          <a href="/apidocs/com/thoughtworks/qdox/parser/Builder.html">Builders</a> using a new
+          <a href="/apidocs/com/thoughtworks/qdox/parser/structs/TagDef.html">TagDef</a> structure.
+        </p>
+      </subsection>
+    </section>
+
+    <section name="Upgrading to 1.3">
+      <p>
+        This section describes what needs to be done when upgrading to QDox 1.3.
+        For an extensive list of changes (most of them backwards compatible), please see the
+        <a href="changes-report.html">Changes Report</a>.
+      </p>
+      <subsection name="Things that might break your code">
+        <p>
+          (Thanks to Peter Donald for contributing this list).
+        </p>
+        <ul>
+          <li>
+            <a href="/apidocs/com/thoughtworks/qdox/model/DocletTag.html">DocletTag</a>
+            is now an interface and needs to be replaced with
+            <a href="/apidocs/com/thoughtworks/qdox/model/DefaultDocletTag.html">DefaultDocletTag</a>
+          </li>
+          <li>
+            <a href="/apidocs/com/thoughtworks/qdox/model/JavaClass.html">JavaClass</a>
+            has changed so that there is no setParent but instead you need to 
+            pass the parent into the constructor.
+          </li>
+          <li>
+            <a href="/apidocs/com/thoughtworks/qdox/model/JavaClassParent.html">JavaClassParent</a>
+            now has to additional methods that need to be implemented if you implement it:
+            <a href="/apidocs/com/thoughtworks/qdox/model/JavaClassParent.html#getClassLibrary()">getClassLibrary()</a> and
+            <a href="/apidocs/com/thoughtworks/qdox/model/JavaClassParent.html#resolveType(java.lang.String)">resolveType(java.lang.String)</a>.         
+          </li>
+        </ul>
+      </subsection>
+    </section>
+
+  </body>
+  
+</document>

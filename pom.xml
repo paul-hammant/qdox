@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <name>QDox</name>
   <groupId>com.thoughtworks.qdox</groupId>
   <artifactId>qdox</artifactId>
-  <version>1.7-SNAPSHOT</version>
+  <version>1.6.2</version>
   <packaging>jar</packaging>
   <url>http://qdox.codehaus.org</url>
   <description>QDox is a high speed, small footprint parser for extracting
@@ -13,9 +12,9 @@
     documentation tools.</description>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</developerConnection>
-    <url>http://svn.qdox.codehaus.org/trunk/qdox</url>
+    <connection>scm:svn:https://svn.codehaus.org/qdox/tags/QDOX_1_6_2</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/tags/QDOX_1_6_2</developerConnection>
+    <url>https://svn.codehaus.org/qdox/tags/QDOX_1_6_2</url>
   </scm>
     
   <build>
@@ -38,9 +37,7 @@
               <arg value="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" />
               <arg value="src/grammar/lexer.flex" />
             </java>
-            <exec executable="${qdox.byaccj.executable}"
-              dir="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl"
-              failonerror="true">
+            <exec executable="${qdox.byaccj.executable}" dir="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" failonerror="true">
               <arg value="-v" />
               <arg value="-Jnorun" />
               <arg value="-Jnoconstruct" />
@@ -49,8 +46,7 @@
               <arg value="-Jpackage=com.thoughtworks.qdox.parser.impl" />
               <arg value="${basedir}/src/grammar/parser.y" />
             </exec>
-            <move tofile="${project.build.directory}/yacc-states.txt"
-              file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y" />
+            <move tofile="${project.build.directory}/yacc-states.txt" file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y" />
           </tasks>
           <sourceRoot>${project.build.directory}/generated-sources/parser</sourceRoot>
         </configuration>

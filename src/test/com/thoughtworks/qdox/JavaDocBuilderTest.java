@@ -26,10 +26,10 @@ public class JavaDocBuilderTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         builder = new JavaDocBuilder();
-        createFile("tmp/sourcetest/com/blah/Thing.java", "com.blah", "Thing");
-        createFile("tmp/sourcetest/com/blah/Another.java", "com.blah", "Another");
-        createFile("tmp/sourcetest/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");
-        createFile("tmp/sourcetest/com/blah/Ignore.notjava", "com.blah", "Ignore");
+        createFile("target/test-source/com/blah/Thing.java", "com.blah", "Thing");
+        createFile("target/test-source/com/blah/Another.java", "com.blah", "Another");
+        createFile("target/test-source/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");
+        createFile("target/test-source/com/blah/Ignore.notjava", "com.blah", "Ignore");
     }
 
     public void testParsingMultipleJavaFiles() {
@@ -118,7 +118,7 @@ public class JavaDocBuilderTest extends TestCase {
     }
 
     public void testSourceTree() throws Exception {
-        builder.addSourceTree(new File("tmp/sourcetest"));
+        builder.addSourceTree(new File("target/test-source"));
 
         assertNotNull(builder.getClassByName("com.blah.Thing"));
         assertNotNull(builder.getClassByName("com.blah.Another"));
@@ -126,16 +126,16 @@ public class JavaDocBuilderTest extends TestCase {
     }
 
     public void testRecordFile() throws Exception {
-        builder.addSource(new File("tmp/sourcetest/com/blah/Thing.java"));
+        builder.addSource(new File("target/test-source/com/blah/Thing.java"));
 
         JavaSource[] sources = builder.getSources();
         assertEquals(1, sources.length);
-        assertEquals(new File("tmp/sourcetest/com/blah/Thing.java").toURL(),
+        assertEquals(new File("target/test-source/com/blah/Thing.java").toURL(),
                 sources[0].getURL());
     }
 
     public void testSearcher() throws Exception {
-        builder.addSourceTree(new File("tmp/sourcetest"));
+        builder.addSourceTree(new File("target/test-source"));
 
         List results = builder.search(new Searcher() {
             public boolean eval(JavaClass cls) {
@@ -428,8 +428,8 @@ public class JavaDocBuilderTest extends TestCase {
     }
 
     public void testSaveAndRestore() throws Exception {
-        File file = new File("tmp/sourcetest/cache.obj");
-        builder.addSourceTree(new File("tmp/sourcetest"));
+        File file = new File("target/test-source/cache.obj");
+        builder.addSourceTree(new File("target/test-source"));
         builder.save(file);
 
         JavaDocBuilder newBuilder = JavaDocBuilder.load(file);

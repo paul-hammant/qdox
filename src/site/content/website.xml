@@ -1,0 +1,20 @@
+<sitemap>
+    <section>
+        <name>Software</name>
+        <page>index.html</page>
+    </section>
+    <section>
+        <name>Evaluating QDox</name>
+        <page>license.html</page>
+        <page>download.html</page>
+        <page>changes.html</page>
+        <page>upgrade.html</page>
+        <page>whouses.html</page>
+    </section>
+    <section>
+        <name>Using QDox</name>
+        <page>model.html</page>
+        <page>usage.html</page>
+        <link title="JavaDoc">javadoc/index.html</link>
+    </section>
+</sitemap>

@@ -102,6 +102,9 @@
     <contributor>
       <name>James Lee</name>
     </contributor>
+    <contributor>
+      <name>Eric Redmond</name>
+    </contributor>
   </contributors>
 
   <build>
@@ -144,6 +147,68 @@
           <execution>
             <id>generate-sources</id>
             <phase>generate-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadoc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <links>
+                <link>http://java.sun.com/j2se/1.5/docs/api</link>
+              </links>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.0-alpha-4</version>
+        <executions>
+          <execution>
+            <id>unpack-core</id>
+            <phase>install</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/xsite/javadoc</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${pom.groupId}</groupId>
+                  <artifactId>qdox</artifactId>
+                  <version>${pom.version}</version>
+                  <classifier>javadoc</classifier>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.xsite</groupId>
+        <artifactId>xsite-maven-plugin</artifactId>
+        <configuration>
+          <siteMapPath>${basedir}/src/site/content/website.xml</siteMapPath>
+          <skinPath>${basedir}/src/site/templates/skin.html</skinPath>
+          <outputDirectoryPath>${project.build.directory}/xsite</outputDirectoryPath>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>install</phase>
             <goals>
               <goal>run</goal>
             </goals>

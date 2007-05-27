@@ -1,19 +1,15 @@
 To build QDox there are two prerequisites:
 
-* Maven 
-This is the build system used instead of Ant. 
+* Maven 2 (2.0.6 or later)
 http://maven.apache.org
  
 * BYacc/J (1.8 or later)
-This is the parser generator used to create an effecitive parser for JavaDoc.
-If using Windows, Linux, Solaris or OS-X, no additional installation is 
-needed as yacc binaries are supplied
-in the bootstrap directory. If using any other platform, download BYacc/J from
-the site below and update build.properties.
 http://byaccj.sourceforge.net/
-
-(You might have to download it via CVS and build it yourself, in which case
-we would be grateful to receive a copy of your binary).
+Paarser generator used to create an effective parser for JavaDoc.
+If using Windows, Linux, Solaris or Mac OS X, no additional installation is 
+needed as yacc binaries are supplied in the bootstrap directory. 
+If using any other platform, download BYacc/J from the site or build it yourself, in which case
+we would be grateful to receive a copy of your binary, so we can upgrade the bootstrap support.
 
 Build goals:
 

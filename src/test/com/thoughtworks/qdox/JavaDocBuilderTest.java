@@ -852,4 +852,15 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(expected.trim(), javaField.getInitializationExpression().trim());
     }
 
+    public void testNewLessArrays() {
+        String source = "" +
+                "public class Thing {\n" +
+                " long[] bad = {1,2,3};\n" +
+                "}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaSource javaSource = builder.addSource(new StringReader(source));
+
+        JavaField field = javaSource.getClasses()[0].getFieldByName("bad");
+        assertEquals("{1,2,3}", field.getInitializationExpression().trim());
+    }
 }

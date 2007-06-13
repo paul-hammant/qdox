@@ -303,10 +303,8 @@ Id						= [:jletter:] [:jletterdigit:]*
     }
     "{"                 {
         codeBody.append('{');
-		anonymousMode = newMode;
-        if (anonymousMode) {
-	        nestingDepth++;
-        }
+		anonymousMode = true;
+		nestingDepth++;
     }
     "}"                 {
 		codeBody.append('}');

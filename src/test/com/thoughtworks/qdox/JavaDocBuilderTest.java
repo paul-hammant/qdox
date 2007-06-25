@@ -3,7 +3,6 @@ package com.thoughtworks.qdox;
 import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.model.util.SerializationUtils;
 import com.thoughtworks.qdox.parser.ParseException;
-import junit.framework.TestCase;
 
 import java.io.*;
 import java.util.Arrays;
@@ -11,17 +10,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
+
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  */
-public class JavaDocBuilderTest extends TestCase {
+public class JavaDocBuilderTest extends MockObjectTestCase {
 
     private JavaDocBuilder builder;
-
-    public JavaDocBuilderTest(String name) {
-        super(name);
-    }
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -30,6 +28,11 @@ public class JavaDocBuilderTest extends TestCase {
         createFile("target/test-source/com/blah/Another.java", "com.blah", "Another");
         createFile("target/test-source/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");
         createFile("target/test-source/com/blah/Ignore.notjava", "com.blah", "Ignore");
+    }
+
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        deleteDir("target/test-source");
     }
 
     public void testParsingMultipleJavaFiles() {
@@ -44,7 +47,6 @@ public class JavaDocBuilderTest extends TestCase {
 
         JavaClass testClass = sources[1].getClasses()[0];
         assertEquals("TestClass", testClass.getName());
-
 
         JavaClass testClassListByName = builder.getClassByName("com.thoughtworks.qdox.TestClassList");
         assertEquals("TestClassList", testClassListByName.getName());
@@ -158,6 +160,20 @@ public class JavaDocBuilderTest extends TestCase {
         writer.close();
     }
 
+    private void deleteDir(String path) {
+        File dir = new File(path);
+        File[] children = dir.listFiles();
+        for (int i = 0; i < children.length; i++) {
+            File file = children[i];
+            if (file.isDirectory()) {
+                deleteDir(file.getAbsolutePath());
+            } else {
+                file.delete();
+            }
+        }
+        dir.delete();
+    }
+    
     public void testDefaultClassLoader() throws Exception {
         String in = ""
                 + "package x;"
@@ -379,7 +395,7 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(0, derivedClassesOfArrayList.size());
     }
 
-    public void testSourcePropertyClass() throws IOException, UnsupportedEncodingException {
+    public void testSourcePropertyClass() throws IOException {
         builder.addSource(new File("src/test/com/thoughtworks/qdox/testdata/PropertyClass.java"));
         // Handy way to assert that behaviour for source and binary classes is the same.
         testPropertyClass();
@@ -852,10 +868,10 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(expected.trim(), javaField.getInitializationExpression().trim());
     }
 
-    public void testNewLessArrays() {
+    public void testNewlessArrays() {
         String source = "" +
                 "public class Thing {\n" +
-                " long[] bad = {1,2,3};\n" +
+                " long[] bad = {1,2,3};\n" +  // as opposed to bad = new long[] {1,2,3}.
                 "}";
         JavaDocBuilder builder = new JavaDocBuilder();
         JavaSource javaSource = builder.addSource(new StringReader(source));
@@ -863,4 +879,33 @@ public class JavaDocBuilderTest extends TestCase {
         JavaField field = javaSource.getClasses()[0].getFieldByName("bad");
         assertEquals("{1,2,3}", field.getInitializationExpression().trim());
     }
+
+    public void testDefaultsToThrowingExceptionWhenNotParseable() throws Exception {
+        createFile("target/test-source/com/blah/Bad.java", "com.blah", "@%! BAD {}}}}");
+
+        JavaDocBuilder builder = new JavaDocBuilder();
+        try {
+            builder.addSourceTree(new File("target/test-source"));
+            fail("Expected exception");
+        } catch (ParseException expectedException) {
+            // Good!
+        }
+    }
+
+    public void testContinuesProcessingAfterBadFileIfCustomHandlerPermits() throws Exception {
+        createFile("target/test-source/com/blah/Bad.java", "com.blah", "@%! BAD {}}}}");
+
+        Mock mockErrorHandler = mock(JavaDocBuilder.ErrorHandler.class);
+        // Expectation
+        mockErrorHandler.expects(once())
+                .method("handle")
+                .with(isA(ParseException.class));
+
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.setErrorHandler((JavaDocBuilder.ErrorHandler) mockErrorHandler.proxy());
+        builder.addSourceTree(new File("target/test-source"));
+
+        assertNotNull(builder.getClassByName("com.blah.Thing"));
+    }
+
 }

@@ -83,6 +83,11 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     private String encoding = System.getProperty("file.encoding");
     private boolean debugLexer;
     private boolean debugParser;
+    private ErrorHandler errorHandler;
+
+    public static interface ErrorHandler {
+        void handle(ParseException parseException);
+    }
 
     public JavaDocBuilder() {
         this(new DefaultDocletTagFactory());
@@ -300,7 +305,11 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
             parser.parse();
         } catch (ParseException e) {
             e.setSourceInfo(sourceInfo);
-            throw e;
+            if (errorHandler == null) {
+                throw e;
+            } else {
+                errorHandler.handle(e);
+            }
         }
         JavaSource source = builder.getSource();
         sources.add(source);
@@ -316,6 +325,10 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         JavaSource source = addSource(new InputStreamReader(url.openStream(),encoding), url.toExternalForm());
         source.setURL(url);
         return source;
+    }
+
+    public void setErrorHandler(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
     }
 
     public JavaSource[] getSources() {
@@ -360,17 +373,34 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         }
     }
 
+    /**
+     * Add all files in a directory (and subdirs, recursively).
+     *
+     * If a file cannot be read, a RuntimeException shall be thrown.
+     */
     public void addSourceTree(File file) {
+        FileVisitor errorHandler = new FileVisitor() {
+            public void visitFile(File badFile) {
+                throw new RuntimeException("Cannot read file : " + badFile.getName());
+            }
+        };
+        addSourceTree(file, errorHandler);
+    }
+
+    /**
+     * Add all files in a directory (and subdirs, recursively).
+     *
+     * If a file cannot be read, errorHandler will be notified.
+     */
+    public void addSourceTree(File file, final FileVisitor errorHandler) {
         DirectoryScanner scanner = new DirectoryScanner(file);
         scanner.addFilter(new SuffixFilter(".java"));
         scanner.scan(new FileVisitor() {
             public void visitFile(File currentFile) {
                 try {
                     addSource(currentFile);
-                } catch (UnsupportedEncodingException e) {
-					throw new RuntimeException("Unsupported encoding : " + encoding);
                 } catch (IOException e) {
-                    throw new RuntimeException("Cannot read file : " + currentFile.getName());
+					errorHandler.visitFile(currentFile);
                 }
             }
         });

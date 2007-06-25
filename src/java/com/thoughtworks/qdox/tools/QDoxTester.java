@@ -111,7 +111,6 @@ public class QDoxTester {
                 System.err.println("Unknown input <" + file.getName() + ">. Should be zip, jar, java or directory");
             }
         }
-        qDoxTester.checkZipOrJarFile(new File("/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/src.zip"));
         reporter.writeSummary();
     }
 

@@ -52,6 +52,15 @@ public class JavaFieldTest extends TestCase {
         assertEquals(expected, fld.toString());
     }
 
+    public void testToStringWithValue() throws Exception {
+        JavaField fld = new JavaField();
+        fld.setName("stuff");
+        fld.setType(new Type("String"));
+        fld.setInitializationExpression("STUFF + getThing()");
+        String expected = "String stuff = STUFF + getThing();\n";
+        assertEquals(expected, fld.toString());
+    }
+    
     public void testShouldReturnFieldNameForCallSignature() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");

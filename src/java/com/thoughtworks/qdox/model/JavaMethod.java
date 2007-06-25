@@ -94,12 +94,17 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
                 }
             }
         }
-        if (sourceCode != null) {
-            result.write(sourceCode);
-        }
         if (isPrettyPrint) {
-            result.write(';');
-            result.newline();
+            if (sourceCode != null && sourceCode.length() > 0) {
+                result.write(" {");
+                result.newline();
+                result.write(sourceCode);
+                result.write("}");
+                result.newline();
+            } else {
+                result.write(';');
+                result.newline();
+            }
         }
     }
 

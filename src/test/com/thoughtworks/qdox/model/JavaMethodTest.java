@@ -156,6 +156,19 @@ public class JavaMethodTest extends TestCase {
         assertEquals("void blah(int[][] count, MyThing[] t);\n", mth.toString());
     }
 
+    public void testToStringWithBody() throws Exception {
+        mth.setName("doStuff");
+        mth.setReturns(new Type("java.lang.String"));
+        mth.setSourceCode("  int x = 2;\n  return STUFF;\n");
+
+        assertEquals("" +
+                "java.lang.String doStuff() {\n" +
+                "  int x = 2;\n" +
+                "  return STUFF;\n" +
+                "}\n",
+                mth.toString());
+    }
+    
     public void testEquals() throws Exception {
         mth.setName("thing");
         mth.setReturns(new Type("void"));

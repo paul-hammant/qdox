@@ -1,20 +1,36 @@
 package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import com.thoughtworks.qdox.model.annotation.AnnotationValue;
+import com.thoughtworks.qdox.model.annotation.AnnotationVisitor;
 
 /**
  * 
  * @author Eric Redmond
  */
-public class Annotation implements Serializable
+public class Annotation implements AnnotationValue, Serializable
 {
     private final Type type;
     private final int lineNumber;
 
-    private Map namedParameters;
+    /**
+     * Annotation properties as AnnotationValues
+     * <p>
+     * This map contains the parsed AnnotationValue for each property and allows
+     * access to the full parse tree, including typerefs and expressions.
+     */
+    private final Map properties = new LinkedHashMap();
+
+    /**
+     * Annotation properties as Parameters
+     */
+    private final Map namedParameters = new LinkedHashMap();
+
     private AbstractJavaEntity context;
 
     public Annotation(Type type,
@@ -22,11 +38,29 @@ public class Annotation implements Serializable
             Map namedParameters,
             int lineNumber)
 	{
-		this.type = type;
-		this.context = context;
-    	this.namedParameters = namedParameters == null ? new HashMap(0) : namedParameters;
-		this.lineNumber = lineNumber;
+        this.type = type;
+        this.context = context;
+        this.lineNumber = lineNumber;
+        
+        if(properties != null) {
+            for(Iterator i = this.properties.entrySet().iterator(); i.hasNext(); ) {
+                Entry entry = (Entry) i.next();
+                String name = (String) entry.getKey();
+                AnnotationValue value = (AnnotationValue) entry.getValue();
+                
+                setProperty(name, value);
+            }
+        }
 	}
+
+    public Annotation( Type type, int line ) {
+        this(type, null, null, line);
+    }
+
+    public void setProperty(String name, AnnotationValue value) {
+        properties.put( name, value );
+        namedParameters.put( name, value.getParameterValue() );
+    }
 
     /**
      * @return the annotation type
@@ -57,6 +91,26 @@ public class Annotation implements Serializable
 
     public int getLineNumber() {
         return lineNumber;
+    }
+
+    public Object accept( AnnotationVisitor visitor ) {
+        return visitor.visitAnnotation( this );
+    }
+
+    public Object getParameterValue() {
+        return this;
+    }
+    
+    public Map getPropertyMap() {
+        return properties;
+    }
+    
+    public AnnotationValue getProperty(String name) {
+        return (AnnotationValue) properties.get( name );
+    }
+
+    public void setContext( AbstractJavaEntity context ) {
+        this.context = context;
     }
 
     public String toString() {

@@ -6,6 +6,12 @@
     </properties>
 
     <body>
+
+        <release version="???" date="????">
+            <action dev="paul" type="updated">
+                Improved annotation support including types, fields and expressions (thanks to Jochen Kuhnle; QDOX-126).
+            </action>
+        </release>
  
         <release version="1.6.2" date="2007-05-26">
             <action dev="joe" type="updated">

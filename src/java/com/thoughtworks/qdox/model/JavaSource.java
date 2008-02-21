@@ -2,14 +2,15 @@ package com.thoughtworks.qdox.model;
 
 import java.io.File;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import java.net.URL;
-import java.net.MalformedURLException;
 
 public class JavaSource implements Serializable, JavaClassParent {
 
@@ -246,4 +247,20 @@ public class JavaSource implements Serializable, JavaClassParent {
     public JavaSource getParentSource() {
         return this;
     }
+    
+    public JavaClass getNestedClassByName(String name) {
+        JavaClass result = null;
+        
+        for (ListIterator i = classes.listIterator(); i.hasNext(); ) {
+            JavaClass candidateClass = (JavaClass) i.next();
+            
+            if (candidateClass.getName().equals(name)) {
+                result = candidateClass;
+                break;
+            }
+        }
+
+        return result;
+    }
+
 }

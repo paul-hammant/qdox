@@ -1,12 +1,14 @@
 package com.thoughtworks.qdox.parser;
 
-import com.thoughtworks.qdox.parser.structs.AnnoDef;
-import com.thoughtworks.qdox.parser.structs.ClassDef;
-import com.thoughtworks.qdox.parser.structs.MethodDef;
-import com.thoughtworks.qdox.parser.structs.FieldDef;
-import com.thoughtworks.qdox.parser.structs.TagDef;
 import org.jmock.expectation.ExpectationCounter;
 import org.jmock.expectation.ExpectationList;
+
+import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.TagDef;
 
 class MockBuilder implements Builder {
     private ExpectationCounter myAddPackageCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder AddPackageCalls");
@@ -125,8 +127,8 @@ class MockBuilder implements Builder {
         myAddFieldParameter0Values.addActual(arg0);
     }
 
-    public void addAnnotation( AnnoDef def ) {
-        
+    public void addAnnotation( Annotation annotation ) {
+        // Empty
     }
     
     public void verify() {
@@ -146,5 +148,9 @@ class MockBuilder implements Builder {
         myAddMethodParameter0Values.verify();
         myAddFieldCalls.verify();
         myAddFieldParameter0Values.verify();
+    }
+
+    public Type createType( String name, int dimensions ) {
+        return null;
     }
 }

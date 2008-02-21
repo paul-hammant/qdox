@@ -1,23 +1,47 @@
 %{
 import com.thoughtworks.qdox.parser.*;
 import com.thoughtworks.qdox.parser.structs.*;
+import com.thoughtworks.qdox.model.*;
+import com.thoughtworks.qdox.model.annotation.*;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 %}
 
-%token SEMI DOT DOTDOTDOT COMMA STAR EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
+%token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
-%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE LESSTHAN GREATERTHAN AMPERSAND QUERY AT
+%token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
+%token LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS
+%token LESSTHAN2 GREATERTHAN2 GREATERTHAN3
+%token EXCLAMATION AMPERSAND2 VERTLINE2 EQUALS2 NOTEQUALS
+%token TILDE AMPERSAND VERTLINE CIRCUMFLEX
+%token VOID
+%token QUERY COLON AT
 %token JAVADOCSTART JAVADOCEND JAVADOCEOL
 %token CODEBLOCK PARENBLOCK
+%token BYTE SHORT INT LONG CHAR FLOAT DOUBLE BOOLEAN
 
 // strongly typed tokens/types
-%token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN ANNOTATION
-%token <sval> BOOLEAN_LITERAL INTEGER_LITERAL FLOAT_LITERAL
+%token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN
+%token <sval> BOOLEAN_LITERAL
+%token <sval> INTEGER_LITERAL
+%token <sval> LONG_LITERAL
+%token <sval> FLOAT_LITERAL
+%token <sval> DOUBLE_LITERAL
+%token <sval> CHAR_LITERAL
+%token <sval> STRING_LITERAL
+%token <ival> VERTLINE2 AMPERSAND2 VERTLINE CIRCUMFLEX AMPERSAND EQUALS2 NOTEQUALS
+%token <ival> LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS LESSTHAN2 GREATERTHAN2 GREATERTHAN3
+%token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
+%type <sval> name primitiveType
+%type <annoval> value expression literal annotation arrayInitializer
+%type <annoval> conditionalExpression conditionalOrExpression conditionalAndExpression inclusiveOrExpression exclusiveOrExpression andExpression
+%type <annoval> equalityExpression relationalExpression shiftExpression additiveExpression multiplicativeExpression
+%type <annoval> unaryExpression unaryExpressionNotPlusMinus primary
+%type <ival> dims
 %type <sval> fullidentifier modifier classtype typedeclspecifier typename memberend
-%type <sval> annotationValueConstant annotationSymConstant
-%type <oval> annoElementValue
 %type <ival> dimensions
 %type <bval> varargs
 %type <type> type arrayidentifier
@@ -104,85 +128,169 @@ modifier:
 
 modifiers:
     modifiers modifier { modifiers.add($2); } |
-    modifiers annotation |
+    modifiers annotation { builder.addAnnotation((Annotation) $2); } |
     ;
 
 
-// ----- ANNOTATIONS
-
-annotationValueConstant:
-	FLOAT_LITERAL		{ $$ = $1; } |
-	INTEGER_LITERAL		{ $$ = $1; } |
-	BOOLEAN_LITERAL		{ $$ = $1; } |
-	fullidentifier		{ $$ = $1; } |
-	fullidentifier DOT CLASS { $$ = $1 + ".class"; } |
-	ANNOSTRING			{
-		// would prefer to set this as a returned token in flex... how?
-		String str = lexer.getCodeBody();
-		str = str.substring( 1, str.length() - 1 );
-		$$ = str;
-	} |
-	ANNOCHAR			{
-		String str = lexer.getCodeBody();
-		str = str.substring( 1, str.length() - 1 );
-		$$ = str;
-	};
-
-annotationSymConstant:
-	LESSTHAN	{ $$ = "<"; } |
-	GREATERTHAN	{ $$ = ">"; } |
-	STAR		{ $$ = "*"; } |
-	SLASH		{ $$ = "/"; } |
-	PLUS		{ $$ = "+"; } |
-	MINUS		{ $$ = "/"; };
-
-annotationValueConstants:
-	annotationValueConstant {
-		annoConstants.add( $1 );
-	} | annotationValueConstants annotationSymConstant annotationValueConstant {
-		annoConstants.add( $2 );
-		annoConstants.add( $3 );
-	};
+//--------------------------------------------------------------------------------
+// ANNOTATIONS
+//--------------------------------------------------------------------------------
 
 annotation:
-	{ ano = new AnnoDef(); } annotationWork { builder.addAnnotation(ano); };
-
-annotationWork:
-	ANNOTATION {
-        ano.lineNumber = line;
-		ano.name = $1.substring(1).trim();
-	} annoParens;
-
-annoParens:
+    AT name 
+    { 
+    	annotationStack.add(annotation);
+    	annotation = new Annotation(builder.createType($2, 0), lexer.getLine()); 
+    }
+    annotationParensOpt
+    {
+    	$$ = annotation;
+    	annotation = (Annotation)annotationStack.remove(annotationStack.size() - 1);
+    };
+    
+annotationParensOpt:
 	|
-	PARENOPEN annoParenContents PARENCLOSE;
+	PARENOPEN value PARENCLOSE { annotation.setProperty("value", $2); } |
+	PARENOPEN valuePairs PARENCLOSE |
+	PARENOPEN PARENCLOSE;
+    
+valuePairs:
+    valuePair |
+    valuePairs COMMA valuePair;
+    
+valuePair:
+    IDENTIFIER EQUALS value { annotation.setProperty($1, $3); };
+    
+arrayInitializer:
+    {
+    	annoValueListStack.add(annoValueList);
+    	annoValueList = new ArrayList(); 
+    }
+    BRACEOPEN valuesOpt BRACECLOSE
+    {
+    	$$ = new AnnotationValueList(annoValueList);
+    	annoValueList = (List)annoValueListStack.remove(annoValueListStack.size() - 1);
+    };
+    
+valuesOpt:
+    |
+    values;    
+    
+values:
+	value { annoValueList.add($1); } |
+	values COMMA value { annoValueList.add($3); };
+    
+value:
+    expression { $$ = $1; } |
+    annotation { $$ = $1; } |
+    arrayInitializer { $$ = $1; };
 
-annoParenContents:
-	annoElementValue { ano.args.put( "value", $1 ); } |
-	annoElementValuePairs;
+expression:
+	conditionalExpression { $$ = $1; };
+	
+conditionalExpression:
+	conditionalOrExpression { $$ = $1; } |
+	conditionalOrExpression QUERY expression COLON expression { $$ = new AnnotationQuery($1, $3, $5); };
 
-annoElementValuePairs:
-	annoElementValuePair |
-	annoElementValuePairs COMMA annoElementValuePair;
+conditionalOrExpression:
+    conditionalAndExpression { $$ = $1; } |
+	conditionalOrExpression VERTLINE2 conditionalAndExpression { $$ = new AnnotationLogicalOr($1, $3); };
 
-annoElementValuePair:
-	IDENTIFIER EQUALS annoElementValue { ano.args.put( $1, $3 ); };
+conditionalAndExpression:
+    inclusiveOrExpression { $$ = $1; } |
+	conditionalAndExpression AMPERSAND2 inclusiveOrExpression { $$ = new AnnotationLogicalAnd($1, $3); };
 
-annoElementValue:
-	PARENOPEN annoElementValue PARENCLOSE { $$ = $2; } |
-	annotationValueConstants { $$ = annoConstants; annoConstants = new LinkedList(); } |
-	{	AnnoDef tmpAno = new AnnoDef();
-		tmpAno.tempAnno = ano;
-		ano = tmpAno;
-	} annotationWork { $$ = ano; ano = ano.tempAnno; } |
-	annoElementValueArrayInitializer { $$ = annoValues; annoValues = new LinkedList(); };
+inclusiveOrExpression:
+    exclusiveOrExpression { $$ = $1; } |
+    inclusiveOrExpression VERTLINE exclusiveOrExpression { $$ = new AnnotationOr($1, $3); };
 
-annoElementValueArrayInitializer:
-    BRACEOPEN annoElementValues BRACECLOSE;
+exclusiveOrExpression:
+	andExpression { $$ = $1; } |
+	exclusiveOrExpression CIRCUMFLEX andExpression { $$ = new AnnotationExclusiveOr($1, $3); };
 
-annoElementValues:
-	annoElementValue { annoValues.add( $1 ); } |
-	annoElementValues COMMA annoElementValue { annoValues.add( $3 ); };
+andExpression:
+    equalityExpression { $$ = $1; } |
+    andExpression AMPERSAND equalityExpression { $$ = new AnnotationAnd($1, $3); };
+
+equalityExpression:
+    relationalExpression { $$ = $1; } |
+    equalityExpression EQUALS2 relationalExpression { $$ = new AnnotationEquals($1, $3); } |
+    equalityExpression NOTEQUALS relationalExpression { $$ = new AnnotationNotEquals($1, $3); };
+
+relationalExpression:
+	shiftExpression { $$ = $1; } |
+	relationalExpression LESSEQUALS shiftExpression { $$ = new AnnotationLessEquals($1, $3); } |
+	relationalExpression GREATEREQUALS shiftExpression { $$ = new AnnotationGreaterEquals($1, $3); } |
+	relationalExpression LESSTHAN shiftExpression { $$ = new AnnotationLessThan($1, $3); } |
+	relationalExpression GREATERTHAN shiftExpression { $$ = new AnnotationGreaterThan($1, $3); };
+	
+shiftExpression:
+	additiveExpression { $$ = $1; } |
+	shiftExpression LESSTHAN2 additiveExpression { $$ = new AnnotationShiftLeft($1, $3); } |
+	shiftExpression GREATERTHAN3 additiveExpression { $$ = new AnnotationUnsignedShiftRight($1, $3); } |
+	shiftExpression GREATERTHAN2 additiveExpression { $$ = new AnnotationShiftRight($1, $3); };
+
+additiveExpression:
+	multiplicativeExpression { $$ = $1; } |
+	additiveExpression PLUS multiplicativeExpression { $$ = new AnnotationAdd($1, $3); } |
+	additiveExpression MINUS multiplicativeExpression { $$ = new AnnotationSubtract($1, $3); };
+
+multiplicativeExpression:
+    unaryExpression { $$ = $1; } |
+	multiplicativeExpression STAR unaryExpression { $$ = new AnnotationMultiply($1, $3); } |
+	multiplicativeExpression SLASH unaryExpression { $$ = new AnnotationDivide($1, $3); } |
+	multiplicativeExpression PERCENT unaryExpression { $$ = new AnnotationRemainder($1, $3); };
+	
+unaryExpression:
+    PLUS unaryExpression { $$ = new AnnotationPlusSign($2); } |
+    MINUS unaryExpression { $$ = new AnnotationMinusSign($2); } |
+	unaryExpressionNotPlusMinus { $$ = $1; };
+
+unaryExpressionNotPlusMinus:
+	TILDE unaryExpression { $$ = new AnnotationNot($2); } |
+	EXCLAMATION unaryExpression { $$ = new AnnotationLogicalNot($2); } |
+	primary;
+    	
+primary:
+    PARENOPEN primitiveType PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2, 0), $4); } |
+	PARENOPEN primitiveType dims PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2, $3), $5); } |
+    PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, $3), $5); } |
+	PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, 0), $4); } |
+    PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
+    literal { $$ = $1; } |
+    primitiveType dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
+    primitiveType DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
+    name DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
+    name dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
+    name { $$ = new AnnotationFieldRef($1); };
+	
+dims:
+    SQUAREOPEN SQUARECLOSE { $$ = 1; } |
+    dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };
+	
+name:
+    IDENTIFIER { $$ = $1; } |
+    name DOT IDENTIFIER { $$ = $1 + "." + $3; };    
+    
+literal:
+    DOUBLE_LITERAL { $$ = new AnnotationConstant(toDouble($1), $1); } |
+    FLOAT_LITERAL { $$ = new AnnotationConstant(toFloat($1), $1); } |
+    LONG_LITERAL { $$ = new AnnotationConstant(toLong($1), $1); } |
+    INTEGER_LITERAL { $$ = new AnnotationConstant(toInteger($1), $1); } |
+    BOOLEAN_LITERAL { $$ = new AnnotationConstant(toBoolean($1), $1); } |
+    CHAR_LITERAL { String s = lexer.getCodeBody(); $$ = new AnnotationConstant(toChar(s), s); } |
+    STRING_LITERAL { String s = lexer.getCodeBody(); $$ = new AnnotationConstant(toString(s), s); };
+        
+primitiveType:
+    BOOLEAN { $$ = "boolean"; } |
+    BYTE { $$ = "byte"; } |
+    SHORT { $$ = "short"; } |
+    INT { $$ = "int"; } |
+    LONG { $$ = "long"; } |
+    CHAR { $$ = "char"; } |
+    FLOAT { $$ = "float"; } |
+    DOUBLE { $$ = "double"; };
+        
 
 // ----- TYPES
 
@@ -409,16 +517,16 @@ private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
-private AnnoDef ano = new AnnoDef();
+private List annotationStack = new ArrayList(); // Use ArrayList intead of Stack because it is unsynchronized 
+private Annotation annotation = null;
+private List annoValueListStack = new ArrayList(); // Use ArrayList intead of Stack because it is unsynchronized
+private List annoValueList = null;
 private FieldDef param = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
 private TypeDef fieldType;
 private int line;
 private int column;
 private boolean debugLexer;
-
-private LinkedList annoConstants = new LinkedList();
-private LinkedList annoValues = new LinkedList();
 
 private void appendToBuffer(String word) {
     if (textBuffer.length() > 0) {
@@ -481,7 +589,9 @@ private class Value {
     int ival;
 	boolean bval;
     TypeDef type;
+    AnnotationValue annoval;
 }
+
 
 private void makeField(TypeDef field, String body) {
     FieldDef fd = new FieldDef();
@@ -494,3 +604,197 @@ private void makeField(TypeDef field, String body) {
     builder.addField(fd);
 }
 
+private String convertString(String str) {
+	StringBuffer buf = new StringBuffer();
+	boolean escaped = false;
+	int unicode = 0;
+	int value = 0;
+	int octal = 0;
+	boolean consumed = false;
+	
+	for(int i = 0; i < str.length(); ++ i) {
+		char ch = str.charAt( i );
+		
+		if(octal > 0) {
+			if( value >= '0' && value <= '7' ) {
+				value = ( value << 3 ) | Character.digit( ch, 8 );
+				-- octal;
+				consumed = true;
+			}
+			else {
+				octal = 0;
+			}
+			
+			if( octal == 0 ) {
+				buf.append( (char) value );		
+				value = 0;
+			}
+		}
+		
+		if(!consumed) {
+			if(unicode > 0) {
+				value = ( value << 4 ) | Character.digit( ch, 16 );
+				
+				-- unicode;
+		
+				if(unicode == 0) {
+					buf.append( (char)value );
+					value = 0;
+				}
+			}
+			else if(ch == '\\') {
+				escaped = true;
+			}
+			else if(escaped) {
+				if(ch == 'u' || ch == 'U') {
+					unicode = 4;
+				}
+				else if(ch >= '0' && ch <= '7') {
+					octal = (ch > '3') ? 1 : 2;
+					value = Character.digit( ch, 8 );
+				}
+				else {
+					switch( ch ) {
+						case 'b':
+							buf.append('\b');
+							break;
+							
+						case 'f':
+							buf.append('\f');
+							break;
+							
+						case 'n':
+							buf.append('\n');
+							break;
+							
+						case 'r':
+							buf.append('\r');
+							break;
+							
+						case 't':
+							buf.append('\t');
+							break;
+							
+						case '\'':
+							buf.append('\'');
+							break;
+	
+						case '\"':
+							buf.append('\"');
+							break;
+	
+						case '\\':
+							buf.append('\\');
+							break;
+							
+						default:
+							yyerror( "Illegal escape character '" + ch + "'" );
+					}
+				}
+				
+				escaped = false;
+			}
+			else {
+				buf.append( ch );
+			}
+		}
+	}
+
+	return buf.toString();
+}
+
+private Boolean toBoolean(String str) {
+	str = str.trim();
+
+	return new Boolean( str );
+}
+
+private Integer toInteger(String str) {
+	str = str.trim();
+	
+	Integer result;
+	
+	if(str.startsWith("0x") || str.startsWith( "0X" ) ) {
+		result = new Integer( Integer.parseInt( str.substring( 2 ), 16 ) );
+	}
+	else if(str.length() > 1 && str.startsWith("0") ) {
+		result = new Integer( Integer.parseInt( str.substring( 1 ), 8 ) );
+	}
+	else {
+		result = new Integer( str );
+	}
+	
+	return result;
+}
+
+private Long toLong(String str) {
+	str = str.trim();
+
+	Long result;
+	
+	if( !str.endsWith("l") && !str.endsWith("L") ) {
+		yyerror( "Long literal must end with 'l' or 'L'." );
+	}
+	
+	int len = str.length() - 1;
+	
+	if(str.startsWith("0x") || str.startsWith( "0X" ) ) {
+		result = new Long( Long.parseLong( str.substring( 2, len ), 16 ) );
+	}
+	else if(str.startsWith("0") ) {
+		result = new Long( Long.parseLong( str.substring( 1, len ), 8 ) );
+	}
+	else {
+		result = new Long( str.substring( 0, len ) );
+	}
+
+	return result;
+}
+
+private Float toFloat(String str) {
+	str = str.trim();
+	return new Float( str );
+}
+
+private Double toDouble(String str) {
+	str = str.trim();
+
+	if( !str.endsWith("d") && !str.endsWith("D") ) {
+		yyerror( "Double literal must end with 'd' or 'D'." );
+	}
+	
+	return new Double( str.substring( 0, str.length() - 1 ) );
+}
+
+/**
+ * Convert a character literal into a character.
+ */
+private Character toChar(String str) {
+	str = str.trim();
+
+	if( !str.startsWith("'") && !str.endsWith("'") ) {
+		yyerror("Character must be single quoted.");
+	}
+
+	String str2 = convertString( str.substring( 1, str.length() - 1 ) );
+	
+	if( str2.length() != 1) {
+		yyerror("Only one character allowed in character constants.");
+	}
+	
+	return new Character( str2.charAt( 0 ) );
+}
+
+/**
+ * Convert a string literal into a string.
+ */
+private String toString(String str) {
+	str = str.trim();
+
+	if( str.length() < 2 && !str.startsWith("\"") && !str.endsWith("\"") ) {
+		yyerror("String must be double quoted.");
+	}
+
+	String str2 = convertString( str.substring( 1, str.length() - 1 ) );
+	return str2;
+}

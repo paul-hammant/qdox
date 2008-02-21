@@ -1,15 +1,16 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.ListIterator;
 import java.util.Set;
 
+import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
+import com.thoughtworks.qdox.model.annotation.AnnotationVisitor;
+import com.thoughtworks.qdox.model.annotation.RecursiveAnnotationVisitor;
 import com.thoughtworks.qdox.parser.Builder;
-import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -122,9 +123,10 @@ public class ModelBuilder implements Builder {
         }
     }
 
-    private Type createType(String typeName, int dimensions) {
-        if (typeName == null || typeName.equals("")) return null;
-        return Type.createUnresolved(typeName, dimensions, currentClass);
+    public Type createType( String typeName, int dimensions ) {
+        if( typeName == null || typeName.equals( "" ) )
+            return null;
+        return Type.createUnresolved( typeName, dimensions, currentClass == null ? currentParent : currentClass);
     }
 
     private void addJavaDoc(AbstractJavaEntity entity) {
@@ -224,13 +226,25 @@ public class ModelBuilder implements Builder {
         currentClass.addField(currentField);
     }
 
-    private void setAnnotations( AbstractJavaEntity entity ) {
+    private void setAnnotations( final AbstractJavaEntity entity ) {
         if( !currentAnnoDefs.isEmpty() ) {
+            AnnotationVisitor visitor = new RecursiveAnnotationVisitor() {
+                public Object visitAnnotation( Annotation annotation ) {
+                    annotation.setContext( entity );
+                    return super.visitAnnotation( annotation );
+                }
+                
+                public Object visitAnnotationFieldRef( AnnotationFieldRef fieldRef ) {
+                    fieldRef.setContext( entity );
+                    return super.visitAnnotationFieldRef( fieldRef );
+                }
+            };
+
             Annotation[] annotations = new Annotation[currentAnnoDefs.size()];
-            int index = 0;
-            for (Iterator iter = currentAnnoDefs.iterator(); iter.hasNext();) {
-            	AnnoDef def = (AnnoDef)iter.next();
-            	annotations[index++] = buildAnnotation( def, entity );
+            for( ListIterator iter = currentAnnoDefs.listIterator(); iter.hasNext(); ) {
+                Annotation annotation = (Annotation) iter.next();
+                annotation.accept(visitor);
+                annotations[iter.previousIndex()] = annotation;
             }
 
             entity.setAnnotations( annotations );
@@ -238,37 +252,9 @@ public class ModelBuilder implements Builder {
         }
     }
 
-    private Annotation buildAnnotation( AnnoDef def, AbstractJavaEntity entity ) {
-    	Type annoType = createType(def.name, 0);
-
-    	Map args = new HashMap();
-        for (Iterator iter = def.args.entrySet().iterator(); iter.hasNext();) {
-        	Map.Entry entry = (Map.Entry)iter.next();
-        	Object value = entry.getValue();
-
-        	if( value instanceof AnnoDef ) {
-        		args.put( entry.getKey(), buildAnnotation( (AnnoDef)value, entity ) );
-        	}
-        	else if( value instanceof List ) {
-        		List values = (List)value;
-        		if( values.size() == 1 ) {
-        			// TODO: what about types?
-        			args.put( entry.getKey(), values.get( 0 ) );
-        		}
-        		else {
-        			args.put( entry.getKey(), values );
-        		}
-        	}
-        }
-
-    	Annotation anno = new Annotation( annoType, entity, args, def.lineNumber );
-        return anno;
-    }
-
-
     // Don't resolve until we need it... class hasn't been defined yet.
-    public void addAnnotation( AnnoDef def ) {
-    	currentAnnoDefs.add( def );
+    public void addAnnotation( Annotation annotation ) {
+        currentAnnoDefs.add( annotation );
     }
 
     public JavaSource getSource() {
@@ -276,3 +262,4 @@ public class ModelBuilder implements Builder {
     }
 
 }
+

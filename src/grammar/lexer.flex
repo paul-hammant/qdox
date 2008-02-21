@@ -25,6 +25,7 @@ import com.thoughtworks.qdox.parser.*;
 	private boolean at;
 	private boolean annotation;
     private boolean newMode;
+    private boolean bracketMode;
     private boolean anonymousMode;
     private boolean enumMode;
     private boolean appendingToCodeBody;
@@ -329,6 +330,7 @@ Id						= [:jletter:] [:jletterdigit:]*
     ";"                 { 
         if (nestingDepth == assignmentDepth) {
             appendingToCodeBody = true;
+            newMode = false;
             popState(); 
             return Parser.SEMI; 
         } else {
@@ -369,8 +371,8 @@ Id						= [:jletter:] [:jletterdigit:]*
             return Parser.PARENCLOSE; 
         }
     }
-    "["                 { codeBody.append('['); nestingDepth++; }
-    "]"                 { codeBody.append(']'); nestingDepth--; }
+    "["                 { codeBody.append('['); bracketMode = true; nestingDepth++; }
+    "]"                 { codeBody.append(']'); bracketMode = false; nestingDepth--; }
     "new"               {
         codeBody.append("new");
         if (nestingDepth==assignmentDepth) {
@@ -379,14 +381,14 @@ Id						= [:jletter:] [:jletterdigit:]*
     }
     "<"                 {
         codeBody.append('<');
-        if (newMode && !anonymousMode) { 
+        if (!bracketMode && newMode && !anonymousMode) {
             nestingDepth++; 
         }
     }
     ">"                 {
         codeBody.append('>');
         if (!anonymousMode) {
-	        if (newMode) {
+	        if (!bracketMode && newMode) {
     	        nestingDepth--;
     	    	if (nestingDepth==assignmentDepth) { 
     	            newMode=false;

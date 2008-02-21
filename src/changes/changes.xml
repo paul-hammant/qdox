@@ -7,9 +7,12 @@
 
     <body>
 
-        <release version="???" date="????">
+        <release version="1.7" date="????">
             <action dev="paul" type="updated">
                 Improved annotation support including types, fields and expressions (thanks to Jochen Kuhnle; QDOX-126).
+            </action>
+            <action dev="paul" type="fix">
+                Fix to lexer bug (thanks to Felix Meschberger but report QDOX-114 and Louis R. Marascio - fix + test).
             </action>
         </release>
  

@@ -12,7 +12,10 @@
                 Improved annotation support including types, fields and expressions (thanks to Jochen Kuhnle; QDOX-126).
             </action>
             <action dev="paul" type="fix">
-                Fix to lexer bug (thanks to Felix Meschberger but report QDOX-114 and Louis R. Marascio - fix + test).
+                Fix to lexer bug (thanks to Felix Meschberger: bug report QDOX-114 and Louis R. Marascio - fix + test).
+            </action>
+            <action dev="paul" type="fix">
+                Inconsistency between getMethods(), getFields() in binary and source JavaClass fixed (thanks to Paul Duffin; QDOX-129).
             </action>
         </release>
  

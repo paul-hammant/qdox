@@ -185,25 +185,24 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
             binaryBuilder.beginClass(classDef);
 
             // add the constructors
-            Constructor[] constructors = clazz.getConstructors();
+            //
+            // This also adds the default constructor if any which is different
+            // to the source code as that does not create a default constructor
+            // if no constructor exists.
+            Constructor[] constructors = clazz.getDeclaredConstructors();
             for (int i = 0; i < constructors.length; i++) {
                 addMethodOrConstructor(constructors[i], binaryBuilder);
             }
 
             // add the methods
-            Method[] methods = clazz.getMethods();
+            Method[] methods = clazz.getDeclaredMethods();
             for (int i = 0; i < methods.length; i++) {
-                // Ignore methods defined in superclasses
-                if (methods[i].getDeclaringClass() == clazz) {
-                    addMethodOrConstructor(methods[i], binaryBuilder);
-                }
+                addMethodOrConstructor(methods[i], binaryBuilder);
             }
 
-            Field[] fields = clazz.getFields();
+            Field[] fields = clazz.getDeclaredFields();
             for (int i = 0; i < fields.length; i++) {
-                if (fields[i].getDeclaringClass() == clazz) {
-                    addField(fields[i], binaryBuilder);
-                }
+                addField(fields[i], binaryBuilder);
             }
 
             binaryBuilder.endClass();

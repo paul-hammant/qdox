@@ -13,7 +13,15 @@ public class PropertyClass extends Superclass {
         aField = true;
     }
 
+    protected int protectedField;
+
+    private int privateField;
+
     public PropertyClass() {
+    }
+
+    protected PropertyClass(PropertyClass other) {
+        privateField = other.privateField;
     }
 
     // not a bean property, sice it's static
@@ -32,6 +40,15 @@ public class PropertyClass extends Superclass {
     // not a bean property
     public final String get() {
         return null;
+    }
+
+    protected void protectedMethod() {
+        privateField = 2;
+        protectedField = privateMethod();
+    }
+
+    private int privateMethod() {
+        return privateField;
     }
 }
 

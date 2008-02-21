@@ -407,30 +407,75 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
 
         // test ctor, methods and fields
         JavaMethod[] methods = propertyClass.getMethods();
-        assertEquals(5, methods.length);
+        assertEquals(8, methods.length);
 
         JavaMethod ctor = propertyClass.getMethodBySignature("PropertyClass", null);
+        JavaMethod ctor2 = propertyClass.getMethodBySignature("PropertyClass", new Type[] {propertyClass.asType()});
         JavaMethod getFoo = propertyClass.getMethodBySignature("getFoo", null);
         JavaMethod isBar = propertyClass.getMethodBySignature("isBar", null);
         JavaMethod get = propertyClass.getMethodBySignature("get", null);
         JavaMethod set = propertyClass.getMethodBySignature("set", new Type[]{new Type("int")});
 
+        JavaMethod protectedMethod = propertyClass.getMethodBySignature("protectedMethod", null);
+        JavaMethod privateMethod = propertyClass.getMethodBySignature("privateMethod", null);
+        JavaMethod shouldntBeInherited = propertyClass.getMethodBySignature("getShouldntBeInherited", null);
+
+        assertNotNull(ctor);
+        assertNotNull(ctor2);
+        assertNotNull(getFoo);
+        assertNotNull(isBar);
+        assertNotNull(get);
+        assertNotNull(set);
+        assertNotNull(protectedMethod);
+        assertNotNull(privateMethod);
+        assertNull(shouldntBeInherited);
+
         assertTrue(ctor.isConstructor());
+        assertTrue(ctor2.isConstructor());
         assertFalse(getFoo.isConstructor());
         assertFalse(isBar.isConstructor());
         assertFalse(get.isConstructor());
         assertFalse(set.isConstructor());
+        assertFalse(protectedMethod.isConstructor());
+        assertFalse(privateMethod.isConstructor());
 
         assertTrue(getFoo.isStatic());
         assertFalse(isBar.isStatic());
         assertFalse(get.isStatic());
         assertFalse(set.isStatic());
+        assertFalse(protectedMethod.isStatic());
+        assertFalse(privateMethod.isStatic());
 
         assertTrue(get.isFinal());
-        assertFalse(set.isStatic());
+        assertFalse(set.isFinal());
+
+        assertTrue(ctor2.isProtected());
+        assertTrue(protectedMethod.isProtected());
+        assertTrue(privateMethod.isPrivate());
 
         JavaField[] fields = propertyClass.getFields();
-        assertEquals(1, fields.length);
+        assertEquals(3, fields.length);
+    }
+
+    public void testSourceDefaultCtor() throws Exception {
+        builder.addSource(new File("src/test/com/thoughtworks/qdox/testdata/DefaultCtor.java"));
+        JavaClass javaClass = builder.getClassByName("com.thoughtworks.qdox.testdata.DefaultCtor");
+
+        JavaMethod ctor = javaClass.getMethodBySignature("DefaultCtor", null);
+
+        // Differs from binary as currently no way to identify default
+        // constructor in binary class.
+        assertNull(ctor);
+    }
+
+    public void testBinaryDefaultCtor() {
+        JavaClass javaClass = builder.getClassByName("com.thoughtworks.qdox.testdata.DefaultCtor");
+
+        JavaMethod ctor = javaClass.getMethodBySignature("DefaultCtor", null);
+
+        // Differs from source as currently no way to identify default 
+        // constructor in binary class.
+        assertNotNull(ctor);
     }
 
     public void testSerializable() throws Exception {

@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.annotation.AnnotationAdd;
 import com.thoughtworks.qdox.model.annotation.AnnotationConstant;
 import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
@@ -296,4 +297,21 @@ public class AnnotationsModelTest extends TestCase {
         assertAnnotationExpression( "(long)(short)1", new Long( 1 ) );
         assertAnnotationExpression( "(int)((short)1 + (long)3)", new Integer( 4 ) );
     }
+
+    // http://jira.codehaus.org/browse/QDOX-135
+    public void fails_testAnnotationInMethodParamList() {
+        String source = ""
+                + "class Foo {\n"
+            //    + "    @X()\n"  - does not affect test.
+                + "    public String xyz(@Y(1) int blah) {\n"
+                + "    }\n"
+                + "}\n";
+
+        builder.addSource(new StringReader(source));
+        JavaClass clazz = builder.getClassByName("Foo");
+        JavaMethod mth = clazz.getMethods()[0];
+        assertEquals("Foo", clazz.getName());
+        assertEquals("X", mth.getAnnotations()[0].getType().getJavaClass().getName());
+    }
+
 }

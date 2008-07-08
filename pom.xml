@@ -202,6 +202,7 @@
           <skinPath>templates/skin.html</skinPath>
           <sourceDirectoryPath>${basedir}/src/site</sourceDirectoryPath>
           <outputDirectoryPath>${project.build.directory}/xsite</outputDirectoryPath>
+          <resourcePaths>resources</resourcePaths>
         </configuration>
         <executions>
           <execution>

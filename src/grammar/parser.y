@@ -344,15 +344,18 @@ typeboundlist:
 
 enum: enum_definition BRACEOPEN enum_body BRACECLOSE {
   builder.endClass();
+  fieldType = null;
+  modifiers.clear();
 };
 
 enum_definition: modifiers ENUM IDENTIFIER opt_implements {
     cls.lineNumber = line;
-    cls.modifiers.addAll(modifiers); modifiers.clear();
+    cls.modifiers.addAll(modifiers);
     cls.name = $3;
     cls.type = ClassDef.ENUM;
     builder.beginClass(cls);
     cls = new ClassDef();
+    fieldType = new TypeDef($3, 0);
 };
 
 enum_body: enum_values | enum_values SEMI members;
@@ -364,10 +367,10 @@ enum_value:
     opt_annotations enum_constructor;
 
 enum_constructor:
-    IDENTIFIER |
-    IDENTIFIER CODEBLOCK |
-    IDENTIFIER PARENBLOCK |
-    IDENTIFIER PARENBLOCK CODEBLOCK;
+    IDENTIFIER { makeField(new TypeDef($1, 0), ""); } |
+    IDENTIFIER CODEBLOCK  { makeField(new TypeDef($1, 0), ""); } |
+    IDENTIFIER PARENBLOCK { makeField(new TypeDef($1, 0), ""); } |
+    IDENTIFIER PARENBLOCK CODEBLOCK { makeField(new TypeDef($1, 0), ""); };
 
 
 // ----- CLASS

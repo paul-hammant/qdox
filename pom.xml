@@ -201,7 +201,7 @@
           <sitemapPath>content/website.xml</sitemapPath>
           <skinPath>templates/skin.html</skinPath>
           <sourceDirectoryPath>${basedir}/src/site</sourceDirectoryPath>
-          <outputDirectoryPath>${project.build.directory}/xsite</outputDirectoryPath>
+          <outputDirectoryPath>${project.build.directory}/site</outputDirectoryPath>
           <resourcePaths>resources</resourcePaths>
         </configuration>
         <executions>

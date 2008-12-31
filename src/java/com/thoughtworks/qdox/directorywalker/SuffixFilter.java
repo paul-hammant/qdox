@@ -3,13 +3,13 @@ package com.thoughtworks.qdox.directorywalker;
 import java.io.File;
 
 public class SuffixFilter implements Filter {
-    private String _suffixFilter;
+    private String suffixFilter;
 
     public SuffixFilter(String suffixFilter) {
-        _suffixFilter = suffixFilter;
+        this.suffixFilter = suffixFilter;
     }
 
     public boolean filter(File file) {
-        return file.getName().endsWith(_suffixFilter);
+        return file.getName().endsWith(this.suffixFilter);
     }
 }

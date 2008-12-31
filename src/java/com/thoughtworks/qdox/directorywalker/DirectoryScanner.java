@@ -8,11 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public class DirectoryScanner {
-    private File _file;
-    private Collection _filters = new HashSet();
+    private File file;
+    private Collection filters = new HashSet();
 
     public DirectoryScanner(File file) {
-        _file = file;
+        this.file = file;
     }
 
     public File[] scan() {
@@ -21,7 +21,7 @@ public class DirectoryScanner {
             public void visitFile(File file) {
                 results.add(file);
             }
-        }, _file);
+        }, this.file);
         File[] resultsArray = new File[results.size()];
         results.toArray(resultsArray);
         return resultsArray;
@@ -34,7 +34,7 @@ public class DirectoryScanner {
                 walk(visitor, currentFiles[i]);
             }
         } else {
-            for (Iterator iterator = _filters.iterator(); iterator.hasNext();) {
+            for (Iterator iterator = this.filters.iterator(); iterator.hasNext();) {
                 Filter filter = (Filter) iterator.next();
                 if (!filter.filter(current)) {
                     return;
@@ -45,10 +45,10 @@ public class DirectoryScanner {
     }
 
     public void addFilter(Filter filter) {
-        _filters.add(filter);
+        this.filters.add(filter);
     }
 
     public void scan(FileVisitor fileVisitor) {
-        walk(fileVisitor, _file);
+        walk(fileVisitor, this.file);
     }
 }

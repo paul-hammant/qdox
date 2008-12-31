@@ -1,11 +1,15 @@
 package com.thoughtworks.qdox.parser;
 
+import java.util.ArrayList;
+
 import junit.framework.TestCase;
 import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
+import com.thoughtworks.qdox.parser.structs.TypeDef;
+import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
 public class ParserTest extends TestCase {
 
@@ -438,7 +442,7 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MySubClass";
-        cls.extendz.add("com.blah.MyBaseClass");
+        cls.extendz.add(new TypeDef("com.blah.MyBaseClass"));
         builder.addExpectedBeginClassValues(cls);
 
         // execute
@@ -471,8 +475,8 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.name = "MyInterface";
         cls.type = ClassDef.INTERFACE;
-        cls.extendz.add("com.blah.AnotherInterface");
-        cls.extendz.add("Serializable");
+        cls.extendz.add(new TypeDef("com.blah.AnotherInterface"));
+        cls.extendz.add(new TypeDef("Serializable"));
         builder.addExpectedBeginClassValues(cls);
 
         // execute
@@ -502,7 +506,7 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyClass";
-        cls.implementz.add("com.blah.AnInterface");
+        cls.implementz.add(new TypeDef("com.blah.AnInterface"));
         builder.addExpectedBeginClassValues(cls);
 
         // execute
@@ -540,9 +544,9 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyClass";
-        cls.implementz.add("com.blah.AnInterface");
-        cls.implementz.add("java.io.Serializable");
-        cls.implementz.add("Eatable");
+        cls.implementz.add(new TypeDef("com.blah.AnInterface"));
+        cls.implementz.add(new TypeDef("java.io.Serializable"));
+        cls.implementz.add(new TypeDef("Eatable"));
         builder.addExpectedBeginClassValues(cls);
 
         // execute
@@ -576,8 +580,8 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyClass";
-        cls.extendz.add("mypackage.BaseClass");
-        cls.implementz.add("com.blah.AnInterface");
+        cls.extendz.add(new TypeDef("mypackage.BaseClass"));
+        cls.implementz.add(new TypeDef("com.blah.AnInterface"));
         builder.addExpectedBeginClassValues(cls);
 
         // execute
@@ -619,10 +623,10 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyClass";
-        cls.extendz.add("mypackage.BaseClass");
-        cls.implementz.add("com.blah.AnInterface");
-        cls.implementz.add("java.io.Serializable");
-        cls.implementz.add("Eatable");
+        cls.extendz.add(new TypeDef("mypackage.BaseClass"));
+        cls.implementz.add(new TypeDef("com.blah.AnInterface"));
+        cls.implementz.add(new TypeDef("java.io.Serializable"));
+        cls.implementz.add(new TypeDef("Eatable"));
         builder.addExpectedBeginClassValues(cls);
 
         // execute
@@ -726,7 +730,7 @@ public class ParserTest extends TestCase {
         cls2.name = "Class2";
         cls2.type = ClassDef.CLASS;
         cls2.modifiers.add("public");
-        cls2.extendz.add("SubClass");
+        cls2.extendz.add(new TypeDef("SubClass"));
         builder.addExpectedBeginClassValues(cls2);
 
         ClassDef cls3 = new ClassDef();
@@ -891,7 +895,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         builder.addExpectedAddMethodValues(mth);
 
         // execute
@@ -921,7 +925,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         builder.addExpectedAddMethodValues(mth);
 
         // execute
@@ -951,7 +955,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "Something";
+        mth.returnType = new TypeDef("Something");
         builder.addExpectedAddMethodValues(mth);
 
         // execute
@@ -985,7 +989,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "com.blah.Something";
+        mth.returnType = new TypeDef("com.blah.Something");
         builder.addExpectedAddMethodValues(mth);
 
         // execute
@@ -1028,7 +1032,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "com.blah.Something";
+        mth.returnType = new TypeDef("com.blah.Something");
         mth.modifiers.add("public");
         mth.modifiers.add("protected");
         mth.modifiers.add("private");
@@ -1069,10 +1073,10 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         mth.params.add(p1);
         builder.addExpectedAddMethodValues(mth);
 
@@ -1109,10 +1113,10 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
-        p1.type = "java.lang.String";
+        p1.type = new TypeDef("java.lang.String");
         mth.params.add(p1);
         builder.addExpectedAddMethodValues(mth);
 
@@ -1148,14 +1152,14 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         mth.params.add(p1);
         FieldDef p2 = new FieldDef();
         p2.name = "name";
-        p2.type = "String";
+        p2.type = new TypeDef("String");
         mth.params.add(p2);
         builder.addExpectedAddMethodValues(mth);
 
@@ -1194,18 +1198,18 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         mth.params.add(p1);
         FieldDef p2 = new FieldDef();
         p2.name = "name";
-        p2.type = "String";
+        p2.type = new TypeDef("String");
         mth.params.add(p2);
         FieldDef p3 = new FieldDef();
         p3.name = "x";
-        p3.type = "boolean";
+        p3.type = new TypeDef("boolean");
         mth.params.add(p3);
         builder.addExpectedAddMethodValues(mth);
 
@@ -1240,10 +1244,10 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         p1.modifiers.add("final");
         p1.modifiers.add("volatile");
         mth.params.add(p1);
@@ -1278,7 +1282,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         mth.exceptions.add("IOException");
         builder.addExpectedAddMethodValues(mth);
 
@@ -1313,7 +1317,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         mth.exceptions.add("IOException");
         mth.exceptions.add("MyException");
         builder.addExpectedAddMethodValues(mth);
@@ -1351,7 +1355,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         mth.exceptions.add("IOException");
         mth.exceptions.add("MyException");
         mth.exceptions.add("AnotherException");
@@ -1390,7 +1394,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         mth.exceptions.add("java.io.IOException");
         builder.addExpectedAddMethodValues(mth);
 
@@ -1433,7 +1437,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         mth.exceptions.add("java.io.IOException");
         mth.exceptions.add("java.lang.RuntimeException");
         builder.addExpectedAddMethodValues(mth);
@@ -1500,7 +1504,7 @@ public class ParserTest extends TestCase {
         mth.modifiers.add("public");
         FieldDef p1 = new FieldDef();
         p1.name = "count";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         mth.params.add(p1);
 
         builder.addExpectedAddMethodValues(mth);
@@ -1545,11 +1549,11 @@ public class ParserTest extends TestCase {
         mth.modifiers.add("public");
         FieldDef p1 = new FieldDef();
         p1.name = "count";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         mth.params.add(p1);
         FieldDef p2 = new FieldDef();
         p2.name = "thingy";
-        p2.type = "java.lang.String";
+        p2.type = new TypeDef("java.lang.String");
         mth.params.add(p2);
 
         builder.addExpectedAddMethodValues(mth);
@@ -1652,7 +1656,7 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
 
         builder.addExpectedAddFieldValues(fld);
 
@@ -1685,7 +1689,7 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "java.lang.String";
+        fld.type = new TypeDef("java.lang.String");
 
         builder.addExpectedAddFieldValues(fld);
 
@@ -1721,7 +1725,7 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.modifiers.add("public");
         fld.modifiers.add("protected");
         fld.modifiers.add("private");
@@ -1759,11 +1763,11 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld1 = new FieldDef();
         fld1.name = "thing";
-        fld1.type = "String";
+        fld1.type = new TypeDef("String");
         builder.addExpectedAddFieldValues(fld1);
         FieldDef fld2 = new FieldDef();
         fld2.name = "another";
-        fld2.type = "String";
+        fld2.type = new TypeDef("String");
         builder.addExpectedAddFieldValues(fld2);
 
         // execute
@@ -1795,7 +1799,10 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "l";
-        fld.type = "List";
+        fld.type = new TypeDef("List");
+        fld.type.actualArgumentTypes = new ArrayList();
+        fld.type.actualArgumentTypes.add(new TypeDef("String"));
+        
 
         builder.addExpectedAddFieldValues(fld);
 
@@ -1830,8 +1837,10 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "l";
-        fld.type = "List";
-
+        fld.type = new TypeDef("List");
+        fld.type.actualArgumentTypes = new ArrayList();
+        fld.type.actualArgumentTypes.add(new WildcardTypeDef(new TypeDef("A"), "extends"));
+        
         builder.addExpectedAddFieldValues(fld);
 
         // execute
@@ -1865,7 +1874,7 @@ public class ParserTest extends TestCase {
         // expect no the method, and it shouldn't be static.
         MethodDef method = new MethodDef();
         method.name = "doStuff";
-        method.returns = "void";
+        method.returnType = new TypeDef("void");
         builder.addExpectedAddMethodValues(method);
 
         // execute
@@ -1956,7 +1965,7 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.dimensions = 0;
 
         builder.addExpectedAddFieldValues(fld);
@@ -1988,7 +1997,7 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.dimensions = 1;
 
         builder.addExpectedAddFieldValues(fld);
@@ -2022,7 +2031,7 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.dimensions = 2;
 
         builder.addExpectedAddFieldValues(fld);
@@ -2054,7 +2063,7 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.dimensions = 1;
 
         builder.addExpectedAddFieldValues(fld);
@@ -2089,7 +2098,7 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.dimensions = 3;
 
         builder.addExpectedAddFieldValues(fld);
@@ -2125,12 +2134,12 @@ public class ParserTest extends TestCase {
         // expectations
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.dimensions = 1;
 
         FieldDef fld2 = new FieldDef();
         fld2.name = "count2";
-        fld2.type = "int";
+        fld2.type = new TypeDef("int");
         fld2.dimensions = 0;
 
         builder.addExpectedAddFieldValues(fld);
@@ -2163,7 +2172,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "count";
-        mth.returns = "int";
+        mth.returnType = new TypeDef("int");
         mth.dimensions = 0;
 
         builder.addExpectedAddMethodValues(mth);
@@ -2197,7 +2206,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "count";
-        mth.returns = "int";
+        mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
 
         builder.addExpectedAddMethodValues(mth);
@@ -2236,7 +2245,7 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "count";
-        mth.returns = "int";
+        mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
 
         builder.addExpectedAddMethodValues(mth);
@@ -2274,11 +2283,11 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "count";
-        mth.returns = "int";
+        mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
         FieldDef p1 = new FieldDef();
         p1.name = "p1";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         p1.dimensions = 0;
         mth.params.add(p1);
 
@@ -2317,11 +2326,11 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "count";
-        mth.returns = "int";
+        mth.returnType = new TypeDef("int");
         mth.dimensions = 0;
         FieldDef p1 = new FieldDef();
         p1.name = "p1";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         p1.dimensions = 1;
         mth.params.add(p1);
 
@@ -2364,11 +2373,11 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "count";
-        mth.returns = "int";
+        mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
         FieldDef p1 = new FieldDef();
         p1.name = "p1";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         p1.dimensions = 2;
         mth.params.add(p1);
 
@@ -2406,10 +2415,10 @@ public class ParserTest extends TestCase {
         // expectations
         MethodDef mth = new MethodDef();
         mth.name = "doStuff";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
         p1.name = "stuff";
-        p1.type = "int";
+        p1.type = new TypeDef("int");
         p1.dimensions = 0;
         p1.isVarArgs = true;
         mth.params.add(p1);

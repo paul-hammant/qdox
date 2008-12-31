@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class FieldDef extends LocatedDef {
     public String name = "";
-    public String type = "";
+    public TypeDef type;
     public Set modifiers = new HashSet();
     public int dimensions;
     public boolean isVarArgs;
@@ -13,15 +13,24 @@ public class FieldDef extends LocatedDef {
 
     public boolean equals(Object obj) {
         FieldDef paramDef = (FieldDef) obj;
-        return paramDef.name.equals(name)
-                && paramDef.type.equals(type)
-                && paramDef.dimensions == dimensions
+        boolean result = paramDef.name.equals(name)
                 && paramDef.modifiers.equals(modifiers)
                 && paramDef.isVarArgs == isVarArgs;
+        if(paramDef.type == null) {
+        	result &= (type == null)
+        		&& paramDef.dimensions == dimensions;
+        }
+        else {
+        	result &= (type != null)
+        		&&(paramDef.type.name.equals(type.name))
+        		&&(paramDef.type.actualArgumentTypes == null ? type.actualArgumentTypes == null: paramDef.type.actualArgumentTypes.equals(type.actualArgumentTypes))
+        		&&(paramDef.type.dimensions + paramDef.dimensions == dimensions + type.dimensions);
+        }
+        return result;
     }
 
     public int hashCode() {
-        return name.hashCode() + type.hashCode() +
+        return name.hashCode() + (type != null ? type.hashCode() : 0) +
                 dimensions + modifiers.hashCode() + (isVarArgs ? 79769989 : 0);
     }
 

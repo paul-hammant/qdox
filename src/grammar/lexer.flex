@@ -200,7 +200,7 @@ Id						= [:jletter:] [:jletterdigit:]*
         pushState(ASSIGNMENT);
     }
 
-    [:jletter:] [:jletterdigit:]* {
+    {Id} {
         annotation = at;
         at = false;
         
@@ -296,7 +296,7 @@ Id						= [:jletter:] [:jletterdigit:]*
 	
 	"class"				{ return Parser.CLASS; }
 
-	[:jletter:] [:jletterdigit:]* {
+	{Id} {
         return Parser.IDENTIFIER;
     }
 

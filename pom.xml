@@ -45,21 +45,21 @@
       <name>Aslak Hellesoy</name>
       <id>rinkrank</id>
       <roles>
-        <role>Developer</role>
+        <role>developer</role>
       </roles>
     </developer>
     <developer>
       <name>Paul Hammant</name>
       <id>paul</id>
       <roles>
-        <role>Developer</role>
+        <role>developer</role>
       </roles>
     </developer>
     <developer>
       <name>Mike Williams</name>
       <id>mdub</id>
       <roles>
-        <role>Developer</role>
+        <role>developer</role>
       </roles>
     </developer>
     <developer>
@@ -104,6 +104,9 @@
     </contributor>
     <contributor>
       <name>Eric Redmond</name>
+    </contributor>
+    <contributor>
+      <name>Robert Scholte</name>
     </contributor>
   </contributors>
 

@@ -17,6 +17,7 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,6 +74,7 @@ import java.util.StringTokenizer;
  *
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
+ * @author Robert Scholte
  */
 public class JavaDocBuilder implements Serializable, JavaClassCache {
 
@@ -166,17 +168,17 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
                 classDef.type = ClassDef.INTERFACE;
                 for (int i = 0; i < interfaces.length; i++) {
                     Class anInterface = interfaces[i];
-                    classDef.extendz.add(anInterface.getName());
+                    classDef.extendz.add(new TypeDef(anInterface.getName()));
                 }
             } else {
                 // It's a class
                 for (int i = 0; i < interfaces.length; i++) {
                     Class anInterface = interfaces[i];
-                    classDef.implementz.add(anInterface.getName());
+                    classDef.implementz.add(new TypeDef(anInterface.getName()));
                 }
                 Class superclass = clazz.getSuperclass();
                 if (superclass != null) {
-                    classDef.extendz.add(superclass.getName());
+                    classDef.extendz.add(new TypeDef(superclass.getName()));
                 }
             }
 
@@ -224,7 +226,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         FieldDef fieldDef = new FieldDef();
         Class fieldType = field.getType();
         fieldDef.name = field.getName();
-        fieldDef.type = getTypeName(fieldType);
+        fieldDef.type = getTypeDef(fieldType);
         fieldDef.dimensions = getDimension(fieldType);
         binaryBuilder.addField(fieldDef);
     }
@@ -248,7 +250,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
             parameterTypes = ((Method) member).getParameterTypes();
 
             Class returnType = ((Method) member).getReturnType();
-            methodDef.returns = getTypeName(returnType);
+            methodDef.returnType = getTypeDef(returnType);
             methodDef.dimensions = getDimension(returnType);
 
         } else {
@@ -265,7 +267,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
             FieldDef param = new FieldDef();
             Class parameterType = parameterTypes[j];
             param.name = "p" + j;
-            param.type = getTypeName(parameterType);
+            param.type = getTypeDef(parameterType);
             param.dimensions = getDimension(parameterType);
             methodDef.params.add(param);
         }
@@ -279,6 +281,11 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     private static String getTypeName(Class c) {
         return c.getComponentType() != null ? c.getComponentType().getName() : c.getName();
     }
+    
+    private static TypeDef getTypeDef(Class c) {
+        return new TypeDef(getTypeName(c));
+    }
+    
 
     private String getPackageName(String fullClassName) {
         int lastDot = fullClassName.lastIndexOf('.');

@@ -15,9 +15,11 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
+import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
+ * @author Robert Scholte
  */
 public class ModelBuilder implements Builder {
 
@@ -76,7 +78,7 @@ public class ModelBuilder implements Builder {
         if (currentClass.isInterface()) {
             currentClass.setSuperClass(null);
         } else if (!currentClass.isEnum()) {
-            currentClass.setSuperClass(def.extendz.size() > 0 ? createType((String) def.extendz.toArray()[0], 0) : null);
+            currentClass.setSuperClass(def.extendz.size() > 0 ? createType((TypeDef) def.extendz.toArray()[0], 0) : null);
         }
 
         // implements
@@ -85,7 +87,7 @@ public class ModelBuilder implements Builder {
             Iterator implementIt = implementSet.iterator();
             Type[] implementz = new Type[implementSet.size()];
             for (int i = 0; i < implementz.length && implementIt.hasNext(); i++) {
-                implementz[i] = createType((String) implementIt.next(), 0);
+                implementz[i] = createType((TypeDef) implementIt.next(), 0);
             }
             currentClass.setImplementz(implementz);
         }
@@ -126,7 +128,28 @@ public class ModelBuilder implements Builder {
     public Type createType( String typeName, int dimensions ) {
         if( typeName == null || typeName.equals( "" ) )
             return null;
-        return Type.createUnresolved( typeName, dimensions, currentClass == null ? currentParent : currentClass);
+        return createType(new TypeDef(typeName), dimensions);
+    }
+    
+    public Type createType(TypeDef typeDef) {
+    	return createType(typeDef, 0);
+    }
+    
+    
+    /**
+     * this one is specific for those cases where dimensions can be part of both the type and identifier
+     * i.e. private String[] matrix[]; //field
+     * 		public abstract String[] getMatrix[](); //method  
+     *      
+     * @param typeDef
+     * @param dimensions
+     * @return
+     */
+    public Type createType(TypeDef typeDef, int dimensions) {
+    	if(typeDef == null) {
+    		return null;
+    	}
+    	return Type.createUnresolved(typeDef, dimensions, currentClass == null ? currentParent : currentClass);
     }
 
     private void addJavaDoc(AbstractJavaEntity entity) {
@@ -157,7 +180,7 @@ public class ModelBuilder implements Builder {
 
         // basic details
         currentMethod.setName(def.name);
-        currentMethod.setReturns(createType(def.returns, def.dimensions));
+        currentMethod.setReturns(createType(def.returnType, def.dimensions));
         currentMethod.setConstructor(def.constructor);
 
         // parameters

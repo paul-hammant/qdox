@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 %}
 
 %token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
@@ -41,10 +42,10 @@ import java.util.List;
 %type <annoval> equalityExpression relationalExpression shiftExpression additiveExpression multiplicativeExpression
 %type <annoval> unaryExpression unaryExpressionNotPlusMinus primary
 %type <ival> dims
-%type <sval> fullidentifier modifier classtype typedeclspecifier typename memberend
+%type <sval> fullidentifier modifier typedeclspecifier typename memberend
 %type <ival> dimensions
 %type <bval> varargs
-%type <type> type arrayidentifier
+%type <type> type arrayidentifier classtype typearg
 
 %%
 
@@ -295,34 +296,43 @@ primitiveType:
 // ----- TYPES
 
 type:
-    classtype opt_typearguments dimensions {
-        $$ = new TypeDef($1,$3);
+    classtype dimensions {
+    	TypeDef td = $1;
+    	td.dimensions = $2;
+        $$ = td;
     };
 
 classtype:
-    typedeclspecifier opt_typearguments {
-        $$ = $1; 
+    typedeclspecifier LESSTHAN {
+    		TypeDef td = new TypeDef($1,0);
+    		td.actualArgumentTypes = new ArrayList();
+    		$$ = (TypeDef) typeStack.push(td);
+    	} typearglist { 
+    		$$ = (TypeDef) typeStack.pop();
+    	} GREATERTHAN {
+         $$ = $5;
+    } |
+    typedeclspecifier {
+        $$ = new TypeDef($1,0); 
     };
 
 typedeclspecifier:
     typename { $$ = $1; } |
-    classtype DOT IDENTIFIER { $$ = $1 + '.' + $3; };
+    classtype DOT IDENTIFIER { $$ = $1.name + '.' + $3; };
 
 typename: 
     IDENTIFIER { $$ = $1; } |
     typename DOT IDENTIFIER { $$ = $1 + '.' + $3; }; 
 
-opt_typearguments: | LESSTHAN typearglist GREATERTHAN;
-
 typearglist:
-    typearg |
-    typearglist COMMA typearg;
+    typearg { ((TypeDef) typeStack.peek()).actualArgumentTypes.add($1);}|
+    typearglist COMMA typearg { ((TypeDef) typeStack.peek()).actualArgumentTypes.add($3);};
 
 typearg:
-    type |
-    QUERY |
-    QUERY EXTENDS type |
-    QUERY SUPER type;
+    type { $$ = $1;} |
+    QUERY  { $$ = new WildcardTypeDef();} |
+    QUERY EXTENDS type { $$ = new WildcardTypeDef($3, "extends");} |
+    QUERY SUPER type { $$ = new WildcardTypeDef($3, "super");};
 
 opt_typeparams: | typeparams;
 
@@ -452,8 +462,8 @@ method:
     modifiers typeparams type IDENTIFIER methoddef dimensions opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
-        mth.returns = $3.name;
-        mth.dimensions = $6 + $3.dimensions; // return dimensions can be specified after return type OR after params
+        mth.returnType = $3;
+        mth.dimensions = $6;
         mth.name = $4;
         mth.body = $8;
         builder.addMethod(mth);
@@ -462,8 +472,8 @@ method:
     modifiers type IDENTIFIER methoddef dimensions opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear();
-        mth.returns = $2.name;
-        mth.dimensions = $5 + $2.dimensions; // return dimensions can be specified after return type OR after params
+        mth.returnType = $2;
+        mth.dimensions = $5;
         mth.name = $3;
         mth.body = $7;
         builder.addMethod(mth);
@@ -497,8 +507,8 @@ paramlist:
 param: 
     opt_annotations opt_parammodifiers type varargs arrayidentifier {
         param.name = $5.name;
-        param.type = $3.name;
-        param.dimensions = $3.dimensions + $5.dimensions;
+        param.type = $3;
+        param.dimensions = $5.dimensions;
         param.isVarArgs = $4;
         mth.params.add(param);
         param = new FieldDef();
@@ -527,6 +537,7 @@ private List annoValueList = null;
 private FieldDef param = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
 private TypeDef fieldType;
+private Stack typeStack = new Stack();
 private int line;
 private int column;
 private boolean debugLexer;
@@ -600,9 +611,9 @@ private void makeField(TypeDef field, String body) {
     FieldDef fd = new FieldDef();
     fd.lineNumber = line;
     fd.modifiers.addAll(modifiers); 
-    fd.type = fieldType.name; 
-    fd.dimensions = fieldType.dimensions + field.dimensions;
     fd.name = field.name;
+    fd.type = fieldType;
+    fd.dimensions = field.dimensions;
     fd.body = body;
     builder.addField(fd);
 }

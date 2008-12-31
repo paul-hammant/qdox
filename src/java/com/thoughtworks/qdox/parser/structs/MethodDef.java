@@ -5,9 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+
 public class MethodDef extends LocatedDef {
     public String name = "";
-    public String returns = "";
+    public TypeDef returnType;
     public Set modifiers = new HashSet();
     public List params = new ArrayList();
     public Set exceptions = new HashSet();
@@ -17,17 +19,29 @@ public class MethodDef extends LocatedDef {
 
     public boolean equals(Object obj) {
         MethodDef methodDef = (MethodDef) obj;
-        return methodDef.name.equals(name)
-                && methodDef.returns.equals(returns)
+        boolean result;
+        result = methodDef.name.equals(name)
                 && methodDef.modifiers.equals(modifiers)
                 && methodDef.params.equals(params)
                 && methodDef.exceptions.equals(exceptions)
-                && methodDef.constructor == constructor
-                && methodDef.dimensions == dimensions;
+                && methodDef.constructor == constructor;
+        if(methodDef.returnType == null) {
+        	result &= (returnType == null)
+        		&& methodDef.dimensions == dimensions;
+        	
+        }
+        else {
+        	result &= (returnType != null)        		
+        			&&(methodDef.returnType.name.equals(returnType.name))
+        			&&(methodDef.returnType.actualArgumentTypes == null ? returnType.actualArgumentTypes == null: methodDef.returnType.actualArgumentTypes.equals(returnType.actualArgumentTypes))
+        			&&(methodDef.returnType.dimensions + methodDef.dimensions == dimensions + returnType.dimensions);
+        }
+        return result;
     }
 
     public int hashCode() {
-        return name.hashCode() + returns.hashCode() +
+        return name.hashCode() + 
+        		(returnType != null ? returnType.hashCode() : 0) +
                 modifiers.hashCode() + params.hashCode() +
                 params.hashCode() + exceptions.hashCode() +
                 dimensions + (constructor ? 0 : 1);
@@ -37,7 +51,7 @@ public class MethodDef extends LocatedDef {
         StringBuffer result = new StringBuffer();
         result.append(modifiers);
         result.append(' ');
-        result.append(returns);
+        result.append((returnType != null ? returnType.toString() : ""));
         for (int i = 0; i < dimensions; i++) result.append("[]");
         result.append(' ');
         result.append(name);

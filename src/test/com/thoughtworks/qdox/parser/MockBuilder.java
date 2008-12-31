@@ -9,6 +9,7 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
+import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 class MockBuilder implements Builder {
     private ExpectationCounter myAddPackageCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder AddPackageCalls");
@@ -152,5 +153,9 @@ class MockBuilder implements Builder {
 
     public Type createType( String name, int dimensions ) {
         return null;
+    }
+    
+    public Type createType(TypeDef name) {
+    	return null;
     }
 }

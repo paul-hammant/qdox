@@ -4,6 +4,8 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
+import com.thoughtworks.qdox.parser.structs.TypeDef;
+
 import java.util.Arrays;
 import junit.framework.TestCase;
 
@@ -97,7 +99,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.extendz.add("Another");
+        cls2.extendz.add(new TypeDef("Another"));
         builder.beginClass(cls2);
         builder.endClass();
         builder.addImport("com.thoughtworks.*");
@@ -128,7 +130,7 @@ public class ModelBuilderTest extends TestCase {
 
         ClassDef cls2 = new ClassDef();
         cls2.type = ClassDef.INTERFACE;
-        cls2.extendz.add("Another");
+        cls2.extendz.add(new TypeDef("Another"));
         builder.beginClass(cls2);
         builder.endClass();
 
@@ -145,9 +147,9 @@ public class ModelBuilderTest extends TestCase {
     public void testInterfaceExtendsMultiple() throws Exception {
         ClassDef cls = new ClassDef();
         cls.type = ClassDef.INTERFACE;
-        cls.extendz.add("Another");
-        cls.extendz.add("java.io.Serializable");
-        cls.extendz.add("BottleOpener");
+        cls.extendz.add(new TypeDef("Another"));
+        cls.extendz.add(new TypeDef("java.io.Serializable"));
+        cls.extendz.add(new TypeDef("BottleOpener"));
         builder.beginClass(cls);
         builder.endClass();
 
@@ -169,7 +171,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.implementz.add("SomeInterface");
+        cls2.implementz.add(new TypeDef("SomeInterface"));
         builder.beginClass(cls2);
         builder.endClass();
 
@@ -186,8 +188,8 @@ public class ModelBuilderTest extends TestCase {
 
     public void testClassImplementsMultiple() throws Exception {
         ClassDef cls = new ClassDef();
-        cls.implementz.add("SomeInterface");
-        cls.implementz.add("XX");
+        cls.implementz.add(new TypeDef("SomeInterface"));
+        cls.implementz.add(new TypeDef("XX"));
         builder.beginClass(cls);
         builder.endClass();
 
@@ -202,9 +204,9 @@ public class ModelBuilderTest extends TestCase {
 
     public void testClassExtendsAndImplements() throws Exception {
         ClassDef cls = new ClassDef();
-        cls.extendz.add("SubClass");
-        cls.implementz.add("SomeInterface");
-        cls.implementz.add("XX");
+        cls.extendz.add(new TypeDef("SubClass"));
+        cls.implementz.add(new TypeDef("SomeInterface"));
+        cls.implementz.add(new TypeDef("XX"));
         builder.beginClass(cls);
         builder.endClass();
 
@@ -301,7 +303,7 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         builder.addMethod(mth);
         builder.endClass();
 
@@ -320,7 +322,7 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         mth.dimensions = 0;
         builder.addMethod(mth);
         builder.endClass();
@@ -334,7 +336,7 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         mth.dimensions = 1;
         builder.addMethod(mth);
         builder.endClass();
@@ -348,7 +350,7 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
-        mth.returns = "void";
+        mth.returnType = new TypeDef("void");
         mth.dimensions = 2;
         builder.addMethod(mth);
         builder.endClass();
@@ -364,13 +366,13 @@ public class ModelBuilderTest extends TestCase {
 
         FieldDef f1 = new FieldDef();
         f1.name = "count";
-        f1.type = "int";
+        f1.type = new TypeDef("int");
         f1.modifiers.add("final");
         mth.params.add(f1);
 
         FieldDef f2 = new FieldDef();
         f2.name = "name";
-        f2.type = "String";
+        f2.type = new TypeDef("String");
         mth.params.add(f2);
 
         builder.addMethod(mth);
@@ -391,14 +393,14 @@ public class ModelBuilderTest extends TestCase {
 
         FieldDef f1 = new FieldDef();
         f1.name = "count";
-        f1.type = "int";
+        f1.type = new TypeDef("int");
         f1.modifiers.add("final");
         f1.dimensions = 1;
         mth.params.add(f1);
 
         FieldDef f2 = new FieldDef();
         f2.name = "name";
-        f2.type = "String";
+        f2.type = new TypeDef("String");
         f2.dimensions = 2;
         mth.params.add(f2);
 
@@ -457,7 +459,7 @@ public class ModelBuilderTest extends TestCase {
 
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         builder.addField(fld);
         builder.endClass();
 
@@ -494,7 +496,7 @@ public class ModelBuilderTest extends TestCase {
 
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.dimensions = 0;
         builder.addField(fld);
         builder.endClass();
@@ -511,7 +513,7 @@ public class ModelBuilderTest extends TestCase {
 
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.dimensions = 1;
         builder.addField(fld);
         builder.endClass();
@@ -528,7 +530,7 @@ public class ModelBuilderTest extends TestCase {
 
         FieldDef fld = new FieldDef();
         fld.name = "count";
-        fld.type = "int";
+        fld.type = new TypeDef("int");
         fld.dimensions = 2;
         builder.addField(fld);
         builder.endClass();
@@ -549,7 +551,7 @@ public class ModelBuilderTest extends TestCase {
 
         MethodDef mth2 = new MethodDef();
         mth2.name = "method";
-        mth2.returns = "void";
+        mth2.returnType = new TypeDef("void");
         builder.addMethod(mth2);
         builder.endClass();
 

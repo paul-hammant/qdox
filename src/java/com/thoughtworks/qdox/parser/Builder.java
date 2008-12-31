@@ -6,6 +6,7 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
+import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 public interface Builder {
 
@@ -27,5 +28,10 @@ public interface Builder {
 
     void addAnnotation(Annotation annotation);
     
+    /**
+     * @deprecated
+     */
     Type createType(String name, int dimensions);
+    
+    Type createType(TypeDef name);
 }

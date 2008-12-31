@@ -8,21 +8,21 @@ import org.jmock.MockObjectTestCase;
 public class DirectoryScannerTest extends MockObjectTestCase {
 
     class MockFile extends File {
-        boolean _isDirectory;
+        boolean isDirectory;
         File[] children;
 
         public MockFile(String pathname) {
             super(pathname);
-            _isDirectory = false;
+            this.isDirectory = false;
         }
 
         public MockFile(String pathname, boolean isDirectory) {
             super(pathname);
-            _isDirectory = isDirectory;
+            this.isDirectory = isDirectory;
         }
 
         public boolean isDirectory() {
-            return _isDirectory;
+            return this.isDirectory;
         }
 
         public File[] listFiles() {

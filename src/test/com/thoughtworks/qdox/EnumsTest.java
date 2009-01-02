@@ -8,10 +8,6 @@ import com.thoughtworks.qdox.model.JavaClass;
 
 public class EnumsTest extends TestCase {
 
-    // NOTE: these tests verify that we can parse enum classes and that they are represented as
-    // classes in the model.
-    // Later versions of QDox will actually expose each enum value in the model: See QDOX-79
-
     public void testAddEmptyEnumsToModel() {
 
         String source = ""
@@ -21,10 +17,8 @@ public class EnumsTest extends TestCase {
         JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
-        JavaClass enum1 = javaDocBuilder.getClassByName("Enum1");
-        assertTrue(enum1.isEnum());
-        JavaClass enum2 = javaDocBuilder.getClassByName("Enum2");
-        assertTrue(enum2.isEnum());
+        assertTrue(javaDocBuilder.getClassByName("Enum1").isEnum());
+        assertTrue(javaDocBuilder.getClassByName("Enum2").isEnum());
     }
 
     public void testAddSimpleEnumsToModel() {
@@ -41,11 +35,9 @@ public class EnumsTest extends TestCase {
 
         JavaClass cls = javaDocBuilder.getClassByName("X");
         assertEquals("int", cls.getFieldByName("someField").getType().getValue()); // sanity check
-        JavaClass enum1 = javaDocBuilder.getClassByName("Enum1");
-        assertTrue(enum1.isEnum());
-        JavaClass enum2 = javaDocBuilder.getClassByName("X$Enum2");
-        assertTrue(enum2.isEnum());
-    }
+        assertTrue(javaDocBuilder.getClassByName("Enum1").isEnum());
+        assertTrue(javaDocBuilder.getClassByName("X$Enum2").isEnum());
+    }    
     
     public void testAddEnumImplementingInterfaceToModel() {
         String source = ""
@@ -108,8 +100,34 @@ public class EnumsTest extends TestCase {
         JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
-        JavaClass cls = javaDocBuilder.getClassByName("Animal");
-        assertTrue(cls.isEnum());
+        assertTrue(javaDocBuilder.getClassByName("Animal").isEnum());
+    }
+
+    //Verify test case from QDOX-74
+    public void testAddEnumsWithConstructorsToModel() throws Exception {
+        String source = ""
+                + "public enum AccountType {\n"
+                + "    \n"
+                + "    ADMINISTRATOR (1, \"Administrator\"),\n"
+                + "    CUSTOMER (2, \"Customer\"),\n"
+                + "\n"
+                + "}";
+
+        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        javaDocBuilder.addSource(new StringReader(source));
+
+        assertTrue(javaDocBuilder.getClassByName("AccountType").isEnum());
+    }
+    
+    //Verify test case from QDOX-74
+    public void testAddEnumsThatDontEndInSemicolon() throws Exception {
+        String source = ""
+                + "public enum Foo { BAR }\n";
+
+        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        javaDocBuilder.addSource(new StringReader(source));
+
+        assertTrue(javaDocBuilder.getClassByName("Foo").isEnum());
     }
 
 }

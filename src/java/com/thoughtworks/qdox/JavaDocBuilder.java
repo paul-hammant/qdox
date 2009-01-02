@@ -128,6 +128,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
                 addClass(result);
             } else {
                 result = createUnknownClass(name);
+                classes.put(name, result);
             }
         }
         return result;

@@ -16,6 +16,7 @@ import com.thoughtworks.qdox.parser.*;
 
     private int classDepth = 0;
     private int nestingDepth = 0;
+    private int annotationDepth = 0;
     private int assignmentDepth = 0;
     private int stateDepth = 0;
     private int[] stateStack = new int[10];
@@ -119,6 +120,7 @@ Id						= [:jletter:] [:jletterdigit:]*
         nestingDepth++;
 		
         if( annotation ) {
+        	annotationDepth = nestingDepth;
             pushState(ANNOTATION);
         }
 
@@ -241,7 +243,7 @@ Id						= [:jletter:] [:jletterdigit:]*
 
 <ANNOTATION> {
 	"("                 { ++ nestingDepth; return Parser.PARENOPEN; }
-    ")"                 { if( --nestingDepth == classDepth) { popState(); } return Parser.PARENCLOSE; }
+    ")"                 { if( nestingDepth-- == annotationDepth) { popState(); } return Parser.PARENCLOSE; }
 
 	","                 { return Parser.COMMA; }
     "="                 { return Parser.EQUALS; }

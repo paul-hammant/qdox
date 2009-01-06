@@ -141,16 +141,19 @@ Id						= [:jletter:] [:jletterdigit:]*
 
     "@" {WhiteSpace}* "interface" {
     	classDepth++;
+    	enumMode = false;
         return Parser.ANNOINTERFACE;
 	}
 
     "class"             {
         classDepth++;
+        enumMode = false;
         return Parser.CLASS; 
     }
     
     "interface"         { 
         classDepth++;
+     	enumMode = false;
         return Parser.INTERFACE;
     }
     

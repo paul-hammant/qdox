@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import java.io.StringReader;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.parser.Lexer;
+import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 
 public class EnumsTest extends TestCase {
 
@@ -129,5 +131,31 @@ public class EnumsTest extends TestCase {
 
         assertTrue(javaDocBuilder.getClassByName("Foo").isEnum());
     }
-
+    
+    
+    public void testEnumBeforeClass() throws Exception {
+        String source = "" +
+        	"package org.carrot2.util.attribute.constraint;" +
+        	"public class Test" +
+        	"{" +
+        	"public enum TestValueSet" +
+        	"{ VALUE_1 }" +
+        	"static class AnnotationContainer" +
+        	"{ @ValueHintEnum(values = TestValueSet.class) String hint; }" +
+        	"}";
+        new JavaDocBuilder().addSource(new StringReader(source));
+   }
+    
+    public void testEnumAfterClass() throws Exception {
+        String source = "" +
+        	"package org.carrot2.util.attribute.constraint;" +
+        	"public class Test" +
+        	"{" +
+        	"static class AnnotationContainer" +
+        	"{ @ValueHintEnum(values = TestValueSet.class) String hint; }" +
+        	"public enum TestValueSet" +
+        	"{ VALUE_1 }" +
+        	"}";
+        new JavaDocBuilder().addSource(new StringReader(source));
+   }
 }

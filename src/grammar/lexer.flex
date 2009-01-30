@@ -171,6 +171,7 @@ Id						= [:jletter:] [:jletterdigit:]*
     "{"                 {
         nestingDepth++;
         if (nestingDepth == classDepth + 1) {
+        	getCodeBody(); /* reset codebody */
             appendingToCodeBody = true;
             pushState(CODEBLOCK);
         }

@@ -69,6 +69,14 @@
         <role>developer</role>
       </roles>
     </developer>
+    <developer>
+      <id>rfscholte</id>
+      <name>Robert Scholte</name>
+      <timezone>+1</timezone>      
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
   </developers>
 
   <contributors>
@@ -104,9 +112,6 @@
     </contributor>
     <contributor>
       <name>Eric Redmond</name>
-    </contributor>
-    <contributor>
-      <name>Robert Scholte</name>
     </contributor>
   </contributors>
 

@@ -140,7 +140,7 @@ public class AnnotationsTest extends TestCase {
     }
 
     // from QDOX-101
-    public void todo_testShouldNotChokeOnDoubleAttributeAnnotationAndGenerics() {
+    public void testShouldNotChokeOnDoubleAttributeAnnotationAndGenerics() {
         String source = ""
             + "public class Person {\n" +
               "    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)\n" +

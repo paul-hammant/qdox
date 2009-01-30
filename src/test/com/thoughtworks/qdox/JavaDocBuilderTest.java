@@ -798,7 +798,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals(1, results.size());
     } 
     
-    public void FIXME_testJiraQdox63() {
+    public void testJiraQdox63() {
         builder.addSource(
             new StringReader(
                 "package p1;\n" +

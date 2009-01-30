@@ -825,7 +825,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals("p1.A$Inner", innerField.getType().getValue());
     }
 
-    public void FIXME_testJiraQdox71() {
+    public void testJiraQdox71() {
         String sourceCode = ""
                 + "package foo;"
                 + "public class C {"

@@ -229,6 +229,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         fieldDef.name = field.getName();
         fieldDef.type = getTypeDef(fieldType);
         fieldDef.dimensions = getDimension(fieldType);
+        addModifiers( fieldDef.modifiers, field.getModifiers());
         binaryBuilder.addField(fieldDef);
     }
 

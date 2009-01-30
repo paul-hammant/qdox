@@ -3,6 +3,7 @@ package com.thoughtworks.qdox;
 import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.model.util.SerializationUtils;
 import com.thoughtworks.qdox.parser.ParseException;
+import com.thoughtworks.qdox.testdata.PropertyClass;
 
 import java.io.*;
 import java.util.Arrays;
@@ -972,6 +973,18 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         builder.addSourceTree(new File("target/test-source"));
 
         assertNotNull(builder.getClassByName("com.blah.Thing"));
+    }
+
+    public void testBinaryClassFieldModifiers() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaClass javaClass = builder.getClassByName(PropertyClass.class.getName());
+        assertEquals("Class", PropertyClass.class.getName(), javaClass.getFullyQualifiedName());
+        JavaField javaField = javaClass.getFieldByName("aField");
+        assertNotNull("Field", javaField);
+        Set modifiers = new HashSet(Arrays.asList(javaField.getModifiers()));
+        assertEquals("Modifier count", 2, javaField.getModifiers().length);
+        assertTrue("Static", modifiers.contains("static"));
+        assertTrue("Public", modifiers.contains("public"));
     }
 
 }

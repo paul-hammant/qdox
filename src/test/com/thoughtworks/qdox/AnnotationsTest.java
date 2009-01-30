@@ -163,6 +163,15 @@ public class AnnotationsTest extends TestCase {
         builder.addSource(new StringReader(source));
         assertEquals("Foo", builder.getClassByName("Foo").getName());
     }
+    
+    // from QDOX-113
+    public void testAnnotationWithParameter() throws Exception {
+    	String source="public class Foo{\n" +
+    			"@Editor(FileEditor.class)\n" +
+    			"public void setFile(File file) { this.file = file; }" +
+    			"}";
+    	builder.addSource(new StringReader(source));
+    }
 
     // from QDOX-135
     public void testAnnotationInMethodParamList() {

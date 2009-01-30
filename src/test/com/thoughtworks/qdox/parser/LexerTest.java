@@ -625,4 +625,28 @@ public class LexerTest extends TestCase {
         assertEquals(expectedText, lexer.text());
     }
 
+    // TODO make this work .... QDOX-140
+    public void testNonAsciiMethodNameDoesNotCrashLexerButChewsUpUnicodeEscapedSequencesBadly() throws Exception {
+        String in = ""
+                + "interface X { "
+                + "   void paramWithNonAsciis\\u00E4\\u00F6\\u00FC\\u00DF();"
+                + "} ";
+
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.INTERFACE, lexer);
+        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.BRACEOPEN, lexer);
+        assertLex(Parser.IDENTIFIER, "void", lexer);
+        assertLex(Parser.IDENTIFIER, "paramWithNonAsciis", lexer);
+        assertLex(Parser.IDENTIFIER, "u00E4", lexer);
+        assertLex(Parser.IDENTIFIER, "u00F6", lexer);
+        assertLex(Parser.IDENTIFIER, "u00FC", lexer);
+        assertLex(Parser.IDENTIFIER, "u00DF", lexer);
+        assertLex(Parser.PARENOPEN, lexer);
+        assertLex(Parser.PARENCLOSE, lexer);
+        assertLex(Parser.SEMI, lexer);
+        assertLex(Parser.BRACECLOSE, lexer);
+        assertLex(0, lexer);
+    }
+
 }

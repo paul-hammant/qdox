@@ -197,4 +197,11 @@ public class AnnotationsTest extends TestCase {
     	assertEquals("X", mth.getAnnotations()[0].getType().getJavaClass().getName());
     }
 
+    // from QDOX-142
+    public void testEmptyParameterListAnnotation() throws Exception {
+    	String source = "@MyAnnotation()\n" +
+    			"public class MyClass {}";
+    	builder.addSource(new StringReader(source));
+    	assertEquals("MyAnnotation", builder.getClasses()[0].getAnnotations()[0].getType().getValue());
+    }
 }

@@ -547,7 +547,7 @@ public class LexerTest extends TestCase {
 
     public void testAnnotationTokens() throws Exception {
         String in = ""
-            + "@Copyright (year = 2004, month = \"Jan\")\n" 
+            + "@Copyright (year = 2004, month = \"Jan\")\n"
             + "@Note(\"Just ignore me\")\n" 
             + "public class LexerTest extends TestCase {}\n";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -561,13 +561,38 @@ public class LexerTest extends TestCase {
         assertLex(Parser.COMMA, lexer);
         assertLex(Parser.IDENTIFIER, "month", lexer);
         assertLex(Parser.EQUALS, lexer);
-        assertLex(Parser.STRING_LITERAL, lexer);
+        assertLex(Parser.STRING_LITERAL, "\"", lexer);
+        // TODO the above should be ...
+        // assertLex(Parser.STRING_LITERAL, "Jan", lexer);
         assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.AT, "@", lexer);
         assertLex(Parser.IDENTIFIER, "Note", lexer);
         assertLex(Parser.PARENOPEN, lexer);
         assertLex(Parser.STRING_LITERAL, lexer);
         assertLex(Parser.PARENCLOSE, lexer);
+        assertLex(Parser.PUBLIC, lexer);
+        assertLex(Parser.CLASS, lexer);
+        assertLex(Parser.IDENTIFIER, "LexerTest", lexer);
+        assertLex(Parser.EXTENDS, lexer);
+        assertLex(Parser.IDENTIFIER, "TestCase", lexer);
+        assertLex(Parser.BRACEOPEN, lexer);
+        assertLex(Parser.BRACECLOSE, lexer);
+        assertLex(0, lexer);
+    }
+
+    public void testQDOX134_MoreAnnotationTokens() throws Exception {
+        String in = ""
+            + "@myTag name=TestClass attrs=Something1,Something2,Something3\n"
+            + "public class LexerTest extends TestCase {}\n";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+
+        assertLex(Parser.AT, "@", lexer);
+        assertLex(Parser.IDENTIFIER, "myTag", lexer);
+        assertLex(Parser.IDENTIFIER, "name", lexer);
+        assertLex(Parser.COMMA, lexer);
+        assertLex(Parser.IDENTIFIER, "Something2", lexer);
+        assertLex(Parser.COMMA, lexer);
+        assertLex(Parser.IDENTIFIER, "Something3", lexer);
         assertLex(Parser.PUBLIC, lexer);
         assertLex(Parser.CLASS, lexer);
         assertLex(Parser.IDENTIFIER, "LexerTest", lexer);

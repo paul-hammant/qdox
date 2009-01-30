@@ -145,6 +145,7 @@ public class JavaSourceTest extends TestCase {
     
     public void testResolveFullyQualifiedImport() throws Exception {
         source.addImport("foo.Bar");
+        source.getClassLibrary().add("foo.Bar");
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
@@ -152,6 +153,9 @@ public class JavaSourceTest extends TestCase {
         source.addImport("bogus.package.MyType");
         source.addImport("com.thoughtworks.qdox.model.Type");
         source.addImport("another.package.Type");
+        source.getClassLibrary().add("bogus.package.MyType");
+        source.getClassLibrary().add("com.thoughtworks.qdox.model.Type");
+        source.getClassLibrary().add("another.package.Type");
         assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
     }
 
@@ -168,6 +172,14 @@ public class JavaSourceTest extends TestCase {
         assertEquals("open.Bar", source.resolveType("open.Bar"));
     }
 
+    public void testResolveFullyQualifiedTrumpsWildCard() throws Exception {
+        source.addImport("bar.Bar");
+        source.addImport("foo.Bar");
+        source.getClassLibrary().add("foo.*");
+        source.getClassLibrary().add("bar.Bar");
+        assertEquals("bar.Bar", source.resolveType("Bar"));
+    }
+
     public void testResolveWildcard() throws Exception {
         source.getClassLibrary().add("foo.Bar");
         source.addImport("foo.*");
@@ -182,6 +194,7 @@ public class JavaSourceTest extends TestCase {
     public void testResolveSamePackageTrumpsWildcard() throws Exception {
         source.addImport("com.thoughtworks.qdox.model.Type");
         source.addImport("foo.*");
+        source.getClassLibrary().add("com.thoughtworks.qdox.model.Type");
         source.getClassLibrary().add("foo.Type");
         assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
     }
@@ -200,5 +213,5 @@ public class JavaSourceTest extends TestCase {
         assertEquals("foo.Bar$Fnord", source.resolveType("Bar.Fnord"));
         assertEquals("java.util.Map$Entry", source.resolveType("Map.Entry"));
     }
-
+    
 }

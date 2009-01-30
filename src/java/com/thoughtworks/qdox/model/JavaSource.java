@@ -156,86 +156,129 @@ public class JavaSource implements Serializable, JavaClassParent {
         }
         return resolved;
     }
-
+    
+    /**
+     * Resolves a type name
+     * <p>
+     * Follows the <a href="http://java.sun.com/docs/books/jls/third_edition/html/packages.html#7.5.1">
+     * Java Language Specification, Version 3.0</a>.
+     * <p>
+     * Current resolution order is:
+     * <ol>
+     * <li>Single-Type-Import Declaration</li>
+     * <li>Type-Import-on-Demand Declaration</li>
+     * <li>Automatic Imports</li>
+     * </ol>
+     * @todo Static imports are not handled yet
+     * 
+     * @param typeName
+     * @return Resolved type name
+     */
     private String resolveTypeInternal(String typeName) {
+        String resolvedName = null;
 
-        // primitive types
-        if (PRIMITIVE_TYPES.contains(typeName)) return typeName;
+        lookup : {
+            // primitive types
+            if(PRIMITIVE_TYPES.contains( typeName )) {
+                resolvedName = typeName;
+                break lookup;
+            }
 
-        // check if a matching fully-qualified import
+            String outerName = typeName;
+            String nestedName = typeName.replace('.', '$');
+            int dotpos = typeName.indexOf( '.' );
+
+            if(dotpos >= 0) {
+                outerName = typeName.substring( 0, dotpos );
+            }
+            
+            // Check single-type-import with fully qualified name
+            resolvedName = resolveImportedType( typeName, nestedName, true );
+                    
+            if(resolvedName != null) {
+                break lookup;
+            }
+            
+            // Check single-type-import with outer name
+            resolvedName = resolveImportedType( outerName, nestedName, false );
+            
+            if(resolvedName != null) {
+                break lookup;
+            }
+
+            // check for a class globally
+            resolvedName = resolveFullyQualifiedType( typeName );
+            
+            if(resolvedName != null) {
+                break lookup;
+            }
+
+            if(getClassLibrary() != null) {
+                // check for a class in the same package
+                resolvedName = resolveFromLibrary( getClassNamePrefix() + nestedName );
+                
+                if(resolvedName != null) {
+                    break lookup;
+                }
+                
+                // try java.lang.*
+                resolvedName = resolveFromLibrary( "java.lang." + nestedName );
+
+                if(resolvedName != null) {
+                    break lookup;
+                }
+            }
+            
+            // Check type-import-on-demand
+            resolvedName = resolveImportedType( "*", nestedName, false );
+
+            if(resolvedName != null) {
+                break lookup;
+            }
+        }
+        
+        return resolvedName;
+    }
+    
+    private String resolveImportedType( String importSpec, String typeName, boolean fullMatch ) {
         String[] imports = getImports();
-        for (int i = 0; i < imports.length; i++) {
-            if (imports[i].equals(typeName)) return typeName;
-            if (imports[i].endsWith("." + typeName)) return imports[i];
-        }
-
-        if (getClassLibrary() == null) return null;
-
-        // check for fully-qualified class
-        if (getClassLibrary().contains(typeName)) {
-            return typeName;
+        String resolvedName = null;
+        String dotSuffix = "." + importSpec;
+            
+        for (int i = 0; i < imports.length && resolvedName == null; i++) {
+            if (imports[i].equals(importSpec) || (!fullMatch && imports[i].endsWith(dotSuffix))) {
+                String candidateName = imports[i].substring( 0, imports[i].length() - importSpec.length()) + typeName;
+                resolvedName = resolveFullyQualifiedType( candidateName );
+            } 
         }
         
-        // check for a class in the same package
-        {
-            String fqn = getClassNamePrefix() + typeName;
-            if (getClassLibrary().contains(fqn)) {
-                return fqn;
-            }
-        }
-
-        // check for inner classes of already imported classes        
-        String parent = null;
-        String dotParent = null;
-        String child = null;
-        int dollarIdx = 0;
-        if ((dollarIdx = typeName.indexOf('$')) > 0) {
-            parent = typeName.substring(0, dollarIdx);
-            dotParent = "." + parent;
-            child = typeName.substring(dollarIdx);
-        }
-        for (int i = 0; i < imports.length; i++) {
-            if (parent != null && (imports[i].equals(parent) || imports[i].endsWith(dotParent))) {
-                String fqn = imports[i] + child;
-                if (getClassLibrary().contains(fqn)) {
-                    return fqn;
+        return resolvedName;
+    }
+    
+    private String resolveFromLibrary(String typeName) {
+        return getClassLibrary().contains( typeName ) ? typeName : null;
+    }
+    
+    private String resolveFullyQualifiedType(String typeName) {
+        if (getClassLibrary() != null) {
+            int indexOfLastDot = typeName.lastIndexOf('.');
+            
+            if (indexOfLastDot >= 0) {
+                String root = typeName.substring(0,indexOfLastDot);
+                String leaf = typeName.substring(indexOfLastDot+1);
+                String resolvedTypeName = resolveFullyQualifiedType(root + "$" + leaf);
+                
+                if(resolvedTypeName != null) {
+                    return resolvedTypeName;
                 }
             }
-        }
-
-        // check for wildcard imports
-        for (int i = 0; i < imports.length; i++) {
-            if (imports[i].endsWith(".*")) {
-                String fqn =
-                    imports[i].substring(0, imports[i].length() - 1)
-                    + typeName;
-                if (getClassLibrary().contains(fqn)) {
-                    return fqn;
-                }
-            } else if (parent != null && (imports[i].equals(parent) || imports[i].endsWith(dotParent))) {
-                String fqn = imports[i] + child;
-                if (getClassLibrary().contains(fqn)) {
-                    return fqn;
-                }
+    
+            // check for fully-qualified class
+            if (getClassLibrary().contains(typeName)) {
+                return typeName;
             }
         }
 
-        // try java.lang.*
-        {
-            String fqn = "java.lang." + typeName;
-            if (getClassLibrary().contains(fqn)) {
-                return fqn;
-            }
-        }
-
-        // maybe it's an inner-class reference
-        int indexOfLastDot = typeName.lastIndexOf('.');
-        if (indexOfLastDot != -1) {
-            String root = typeName.substring(0,indexOfLastDot);
-            String leaf = typeName.substring(indexOfLastDot+1);
-            return resolveType(root + "$" + leaf);
-        }
-        
         return null;
     }
 

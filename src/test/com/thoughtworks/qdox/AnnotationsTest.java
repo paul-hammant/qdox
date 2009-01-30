@@ -172,6 +172,14 @@ public class AnnotationsTest extends TestCase {
     			"}";
     	builder.addSource(new StringReader(source));
     }
+    
+    //from QDOX-128
+    public void testQuotedStringAnnotation()  throws Exception {
+    	String source = "@Anno(run = \"1.0\")"+
+    	"public interface Foo {}";
+        builder.addSource(new StringReader(source));
+        assertEquals("\"1.0\"", builder.getClassByName("Foo").getAnnotations()[0].getProperty("run").getParameterValue());
+    }
 
     // from QDOX-135
     public void testAnnotationInMethodParamList() {

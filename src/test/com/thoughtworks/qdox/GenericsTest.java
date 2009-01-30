@@ -232,7 +232,7 @@ public class GenericsTest extends TestCase {
         assertEquals("Map", envField.getType().getValue());
     }
 
-    public void FIXME_testJiraQdox66() {
+    public void testJiraQdox66() {
         // Also see QDOX-77
         String source = "" +
             "public class Foo {\n" +

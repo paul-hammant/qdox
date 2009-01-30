@@ -897,6 +897,27 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals(expected.trim(), javaMethod.getSourceCode().trim());
     }
 
+    public void testMethodBodyWithPrecedingStaticBlock() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        String sourceCode = "" +
+                "public class X {\n" +
+                "  static {\n" +
+                "    System.out.println(\"static\");\n" +
+                "  }\n" +
+                "  public void doStuff() {\n" +
+                "    System.out.println(\"hi\"); // comment\n" +
+                "    Foo<X> x = new Cheese().get()[4]; /*x*/\n" +
+                "  } // not this \n" +
+                "}";
+        JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
+        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaMethod javaMethod = javaClass.getMethods()[0];
+        String expected = "" +
+                "    System.out.println(\"hi\"); // comment\n" +
+                "    Foo<X> x = new Cheese().get()[4]; /*x*/";
+        assertEquals(expected.trim(), javaMethod.getSourceCode().trim());
+    }
+
     public void testFieldDefinition() {
         JavaDocBuilder builder = new JavaDocBuilder();
         String sourceCode = "" +

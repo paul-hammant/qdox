@@ -437,7 +437,7 @@ memberend:
     };
 
 static_block:
-    modifiers CODEBLOCK { modifiers.clear(); };
+    modifiers CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
 
 // ----- FIELD
 

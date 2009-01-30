@@ -135,15 +135,19 @@ public class Type implements Comparable, Serializable {
     }
 
     public JavaClass getJavaClass() {
+    	JavaClass result = null;
+    	
         JavaClassParent javaClassParent = getJavaClassParent();
-        if (javaClassParent == null) {
-            return null;
+        if (javaClassParent != null) {
+        	result = javaClassParent.getNestedClassByName(getValue());
+	        if(result == null) {
+	            ClassLibrary classLibrary = javaClassParent.getClassLibrary();
+	            if (classLibrary != null) {
+	            	result = classLibrary.getClassByName(getValue());
+	            }
+	        }
         }
-        ClassLibrary classLibrary = javaClassParent.getClassLibrary();
-        if (classLibrary == null) {
-            return null;
-        }
-        return classLibrary.getClassByName(getValue());
+        return result;
     }
 
     /**

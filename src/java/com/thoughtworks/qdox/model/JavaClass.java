@@ -424,13 +424,20 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public JavaClass getNestedClassByName(String name) {
         JavaClass[] classes = getNestedClasses();
-
+        
+        int separatorIndex = name.indexOf('.');
+        String directInnerClassName = (separatorIndex > 0 ? name.substring(0, separatorIndex) : name); 
         for (int i = 0; i < classes.length; i++) {
-            if (classes[i].getName().equals(name)) {
-                return classes[i];
+        	JavaClass jClass = classes[i];
+            if (jClass.getName().equals(directInnerClassName)) {
+            	if(separatorIndex > 0) {
+                    return jClass.getNestedClassByName(name.substring(separatorIndex+1));
+            	}
+            	else {
+                    return jClass;
+            	}
             }
         }
-
         return null;
     }
 

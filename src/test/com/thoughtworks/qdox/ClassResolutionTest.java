@@ -77,4 +77,20 @@ public class ClassResolutionTest extends TestCase {
 
         builder.addSource(new StringReader(source));
     }
+    
+    //from QDOX-86
+    public void testInnerClassInMethod() throws Exception {
+    	JavaDocBuilder builder = new JavaDocBuilder();
+    	String source = "package some.pack;\n" +
+    	"class Test {\n" +
+    	"void some(Inner.Inner2 a) {}\n" +
+    	"static interface Inner {\n" +
+    	"static interface Inner2 { }\n" +
+    	"}\n" +
+    	"}";
+    	builder.addSource(new StringReader(source));
+    	JavaMethod method = builder.getClassByName("some.pack.Test").getMethods()[0];
+    	JavaParameter parameter = method.getParameters()[0];
+    	assertEquals("some.pack.Test$Inner$Inner2", parameter.getType().getJavaClass().getFullyQualifiedName());
+    }
 }

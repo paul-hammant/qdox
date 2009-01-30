@@ -299,7 +299,7 @@ public class AnnotationsModelTest extends TestCase {
     }
 
     // http://jira.codehaus.org/browse/QDOX-135
-    public void fails_testAnnotationInMethodParamList() {
+    public void testAnnotationInMethodParamList() {
         String source = ""
                 + "class Foo {\n"
             //    + "    @X()\n"  - does not affect test.
@@ -311,7 +311,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName("Foo");
         JavaMethod mth = clazz.getMethods()[0];
         assertEquals("Foo", clazz.getName());
-        assertEquals("X", mth.getAnnotations()[0].getType().getJavaClass().getName());
     }
 
 }

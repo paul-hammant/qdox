@@ -143,7 +143,7 @@ public class ModelBuilder implements Builder {
      *      
      * @param typeDef
      * @param dimensions
-     * @return
+     * @return the Type
      */
     public Type createType(TypeDef typeDef, int dimensions) {
     	if(typeDef == null) {

@@ -51,9 +51,8 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
      * Return the result type of a binary operator
      * <p>
      * Performs binary numeric promotion as specified in the Java Language
-     * Specification, <a
-     * href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section
-     * 5.6.1<a>
+     * Specification, 
+     * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section 5.6.1<a>
      */
     protected static Class resultType( Object left, Object right ) {
         Class type = void.class;
@@ -83,9 +82,8 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
      * Return the numeric result type of a binary operator
      * <p>
      * Performs binary numeric promotion as specified in the Java Language
-     * Specification, <a
-     * href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section
-     * 5.6.1<a>
+     * Specification, 
+     * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section 5.6.1<a>
      */
     protected static Class numericResultType( Object left, Object right ) {
         Class type = void.class;
@@ -106,9 +104,8 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
      * Return the result type of an unary operator
      * <p>
      * Performs unary numeric promotion as specified in the Java Language
-     * Specification, <a
-     * href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170952">section
-     * 5.6.2<a>
+     * Specification, 
+     * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170952">section 5.6.2<a>
      */
     protected static Class unaryNumericResultType( Object value ) {
         Class type = void.class;

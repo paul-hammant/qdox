@@ -987,4 +987,17 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertTrue("Public", modifiers.contains("public"));
     }
 
+    public void testJiraQdox117() throws Exception {
+    	JavaDocBuilder builder = new JavaDocBuilder();
+        String sourceCode = "" +
+                "public class foo {\n" +
+                "{ dosomething(); }\n" +
+                "@Test (description=\"test blah blah\")\n" +
+                "public void myTest() {}\n" +
+                "}";
+        JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
+        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaMethod javaMethod = javaClass.getMethods()[0];
+        assertEquals("\"test blah blah\"", javaMethod.getAnnotations()[0].getNamedParameter("description").toString());
+    }
 }

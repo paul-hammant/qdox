@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <name>QDox</name>
   <groupId>com.thoughtworks.qdox</groupId>
   <artifactId>qdox</artifactId>
-  <version>1.8-SNAPSHOT</version>
+  <version>1.8</version>
   <packaging>jar</packaging>
   <url>http://qdox.codehaus.org</url>
   <description>
@@ -27,9 +26,9 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</developerConnection>
-    <url>http://svn.qdox.codehaus.org/trunk/qdox</url>
+    <connection>scm:svn:https://svn.codehaus.org/qdox/tags/qdox-1.8</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/tags/qdox-1.8</developerConnection>
+    <url>http://svn.qdox.codehaus.org/tags/qdox-1.8</url>
   </scm>
 
   <developers>
@@ -130,16 +129,12 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <configuration>
           <tasks>
-            <java classpath="bootstrap/jflex.jar" classname="JFlex.Main"
-              fork="true">
+            <java classpath="bootstrap/jflex.jar" classname="JFlex.Main" fork="true">
               <arg value="-d" />
-              <arg
-                value="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" />
+              <arg value="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" />
               <arg value="src/grammar/lexer.flex" />
             </java>
-            <exec executable="${qdox.byaccj.executable}"
-              dir="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl"
-              failonerror="true">
+            <exec executable="${qdox.byaccj.executable}" dir="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" failonerror="true">
               <arg value="-v" />
               <arg value="-Jnorun" />
               <arg value="-Jnoconstruct" />
@@ -148,8 +143,7 @@
               <arg value="-Jpackage=com.thoughtworks.qdox.parser.impl" />
               <arg value="${basedir}/src/grammar/parser.y" />
             </exec>
-            <move tofile="${project.build.directory}/yacc-states.txt"
-              file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y" />
+            <move tofile="${project.build.directory}/yacc-states.txt" file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y" />
           </tasks>
           <sourceRoot>${project.build.directory}/generated-sources/parser</sourceRoot>
         </configuration>
@@ -367,8 +361,7 @@
           <version>true</version>
           <windowtitle>${project.name} ${project.version}
             API</windowtitle>
-          <tag name="noinspection" description="IntelliJ Inspection Ignore tag"
-            enabled="false" />
+          <tag name="noinspection" description="IntelliJ Inspection Ignore tag" enabled="false" />
         </configuration>
       </plugin>
 

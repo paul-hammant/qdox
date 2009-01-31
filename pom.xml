@@ -72,7 +72,7 @@
     <developer>
       <id>rfscholte</id>
       <name>Robert Scholte</name>
-      <timezone>+1</timezone>      
+      <timezone>+1</timezone>
       <roles>
         <role>developer</role>
       </roles>
@@ -165,7 +165,17 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.0.2</version>
+        <configuration>
+          <source>1.4</source>
+          <target>1.4</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.4</version>
         <executions>
           <execution>
             <id>attach-javadoc</id>
@@ -184,7 +194,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.0-alpha-4</version>
+        <version>2.0</version>
         <executions>
           <execution>
             <id>unpack-core</id>
@@ -211,6 +221,7 @@
       <plugin>
         <groupId>org.codehaus.xsite</groupId>
         <artifactId>xsite-maven-plugin</artifactId>
+        <version>1.0</version>
         <configuration>
           <sitemapPath>content/website.xml</sitemapPath>
           <skinPath>templates/skin.html</skinPath>
@@ -350,7 +361,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.2</version>
         <configuration>
           <packagenames>com.thoughtworks.qdox.*</packagenames>
           <use>true</use>
@@ -366,7 +376,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>2.0</version>
         <configuration>
           <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
         </configuration>

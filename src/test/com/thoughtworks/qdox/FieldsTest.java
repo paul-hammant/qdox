@@ -40,4 +40,22 @@ public class FieldsTest extends TestCase
         assertEquals("a", fooClass.getFieldByName("a").getName());
         assertEquals("new int[1 << 16]", fooClass.getFieldByName("a").getInitializationExpression().trim());
     }
+    
+    //from QDOX-127
+    //fails because returned value is " null"
+    //which is already better then mentioned in the issue
+    public void todo_testCommentBeforeInitialization() throws Exception {
+    	String source = "public class X{\n" +
+    			"// Attributes\n" +
+    			"\n" +
+    			"/**" +
+    			"* Some decription" +
+    			"*/" +
+    			"private String uDI = null;\n" +
+    			"}";
+    	
+    	builder.addSource(new StringReader(source));
+    	JavaField field = builder.getClasses()[0].getFields()[0];
+    	assertEquals("null", field.getInitializationExpression());
+    }
 }

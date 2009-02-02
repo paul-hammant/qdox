@@ -1,6 +1,6 @@
 To build QDox there are two prerequisites:
 
-* Maven 2 (2.0.6 or later)
+* Maven 2 (2.0.9 or later)
 http://maven.apache.org
  
 * BYacc/J (1.8 or later)
@@ -16,3 +16,5 @@ Build goals:
 mvn install				- Create qdox jar
 mvn generate-sources 	- Generate the Java parser code (allowing you to develop in an IDE).
 mvn site      			- Build the QDox website
+mvn release:prepare		- Prepare release (confirm or change release version interactively)
+mvn release:perform		- Perform release (perform release from tag of prepare phase)

@@ -13,8 +13,8 @@
     </section>
     <section>
         <name>Using QDox</name>
-        <page>model.html</page>
         <page>usage.html</page>
+        <page>model.html</page>
         <link title="JavaDoc">javadoc/index.html</link>
     </section>
 </sitemap>

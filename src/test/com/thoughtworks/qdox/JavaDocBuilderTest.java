@@ -124,6 +124,11 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals("Thing", classes[1].getName());
         assertEquals(comBlah, comBlahSubpackage.getParentPackage());
         assertNull(comBlah.getParentPackage());
+        JavaPackage[] comBlahSubpackages = comBlah.getSubPackages();
+        assertEquals(1, comBlahSubpackages.length);
+        assertEquals(comBlahSubpackage, comBlahSubpackages[0]);
+        JavaPackage[] comBlahSubpackageSubpackages = comBlahSubpackage.getSubPackages();
+        assertEquals(0, comBlahSubpackageSubpackages.length);
     }
 
     private String createOuter() {

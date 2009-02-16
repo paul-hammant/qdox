@@ -3,6 +3,8 @@ package com.thoughtworks.qdox.model;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
 
 
 public class JavaPackage extends AbstractBaseJavaEntity {
@@ -62,6 +64,19 @@ public class JavaPackage extends AbstractBaseJavaEntity {
     public JavaPackage getParentPackage() {
         String parentName = name.substring(0,name.lastIndexOf("."));
         return (JavaPackage) allPackages.get(parentName);
+    }
+
+    public JavaPackage[] getSubPackages() {
+        String expected = name + ".";
+        Set packageKeys = allPackages.keySet();
+        List retList = new ArrayList();
+        for (Iterator iterator = packageKeys.iterator(); iterator.hasNext();) {
+            String pName = (String) iterator.next();
+            if (pName.startsWith(expected) && !pName.substring(expected.length()).contains(".")) {
+                retList.add(allPackages.get(pName));
+            }
+        }
+        return (JavaPackage[]) retList.toArray(new JavaPackage[retList.size()]);
     }
 
     public boolean equals(Object o) {

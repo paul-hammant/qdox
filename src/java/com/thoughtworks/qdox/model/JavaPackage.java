@@ -55,4 +55,19 @@ public class JavaPackage extends AbstractBaseJavaEntity {
 	public JavaClass[] getClasses() {
 		return (JavaClass[]) classes.toArray(new JavaClass[classes.size()]);
 	}
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavaPackage that = (JavaPackage) o;
+
+        if (!name.equals(that.name)) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

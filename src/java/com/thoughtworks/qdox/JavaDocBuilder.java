@@ -89,6 +89,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     private boolean debugLexer;
     private boolean debugParser;
     private ErrorHandler errorHandler;
+    private Map allPackages = new HashMap();
 
     public static interface ErrorHandler {
         void handle(ParseException parseException);
@@ -138,7 +139,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     }
 
     private JavaClass createUnknownClass(String name) {
-        ModelBuilder unknownBuilder = new ModelBuilder(classLibrary, docletTagFactory);
+        ModelBuilder unknownBuilder = new ModelBuilder(classLibrary, docletTagFactory, new HashMap());
         ClassDef classDef = new ClassDef();
         classDef.name = name;
         unknownBuilder.beginClass(classDef);
@@ -156,7 +157,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         } else {
             // Create a new builder and mimic the behaviour of the parser.
             // We're getting all the information we need via reflection instead.
-            ModelBuilder binaryBuilder = new ModelBuilder(classLibrary, docletTagFactory);
+            ModelBuilder binaryBuilder = new ModelBuilder(classLibrary, docletTagFactory, new HashMap());
 
             // Set the package name and class name
             String packageName = getPackageName(name);
@@ -307,7 +308,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     }
 
     public JavaSource addSource(Reader reader, String sourceInfo) {
-        ModelBuilder builder = new ModelBuilder(classLibrary, docletTagFactory);
+        ModelBuilder builder = new ModelBuilder(classLibrary, docletTagFactory, allPackages);
         Lexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
         parser.setDebugLexer(debugLexer);
@@ -327,7 +328,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         addClasses(source);
 
         JavaPackage pkg = source.getPackage();
-        JavaClass[] classes = getClasses();
+        JavaClass[] classes = source.getClasses();
         if (!packages.contains(pkg)) {
             packages.add(pkg);
         }

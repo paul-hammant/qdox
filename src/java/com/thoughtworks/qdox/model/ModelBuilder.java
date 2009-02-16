@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
 import com.thoughtworks.qdox.model.annotation.AnnotationVisitor;
@@ -32,14 +34,16 @@ public class ModelBuilder implements Builder {
     private String lastComment;
     private List lastTagSet;
     private DocletTagFactory docletTagFactory;
+    private final Map allPackages;
 
     public ModelBuilder() {
-        this(new ClassLibrary(null), new DefaultDocletTagFactory());
+        this(new ClassLibrary(null), new DefaultDocletTagFactory(), new HashMap());
     }
 
-    public ModelBuilder(ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
+    public ModelBuilder(ClassLibrary classLibrary, DocletTagFactory docletTagFactory, Map allPackages) {
         this.classLibrary = classLibrary;
         this.docletTagFactory = docletTagFactory;
+        this.allPackages = allPackages;
         source = new JavaSource();
         source.setClassLibrary(classLibrary);
         currentParent = source;
@@ -47,8 +51,12 @@ public class ModelBuilder implements Builder {
     }
 
     public void addPackage(PackageDef packageDef) {
-    	JavaPackage jPackage = new JavaPackage(packageDef.name);
-    	jPackage.setLineNumber(packageDef.lineNumber);
+        JavaPackage jPackage = (JavaPackage) allPackages.get(packageDef.name);
+        if (jPackage == null) {
+            jPackage = new JavaPackage(packageDef.name);
+            allPackages.put(packageDef.name, jPackage);
+        }
+        jPackage.setLineNumber(packageDef.lineNumber);
     	setAnnotations(jPackage);
         source.setPackage(jPackage); //@todo introduce PackageDef?
     }

@@ -108,11 +108,18 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     }
 
     public void testGetPackagesShowsOnePackageAndTwoClasses() {
-        builder.addSource(new StringReader(createOuter()));
+        builder.addSourceTree(new File("target/test-source"));
         JavaPackage[] packages = builder.getPackages();
-        assertEquals(1, packages.length);
-        assertEquals("foo.bar", packages[0].getName());
-        assertEquals(2, packages[0].getClasses().length); // same result as testGetClasses()
+        assertEquals(2, packages.length);
+        assertEquals("com.blah.subpackage", packages[0].getName());
+        assertEquals("com.blah", packages[1].getName());
+        JavaClass[] classes = packages[0].getClasses();
+        assertEquals(1, classes.length);
+        assertEquals("Cheese", classes[0].getName());
+        classes = packages[1].getClasses();
+        assertEquals(2, classes.length);
+        assertEquals("Another", classes[0].getName());
+        assertEquals("Thing", classes[1].getName());
     }
 
     private String createOuter() {

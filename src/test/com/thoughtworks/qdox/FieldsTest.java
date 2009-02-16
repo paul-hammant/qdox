@@ -44,14 +44,14 @@ public class FieldsTest extends TestCase
     //from QDOX-127
     //fails because returned value is " null"
     //which is already better then mentioned in the issue
-    public void todo_testCommentBeforeInitialization() throws Exception {
+    public void testCommentBeforeInitialization() throws Exception {
     	String source = "public class X{\n" +
     			"// Attributes\n" +
     			"\n" +
     			"/**" +
     			"* Some decription" +
     			"*/" +
-    			"private String uDI = null;\n" +
+    			"private String uDI =   null;\n" +
     			"}";
     	
     	builder.addSource(new StringReader(source));

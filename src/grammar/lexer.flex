@@ -194,7 +194,7 @@ Id						= [:jletter:] [:jletterdigit:]*
         return Parser.JAVADOCSTART;
     }
 
-    "="                 { 
+    "=" {WhiteSpace}* { 
         assignmentDepth = nestingDepth;
         appendingToCodeBody = true;
         pushState(ASSIGNMENT);

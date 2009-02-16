@@ -10,6 +10,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassCache;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
@@ -80,6 +81,7 @@ import java.util.StringTokenizer;
 public class JavaDocBuilder implements Serializable, JavaClassCache {
 
     private Map classes = new HashMap();
+    private Set packages = new HashSet();
     private ClassLibrary classLibrary;
     private List sources = new ArrayList();
     private DocletTagFactory docletTagFactory;
@@ -323,6 +325,18 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         JavaSource source = builder.getSource();
         sources.add(source);
         addClasses(source);
+
+        JavaPackage pkg = source.getPackage();
+        JavaClass[] classes = getClasses();
+        if (!packages.contains(pkg)) {
+            packages.add(pkg);
+        }
+        for (int i = 0; i < classes.length; i++) {
+            if (pkg != null) {
+                pkg.addClass(classes[i]);
+            }
+        }
+
         return source;
     }
 
@@ -360,6 +374,16 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         }
         JavaClass[] result = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
         return result;
+    }
+
+    /**
+     * Returns all the packages found in all the sources.
+     *
+     * @return all the packages found in all the sources.
+     * @since 1.9
+     */
+    public JavaPackage[] getPackages() {
+        return (JavaPackage[]) packages.toArray(new JavaPackage[packages.size()]);
     }
 
     private void addClassesRecursive(JavaSource javaSource, Set resultSet) {

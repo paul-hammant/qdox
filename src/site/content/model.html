@@ -302,7 +302,7 @@ boolean oArray = o.getType().isArray(); // true
 					<td><a href="javadoc/com/thoughtworks/qdox/model/Type.html">Type</a></td>
 					<td>
             <p>Represents a specific instance of a class used by another class (such as return value, superclass, etc).
-						The value represents the name of the class. Array dimensions are also available.</p>
+						The value represents the name of the class. Array dimensions are also available. Since 1.8 it's also possible to get the generic value of the Type</p>
 
 
 						<h5>Example Input</h5>
@@ -312,7 +312,7 @@ import java.util.*;
 public class MyClass  {
 
   public void stuff(int n, Object[] objects,
-	                  Date[][] dates) {
+	                  Date[][] dates, List<String> stringList) {
     ...
   }
 
@@ -338,16 +338,23 @@ objects.getValue(); // "java.lang.Object"
 objects.getArray(); // true
 objects.getDimensions(); // 1
 
-Type dates = m.getParameters()[1].getType();
+Type dates = m.getParameters()[2].getType();
 dates.getValue(); // "java.util.Date"
 dates.getArray(); // true
 dates.getDimensions(); // 2
+
+Type stringList = m.getParameters()[3].getType();
+stringList.getValue(); // "java.util.List"
+stringList.getGenericValue(); // "java.util.List<java.lang.String>"
+stringList.getArray(); // false
+stringList.getDimensions(); // 0
 </pre></div>
 
 					</td>
 					<td>
 						<code>
 							<nobr>String <a href="javadoc/com/thoughtworks/qdox/model/Type.html#getValue()">getValue()</a></nobr><br/>
+							<nobr>String <a href="javadoc/com/thoughtworks/qdox/model/Type.html#getGenericValue()">getGenericValue()</a></nobr><br/>
 							<nobr>boolean <a href="javadoc/com/thoughtworks/qdox/model/Type.html#isArray()">isArray()</a></nobr><br/>
 							<nobr>int <a href="javadoc/com/thoughtworks/qdox/model/Type.html#getDimensions()">getDimensions()</a></nobr><br/>
 							<br/>

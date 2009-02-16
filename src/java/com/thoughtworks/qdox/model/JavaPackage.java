@@ -6,7 +6,10 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
 
-
+/**
+ * A representation of a package.
+ * @since 1.9
+ */
 public class JavaPackage extends AbstractBaseJavaEntity {
 
 	private String name;
@@ -55,7 +58,6 @@ public class JavaPackage extends AbstractBaseJavaEntity {
      * Returns all the classes found for the package.
      *
      * @return all the classes found for the package
-     * @since 1.9
      */
 	public JavaClass[] getClasses() {
 		return (JavaClass[]) classes.toArray(new JavaClass[classes.size()]);

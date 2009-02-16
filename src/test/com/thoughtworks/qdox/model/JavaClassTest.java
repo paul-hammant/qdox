@@ -342,12 +342,12 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testQualifiedType() throws Exception {
-        src.setPackage("com.thoughtworks.qdox");
+        src.setPackage(new JavaPackage("com.thoughtworks.qdox"));
 
         cls.setName("MyClass");
 
         assertEquals("MyClass", cls.getName());
-        assertEquals("com.thoughtworks.qdox", cls.getPackage());
+        assertEquals("com.thoughtworks.qdox", cls.getPackage().getName());
         assertEquals("com.thoughtworks.qdox.MyClass",
                 cls.getFullyQualifiedName());
         assertTrue(cls.asType().isResolved());
@@ -355,13 +355,13 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetClassNamePrefix() {
-        src.setPackage("foo.bar");
+        src.setPackage(new JavaPackage("foo.bar"));
         cls.setName("Stanley");
         assertEquals("foo.bar.Stanley$", cls.getClassNamePrefix());
     }
     
     public void testInnerClass() throws Exception {
-        src.setPackage("foo.bar");
+        src.setPackage(new JavaPackage("foo.bar"));
 
         JavaClass outer = new JavaClass();
         outer.setName("Outer");
@@ -372,7 +372,7 @@ public class JavaClassTest extends TestCase {
         outer.addClass(inner);
 
         assertEquals("Inner", inner.getName());
-        assertEquals("foo.bar", inner.getPackage());
+        assertEquals("foo.bar", inner.getPackage().getName());
         assertEquals("foo.bar.Outer$Inner",
                 inner.getFullyQualifiedName());
     }
@@ -460,7 +460,7 @@ public class JavaClassTest extends TestCase {
     }
     
     public void testResolveTypeInnerClass() throws Exception {
-        src.setPackage("p");
+        src.setPackage(new JavaPackage("p"));
         cls.setName("X");
         JavaClass innerClass = new JavaClass();
         innerClass.setName("DogFood");

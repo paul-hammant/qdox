@@ -9,6 +9,7 @@ import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.annotation.AnnotationAdd;
 import com.thoughtworks.qdox.model.annotation.AnnotationConstant;
 import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
@@ -296,6 +297,20 @@ public class AnnotationsModelTest extends TestCase {
         assertAnnotationExpression( "(short)1", new Short( (short) 1 ) );
         assertAnnotationExpression( "(long)(short)1", new Long( 1 ) );
         assertAnnotationExpression( "(int)((short)1 + (long)3)", new Integer( 4 ) );
+    }
+    
+    //from Qdox-98
+    public void testPackageWithAnnotation() throws Exception {
+    	String source = "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n" +
+    			"package org.oasis_open.docs.wsn.br_2;\n" +
+    			"public class Foo {}";
+    	builder.addSource(new StringReader(source));
+    	JavaPackage jPackage = builder.getClasses()[0].getPackage();
+    	assertEquals("org.oasis_open.docs.wsn.br_2", jPackage.getName());
+    	assertEquals("javax.xml.bind.annotation.XmlSchema", jPackage.getAnnotations()[0].getType().getValue());
+    	assertEquals(2, jPackage.getLineNumber());
+    	
+    	
     }
 
     // http://jira.codehaus.org/browse/QDOX-135

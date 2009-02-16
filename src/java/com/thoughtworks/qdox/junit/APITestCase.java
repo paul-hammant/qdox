@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.junit;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
@@ -37,8 +38,8 @@ public abstract class APITestCase extends TestCase {
      */
     private static Comparator ENTITY_COMPARATOR = new Comparator() {
         public int compare(Object o1, Object o2) {
-            AbstractJavaEntity entity1 = (AbstractJavaEntity) o1;
-            AbstractJavaEntity entity2 = (AbstractJavaEntity) o2;
+            AbstractBaseJavaEntity entity1 = (AbstractBaseJavaEntity) o1;
+            AbstractBaseJavaEntity entity2 = (AbstractBaseJavaEntity) o2;
             return entity1.getName().compareTo(entity2.getName());
         }
     };

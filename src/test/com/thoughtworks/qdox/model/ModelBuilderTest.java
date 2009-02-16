@@ -1,13 +1,15 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.Arrays;
+
+import junit.framework.TestCase;
+
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
-
-import java.util.Arrays;
-import junit.framework.TestCase;
 
 public class ModelBuilderTest extends TestCase {
 
@@ -113,7 +115,7 @@ public class ModelBuilderTest extends TestCase {
         assertEquals(0, source.getClasses()[1].getImplements().length);
 
         //Add another class and see if Another gets resolved
-        builder.addPackage("com.thoughtworks");
+        builder.addPackage(new PackageDef("com.thoughtworks"));
         ClassDef anotherCls = new ClassDef();
         anotherCls.name = "Another";
         builder.beginClass(anotherCls);
@@ -266,7 +268,7 @@ public class ModelBuilderTest extends TestCase {
     }
 
     public void testInnerClass() throws Exception {
-        builder.addPackage("xyz");
+        builder.addPackage(new PackageDef("xyz"));
 
         ClassDef outerDef = new ClassDef();
         outerDef.name = "Outer";
@@ -750,9 +752,9 @@ public class ModelBuilderTest extends TestCase {
     }
 
     public void testJavaSourceWithPackage() throws Exception {
-        builder.addPackage("com.blah.thing");
+        builder.addPackage(new PackageDef("com.blah.thing"));
         JavaSource result = builder.getSource();
-        assertEquals("com.blah.thing", result.getPackage());
+        assertEquals("com.blah.thing", result.getPackage().getName());
     }
 
     public void testJavaSourceNoImports() throws Exception {

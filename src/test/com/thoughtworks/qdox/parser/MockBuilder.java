@@ -8,6 +8,7 @@ import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
@@ -33,11 +34,11 @@ class MockBuilder implements Builder {
         myAddPackageCalls.setExpected(calls);
     }
 
-    public void addExpectedAddPackageValues(String arg0) {
+    public void addExpectedAddPackageValues(PackageDef arg0) {
         myAddPackageParameter0Values.addExpected(arg0);
     }
 
-    public void addPackage(String arg0) {
+    public void addPackage(PackageDef arg0) {
         myAddPackageCalls.inc();
         myAddPackageParameter0Values.addActual(arg0);
     }
@@ -158,4 +159,5 @@ class MockBuilder implements Builder {
     public Type createType(TypeDef name) {
     	return null;
     }
+
 }

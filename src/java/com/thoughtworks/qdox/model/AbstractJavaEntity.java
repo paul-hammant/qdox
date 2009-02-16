@@ -1,29 +1,15 @@
 package com.thoughtworks.qdox.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class AbstractJavaEntity implements Serializable, Comparable {
+public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements Comparable {
 
-    protected String name;
     protected List modifiers = new ArrayList();
     private String comment;
     private DocletTag[] tags = new DocletTag[0];
-    private Annotation[] annotations = new Annotation[0];
-    private JavaClassParent parent;
-    private int lineNumber = -1;
-
-    public int getLineNumber() {
-    	return lineNumber;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     /**
      * Return list of modifiers as Strings.
      * (public, private, protected, final, abstract, static)
@@ -38,11 +24,6 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
 
     public DocletTag[] getTags() {
         return tags;
-    }
-
-    public Annotation[] getAnnotations()
-    {
-        return annotations;
     }
 
     public DocletTag[] getTagsByName(String name) {
@@ -128,10 +109,6 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
 
     protected abstract void writeBody(IndentBuffer result);
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setModifiers(String[] modifiers) {
         this.modifiers = Arrays.asList(modifiers);
     }
@@ -143,10 +120,6 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
     public void setTags(List tagList) {
         this.tags = new DocletTag[tagList.size()];
         tagList.toArray(this.tags);
-    }
-
-    public void setAnnotations(Annotation[] annotations) {
-        this.annotations = annotations;
     }
 
     //helper methods for querying the modifiers
@@ -236,20 +209,8 @@ public abstract class AbstractJavaEntity implements Serializable, Comparable {
         }
     }
     
-    public JavaClassParent getParent() { 
-        return parent; 
-    } 
- 
     public JavaSource getSource() { 
         return parent.getParentSource(); 
-    }
-
-    public void setLineNumber(int lineNumber) {
-        this.lineNumber = lineNumber;
-    }
-    
-    public void setParent(JavaClassParent parent) { 
-        this.parent = parent;
     }
 
 }

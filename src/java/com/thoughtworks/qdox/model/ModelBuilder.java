@@ -14,6 +14,7 @@ import com.thoughtworks.qdox.parser.Builder;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
@@ -45,8 +46,11 @@ public class ModelBuilder implements Builder {
         currentAnnoDefs = new ArrayList();
     }
 
-    public void addPackage(String packageName) {
-        source.setPackage(packageName);
+    public void addPackage(PackageDef packageDef) {
+    	JavaPackage jPackage = new JavaPackage(packageDef.name);
+    	jPackage.setLineNumber(packageDef.lineNumber);
+    	setAnnotations(jPackage);
+        source.setPackage(jPackage); //@todo introduce PackageDef?
     }
 
     public void addImport(String importName) {
@@ -249,7 +253,7 @@ public class ModelBuilder implements Builder {
         currentClass.addField(currentField);
     }
 
-    private void setAnnotations( final AbstractJavaEntity entity ) {
+    private void setAnnotations( final AbstractBaseJavaEntity entity ) {
         if( !currentAnnoDefs.isEmpty() ) {
             AnnotationVisitor visitor = new RecursiveAnnotationVisitor() {
                 public Object visitAnnotation( Annotation annotation ) {

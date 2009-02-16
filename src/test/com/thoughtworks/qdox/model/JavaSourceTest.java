@@ -57,7 +57,7 @@ public class JavaSourceTest extends TestCase {
         JavaClass cls = new JavaClass();
         cls.setName("MyClass");
         source.addClass(cls);
-        source.setPackage("com.thing");
+        source.setPackage(new JavaPackage("com.thing"));
         String expected = ""
                 + "package com.thing;\n"
                 + "\n"
@@ -104,7 +104,7 @@ public class JavaSourceTest extends TestCase {
         cls.setName("MyClass");
         source.addClass(cls);
         source.addImport("java.util.*");
-        source.setPackage("com.moo");
+        source.setPackage(new JavaPackage("com.moo"));
         String expected = ""
                 + "package com.moo;\n"
                 + "\n"
@@ -118,7 +118,7 @@ public class JavaSourceTest extends TestCase {
 
     public void testGetClassNamePrefix() {
         assertEquals("", source.getClassNamePrefix());
-        source.setPackage("foo.bar");
+        source.setPackage(new JavaPackage("foo.bar"));
         assertEquals("foo.bar.", source.getClassNamePrefix());
        }
     
@@ -160,13 +160,13 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testResolveSamePackage() throws Exception {
-        source.setPackage("foo");
+        source.setPackage(new JavaPackage("foo"));
         source.getClassLibrary().add("foo.Bar");
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveFullyQualifiedTrumpsSamePackage() throws Exception {
-        source.setPackage("foo");
+        source.setPackage(new JavaPackage("foo"));
         source.getClassLibrary().add("foo.Bar");
         source.getClassLibrary().add("open.Bar");
         assertEquals("open.Bar", source.resolveType("open.Bar"));
@@ -200,13 +200,13 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testResolveFullyQualifiedInnerClass() throws Exception {
-        source.setPackage("foo");
+        source.setPackage(new JavaPackage("foo"));
         source.getClassLibrary().add("foo.Bar$Fnord");
         assertEquals("foo.Bar$Fnord", source.resolveType("foo.Bar.Fnord"));
     }
 
     public void testResolvePartiallySpecifiedInnerClass() throws Exception {
-        source.setPackage("foo");
+        source.setPackage(new JavaPackage("foo"));
         source.addImport("java.util.*");
         source.getClassLibrary().add("foo.Bar$Fnord");
         source.getClassLibrary().addDefaultLoader();

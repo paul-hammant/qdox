@@ -56,10 +56,10 @@ import java.util.Stack;
 file: | file { line = lexer.getLine(); } filepart;
 
 // And a filepart is a package/import statement, javadoc comment, or class declaration.
-filepart: package | import | javadoc | class | enum | SEMI;
+filepart: annotation { builder.addAnnotation((Annotation) $1); } | package | import | javadoc | class | enum | SEMI;
 
 // Package statement
-package: PACKAGE fullidentifier SEMI { builder.addPackage($2); };
+package: PACKAGE fullidentifier SEMI { builder.addPackage(new PackageDef($2, line)); };
 
 // Import statement
 import: IMPORT fullidentifier SEMI { builder.addImport($2); } |

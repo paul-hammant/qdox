@@ -31,10 +31,10 @@ public class Annotation implements AnnotationValue, Serializable
      */
     private final Map namedParameters = new LinkedHashMap();
 
-    private AbstractJavaEntity context;
+    private AbstractBaseJavaEntity context;
 
     public Annotation(Type type,
-            AbstractJavaEntity context,
+            AbstractBaseJavaEntity context,
             Map namedParameters,
             int lineNumber)
 	{
@@ -85,7 +85,7 @@ public class Annotation implements AnnotationValue, Serializable
     	return namedParameters;
     }
 
-    public final AbstractJavaEntity getContext() {
+    public final AbstractBaseJavaEntity getContext() {
         return context;
     }
 
@@ -109,7 +109,7 @@ public class Annotation implements AnnotationValue, Serializable
         return (AnnotationValue) properties.get( name );
     }
 
-    public void setContext( AbstractJavaEntity context ) {
+    public void setContext( AbstractBaseJavaEntity context ) {
         this.context = context;
     }
 

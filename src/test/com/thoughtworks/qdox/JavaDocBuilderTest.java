@@ -142,7 +142,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
 
         List results = builder.search(new Searcher() {
             public boolean eval(JavaClass cls) {
-                return cls.getPackage().equals("com.blah");
+                return cls.getPackage().getName().equals("com.blah");
             }
         });
 

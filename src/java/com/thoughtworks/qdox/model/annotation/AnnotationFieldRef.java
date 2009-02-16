@@ -2,6 +2,7 @@ package com.thoughtworks.qdox.model.annotation;
 
 import java.util.StringTokenizer;
 
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
@@ -13,7 +14,7 @@ public class AnnotationFieldRef implements AnnotationValue {
 
     private final String name;
 
-    private AbstractJavaEntity context;
+    private AbstractBaseJavaEntity context;
 
     private JavaField field;
 
@@ -61,11 +62,11 @@ public class AnnotationFieldRef implements AnnotationValue {
         return getName();
     }
 
-    public AbstractJavaEntity getContext() {
+    public AbstractBaseJavaEntity getContext() {
         return this.context;
     }
 
-    public void setContext( AbstractJavaEntity context ) {
+    public void setContext( AbstractBaseJavaEntity context ) {
         this.context = context;
     }
 

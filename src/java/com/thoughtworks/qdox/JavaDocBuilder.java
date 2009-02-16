@@ -17,6 +17,7 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 import java.io.File;
@@ -157,7 +158,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
 
             // Set the package name and class name
             String packageName = getPackageName(name);
-            binaryBuilder.addPackage(packageName);
+            binaryBuilder.addPackage(new PackageDef(packageName));
 
             ClassDef classDef = new ClassDef();
             classDef.name = getClassName(name);

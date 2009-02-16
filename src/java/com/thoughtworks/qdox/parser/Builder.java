@@ -5,12 +5,13 @@ import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 public interface Builder {
 
-    void addPackage(String packageName);
+    void addPackage(PackageDef packageDef);
 
     void addImport(String importName);
 

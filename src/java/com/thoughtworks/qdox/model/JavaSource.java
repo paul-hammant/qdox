@@ -28,7 +28,7 @@ public class JavaSource implements Serializable, JavaClassParent {
         PRIMITIVE_TYPES.add("void");
     }
 
-    private String packge;
+    private JavaPackage packge;
     private List imports = new LinkedList();
     private String[] importsArray;
     private List classes = new LinkedList();
@@ -69,11 +69,11 @@ public class JavaSource implements Serializable, JavaClassParent {
         return new File(url.getFile());
     }
 
-    public String getPackage() {
+    public JavaPackage getPackage() {
         return packge;
     }
 
-    public void setPackage(String packge) {
+    public void setPackage(JavaPackage packge) {
         this.packge = packge;
     }
 
@@ -118,7 +118,7 @@ public class JavaSource implements Serializable, JavaClassParent {
         // package statement
         if (packge != null) {
             result.write("package ");
-            result.write(packge);
+            result.write(packge.getName());
             result.write(';');
             result.newline();
             result.newline();
@@ -284,7 +284,7 @@ public class JavaSource implements Serializable, JavaClassParent {
 
     public String getClassNamePrefix() {
         if (getPackage() == null) return "";
-        return getPackage() + ".";
+        return getPackage().getName() + ".";
     }
 
     public JavaSource getParentSource() {

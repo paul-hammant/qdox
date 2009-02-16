@@ -7,6 +7,7 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
@@ -35,7 +36,7 @@ public class ParserTest extends TestCase {
         setupLex(0);
 
         // expectations
-        builder.addExpectedAddPackageValues("mypackage");
+        builder.addExpectedAddPackageValues(new PackageDef("mypackage"));
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -61,7 +62,7 @@ public class ParserTest extends TestCase {
         setupLex(0);
 
         // expectations
-        builder.addExpectedAddPackageValues("com.blah.thingy.x");
+        builder.addExpectedAddPackageValues(new PackageDef("com.blah.thingy.x"));
 
         // execute
         Parser parser = new Parser(lexer, builder);

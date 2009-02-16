@@ -2,21 +2,24 @@ package com.thoughtworks.qdox.model;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class JavaPackage extends AbstractBaseJavaEntity {
 
 	private String name;
-	private Annotation[] annotations = new Annotation[0];
+    private Map allPackages;
+    private Annotation[] annotations = new Annotation[0];
 	private int lineNumber = -1;
 	private List classes = new ArrayList();
 
-	public JavaPackage() {
+    public JavaPackage() {
 	}
 
-	public JavaPackage(String name) {
+	public JavaPackage(String name, Map allPackages) {
 		this.name= name;
-	}
+        this.allPackages = allPackages;
+    }
 
 	public String getName() {
 		return name;
@@ -55,6 +58,11 @@ public class JavaPackage extends AbstractBaseJavaEntity {
 	public JavaClass[] getClasses() {
 		return (JavaClass[]) classes.toArray(new JavaClass[classes.size()]);
 	}
+
+    public JavaPackage getParentPackage() {
+        String parentName = name.substring(0,name.lastIndexOf("."));
+        return (JavaPackage) allPackages.get(parentName);
+    }
 
     public boolean equals(Object o) {
         if (this == o) return true;

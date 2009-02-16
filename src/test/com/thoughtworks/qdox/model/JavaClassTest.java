@@ -2,6 +2,8 @@ package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
 
+import java.util.HashMap;
+
 public class JavaClassTest extends TestCase {
 
     private JavaClass cls;
@@ -342,7 +344,7 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testQualifiedType() throws Exception {
-        src.setPackage(new JavaPackage("com.thoughtworks.qdox"));
+        src.setPackage(new JavaPackage("com.thoughtworks.qdox", new HashMap()));
 
         cls.setName("MyClass");
 
@@ -355,13 +357,13 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetClassNamePrefix() {
-        src.setPackage(new JavaPackage("foo.bar"));
+        src.setPackage(new JavaPackage("foo.bar", new HashMap()));
         cls.setName("Stanley");
         assertEquals("foo.bar.Stanley$", cls.getClassNamePrefix());
     }
     
     public void testInnerClass() throws Exception {
-        src.setPackage(new JavaPackage("foo.bar"));
+        src.setPackage(new JavaPackage("foo.bar", new HashMap()));
 
         JavaClass outer = new JavaClass();
         outer.setName("Outer");
@@ -460,7 +462,7 @@ public class JavaClassTest extends TestCase {
     }
     
     public void testResolveTypeInnerClass() throws Exception {
-        src.setPackage(new JavaPackage("p"));
+        src.setPackage(new JavaPackage("p", new HashMap()));
         cls.setName("X");
         JavaClass innerClass = new JavaClass();
         innerClass.setName("DogFood");

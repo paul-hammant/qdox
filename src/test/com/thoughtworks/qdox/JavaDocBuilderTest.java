@@ -111,15 +111,19 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         builder.addSourceTree(new File("target/test-source"));
         JavaPackage[] packages = builder.getPackages();
         assertEquals(2, packages.length);
-        assertEquals("com.blah.subpackage", packages[0].getName());
-        assertEquals("com.blah", packages[1].getName());
-        JavaClass[] classes = packages[0].getClasses();
+        JavaPackage comBlahSubpackage = packages[0];
+        assertEquals("com.blah.subpackage", comBlahSubpackage.getName());
+        JavaPackage comBlah = packages[1];
+        assertEquals("com.blah", comBlah.getName());
+        JavaClass[] classes = comBlahSubpackage.getClasses();
         assertEquals(1, classes.length);
         assertEquals("Cheese", classes[0].getName());
-        classes = packages[1].getClasses();
+        classes = comBlah.getClasses();
         assertEquals(2, classes.length);
         assertEquals("Another", classes[0].getName());
         assertEquals("Thing", classes[1].getName());
+        assertEquals(comBlah, comBlahSubpackage.getParentPackage());
+        assertNull(comBlah.getParentPackage());
     }
 
     private String createOuter() {

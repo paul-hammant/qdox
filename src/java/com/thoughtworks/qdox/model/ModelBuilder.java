@@ -53,7 +53,7 @@ public class ModelBuilder implements Builder {
     public void addPackage(PackageDef packageDef) {
         JavaPackage jPackage = (JavaPackage) allPackages.get(packageDef.name);
         if (jPackage == null) {
-            jPackage = new JavaPackage(packageDef.name);
+            jPackage = new JavaPackage(packageDef.name, allPackages);
             allPackages.put(packageDef.name, jPackage);
         }
         jPackage.setLineNumber(packageDef.lineNumber);

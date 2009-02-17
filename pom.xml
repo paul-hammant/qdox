@@ -251,19 +251,21 @@
       <groupId>ant</groupId>
       <artifactId>ant</artifactId>
       <version>1.5.1</version>
-      <scope>provided</scope>
+      <scope>compile</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
-      <scope>provided</scope>
+      <scope>compile</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>jmock</groupId>
       <artifactId>jmock</artifactId>
       <version>1.0.0</version>
-      <scope>provided</scope>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

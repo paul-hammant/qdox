@@ -74,7 +74,7 @@ public class JavaPackage extends AbstractBaseJavaEntity {
         List retList = new ArrayList();
         for (Iterator iterator = packageKeys.iterator(); iterator.hasNext();) {
             String pName = (String) iterator.next();
-            if (pName.startsWith(expected) && !pName.substring(expected.length()).contains(".")) {
+            if (pName.startsWith(expected) && !(pName.substring(expected.length()).indexOf(".") > -1)) {
                 retList.add(allPackages.get(pName));
             }
         }

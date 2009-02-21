@@ -18,3 +18,9 @@ mvn generate-sources 	- Generate the Java parser code (allowing you to develop i
 mvn site      			- Build the QDox website
 mvn release:prepare		- Prepare release (confirm or change release version interactively)
 mvn release:perform		- Perform release (perform release from tag of prepare phase)
+
+If you are releasing, remember to 
+
+1) Update src/site/content/download.html
+2) Go to JIRA and release the applicable version for QDOX : http://jira.codehaus.org/secure/project/ManageVersions.jspa?pid=10103
+3) Copy the contents of target/site/ to the DAV folder for QDox's website : https://dav.codehaus.org/qdox/

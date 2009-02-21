@@ -4,8 +4,11 @@ import junit.framework.TestCase;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -672,6 +675,24 @@ public class LexerTest extends TestCase {
         assertLex(Parser.SEMI, lexer);
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
+    }
+    
+    // for QDOX-140
+    public void todo_testReadFileWithUnicode() throws Exception {
+    	URL url = getClass().getClassLoader().getResource("qdox-140/X.jav");
+    	
+    	//this line is copied from JavaDocBuilder.addSource(URL), because that part immediately starts parsing
+    	Reader reader =  new InputStreamReader(url.openStream(),System.getProperty("file.encoding"));
+
+    	StringBuffer buffer = new StringBuffer();
+    	int ch;
+    	while ((ch = reader.read()) > -1) {
+    		buffer.append((char)ch);
+    	}
+    	reader.close();
+    	String result = buffer.toString();
+    	assertEquals(false, result.indexOf("\\u00E4") > -1);
+    	assertEquals(true, result.indexOf("\u00E4") > -1);
     }
 
 }

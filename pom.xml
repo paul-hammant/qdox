@@ -131,15 +131,28 @@
     </testResources>
     <plugins>
       <plugin>
+        <groupId>de.jflex</groupId>
+        <artifactId>maven-jflex-plugin</artifactId>
+        <version>1.4.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+           <outputDirectory>${project.build.directory}/generated-sources/parser</outputDirectory>
+           <lexDefinitions>
+             <lexFile>${basedir}/src/grammar/lexer.flex</lexFile>
+           </lexDefinitions>
+         </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.3</version>
         <configuration>
           <tasks>
-            <java classpath="bootstrap/jflex.jar" classname="JFlex.Main" fork="true">
-              <arg value="-d" />
-              <arg value="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" />
-              <arg value="src/grammar/lexer.flex" />
-            </java>
             <exec executable="${qdox.byaccj.executable}" dir="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" failonerror="true">
               <arg value="-v" />
               <arg value="-Jnorun" />

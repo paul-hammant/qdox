@@ -53,7 +53,7 @@ import com.thoughtworks.qdox.parser.*;
     }
 
     private void pushState(int newState) {
-        stateStack[stateDepth++] = yy_lexical_state;
+        stateStack[stateDepth++] = zzLexicalState;
         yybegin(newState);
     }
 

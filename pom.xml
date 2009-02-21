@@ -124,6 +124,11 @@
     </extensions>
     <sourceDirectory>${basedir}/src/java</sourceDirectory>
     <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+    <testResources>
+    	<testResource>
+    		<directory>${basedir}/src/test-resources</directory>
+    	</testResource>
+    </testResources>
     <plugins>
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>

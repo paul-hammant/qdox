@@ -3,11 +3,26 @@
     <title>Upgrading</title>
   </head>
   <body>
+	<h2>Upgrading to 1.9 or above</h2>
+      <p>
+        This section describes what needs to be done when upgrading to QDox
+        1.9.</a>.
+      </p>
+      <h2>Things that might break your code</h2>
+        <p>
+          In both <a
+          href="javadoc/com/thoughtworks/qdox/model/JavaClass.html">JavaClass</a> and
+          <a href="javadoc/com/thoughtworks/qdox/model/JavaSource.html">JavaSource</a> 
+          the getPackage() returns an object of type <a 
+          href="javadoc/com/thoughtworks/qdox/model/JavaPackage.html">JavaPackage</a> 
+          instead of a String. To get the same result as before use getPackage().getName() .
+        </p>
+	  
 
     <h2>Upgrading to 1.6 or above</h2>
       <p>
         This section describes what needs to be done when upgrading to QDox
-        1.5.  For an extensive list of changes (most of them backwards
+        1.6.  For an extensive list of changes (most of them backwards
         compatible), please see the <a href="changes.html">Changes
         Report</a>.
       </p>

@@ -3,7 +3,7 @@
   <name>QDox</name>
   <groupId>com.thoughtworks.qdox</groupId>
   <artifactId>qdox</artifactId>
-  <version>1.9</version>
+  <version>1.10-SNAPSHOT</version>
   <packaging>jar</packaging>
   <url>http://qdox.codehaus.org</url>
   <description>
@@ -26,9 +26,9 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/qdox/tags/qdox-1.9</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/tags/qdox-1.9</developerConnection>
-    <url>http://svn.qdox.codehaus.org/tags/qdox-1.9</url>
+    <connection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</developerConnection>
+    <url>http://svn.qdox.codehaus.org/trunk/qdox</url>
   </scm>
 
   <developers>

@@ -284,4 +284,29 @@ public class JSR14Test extends TestCase {
     	assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericValue());
     }
     
+    //for qdox-150
+    // second assert is based on java's Method.toString()
+    // http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/Method.html#toString()
+    // 3rd and 4th are resolved Types, based on <T extends StringBuffer> in method
+    // maybe wrong methodcalls here...
+    public void todo_testGenericMethodDeclaration() throws Exception {
+    	String source = "package com.thoughtworks.qdox;" +
+    			"public class TestQDOX150 {\n" +
+    			" public <T extends StringBuffer> List<StringBuffer> myMethod( T request ) throws Exception {\n" +
+    			"  return null;\n" +
+    			" }\n" +
+    			"}\n";
+    	JavaSource javaSource = builder.addSource(new StringReader(source));
+    	JavaClass javaClass = javaSource.getClasses()[0];
+    	JavaMethod javaMethod = javaClass.getMethods()[0];
+    	Type paramType = javaMethod.getParameters()[0].getType();
+    	Type returnType = javaMethod.getReturns();
+    	assertEquals("myMethod(request)", javaMethod.getCallSignature());
+    	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer request) throws java.lang.Exception", javaMethod.toString());
+    	assertEquals("java.lang.StringBuffer", paramType.getValue());
+    	assertEquals("<T extends java.lang.StringBuffer>", paramType.getGenericValue());
+    	assertEquals("java.util.List", returnType.getValue());
+    	assertEquals("java.util.List<java.lang.StringBuffer>", returnType.getGenericValue());
+    	
+    }
 }

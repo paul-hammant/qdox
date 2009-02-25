@@ -117,8 +117,8 @@ public class Type implements Comparable, Serializable {
     }
 
     public String toString() {
-        if (dimensions == 0) return getValue();
-        StringBuffer buff = new StringBuffer(getValue());
+        if (dimensions == 0) return getGenericValue();
+        StringBuffer buff = new StringBuffer(getGenericValue());
         for (int i = 0; i < dimensions; i++) buff.append("[]");
         String result = buff.toString();
         return result;

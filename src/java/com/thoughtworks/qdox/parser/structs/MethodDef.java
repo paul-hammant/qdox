@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class MethodDef extends LocatedDef {
     public String name = "";
+    public List typeParams; //<TypeVariableDef>
     public TypeDef returnType;
     public Set modifiers = new HashSet();
     public List params = new ArrayList();

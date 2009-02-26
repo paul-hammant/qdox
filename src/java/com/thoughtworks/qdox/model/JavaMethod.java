@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class JavaMethod extends AbstractInheritableJavaEntity implements Member {
 
+	private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
     private Type returns = Type.VOID;
     private JavaParameter[] parameters = JavaParameter.EMPTY_ARRAY;
     private Type[] exceptions = Type.EMPTY_ARRAY;
@@ -315,4 +316,12 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     public void setSourceCode(String sourceCode){
     	this.sourceCode = sourceCode;
     }
+
+	public void setTypeParameters(TypeVariable[] typeParameters) {
+		this.typeParameters = typeParameters;
+	}
+	
+	public TypeVariable[] getTypeParameters() {
+		return typeParameters;
+	}
 }

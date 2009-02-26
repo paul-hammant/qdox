@@ -1,13 +1,13 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Set;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
 import com.thoughtworks.qdox.model.annotation.AnnotationVisitor;
@@ -19,6 +19,7 @@ import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
+import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -195,6 +196,17 @@ public class ModelBuilder implements Builder {
         currentMethod.setReturns(createType(def.returnType, def.dimensions));
         currentMethod.setConstructor(def.constructor);
 
+        // typeParameters
+        if (def.typeParams != null) {
+        	TypeVariable[] typeParams = new TypeVariable[def.typeParams.size()];
+        	int index = 0;
+        	for(Iterator iterator = def.typeParams.iterator(); iterator.hasNext();) {
+        		TypeVariableDef typeVariableDef = (TypeVariableDef) iterator.next();
+        		typeParams[index++] = createTypeVariable(typeVariableDef);
+        	}
+            currentMethod.setTypeParameters(typeParams);
+        }
+        
         // parameters
         {
             JavaParameter[] params = new JavaParameter[def.params.size()];
@@ -234,7 +246,22 @@ public class ModelBuilder implements Builder {
         currentClass.addMethod(currentMethod);
     }
 
-    public void addField(FieldDef def) {
+    public TypeVariable createTypeVariable(TypeVariableDef typeVariableDef) {
+    	if(typeVariableDef == null) {
+    		return null;
+    	}
+    	return TypeVariable.createUnresolved(typeVariableDef, currentClass == null ? currentParent : currentClass);
+
+	}
+
+	public TypeVariable createTypeVariable(String name, List typeParams) {
+    	if( name == null || name.equals( "" ) )
+            return null;
+    	
+        return createTypeVariable(new TypeVariableDef(name, typeParams));
+	}
+
+	public void addField(FieldDef def) {
         JavaField currentField = new JavaField();
         currentField.setParent(currentClass);
         currentField.setLineNumber(def.lineNumber);

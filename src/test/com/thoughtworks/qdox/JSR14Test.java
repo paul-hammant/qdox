@@ -284,6 +284,18 @@ public class JSR14Test extends TestCase {
     	assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericValue());
     }
     
+    public void testSimpleTypeVariable() throws Exception {
+    	String source = "public class Something {\n" +
+    			" public <T extends StringBuffer> void doStuff(T param) {}\n" +
+    			"}";
+    	
+    	JavaSource javaSource = builder.addSource(new StringReader(source));
+    	JavaMethod javaMethod = javaSource.getClasses()[0].getMethods()[0];
+    	assertEquals(1, javaMethod.getTypeParameters().length);
+    	assertEquals("", javaMethod.getTypeParameters()[0].getValue());
+    	assertEquals("<T extends java.lang.StringBuffer>", javaMethod.getTypeParameters()[0].getGenericValue());
+    	
+    }
     //for qdox-150
     // second assert is based on java's Method.toString()
     // http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/Method.html#toString()

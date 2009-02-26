@@ -336,19 +336,25 @@ typearg:
 
 opt_typeparams: | typeparams;
 
-typeparams: LESSTHAN typeparamlist GREATERTHAN;
+typeparams: LESSTHAN { mth.typeParams = new ArrayList(); } typeparamlist GREATERTHAN;
 
 typeparamlist:
     typeparam |
     typeparamlist COMMA typeparam;
 
 typeparam: 
-    IDENTIFIER |
-    IDENTIFIER EXTENDS typeboundlist;
+    IDENTIFIER { mth.typeParams.add(new TypeVariableDef($1)); } |
+    IDENTIFIER EXTENDS { 
+      typeVariable = new TypeVariableDef($1);
+      typeVariable.bounds = new ArrayList();
+    } typeboundlist {
+      mth.typeParams.add(typeVariable);
+      typeVariable = null;
+    };
 
 typeboundlist:
-    type | 
-    typeboundlist AMPERSAND type;
+    type { typeVariable.bounds.add($1); } | 
+    typeboundlist AMPERSAND type { typeVariable.bounds.add($3); };
 
 // ----- ENUM
 
@@ -537,6 +543,7 @@ private List annoValueList = null;
 private FieldDef param = new FieldDef();
 private java.util.Set modifiers = new java.util.HashSet();
 private TypeDef fieldType;
+private TypeVariableDef typeVariable;
 private Stack typeStack = new Stack();
 private int line;
 private int column;

@@ -3,6 +3,16 @@
     <title>Upgrading</title>
   </head>
   <body>
+  <h2>Upgrading to 1.10 or above</h2>
+      <p>
+        This section describes what needs to be done when upgrading to QDox
+        1.9.</a>.
+      </p>
+      <h2>Things that might break your code</h2>
+        <p> The toString()-method in most of the JavaObjects under com.thoughtworks.qdox.models used to return the corresponding codeblock.
+        This method has been renamed to getCodeBlock(). The toString() will follow the Java API Specs as described for each equivalent object under the java.lang.reflect-package. 
+        </p>
+           
 	<h2>Upgrading to 1.9 or above</h2>
       <p>
         This section describes what needs to be done when upgrading to QDox

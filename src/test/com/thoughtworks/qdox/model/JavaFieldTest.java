@@ -8,22 +8,22 @@ public class JavaFieldTest extends TestCase {
         super(s);
     }
 
-    public void testToString() throws Exception {
+    public void testGetCodeBlock() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
         fld.setType(new Type("int"));
-        assertEquals("int count;\n", fld.toString());
+        assertEquals("int count;\n", fld.getCodeBlock());
     }
 
-    public void testToStringWithModifiers() throws Exception {
+    public void testGetCodeBlockWithModifiers() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
         fld.setType(new Type("int"));
         fld.setModifiers(new String[]{"public", "final"});
-        assertEquals("public final int count;\n", fld.toString());
+        assertEquals("public final int count;\n", fld.getCodeBlock());
     }
 
-    public void testToStringWithComment() throws Exception {
+    public void testGetCodeBlockWithComment() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
         fld.setType(new Type("int"));
@@ -33,32 +33,32 @@ public class JavaFieldTest extends TestCase {
                 + " * Hello\n"
                 + " */\n"
                 + "int count;\n";
-        assertEquals(expected, fld.toString());
+        assertEquals(expected, fld.getCodeBlock());
     }
 
-    public void testToString1dArray() throws Exception {
+    public void testGetCodeBlock1dArray() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
         fld.setType(new Type("int", 1));
         String expected = "int[] count;\n";
-        assertEquals(expected, fld.toString());
+        assertEquals(expected, fld.getCodeBlock());
     }
 
-    public void testToString2dArray() throws Exception {
+    public void testGetCodeBlock2dArray() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("count");
         fld.setType(new Type("int", 2));
         String expected = "int[][] count;\n";
-        assertEquals(expected, fld.toString());
+        assertEquals(expected, fld.getCodeBlock());
     }
 
-    public void testToStringWithValue() throws Exception {
+    public void testGetCodeBlockWithValue() throws Exception {
         JavaField fld = new JavaField();
         fld.setName("stuff");
         fld.setType(new Type("String"));
         fld.setInitializationExpression("STUFF + getThing()");
         String expected = "String stuff = STUFF + getThing();\n";
-        assertEquals(expected, fld.toString());
+        assertEquals(expected, fld.getCodeBlock());
     }
     
     public void testShouldReturnFieldNameForCallSignature() throws Exception {

@@ -96,7 +96,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         }
     }
 
-    public String toString() {
+    public String getCodeBlock() {
         IndentBuffer result = new IndentBuffer();
         write(result);
         return result.toString();

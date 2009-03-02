@@ -53,30 +53,30 @@ public class JavaMethodTest extends TestCase {
         });
     }
 
-    public void testToStringSimple() throws Exception {
+    public void testGetCodeBlockSimple() throws Exception {
         mth.setName("doSomething");
         mth.setReturns(new Type("java.lang.String"));
-        assertEquals("java.lang.String doSomething();\n", mth.toString());
+        assertEquals("java.lang.String doSomething();\n", mth.getCodeBlock());
     }
 
-    public void testToStringOneParam() throws Exception {
+    public void testGetCodeBlockOneParam() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setParameters(new JavaParameter[]{new JavaParameter(new Type("String"), "thingy")});
-        assertEquals("void blah(String thingy);\n", mth.toString());
+        assertEquals("void blah(String thingy);\n", mth.getCodeBlock());
     }
 
-    public void testToStringTwoParams() throws Exception {
+    public void testGetCodeBlockTwoParams() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setParameters(new JavaParameter[]{
             new JavaParameter(new Type("int"), "count"),
             new JavaParameter(new Type("MyThing"), "t")
         });
-        assertEquals("void blah(int count, MyThing t);\n", mth.toString());
+        assertEquals("void blah(int count, MyThing t);\n", mth.getCodeBlock());
     }
 
-    public void testToStringThreeParams() throws Exception {
+    public void testGetCodeBlockThreeParams() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setParameters(new JavaParameter[]{
@@ -84,45 +84,45 @@ public class JavaMethodTest extends TestCase {
             new JavaParameter(new Type("MyThing"), "t"),
             new JavaParameter(new Type("java.lang.Meat"), "beef")
         });
-        assertEquals("void blah(int count, MyThing t, java.lang.Meat beef);\n", mth.toString());
+        assertEquals("void blah(int count, MyThing t, java.lang.Meat beef);\n", mth.getCodeBlock());
     }
 
-    public void testToStringModifiersWithAccessLevelFirst() throws Exception {
+    public void testGetCodeBlockModifiersWithAccessLevelFirst() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setModifiers(new String[]{"synchronized", "public", "final"});
-        assertEquals("public synchronized final void blah();\n", mth.toString());
+        assertEquals("public synchronized final void blah();\n", mth.getCodeBlock());
     }
 
-    public void testToStringOneException() throws Exception {
+    public void testGetCodeBlockOneException() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setExceptions(new Type[]{new Type("RuntimeException")});
-        assertEquals("void blah() throws RuntimeException;\n", mth.toString());
+        assertEquals("void blah() throws RuntimeException;\n", mth.getCodeBlock());
     }
 
-    public void testToStringTwoException() throws Exception {
+    public void testGetCodeBlockTwoException() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setExceptions(new Type[]{new Type("RuntimeException"), new Type("java.lang.SheepException", 1)});
-        assertEquals("void blah() throws RuntimeException, java.lang.SheepException;\n", mth.toString());
+        assertEquals("void blah() throws RuntimeException, java.lang.SheepException;\n", mth.getCodeBlock());
     }
 
-    public void testToStringThreeException() throws Exception {
+    public void testGetCodeBlockThreeException() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setExceptions(new Type[]{new Type("RuntimeException"), new Type("java.lang.SheepException", 1), new Type("CowException", 1)});
-        assertEquals("void blah() throws RuntimeException, java.lang.SheepException, CowException;\n", mth.toString());
+        assertEquals("void blah() throws RuntimeException, java.lang.SheepException, CowException;\n", mth.getCodeBlock());
     }
 
-    public void testToStringConstructor() throws Exception {
+    public void testGetCodeBlockConstructor() throws Exception {
         mth.setName("Blah");
         mth.setModifiers(new String[]{"public"});
         mth.setConstructor(true);
-        assertEquals("public Blah();\n", mth.toString());
+        assertEquals("public Blah();\n", mth.getCodeBlock());
     }
 
-    public void testToStringWithComment() throws Exception {
+    public void testGetCodeBlockWithComment() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setComment("Hello");
@@ -131,32 +131,32 @@ public class JavaMethodTest extends TestCase {
                 + " * Hello\n"
                 + " */\n"
                 + "void blah();\n";
-        assertEquals(expect, mth.toString());
+        assertEquals(expect, mth.getCodeBlock());
     }
 
-    public void testToString1dArray() throws Exception {
+    public void testGetCodeBlock1dArray() throws Exception {
         mth.setName("doSomething");
         mth.setReturns(new Type("java.lang.String", 1));
-        assertEquals("java.lang.String[] doSomething();\n", mth.toString());
+        assertEquals("java.lang.String[] doSomething();\n", mth.getCodeBlock());
     }
 
-    public void testToString2dArray() throws Exception {
+    public void testGetCodeBlock2dArray() throws Exception {
         mth.setName("doSomething");
         mth.setReturns(new Type("java.lang.String", 2));
-        assertEquals("java.lang.String[][] doSomething();\n", mth.toString());
+        assertEquals("java.lang.String[][] doSomething();\n", mth.getCodeBlock());
     }
 
-    public void testToStringParamArray() throws Exception {
+    public void testGetCodeBlockParamArray() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
         mth.setParameters(new JavaParameter[]{
             new JavaParameter(new Type("int", 2), "count"),
             new JavaParameter(new Type("MyThing", 1), "t")
         });
-        assertEquals("void blah(int[][] count, MyThing[] t);\n", mth.toString());
+        assertEquals("void blah(int[][] count, MyThing[] t);\n", mth.getCodeBlock());
     }
 
-    public void testToStringWithBody() throws Exception {
+    public void testGetCodeBlockWithBody() throws Exception {
         mth.setName("doStuff");
         mth.setReturns(new Type("java.lang.String"));
         mth.setSourceCode("  int x = 2;\n  return STUFF;\n");
@@ -166,7 +166,7 @@ public class JavaMethodTest extends TestCase {
                 "  int x = 2;\n" +
                 "  return STUFF;\n" +
                 "}\n",
-                mth.toString());
+                mth.getCodeBlock());
     }
     
     public void testEquals() throws Exception {

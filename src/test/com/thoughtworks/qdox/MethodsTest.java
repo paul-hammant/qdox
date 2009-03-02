@@ -38,7 +38,7 @@ public class MethodsTest extends TestCase {
     public void testVarArgsIncludedInToString() {
         JavaMethod javaMethod = buildMethod("void doStuff(AThing param1, BThing... param2);");
 
-        assertEquals("void doStuff(AThing param1, BThing... param2);\n", javaMethod.toString());
+        assertEquals("void doStuff(AThing param1, BThing... param2);\n", javaMethod.getCodeBlock());
     }
 
     private JavaMethod buildMethod(String methodSource) {

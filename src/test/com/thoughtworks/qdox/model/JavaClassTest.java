@@ -20,46 +20,46 @@ public class JavaClassTest extends TestCase {
         src.addClass(cls);
     }
 
-    public void testToStringSimpleClass() throws Exception {
+    public void testGetCodeBlockSimpleClass() throws Exception {
         cls.setName("MyClass");
         String expected = ""
                 + "class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringSimpleInterface() throws Exception {
+    public void testGetCodeBlockSimpleInterface() throws Exception {
         cls.setName("MyClass");
         cls.setInterface(true);
         String expected = ""
                 + "interface MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringSimpleEnum() throws Exception {
+    public void testGetCodeBlockSimpleEnum() throws Exception {
         cls.setName("MyEnum");
         cls.setEnum(true);
         String expected = ""
                 + "enum MyEnum {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassExtends() throws Exception {
+    public void testGetCodeBlockClassExtends() throws Exception {
         cls.setName("MyClass");
         cls.setSuperClass(new Type("SuperClass"));
         String expected = ""
                 + "class MyClass extends SuperClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringInterfaceExtends() throws Exception {
+    public void testGetCodeBlockInterfaceExtends() throws Exception {
         cls.setName("MyClass");
         cls.setImplementz(type(new String[]{"SomeInterface"}));
         cls.setInterface(true);
@@ -67,10 +67,10 @@ public class JavaClassTest extends TestCase {
                 + "interface MyClass extends SomeInterface {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringInterfaceExtendsTwo() throws Exception {
+    public void testGetCodeBlockInterfaceExtendsTwo() throws Exception {
         cls.setName("MyClass");
         cls.setImplementz(type(new String[]{"SomeInterface", "AnotherInterface"}));
         cls.setInterface(true);
@@ -78,10 +78,10 @@ public class JavaClassTest extends TestCase {
                 + "interface MyClass extends SomeInterface, AnotherInterface {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringInterfaceExtendsThree() throws Exception {
+    public void testGetCodeBlockInterfaceExtendsThree() throws Exception {
         cls.setName("MyClass");
         cls.setImplementz(type(new String[]{"SomeInterface", "AnotherInterface", "Thingy"}));
         cls.setInterface(true);
@@ -89,30 +89,30 @@ public class JavaClassTest extends TestCase {
                 + "interface MyClass extends SomeInterface, AnotherInterface, Thingy {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassImplements() throws Exception {
+    public void testGetCodeBlockClassImplements() throws Exception {
         cls.setName("MyClass");
         cls.setImplementz(type(new String[]{"SomeInterface"}));
         String expected = ""
                 + "class MyClass implements SomeInterface {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassImplementsTwo() throws Exception {
+    public void testGetCodeBlockClassImplementsTwo() throws Exception {
         cls.setName("MyClass");
         cls.setImplementz(type(new String[]{"SomeInterface", "AnotherInterface", "Xx"}));
         String expected = ""
                 + "class MyClass implements SomeInterface, AnotherInterface, Xx {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassImplementsAndExtends() throws Exception {
+    public void testGetCodeBlockClassImplementsAndExtends() throws Exception {
         cls.setName("MyClass");
         cls.setImplementz(type(new String[]{"SomeInterface", "AnotherInterface", "Xx"}));
         cls.setSuperClass(new Type("SubMarine"));
@@ -120,37 +120,37 @@ public class JavaClassTest extends TestCase {
                 + "class MyClass extends SubMarine implements SomeInterface, AnotherInterface, Xx {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringModifers() throws Exception {
+    public void testGetCodeBlockModifers() throws Exception {
         cls.setName("MyClass");
         cls.setModifiers(new String[]{"public", "final"});
         String expected = ""
                 + "public final class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringModifersProtectionAlwaysFirst() throws Exception {
+    public void testGetCodeBlockModifersProtectionAlwaysFirst() throws Exception {
         cls.setName("MyClass");
         cls.setModifiers(new String[]{"final", "public"});
         String expected = ""
                 + "public final class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
 
         cls.setModifiers(new String[]{"abstract", "protected"});
         expected = ""
                 + "protected abstract class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassWithOneMethod() throws Exception {
+    public void testGetCodeBlockClassWithOneMethod() throws Exception {
         cls.setName("MyClass");
         JavaMethod mth = new JavaMethod();
         mth.setName("doStuff");
@@ -162,10 +162,10 @@ public class JavaClassTest extends TestCase {
                 + "\tvoid doStuff();\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassWithThreeMethods() throws Exception {
+    public void testGetCodeBlockClassWithThreeMethods() throws Exception {
         cls.setName("MyClass");
 
         {
@@ -199,10 +199,10 @@ public class JavaClassTest extends TestCase {
                 + "\tvoid eat();\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassWithTwoFields() throws Exception {
+    public void testGetCodeBlockClassWithTwoFields() throws Exception {
         cls.setName("MyClass");
 
         {
@@ -228,10 +228,10 @@ public class JavaClassTest extends TestCase {
                 + "\tpublic String thing;\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassWithInnerClass() throws Exception {
+    public void testGetCodeBlockClassWithInnerClass() throws Exception {
         cls.setName("Outer");
         JavaClass innerClass = new JavaClass();
         innerClass.setName("Inner");
@@ -245,10 +245,10 @@ public class JavaClassTest extends TestCase {
                 + "\t}\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassWithInnerEnum() throws Exception {
+    public void testGetCodeBlockClassWithInnerEnum() throws Exception {
         cls.setName("Outer");
         JavaClass innerEnum = new JavaClass();
         innerEnum.setEnum(true);
@@ -263,10 +263,10 @@ public class JavaClassTest extends TestCase {
                 + "\t}\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringEnumWithInnerClass() throws Exception {
+    public void testGetCodeBlockEnumWithInnerClass() throws Exception {
         cls.setName("Outer");
         cls.setEnum(true);
         JavaClass innerClass = new JavaClass();
@@ -281,11 +281,11 @@ public class JavaClassTest extends TestCase {
                 + "\t}\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
 
-    public void testToStringClassWithComment() throws Exception {
+    public void testGetCodeBlockClassWithComment() throws Exception {
         cls.setName("MyClass");
         cls.setComment("Hello World");
 
@@ -296,10 +296,10 @@ public class JavaClassTest extends TestCase {
                 + "class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testToStringClassWithIndentedCommentsForFieldAndMethod() throws Exception {
+    public void testGetCodeBlockClassWithIndentedCommentsForFieldAndMethod() throws Exception {
         cls.setName("MyClass");
         cls.setComment("Hello World");
 
@@ -332,7 +332,7 @@ public class JavaClassTest extends TestCase {
                 + "\tString thingy();\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.toString());
+        assertEquals(expected, cls.getCodeBlock());
     }
 
     public void testIsPublic() {

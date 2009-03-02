@@ -105,6 +105,15 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         classLibrary.addDefaultLoader();
     }
 
+    public JavaDocBuilder(ClassLibrary classLibrary) {
+        this(new DefaultDocletTagFactory(), classLibrary);
+    }
+
+    public JavaDocBuilder(DocletTagFactory docletTagFactory, ClassLibrary classLibrary) {
+        this.docletTagFactory = docletTagFactory;
+        this.classLibrary = classLibrary; 
+    }
+
     private void addClasses(JavaSource source) {
         Set resultSet = new HashSet();
         addClassesRecursive(source, resultSet);
@@ -155,68 +164,72 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         if (clazz == null) {
             return null;
         } else {
-            // Create a new builder and mimic the behaviour of the parser.
-            // We're getting all the information we need via reflection instead.
-            ModelBuilder binaryBuilder = new ModelBuilder(classLibrary, docletTagFactory, new HashMap());
+            try {
+				// Create a new builder and mimic the behaviour of the parser.
+				// We're getting all the information we need via reflection instead.
+				ModelBuilder binaryBuilder = new ModelBuilder(classLibrary, docletTagFactory, new HashMap());
 
-            // Set the package name and class name
-            String packageName = getPackageName(name);
-            binaryBuilder.addPackage(new PackageDef(packageName));
+				// Set the package name and class name
+				String packageName = getPackageName(name);
+				binaryBuilder.addPackage(new PackageDef(packageName));
 
-            ClassDef classDef = new ClassDef();
-            classDef.name = getClassName(name);
+				ClassDef classDef = new ClassDef();
+				classDef.name = getClassName(name);
 
-            // Set the extended class and interfaces.
-            Class[] interfaces = clazz.getInterfaces();
-            if (clazz.isInterface()) {
-                // It's an interface
-                classDef.type = ClassDef.INTERFACE;
-                for (int i = 0; i < interfaces.length; i++) {
-                    Class anInterface = interfaces[i];
-                    classDef.extendz.add(new TypeDef(anInterface.getName()));
-                }
-            } else {
-                // It's a class
-                for (int i = 0; i < interfaces.length; i++) {
-                    Class anInterface = interfaces[i];
-                    classDef.implementz.add(new TypeDef(anInterface.getName()));
-                }
-                Class superclass = clazz.getSuperclass();
-                if (superclass != null) {
-                    classDef.extendz.add(new TypeDef(superclass.getName()));
-                }
-            }
+				// Set the extended class and interfaces.
+				Class[] interfaces = clazz.getInterfaces();
+				if (clazz.isInterface()) {
+				    // It's an interface
+				    classDef.type = ClassDef.INTERFACE;
+				    for (int i = 0; i < interfaces.length; i++) {
+				        Class anInterface = interfaces[i];
+				        classDef.extendz.add(new TypeDef(anInterface.getName()));
+				    }
+				} else {
+				    // It's a class
+				    for (int i = 0; i < interfaces.length; i++) {
+				        Class anInterface = interfaces[i];
+				        classDef.implementz.add(new TypeDef(anInterface.getName()));
+				    }
+				    Class superclass = clazz.getSuperclass();
+				    if (superclass != null) {
+				        classDef.extendz.add(new TypeDef(superclass.getName()));
+				    }
+				}
 
-            addModifiers(classDef.modifiers, clazz.getModifiers());
+				addModifiers(classDef.modifiers, clazz.getModifiers());
 
-            binaryBuilder.beginClass(classDef);
+				binaryBuilder.beginClass(classDef);
 
-            // add the constructors
-            //
-            // This also adds the default constructor if any which is different
-            // to the source code as that does not create a default constructor
-            // if no constructor exists.
-            Constructor[] constructors = clazz.getDeclaredConstructors();
-            for (int i = 0; i < constructors.length; i++) {
-                addMethodOrConstructor(constructors[i], binaryBuilder);
-            }
+				// add the constructors
+				//
+				// This also adds the default constructor if any which is different
+				// to the source code as that does not create a default constructor
+				// if no constructor exists.
+				Constructor[] constructors = clazz.getDeclaredConstructors();
+				for (int i = 0; i < constructors.length; i++) {
+				    addMethodOrConstructor(constructors[i], binaryBuilder);
+				}
 
-            // add the methods
-            Method[] methods = clazz.getDeclaredMethods();
-            for (int i = 0; i < methods.length; i++) {
-                addMethodOrConstructor(methods[i], binaryBuilder);
-            }
+				// add the methods
+				Method[] methods = clazz.getDeclaredMethods();
+				for (int i = 0; i < methods.length; i++) {
+				    addMethodOrConstructor(methods[i], binaryBuilder);
+				}
 
-            Field[] fields = clazz.getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                addField(fields[i], binaryBuilder);
-            }
+				Field[] fields = clazz.getDeclaredFields();
+				for (int i = 0; i < fields.length; i++) {
+				    addField(fields[i], binaryBuilder);
+				}
 
-            binaryBuilder.endClass();
-            JavaSource binarySource = binaryBuilder.getSource();
-            // There is always only one class in a "binary" source.
-            JavaClass result = binarySource.getClasses()[0];
-            return result;
+				binaryBuilder.endClass();
+				JavaSource binarySource = binaryBuilder.getSource();
+				// There is always only one class in a "binary" source.
+				JavaClass result = binarySource.getClasses()[0];
+				return result;
+			} catch (NoClassDefFoundError e) {
+				return null;
+			}
         }
     }
 

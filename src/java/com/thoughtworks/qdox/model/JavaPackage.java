@@ -21,6 +21,10 @@ public class JavaPackage extends AbstractBaseJavaEntity {
     public JavaPackage() {
 	}
 
+    public JavaPackage(String name) {
+    	this(name, null);
+	}
+    
 	public JavaPackage(String name, Map allPackages) {
 		this.name= name;
         this.allPackages = allPackages;
@@ -51,6 +55,7 @@ public class JavaPackage extends AbstractBaseJavaEntity {
 	}
 
 	public void addClass(JavaClass clazz) {
+		clazz.setJavaPackage(this);
 		classes.add(clazz);
 	}
 
@@ -94,5 +99,12 @@ public class JavaPackage extends AbstractBaseJavaEntity {
 
     public int hashCode() {
         return name.hashCode();
+    }
+    
+    /**
+     * @see http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Package.html#toString()
+     */
+    public String toString() {
+    	return "package " + name;
     }
 }

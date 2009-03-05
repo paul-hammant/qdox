@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.io.ObjectInputStream.GetField;
+
 public class JavaField extends AbstractJavaEntity implements Member {
 
     private Type type;
@@ -70,4 +72,34 @@ public class JavaField extends AbstractJavaEntity implements Member {
     	this.initializationExpression = initializationExpression;
     }
 
+    /**
+     * @see http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Field.html#toString()
+     */
+    public String toString() {
+    	StringBuffer result = new StringBuffer();
+    	if(isPrivate()) {
+    		result.append("private ");
+    	}
+    	else if(isProtected()) {
+    		result.append("protected ");
+    	}
+    	else if(isPublic()) {
+    		result.append("public ");
+    	}
+    	if(isStatic()) {
+    		result.append("static ");
+    	}
+    	if(isFinal()) {
+    		result.append("final ");
+    	}
+    	if(isTransient()) {
+    		result.append("transient ");
+    	}
+    	if(isVolatile()) {
+    		result.append("volatile ");
+    	}
+    	result.append(getType().getValue() + " ");
+    	result.append(((JavaClass)getParent()).getFullyQualifiedName() + "." +getName());
+    	return result.toString();
+    }
 }

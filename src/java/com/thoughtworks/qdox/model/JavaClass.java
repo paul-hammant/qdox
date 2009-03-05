@@ -35,6 +35,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private Type superClass;
     private Type[] implementz = new Type[0];
     private JavaClassCache javaClassCache;
+	private JavaPackage javaPackage;
 
     public JavaClass() {
     }
@@ -199,6 +200,10 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         fields.add(javaField);
         fieldsArray = null;
     }
+    
+    public void setJavaPackage(JavaPackage javaPackage) {
+    	this.javaPackage = javaPackage;
+    }
 
     public JavaSource getParentSource() {
         JavaClassParent parent = getParent();
@@ -206,11 +211,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public JavaPackage getPackage() {
-        return getParentSource().getPackage();
+        return (getParentSource() != null ? getParentSource().getPackage() : javaPackage);
     }
 
     public String getFullyQualifiedName() {
-        return getParent().getClassNamePrefix() + getName();
+        return (getParent() != null ? (getParent().getClassNamePrefix()) : javaPackage != null ? (javaPackage.getName()+".") : "") + getName();
     }
 
     /**
@@ -610,6 +615,22 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public int compareTo(Object o) {
         return getFullyQualifiedName().compareTo(((JavaClass) o).getFullyQualifiedName());
+    }
+
+    /**
+     * @see http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Class.html#toString()
+     */
+    public String toString() {
+    	StringBuffer sb = new StringBuffer();
+    	if(asType().isPrimitive() || (Type.VOID.equals(asType()))) {
+    		sb.append(asType().getValue());
+    	}
+    	else {
+        	sb.append(isInterface() ? "interface" : "class");
+        	sb.append(" ");
+        	sb.append(getFullyQualifiedName());
+    	}
+    	return sb.toString();
     }
 
 }

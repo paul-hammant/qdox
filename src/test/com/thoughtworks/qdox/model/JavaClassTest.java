@@ -494,6 +494,73 @@ public class JavaClassTest extends TestCase {
         assertEquals(getFooMethod, fooProp.getAccessor());
         assertEquals(setFooMethod, fooProp.getMutator());
     }
+    
+    public void testToStringClass() {
+    	cls.setName("com.MyClass");
+    	assertEquals("class com.MyClass", cls.toString());
+    }
+    
+    public void testToStringInterface() {
+    	cls.setName("com.MyClass");
+    	cls.setInterface(true);
+    	assertEquals("interface com.MyClass", cls.toString());
+    }
+    
+    public void testToStringVoid() {
+    	cls.setName("com.MyClass");
+    	cls.addMethod(new JavaMethod(Type.VOID, "doSomething"));
+    	JavaMethod javaMethod = cls.getMethods()[0];
+    	assertEquals("void", javaMethod.getReturns().toString());
+    }
+
+    public void testToStringBoolean() {
+    	cls.setName("com.MyClass");
+    	cls.addMethod(new JavaMethod(new Type("boolean"), "doSomething"));
+    	JavaMethod javaMethod = cls.getMethods()[0];
+    	assertEquals("boolean", javaMethod.getReturns().toString());
+    }
+    
+    public void testToStringInt() {
+    	cls.setName("com.MyClass");
+    	cls.addMethod(new JavaMethod(new Type("int"), "doSomething"));
+    	JavaMethod javaMethod = cls.getMethods()[0];
+    	assertEquals("int", javaMethod.getReturns().toString());
+    }
+
+    public void testToStringLong() {
+    	cls.setName("com.MyClass");
+    	cls.addMethod(new JavaMethod(new Type("long"), "doSomething"));
+    	JavaMethod javaMethod = cls.getMethods()[0];
+    	assertEquals("long", javaMethod.getReturns().toString());
+    }
+
+    public void testToStringFloat() {
+    	cls.setName("com.MyClass");
+    	cls.addMethod(new JavaMethod(new Type("float"), "doSomething"));
+    	JavaMethod javaMethod = cls.getMethods()[0];
+    	assertEquals("float", javaMethod.getReturns().toString());
+    }
+
+    public void testToStringDouble() {
+    	cls.setName("com.MyClass");
+    	cls.addMethod(new JavaMethod(new Type("double"), "doSomething"));
+    	JavaMethod javaMethod = cls.getMethods()[0];
+    	assertEquals("double", javaMethod.getReturns().toString());
+    }
+    
+    public void testToStringChar() {
+    	cls.setName("com.MyClass");
+    	cls.addMethod(new JavaMethod(new Type("char"), "doSomething"));
+    	JavaMethod javaMethod = cls.getMethods()[0];
+    	assertEquals("char", javaMethod.getReturns().toString());
+    }
+
+    public void testToStringByte() {
+    	cls.setName("com.MyClass");
+    	cls.addMethod(new JavaMethod(new Type("byte"), "doSomething"));
+    	JavaMethod javaMethod = cls.getMethods()[0];
+    	assertEquals("byte", javaMethod.getReturns().toString());
+    }
 
     /**
      * @codehaus.jira QDOX-59

@@ -84,4 +84,22 @@ public class JavaFieldTest extends TestCase {
         fld.setModifiers(new String[]{"public", "final"});
         assertEquals("int count", fld.getDeclarationSignature(false));
     }
+    
+    public void testToStringThreadMIN_PRIORITY() throws Exception {
+    	JavaClass cls = new JavaClass("java.lang.Thread");
+    	JavaField fld = new JavaField(new Type("int"), "MIN_PRIORITY");
+    	fld.setModifiers(new String[] {"final", "static", "public"});
+    	cls.addField(fld);
+    	assertEquals("public static final int java.lang.Thread.MIN_PRIORITY", fld.toString());
+    }
+    
+    public void testToStringFieldDescriptorFd() throws Exception {
+    	JavaPackage pckg =  new JavaPackage("java.io");
+    	JavaClass cls = new JavaClass("FileDescriptor");
+    	pckg.addClass(cls);
+    	JavaField fld =  new JavaField(new Type("int"), "fd");
+    	fld.setModifiers(new String[]{"private"});
+    	cls.addField(fld);
+    	assertEquals("private int java.io.FileDescriptor.fd", fld.toString());
+    }
 }

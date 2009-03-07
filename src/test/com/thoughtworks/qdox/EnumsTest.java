@@ -158,4 +158,17 @@ public class EnumsTest extends TestCase {
         	"}";
         new JavaDocBuilder().addSource(new StringReader(source));
    }
+    
+    //for QDOX-153
+    public void todo_testAnotherEnumTest() throws Exception {
+    	String source = "package org.apache.myfaces.el.unified.resolver;\n" +
+    			"public final class FacesCompositeELResolver extends org.apache.myfaces.el.CompositeELResolver\n" +
+    			"{\n" +
+    			" public enum Scope\n" +
+    			" { Faces, JSP }\n" +
+    			" public FacesCompositeELResolver(final Scope scope) {}\n" +
+    			"}";
+    	
+    	new JavaDocBuilder().addSource(new StringReader(source));
+     }
 }

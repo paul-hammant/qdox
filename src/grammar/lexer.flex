@@ -20,6 +20,8 @@ import com.thoughtworks.qdox.parser.*;
     private int assignmentDepth = 0;
     private int stateDepth = 0;
     private int[] stateStack = new int[10];
+    private int braceMode = CODEBLOCK;
+    private String className;
     private boolean javaDocNewLine;
     private boolean javaDocStartedContent;
     private StringBuffer codeBody = new StringBuffer(8192);
@@ -31,6 +33,7 @@ import com.thoughtworks.qdox.parser.*;
     private boolean enumMode;
     private boolean appendingToCodeBody;
     private boolean shouldCaptureCodeBody;
+    private boolean isConstructor;
 
     public void setCaptureCodeBody(boolean shouldCaptureCodeBody) {
         this.shouldCaptureCodeBody = shouldCaptureCodeBody;
@@ -85,12 +88,11 @@ DoubleLiteral			= ( [0-9]+ ("." [0-9]+)? ({Exponent})? [dD] ) |
 						  ( ([0-9])+ ({Exponent})? [dD] )
 Id						= [:jletter:] [:jletterdigit:]*
 
-%state JAVADOC CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR
+%state JAVADOC CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ENUM
 
 %%
 
-<YYINITIAL> {
-    ";"                 { enumMode = false; return Parser.SEMI; }
+<YYINITIAL, ENUM> {
     "."                 { return Parser.DOT; }
     "..."               { return Parser.DOTDOTDOT; }
     ","                 { return Parser.COMMA; }
@@ -116,7 +118,7 @@ Id						= [:jletter:] [:jletterdigit:]*
 
     "["                 { nestingDepth++; return Parser.SQUAREOPEN; }
     "]"                 { nestingDepth--; return Parser.SQUARECLOSE; }
-    "("                 {
+/*    "("                 {
         nestingDepth++;
 		
         if( annotation ) {
@@ -132,7 +134,7 @@ Id						= [:jletter:] [:jletterdigit:]*
           return Parser.PARENOPEN;
         }
     }
-    
+*/    
     ")"                 { nestingDepth--; return Parser.PARENCLOSE; }
     "<"                 { return Parser.LESSTHAN; }
     ">"                 { return Parser.GREATERTHAN; }
@@ -140,26 +142,26 @@ Id						= [:jletter:] [:jletterdigit:]*
     "?"                 { return Parser.QUERY; }
 
     "@" {WhiteSpace}* "interface" {
-    	classDepth++;
-    	enumMode = false;
+      	classDepth++;
+        braceMode = CODEBLOCK;
         return Parser.ANNOINTERFACE;
 	}
 
     "class"             {
         classDepth++;
-        enumMode = false;
+        braceMode = CODEBLOCK;
         return Parser.CLASS; 
     }
     
     "interface"         { 
         classDepth++;
-     	enumMode = false;
+        braceMode = CODEBLOCK;
         return Parser.INTERFACE;
     }
     
     "enum"              {
         classDepth++;
-        enumMode = true;
+        braceMode = ENUM;
         return Parser.ENUM;
     }
 
@@ -169,17 +171,28 @@ Id						= [:jletter:] [:jletterdigit:]*
     }
 
     "{"                 {
-        nestingDepth++;
-        if (nestingDepth == classDepth + 1) {
-        	getCodeBody(); /* reset codebody */
-            appendingToCodeBody = true;
-            pushState(CODEBLOCK);
+        if(braceMode == ENUM) { /* when fulle supported braceMode >= 0 */
+          if(braceMode == ENUM) {
+            isConstructor = true;
+          }
+          else if(braceMode == CODEBLOCK) { } /* todo */        
+          pushState(braceMode);
+          braceMode = -1;
+          yypushback(1);
         }
         else {
-            return Parser.BRACEOPEN;
+          nestingDepth++;
+          if (nestingDepth == classDepth + 1) {
+            getCodeBody(); /* reset codebody */
+              appendingToCodeBody = true;
+              pushState(CODEBLOCK);
+          }
+          else {
+              return Parser.BRACEOPEN;
+          }
         }
     }
-    
+/*    
     "}"                 { 
         nestingDepth--;
         if (nestingDepth == classDepth - 1) {
@@ -187,7 +200,7 @@ Id						= [:jletter:] [:jletterdigit:]*
         }
         return Parser.BRACECLOSE; 
     }
-
+*/
     "/*" "*"+           { 
         pushState(JAVADOC); 
         javaDocNewLine = true; 
@@ -199,13 +212,11 @@ Id						= [:jletter:] [:jletterdigit:]*
         appendingToCodeBody = true;
         pushState(ASSIGNMENT);
     }
-
     "default"           { 
         assignmentDepth = nestingDepth;
         appendingToCodeBody = true;
         pushState(ASSIGNMENT);
     }
-
     {Id} {
         annotation = at;
         at = false;
@@ -213,7 +224,46 @@ Id						= [:jletter:] [:jletterdigit:]*
         return Parser.IDENTIFIER;
     }
 }
+<YYINITIAL> {
+    ";"  { return Parser.SEMI; }
+    "}"  { 
+        nestingDepth--;
+        if (nestingDepth == classDepth - 1) {
+            classDepth--;
+        }
+        return Parser.BRACECLOSE; 
+    }
+        "("                 {
+        nestingDepth++;
+    
+        if( annotation ) {
+          annotationDepth = nestingDepth;
+            pushState(ANNOTATION);
+        }
 
+        annotation = false;
+
+        return Parser.PARENOPEN;
+    }
+}
+<ENUM> {
+    ";"  { isConstructor = false; return Parser.SEMI; }
+    "}"  { 
+        nestingDepth--;
+        classDepth--;
+        popState();
+        return Parser.BRACECLOSE; 
+    }
+    "("  {
+        nestingDepth++;
+        if(isConstructor) {
+          pushState(PARENBLOCK);
+        }
+        else {
+          return Parser.PARENOPEN;
+        }
+    }
+}
 <JAVADOC> {
     "*"+ "/"            { popState(); return Parser.JAVADOCEND; }
     ^ [ \t]* "*"+ / [^/*] { /* ignore */ }

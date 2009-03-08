@@ -93,7 +93,7 @@ public class EnumsTest extends TestCase {
         String source = ""
                 + "public enum Animal {\n"
                 + "    \n"
-                + "    DUCK { public void speak() { System.out.println(\"quack!\"); } },\n"
+                + "    DUCK    { public void speak() { System.out.println(\"quack!\"); } },\n"
                 + "    CHICKEN { public void speak() { System.out.println(\"cluck!\"); } };\n"
                 + "\n"
                 + "    public abstract void speak();\n"
@@ -160,7 +160,7 @@ public class EnumsTest extends TestCase {
    }
     
     //for QDOX-153
-    public void todo_testAnotherEnumTest() throws Exception {
+    public void testAnotherEnumTest() throws Exception {
     	String source = "package org.apache.myfaces.el.unified.resolver;\n" +
     			"public final class FacesCompositeELResolver extends org.apache.myfaces.el.CompositeELResolver\n" +
     			"{\n" +

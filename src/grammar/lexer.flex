@@ -19,18 +19,18 @@ import com.thoughtworks.qdox.parser.*;
     private int annotationDepth = 0;
     private int assignmentDepth = 0;
     private int stateDepth = 0;
+    private int codeblockDepth = 0;
     private int[] stateStack = new int[10];
     private int braceMode = CODEBLOCK;
     private String className;
     private boolean javaDocNewLine;
     private boolean javaDocStartedContent;
     private StringBuffer codeBody = new StringBuffer(8192);
-	private boolean at;
-	private boolean annotation;
+	  private boolean at;
+	  private boolean annotation;
     private boolean newMode;
     private boolean bracketMode;
     private boolean anonymousMode;
-    private boolean enumMode;
     private boolean appendingToCodeBody;
     private boolean shouldCaptureCodeBody;
     private boolean isConstructor;
@@ -118,23 +118,6 @@ Id						= [:jletter:] [:jletterdigit:]*
 
     "["                 { nestingDepth++; return Parser.SQUAREOPEN; }
     "]"                 { nestingDepth--; return Parser.SQUARECLOSE; }
-/*    "("                 {
-        nestingDepth++;
-		
-        if( annotation ) {
-        	annotationDepth = nestingDepth;
-            pushState(ANNOTATION);
-        }
-
-        annotation = false;
-
-        if (enumMode) {
-          pushState(PARENBLOCK);
-        } else {
-          return Parser.PARENOPEN;
-        }
-    }
-*/    
     ")"                 { nestingDepth--; return Parser.PARENCLOSE; }
     "<"                 { return Parser.LESSTHAN; }
     ">"                 { return Parser.GREATERTHAN; }
@@ -143,19 +126,19 @@ Id						= [:jletter:] [:jletterdigit:]*
 
     "@" {WhiteSpace}* "interface" {
       	classDepth++;
-        braceMode = CODEBLOCK;
+        braceMode = YYINITIAL;
         return Parser.ANNOINTERFACE;
 	}
 
     "class"             {
         classDepth++;
-        braceMode = CODEBLOCK;
+        braceMode = YYINITIAL;
         return Parser.CLASS; 
     }
     
     "interface"         { 
         classDepth++;
-        braceMode = CODEBLOCK;
+        braceMode = YYINITIAL;
         return Parser.INTERFACE;
     }
     
@@ -171,36 +154,31 @@ Id						= [:jletter:] [:jletterdigit:]*
     }
 
     "{"                 {
-        if(braceMode == ENUM) { /* when fulle supported braceMode >= 0 */
+        if(braceMode >= 0) { /* when fulle supported braceMode >= 0 */
           if(braceMode == ENUM) {
             isConstructor = true;
+          } else if (braceMode == CODEBLOCK) {
+              getCodeBody(); /* reset codebody */
+              appendingToCodeBody = true;
           }
-          else if(braceMode == CODEBLOCK) { } /* todo */        
           pushState(braceMode);
           braceMode = -1;
           yypushback(1);
         }
         else {
           nestingDepth++;
-          if (nestingDepth == classDepth + 1) {
-            getCodeBody(); /* reset codebody */
-              appendingToCodeBody = true;
-              pushState(CODEBLOCK);
-          }
-          else {
-              return Parser.BRACEOPEN;
-          }
+          braceMode = CODEBLOCK;
+          return Parser.BRACEOPEN;
         }
     }
-/*    
-    "}"                 { 
+    "}"  { 
         nestingDepth--;
-        if (nestingDepth == classDepth - 1) {
-            classDepth--;
-        }
+        classDepth--;
+        popState();
+        braceMode = CODEBLOCK;
         return Parser.BRACECLOSE; 
     }
-*/
+
     "/*" "*"+           { 
         pushState(JAVADOC); 
         javaDocNewLine = true; 
@@ -226,43 +204,27 @@ Id						= [:jletter:] [:jletterdigit:]*
 }
 <YYINITIAL> {
     ";"  { return Parser.SEMI; }
-    "}"  { 
-        nestingDepth--;
-        if (nestingDepth == classDepth - 1) {
-            classDepth--;
-        }
-        return Parser.BRACECLOSE; 
-    }
-        "("                 {
-        nestingDepth++;
-    
-        if( annotation ) {
-          annotationDepth = nestingDepth;
-            pushState(ANNOTATION);
-        }
-
-        annotation = false;
-
-        return Parser.PARENOPEN;
-    }
+    "("  {
+            nestingDepth++;
+            if( annotation ) {
+              annotationDepth = nestingDepth;
+                pushState(ANNOTATION);
+            }
+            annotation = false;
+            return Parser.PARENOPEN;
+          }
 }
 <ENUM> {
     ";"  { isConstructor = false; return Parser.SEMI; }
-    "}"  { 
-        nestingDepth--;
-        classDepth--;
-        popState();
-        return Parser.BRACECLOSE; 
-    }
     "("  {
-        nestingDepth++;
-        if(isConstructor) {
-          pushState(PARENBLOCK);
-        }
-        else {
-          return Parser.PARENOPEN;
-        }
-    }
+            nestingDepth++;
+            if(isConstructor) {
+              pushState(PARENBLOCK);
+            }
+            else {
+              return Parser.PARENOPEN;
+            }
+          }
 }
 <JAVADOC> {
     "*"+ "/"            { popState(); return Parser.JAVADOCEND; }
@@ -282,12 +244,16 @@ Id						= [:jletter:] [:jletterdigit:]*
 }
 
 <CODEBLOCK> {
-     "{"                 { codeBody.append('{'); nestingDepth++; }
+     "{"  { 
+            if(codeblockDepth++ > 0 ) {
+            codeBody.append('{');
+            }  
+          }
      "}"                 {
-        nestingDepth--;
-        if (nestingDepth == classDepth) {
+        if (--codeblockDepth == 0) {
             popState();
             appendingToCodeBody = false;
+            braceMode = CODEBLOCK;
             return Parser.CODEBLOCK;
         } else {
             codeBody.append('}');

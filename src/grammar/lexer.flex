@@ -154,7 +154,7 @@ Id						= [:jletter:] [:jletterdigit:]*
     }
 
     "{"                 {
-        if(braceMode >= 0) { /* when fulle supported braceMode >= 0 */
+        if(braceMode >= 0) {
           if(braceMode == ENUM) {
             isConstructor = true;
           } else if (braceMode == CODEBLOCK) {
@@ -163,7 +163,7 @@ Id						= [:jletter:] [:jletterdigit:]*
           }
           pushState(braceMode);
           braceMode = -1;
-          yypushback(1);
+          yypushback(1); /* (re)enter brace in right mode */
         }
         else {
           nestingDepth++;
@@ -420,7 +420,7 @@ Id						= [:jletter:] [:jletterdigit:]*
     }
 }
 
-<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK> {
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM> {
     "\""                { if (appendingToCodeBody) { codeBody.append('"');  } pushState(STRING); }
     \'                  { if (appendingToCodeBody) { codeBody.append('\''); } pushState(CHAR); }
     "//"                { if (appendingToCodeBody) { codeBody.append("//"); } pushState(SINGLELINECOMMENT); }

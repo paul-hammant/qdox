@@ -86,7 +86,8 @@ DoubleLiteral			= ( [0-9]+ ("." [0-9]+)? ({Exponent})? [dD] ) |
 						  ( "." [0-9]+ ({Exponent})? [dD] ) |
 						  ( ([0-9])+ {Exponent} [dD] ) |
 						  ( ([0-9])+ ({Exponent})? [dD] )
-Id						= [:jletter:] [:jletterdigit:]*
+UnicodeChar = \\u[a-fA-F0-9]{4}						  
+Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 
 %state JAVADOC CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ENUM
 

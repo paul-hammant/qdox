@@ -653,7 +653,7 @@ public class LexerTest extends TestCase {
         assertEquals(expectedText, lexer.text());
     }
 
-    // TODO make this work .... QDOX-140
+    // for QDOX-140
     public void testNonAsciiMethodNameDoesNotCrashLexerButChewsUpUnicodeEscapedSequencesBadly() throws Exception {
         String in = ""
                 + "interface X { "
@@ -665,34 +665,11 @@ public class LexerTest extends TestCase {
         assertLex(Parser.IDENTIFIER, lexer);
         assertLex(Parser.BRACEOPEN, lexer);
         assertLex(Parser.IDENTIFIER, "void", lexer);
-        assertLex(Parser.IDENTIFIER, "paramWithNonAsciis", lexer);
-        assertLex(Parser.IDENTIFIER, "u00E4", lexer);
-        assertLex(Parser.IDENTIFIER, "u00F6", lexer);
-        assertLex(Parser.IDENTIFIER, "u00FC", lexer);
-        assertLex(Parser.IDENTIFIER, "u00DF", lexer);
+        assertLex(Parser.IDENTIFIER, "paramWithNonAsciis\\u00E4\\u00F6\\u00FC\\u00DF", lexer);
         assertLex(Parser.PARENOPEN, lexer);
         assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.SEMI, lexer);
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
     }
-    
-    // for QDOX-140
-    public void todo_testReadFileWithUnicode() throws Exception {
-    	URL url = getClass().getClassLoader().getResource("qdox-140/X.jav");
-    	
-    	//this line is copied from JavaDocBuilder.addSource(URL), because that part immediately starts parsing
-    	Reader reader =  new InputStreamReader(url.openStream(),System.getProperty("file.encoding"));
-
-    	StringBuffer buffer = new StringBuffer();
-    	int ch;
-    	while ((ch = reader.read()) > -1) {
-    		buffer.append((char)ch);
-    	}
-    	reader.close();
-    	String result = buffer.toString();
-    	assertEquals(false, result.indexOf("\\u00E4") > -1);
-    	assertEquals(true, result.indexOf("\u00E4") > -1);
-    }
-
 }

@@ -379,7 +379,7 @@ enum_body: enum_values | enum_values SEMI members;
 enum_values: | enum_value | enum_value COMMA enum_values;
 
 enum_value:
-    javadoc enum_constructor |
+    javadoc opt_annotations enum_constructor |
     opt_annotations enum_constructor;
 
 enum_constructor:

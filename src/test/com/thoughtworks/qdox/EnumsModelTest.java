@@ -187,6 +187,20 @@ public class EnumsModelTest extends TestCase {
         assertTrue(cls.isEnum());
     }
     
+    //for qdox-118 
+    public void testEnumWithJavaDocAndAnnotation() {
+        String source = "public enum TestEnum\n" +
+        		"{\n" +
+        		"/**\n" +
+        		"* Blah blah\n" +
+        		"*/\n" +
+        		"@MyAnno\n" +
+        		"TEST;\n" +
+        		"}\n";
+        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        javaDocBuilder.addSource(new StringReader(source));
+    }
+    
 /*
     private void printFields(final JavaField fields[]) {
 	    

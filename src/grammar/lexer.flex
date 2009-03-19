@@ -188,6 +188,7 @@ Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 
     "=" {WhiteSpace}* { 
         assignmentDepth = nestingDepth;
+        getCodeBody(); /* reset codebody */
         appendingToCodeBody = true;
         pushState(ASSIGNMENT);
     }

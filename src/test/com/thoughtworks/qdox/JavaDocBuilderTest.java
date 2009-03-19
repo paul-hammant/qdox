@@ -1035,4 +1035,16 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaClass javaClass = javaSource.getClasses()[0];
         assertEquals(javaClass.getFieldByName( "SEPARATOR" ).getInitializationExpression(), "','");
     }
+    
+  //for qdox-157
+    public void testCommentBetweenFields() throws Exception {
+    	String source = "public class Foo {\n" +
+    			"public static final String TEST1 = \"test1\";\n" +
+    			"// TODO: blabla\n" +
+    			"public static final String TEST2 = \"test2\";\n" +
+    			"}";
+    	JavaSource javaSource = builder.addSource(new StringReader(source));
+    	JavaClass javaClass = javaSource.getClasses()[0];
+        assertEquals(javaClass.getFieldByName( "TEST2" ).getInitializationExpression(), "\"test2\"");
+    }
 }

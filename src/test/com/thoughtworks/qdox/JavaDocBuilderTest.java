@@ -1024,4 +1024,15 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaMethod javaMethod = javaClass.getMethods()[0];
         assertEquals("\"test blah blah\"", javaMethod.getAnnotations()[0].getNamedParameter("description").toString());
     }
+
+    
+    //for qdox-155
+    public void testCharField() throws Exception {
+    	String source = "public class Foo {\n" +
+    			"public static final char SEPARATOR = ',';" +
+    			"}";
+    	JavaSource javaSource = builder.addSource(new StringReader(source));
+        JavaClass javaClass = javaSource.getClasses()[0];
+        assertEquals(javaClass.getFieldByName( "SEPARATOR" ).getInitializationExpression(), "','");
+    }
 }

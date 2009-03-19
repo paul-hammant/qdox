@@ -440,7 +440,7 @@ Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 }
 
 <CHAR> {
-    \'                  { if (appendingToCodeBody) { codeBody.append('"');    } popState(); }
+    \'                  { if (appendingToCodeBody) { codeBody.append('\'');    } popState(); }
     "\\'"               { if (appendingToCodeBody) { codeBody.append("\\'");  } }
     "\\\\"              { if (appendingToCodeBody) { codeBody.append("\\\\"); } }
 }

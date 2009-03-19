@@ -206,7 +206,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     }
 
     public boolean isPublic() {
-        return super.isPublic() || getParentClass().isInterface();
+        return super.isPublic() || (getParentClass() != null ? getParentClass().isInterface() : false);
     }
 
     /**
@@ -323,5 +323,59 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
 	
 	public TypeVariable[] getTypeParameters() {
 		return typeParameters;
+	}
+	
+	public String toString() {
+		StringBuffer result = new StringBuffer();
+		if(isPrivate()) {
+			result.append("private ");
+		}
+		else if(isProtected()) {
+			result.append("protected ");
+		}
+		else if(isPublic()) {
+			result.append("public ");
+		}
+		if(isAbstract()) {
+			result.append("abstract ");
+		}
+		if(isStatic()) {
+			result.append("static ");
+		}
+		if(isFinal()) {
+			result.append("final ");
+		}
+		if(isSynchronized()) {
+			result.append("synchronized ");
+		}
+		if(isNative()) {
+			result.append("native ");
+		}
+		result.append(getReturns().getValue() + " ");
+		if(getParentClass() != null) {
+			result.append(getParentClass().getFullyQualifiedName() + ".");
+		}
+		result.append(getName());
+		result.append("(");
+		for(int paramIndex=0;paramIndex<getParameters().length;paramIndex++) {
+			if(paramIndex>1) {
+				result.append(",");
+			}
+			String typeValue = getParameters()[paramIndex].getType().getValue();
+			for(int typeIndex=0;typeIndex<typeParameters.length; typeIndex++) {
+				if(typeParameters[typeIndex].getName().equals(getParameters()[paramIndex].getType().getValue())) {
+					typeValue = typeParameters[typeIndex].getValue() + " "+ getParameters()[paramIndex].getName();
+					
+					break;
+				}
+			}
+			result.append(typeValue);
+		}
+		result.append(")");
+		for(int i = 0; i < exceptions.length; i++) {
+			result.append(i==0 ? " throws " : ",");
+			result.append(exceptions[i].getValue());
+		}
+		return result.toString();
 	}
 }

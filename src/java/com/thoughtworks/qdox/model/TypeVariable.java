@@ -30,7 +30,7 @@ public class TypeVariable extends Type {
 	
 	
 	public String getValue() {
-		return ""; //a typical generic feature, asking value is weird
+		return bounds[0].getValue();
 	}
 	
 	public String getGenericValue() {
@@ -49,5 +49,8 @@ public class TypeVariable extends Type {
 		return result.toString();
 	}
 	
+	public String getName() {
+		return super.getValue();
+	}
 
 }

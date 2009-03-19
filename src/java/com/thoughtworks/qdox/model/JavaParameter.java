@@ -55,5 +55,34 @@ public class JavaParameter implements Serializable {
     public boolean isVarArgs() {
         return varArgs;
     }
+    
+    public String toString() {
+    	return getResolvedValue() + " "+ name;
+    }
+    
+    /**
+     * 
+     * @return the resolved value if the method has typeParameters, otherwise type's value
+     * @since 1.10
+     */
+    public String getResolvedValue() {
+    	return getResolvedType().getValue();
+    }
+
+	public String getResolvedGenericValue() {
+		return getResolvedType().getGenericValue();
+	}
+	
+	private Type getResolvedType() {
+		Type result = type;
+		if(getParentMethod().getTypeParameters() != null) {
+			for(int typeIndex=0;typeIndex<getParentMethod().getTypeParameters().length; typeIndex++) {
+				if(getParentMethod().getTypeParameters()[typeIndex].getName().equals(type.getValue())) {
+					result = getParentMethod().getTypeParameters()[typeIndex];
+				}
+			}
+    	}
+		return result;
+	}
 
 }

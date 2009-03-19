@@ -344,8 +344,20 @@ public class JavaMethodTest extends TestCase {
         assertEquals(null, mth.getParameterByName("z"));
     }
 
+    public void testToString() throws Exception {
+    	JavaClass cls = new JavaClass("java.lang.Object");
+    	JavaMethod mthd = new JavaMethod(new Type("boolean"),"equals");
+    	cls.addMethod(mthd);
+    	mthd.setModifiers(new String[]{"public"});
+    	JavaParameter prmtr = new JavaParameter(new Type("java.lang.Object"), null);
+    	mthd.setParameters(new JavaParameter[] {prmtr});
+    	assertEquals("public boolean java.lang.Object.equals(java.lang.Object)", mthd.toString());
+    	
+    }
+
     private void assertNotEquals(Object o1, Object o2) {
         assertTrue(o1.toString() + " should not equals " + o2.toString(), !o1.equals(o2));
     }
+    
 
 }

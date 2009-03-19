@@ -1,14 +1,18 @@
 package com.thoughtworks.qdox;
 
 import java.io.StringReader;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.List;
+
+import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
-
-import junit.framework.TestCase;
 /**
  * QDOX-54 Support for retrieval of generic type information (JSR 14)
  * 
@@ -292,17 +296,37 @@ public class JSR14Test extends TestCase {
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaMethod javaMethod = javaSource.getClasses()[0].getMethods()[0];
     	assertEquals(1, javaMethod.getTypeParameters().length);
-    	assertEquals("", javaMethod.getTypeParameters()[0].getValue());
+    	assertEquals("java.lang.StringBuffer", javaMethod.getTypeParameters()[0].getValue());
     	assertEquals("<T extends java.lang.StringBuffer>", javaMethod.getTypeParameters()[0].getGenericValue());
     	
     }
+    
+    public void testComplexTypeVariable() throws Exception {
+    	String source  = "class Collections {\n" +
+    			"public static <T, S extends T> void copy(List<T> dest, List<S> src){}\n" +
+    			"}";
+    	JavaSource javaSource = builder.addSource(new StringReader(source));
+    	JavaMethod javaMethod = javaSource.getClasses()[0].getMethods()[0];
+    	assertEquals("T", javaMethod.getTypeParameters()[0].getName());
+    	assertEquals("S", javaMethod.getTypeParameters()[1].getName());
+    	assertEquals("T", javaMethod.getTypeParameters()[1].getValue());
+	}
+    
+    public void testComplexTypeVariableMultipleBounds() throws Exception {
+    	String source = "class Collections\n" +
+    			"public static <T extends Object & Comparable<? super T>>\n" +
+    			"T max(Collection<? extends T> coll) {\n" +
+    			"return null;}\n";
+    	
+    }
+    
     //for qdox-150
     // second assert is based on java's Method.toString()
     // http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/Method.html#toString()
     // 3rd and 4th are resolved Types, based on <T extends StringBuffer> in method
-    // maybe wrong methodcalls here...
-    public void todo_testGenericMethodDeclaration() throws Exception {
+    public void testGenericMethodDeclaration() throws Exception {
     	String source = "package com.thoughtworks.qdox;" +
+    			"import java.util.*;\n" +
     			"public class TestQDOX150 {\n" +
     			" public <T extends StringBuffer> List<StringBuffer> myMethod( T request ) throws Exception {\n" +
     			"  return null;\n" +
@@ -311,12 +335,12 @@ public class JSR14Test extends TestCase {
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses()[0];
     	JavaMethod javaMethod = javaClass.getMethods()[0];
-    	Type paramType = javaMethod.getParameters()[0].getType();
+    	JavaParameter paramType = javaMethod.getParameters()[0];
     	Type returnType = javaMethod.getReturns();
     	assertEquals("myMethod(request)", javaMethod.getCallSignature());
     	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer request) throws java.lang.Exception", javaMethod.toString());
-    	assertEquals("java.lang.StringBuffer", paramType.getValue());
-    	assertEquals("<T extends java.lang.StringBuffer>", paramType.getGenericValue());
+    	assertEquals("java.lang.StringBuffer", paramType.getResolvedValue());
+    	assertEquals("<T extends java.lang.StringBuffer>", paramType.getResolvedGenericValue());
     	assertEquals("java.util.List", returnType.getValue());
     	assertEquals("java.util.List<java.lang.StringBuffer>", returnType.getGenericValue());
     	

@@ -112,7 +112,7 @@ public class JavaSource implements Serializable, JavaClassParent {
         this.classLibrary = classLibrary;
     }
 
-    public String toString() {
+    public String getCodeBlock() {
         IndentBuffer result = new IndentBuffer();
 
         // package statement
@@ -144,6 +144,10 @@ public class JavaSource implements Serializable, JavaClassParent {
         }
 
         return result.toString();
+    }
+    
+    public String toString() {
+    	return getCodeBlock();
     }
 
     public String resolveType(String typeName) {

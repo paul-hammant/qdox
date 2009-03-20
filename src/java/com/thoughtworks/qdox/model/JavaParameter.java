@@ -66,23 +66,12 @@ public class JavaParameter implements Serializable {
      * @since 1.10
      */
     public String getResolvedValue() {
-    	return getResolvedType().getValue();
+		return type.getResolvedValue(getParentMethod().getTypeParameters());
     }
 
 	public String getResolvedGenericValue() {
-		return getResolvedType().getGenericValue();
+		return type.getResolvedGenericValue(getParentMethod().getTypeParameters());
 	}
 	
-	private Type getResolvedType() {
-		Type result = type;
-		if(getParentMethod().getTypeParameters() != null) {
-			for(int typeIndex=0;typeIndex<getParentMethod().getTypeParameters().length; typeIndex++) {
-				if(getParentMethod().getTypeParameters()[typeIndex].getName().equals(type.getValue())) {
-					result = getParentMethod().getTypeParameters()[typeIndex];
-				}
-			}
-    	}
-		return result;
-	}
 
 }

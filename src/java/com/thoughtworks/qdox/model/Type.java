@@ -90,6 +90,41 @@ public class Type implements Comparable, Serializable {
     	}
         return result.toString();
     }
+    
+    protected String getGenericValue(TypeVariable[] typeVariableList) {
+    	StringBuffer result = new StringBuffer(getResolvedValue(typeVariableList));
+    	if(actualArgumentTypes != null && actualArgumentTypes.length > 0) {
+    		for(int index = 0;index < actualArgumentTypes.length; index++) {
+    			result.append(actualArgumentTypes[index].getResolvedGenericValue(typeVariableList));
+    			if(index + 1 != actualArgumentTypes.length) {
+    				result.append(",");
+    			}
+    		}
+    	}
+        return result.toString();
+    }
+    
+    protected String getResolvedValue(TypeVariable[] typeParameters) {
+    	String result = getValue();
+    	for(int typeIndex=0;typeIndex<typeParameters.length; typeIndex++) {
+			if(typeParameters[typeIndex].getName().equals(getValue())) {
+				result = typeParameters[typeIndex].getValue();
+				break;
+			}
+		}
+    	return result;
+    }
+    
+    protected String getResolvedGenericValue(TypeVariable[] typeParameters) {
+    	String result = getGenericValue(typeParameters);
+    	for(int typeIndex=0;typeIndex<typeParameters.length; typeIndex++) {
+			if(typeParameters[typeIndex].getName().equals(getValue())) {
+				result = typeParameters[typeIndex].getGenericValue();
+				break;
+			}
+		}
+    	return result;
+    }
 
     public boolean isResolved() {
         if (fullName == null && context != null) {

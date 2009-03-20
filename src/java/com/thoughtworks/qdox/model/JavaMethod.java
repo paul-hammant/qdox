@@ -358,17 +358,10 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
 		result.append(getName());
 		result.append("(");
 		for(int paramIndex=0;paramIndex<getParameters().length;paramIndex++) {
-			if(paramIndex>1) {
+			if(paramIndex>0) {
 				result.append(",");
 			}
-			String typeValue = getParameters()[paramIndex].getType().getValue();
-			for(int typeIndex=0;typeIndex<typeParameters.length; typeIndex++) {
-				if(typeParameters[typeIndex].getName().equals(getParameters()[paramIndex].getType().getValue())) {
-					typeValue = typeParameters[typeIndex].getValue() + " "+ getParameters()[paramIndex].getName();
-					
-					break;
-				}
-			}
+			String typeValue = getParameters()[paramIndex].getType().getResolvedValue(getTypeParameters());
 			result.append(typeValue);
 		}
 		result.append(")");

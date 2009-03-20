@@ -358,6 +358,4 @@ public class JavaMethodTest extends TestCase {
     private void assertNotEquals(Object o1, Object o2) {
         assertTrue(o1.toString() + " should not equals " + o2.toString(), !o1.equals(o2));
     }
-    
-
 }

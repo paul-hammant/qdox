@@ -324,7 +324,7 @@ public class JSR14Test extends TestCase {
     // second assert is based on java's Method.toString()
     // http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/Method.html#toString()
     // 3rd and 4th are resolved Types, based on <T extends StringBuffer> in method
-    public void testGenericMethodDeclaration() throws Exception {
+    public void testGenericMethodDeclarationSingleParameter() throws Exception {
     	String source = "package com.thoughtworks.qdox;" +
     			"import java.util.*;\n" +
     			"public class TestQDOX150 {\n" +
@@ -338,11 +338,31 @@ public class JSR14Test extends TestCase {
     	JavaParameter paramType = javaMethod.getParameters()[0];
     	Type returnType = javaMethod.getReturns();
     	assertEquals("myMethod(request)", javaMethod.getCallSignature());
-    	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer request) throws java.lang.Exception", javaMethod.toString());
+    	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer) throws java.lang.Exception", javaMethod.toString());
     	assertEquals("java.lang.StringBuffer", paramType.getResolvedValue());
     	assertEquals("<T extends java.lang.StringBuffer>", paramType.getResolvedGenericValue());
     	assertEquals("java.util.List", returnType.getValue());
     	assertEquals("java.util.List<java.lang.StringBuffer>", returnType.getGenericValue());
-    	
     }
+    
+    public void testGenericMethodDeclarationMultipleParameters() throws Exception {
+    	String source = "package com.thoughtworks.qdox;" +
+    			"import java.util.*;\n" +
+    			"public class TestQDOX150 {\n" +
+    			" public <T extends StringBuffer> List<StringBuffer> myMethod( T request, List<T> list ) throws Exception {\n" +
+    			"  return null;\n" +
+    			" }\n" +
+    			"}\n";
+    	JavaSource javaSource = builder.addSource(new StringReader(source));
+    	JavaClass javaClass = javaSource.getClasses()[0];
+    	JavaMethod javaMethod = javaClass.getMethods()[0];
+    	JavaParameter paramType = javaMethod.getParameters()[1];
+    	assertEquals("myMethod(request, list)", javaMethod.getCallSignature());
+    	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer,java.util.List) throws java.lang.Exception", javaMethod.toString());
+    	assertEquals("java.util.List", paramType.getResolvedValue());
+    	assertEquals("java.util.List<T extends java.lang.StringBuffer>", paramType.getResolvedGenericValue());
+    }
+
+    
+    
 }

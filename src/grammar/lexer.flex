@@ -198,7 +198,7 @@ Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
         pushState(ASSIGNMENT);
     }
     {Id} {
-        annotation = at;
+        annotation |= at;
         at = false;
         
         return Parser.IDENTIFIER;

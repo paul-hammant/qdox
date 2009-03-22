@@ -671,7 +671,7 @@ public class LexerTest extends TestCase {
     }
     
     //for QDOX-158
-    public void todo_testAnnotationWithMultipleParameters() throws Exception {
+    public void testAnnotationWithMultipleParameters() throws Exception {
     	String in = 
     			"@MyFunction.MyInterface( prefix1 = \"abc\", prefix2 = \"abc\" )";
     	Lexer lexer = new JFlexLexer(new StringReader(in));

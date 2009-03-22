@@ -669,4 +669,25 @@ public class LexerTest extends TestCase {
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
     }
+    
+    //for QDOX-158
+    public void todo_testAnnotationWithMultipleParameters() throws Exception {
+    	String in = 
+    			"@MyFunction.MyInterface( prefix1 = \"abc\", prefix2 = \"abc\" )";
+    	Lexer lexer = new JFlexLexer(new StringReader(in));
+    	assertLex(Parser.AT, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.DOT, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.PARENOPEN, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.EQUALS, lexer);
+    	assertLex(Parser.STRING_LITERAL, lexer);
+    	assertLex(Parser.COMMA, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.EQUALS, lexer);
+    	assertLex(Parser.STRING_LITERAL, lexer);
+    	assertLex(Parser.PARENCLOSE, lexer);
+    }
+
 }

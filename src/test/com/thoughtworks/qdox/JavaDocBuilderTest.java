@@ -1025,7 +1025,16 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals("\"test blah blah\"", javaMethod.getAnnotations()[0].getNamedParameter("description").toString());
     }
 
-    
+    //for qdox-152
+    public void testExtendedClass() throws Exception {
+    	String source = "import javax.faces.component.UIOutput;" +
+    			"public abstract class AbstractSayHello extends UIOutput {\n" +
+    			"}";
+    	JavaSource javaSource = builder.addSource(new StringReader(source));
+        JavaClass javaClass = javaSource.getClasses()[0];
+        assertEquals(javaClass.getSuperClass().getValue(), "javax.faces.component.UIOutput");
+    }
+
     //for qdox-155
     public void testCharField() throws Exception {
     	String source = "public class Foo {\n" +

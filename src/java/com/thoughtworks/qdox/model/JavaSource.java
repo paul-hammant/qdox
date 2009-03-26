@@ -253,6 +253,9 @@ public class JavaSource implements Serializable, JavaClassParent {
             if (imports[i].equals(importSpec) || (!fullMatch && imports[i].endsWith(dotSuffix))) {
                 String candidateName = imports[i].substring( 0, imports[i].length() - importSpec.length()) + typeName;
                 resolvedName = resolveFullyQualifiedType( candidateName );
+                if(resolvedName == null && !"*".equals(importSpec)) {
+                	resolvedName = candidateName;
+                }
             } 
         }
         

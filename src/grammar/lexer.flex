@@ -203,6 +203,9 @@ Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
         
         return Parser.IDENTIFIER;
     }
+    {Eol} {
+       annotation = false;
+    }
 }
 <YYINITIAL> {
     ";"  { return Parser.SEMI; }

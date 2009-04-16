@@ -690,4 +690,19 @@ public class LexerTest extends TestCase {
     	assertLex(Parser.PARENCLOSE, lexer);
     }
 
+    public void testSimpleAnnotation() throws Exception {
+    	String in = "@Override\n public boolean isReadOnly(final ELContext context)";
+    	Lexer lexer = new JFlexLexer(new StringReader(in));
+    	assertLex(Parser.AT, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.PUBLIC, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.PARENOPEN, lexer);
+    	assertLex(Parser.FINAL, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.PARENCLOSE, lexer);
+
+    }
 }

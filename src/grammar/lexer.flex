@@ -22,12 +22,11 @@ import com.thoughtworks.qdox.parser.*;
     private int codeblockDepth = 0;
     private int[] stateStack = new int[10];
     private int braceMode = CODEBLOCK;
+    private int parenMode = -1;
     private String className;
     private boolean javaDocNewLine;
     private boolean javaDocStartedContent;
     private StringBuffer codeBody = new StringBuffer(8192);
-	  private boolean at;
-	  private boolean annotation;
     private boolean newMode;
     private boolean bracketMode;
     private boolean anonymousMode;
@@ -88,6 +87,7 @@ DoubleLiteral			= ( [0-9]+ ("." [0-9]+)? ({Exponent})? [dD] ) |
 						  ( ([0-9])+ ({Exponent})? [dD] )
 UnicodeChar = \\u[a-fA-F0-9]{4}						  
 Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
+Annotation = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
 
 %state JAVADOC CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ENUM
 
@@ -129,7 +129,7 @@ Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
       	classDepth++;
         braceMode = YYINITIAL;
         return Parser.ANNOINTERFACE;
-	}
+	  }
 
     "class"             {
         classDepth++;
@@ -148,12 +148,14 @@ Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
         braceMode = ENUM;
         return Parser.ENUM;
     }
-
-    "@"                 {
-        at = true;                
+    {Annotation} "(" {
+        parenMode = ANNOTATION;
+        yypushback(text().length()-1);
         return Parser.AT;
     }
-
+    "@"                 {
+        return Parser.AT;
+    }
     "{"                 {
         if(braceMode >= 0) {
           if(braceMode == ENUM) {
@@ -198,24 +200,18 @@ Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
         pushState(ASSIGNMENT);
     }
     {Id} {
-        annotation |= at;
-        at = false;
-        
         return Parser.IDENTIFIER;
-    }
-    {Eol} {
-       annotation = false;
     }
 }
 <YYINITIAL> {
     ";"  { return Parser.SEMI; }
     "("  {
             nestingDepth++;
-            if( annotation ) {
+            if( parenMode >= 0 ) {
               annotationDepth = nestingDepth;
-                pushState(ANNOTATION);
+              pushState(parenMode);
+              parenMode = -1;
             }
-            annotation = false;
             return Parser.PARENOPEN;
           }
 }

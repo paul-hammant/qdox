@@ -703,6 +703,17 @@ public class LexerTest extends TestCase {
     	assertLex(Parser.IDENTIFIER, lexer);
     	assertLex(Parser.IDENTIFIER, lexer);
     	assertLex(Parser.PARENCLOSE, lexer);
-
+    }
+    
+    public void testMultipleRowAnnotation() throws Exception {
+    	String in = "@JSFComponent\n  (name = \"h:inputHidden\")";
+    	Lexer lexer = new JFlexLexer(new StringReader(in));
+    	assertLex(Parser.AT, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.PARENOPEN, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.EQUALS, lexer);
+    	assertLex(Parser.STRING_LITERAL, lexer);
+    	assertLex(Parser.PARENCLOSE, lexer);
     }
 }

@@ -204,4 +204,16 @@ public class AnnotationsTest extends TestCase {
     	builder.addSource(new StringReader(source));
     	assertEquals("MyAnnotation", builder.getClasses()[0].getAnnotations()[0].getType().getValue());
     }
+    
+    public void testMethodAnnotationBeforeComment() throws Exception {
+    	String source = "class Foo {\n" +
+    			"@Override\n" +
+    			"/**\n" +
+    			" * " +
+    			" */" +
+    			" public boolean isPostback() { return true;}\n" +
+    			"}";
+    	builder.addSource(new StringReader(source));
+    	assertEquals("java.lang.Override", builder.getClasses()[0].getMethods()[0].getAnnotations()[0].getType().getValue());
+    }
 }

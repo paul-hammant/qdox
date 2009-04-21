@@ -130,6 +130,7 @@ modifier:
 modifiers:
     modifiers modifier { modifiers.add($2); } |
     modifiers annotation { builder.addAnnotation((Annotation) $2); } |
+    modifiers javadoc |
     ;
 
 
@@ -431,7 +432,7 @@ member:
     constructor |
     static_block |
     class |
-	enum |
+	  enum |
     SEMI;
 
 memberend:

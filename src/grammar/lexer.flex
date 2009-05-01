@@ -424,9 +424,12 @@ Annotation = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
 <ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM> {
     "\""                { if (appendingToCodeBody) { codeBody.append('"');  } pushState(STRING); }
     \'                  { if (appendingToCodeBody) { codeBody.append('\''); } pushState(CHAR); }
-    "//"                { if (appendingToCodeBody) { codeBody.append("//"); } pushState(SINGLELINECOMMENT); }
-    "/*"                { if (appendingToCodeBody) { codeBody.append("/*"); } pushState(MULTILINECOMMENT); }
-    "/**/"              { if (appendingToCodeBody) { codeBody.append("/**/"); } }
+}
+
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATION> {
+  "//"                { if (appendingToCodeBody) { codeBody.append("//"); } pushState(SINGLELINECOMMENT); }
+  "/*"                { if (appendingToCodeBody) { codeBody.append("/*"); } pushState(MULTILINECOMMENT); }
+  "/**/"              { if (appendingToCodeBody) { codeBody.append("/**/"); } }
 }
 
 <CODEBLOCK, ASSIGNMENT> { 

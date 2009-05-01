@@ -1056,4 +1056,13 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     	JavaClass javaClass = javaSource.getClasses()[0];
         assertEquals(javaClass.getFieldByName( "TEST2" ).getInitializationExpression(), "\"test2\"");
     }
+    
+    public void testAnnotationWithComment() throws Exception {
+    	String source = "@OneToMany(cascade = {/* CascadeType.PERSIST */}, fetch = FetchType.LAZY)\n" +
+    			"public class Foo{}"; 
+    	JavaSource javaSource = builder.addSource(new StringReader(source));
+    	JavaClass javaClass = javaSource.getClasses()[0];
+    	assertNotNull(javaClass.getAnnotations()[0].getNamedParameter("cascade"));
+    } 
+    
 }

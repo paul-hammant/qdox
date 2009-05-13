@@ -716,4 +716,28 @@ public class LexerTest extends TestCase {
     	assertLex(Parser.STRING_LITERAL, lexer);
     	assertLex(Parser.PARENCLOSE, lexer);
     }
+    
+    public void testEnumWithAnnotations() throws Exception {
+    	String in = "class Foo {\n" +
+		"public enum BasicType {\n" +
+		"@XmlEnumValue(\"text\")\n" +
+		"VALUE(\"value\"); }\n" +
+		"}";  
+    	Lexer lexer = new JFlexLexer(new StringReader(in));
+    	assertLex(Parser.CLASS, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.BRACEOPEN, lexer);
+    	assertLex(Parser.PUBLIC, lexer);
+    	assertLex(Parser.ENUM, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.BRACEOPEN, lexer);
+    	assertLex(Parser.AT, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.PARENOPEN, lexer);
+    	assertLex(Parser.STRING_LITERAL, lexer);
+    	assertLex(Parser.PARENCLOSE, lexer);
+    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.PARENBLOCK, lexer);
+    	assertLex(Parser.SEMI, lexer);
+    }
 }

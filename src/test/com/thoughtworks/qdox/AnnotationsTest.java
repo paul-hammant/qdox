@@ -216,4 +216,16 @@ public class AnnotationsTest extends TestCase {
     	builder.addSource(new StringReader(source));
     	assertEquals("java.lang.Override", builder.getClasses()[0].getMethods()[0].getAnnotations()[0].getType().getValue());
     }
+    
+    public void testEnumsWithAnnotations() throws Exception {
+    	String source="class Foo {\n" +
+    			" public enum BasicType {\n" +
+    			" @XmlEnumValue(\"text\")\n" +
+    			" TEXT(\"text\"),\n" +
+    			"" +
+    			" @XmlEnumValue(\"value\")\n" +
+    			" VALUE(\"value\") }\n" +
+    			"}";   
+    	builder.addSource(new StringReader(source));
+    }
 }

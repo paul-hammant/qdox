@@ -219,11 +219,20 @@ Annotation = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
     ";"  { isConstructor = false; return Parser.SEMI; }
     "("  {
             nestingDepth++;
-            if(isConstructor) {
-              pushState(PARENBLOCK);
+            if(parenMode >= 0) {
+              annotationDepth = nestingDepth;
+              pushState(parenMode);
+              parenMode = -1;
+              return Parser.PARENOPEN;
             }
             else {
-              return Parser.PARENOPEN;
+              
+              if(isConstructor) {
+                pushState(PARENBLOCK);
+              }
+              else {
+                return Parser.PARENOPEN;
+              }
             }
           }
 }

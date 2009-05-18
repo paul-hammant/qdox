@@ -2,6 +2,7 @@ package com.thoughtworks.qdox.parser.structs;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ public class MethodDef extends LocatedDef {
     public TypeDef returnType;
     public Set modifiers = new HashSet();
     public List params = new ArrayList();
-    public Set exceptions = new HashSet();
+    public Set exceptions = new LinkedHashSet();
     public boolean constructor = false;
     public int dimensions;
     public String body;

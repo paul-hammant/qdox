@@ -1,0 +1,80 @@
+package com.thoughtworks.qdox;
+
+import java.io.Serializable;
+
+import com.thoughtworks.qdox.model.ClassLibrary;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaClassCache;
+
+/**
+ * JavaClassContext gives you a mechanism to get a JavaClass.
+ * If a class couldn't be found in the cache, the class will be pulled from the classLibrary, the builder will create the corresponding JavaClass and put it in the cache.  
+ * 
+ * 
+ * @author Robert Scholte
+ *
+ */
+public class JavaClassContext implements Serializable {
+
+	private final JavaClassCache cache;
+	private ClassLibrary classLibrary;
+	private JavaDocBuilder builder;
+	
+	public JavaClassContext(JavaDocBuilder builder) {
+		this.builder = builder;
+		this.cache = new DefaultJavaClassCache();
+	}
+	
+	
+	public JavaClassContext(ClassLibrary classLibrary) {
+		this.classLibrary = classLibrary;
+		this.cache = new DefaultJavaClassCache();
+	}
+	
+	
+	public void setClassLibrary(ClassLibrary classLibrary) {
+		this.classLibrary = classLibrary;
+	}
+	
+	/**
+	 * temporary, this should be hidden
+	 * @return classLibrary
+	 * @todo remove
+	 */
+	public ClassLibrary getClassLibrary() {
+		return classLibrary;
+	}
+	
+	
+	public JavaClass getClassByName(String name) {
+		JavaClass result = cache.getClassByName(name);
+		if(result == null && builder != null) {
+			result = builder.createBinaryClass(name);
+			if(result != null) {
+				add(result);
+		        result.setJavaClassContext(this);
+			}
+			else {
+				result = builder.createUnknownClass(name);
+				add(result);
+			}
+		}
+		return result;
+	}
+	
+	public JavaClass[] getClasses() {
+		return cache.getClasses();
+	}
+	public void add(JavaClass javaClass) {
+		cache.putClassByName(javaClass.getFullyQualifiedName(), javaClass);
+	}
+	
+	
+	public void add(String fullyQualifiedClassName) {
+		classLibrary.add(fullyQualifiedClassName);
+	}
+
+	public Class getClass(String name) {
+		return classLibrary.getClass(name);
+	}
+}

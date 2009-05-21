@@ -74,4 +74,8 @@ public class ClassLibraryTest extends TestCase implements JavaClassCache {
         assertNotNull(jclass);
         assertEquals("MyClass", jclass.getName());
     }
+
+	public void putClassByName(String name, JavaClass javaClass) {
+		//only required by interface
+	}
 }

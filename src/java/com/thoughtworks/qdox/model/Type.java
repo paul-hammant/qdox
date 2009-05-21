@@ -2,6 +2,7 @@ package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
 
+import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
@@ -184,9 +185,9 @@ public class Type implements Comparable, Serializable {
         if (javaClassParent != null) {
         	result = javaClassParent.getNestedClassByName(getValue());
 	        if(result == null) {
-	            ClassLibrary classLibrary = javaClassParent.getClassLibrary();
-	            if (classLibrary != null) {
-	            	result = classLibrary.getClassByName(getValue());
+	            JavaClassContext context = javaClassParent.getJavaClassContext();
+	            if (context.getClassLibrary() != null) {
+	            	result = context.getClassByName(getValue());
 	            }
 	        }
         }

@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
+
+import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.JavaDocBuilder;
 
 public class TypeTest extends TestCase {
@@ -45,8 +47,8 @@ public class TypeTest extends TestCase {
     }
 
     public void testTypeHasJavaClass() {
-        JavaSource javaSource = new JavaSource();
-        javaSource.setClassLibrary(new ClassLibrary(new JavaDocBuilder()));
+        JavaSource javaSource = new JavaSource(new JavaClassContext(new JavaDocBuilder()));
+        javaSource.setClassLibrary(new ClassLibrary(null));
         Type type = new Type("java.util.HashSet", 0, javaSource);
         JavaClass clazz = type.getJavaClass();
         JavaClass superClass = clazz.getSuperJavaClass();

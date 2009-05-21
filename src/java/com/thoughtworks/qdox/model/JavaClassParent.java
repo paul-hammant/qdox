@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.JavaClassContext;
+
 public interface JavaClassParent {
 
     /**
@@ -10,7 +12,7 @@ public interface JavaClassParent {
      */
     public String resolveType(String typeName);
 
-    public ClassLibrary getClassLibrary();
+    public JavaClassContext getJavaClassContext();
 
     public String getClassNamePrefix();
 

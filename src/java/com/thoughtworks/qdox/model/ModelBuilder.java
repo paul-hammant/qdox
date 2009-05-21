@@ -9,6 +9,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
 import com.thoughtworks.qdox.model.annotation.AnnotationVisitor;
 import com.thoughtworks.qdox.model.annotation.RecursiveAnnotationVisitor;
@@ -27,7 +28,7 @@ import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
  */
 public class ModelBuilder implements Builder {
 
-    private final ClassLibrary classLibrary;
+    private final JavaClassContext context;
     private final JavaSource source;
     private JavaClassParent currentParent;
     private JavaClass currentClass;
@@ -38,15 +39,14 @@ public class ModelBuilder implements Builder {
     private final Map allPackages;
 
     public ModelBuilder() {
-        this(new ClassLibrary(null), new DefaultDocletTagFactory(), new HashMap());
+        this(new JavaClassContext(new ClassLibrary(null)), new DefaultDocletTagFactory(), new HashMap());
     }
 
-    public ModelBuilder(ClassLibrary classLibrary, DocletTagFactory docletTagFactory, Map allPackages) {
-        this.classLibrary = classLibrary;
+    public ModelBuilder(JavaClassContext context, DocletTagFactory docletTagFactory, Map allPackages) {
+        this.context = context;
         this.docletTagFactory = docletTagFactory;
         this.allPackages = allPackages;
-        source = new JavaSource();
-        source.setClassLibrary(classLibrary);
+        source = new JavaSource(context);
         currentParent = source;
         currentAnnoDefs = new ArrayList();
     }
@@ -126,7 +126,7 @@ public class ModelBuilder implements Builder {
 
         currentParent.addClass(currentClass);
         currentParent = currentClass;
-        classLibrary.add(currentClass.getFullyQualifiedName());
+        context.add(currentClass.getFullyQualifiedName());
     }
 
     public void endClass() {

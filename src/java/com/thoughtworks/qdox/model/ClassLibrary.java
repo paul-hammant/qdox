@@ -25,6 +25,8 @@ public class ClassLibrary implements Serializable {
     private transient List classLoaders = new ArrayList();
     private JavaClassCache cache;
     
+    public ClassLibrary() {}
+    
     public ClassLibrary(JavaClassCache cache) {
         this.cache = cache;
     }

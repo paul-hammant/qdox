@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.model.util.OrderedMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +35,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private Type type;
     private Type superClass;
     private Type[] implementz = new Type[0];
-    private JavaClassCache javaClassCache;
+    private JavaClassContext context;
 	private JavaPackage javaPackage;
 
     public JavaClass() {
@@ -44,13 +45,13 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         setName(name);
     }
 
-    public void setJavaClassCache(JavaClassCache javaClassCache) {
-        this.javaClassCache = javaClassCache;
+    public void setJavaClassContext(JavaClassContext context) {
+		this.context = context;
 
         // reassign OBJECT. This will make it have a "source" too,
         // causing Type.getJavaClass() to return a JavaClass, instead
         // of null.
-        OBJECT = javaClassCache.getClassByName("java.lang.Object").asType();
+        OBJECT = context.getClassByName("java.lang.Object").asType();
     }
 
     /**
@@ -237,8 +238,8 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return getParent().resolveType(typeName);
     }
 
-    public ClassLibrary getClassLibrary() {
-        return getParent().getClassLibrary();
+    public JavaClassContext getJavaClassContext() {
+        return getParent().getJavaClassContext();
     }
 
     public String getClassNamePrefix() {
@@ -557,7 +558,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      */
     public JavaClass[] getDerivedClasses() {
         List result = new ArrayList();
-        JavaClass[] classes = javaClassCache.getClasses();
+        JavaClass[] classes = context.getClasses();
 
         for (int i = 0; i < classes.length; i++) {
             JavaClass clazz = classes[i];

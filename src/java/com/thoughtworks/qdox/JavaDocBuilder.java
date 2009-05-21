@@ -78,11 +78,11 @@ import java.util.StringTokenizer;
  * @author Aslak Helles&oslash;y
  * @author Robert Scholte
  */
-public class JavaDocBuilder implements Serializable, JavaClassCache {
+public class JavaDocBuilder implements Serializable {
 
-    private Map classes = new HashMap();
+	private final JavaClassContext context;;
+	
     private Set packages = new HashSet();
-    private ClassLibrary classLibrary;
     private List sources = new ArrayList();
     private DocletTagFactory docletTagFactory;
     private String encoding = System.getProperty("file.encoding");
@@ -101,8 +101,10 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
 
     public JavaDocBuilder(DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
-        classLibrary = new ClassLibrary(this);
+        ClassLibrary classLibrary = new ClassLibrary();
         classLibrary.addDefaultLoader();
+        this.context = new JavaClassContext(this);
+        this.context.setClassLibrary(classLibrary);
     }
 
     public JavaDocBuilder(ClassLibrary classLibrary) {
@@ -111,7 +113,8 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
 
     public JavaDocBuilder(DocletTagFactory docletTagFactory, ClassLibrary classLibrary) {
         this.docletTagFactory = docletTagFactory;
-        this.classLibrary = classLibrary; 
+        this.context = new JavaClassContext(this);
+        this.context.setClassLibrary(classLibrary);
     }
 
     private void addClasses(JavaSource source) {
@@ -125,30 +128,19 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     }
 
     private void addClass(JavaClass cls) {
-        classes.put(cls.getFullyQualifiedName(), cls);
-        cls.setJavaClassCache(this);
+        context.add(cls);
+        cls.setJavaClassContext(context);
     }
 
     public JavaClass getClassByName(String name) {
         if (name == null) {
             return null;
         }
-        JavaClass result = (JavaClass) classes.get(name);
-        if (result == null) {
-            // Try to make a binary class out of it
-            result = createBinaryClass(name);
-            if (result != null) {
-                addClass(result);
-            } else {
-                result = createUnknownClass(name);
-                classes.put(name, result);
-            }
-        }
-        return result;
+        return context.getClassByName(name);
     }
 
-    private JavaClass createUnknownClass(String name) {
-        ModelBuilder unknownBuilder = new ModelBuilder(classLibrary, docletTagFactory, new HashMap());
+    protected JavaClass createUnknownClass(String name) {
+        ModelBuilder unknownBuilder = new ModelBuilder(context, docletTagFactory, new HashMap());
         ClassDef classDef = new ClassDef();
         classDef.name = name;
         unknownBuilder.beginClass(classDef);
@@ -158,16 +150,16 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
         return result;
     }
 
-    private JavaClass createBinaryClass(String name) {
+    protected JavaClass createBinaryClass(String name) {
         // First see if the class exists at all.
-        Class clazz = classLibrary.getClass(name);
+        Class clazz = context.getClass(name);
         if (clazz == null) {
             return null;
         } else {
             try {
 				// Create a new builder and mimic the behaviour of the parser.
 				// We're getting all the information we need via reflection instead.
-				ModelBuilder binaryBuilder = new ModelBuilder(classLibrary, docletTagFactory, new HashMap());
+				ModelBuilder binaryBuilder = new ModelBuilder(context, docletTagFactory, new HashMap());
 
 				// Set the package name and class name
 				String packageName = getPackageName(name);
@@ -321,7 +313,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     }
 
     public JavaSource addSource(Reader reader, String sourceInfo) {
-        ModelBuilder builder = new ModelBuilder(classLibrary, docletTagFactory, allPackages);
+        ModelBuilder builder = new ModelBuilder(context, docletTagFactory, allPackages);
         Lexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
         parser.setDebugLexer(debugLexer);
@@ -455,7 +447,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
 
     public List search(Searcher searcher) {
         List results = new LinkedList();
-        for (Iterator iterator = classLibrary.all().iterator(); iterator.hasNext();) {
+        for (Iterator iterator = context.getClassLibrary().all().iterator(); iterator.hasNext();) {
             String clsName = (String) iterator.next();
             JavaClass cls = getClassByName(clsName);
             if (searcher.eval(cls)) {
@@ -466,7 +458,7 @@ public class JavaDocBuilder implements Serializable, JavaClassCache {
     }
 
     public ClassLibrary getClassLibrary() {
-        return classLibrary;
+        return context.getClassLibrary();
     }
 
     public void save(File file) throws IOException {

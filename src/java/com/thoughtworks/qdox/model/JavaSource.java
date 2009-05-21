@@ -12,6 +12,9 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.thoughtworks.qdox.DefaultJavaClassCache;
+import com.thoughtworks.qdox.JavaClassContext;
+
 public class JavaSource implements Serializable, JavaClassParent {
 
     private static final Set PRIMITIVE_TYPES = new HashSet();
@@ -33,10 +36,18 @@ public class JavaSource implements Serializable, JavaClassParent {
     private String[] importsArray;
     private List classes = new LinkedList();
     private JavaClass[] classesArray;
-    private ClassLibrary classLibrary;
+    private JavaClassContext context;
     private Map resolvedTypeCache = new HashMap();
     private URL url;
 
+    public JavaSource() {
+    	this(new JavaClassContext((ClassLibrary) null));
+    }
+    
+    public JavaSource(JavaClassContext context) {
+    	this.context = context;
+    }
+    
     /**
      * @since 1.4
      */
@@ -104,12 +115,12 @@ public class JavaSource implements Serializable, JavaClassParent {
         return classesArray;
     }
 
-    public ClassLibrary getClassLibrary() {
-        return classLibrary;
+    public JavaClassContext getJavaClassContext() {
+        return this.context;
     }
 
     public void setClassLibrary(ClassLibrary classLibrary) {
-        this.classLibrary = classLibrary;
+        this.context.setClassLibrary(classLibrary);
     }
 
     public String getCodeBlock() {
@@ -217,7 +228,7 @@ public class JavaSource implements Serializable, JavaClassParent {
                 break lookup;
             }
 
-            if(getClassLibrary() != null) {
+            if(context.getClassLibrary() != null) {
                 // check for a class in the same package
                 resolvedName = resolveFromLibrary( getClassNamePrefix() + nestedName );
                 
@@ -263,11 +274,11 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
     
     private String resolveFromLibrary(String typeName) {
-        return getClassLibrary().contains( typeName ) ? typeName : null;
+        return context.getClassLibrary().contains( typeName ) ? typeName : null;
     }
     
     private String resolveFullyQualifiedType(String typeName) {
-        if (getClassLibrary() != null) {
+        if (context.getClassLibrary() != null) {
             int indexOfLastDot = typeName.lastIndexOf('.');
             
             if (indexOfLastDot >= 0) {
@@ -281,7 +292,7 @@ public class JavaSource implements Serializable, JavaClassParent {
             }
     
             // check for fully-qualified class
-            if (getClassLibrary().contains(typeName)) {
+            if (context.getClassLibrary().contains(typeName)) {
                 return typeName;
             }
         }
@@ -312,5 +323,14 @@ public class JavaSource implements Serializable, JavaClassParent {
 
         return result;
     }
+
+    /**
+     * 
+     * @return
+     * @deprecated, use getJavaClassContext().getClassLibrary()
+     */
+	public ClassLibrary getClassLibrary() {
+		return this.context.getClassLibrary();
+	}
 
 }

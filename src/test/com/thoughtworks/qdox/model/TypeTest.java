@@ -12,7 +12,7 @@ public class TypeTest extends TestCase {
     }
 
     public void testResolving() throws Exception {
-        ClassLibrary classLib = new ClassLibrary(null);
+        ClassLibrary classLib = new ClassLibrary();
         JavaSource src = new JavaSource();
         src.setClassLibrary(classLib);
         src.addImport("foo.*");
@@ -48,7 +48,7 @@ public class TypeTest extends TestCase {
 
     public void testTypeHasJavaClass() {
         JavaSource javaSource = new JavaSource(new JavaClassContext(new JavaDocBuilder()));
-        javaSource.setClassLibrary(new ClassLibrary(null));
+        javaSource.setClassLibrary(new ClassLibrary());
         Type type = new Type("java.util.HashSet", 0, javaSource);
         JavaClass clazz = type.getJavaClass();
         JavaClass superClass = clazz.getSuperJavaClass();

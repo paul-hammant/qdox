@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import java.util.Collection;
 
-public class ClassLibraryTest extends TestCase implements JavaClassCache {
+public class ClassLibraryTest extends TestCase {
 
     public ClassLibraryTest(String s) {
         super(s);
@@ -21,7 +21,7 @@ public class ClassLibraryTest extends TestCase implements JavaClassCache {
     }
   
     public void testAdd() throws Exception {
-        ClassLibrary c = new ClassLibrary(this);
+        ClassLibrary c = new ClassLibrary();
         c.add("com.blah.Ping");
         c.add("com.moo.Poo");
         assertTrue(c.contains("com.blah.Ping"));
@@ -30,7 +30,7 @@ public class ClassLibraryTest extends TestCase implements JavaClassCache {
     }
 
     public void testListAll() throws Exception {
-        ClassLibrary c = new ClassLibrary(this);
+        ClassLibrary c = new ClassLibrary();
         c.add("com.blah.Ping");
         c.add("com.thing.Ping");
         c.add("com.x.Goat");
@@ -47,12 +47,12 @@ public class ClassLibraryTest extends TestCase implements JavaClassCache {
     }
 
     public void testNoClassLoaders() throws Exception {
-        ClassLibrary c = new ClassLibrary(this);
+        ClassLibrary c = new ClassLibrary();
         assertTrue(!c.contains("java.lang.String"));
     }
 
     public void testWithClassLoader() throws Exception {
-        ClassLibrary c = new ClassLibrary(this);
+        ClassLibrary c = new ClassLibrary();
         c.addClassLoader(getClass().getClassLoader());
         assertTrue(c.contains("java.lang.String"));
         assertTrue(c.contains("java.util.Collection"));
@@ -60,22 +60,11 @@ public class ClassLibraryTest extends TestCase implements JavaClassCache {
     }
 
     public void testDefaultClassLoader() throws Exception {
-        ClassLibrary c = new ClassLibrary(this);
+        ClassLibrary c = new ClassLibrary();
         c.addDefaultLoader();
         assertTrue(c.contains("java.lang.String"));
         assertTrue(c.contains("java.util.Collection"));
         assertTrue(c.contains("java.util.Map$Entry"));
         assertTrue(!c.contains("java.util.GoatCrusher"));
     }
-
-    public void testAccessingCache() throws Exception {
-        ClassLibrary c = new ClassLibrary(this);
-        JavaClass jclass = c.getClassByName("MyClass");
-        assertNotNull(jclass);
-        assertEquals("MyClass", jclass.getName());
-    }
-
-	public void putClassByName(String name, JavaClass javaClass) {
-		//only required by interface
-	}
 }

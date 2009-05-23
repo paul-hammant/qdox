@@ -39,7 +39,7 @@ public class ModelBuilder implements Builder {
     private final Map allPackages;
 
     public ModelBuilder() {
-        this(new JavaClassContext(new ClassLibrary(null)), new DefaultDocletTagFactory(), new HashMap());
+        this(new JavaClassContext(new ClassLibrary()), new DefaultDocletTagFactory(), new HashMap());
     }
 
     public ModelBuilder(JavaClassContext context, DocletTagFactory docletTagFactory, Map allPackages) {

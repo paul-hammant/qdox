@@ -23,20 +23,11 @@ public class ClassLibrary implements Serializable {
     private final Map classNameToClassMap = new HashMap();
     private boolean defaultClassLoadersAdded = false;
     private transient List classLoaders = new ArrayList();
-    private JavaClassCache cache;
     
     public ClassLibrary() {}
     
-    public ClassLibrary(JavaClassCache cache) {
-        this.cache = cache;
-    }
-
     public void add(String className) {
         classNames.add(className);
-    }
-
-    public JavaClass getClassByName(String name) {
-        return cache.getClassByName(name);
     }
 
     public boolean contains(String className) {

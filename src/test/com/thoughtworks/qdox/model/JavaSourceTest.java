@@ -15,7 +15,7 @@ public class JavaSourceTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         source = new JavaSource();
-        source.setClassLibrary(new ClassLibrary(null));
+        source.setClassLibrary(new ClassLibrary());
     }
 
     public void testToStringOneClass() throws Exception {

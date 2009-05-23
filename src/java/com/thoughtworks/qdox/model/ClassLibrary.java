@@ -14,8 +14,26 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
+ * <strong>Important!! Be sure to add a classloader with the bootstrap classes.</strong>
+ * 
+ * <p>
+ * Normally you can generate your classLibrary like this:<br/>
+ * <code>
+ * 	ClassLibrary classLibrary = new ClassLibrary();
+ *  classLibrary.addDefaultLoader();
+ * </code>
+ * </p>
+ * 
+ * <p>
+ * If you want full control over the classLoaders you might want to create your library like:<br/> 
+ * <code>
+ * ClassLibrary classLibrary = new ClassLibrary( ClassLoader.getSystemClassLoader() )
+ * </code>  
+ * </p>
+ * 
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
+ * @author Robert Scholte
  */
 public class ClassLibrary implements Serializable {
 
@@ -24,8 +42,14 @@ public class ClassLibrary implements Serializable {
     private boolean defaultClassLoadersAdded = false;
     private transient List classLoaders = new ArrayList();
     
+    /**
+     * Remember to add bootstrap classes
+     */
     public ClassLibrary() {}
 
+    /**
+     * Remember to add bootstrap classes
+     */
     public ClassLibrary(ClassLoader loader) {
     	classLoaders.add(loader);
     }

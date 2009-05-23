@@ -25,6 +25,10 @@ public class ClassLibrary implements Serializable {
     private transient List classLoaders = new ArrayList();
     
     public ClassLibrary() {}
+
+    public ClassLibrary(ClassLoader loader) {
+    	classLoaders.add(loader);
+    }
     
     public void add(String className) {
         classNames.add(className);

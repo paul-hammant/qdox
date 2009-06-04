@@ -500,6 +500,34 @@ public class JavaClassTest extends TestCase {
     	assertEquals("class com.MyClass", cls.toString());
     }
     
+    public void testInnerClassToString() throws Exception {
+    	JavaPackage jPackage = new JavaPackage("com.thoughtworks.qdox.model");
+    	JavaClass jOuterClass = new JavaClass("OuterClass");
+    	jPackage.addClass(jOuterClass);
+    	JavaClass jInnerClass = new JavaClass("InnerClass");
+    	jOuterClass.addClass(jInnerClass);
+    	assertEquals("class com.thoughtworks.qdox.model.OuterClass$InnerClass", jInnerClass.toString());
+    }
+    
+    public void testInnerClassType() {
+        JavaPackage jPackage = new JavaPackage("com.thoughtworks.qdox.model");
+        JavaClass jOuterClass = new JavaClass("OuterClass");
+        jPackage.addClass(jOuterClass);
+        JavaClass jInnerClass = new JavaClass("InnerClass");
+        jOuterClass.addClass(jInnerClass);
+        assertEquals("com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.asType().getValue());
+    }
+    
+    public void testInnerInterfaceToString() {
+    	JavaPackage jPackage = new JavaPackage("com.thoughtworks.qdox.model");
+    	JavaClass jOuterClass = new JavaClass("OuterClass");
+    	jPackage.addClass(jOuterClass);
+    	JavaClass jInnerInterface = new JavaClass("InnerInterface");
+    	jInnerInterface.setInterface(true);
+    	jOuterClass.addClass(jInnerInterface);
+    	assertEquals("interface com.thoughtworks.qdox.model.OuterClass$InnerInterface", jInnerInterface.toString());
+    }
+    
     public void testToStringInterface() {
     	cls.setName("com.MyClass");
     	cls.setInterface(true);
@@ -584,4 +612,6 @@ public class JavaClassTest extends TestCase {
         }
         return result;
     }
+    
+    
 }

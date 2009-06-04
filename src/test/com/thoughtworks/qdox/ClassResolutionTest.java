@@ -39,7 +39,7 @@ public class ClassResolutionTest extends TestCase {
         Type type = parameter.getType();
 
         // verify
-        assertEquals("Should include fully qualified name", "package1.Class1$NestedClass", type.getValue());
+        assertEquals("Should include fully qualified name", "package1.Class1$NestedClass", type.getFullQualifiedName());
     }
 
     public void testSurvivesStaticImports() {

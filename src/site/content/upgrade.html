@@ -6,7 +6,7 @@
   <h2>Upgrading to 1.10 or above</h2>
       <p>
         This section describes what needs to be done when upgrading to QDox
-        1.9.</a>.
+        1.10.</a>.
       </p>
       <h2>Things that might break your code</h2>
         <p> The toString()-method in most of the JavaObjects under com.thoughtworks.qdox.models used to return the corresponding codeblock.
@@ -17,6 +17,10 @@
           <tr><td>((java.lang.Method) aMethod).getReturnsType().toString()</td><td>((com.thoughtworks.qdox.model.JavaMethod) aMethod).getReturns().toString()</td>
         </table> 
         </p>
+        <p>com.thoughtworks.qdox.model.Type.getValue() will return the typeName for usage in the code. The new method com.thoughtworks.qdox.model.Type.getFullQualifiedName() will return the FQN as defined by the java specs. 
+        Normally they would return the same value, but pay attention when using inner classes.
+        </p>
+        
            
 	<h2>Upgrading to 1.9 or above</h2>
       <p>

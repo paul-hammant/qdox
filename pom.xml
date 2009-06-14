@@ -313,10 +313,23 @@
       <activation>
         <os>
           <family>Linux</family>
+          <arch>i386</arch>
         </os>
       </activation>
       <properties>
         <qdox.byaccj.executable>${basedir}/bootstrap/yacc.linux</qdox.byaccj.executable>
+      </properties>
+    </profile>
+    <profile>
+      <id>linux64</id>
+      <activation>
+        <os>
+          <family>Linux</family>
+          <arch>x86_64</arch>
+        </os>
+      </activation>
+      <properties>
+        <qdox.byaccj.executable>${basedir}/bootstrap/yacc.linux.x86_64</qdox.byaccj.executable>
       </properties>
     </profile>
     <profile>

@@ -163,7 +163,7 @@
               <arg value="-Jpackage=com.thoughtworks.qdox.parser.impl" />
               <arg value="${basedir}/src/grammar/parser.y" />
             </exec>
-            <move tofile="${project.build.directory}/yacc-states.txt" file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y" />
+            <move tofile="${project.build.directory}/yacc-states.txt" file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y" failonerror="false"/>
           </tasks>
           <sourceRoot>${project.build.directory}/generated-sources/parser</sourceRoot>
         </configuration>

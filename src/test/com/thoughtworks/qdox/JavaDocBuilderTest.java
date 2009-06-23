@@ -1034,6 +1034,38 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaClass javaClass = javaSource.getClasses()[0];
         assertEquals(javaClass.getSuperClass().getValue(), "javax.faces.component.UIOutput");
     }
+    
+    //for QDox-154
+    public void testImplicitJavadocCommentOrder() throws Exception {
+        String source = "" +
+        		"public class Foo {\n" +
+        		"    /**\n" + 
+                "     * A Javadoc sample.\n" + 
+                "     *\n" + 
+                "     * @return The size.\n" + 
+                "     */\n" + 
+                "    public long getSize()\n" + 
+                "    {\n" + 
+                "        return 0;\n" + 
+                "    }\n" + 
+                "\n" + 
+                "    /**\n" + 
+                "     * @return The size.\n" +
+                "     *\n" + 
+                "     * A Javadoc sample.\n" + 
+                "     */\n" + 
+                "    public long getSize2()\n" + 
+                "    {\n" + 
+                "        return 0;\n" + 
+                "    }\n" +
+                "}";
+        JavaSource javaSource = builder.addSource(new StringReader(source));
+        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaMethod method1 = javaClass.getMethods()[0];
+        assertEquals( "A Javadoc sample.", method1.getComment());
+        JavaMethod method2 = javaClass.getMethods()[1];
+        assertEquals( "A Javadoc sample.", method1.getComment());
+    }
 
     //for qdox-155
     public void testCharField() throws Exception {

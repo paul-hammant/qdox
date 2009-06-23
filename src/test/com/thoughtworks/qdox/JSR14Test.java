@@ -363,6 +363,19 @@ public class JSR14Test extends TestCase {
     	assertEquals("java.util.List<T extends java.lang.StringBuffer>", paramType.getResolvedGenericValue());
     }
 
-    
+    //for QDOX-167
+    public void testGenericTypedMethodCall() throws Exception {
+        String source = "import java.util.*;\n" + 
+        		"\n" + 
+        		"public class MyClass\n" + 
+        		"{\n" + 
+        		"\n" + 
+        		"    private static final Map<String, String> map1 = Collections.<String, String>emptyMap();\n" + 
+        		"\n" + 
+        		"    private static final Map<?, ?> map2 = Collections. <String, String> emptyMap();\n" + 
+        		"\n" + 
+        		"}";
+        builder.addSource(new StringReader(source));
+    }
     
 }

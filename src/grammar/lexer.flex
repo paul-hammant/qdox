@@ -411,6 +411,10 @@ Annotation = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
             newMode=true;
         } 
     }
+    "." [ \t\r\n]* / "<" {
+      codeBody.append('.');
+      newMode = true;
+    }
     "<"                 {
         codeBody.append('<');
         if (!bracketMode && newMode && !anonymousMode) {

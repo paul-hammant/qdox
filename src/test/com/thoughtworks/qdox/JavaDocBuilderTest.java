@@ -1036,7 +1036,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     }
     
     //for QDox-154
-    public void testImplicitJavadocCommentOrder() throws Exception {
+    public void todo_testImplicitJavadocCommentOrder() throws Exception {
         String source = "" +
         		"public class Foo {\n" +
         		"    /**\n" + 
@@ -1063,8 +1063,10 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaClass javaClass = javaSource.getClasses()[0];
         JavaMethod method1 = javaClass.getMethods()[0];
         assertEquals( "A Javadoc sample.", method1.getComment());
+        assertEquals( "The size.", method1.getTagByName( "return" ).getValue());
         JavaMethod method2 = javaClass.getMethods()[1];
-        assertEquals( "A Javadoc sample.", method1.getComment());
+        assertEquals( "The size.", method2.getTagByName( "return" ).getValue());
+        assertEquals( "A Javadoc sample.", method2.getComment());
     }
 
     //for qdox-155

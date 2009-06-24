@@ -5,16 +5,33 @@
     </section>
     <section>
         <name>Evaluating QDox</name>
-        <page>license.html</page>
         <page>download.html</page>
         <page>changes.html</page>
         <page>upgrade.html</page>
         <page>whouses.html</page>
     </section>
+   
+    <section>
+      <name>Project Information</name>
+      <page>dependencies.html</page>      
+      <page>issue-tracking.html</page>
+      <page>mail-lists.html</page>
+      <page>license.html</page>
+      <page>project-summary.html</page>
+      <page>team-list.html</page>
+      <page>source-repository.html</page>
+    </section>
+    <section>
+      <name>Project Reports</name>
+      <page>changes-report.html</page>
+      <link title="javadoc">http://qdox.codehaus.org/apidocs/index.html</link>
+      <page>usage.html</page>
+    </section>
     <section>
         <name>Using QDox</name>
         <page>usage.html</page>
         <page>model.html</page>
-        <link title="JavaDoc">javadoc/index.html</link>
+<!--        <link title="JavaDoc">javadoc/index.html</link>-->
+<!--        <page>model.html</page>-->
     </section>
 </sitemap>

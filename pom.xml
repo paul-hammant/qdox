@@ -58,7 +58,7 @@
   <scm>
     <connection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</developerConnection>
-    <url>http://svn.qdox.codehaus.org/trunk/qdox</url>
+    <url>http://svn.qdox.codehaus.org/browse/qdox/trunk/qdox</url>
   </scm>
 
   <developers>

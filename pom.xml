@@ -35,6 +35,19 @@
       <unsubscribe>http://xircles.codehaus.org/lists/dev@qdox.codehaus.org/unsubscribe</unsubscribe>
       <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.dev</archive>
     </mailingList>
+    <mailingList>
+      <name>scm at QDox</name>
+      <subscribe>http://xircles.codehaus.org/lists/scm@qdox.codehaus.org/subscribe</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/lists/scm@qdox.codehaus.org/unsubscribe</unsubscribe>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.scm</archive>
+    </mailingList>
+    <mailingList>
+      <name>user at QDox</name>
+      <post>user@qdox.codehaus.org</post>
+      <subscribe>http://xircles.codehaus.org/lists/user@qdox.codehaus.org/subscribe</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/lists/user@qdox.codehaus.org/unsubscribe</unsubscribe>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.user</archive>
+    </mailingList>
   </mailingLists>
 
   <issueManagement>
@@ -88,7 +101,7 @@
     <developer>
       <id>rfscholte</id>
       <name>Robert Scholte</name>
-      <timezone>+1</timezone>
+      <timezone>+2</timezone>
       <roles>
         <role>developer</role>
       </roles>
@@ -147,6 +160,22 @@
       </testResource>
     </testResources>
     <plugins>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.2</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.4.2</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.2</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.3</version>
+      </plugin>
       <plugin>
         <groupId>de.jflex</groupId>
         <artifactId>maven-jflex-plugin</artifactId>

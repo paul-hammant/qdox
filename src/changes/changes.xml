@@ -14,6 +14,52 @@
         </release>
 
         <release version="1.8" date="2009-01-31">
+            <action dev="rfscholte" type="update" issue="QDOX-144" due-to="Stanislaw Osinski">
+				QDox fails to parse correct code
+            </action>
+            <action dev="rfscholte" type="update" issue="QDOX-135" due-to="Louis R. Marascio">
+				Annotation with value in method signature does not parse		
+        </action>
+        <action dev="rfscholte" type="update" issue="QDOX-113" due-to="Jukka Lindström">
+				Annotations With Parameters do not work		
+        </action>
+        <action dev="paul" type="update" issue="QDOX-124" due-to="Jochen Kuhnlei">
+				Field modifiers of binary classes ignored		
+        </action>
+        <action dev="rfscholte" type="update" issue="QDOX-101" due-to="David Blevins">
+				Multiple annotations on one field and generics		
+        </action>
+        <action dev="paul" type="update" issue="QDOX-125" due-to="Jochen Kuhnle">
+				Name resolution of imported nested types does not work correctly		
+        </action>
+        <action dev="rfscholte" type="update" issue="QDOX-144" due-to="alex322">
+				ParseException for private static String[] allConstants = {C1,C2,C3};		
+        </action>
+        <action dev="rfscholte" type="update" issue="QDOX-138" due-to="Stanislaw Osinski">
+				Parser fails depending on the position of an internal enum		
+        </action>
+        <action dev="mauro" type="update" issue="QDOX-92" due-to="Wolfgang Jung">
+				Performance Improvement of JavaDocBuilder.getClassByName()		
+        </action>
+        <action dev="rfscholte" type="update" issue="QDOX-145" due-to="Elliot Schwartz">
+				Static block source code gets associated with source code of subsequent method		
+        </action>
+        <action dev="rfscholte" type="update" issue="QDOX-54" due-to="Aslak Hellesoy">
+				Support for retrieval of generic type information (JSR 14)		
+        </action>
+        <action dev="mauro" type="update" issue="QDOX-74" due-to="Mike Williams">
+				add parser support for enumerated types		
+        </action>
+        <action dev="rfscholte" type="update" issue="QDOX-117" due-to="Ron Saito">
+				annotation value poluted with class instance block		
+        </action>
+        <action dev="rfscholte" type="update" issue="QDOX-86" due-to="Alexandre Vasseur">
+				inner classes not resolved correctly when appears as method param		
+        </action>
+        <action dev="rfscholte" type="update" issue="QDOX-147" due-to="Robert Scholte">
+			packaging with java5+ fails due to incorrect javadocs
+        </action>
+	
         </release>
 
         <release version="1.7" date="2008-12-22">

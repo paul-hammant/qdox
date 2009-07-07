@@ -7,7 +7,16 @@
 
     <body>
 
-        <release version="1.7" date="????">
+        <release version="1.9.1" date="2009-05-05">
+        </release>
+
+        <release version="1.9" date="2009-02-21">
+        </release>
+
+        <release version="1.8" date="2009-01-31">
+        </release>
+
+        <release version="1.7" date="2008-12-22">
             <action dev="paul" type="update" issue="QDOX-126" due-to="Jochen Kuhnle">
                 Improved annotation support including types, fields and expressions.
             </action>

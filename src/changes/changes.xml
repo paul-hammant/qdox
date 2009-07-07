@@ -8,11 +8,10 @@
     <body>
 
         <release version="1.9.1" date="2009-05-05">
-					getInitializationExpression() includes comment text		
-	        <action dev="rfscholte" type="update" issue="QDOX-152" due-to="Leonardo Uribe">
+        <action dev="rfscholte" type="update" issue="QDOX-152" due-to="Leonardo Uribe">
 			JavaClass.getFullyQualifiedName() does not work on version 1.9 (version 1.6.3 works without problem). Manual resolve scanning imports are required		
         </action>
-	        <action dev="rfscholte" type="update" issue="QDOX-118" due-to="Rune Flobakk">
+        <action dev="rfscholte" type="update" issue="QDOX-118" due-to="Rune Flobakk">
 			Annotation parsing fails on enum constant when javadoc present		
         </action>
         <action dev="rfscholte" type="update" issue="QDOX-161" due-to="Lars Huber">

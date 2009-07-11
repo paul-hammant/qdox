@@ -3,10 +3,7 @@
  */
 
 #banner {
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    height: 116px;
+  margin 5px;
 }
 
 #left {
@@ -54,6 +51,28 @@
     padding-bottom: 8px;
 }
 
+/*---------------------------------------------------------------------------
+ *  Bradcrumbs
+ */
+.xleft, #bannerLeft img {
+  float:left;
+}
+.xright, #bannerRight {
+  float:right;
+}
+div.clear {
+  clear:both;
+  visibility:hidden;
+}
+#breadcrumbs {
+  background-image:url(breadcrumbs.jpg);
+  height:13px;
+  padding:5px 10px 14px 20px;
+}
+#breadcrumbs {
+  font-size:x-small;
+  margin:0;
+} 
 
 /*---------------------------------------------------------------------------
  *  Default element styles
@@ -106,6 +125,10 @@ blockquote {
     margin-bottom: 10px;
 }
 
+table {
+    width:100%;
+    padding-bottom: 6px;
+}
 td {
     font-size: 12px;
     padding: 2px;
@@ -130,6 +153,12 @@ ul, ol {
     margin-bottom: 12px;
     margin-left: 20px;
 }
+tr.a {
+  background-color: #7EB2E4;
+}
+tr.b {
+  background-color: #BDD7F0;
+}
 
 
 /*---------------------------------------------------------------------------
@@ -137,9 +166,8 @@ ul, ol {
  */
 
 #banner {
-    margin: 0px;
+    margin: 5px;
     border: 0px;
-    border-bottom: 1px solid #06c;
     padding: 0px;
     background-color: white;
     color: #06c;
@@ -150,12 +178,6 @@ ul, ol {
 #banner a:visited { color: #9cf; }
 #banner a:hover { color: red; }
 #banner a:active { color: red; }
-
-#logo {
-    position: absolute;
-    top: 5px;
-    left: 8px;
-}
 
 #versions {
     position: absolute;
@@ -200,12 +222,16 @@ ul, ol {
 
 #content h2 {
     margin-top: 24px;
-    border-top: 1px solid #06c;
+    border-top: 1px solid #99CCFF;
     margin-bottom: 16px;
     font-size: 15px;
     font-weight: bold;
-    background-color: #9cf;
+    background: transparent url(blue2white.jpg) repeat-y;
     padding: 2px;
+}
+#content h3 {
+    padding-left: 13px;
+    border-bottom: 1px solid #99CCFF;
 }
 
 #content li {
@@ -213,19 +239,15 @@ ul, ol {
 }
 
 #content th {
-    background-color: #9cf;
-}
-
-#content td {
-    background-color: #9cf;
+    background-color: #3E8BD9;
 }
 
 .Source pre {
     padding: 4px;
     font-family: courier new, monospace;
     font-size: 11px;
-    border: 1px solid #06c;
-    background-color: #cff;
+    border: 1px dashed #06c;
+    background-color: #eeeeee;
     color: black;
 }
 
@@ -266,6 +288,12 @@ ul, ol {
     display: inline;
 }
 
+ul.referenceSummary {
+  list-style: none;
+  font-family: monospace;
+  display: inline-table;
+}
+
 .RuleOfThumb {
     font-weight: bold;
 }
@@ -284,11 +312,10 @@ ul, ol {
     margin: 0px;
     border: 0px;
     padding: 4px;
-
     color: #06c;
-
     font-size: 12px;
     font-weight: bold;
+    background: url(white2blue.jpg);
 }
 
 
@@ -303,12 +330,11 @@ ul, ol {
  */
 
 .MenuGroup {
-    border-left: 1px solid #06c;
-    border-top: 1px solid #06c;
-    border-bottom: 1px solid white; /* IE work-around */
+    border-top: 2px solid #06c;
 
     margin-bottom: 8px;
-    background-color: white;
+    background: white;
+	
     color: #06c;
 }
 
@@ -323,9 +349,7 @@ ul, ol {
 }
 
 .MenuGroup .currentLink {
-/*    background-color: #06c;*/
-    background-color: #9cf;
-    color: #000;
+    color: #06c;
 }
 
 

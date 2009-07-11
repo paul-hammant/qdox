@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Frequently Asked Questions</title>
+  </head>
+  <body>
+
+		<ul style="list-style-type:decimal;">
+		  <li><a href="#Where_is_the_array_information_stored">Where is the array information stored?</a></li>
+		  <li><a href="#What_s_the_object_type_of_an_interface">What's the objecttype of an interface?</a></li>
+      <li><a href="#Can_I_have_full_control_over_the_classloader">Can I have full control over the classloader?</a></li>
+		</ul>
+
+    <a name="Where_is_the_array_information_stored"></a><h2>Where is the array information stored?</h2>
+			<p>The <code><a href="apidocs/com/thoughtworks/qdox/model/Type.html">Type</a></code> class stores array information
+			in it. If the array is multidimensional, the dimension depth can be accessed.</p>
+
+  	 <a name="What_s_the_object_type_of_an_interface"></a><h2>What's the object type of an interface?</h2>
+
+			<p>The <code><a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html">JavaClass</a></code> method is used to
+			represent both classes and interfaces.
+			The <code><a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#isInterface()">isInterface()</a></code>
+			method allows you to distinguish between the two.</p>
+
+			<p>When using a class, the <a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getSuperClass()">getSuperClass()</a>
+				return which class is extended. If this has not been defined in the input source code, <code>java.lang.Object</code> is
+				returned. When using an interface, this method ALWAYS returns null.</p>
+
+			<p>When using a class, the <a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getImplements()">getImplements()</a>
+			returns an array of the interfaces implemented by the class. If none are implemented, an empty array is returned. When
+			using an interface, this returns an array of interfaces the current interface EXTENDS.
+			</p>
+			
+			<a name="Can_I_have_full_control_over_the_classloader"></a><h2>Can I have full control over the classloader?</h2>
+			<p>
+			I some cases QDox is used to generate classes for another project with it's own dependencies. This could result in class-collission.
+			By default the JavadocBuilder will contain the classloader(s) of the current project, but by defining your own classLibrary you can have the required control.
+			
+			<code><pre>
+    /* new ClassLibrary() will give you an empty classLoader
+     * Big chance you want at least the system classloader.
+     */	
+    ClassLibrary classLibrary = new ClassLibrary( ClassLoader.getSystemClassLoader() );
+    JavaDocBuilder builder = new JavaDocBuilder(classLibrary);
+    
+      </pre></code>
+			</p> 
+	</body>
+
+</html>

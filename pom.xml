@@ -257,33 +257,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.0</version>
-        <executions>
-          <execution>
-            <id>unpack-core</id>
-            <phase>install</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/xsite/javadoc</outputDirectory>
-              <overWriteReleases>false</overWriteReleases>
-              <overWriteSnapshots>true</overWriteSnapshots>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${pom.groupId}</groupId>
-                  <artifactId>qdox</artifactId>
-                  <version>${pom.version}</version>
-                  <classifier>javadoc</classifier>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <version>2.0</version>
         <configuration>
@@ -325,6 +298,16 @@
               <resources>          
                 <resource>
                   <directory>src/site</directory>
+                  <excludes>
+                    <exclude>**/skin.html</exclude>
+                  </excludes>
+                  </resource>
+                <resource>
+                  <directory>src/site</directory>
+                  <includes>
+                    <include>**/skin.html</include>
+                  </includes>
+                  <filtering>true</filtering>
                 </resource>
               </resources>              
             </configuration>            
@@ -500,8 +483,7 @@
           <packagenames>com.thoughtworks.qdox.*</packagenames>
           <use>true</use>
           <version>true</version>
-          <windowtitle>${project.name} ${project.version}
-            API</windowtitle>
+          <windowtitle>${project.name} ${project.version} API</windowtitle>
           <tag name="noinspection" description="IntelliJ Inspection Ignore tag" enabled="false" />
           <encoding>UTF-8</encoding>
         </configuration>
@@ -513,12 +495,18 @@
         <artifactId>maven-changes-plugin</artifactId>
         <version>2.1</version>
         <configuration>
+		  <!-- changes-report -->
           <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
+<!--           jira-report -->
+<!--          <resolutionIds>Closed</resolutionIds>-->
+<!--          <statusIds>Resolved, Closed</statusIds>-->
+<!--          <onlyCurrentVersion>false</onlyCurrentVersion>-->
         </configuration>
         <reportSets>
           <reportSet>
             <reports>
               <report>changes-report</report>
+<!--              <report>jira-report</report>-->
             </reports>
           </reportSet>
         </reportSets>
@@ -526,6 +514,8 @@
     </plugins>
   </reporting>
   <properties>
+    <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+    <timestamp>${maven.build.timestamp}</timestamp>
     <xsite.sourceDirectoryPath>${project.build.directory}/generated-site</xsite.sourceDirectoryPath>
   </properties>
 </project>

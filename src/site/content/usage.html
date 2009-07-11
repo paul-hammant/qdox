@@ -6,7 +6,7 @@
 
 		<h2>Entry Point</h2>
 
-			<p><code><a href="javadoc/com/thoughtworks/qdox/JavaDocBuilder.html">JavaDocBuilder</a></code> is the entry point to
+			<p><code><a href="apidocs/com/thoughtworks/qdox/JavaDocBuilder.html">JavaDocBuilder</a></code> is the entry point to
 			QDox. It is responsible for parsing source code, resolving imports and storing
 			the data.</p>
 
@@ -20,7 +20,7 @@ JavaDocBuilder builder = new JavaDocBuilder();
 		<h2>Reading Source Files</h2>
 
 			<p>Java source code can then be added to the
-			<code><a href="javadoc/com/thoughtworks/qdox/JavaDocBuilder.html">JavaDocBuilder</a></code>.
+			<code><a href="apidocs/com/thoughtworks/qdox/JavaDocBuilder.html">JavaDocBuilder</a></code>.
 			Source can either beread one file at a time (using a java.io.Reader) or an entire source tree
 			can be added recursively.</p>
 
@@ -38,7 +38,7 @@ builder.addSourceTree(new File("mysrcdir"));
 		<h2>Resolving Class Names</h2>
 
 			<p>In order to resolve classes that have been imported using a wildcard (e.g. <code>import java.util.*;</code>), the
-			<code><a href="javadoc/com/thoughtworks/qdox/model/ClassLibrary.html">ClassLibrary</a></code>
+			<code><a href="apidocs/com/thoughtworks/qdox/model/ClassLibrary.html">ClassLibrary</a></code>
 			must be aware of other classes used in the project.</p>
 
 			<p>ClassLibrary has 3 ways to resolve classes:</p>

@@ -57,6 +57,26 @@ public class AbstractJavaEntityTest extends TestCase {
         // verify
         assertEquals(expected, buffer.toString());
     }
+    
+    public void testMultilineCommentToString() {
+        AbstractJavaEntity entity = new JavaField();
+        IndentBuffer buffer = new IndentBuffer();
+        entity.setComment("Hello\nWorld");
+
+        // expectation
+        String expected = ""
+                + "/**\n"
+                + " * Hello\n"
+                + " * World\n"
+                + " */\n";
+
+        // run
+        entity.commentHeader(buffer);
+
+        // verify
+        assertEquals(expected, buffer.toString());
+    	
+    }
 
     public void testNoCommentToString() {
         // setup

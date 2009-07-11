@@ -70,7 +70,9 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
 
             if (comment != null && comment.length() > 0) {
                 buffer.write(" * ");
-                buffer.write(comment);
+                
+                buffer.write(comment.replaceAll("\n", "\n * "));
+                
                 buffer.newline();
             }
 

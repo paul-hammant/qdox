@@ -678,7 +678,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         String X = "" +
                 "/** @c x */" +
                 "class X {" +
-                "  /** " +
+                "  /** \n" +
                 "   * @m x \n" +
                 "   * @s f\n" +
                 "   */" +

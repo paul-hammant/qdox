@@ -21,6 +21,8 @@ public class TagParser {
         tokenizer.wordChars('-','-');
         tokenizer.wordChars('_','_');
         tokenizer.wordChars('.','.');
+        tokenizer.wordChars('<','<');
+        tokenizer.wordChars('>','>');
         tokenizer.quoteChar('\'');
         tokenizer.quoteChar('"');
         tokenizer.whitespaceChars(' ',' ');

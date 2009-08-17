@@ -215,6 +215,17 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return (getParentSource() != null ? getParentSource().getPackage() : javaPackage);
     }
 
+    /**
+     * If this class has a package, the packagename will be returned.
+     * Otherwise an empty String.
+     * 
+     * @return
+     */
+    public String getPackageName() {
+        JavaPackage javaPackage = getPackage();
+        return (javaPackage != null && javaPackage.getName() != null) ? javaPackage.getName() : "";
+    }
+
     public String getFullyQualifiedName() {
         return (getParent() != null ? (getParent().getClassNamePrefix()) : javaPackage != null ? (javaPackage.getName()+".") : "") + getName();
     }

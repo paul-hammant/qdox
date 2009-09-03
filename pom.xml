@@ -3,7 +3,7 @@
   <name>QDox</name>
   <groupId>com.thoughtworks.qdox</groupId>
   <artifactId>qdox</artifactId>
-  <version>1.10</version>
+  <version>1.10-SNAPSHOT</version>
   <packaging>jar</packaging>
   <url>http://qdox.codehaus.org</url>
   <description>

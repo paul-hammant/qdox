@@ -3,7 +3,7 @@
   <name>QDox</name>
   <groupId>com.thoughtworks.qdox</groupId>
   <artifactId>qdox</artifactId>
-  <version>1.10</version>
+  <version>1.11-SNAPSHOT</version>
   <packaging>jar</packaging>
   <url>http://qdox.codehaus.org</url>
   <description>
@@ -56,9 +56,9 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/qdox/tags/qdox-1.10-attempt4</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/tags/qdox-1.10-attempt4</developerConnection>
-    <url>http://svn.qdox.codehaus.org/browse/qdox/tags/qdox-1.10-attempt4</url>
+    <connection>scm:svn:https://svn.codehaus.org/qdox/tags/qdox-1.10</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/tags/qdox-1.10</developerConnection>
+    <url>http://svn.qdox.codehaus.org/browse/qdox/tags/qdox-1.10</url>
   </scm>
 
   <developers>

@@ -652,8 +652,8 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         builder.addSource(new StringReader(source));
         JavaClass x = builder.getClassByName("x");
         DocletTag tag = x.getTagByName("bar.baz");
-        assertEquals("foo=\"this is\\\nmultilined\"", tag.getValue());
-        assertEquals("this is\nmultilined", tag.getNamedParameter("foo"));
+        assertEquals("foo=\"this is\\\n      multilined\"", tag.getValue());
+        assertEquals("this is\n      multilined", tag.getNamedParameter("foo"));
     }
 
     public void testJiraQdox19() {
@@ -1024,6 +1024,26 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaMethod javaMethod = javaClass.getMethods()[0];
         assertEquals("\"test blah blah\"", javaMethod.getAnnotations()[0].getNamedParameter("description").toString());
     }
+    
+    //for qdox-146
+    public void testWhitespaceCanBeRetainedInJavadoc() {
+        String sourceCode = ""
+                + "package com.acme.thing;\n"
+                + "\n"
+                + "/**\n"
+                + " * This class does something.\n"
+                + " *     chalala\n"
+                + " *         cha  **  lala\n"
+                + " **/\n"
+                + "public class AClassName {\n"
+                + "}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.addSource(new StringReader(sourceCode));
+        JavaClass aClass = builder.getClassByName("com.acme.thing.AClassName");
+        assertEquals("This class does something.\n"
+                + "    chalala\n"
+                + "        cha  **  lala", aClass.getComment());
+    }
 
     //for qdox-152
     public void testExtendedClass() throws Exception {
@@ -1098,4 +1118,25 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     	assertNotNull(javaClass.getAnnotations()[0].getNamedParameter("cascade"));
     } 
     
+    /**
+     * According to sun specs: Starting with Javadoc 1.4, the leading asterisks are optional
+     * @throws Exception
+     */
+    public void testJavadocWithoutStartingAsterisks() throws Exception {
+    	String source = "    /**\n" + 
+    			"     Some text\n" +
+    			"more text\n" +
+    			"\t and even more\n" +
+    			"     \n" + 
+    			"     @throws Exception\n" +
+    			"@deprecated" + 
+    			"     */\n" + 
+    			"public class Foo{}";
+    	JavaSource javaSource = builder.addSource(new StringReader(source));
+    	JavaClass javaClass = javaSource.getClasses()[0];
+    	assertEquals("Some text\nmore text\nand even more", javaClass.getComment());
+    	assertEquals("throws", javaClass.getTags()[0].getName());
+    	assertEquals("Exception", javaClass.getTags()[0].getValue());
+    	assertEquals("deprecated", javaClass.getTags()[1].getName());
+    }
 }

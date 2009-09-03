@@ -171,9 +171,7 @@ public class ParserTest extends TestCase {
 
         // setup values
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "This");
-        setupLex(Parser.JAVADOCTOKEN, "is");
-        setupLex(Parser.JAVADOCTOKEN, "great!");
+        setupLex(Parser.JAVADOCLINE, "This is great!");
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
@@ -194,8 +192,7 @@ public class ParserTest extends TestCase {
         // setup values
         setupLex(Parser.JAVADOCSTART);
         setupLex(Parser.JAVADOCTAG, "@This");
-        setupLex(Parser.JAVADOCTOKEN, "is");
-        setupLex(Parser.JAVADOCTOKEN, "great!");
+        setupLex(Parser.JAVADOCLINE, "is great!");
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
@@ -236,9 +233,7 @@ public class ParserTest extends TestCase {
         // setup values
         setupLex(Parser.JAVADOCSTART);
         setupLex(Parser.JAVADOCTAG, "@This");
-        setupLex(Parser.JAVADOCTOKEN, "is");
-        setupLex(Parser.JAVADOCTOKEN, "great!");
-        setupLex(Parser.JAVADOCTOKEN, "Mmmkay.");
+        setupLex(Parser.JAVADOCLINE, "is great! Mmmkay.");
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
@@ -262,10 +257,9 @@ public class ParserTest extends TestCase {
         // setup values
         setupLex(Parser.JAVADOCSTART);
         setupLex(Parser.JAVADOCTAG, "@This");
-        setupLex(Parser.JAVADOCTOKEN, "is");
-        setupLex(Parser.JAVADOCTOKEN, "great!");
+        setupLex(Parser.JAVADOCLINE, "is great!");
         setupLex(Parser.JAVADOCTAG, "@mock");
-        setupLex(Parser.JAVADOCTOKEN, "generate");
+        setupLex(Parser.JAVADOCLINE, "generate");
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
@@ -287,16 +281,11 @@ public class ParserTest extends TestCase {
 
         // setup values
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "Welcome!");
-        setupLex(Parser.JAVADOCTOKEN, "Here");
-        setupLex(Parser.JAVADOCTOKEN, "is");
-        setupLex(Parser.JAVADOCTOKEN, "my");
-        setupLex(Parser.JAVADOCTOKEN, "class.");
+        setupLex(Parser.JAVADOCLINE, "Welcome! Here is my class.");
         setupLex(Parser.JAVADOCTAG, "@This");
-        setupLex(Parser.JAVADOCTOKEN, "is");
-        setupLex(Parser.JAVADOCTOKEN, "great!");
+        setupLex(Parser.JAVADOCLINE, "is great!");
         setupLex(Parser.JAVADOCTAG, "@mock");
-        setupLex(Parser.JAVADOCTOKEN, "generate");
+        setupLex(Parser.JAVADOCLINE, "generate");
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
@@ -789,11 +778,11 @@ public class ParserTest extends TestCase {
 
         // setup values
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc1");
+        setupLex(Parser.JAVADOCLINE, "javadoc1");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc2");
+        setupLex(Parser.JAVADOCLINE, "javadoc2");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(Parser.PACKAGE);
@@ -801,11 +790,11 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
 
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc3");
+        setupLex(Parser.JAVADOCLINE, "javadoc3");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc4");
+        setupLex(Parser.JAVADOCLINE, "javadoc4");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(Parser.IMPORT);
@@ -815,11 +804,11 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
 
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc5");
+        setupLex(Parser.JAVADOCLINE, "javadoc5");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc6");
+        setupLex(Parser.JAVADOCLINE, "javadoc6");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(Parser.IMPORT);
@@ -829,11 +818,11 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
 
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc7");
+        setupLex(Parser.JAVADOCLINE, "javadoc7");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc8");
+        setupLex(Parser.JAVADOCLINE, "javadoc8");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(Parser.PUBLIC);
@@ -843,11 +832,11 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
 
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc9");
+        setupLex(Parser.JAVADOCLINE, "javadoc9");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTOKEN, "javadoc10");
+        setupLex(Parser.JAVADOCLINE, "javadoc10");
         setupLex(Parser.JAVADOCEND);
 
         setupLex(0);

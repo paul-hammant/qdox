@@ -25,7 +25,7 @@ import java.util.Stack;
 %token BYTE SHORT INT LONG CHAR FLOAT DOUBLE BOOLEAN
 
 // strongly typed tokens/types
-%token <sval> IDENTIFIER JAVADOCTAG JAVADOCTOKEN
+%token <sval> IDENTIFIER JAVADOCTAG JAVADOCLINE
 %token <sval> BOOLEAN_LITERAL
 %token <sval> INTEGER_LITERAL
 %token <sval> LONG_LITERAL
@@ -78,12 +78,9 @@ javadocdescription:
 javadoctokens: | javadoctokens javadoctoken;
 
 javadoctoken: 
-    JAVADOCTOKEN {
+    JAVADOCLINE {
         appendToBuffer($1);
-    } |
-    JAVADOCEOL {
-        textBuffer.append('\n');
-    };
+    } 
 
 javadoctags: | javadoctags javadoctag;
 

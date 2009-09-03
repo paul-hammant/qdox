@@ -88,8 +88,9 @@ DoubleLiteral			= ( [0-9]+ ("." [0-9]+)? ({Exponent})? [dD] ) |
 UnicodeChar = \\u[a-fA-F0-9]{4}						  
 Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 Annotation = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
+JavadocEnd  = "*"+ "/"
 
-%state JAVADOC CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ENUM
+%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ENUM
 
 %%
 
@@ -182,9 +183,9 @@ Annotation = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
         return Parser.BRACECLOSE; 
     }
 
-    "/*" "*"+           { 
-        pushState(JAVADOC); 
-        javaDocNewLine = true; 
+    "/**" ~"*/" {
+        pushState(JAVADOC);
+        yypushStream(new java.io.StringReader(text().substring(2))); 
         return Parser.JAVADOCSTART;
     }
 
@@ -237,20 +238,22 @@ Annotation = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
           }
 }
 <JAVADOC> {
-    "*"+ "/"            { popState(); return Parser.JAVADOCEND; }
-    ^ [ \t]* "*"+ / [^/*] { /* ignore */ }
-    {Eol}               { javaDocNewLine = true; return Parser.JAVADOCEOL; }
-    {CommentChar}* "*"+ / [ \t\r\n] {
-        return Parser.JAVADOCTOKEN;
-    }
-    {CommentChar}+ { 
-        int token = Parser.JAVADOCTOKEN;
-        if (javaDocNewLine && yycharat(0) == '@') {
-                token = Parser.JAVADOCTAG;
-        }
-        javaDocNewLine = false;
-        return token;
-    }
+    "@"               { yypushback(1); pushState(JAVADOCTAG); }
+    [^ \t\r*@]		  { yypushback(1); pushState(JAVADOCLINE); }
+    "*"+ [ \t]* / "@" { pushState(JAVADOCTAG); }
+    "*"+ [ \t]?       { pushState(JAVADOCLINE); }
+    {JavadocEnd}      { popState(); yypopStream(); return Parser.JAVADOCEND; }
+}
+<JAVADOCLINE> {
+  ~{Eol}                           { popState(); return Parser.JAVADOCLINE; }
+  .* [^ \t*] / [ \t]* {JavadocEnd} { popState(); return Parser.JAVADOCLINE;}
+  {JavadocEnd}                     { popState(); popState(); yypopStream(); return Parser.JAVADOCEND; }
+}
+
+<JAVADOCTAG> {
+  "@" [^ \t\n\r]+  { return Parser.JAVADOCTAG; }
+  [ \t]+           { popState();pushState(JAVADOCLINE);}
+  {Eol}            { popState();return Parser.JAVADOCLINE;}
 }
 
 <CODEBLOCK> {

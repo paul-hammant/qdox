@@ -313,22 +313,18 @@ public class LexerTest extends TestCase {
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
 
-        assertLex(Parser.JAVADOCEOL, lexer);
+        assertLex(Parser.JAVADOCLINE, "\n",lexer);
         assertLex(Parser.JAVADOCTAG, "@hello", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "world", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
+        assertLex(Parser.JAVADOCLINE, "world\n", lexer);
 
         assertLex(Parser.JAVADOCTAG, "@a", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "b", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "c", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "d", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
+        assertLex(Parser.JAVADOCLINE, "b c d\n", lexer);
 
         assertLex(Parser.JAVADOCTAG, "@bye", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
+        assertLex(Parser.JAVADOCLINE, "\n",lexer);
 
         assertLex(Parser.JAVADOCTAG, "@bye:bye", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
+        assertLex(Parser.JAVADOCLINE, "\n",lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
@@ -340,7 +336,7 @@ public class LexerTest extends TestCase {
         assertLex(Parser.JAVADOCSTART, lexer);
 
         assertLex(Parser.JAVADOCTAG, "@hello", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "world", lexer);
+        assertLex(Parser.JAVADOCLINE, "world", lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
@@ -352,10 +348,22 @@ public class LexerTest extends TestCase {
         assertLex(Parser.JAVADOCSTART, lexer);
         
         assertLex(Parser.JAVADOCTAG, "@foo", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "bar", lexer);
+        assertLex(Parser.JAVADOCLINE, "bar", lexer);
         
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
+    }
+
+    public void testDeepJavadocTag() throws Exception {
+        String in = "  /** *  *** * @m x \n" +
+        		"*/";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.JAVADOCSTART, lexer);
+        
+        assertLex(Parser.JAVADOCLINE, "*  *** * @m x \n", lexer);
+        
+        assertLex(Parser.JAVADOCEND, lexer);
+        assertLex(0, lexer); 
     }
 
     public void testDocCommentContainingAtSymbols() throws Exception {
@@ -369,19 +377,11 @@ public class LexerTest extends TestCase {
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
 
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "joe@truemesh.com", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "{@link", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "here}.", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "me", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "@home", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "geeks", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "@", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "play", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
+        assertLex(Parser.JAVADOCLINE, "\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "joe@truemesh.com\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "{@link here}.\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "me @home\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "geeks @ play\n", lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
@@ -397,16 +397,10 @@ public class LexerTest extends TestCase {
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
 
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "5", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "*", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "4", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "SELECT", lexer);
-        assertLex(Parser.JAVADOCTOKEN, "COUNT(*)", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "**stars**everywhere**", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
+        assertLex(Parser.JAVADOCLINE, "\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "5 * 4\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "SELECT COUNT(*)\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "**stars**everywhere** \n", lexer);
 
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
@@ -419,9 +413,8 @@ public class LexerTest extends TestCase {
                 + " *****/";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "blah", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
+        assertLex(Parser.JAVADOCLINE, "\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "blah\n", lexer);
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
     }
@@ -431,7 +424,7 @@ public class LexerTest extends TestCase {
                 + "/***blah***/public";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "blah", lexer);
+        assertLex(Parser.JAVADOCLINE, "blah", lexer);
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(Parser.PUBLIC, lexer);
         assertLex(0, lexer);
@@ -449,16 +442,12 @@ public class LexerTest extends TestCase {
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.JAVADOCSTART, lexer);
         
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "simple", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "indented", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "nospace", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCTOKEN, "multistar", lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
-        assertLex(Parser.JAVADOCEOL, lexer);
+        assertLex(Parser.JAVADOCLINE, "\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "simple\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "indented\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "nospace\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "multistar\n", lexer);
+        assertLex(Parser.JAVADOCLINE, "\n", lexer);
         
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);

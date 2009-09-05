@@ -7,7 +7,34 @@
 
     <body>
 
-        <release version="1.9.1" date="2009-05-05">
+    <release version="1.10" date="2009-09-04">        
+		<action dev="rfscholte" type="update" issue="QDOX-171" due-to="Vincent Siveton">
+			AbstractJavaEntity#getCodeBlock() skips Javadoc separator
+		</action>
+		<action dev="rfscholte" type="update" issue="QDOX-173" due-to="Vincent Siveton">
+			Unwanted DocletTag.getParameters()[0]=< in generic case
+		</action>		 			
+		<action dev="rfscholte" type="update" issue="QDOX-82" due-to="Grégory Joseph">
+			Multilined tag attribute values not working anymore
+		</action>
+		<action dev="rfscholte" type="update" issue="QDOX-168" due-to="Robert Scholte">
+			Parsing JavadocComment improvement
+		</action>		
+		<action dev="rfscholte" type="update" issue="QDOX-176" due-to="Benjamin Bentmann">
+			Add method to safely and easily get the package name for a JavaClass
+		</action>
+		<action dev="rfscholte" type="update" issue="QDOX-146" due-to="Grégory Joseph">
+			Retaining whitespace in comments
+		</action>
+		<action dev="rfscholte" type="update" issue="QDOX-164" due-to="Robert Scholte">
+			QDox Site overhaul
+		</action>
+		<action dev="rfscholte" type="update" issue="QDOX-151" due-to="Robert Scholte">
+			Introduce toString() according to the Java Language Specification
+		</action>		
+    </release>
+
+	<release version="1.9.1" date="2009-05-05">
         <action dev="rfscholte" type="update" issue="QDOX-152" due-to="Leonardo Uribe">
 			JavaClass.getFullyQualifiedName() does not work on version 1.9 (version 1.6.3 works without problem). Manual resolve scanning imports are required		
         </action>
@@ -55,7 +82,7 @@
 	        <action dev="rfscholte" type="update" issue="QDOX-127" due-to="Richard Craddock">
 					getInitializationExpression() includes comment text		
 	        </action>
-	        <action dev="pail" type="update" issue="QDOX-65" due-to="Jose Peleteiro">
+	        <action dev="paul" type="update" issue="QDOX-65" due-to="Jose Peleteiro">
 					More package information, not just package name.		
 	        </action>
 	        <action dev="rfscholte" type="update" issue="QDOX-98" due-to="Guillaume Nodet">

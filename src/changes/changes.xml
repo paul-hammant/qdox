@@ -12,7 +12,7 @@
 			AbstractJavaEntity#getCodeBlock() skips Javadoc separator
 		</action>
 		<action dev="rfscholte" type="update" issue="QDOX-173" due-to="Vincent Siveton">
-			Unwanted DocletTag.getParameters()[0]=< in generic case
+			Unwanted DocletTag.getParameters()[0]=&lt; in generic case
 		</action>		 			
 		<action dev="rfscholte" type="update" issue="QDOX-82" due-to="Grégory Joseph">
 			Multilined tag attribute values not working anymore

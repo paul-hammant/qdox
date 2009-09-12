@@ -429,7 +429,7 @@ member:
     constructor |
     static_block |
     class |
-	  enum |
+    enum |
     SEMI;
 
 memberend:
@@ -457,6 +457,9 @@ fields:
 extrafields: | 
     extrafields COMMA { line = lexer.getLine(); } arrayidentifier {
         makeField($4, lexer.getCodeBody());
+    } | 
+    extrafields COMMA javadoc { line = lexer.getLine(); } arrayidentifier {
+        makeField($5, lexer.getCodeBody());
     };
 
 

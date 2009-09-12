@@ -1011,6 +1011,19 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertTrue("Public", modifiers.contains("public"));
     }
 
+    public void testMultipleFieldsWithJavaDoc() throws Exception {
+    	String sourceCode = "class Thing {\n" +
+    			" /** some doc */\n" +
+    			" int a = 1,\n" +
+    			" /** more doc */\n" +
+    			" b = 2,\n" +
+    			" /** etc */\n" +
+    			" c = 3; }";
+    	JavaDocBuilder builder = new JavaDocBuilder();
+    	builder.addSource(new StringReader(sourceCode));
+    }
+
+    
     public void testJiraQdox117() throws Exception {
     	JavaDocBuilder builder = new JavaDocBuilder();
         String sourceCode = "" +

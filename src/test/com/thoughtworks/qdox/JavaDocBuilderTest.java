@@ -1021,6 +1021,13 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     			" c = 3; }";
     	JavaDocBuilder builder = new JavaDocBuilder();
     	builder.addSource(new StringReader(sourceCode));
+    	JavaClass javaClass = builder.getClasses()[0];
+    	JavaField fieldA = javaClass.getFieldByName("a");
+    	assertEquals("some doc", fieldA.getComment());
+    	JavaField fieldB = javaClass.getFields()[1];
+    	assertEquals("more doc", fieldB.getComment());
+    	JavaField fieldC = javaClass.getFields()[2];
+    	assertEquals("etc", fieldC.getComment());
     }
 
     

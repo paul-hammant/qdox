@@ -847,7 +847,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaField innerField = 
             builder.getClassByName("p2.B").getFieldByName("innerField");
         assertEquals(innerClass.asType(), innerField.getType());
-        assertEquals("p1.A$Inner", innerField.getType().getFullQualifiedName());
+        assertEquals("p1.A$Inner", innerField.getType().getFullyQualifiedName());
     }
 
     public void testJiraQdox71() {

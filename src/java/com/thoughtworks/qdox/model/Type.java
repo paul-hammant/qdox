@@ -70,12 +70,20 @@ public class Type implements Comparable, Serializable {
         return context;
     }
 
+    /**
+     * 
+     * @deprecated instead use getFullyQualifiedName()
+     */
     public String getFullQualifiedName() {
+        return getFullyQualifiedName();
+    }
+
+    public String getFullyQualifiedName() {
         return isResolved() ? fullName : name;
     }
-    
+
     public String getValue() {
-        return getFullQualifiedName().replaceAll( "\\$", "." );
+        return getFullyQualifiedName().replaceAll( "\\$", "." );
     }
     
     /**
@@ -157,8 +165,8 @@ public class Type implements Comparable, Serializable {
     }
 
     public String toString() {
-        if (dimensions == 0) return getFullQualifiedName();
-        StringBuffer buff = new StringBuffer(getFullQualifiedName());
+        if (dimensions == 0) return getFullyQualifiedName();
+        StringBuffer buff = new StringBuffer(getFullyQualifiedName());
         for (int i = 0; i < dimensions; i++) buff.append("[]");
         String result = buff.toString();
         return result;
@@ -187,11 +195,11 @@ public class Type implements Comparable, Serializable {
     	
         JavaClassParent javaClassParent = getJavaClassParent();
         if (javaClassParent != null) {
-        	result = javaClassParent.getNestedClassByName(getFullQualifiedName());
+        	result = javaClassParent.getNestedClassByName(getFullyQualifiedName());
 	        if(result == null) {
 	            JavaClassContext context = javaClassParent.getJavaClassContext();
 	            if (context.getClassLibrary() != null) {
-	            	result = context.getClassByName(getFullQualifiedName());
+	            	result = context.getClassByName(getFullyQualifiedName());
 	            }
 	        }
         }

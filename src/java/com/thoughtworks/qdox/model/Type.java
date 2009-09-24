@@ -236,7 +236,8 @@ public class Type implements Comparable, Serializable {
         if (value == null || value.length() == 0 || value.indexOf('.') > -1) {
             return false;
         } else {
-           return "boolean".equals(value)
+           return "void".equals(value)           
+            || "boolean".equals(value)
             || "byte".equals(value)
             || "char".equals(value)
             || "short".equals(value)

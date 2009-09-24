@@ -55,9 +55,19 @@ public class TypeTest extends TestCase {
         assertEquals("java.util.AbstractSet", superClass.getFullyQualifiedName());
     }
 
+    public void testIsPrimitive() throws Exception {
+    	ClassLibrary classLibrary = new ClassLibrary( ClassLoader.getSystemClassLoader() );
+        JavaDocBuilder builder = new JavaDocBuilder(classLibrary);
+        
+        JavaClass javaClass = builder.getClassByName("java.lang.Object");
+        assertEquals(true, javaClass.getMethodBySignature("notify", null).getReturns().isPrimitive());
+
+    } 
+
     private void assertNotEquals(Object o1, Object o2) {
         assertTrue(o2.toString() + " should not equal " + o1.toString(),
                 !o2.equals(o1));
     }
 
+    
 }

@@ -38,7 +38,7 @@ public class DefaultDocletTag implements DocletTag {
 
     public String[] getParameters() {
         if (parameters == null) {
-            parameters = TagParser.parseWords(value);
+            parameters = TagParser.parseParameters(value);
         }
         return parameters;
     }

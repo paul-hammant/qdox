@@ -1045,6 +1045,20 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals("\"test blah blah\"", javaMethod.getAnnotations()[0].getNamedParameter("description").toString());
     }
     
+    public void testJiraQdox134() throws Exception {
+        String sourceCode = "/**\n" + 
+        		"*\n" + 
+        		"@myTag name=TestClass attrs=Something1,Something2,Something3\n" + 
+        		"*/\n" + 
+        		"public class TestClassImpl {\r\n" + 
+        		"}";
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.addSource(new StringReader(sourceCode));
+        JavaClass jClass = builder.getClasses()[0];
+        assertEquals( Arrays.toString( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}), Arrays.toString(jClass.getTags()[0].getParameters()));
+        //assertTrue( Arrays.equals( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}, jClass.getTags()[0].getParameters() ));
+    }
+    
     //for qdox-146
     public void testWhitespaceCanBeRetainedInJavadoc() {
         String sourceCode = ""

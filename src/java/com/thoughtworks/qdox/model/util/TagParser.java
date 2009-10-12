@@ -83,4 +83,42 @@ public class TagParser {
         return wordArray;
     }
     
+    /**
+     * Extract an array of parameters as name or name=value representation
+     * @since 1.11  
+     */
+    public static String[] parseParameters(String tagValue) {
+        StreamTokenizer tokenizer = makeTokenizer(tagValue);
+        ArrayList wordList = new ArrayList();
+        try {
+            while (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
+                StringBuilder param = new StringBuilder();
+                if (tokenizer.sval != null) {
+                    param.append( tokenizer.sval );
+                }
+                
+                //check for parameterValues
+                while (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
+                    if(tokenizer.sval == null && ('=' == (char)tokenizer.ttype || ','== (char)tokenizer.ttype)){
+                        param.append( Character.toString( (char)tokenizer.ttype ) );
+                        
+                        //file was parsed correctly, so this works.
+                        tokenizer.nextToken();
+                        param.append(tokenizer.sval); 
+                    }
+                    else {
+                        tokenizer.pushBack(); break;
+                    }
+                }
+                wordList.add(param.toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("error tokenizing tag");
+        }
+        String[] wordArray = new String[wordList.size()];
+        wordList.toArray(wordArray);
+        return wordArray;
+    }
+    
 }

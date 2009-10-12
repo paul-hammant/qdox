@@ -25,11 +25,15 @@ class MockBuilder implements Builder {
     private ExpectationCounter myBeginClassCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder BeginClassCalls");
     private ExpectationList myBeginClassParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.beginClass() : com.thoughtworks.qdox.parser.structs.ClassDef def");
     private ExpectationCounter myEndClassCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder EndClassCalls");
-    private ExpectationCounter myAddMethodCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder AddMethodCalls");
-    private ExpectationList myAddMethodParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.addMethod() : com.thoughtworks.qdox.parser.structs.MethodDef def");
+    private ExpectationCounter myBeginMethodCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder BeginMethodCalls");
+    private ExpectationCounter myEndMethodCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder EndMethodCalls");
+    private ExpectationList myEndMethodParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.endMethod() : com.thoughtworks.qdox.parser.structs.MethodDef def");
     private ExpectationCounter myAddFieldCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder AddFieldCalls");
     private ExpectationList myAddFieldParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.addField() : com.thoughtworks.qdox.parser.structs.FieldDef def");
+    private ExpectationCounter myAddParameterCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder AddParameterCalls");
+    private ExpectationList myAddParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.addParameter() : com.thoughtworks.qdox.parser.structs.FieldDef def");
 
+    
     public void setExpectedAddPackageCalls(int calls) {
         myAddPackageCalls.setExpected(calls);
     }
@@ -103,17 +107,20 @@ class MockBuilder implements Builder {
         myEndClassCalls.inc();
     }
 
-    public void setExpectedAddMethodCalls(int calls) {
-        myAddMethodCalls.setExpected(calls);
+    public void beginMethod() {
+        myBeginMethodCalls.inc();
+    }
+    public void setExpectedEndMethodCalls(int calls) {
+        myEndMethodCalls.setExpected(calls);
     }
 
     public void addExpectedAddMethodValues(MethodDef arg0) {
-        myAddMethodParameter0Values.addExpected(arg0);
+        myEndMethodParameter0Values.addExpected(arg0);
     }
 
-    public void addMethod(MethodDef arg0) {
-        myAddMethodCalls.inc();
-        myAddMethodParameter0Values.addActual(arg0);
+    public void endMethod(MethodDef arg0) {
+        myEndMethodCalls.inc();
+        myEndMethodParameter0Values.addActual(arg0);
     }
 
     public void setExpectedAddFieldCalls(int calls) {
@@ -146,8 +153,9 @@ class MockBuilder implements Builder {
         myBeginClassCalls.verify();
         myBeginClassParameter0Values.verify();
         myEndClassCalls.verify();
-        myAddMethodCalls.verify();
-        myAddMethodParameter0Values.verify();
+        myBeginMethodCalls.verify();
+        myEndMethodCalls.verify();
+        myEndMethodParameter0Values.verify();
         myAddFieldCalls.verify();
         myAddFieldParameter0Values.verify();
     }
@@ -160,4 +168,16 @@ class MockBuilder implements Builder {
     	return null;
     }
 
+    public void setExpectedAddParameterCalls(int calls) {
+        myAddParameterCalls.setExpected(calls);
+    }
+
+    public void addExpectedAddParameterValues(FieldDef arg0) {
+        myAddParameter0Values.addExpected(arg0);
+    }
+
+    public void addParameter(FieldDef arg0) {
+        myAddParameterCalls.inc();
+        myAddParameter0Values.addActual(arg0);
+    }
 }

@@ -2,7 +2,7 @@ package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
 
-public class JavaParameter implements Serializable {
+public class JavaParameter extends AbstractBaseJavaEntity implements Serializable {
 
     public static final JavaParameter[]
             EMPTY_ARRAY = new JavaParameter[0];

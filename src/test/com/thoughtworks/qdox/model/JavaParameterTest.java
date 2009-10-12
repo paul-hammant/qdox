@@ -13,7 +13,7 @@ public class JavaParameterTest extends TestCase {
         assertNull(p.getParentMethod());
 
         JavaMethod m = new JavaMethod();
-        m.setParameters(new JavaParameter[]{p});
+        m.addParameter(p);
         assertSame(m, p.getParentMethod());
     }
 

@@ -47,10 +47,8 @@ public class JavaMethodTest extends TestCase {
             new Type("FishException"),
             new Type("FruitException"),
         });
-        mth.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int"), "count"),
-            new JavaParameter(new Type("MyThing"), "t")
-        });
+        mth.addParameter(new JavaParameter(new Type("int"), "count"));
+        mth.addParameter(new JavaParameter(new Type("MyThing"), "t"));
     }
 
     public void testGetCodeBlockSimple() throws Exception {
@@ -62,28 +60,24 @@ public class JavaMethodTest extends TestCase {
     public void testGetCodeBlockOneParam() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
-        mth.setParameters(new JavaParameter[]{new JavaParameter(new Type("String"), "thingy")});
+        mth.addParameter(new JavaParameter(new Type("String"), "thingy"));
         assertEquals("void blah(String thingy);\n", mth.getCodeBlock());
     }
 
     public void testGetCodeBlockTwoParams() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
-        mth.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int"), "count"),
-            new JavaParameter(new Type("MyThing"), "t")
-        });
+        mth.addParameter(new JavaParameter(new Type("int"), "count"));
+        mth.addParameter(new JavaParameter(new Type("MyThing"), "t"));
         assertEquals("void blah(int count, MyThing t);\n", mth.getCodeBlock());
     }
 
     public void testGetCodeBlockThreeParams() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
-        mth.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int"), "count"),
-            new JavaParameter(new Type("MyThing"), "t"),
-            new JavaParameter(new Type("java.lang.Meat"), "beef")
-        });
+        mth.addParameter(new JavaParameter(new Type("int"), "count"));
+        mth.addParameter(new JavaParameter(new Type("MyThing"), "t"));
+        mth.addParameter(new JavaParameter(new Type("java.lang.Meat"), "beef"));
         assertEquals("void blah(int count, MyThing t, java.lang.Meat beef);\n", mth.getCodeBlock());
     }
 
@@ -149,10 +143,8 @@ public class JavaMethodTest extends TestCase {
     public void testGetCodeBlockParamArray() throws Exception {
         mth.setName("blah");
         mth.setReturns(new Type("void"));
-        mth.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int", 2), "count"),
-            new JavaParameter(new Type("MyThing", 1), "t")
-        });
+        mth.addParameter(new JavaParameter(new Type("int", 2), "count"));
+        mth.addParameter(new JavaParameter(new Type("MyThing", 1), "t"));
         assertEquals("void blah(int[][] count, MyThing[] t);\n", mth.getCodeBlock());
     }
 
@@ -209,46 +201,36 @@ public class JavaMethodTest extends TestCase {
 
     public void testEqualsWithParameters() throws Exception {
         mth.setName("thing");
-        mth.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int", 1), "blah"),
-            new JavaParameter(new Type("java.lang.String", 2), "thing"),
-            new JavaParameter(new Type("X", 3), "")
-        });
+        mth.addParameter(new JavaParameter(new Type("int", 1), "blah"));
+        mth.addParameter(new JavaParameter(new Type("java.lang.String", 2), "thing"));
+        mth.addParameter(new JavaParameter(new Type("X", 3), ""));
         mth.setReturns(new Type("void"));
 
         JavaMethod m2 = new JavaMethod();
         m2.setName("thing");
-        m2.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int", 1), "blah"),
-            new JavaParameter(new Type("java.lang.String", 2), "anotherName"),
-            new JavaParameter(new Type("X", 3), "blah")
-        });
+        m2.addParameter(new JavaParameter(new Type("int", 1), "blah"));
+        m2.addParameter(new JavaParameter(new Type("java.lang.String", 2), "anotherName"));
+        m2.addParameter(new JavaParameter(new Type("X", 3), "blah"));
         m2.setReturns(new Type("void"));
 
         JavaMethod m3 = new JavaMethod();
         m3.setName("thing");
-        m3.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int", 1), "blah"),
-            new JavaParameter(new Type("java.lang.String", 2), "thing"),
-        });
+        m3.addParameter(new JavaParameter(new Type("int", 1), "blah"));
+        m3.addParameter(new JavaParameter(new Type("java.lang.String", 2), "thing"));
         m3.setReturns(new Type("void"));
 
         JavaMethod m4 = new JavaMethod();
         m4.setName("thing");
-        m4.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int", 1), "blah"),
-            new JavaParameter(new Type("java.lang.String", 2), "thing"),
-            new JavaParameter(new Type("TTTTTTTT", 3), "blah") // name
-        });
+        m4.addParameter(new JavaParameter(new Type("int", 1), "blah"));
+        m4.addParameter(new JavaParameter(new Type("java.lang.String", 2), "thing"));
+        m4.addParameter(new JavaParameter(new Type("TTTTTTTT", 3), "blah")); //name
         m4.setReturns(new Type("void"));
 
         JavaMethod m5 = new JavaMethod();
         m5.setName("thing");
-        m5.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int", 1), "blah"),
-            new JavaParameter(new Type("java.lang.String", 2), "thing"),
-            new JavaParameter(new Type("X", 9), "blah") // dimension
-        });
+        m5.addParameter(new JavaParameter(new Type("int", 1), "blah"));
+        m5.addParameter(new JavaParameter(new Type("java.lang.String", 2), "thing"));
+        m5.addParameter(new JavaParameter(new Type("X", 9), "blah")); // dimension
         m5.setReturns(new Type("void"));
 
         assertEquals(mth, m2);
@@ -260,28 +242,22 @@ public class JavaMethodTest extends TestCase {
 
     public void testHashCode() throws Exception {
         mth.setName("thing");
-        mth.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int", 1), "blah"),
-            new JavaParameter(new Type("java.lang.String", 2), "thing"),
-            new JavaParameter(new Type("X", 3), "")
-        });
+        mth.addParameter(new JavaParameter(new Type("int", 1), "blah"));
+        mth.addParameter(new JavaParameter(new Type("java.lang.String", 2), "thing"));
+        mth.addParameter(new JavaParameter(new Type("X", 3), ""));
         mth.setReturns(new Type("void"));
 
         JavaMethod m2 = new JavaMethod();
         m2.setName("thing");
-        m2.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int", 1), "blah"),
-            new JavaParameter(new Type("java.lang.String", 2), "anotherName"),
-            new JavaParameter(new Type("X", 3), "blah")
-        });
+        m2.addParameter(new JavaParameter(new Type("int", 1), "blah"));
+        m2.addParameter(new JavaParameter(new Type("java.lang.String", 2), "anotherName"));
+        m2.addParameter(new JavaParameter(new Type("X", 3), "blah"));
         m2.setReturns(new Type("void"));
 
         JavaMethod m3 = new JavaMethod();
         m3.setName("thing");
-        m3.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int", 1), "blah"),
-            new JavaParameter(new Type("java.lang.String", 2), "thing"),
-        });
+        m3.addParameter(new JavaParameter(new Type("int", 1), "blah"));
+        m3.addParameter(new JavaParameter(new Type("java.lang.String", 2), "thing"));
         m3.setReturns(new Type("void"));
 
         JavaMethod c1 = new JavaMethod();
@@ -299,10 +275,8 @@ public class JavaMethodTest extends TestCase {
 
     public void testSignatureMatches() throws Exception {
         mth.setName("thing");
-        mth.setParameters(new JavaParameter[]{
-            new JavaParameter(new Type("int"), "x"),
-            new JavaParameter(new Type("long", 2), "y")
-        });
+        mth.addParameter(new JavaParameter(new Type("int"), "x"));
+        mth.addParameter(new JavaParameter(new Type("long", 2), "y"));
         mth.setReturns(new Type("void"));
 
         Type[] correctTypes = new Type[]{
@@ -332,14 +306,10 @@ public class JavaMethodTest extends TestCase {
     }
 
     public void testCanGetParameterByName() throws Exception {
-        JavaParameter paramX =
-                new JavaParameter(new Type("int"), "x");
-        JavaParameter[] parameters = new JavaParameter[]{
-            paramX,
-            new JavaParameter(new Type("string"), "y")
-        };
-        mth.setParameters(parameters);
-
+        JavaParameter paramX = new JavaParameter(new Type("int"), "x");
+        mth.addParameter(paramX);
+        mth.addParameter(new JavaParameter(new Type("string"), "y"));
+        
         assertEquals(paramX, mth.getParameterByName("x"));
         assertEquals(null, mth.getParameterByName("z"));
     }
@@ -349,8 +319,7 @@ public class JavaMethodTest extends TestCase {
     	JavaMethod mthd = new JavaMethod(new Type("boolean"),"equals");
     	cls.addMethod(mthd);
     	mthd.setModifiers(new String[]{"public"});
-    	JavaParameter prmtr = new JavaParameter(new Type("java.lang.Object"), null);
-    	mthd.setParameters(new JavaParameter[] {prmtr});
+    	mthd.addParameter(new JavaParameter(new Type("java.lang.Object"), null));
     	assertEquals("public boolean java.lang.Object.equals(java.lang.Object)", mthd.toString());
     	
     }

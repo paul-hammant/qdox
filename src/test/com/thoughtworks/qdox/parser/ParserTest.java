@@ -1067,8 +1067,9 @@ public class ParserTest extends TestCase {
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
         p1.type = new TypeDef("int");
-        mth.params.add(p1);
+        
         builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddParameterValues( p1 );
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -1107,8 +1108,9 @@ public class ParserTest extends TestCase {
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
         p1.type = new TypeDef("java.lang.String");
-        mth.params.add(p1);
+
         builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddParameterValues( p1 );
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -1146,12 +1148,12 @@ public class ParserTest extends TestCase {
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
         p1.type = new TypeDef("int");
-        mth.params.add(p1);
         FieldDef p2 = new FieldDef();
         p2.name = "name";
         p2.type = new TypeDef("String");
-        mth.params.add(p2);
         builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddParameterValues( p1 );
+        builder.addExpectedAddParameterValues( p2 );
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -1192,16 +1194,16 @@ public class ParserTest extends TestCase {
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
         p1.type = new TypeDef("int");
-        mth.params.add(p1);
         FieldDef p2 = new FieldDef();
         p2.name = "name";
         p2.type = new TypeDef("String");
-        mth.params.add(p2);
         FieldDef p3 = new FieldDef();
         p3.name = "x";
         p3.type = new TypeDef("boolean");
-        mth.params.add(p3);
         builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddParameterValues( p1 );
+        builder.addExpectedAddParameterValues( p2 );
+        builder.addExpectedAddParameterValues( p3 );
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -1240,9 +1242,9 @@ public class ParserTest extends TestCase {
         p1.type = new TypeDef("int");
         p1.modifiers.add("final");
         p1.modifiers.add("volatile");
-        mth.params.add(p1);
         builder.addExpectedAddMethodValues(mth);
-
+        builder.addExpectedAddParameterValues( p1 );
+        
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
@@ -1495,9 +1497,9 @@ public class ParserTest extends TestCase {
         FieldDef p1 = new FieldDef();
         p1.name = "count";
         p1.type = new TypeDef("int");
-        mth.params.add(p1);
 
         builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddParameterValues( p1 );
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -1540,14 +1542,14 @@ public class ParserTest extends TestCase {
         FieldDef p1 = new FieldDef();
         p1.name = "count";
         p1.type = new TypeDef("int");
-        mth.params.add(p1);
         FieldDef p2 = new FieldDef();
         p2.name = "thingy";
         p2.type = new TypeDef("java.lang.String");
-        mth.params.add(p2);
 
         builder.addExpectedAddMethodValues(mth);
-
+        builder.addExpectedAddParameterValues( p1 );
+        builder.addExpectedAddParameterValues( p2 );
+        
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
@@ -2279,9 +2281,9 @@ public class ParserTest extends TestCase {
         p1.name = "p1";
         p1.type = new TypeDef("int");
         p1.dimensions = 0;
-        mth.params.add(p1);
 
         builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddParameterValues( p1 );
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -2322,9 +2324,9 @@ public class ParserTest extends TestCase {
         p1.name = "p1";
         p1.type = new TypeDef("int");
         p1.dimensions = 1;
-        mth.params.add(p1);
 
         builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddParameterValues( p1 );
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -2369,9 +2371,9 @@ public class ParserTest extends TestCase {
         p1.name = "p1";
         p1.type = new TypeDef("int");
         p1.dimensions = 2;
-        mth.params.add(p1);
 
         builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddParameterValues( p1 );
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -2411,9 +2413,9 @@ public class ParserTest extends TestCase {
         p1.type = new TypeDef("int");
         p1.dimensions = 0;
         p1.isVarArgs = true;
-        mth.params.add(p1);
 
         builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddParameterValues(p1);
 
         // execute
         Parser parser = new Parser(lexer, builder);

@@ -466,34 +466,40 @@ extrafields: |
 // ----- METHOD
 
 method:
-    modifiers typeparams type IDENTIFIER methoddef dimensions opt_exceptions memberend {
+    modifiers typeparams type IDENTIFIER {
+      builder.beginMethod();
+    } methoddef dimensions opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.returnType = $3;
-        mth.dimensions = $6;
+        mth.dimensions = $7;
         mth.name = $4;
-        mth.body = $8;
-        builder.addMethod(mth);
+        mth.body = $9;
+        builder.endMethod(mth);
         mth = new MethodDef(); 
     } |
-    modifiers type IDENTIFIER methoddef dimensions opt_exceptions memberend {
+    modifiers type IDENTIFIER {
+      builder.beginMethod();
+    } methoddef dimensions opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear();
         mth.returnType = $2;
-        mth.dimensions = $5;
+        mth.dimensions = $6;
         mth.name = $3;
-        mth.body = $7;
-        builder.addMethod(mth);
+        mth.body = $8;
+        builder.endMethod(mth);
         mth = new MethodDef();
     };
 
 constructor:
-    modifiers IDENTIFIER methoddef opt_exceptions memberend {
+    modifiers IDENTIFIER {
+      builder.beginMethod();
+    } methoddef opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $2;
-        mth.body = $5;
-        builder.addMethod(mth);
+        mth.body = $6;
+        builder.endMethod(mth);
         mth = new MethodDef(); 
     };
 
@@ -517,7 +523,7 @@ param:
         param.type = $3;
         param.dimensions = $5.dimensions;
         param.isVarArgs = $4;
-        mth.params.add(param);
+        builder.addParameter(param);
         param = new FieldDef();
     };
 
@@ -525,7 +531,7 @@ varargs:
     /* empty */ { $$ = false; } |
     DOTDOTDOT   { $$ = true; } ;
 
-opt_annotations: | opt_annotations annotation;
+opt_annotations: | opt_annotations annotation { builder.addAnnotation((Annotation) $2); };
 
 opt_parammodifiers: |
     opt_parammodifiers modifier { param.modifiers.add($2); };

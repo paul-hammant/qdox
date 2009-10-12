@@ -435,11 +435,8 @@ public class JavaClassTest extends TestCase {
         JavaMethod method = new JavaMethod();
         method.setReturns(new Type("void"));
         method.setName("doStuff");
-        JavaParameter[] parameters = {
-            new JavaParameter(new Type("int"), "x"),
-            new JavaParameter(new Type("double"), "y"),
-        };
-        method.setParameters(parameters);
+        method.addParameter( new JavaParameter(new Type("int"), "x") );
+        method.addParameter( new JavaParameter(new Type("double"), "y") );
         cls.addMethod(method);
 
         Type[] correctTypes = type(new String[]{"int", "double"});
@@ -487,11 +484,7 @@ public class JavaClassTest extends TestCase {
 
     public void testGetBeanPropertiesFindsSimpleProperties() throws Exception {
         JavaMethod setFooMethod = new JavaMethod("setFoo");
-        setFooMethod.setParameters(
-            new JavaParameter[] {
-                new JavaParameter(new Type("int"), "foo")
-            }
-        );
+        setFooMethod.addParameter(new JavaParameter(new Type("int"), "foo"));
         cls.addMethod(setFooMethod);
 
         JavaMethod getFooMethod = new JavaMethod(new Type("int"), "getFoo");

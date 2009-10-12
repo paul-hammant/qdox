@@ -32,6 +32,7 @@ public class ModelBuilder implements Builder {
     private final JavaSource source;
     private JavaClassParent currentParent;
     private JavaClass currentClass;
+    private JavaMethod currentMethod;
     private List currentAnnoDefs;
     private String lastComment;
     private List lastTagSet;
@@ -187,7 +188,16 @@ public class ModelBuilder implements Builder {
     }
 
     public void addMethod(MethodDef def) {
-        JavaMethod currentMethod = new JavaMethod();
+    	beginMethod();
+    	endMethod(def);
+    }
+    
+    public void beginMethod() {
+    	currentMethod = new JavaMethod();
+    	setAnnotations(currentMethod);
+    }
+    
+    public void endMethod(MethodDef def) {
         currentMethod.setParentClass(currentClass);
         currentMethod.setLineNumber(def.lineNumber);
 
@@ -207,17 +217,6 @@ public class ModelBuilder implements Builder {
             currentMethod.setTypeParameters(typeParams);
         }
         
-        // parameters
-        {
-            JavaParameter[] params = new JavaParameter[def.params.size()];
-            int i = 0;
-            for (Iterator iterator = def.params.iterator(); iterator.hasNext();) {
-                FieldDef fieldDef = (FieldDef) iterator.next();
-                params[i++] = new JavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name, fieldDef.isVarArgs);
-            }
-            currentMethod.setParameters(params);
-        }
-
         // exceptions
         {
             Type[] exceptions = new Type[def.exceptions.size()];
@@ -239,9 +238,6 @@ public class ModelBuilder implements Builder {
 
         // javadoc
         addJavaDoc(currentMethod);
-
-        // annotations
-        setAnnotations( currentMethod );
 
         currentClass.addMethod(currentMethod);
     }
@@ -287,6 +283,12 @@ public class ModelBuilder implements Builder {
 
         currentClass.addField(currentField);
     }
+	
+	public void addParameter(FieldDef fieldDef) {
+        JavaParameter jParam = new JavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name, fieldDef.isVarArgs);
+        setAnnotations( jParam );
+        currentMethod.addParameter( jParam );
+	}
 
     private void setAnnotations( final AbstractBaseJavaEntity entity ) {
         if( !currentAnnoDefs.isEmpty() ) {

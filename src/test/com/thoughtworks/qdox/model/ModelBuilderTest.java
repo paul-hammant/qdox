@@ -366,18 +366,19 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
 
+        builder.addMethod(mth);
+
         FieldDef f1 = new FieldDef();
         f1.name = "count";
         f1.type = new TypeDef("int");
         f1.modifiers.add("final");
-        mth.params.add(f1);
+        builder.addParameter( f1 );
 
         FieldDef f2 = new FieldDef();
         f2.name = "name";
         f2.type = new TypeDef("String");
-        mth.params.add(f2);
+        builder.addParameter( f2 );
 
-        builder.addMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -392,21 +393,22 @@ public class ModelBuilderTest extends TestCase {
     public void testMethodParametersWithArrays() throws Exception {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
+        builder.addMethod(mth);
 
         FieldDef f1 = new FieldDef();
         f1.name = "count";
         f1.type = new TypeDef("int");
         f1.modifiers.add("final");
         f1.dimensions = 1;
-        mth.params.add(f1);
+        builder.addParameter( f1 );
+
 
         FieldDef f2 = new FieldDef();
         f2.name = "name";
         f2.type = new TypeDef("String");
         f2.dimensions = 2;
-        mth.params.add(f2);
+        builder.addParameter( f2 );
 
-        builder.addMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();

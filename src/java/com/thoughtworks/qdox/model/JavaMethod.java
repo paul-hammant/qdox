@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.beans.Introspector;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -8,7 +9,8 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
 
 	private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
     private Type returns = Type.VOID;
-    private JavaParameter[] parameters = JavaParameter.EMPTY_ARRAY;
+    private List parameters = new LinkedList();
+    private JavaParameter[] parametersArray = JavaParameter.EMPTY_ARRAY;
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
     private String sourceCode;
@@ -30,7 +32,11 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     }
 
     public JavaParameter[] getParameters() {
-        return parameters;
+        if(parametersArray == null) {
+            parametersArray = new JavaParameter[parameters.size()];
+            parameters.toArray( parametersArray );
+        }
+        return parametersArray;
     }
 
     public JavaParameter getParameterByName(String name) {
@@ -73,8 +79,8 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
 
         result.write(name);
         result.write('(');
-        for (int i = 0; i < parameters.length; i++) {
-            JavaParameter parameter = parameters[i];
+        for (int i = 0; i < getParameters().length; i++) {
+            JavaParameter parameter = parametersArray[i];
             if (i > 0) result.write(", ");
             if (isDeclaration) {
                 result.write(parameter.getType().toString());
@@ -136,11 +142,10 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         this.returns = returns;
     }
 
-    public void setParameters(JavaParameter[] parameters) {
-        for (int i = 0; i < parameters.length; i++) {
-            parameters[i].setParentMethod(this);
-        }
-        this.parameters = parameters;
+    public void addParameter(JavaParameter javaParameter) {
+        javaParameter.setParentMethod( this );
+        parameters.add( javaParameter );
+        parametersArray = null;
     }
 
     public void setExceptions(Type[] exceptions) {
@@ -180,10 +185,10 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
      */
     public boolean signatureMatches(String name, Type[] parameterTypes) {
         if (!name.equals(this.name)) return false;
-        parameterTypes = parameterTypes == null ? new Type[0] : parameterTypes;
-        if (parameterTypes.length != this.parameters.length) return false;
-        for (int i = 0; i < parameters.length; i++) {
-            if (!parameters[i].getType().equals(parameterTypes[i])) {
+        parameterTypes = (parameterTypes == null ? new Type[0] : parameterTypes);
+        if (parameterTypes.length != this.getParameters().length) return false;
+        for (int i = 0; i < parametersArray.length; i++) {
+            if (!parametersArray[i].getType().equals(parameterTypes[i])) {
                 return false;
             }
         }

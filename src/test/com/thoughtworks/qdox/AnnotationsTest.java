@@ -4,6 +4,7 @@ import java.io.StringReader;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.Type;
@@ -227,5 +228,18 @@ public class AnnotationsTest extends TestCase {
     			" VALUE(\"value\") }\n" +
     			"}";   
     	builder.addSource(new StringReader(source));
+    }
+    
+    public void testParameterAnnotations() throws Exception {
+        String source = "class Foo {\n" +
+        		"  @NativeAccessible\n" + 
+        		"  static void get_tmp_dir( String targetfilename, @ParamInfo( direction = ParamInfo.Direction.OUT ) byte[] tmpDirOutput ) throws IOException {}\n" + 
+        		"}";
+        builder.addSource( new StringReader( source ) );
+        JavaMethod jMethod = builder.getClasses()[0].getMethods()[0];
+        assertEquals( "NativeAccessible", jMethod.getAnnotations()[0].getType().getValue() );
+        Annotation annotation = jMethod.getParameters()[1].getAnnotations()[0];
+        assertEquals( "ParamInfo", annotation.getType().getValue() );
+        assertEquals( "ParamInfo.Direction.OUT", annotation.getProperty( "direction" ).getParameterValue() );
     }
 }

@@ -274,15 +274,15 @@ public class JavaDocBuilder implements Serializable {
             Class exception = exceptions[j];
             methodDef.exceptions.add(exception.getName());
         }
+        binaryBuilder.addMethod(methodDef);
         for (int j = 0; j < parameterTypes.length; j++) {
             FieldDef param = new FieldDef();
             Class parameterType = parameterTypes[j];
             param.name = "p" + j;
             param.type = getTypeDef(parameterType);
             param.dimensions = getDimension(parameterType);
-            methodDef.params.add(param);
+            binaryBuilder.addParameter( param );
         }
-        binaryBuilder.addMethod(methodDef);
     }
 
     private static final int getDimension(Class c) {

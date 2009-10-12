@@ -23,8 +23,11 @@ public interface Builder {
 
     void endClass();
 
-    void addMethod(MethodDef def);
+    void beginMethod();
+    void endMethod(MethodDef def);
 
+    void addParameter(FieldDef def);
+    
     void addField(FieldDef def);
 
     void addAnnotation(Annotation annotation);

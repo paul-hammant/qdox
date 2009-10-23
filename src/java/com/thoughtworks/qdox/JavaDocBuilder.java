@@ -80,7 +80,7 @@ import java.util.StringTokenizer;
  */
 public class JavaDocBuilder implements Serializable {
 
-	private final JavaClassContext context;;
+	private final JavaClassContext context;
 	
     private Set packages = new HashSet();
     private List sources = new ArrayList();
@@ -88,11 +88,17 @@ public class JavaDocBuilder implements Serializable {
     private String encoding = System.getProperty("file.encoding");
     private boolean debugLexer;
     private boolean debugParser;
-    private ErrorHandler errorHandler;
+    private ErrorHandler errorHandler = new DefaultErrorHandler();
     private Map allPackages = new HashMap();
 
     public static interface ErrorHandler {
         void handle(ParseException parseException);
+    }
+
+    public static class DefaultErrorHandler implements ErrorHandler, Serializable {
+        public void handle(ParseException parseException) {
+            throw parseException;
+        }
     }
 
     public JavaDocBuilder() {
@@ -322,11 +328,7 @@ public class JavaDocBuilder implements Serializable {
             parser.parse();
         } catch (ParseException e) {
             e.setSourceInfo(sourceInfo);
-            if (errorHandler == null) {
-                throw e;
-            } else {
-                errorHandler.handle(e);
-            }
+            errorHandler.handle(e);
         }
         JavaSource source = builder.getSource();
         sources.add(source);

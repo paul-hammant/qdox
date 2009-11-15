@@ -71,7 +71,7 @@ public class EnumsModelTest extends TestCase {
         assertNotNull( enum2d.getComment() );
         assertEquals( 0, enum2d.getModifiers().length );
         assertEquals( 0, enum2d.getAnnotations().length );
-        assertEquals( "X$Enum2", enum2d.getType().toString() );
+        assertEquals( "X$Enum2", enum2d.getType().getFullyQualifiedName() );
         assertEquals( "d", enum2d.getName() );
 
         //---
@@ -156,7 +156,7 @@ public class EnumsModelTest extends TestCase {
         assertNull( enum1c.getComment() );
         assertEquals( 0, enum1c.getModifiers().length );
         assertEquals( 0, enum1c.getAnnotations().length );
-        assertEquals( "X$EnumWithConstructors", enum1c.getType().toString() );
+        assertEquals( "X$EnumWithConstructors", enum1c.getType().getFullyQualifiedName() );
         assertEquals( "c", enum1c.getName() );
 
         //---
@@ -164,7 +164,7 @@ public class EnumsModelTest extends TestCase {
         JavaField enum1d = fields[1];
         assertNull( enum1d.getComment() );
         assertEquals( 0, enum1d.getModifiers().length );
-        assertEquals( "X$EnumWithConstructors", enum1d.getType().toString() );
+        assertEquals( "X$EnumWithConstructors", enum1d.getType().getFullyQualifiedName() );
         assertEquals( "d", enum1d.getName() );
 
         //---

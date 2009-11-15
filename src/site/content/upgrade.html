@@ -3,6 +3,15 @@
     <title>Upgrading</title>
   </head>
   <body>
+  <h2>Upgrading to 1.11 or above</h2>
+      <p>
+        This section describes what needs to be done when upgrading to QDox
+        1.11.</a>.
+      </p>
+      <h2>Things that might break your code</h2>
+        <p>In some cases the Type.toString() was inconsequent (<a href="http://jira.codehaus.org/browse/QDOX-182">QDOX-182</a>) so we had to change the implementation.
+         If you use this in combination with innerClasses you should use Type.getFullyQualifiedName() to get the same result.
+        </p>
   <h2>Upgrading to 1.10 or above</h2>
       <p>
         This section describes what needs to be done when upgrading to QDox

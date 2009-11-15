@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.io.StringReader;
+
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.JavaClassContext;
@@ -63,11 +65,22 @@ public class TypeTest extends TestCase {
         assertEquals(true, javaClass.getMethodBySignature("notify", null).getReturns().isPrimitive());
 
     } 
+    
+    public void testInnerClassToString() {
+        ClassLibrary classLibrary = new ClassLibrary( ClassLoader.getSystemClassLoader() );
 
+        String source = "public class Outer {\n" +
+            " private Inner ia;" +
+            " public class Inner { }" +
+            "}";
+        JavaDocBuilder builder = new JavaDocBuilder(classLibrary);
+        builder.addSource( new StringReader( source )  );
+        assertEquals("Outer.Inner", builder.getClassByName( "Outer" ).getFieldByName( "ia" ).getType().toString());
+        assertEquals("Outer.Inner", builder.getClassByName( "Outer" ).getFieldByName( "ia" ).getType().toGenericString());
+    }
+    
     private void assertNotEquals(Object o1, Object o2) {
         assertTrue(o2.toString() + " should not equal " + o1.toString(),
                 !o2.equals(o1));
     }
-
-    
 }

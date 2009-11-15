@@ -78,16 +78,61 @@ public class Type implements Comparable, Serializable {
         return getFullyQualifiedName();
     }
 
+    /**
+     * Returns the FQN of an Object or the handler of a Type
+     * If the name of the can't be resolved based on the imports and the classes on the classpath the name will be returned
+     * InnerClasses will use the $ sign
+     * 
+     * Some examples how names will be translated 
+     * <pre>
+     * Object > java.lang.Object
+     * java.util.List > java.util.List
+     * ?  > ?
+     * T  > T
+     * anypackage.Outer.Inner > anypackage.Outer$Inner
+     * </pre>
+     * 
+     * @return
+     */
     public String getFullyQualifiedName() {
+        
         return isResolved() ? fullName : name;
     }
 
+    /**
+     * The FQN representation of an Object for code usage
+     * This implementation ignores generics
+     *
+     * Some examples how Objects will be translated
+     * <pre>
+     * Object > java.lang.object
+     * java.util.List<T> > java.util.List
+     * ? > ?
+     * T > T
+     * anypackage.Outer.Inner > anypackage.Outer.Inner
+     * </pre>
+     * 
+     * @return type representation for code usage
+     */
     public String getValue() {
         return getFullyQualifiedName().replaceAll( "\\$", "." );
     }
     
     /**
+     * The FQN representation of an Object for code usage
+     * This implementation ignores generics
+     *
+     * Some examples how Objects will be translated
+     * <pre>
+     * Object > java.lang.object
+     * java.util.List<T> > java.util.List
+     * ? > ?
+     * T > T
+     * anypackage.Outer.Inner > anypackage.Outer.Inner
+     * </pre>
+
      * @since 1.8
+     * @return generic type representation for code usage 
      */
     public String getGenericValue() {
     	StringBuffer result = new StringBuffer(getValue());
@@ -139,6 +184,11 @@ public class Type implements Comparable, Serializable {
     	return result;
     }
 
+    /**
+     * Checks if the FQN of this Type is resolved 
+     * 
+     * @return 
+     */
     public boolean isResolved() {
         if (fullName == null && context != null) {
             fullName = context.resolveType(name);
@@ -156,22 +206,49 @@ public class Type implements Comparable, Serializable {
         return getValue().compareTo(((Type) o).getValue());
     }
 
+    /**
+     * Returns true if this Type is an array
+     * 
+     * @return
+     */
     public boolean isArray() {
         return dimensions > 0;
     }
 
+    /**
+     * Returns the depth of this array, 0 if it's not an array
+     * 
+     * @return The depth of this array
+     */
     public int getDimensions() {
         return dimensions;
     }
 
+    /**
+     * Returns getValue() extended with the array information 
+     * 
+     * @return
+     */
     public String toString() {
-        if (dimensions == 0) return getFullyQualifiedName();
-        StringBuffer buff = new StringBuffer(getFullyQualifiedName());
+        if (dimensions == 0) return getValue();
+        StringBuffer buff = new StringBuffer(getValue());
         for (int i = 0; i < dimensions; i++) buff.append("[]");
         String result = buff.toString();
         return result;
     }
 
+    /**
+     * Returns getGenericValue() extended with the array information
+     * 
+     * <pre>
+     * Object > java.lang.Object
+     * Object[] > java.lang.Object[]
+     * List<Object> > java.lang.List<java.lang.Object>
+     * Outer.Inner > Outer.Inner 
+     * Outer.Inner<Object>[][] > Outer.Inner<java.lang.Object>[][] 
+     * </pre>
+     * @return 
+     */
     public String toGenericString() {
         if (dimensions == 0) return getGenericValue();
         StringBuffer buff = new StringBuffer(getGenericValue());

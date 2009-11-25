@@ -1,5 +1,9 @@
 package com.thoughtworks.qdox.model.annotation;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.StringTokenizer;
 
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
@@ -10,6 +14,7 @@ import com.thoughtworks.qdox.model.Type;
 
 public class AnnotationFieldRef implements AnnotationValue {
 
+    String[] myArray = new String[]{"unchecked"};
     private final int[] parts;
 
     private final String name;
@@ -108,19 +113,19 @@ public class AnnotationFieldRef implements AnnotationValue {
 
     public JavaField getField() {
         if( fieldIndex < 0 ) {
-            if( context.getParent() instanceof JavaClass ) {
-                JavaClass javaClass = (JavaClass) context.getParent();
-                field = resolveField( javaClass, 0, parts.length );
+            if( context.getParentClass() != null ) {
+                JavaClass javaClass = context.getParentClass();
+                field = resolveField( javaClass, 0, parts.length -1 );
                 fieldIndex = 0;
             }
 
             if( field == null ) {
                 for( int i = 0; i < parts.length - 1; ++i ) {
                     String className = getNamePrefix( i );
-                    String typeName = context.getParent().resolveType( className );
+                    String typeName = context.getParentClass().resolveType( className );
 
                     if( typeName != null ) {
-                        Type type = Type.createUnresolved( typeName, 0, context.getParent() );
+                        Type type = Type.createUnresolved( typeName, 0, context.getParentClass() );
                         JavaClass javaClass = type.getJavaClass();
 
                         if( javaClass != null ) {

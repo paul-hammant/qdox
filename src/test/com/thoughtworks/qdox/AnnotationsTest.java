@@ -8,6 +8,7 @@ import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
 
 public class AnnotationsTest extends TestCase {
 
@@ -241,5 +242,17 @@ public class AnnotationsTest extends TestCase {
         Annotation annotation = jMethod.getParameters()[1].getAnnotations()[0];
         assertEquals( "ParamInfo", annotation.getType().getValue() );
         assertEquals( "ParamInfo.Direction.OUT", annotation.getProperty( "direction" ).getParameterValue() );
+    }
+    
+    public void testFieldRefAnnotation() throws Exception {
+        String source = "public class Foo {\n" +
+        		"  final String s = \"unchecked\";\n" + 
+        		"  @SuppressWarnings( s )\n" +
+        		"  public void testNothing() { }\n " +
+        		"}";
+        builder.addSource( new StringReader( source ) );
+        JavaMethod method = builder.getClasses()[0].getMethods()[0];
+        AnnotationFieldRef suppressWarnings = (AnnotationFieldRef) method.getAnnotations()[0].getProperty( "value" );
+        assertEquals( builder.getClasses()[0].getFields()[0], suppressWarnings.getField());
     }
 }

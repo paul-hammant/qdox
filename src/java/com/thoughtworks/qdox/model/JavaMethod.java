@@ -202,14 +202,6 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         return hashCode;
     }
 
-    public JavaClass getParentClass() {
-        return (JavaClass) getParent();
-    }
-
-    public void setParentClass(JavaClass parentClass) {
-        setParent(parentClass);
-    }
-
     public boolean isPublic() {
         return super.isPublic() || (getParentClass() != null ? getParentClass().isInterface() : false);
     }

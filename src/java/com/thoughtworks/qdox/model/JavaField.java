@@ -1,7 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import java.io.ObjectInputStream.GetField;
-
 public class JavaField extends AbstractJavaEntity implements Member {
 
     private Type type;
@@ -99,7 +97,7 @@ public class JavaField extends AbstractJavaEntity implements Member {
     		result.append("volatile ");
     	}
     	result.append(getType().getValue() + " ");
-    	result.append(((JavaClass)getParent()).getFullyQualifiedName() + "." +getName());
+    	result.append(getParentClass().getFullyQualifiedName() + "." +getName());
     	return result.toString();
     }
 }

@@ -47,6 +47,11 @@ public class JavaParameter extends AbstractBaseJavaEntity implements Serializabl
     public void setParentMethod(JavaMethod parentMethod) {
         this.parentMethod = parentMethod;
     }
+    
+    public JavaClass getParentClass()
+    {
+        return getParentMethod().getParentClass();
+    }
 
     /**
      * Is this a Java 5 var args type specified using three dots. e.g. void doStuff(Object... thing)

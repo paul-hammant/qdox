@@ -37,12 +37,29 @@ public class AbstractBaseJavaEntity implements Serializable {
 	    this.lineNumber = lineNumber;
 	}
 
+	/**
+	 *  
+	 * @return
+	 * @deprecated
+	 */
 	public JavaClassParent getParent() { 
 	    return parent; 
 	}
 
+	/**
+	 * 
+	 * @param parent
+	 * @deprecated
+	 */
 	public void setParent(JavaClassParent parent) { 
 	    this.parent = parent;
 	}
+	
+	/**
+	 * Not every entity has a parentClass, but AnnotationFieldRef requires access to it.
+	 * 
+	 * @return
+	 */
+	public JavaClass getParentClass() { return null; }
 
 }

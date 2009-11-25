@@ -78,7 +78,6 @@ public class ModelBuilder implements Builder {
 
     public void beginClass(ClassDef def) {
         currentClass = new JavaClass();
-        currentClass.setParent(currentParent);
         currentClass.setLineNumber(def.lineNumber);
 
         // basic details
@@ -86,7 +85,6 @@ public class ModelBuilder implements Builder {
         currentClass.setInterface(ClassDef.INTERFACE.equals(def.type));
         currentClass.setEnum(ClassDef.ENUM.equals(def.type));
         currentClass.setAnnotation(ClassDef.ANNOTATION_TYPE.equals(def.type));
-
 
         // superclass
         if (currentClass.isInterface()) {
@@ -259,7 +257,7 @@ public class ModelBuilder implements Builder {
 
 	public void addField(FieldDef def) {
         JavaField currentField = new JavaField();
-        currentField.setParent(currentClass);
+        currentField.setParentClass(currentClass);
         currentField.setLineNumber(def.lineNumber);
 
         currentField.setName(def.name);

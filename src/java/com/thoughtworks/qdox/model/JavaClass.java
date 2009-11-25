@@ -36,7 +36,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private Type superClass;
     private Type[] implementz = new Type[0];
     private JavaClassContext context;
+    
+    //sourceless class can use this property
 	private JavaPackage javaPackage;
+	
+	private JavaSource source;
 
     public JavaClass() {
     }
@@ -182,7 +186,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public void addMethod(JavaMethod meth) {
-        meth.setParent(this);
+        meth.setParentClass( this );
         methods.add(meth);
         methodsArray = null;
     }
@@ -197,22 +201,40 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public void addField(JavaField javaField) {
-        javaField.setParent(this);
+        javaField.setParentClass( this );
         fields.add(javaField);
         fieldsArray = null;
     }
     
+    /**
+     * Only used when constructing the model by hand / without source 
+     * 
+     * @param javaPackage
+     */
     public void setJavaPackage(JavaPackage javaPackage) {
     	this.javaPackage = javaPackage;
     }
 
+    public void setSource( JavaSource source )
+    {
+        this.source = source;
+    }
+    
     public JavaSource getParentSource() {
-        JavaClassParent parent = getParent();
-        return ((parent == null) ? null : parent.getParentSource());
+        return (getParentClass() != null ? getParentClass().getParentSource() : source);
     }
 
     public JavaPackage getPackage() {
-        return (getParentSource() != null ? getParentSource().getPackage() : javaPackage);
+        return getParentSource() != null ? getParentSource().getPackage() : javaPackage;
+    }
+    
+    public JavaClassParent getParent()
+    {
+        JavaClassParent result = getParentClass();
+        if (result == null) {
+            result = getParentSource();
+        }
+        return result;
     }
 
     /**
@@ -227,14 +249,14 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public String getFullyQualifiedName() {
-        return (getParent() != null ? (getParent().getClassNamePrefix()) : javaPackage != null ? (javaPackage.getName()+".") : "") + getName();
+        return (getParentClass() != null ? (getParentClass().getClassNamePrefix()) : getPackage() != null ? (getPackage().getName()+".") : "") + getName();
     }
 
     /**
      * @since 1.3
      */
     public boolean isInner() {
-        return getParent() instanceof JavaClass;
+        return getParentClass() != null;
     }
 
     public String resolveType(String typeName) {
@@ -415,7 +437,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public void addClass(JavaClass cls) {
-        cls.setParent(this);
+        cls.setParentClass( this );
         classes.add(cls);
         classesArray = null;
     }

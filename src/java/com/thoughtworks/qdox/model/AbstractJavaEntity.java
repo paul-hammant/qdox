@@ -10,6 +10,8 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     protected List modifiers = new ArrayList();
     private String comment;
     private DocletTag[] tags = new DocletTag[0];
+    
+    private JavaClass parentClass;
     /**
      * Return list of modifiers as Strings.
      * (public, private, protected, final, abstract, static)
@@ -212,7 +214,16 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
     
     public JavaSource getSource() { 
-        return parent.getParentSource(); 
+        return parentClass.getParentSource(); 
     }
 
+    public void setParentClass( JavaClass parentClass )
+    {
+        this.parentClass = parentClass;
+    }
+    
+    public JavaClass getParentClass()
+    {
+        return parentClass;
+    }
 }

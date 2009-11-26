@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.Type;
 
@@ -120,12 +121,19 @@ public class AnnotationFieldRef implements AnnotationValue {
             }
 
             if( field == null ) {
+                JavaClassParent classParent = context.getParentClass();
+
+                //assume context is a JavaClass itself
+                if(classParent == null) {
+                    classParent = (JavaClass) context;
+                }
+                
                 for( int i = 0; i < parts.length - 1; ++i ) {
                     String className = getNamePrefix( i );
-                    String typeName = context.getParentClass().resolveType( className );
+                    String typeName = classParent.resolveType( className );
 
                     if( typeName != null ) {
-                        Type type = Type.createUnresolved( typeName, 0, context.getParentClass() );
+                        Type type = Type.createUnresolved( typeName, 0, classParent );
                         JavaClass javaClass = type.getJavaClass();
 
                         if( javaClass != null ) {

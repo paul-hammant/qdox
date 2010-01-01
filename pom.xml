@@ -56,9 +56,9 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</developerConnection>
-    <url>http://svn.qdox.codehaus.org/browse/qdox/trunk/qdox</url>
+    <connection>scm:svn:https://svn.codehaus.org/qdox/branches/qdox-2.0.0</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/branches/qdox-2.0.0</developerConnection>
+    <url>https://svn.codehaus.org/qdox/tags/qdox-2.0.0</url>
   </scm>
 
   <developers>

@@ -24,28 +24,28 @@
     <mailingList>
       <name>announce at QDox</name>
       <post>announce@qdox.codehaus.org</post>
-      <subscribe>http://xircles.codehaus.org/lists/announce@qdox.codehaus.org/subscribe</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/lists/announce@qdox.codehaus.org/unsubscribe</unsubscribe>
+      <subscribe>announce-subscribe@qdox.codehaus.org</subscribe>
+      <unsubscribe>announce-unsubscribe@qdox.codehaus.org</unsubscribe>
       <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.announce</archive>
     </mailingList>
     <mailingList>
       <name>dev at QDox</name>
       <post>dev@qdox.codehaus.org</post>
-      <subscribe>http://xircles.codehaus.org/lists/dev@qdox.codehaus.org/subscribe</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/lists/dev@qdox.codehaus.org/unsubscribe</unsubscribe>
+      <subscribe>dev-subscribe@qdox.codehaus.org</subscribe>
+      <unsubscribe>dev-unsubscribe@qdox.codehaus.org</unsubscribe>
       <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.dev</archive>
     </mailingList>
     <mailingList>
       <name>scm at QDox</name>
-      <subscribe>http://xircles.codehaus.org/lists/scm@qdox.codehaus.org/subscribe</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/lists/scm@qdox.codehaus.org/unsubscribe</unsubscribe>
+      <subscribe>scm-subscribe@qdox.codehaus.org</subscribe>
+      <unsubscribe>scm-unsubscribe@qdox.codehaus.org</unsubscribe>
       <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.scm</archive>
     </mailingList>
     <mailingList>
       <name>user at QDox</name>
       <post>user@qdox.codehaus.org</post>
-      <subscribe>http://xircles.codehaus.org/lists/user@qdox.codehaus.org/subscribe</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/lists/user@qdox.codehaus.org/unsubscribe</unsubscribe>
+      <subscribe>user-subscribe@qdox.codehaus.org</subscribe>
+      <unsubscribe>user-unsubscribe@qdox.codehaus.org</unsubscribe>
       <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.user</archive>
     </mailingList>
   </mailingLists>

@@ -1,3 +1,4 @@
+
 package com.thoughtworks.qdox;
 
 import com.thoughtworks.qdox.model.*;
@@ -1173,4 +1174,24 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     	assertEquals("Exception", javaClass.getTags()[0].getValue());
     	assertEquals("deprecated", javaClass.getTags()[1].getName());
     }
+    
+    public void _testSharedPackageJavaClasses() {
+        String source1 = "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n" +
+                "package com.foo;\n" +
+        		"public class Bar1 {}";
+        String source2 = "package com.foo;\n" +
+                "public class Bar2{}";
+        JavaSource javaSource1 = builder.addSource(new StringReader(source1));
+        JavaSource javaSource2 = builder.addSource(new StringReader(source2));
+        JavaPackage jPackage = builder.getPackageByName("com.foo");
+        assertEquals( 2, jPackage.getClasses().length );
+        assertEquals( 2, javaSource1.getPackage().getClasses().length );
+        assertEquals( 2, javaSource2.getPackage().getClasses().length );
+        //assertNotSame( javaSource1.getPackage(), javaSource2.getPackage() );
+        assertEquals( 1, javaSource1.getPackage().getAnnotations().length );
+        assertEquals( 0, javaSource2.getPackage().getAnnotations().length );
+        assertEquals( 1, javaSource1.getPackage().getLineNumber() );
+        assertEquals( 2, javaSource2.getPackage().getLineNumber() );
+    }
 }
+

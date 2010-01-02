@@ -510,4 +510,18 @@ public class JavaDocBuilder implements Serializable {
         this.debugParser = debugParser;
     }
 
+    public JavaPackage getPackageByName( String name )
+    {
+        if(name != null) {
+            Iterator iter = packages.iterator();
+            while(iter.hasNext()) {
+                JavaPackage pkg = (JavaPackage) iter.next();
+                if(name.equals( pkg.getName() )) {
+                    return pkg;
+                }
+            }
+        }
+        return null;
+    }
+
 }

@@ -1175,6 +1175,16 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     	assertEquals("deprecated", javaClass.getTags()[1].getName());
     }
     
+    //fix for QDOX-198
+    public void testFinalAnnotationParam() {
+        JavaDocBuilder builder = new JavaDocBuilder();      
+        String source = "public final class WSEndpointReference {\n" +
+            "    public void writeTo(final @NotNull String localName, @NotNull XMLStreamWriter w) throws XMLStreamException {\n" +
+            "    }\n" +
+            "}";
+        builder.addSource(new StringReader(source));
+    }
+    
     public void _testSharedPackageJavaClasses() {
         String source1 = "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n" +
                 "package com.foo;\n" +

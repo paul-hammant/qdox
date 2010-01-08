@@ -518,11 +518,11 @@ paramlist:
     paramlist COMMA param;
 
 param: 
-    opt_annotations opt_parammodifiers type varargs arrayidentifier {
-        param.name = $5.name;
-        param.type = $3;
-        param.dimensions = $5.dimensions;
-        param.isVarArgs = $4;
+    opt_parammodifiers type varargs arrayidentifier {
+        param.name = $4.name;
+        param.type = $2;
+        param.dimensions = $4.dimensions;
+        param.isVarArgs = $3;
         builder.addParameter(param);
         param = new FieldDef();
     };
@@ -534,7 +534,8 @@ varargs:
 opt_annotations: | opt_annotations annotation { builder.addAnnotation((Annotation) $2); };
 
 opt_parammodifiers: |
-    opt_parammodifiers modifier { param.modifiers.add($2); };
+    opt_parammodifiers modifier { param.modifiers.add($2); } |
+    opt_parammodifiers annotation { builder.addAnnotation((Annotation) $2); };
 
 %%
 

@@ -1175,7 +1175,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     	assertEquals("deprecated", javaClass.getTags()[1].getName());
     }
     
-    //fix for QDOX-198
+    // for QDOX-189
     public void testFinalAnnotationParam() {
         JavaDocBuilder builder = new JavaDocBuilder();      
         String source = "public final class WSEndpointReference {\n" +
@@ -1183,6 +1183,19 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
             "    }\n" +
             "}";
         builder.addSource(new StringReader(source));
+    }
+    
+    // for QDOX-190
+    public void testTwoCommentsBeforeEnumValue() {
+        JavaDocBuilder builder = new JavaDocBuilder();      
+        String source = 
+            "public enum Source {\n" +
+            "    /** comment 1 */    \n" +
+            "    /** comment 2 */\n" +
+            "    JDK1_2(\"1.2\");\n" +
+            "}\n";  
+        JavaSource src = builder.addSource(new StringReader(source));
+        assertEquals( "comment 2", src.getClasses()[0].getFieldByName( "JDK1_2" ).getComment() ); 
     }
     
     public void _testSharedPackageJavaClasses() {

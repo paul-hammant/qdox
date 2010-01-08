@@ -68,6 +68,10 @@ import: IMPORT fullidentifier SEMI { builder.addImport($2); } |
 
 // ----- JAVADOC
 
+javadoclist: 
+    javadoc |
+    javadoclist javadoc;
+
 javadoc: JAVADOCSTART javadocdescription javadoctags JAVADOCEND;
 
 javadocdescription: 
@@ -377,7 +381,7 @@ enum_body: enum_values | enum_values SEMI members;
 enum_values: | enum_value | enum_value COMMA enum_values;
 
 enum_value:
-    javadoc opt_annotations enum_constructor |
+    javadoclist opt_annotations enum_constructor |
     opt_annotations enum_constructor;
 
 enum_constructor:

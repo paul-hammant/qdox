@@ -15,6 +15,7 @@ import com.thoughtworks.qdox.parser.*;
 %{
 
     private int classDepth = 0;
+    private int parenDepth = 0;
     private int nestingDepth = 0;
     private int annotationDepth = 0;
     private int assignmentDepth = 0;
@@ -61,6 +62,15 @@ import com.thoughtworks.qdox.parser.*;
 
     private void popState() {
         yybegin(stateStack[--stateDepth]);
+    }
+    
+    private int peekState(int relative) {
+      if(relative > stateDepth) {
+        return -1;
+      }
+      else {
+        return stateStack[stateDepth - relative];
+      }
     }
     
     public String getCodeBody(){
@@ -227,9 +237,10 @@ JavadocEnd  = "*"+ "/"
               return Parser.PARENOPEN;
             }
             else {
-              
               if(isConstructor) {
+                parenDepth = classDepth;
                 pushState(PARENBLOCK);
+                return Parser.PARENBLOCK;
               }
               else {
                 return Parser.PARENOPEN;
@@ -351,12 +362,15 @@ JavadocEnd  = "*"+ "/"
 }
 
 <PARENBLOCK> {
-    "("                 { nestingDepth++; }
-    ")"                 {
+    "("             { 
+        nestingDepth++; 
+        if (appendingToCodeBody) { codeBody.append("("); }
+    }
+    ")"             {
 		nestingDepth--;
-        if (nestingDepth == classDepth) {
+		if (appendingToCodeBody) { codeBody.append(")"); }
+        if (nestingDepth == parenDepth) {
             popState();
-			return Parser.PARENBLOCK;
         }
     }
 }
@@ -396,7 +410,11 @@ JavadocEnd  = "*"+ "/"
         }
     }
 
-    "("                 { codeBody.append('('); nestingDepth++; }
+    "("                 { 
+        codeBody.append('('); 
+        parenDepth = nestingDepth++; 
+        pushState(PARENBLOCK); 
+    }
     ")"                 {
         codeBody.append(')');
         nestingDepth--; 

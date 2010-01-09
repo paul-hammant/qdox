@@ -1197,6 +1197,16 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaSource src = builder.addSource(new StringReader(source));
         assertEquals( "comment 2", src.getClasses()[0].getFieldByName( "JDK1_2" ).getComment() ); 
     }
+
+    //for QDOX-191
+    public void testLeftShift() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        String source = 
+            "private static class Flags {\n" +
+            "   static final Flags LEFT_JUSTIFY = new Flags(1 << 0);\n" +
+            "}\n";
+        builder.addSource(new StringReader(source));
+    }
     
     public void _testSharedPackageJavaClasses() {
         String source1 = "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n" +

@@ -505,6 +505,16 @@ constructor:
         mth.body = $6;
         builder.endMethod(mth);
         mth = new MethodDef(); 
+    } |
+    modifiers typeparams IDENTIFIER {
+      builder.beginMethod();
+    } methoddef opt_exceptions memberend {
+        mth.lineNumber = line;
+        mth.modifiers.addAll(modifiers); modifiers.clear(); 
+        mth.constructor = true; mth.name = $3;
+        mth.body = $7;
+        builder.endMethod(mth);
+        mth = new MethodDef(); 
     };
 
 methoddef: PARENOPEN opt_params PARENCLOSE;

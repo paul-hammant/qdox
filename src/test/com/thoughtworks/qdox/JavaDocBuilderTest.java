@@ -1208,6 +1208,16 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         builder.addSource(new StringReader(source));
     }
     
+    public void testGenericConstructor() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        String source = 
+            "public class MXBeanSupport {\n" +
+            "  public <T> MXBeanSupport(T resource, Class<T> mxbeanInterface)\n" +
+            "    throws NotCompliantMBeanException {\n" +
+            " } \n" +
+            "}";        
+        builder.addSource(new StringReader(source));
+    }
     public void _testSharedPackageJavaClasses() {
         String source1 = "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n" +
                 "package com.foo;\n" +

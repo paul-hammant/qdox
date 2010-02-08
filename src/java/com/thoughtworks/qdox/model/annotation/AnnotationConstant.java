@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.model.annotation;
 
-public class AnnotationConstant implements AnnotationValue {
+import java.io.Serializable;
+
+public class AnnotationConstant implements AnnotationValue, Serializable {
 
     private final Object value;
 

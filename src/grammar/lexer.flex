@@ -262,9 +262,10 @@ JavadocEnd  = "*"+ "/"
 }
 
 <JAVADOCTAG> {
-  "@" [^ \t\n\r]+  { return Parser.JAVADOCTAG; }
-  [ \t]+           { popState();pushState(JAVADOCLINE);}
-  {Eol}            { popState();return Parser.JAVADOCLINE;}
+  "@" [^ \t\n\r]+ / {JavadocEnd} { popState(); return Parser.JAVADOCTAG;  }
+  "@" [^ \t\n\r]+                { return Parser.JAVADOCTAG; }
+  [ \t]+                         { popState();pushState(JAVADOCLINE);}
+  {Eol}                          { popState();return Parser.JAVADOCLINE;}
 }
 
 <CODEBLOCK> {

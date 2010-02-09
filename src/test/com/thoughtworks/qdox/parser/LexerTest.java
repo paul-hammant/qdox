@@ -452,6 +452,16 @@ public class LexerTest extends TestCase {
         assertLex(Parser.JAVADOCEND, lexer);
         assertLex(0, lexer);
     }
+    
+    // QDOX-200
+    public void testCompactJavaDocTag() throws Exception {
+        String in = "/** @foo*/";
+        Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.JAVADOCSTART, lexer);
+        assertLex(Parser.JAVADOCTAG, "@foo", lexer);
+        assertLex(Parser.JAVADOCEND, lexer);      
+        assertLex(0, lexer);
+    }
 
     public void testArrayTokens() throws Exception {
         String in = "String[] []o[]";

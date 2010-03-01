@@ -51,6 +51,12 @@ public class JavaMethodTest extends TestCase {
         mth.addParameter(new JavaParameter(new Type("MyThing"), "t"));
     }
 
+//    public void testSignatureWithVarArgs() throws Exception {
+//        mth.setName( "method" );
+//        mth.addParameter( new JavaParameter(new Type("java.lang.String"), "param", true) );
+//        assertEquals( mth, clazz.getMethodBySignature( "method", new Type[] { new Type("java.lang.String", true)} ) );
+//    }
+    
     public void testGetCodeBlockSimple() throws Exception {
         mth.setName("doSomething");
         mth.setReturns(new Type("java.lang.String"));
@@ -299,6 +305,35 @@ public class JavaMethodTest extends TestCase {
         assertFalse(mth.signatureMatches("xxx", correctTypes));
         assertFalse(mth.signatureMatches("thing", wrongTypes1));
         assertFalse(mth.signatureMatches("thing", wrongTypes2));
+    }
+    
+    public void testVarArgSignatureMatches() throws Exception {
+        mth.setName("thing");
+        mth.addParameter(new JavaParameter(new Type("int"), "x"));
+        mth.addParameter(new JavaParameter(new Type("long", 2), "y", true));
+        mth.setReturns(new Type("void"));
+
+        Type[] correctTypes = new Type[]{
+            new Type("int"),
+            new Type("long", 2)
+        };
+
+        Type[] wrongTypes1 = new Type[]{
+            new Type("int", 2),
+            new Type("long")
+        };
+
+        Type[] wrongTypes2 = new Type[]{
+            new Type("int"),
+            new Type("long", 2),
+            new Type("double")
+        };
+
+        assertTrue(mth.signatureMatches("thing", correctTypes, true));
+        assertFalse(mth.signatureMatches("thing", correctTypes, false));
+        assertFalse(mth.signatureMatches("xxx", correctTypes, true));
+        assertFalse(mth.signatureMatches("thing", wrongTypes1, true));
+        assertFalse(mth.signatureMatches("thing", wrongTypes2, true));
     }
 
     public void testParentClass() throws Exception {

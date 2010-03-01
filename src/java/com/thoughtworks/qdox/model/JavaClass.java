@@ -353,6 +353,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     /**
+     * 
      * @param name           method name
      * @param parameterTypes parameter types or null if there are no parameters.
      * @return the matching method or null if no match is found.
@@ -361,7 +362,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         JavaMethod[] methods = getMethods();
 
         for (int i = 0; i < methods.length; i++) {
-            if (methods[i].signatureMatches(name, parameterTypes)) {
+            if (methods[i].signatureMatches(name, parameterTypes, false)) {
                 return methods[i];
             }
         }
@@ -369,16 +370,56 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return null;
     }
 
+    /**
+     * 
+     * @param name
+     * @param parameterTypes
+     * @param superclasses
+     * @return
+     */
     public JavaMethod getMethodBySignature(String name, Type[] parameterTypes,
                                            boolean superclasses) {
+        return getMethodBySignature( name, parameterTypes, superclasses, false );
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param parameterTypes
+     * @param superclasses
+     * @param varArg
+     * @return
+     */
+    public JavaMethod getMethodBySignature(String name, Type[] parameterTypes,
+                                           boolean superclasses, boolean varArg) {
         JavaMethod[] result = getMethodsBySignature(name, parameterTypes,
-                superclasses);
+                superclasses, varArg);
 
         return (result.length > 0) ? result[0] : null;
     }
-
+    
+    /**
+     * 
+     * @param name
+     * @param parameterTypes
+     * @param superclasses
+     * @return
+     */
     public JavaMethod[] getMethodsBySignature(String name,
                                               Type[] parameterTypes, boolean superclasses) {
+        return getMethodsBySignature( name, parameterTypes, superclasses, false );
+    }
+
+    /**
+     * 
+     * @param name
+     * @param parameterTypes
+     * @param superclasses
+     * @param varArg
+     * @return
+     */
+    public JavaMethod[] getMethodsBySignature(String name,
+                                              Type[] parameterTypes, boolean superclasses, boolean varArg) {
         List result = new ArrayList();
 
         JavaMethod methodInThisClass = getMethodBySignature(name, parameterTypes);
@@ -392,7 +433,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
             if (superclass != null) {
                 JavaMethod method = superclass.getMethodBySignature(name,
-                        parameterTypes, true);
+                        parameterTypes, true, varArg );
 
                 // todo: ideally we should check on package privacy too. oh well.
                 if ((method != null) && !method.isPrivate()) {
@@ -404,7 +445,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
             for (int i = 0; i < implementz.length; i++) {
                 JavaMethod method = implementz[i].getMethodBySignature(name,
-                        parameterTypes, true);
+                        parameterTypes, true, varArg );
 
                 if (method != null) {
                     result.add(method);

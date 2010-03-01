@@ -14,6 +14,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
     private String sourceCode;
+    private boolean varArg;
 
     public JavaMethod() {
     }
@@ -146,6 +147,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         javaParameter.setParentMethod( this );
         parameters.add( javaParameter );
         parametersArray = null;
+        this.varArg = javaParameter.isVarArgs();
     }
 
     public void setExceptions(Type[] exceptions) {
@@ -175,15 +177,27 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
             if (!otherParams[i].equals(myParams[i])) return false;
         }
 
-        return true;
+        return this.varArg == m.varArg;
     }
 
+    /**
+     * This method is NOT varArg aware. The overloaded method is.
+     * 
+     * @param name
+     * @param parameterTypes
+     * @return
+     * @deprecated use overloaded method 
+     */
+    public boolean signatureMatches(String name, Type[] parameterTypes) {
+        return signatureMatches( name, parameterTypes, false );
+    }
+    
     /**
      * @param name method name
      * @param parameterTypes parameter types or null if there are no parameters.
      * @return true if the signature and parameters match.
      */
-    public boolean signatureMatches(String name, Type[] parameterTypes) {
+    public boolean signatureMatches(String name, Type[] parameterTypes, boolean varArg) {
         if (!name.equals(this.name)) return false;
         parameterTypes = (parameterTypes == null ? new Type[0] : parameterTypes);
         if (parameterTypes.length != this.getParameters().length) return false;
@@ -192,7 +206,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
                 return false;
             }
         }
-        return true;
+        return (this.varArg == varArg);
     }
 
     public int hashCode() {

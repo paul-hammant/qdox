@@ -14,7 +14,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
     private String sourceCode;
-    private boolean varArg;
+    private boolean varArgs;
 
     public JavaMethod() {
     }
@@ -56,6 +56,11 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
 
     public boolean isConstructor() {
         return constructor;
+    }
+    
+    public boolean isVarArgs()
+    {
+        return varArgs;
     }
 
     protected void writeBody(IndentBuffer result) {
@@ -147,7 +152,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         javaParameter.setParentMethod( this );
         parameters.add( javaParameter );
         parametersArray = null;
-        this.varArg = javaParameter.isVarArgs();
+        this.varArgs = javaParameter.isVarArgs();
     }
 
     public void setExceptions(Type[] exceptions) {
@@ -177,7 +182,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
             if (!otherParams[i].equals(myParams[i])) return false;
         }
 
-        return this.varArg == m.varArg;
+        return this.varArgs == m.varArgs;
     }
 
     /**
@@ -206,7 +211,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
                 return false;
             }
         }
-        return (this.varArg == varArg);
+        return (this.varArgs == varArg);
     }
 
     public int hashCode() {

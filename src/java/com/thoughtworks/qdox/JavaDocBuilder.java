@@ -89,7 +89,6 @@ public class JavaDocBuilder implements Serializable {
     private boolean debugLexer;
     private boolean debugParser;
     private ErrorHandler errorHandler = new DefaultErrorHandler();
-    private Map allPackages = new HashMap();
 
     public static interface ErrorHandler {
         void handle(ParseException parseException);
@@ -319,7 +318,7 @@ public class JavaDocBuilder implements Serializable {
     }
 
     public JavaSource addSource(Reader reader, String sourceInfo) {
-        ModelBuilder builder = new ModelBuilder(context, docletTagFactory, allPackages);
+        ModelBuilder builder = new ModelBuilder(context, docletTagFactory, null);
         Lexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
         parser.setDebugLexer(debugLexer);
@@ -334,16 +333,16 @@ public class JavaDocBuilder implements Serializable {
         sources.add(source);
         addClasses(source);
 
-        JavaPackage pkg = source.getPackage();
-        JavaClass[] classes = source.getClasses();
+        JavaPackage pkg = context.getPackageByName( source.getPackageName() );
         if (!packages.contains(pkg)) {
             packages.add(pkg);
         }
-        for (int i = 0; i < classes.length; i++) {
-            if (pkg != null) {
-                pkg.addClass(classes[i]);
-            }
-        }
+//        JavaClass[] classes = source.getClasses();
+//        for (int i = 0; i < classes.length; i++) {
+//            if (pkg != null) {
+//                pkg.addClass(classes[i]);
+//            }
+//        }
 
         return source;
     }

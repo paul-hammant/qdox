@@ -1,10 +1,13 @@
 package com.thoughtworks.qdox;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassCache;
+import com.thoughtworks.qdox.model.JavaPackage;
 
 /**
  * JavaClassContext gives you a mechanism to get a JavaClass.
@@ -19,6 +22,7 @@ public class JavaClassContext implements Serializable {
 	private final JavaClassCache cache;
 	private ClassLibrary classLibrary;
 	private JavaDocBuilder builder;
+	private Map packageMap = new HashMap(); // <String, JavaPackage> 
 	
 	public JavaClassContext(JavaDocBuilder builder) {
 		this.builder = builder;
@@ -67,6 +71,11 @@ public class JavaClassContext implements Serializable {
 	}
 	public void add(JavaClass javaClass) {
 		cache.putClassByName(javaClass.getFullyQualifiedName(), javaClass);
+		
+		JavaPackage jPackage = getPackageByName( javaClass.getPackageName() );
+		if(jPackage != null) {
+		    jPackage.addClass( javaClass );
+		}
 	}
 	
 	
@@ -77,4 +86,30 @@ public class JavaClassContext implements Serializable {
 	public Class getClass(String name) {
 		return classLibrary.getClass(name);
 	}
+
+
+    public JavaPackage getPackageByName( String name )
+    {
+        return (JavaPackage) packageMap.get( name );
+    }
+
+
+    public void add( JavaPackage jPackage )
+    {
+        String packageName = jPackage.getName();
+        JavaPackage javaPackage = getPackageByName( packageName );
+        if ( javaPackage == null ) {
+            javaPackage = new JavaPackage( packageName );
+            javaPackage.setContext( this );
+            packageMap.put( packageName, javaPackage );
+        }
+        jPackage.setContext( this );
+    }
+
+
+    public JavaPackage[] getPackages()
+    {
+        return (JavaPackage[]) packageMap.values().toArray( new JavaPackage[0] );
+        
+    }
 }

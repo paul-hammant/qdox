@@ -1218,7 +1218,9 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
             "}";        
         builder.addSource(new StringReader(source));
     }
-    public void _testSharedPackageJavaClasses() {
+    
+    // for QDOX-195
+    public void testSharedPackageJavaClasses() {
         String source1 = "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n" +
                 "package com.foo;\n" +
         		"public class Bar1 {}";
@@ -1230,11 +1232,11 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals( 2, jPackage.getClasses().length );
         assertEquals( 2, javaSource1.getPackage().getClasses().length );
         assertEquals( 2, javaSource2.getPackage().getClasses().length );
-        //assertNotSame( javaSource1.getPackage(), javaSource2.getPackage() );
+        assertNotSame( javaSource1.getPackage(), javaSource2.getPackage() );
         assertEquals( 1, javaSource1.getPackage().getAnnotations().length );
         assertEquals( 0, javaSource2.getPackage().getAnnotations().length );
-        assertEquals( 1, javaSource1.getPackage().getLineNumber() );
-        assertEquals( 2, javaSource2.getPackage().getLineNumber() );
+        assertEquals( 2, javaSource1.getPackage().getLineNumber() );
+        assertEquals( 1, javaSource2.getPackage().getLineNumber() );
     }
 }
 

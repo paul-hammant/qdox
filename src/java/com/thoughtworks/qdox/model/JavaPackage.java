@@ -1,10 +1,10 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
-import java.util.Set;
+
+import com.thoughtworks.qdox.JavaClassContext;
 
 /**
  * A representation of a package.
@@ -12,8 +12,8 @@ import java.util.Set;
  */
 public class JavaPackage extends AbstractBaseJavaEntity {
 
+    private JavaClassContext context;
 	private String name;
-    private Map allPackages;
     private Annotation[] annotations = new Annotation[0];
 	private int lineNumber = -1;
 	private List classes = new ArrayList();
@@ -25,9 +25,14 @@ public class JavaPackage extends AbstractBaseJavaEntity {
     	this(name, null);
 	}
     
+    /**
+     * 
+     * @param name
+     * @param allPackages
+     * @deprecated allPackages is solved with the context 
+     */
 	public JavaPackage(String name, Map allPackages) {
 		this.name= name;
-        this.allPackages = allPackages;
     }
 
 	public String getName() {
@@ -53,6 +58,11 @@ public class JavaPackage extends AbstractBaseJavaEntity {
 	public void setLineNumber(int lineNumber) {
 		this.lineNumber = lineNumber;
 	}
+	
+	public void setContext( JavaClassContext context )
+    {
+        this.context = context;
+    }
 
 	public void addClass(JavaClass clazz) {
 		clazz.setJavaPackage(this);
@@ -65,22 +75,28 @@ public class JavaPackage extends AbstractBaseJavaEntity {
      * @return all the classes found for the package
      */
 	public JavaClass[] getClasses() {
-		return (JavaClass[]) classes.toArray(new JavaClass[classes.size()]);
+	    //avoid infinitive  recursion
+	    if (this == context.getPackageByName( name )) {
+	        return (JavaClass[]) classes.toArray(new JavaClass[classes.size()]);
+	    }
+	    else {
+	        return context.getPackageByName( name ).getClasses();
+	    }
 	}
 
     public JavaPackage getParentPackage() {
         String parentName = name.substring(0,name.lastIndexOf("."));
-        return (JavaPackage) allPackages.get(parentName);
+        return (JavaPackage) context.getPackageByName( parentName );
     }
 
     public JavaPackage[] getSubPackages() {
         String expected = name + ".";
-        Set packageKeys = allPackages.keySet();
+        JavaPackage[] jPackages = context.getPackages();
         List retList = new ArrayList();
-        for (Iterator iterator = packageKeys.iterator(); iterator.hasNext();) {
-            String pName = (String) iterator.next();
+        for (int index = 0; index < jPackages.length;index++) {
+            String pName = jPackages[index].getName();
             if (pName.startsWith(expected) && !(pName.substring(expected.length()).indexOf(".") > -1)) {
-                retList.add(allPackages.get(pName));
+                retList.add(context.getPackageByName( pName ));
             }
         }
         return (JavaPackage[]) retList.toArray(new JavaPackage[retList.size()]);

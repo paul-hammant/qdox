@@ -37,7 +37,6 @@ public class ModelBuilder implements Builder {
     private String lastComment;
     private List lastTagSet;
     private DocletTagFactory docletTagFactory;
-    private final Map allPackages;
 
     public ModelBuilder() {
         this(new JavaClassContext(new ClassLibrary()), new DefaultDocletTagFactory(), new HashMap());
@@ -46,21 +45,20 @@ public class ModelBuilder implements Builder {
     public ModelBuilder(JavaClassContext context, DocletTagFactory docletTagFactory, Map allPackages) {
         this.context = context;
         this.docletTagFactory = docletTagFactory;
-        this.allPackages = allPackages;
         source = new JavaSource(context);
         currentParent = source;
         currentAnnoDefs = new ArrayList();
     }
 
     public void addPackage(PackageDef packageDef) {
-        JavaPackage jPackage = (JavaPackage) allPackages.get(packageDef.name);
+        JavaPackage jPackage = context.getPackageByName( packageDef.name );;
         if (jPackage == null) {
-            jPackage = new JavaPackage(packageDef.name, allPackages);
-            allPackages.put(packageDef.name, jPackage);
+            jPackage = new JavaPackage(packageDef.name);
+            context.add( jPackage );
         }
         jPackage.setLineNumber(packageDef.lineNumber);
     	setAnnotations(jPackage);
-        source.setPackage(jPackage); //@todo introduce PackageDef?
+        source.setPackage(jPackage);
     }
 
     public void addImport(String importName) {

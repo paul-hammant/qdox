@@ -12,7 +12,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.thoughtworks.qdox.DefaultJavaClassCache;
 import com.thoughtworks.qdox.JavaClassContext;
 
 public class JavaSource implements Serializable, JavaClassParent {
@@ -332,5 +331,10 @@ public class JavaSource implements Serializable, JavaClassParent {
 	public ClassLibrary getClassLibrary() {
 		return this.context.getClassLibrary();
 	}
+
+    public String getPackageName()
+    {
+        return (packge == null ? "" : packge.getName());
+    }
 
 }

@@ -318,12 +318,14 @@
                 <resource>
                   <directory>src/site</directory>
                   <excludes>
+                    <exclude>**/download.html</exclude>
                     <exclude>**/skin.html</exclude>
                   </excludes>
-                  </resource>
+                </resource>
                 <resource>
                   <directory>src/site</directory>
                   <includes>
+                    <include>**/download.html</include>
                     <include>**/skin.html</include>
                   </includes>
                   <filtering>true</filtering>
@@ -359,7 +361,6 @@
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <preparationGoals>clean install</preparationGoals>
-          <goals>deploy</goals>
           <tagBase>https://svn.codehaus.org/qdox/tags</tagBase>
         </configuration>
       </plugin>
@@ -464,6 +465,19 @@
       <properties>
         <qdox.byaccj.executable>${basedir}/bootstrap/yacc.exe</qdox.byaccj.executable>
       </properties>
+    </profile>
+    <profile>
+      <id>release-site</id>
+      <activation>
+        <file>
+          <exists>release.properties</exists>
+        </file>
+      </activation>
+      <build>
+        <filters>
+          <filter>release.properties</filter>
+        </filters>
+      </build>
     </profile>
   </profiles>
 

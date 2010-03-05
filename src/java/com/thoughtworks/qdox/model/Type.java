@@ -225,6 +225,15 @@ public class Type implements Comparable, Serializable {
     }
 
     /**
+     * 
+     * @return the actualTypeArguments or null
+     */
+    public Type[] getActualTypeArguments()
+    {
+        return actualArgumentTypes;
+    }
+    
+    /**
      * Returns getValue() extended with the array information 
      * 
      * @return

@@ -223,6 +223,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     public JavaSource getParentSource() {
         return (getParentClass() != null ? getParentClass().getParentSource() : source);
     }
+    
+    public JavaSource getSource()
+    {
+        return getParentSource();
+    }
 
     public JavaPackage getPackage() {
         return getParentSource() != null ? getParentSource().getPackage() : javaPackage;

@@ -54,13 +54,17 @@ public class JavaClassContext implements Serializable {
 		JavaClass result = cache.getClassByName(name);
 		if(result == null && builder != null) {
 			result = builder.createBinaryClass(name);
+			
+			if ( result == null ) {
+			    result = builder.createSourceClass(name);
+			}
+			if ( result == null ) {
+                result = builder.createUnknownClass(name);
+			}
+			
 			if(result != null) {
 				add(result);
 		        result.setJavaClassContext(this);
-			}
-			else {
-				result = builder.createUnknownClass(name);
-				add(result);
 			}
 		}
 		return result;

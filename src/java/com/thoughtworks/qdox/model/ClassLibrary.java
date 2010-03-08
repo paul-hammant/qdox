@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public class ClassLibrary implements Serializable {
     private final Map classNameToClassMap = new HashMap();
     private boolean defaultClassLoadersAdded = false;
     private transient List classLoaders = new ArrayList();
+    private List sourceFolders = new ArrayList(); //<File>
     
     /**
      * Remember to add bootstrap classes
@@ -61,9 +63,25 @@ public class ClassLibrary implements Serializable {
     public boolean contains(String className) {
         if (classNames.contains(className)) {
             return true;
+        }
+        else if (getSourceFile(className) != null) {
+            return true;
         } else {
             return getClass(className) != null;
         }
+    }
+
+    public File getSourceFile( String className )
+    {
+        for(Iterator iterator = sourceFolders.iterator(); iterator.hasNext();) {
+            File sourceFolder = (File) iterator.next();
+            String mainClassName = className.split( "\\$" )[0];
+            File classFile = new File(sourceFolder, mainClassName.replace( '.', File.separatorChar ) + ".java");
+            if ( classFile.exists() && classFile.isFile() ) {
+                return classFile;
+            }
+        }
+        return null;
     }
 
     public Class getClass(String className) {
@@ -108,6 +126,10 @@ public class ClassLibrary implements Serializable {
         defaultClassLoadersAdded = true;
     }
 
+    public void addSourceFolder( File sourceFolder ) {
+        sourceFolders.add( sourceFolder );
+    }
+    
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         classLoaders = new ArrayList();

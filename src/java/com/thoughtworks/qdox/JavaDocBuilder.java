@@ -143,6 +143,32 @@ public class JavaDocBuilder implements Serializable {
         }
         return context.getClassByName(name);
     }
+    
+    protected JavaClass createSourceClass(String name) {
+        File sourceFile = context.getClassLibrary().getSourceFile( name );
+        if (sourceFile != null) {
+            try
+            {
+                JavaSource source = addSource( sourceFile );
+                for (int index = 0; index < source.getClasses().length; index++) {
+                    JavaClass clazz = source.getClasses()[index];
+                    if (name.equals(clazz.getFullyQualifiedName())) {
+                        return clazz;
+                    }
+                }
+                return source.getNestedClassByName( name );
+            }
+            catch ( FileNotFoundException e )
+            {
+                //nop
+            }
+            catch ( IOException e )
+            {
+                //nop
+            }
+        }
+        return null;
+    }
 
     protected JavaClass createUnknownClass(String name) {
         ModelBuilder unknownBuilder = new ModelBuilder(context, docletTagFactory, new HashMap());

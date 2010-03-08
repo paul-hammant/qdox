@@ -1238,5 +1238,20 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals( 2, javaSource1.getPackage().getLineNumber() );
         assertEquals( 1, javaSource2.getPackage().getLineNumber() );
     }
+    
+    public void testSourceFolder() throws Exception {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        builder.getClassLibrary().addSourceFolder( new File("target/test-source") );
+        String source = "package com.foo;\n" +
+        		"import com.blah.*;\n" +
+        		"public abstract class Me {\n" +
+        		" public abstract Thing getThing(); " +
+        		"}";
+        builder.addSource( new StringReader( source ) );
+        JavaClass clazz = builder.addSource( new StringReader( source ) ).getClasses()[0];
+        JavaClass thing = clazz.getMethods()[0].getReturns().getJavaClass();
+        assertEquals("com.blah.Thing", thing.getFullyQualifiedName());
+        assertNotNull(thing.getSource());
+    }
 }
 

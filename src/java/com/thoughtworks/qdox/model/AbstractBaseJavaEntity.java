@@ -57,8 +57,9 @@ public class AbstractBaseJavaEntity implements Serializable {
 	
 	/**
 	 * Not every entity has a parentClass, but AnnotationFieldRef requires access to it.
+	 * When used with JavaClass, don't confuse this with getSuperClass()
 	 * 
-	 * @return
+	 * @return the surrounding class
 	 */
 	public JavaClass getParentClass() { return null; }
 

@@ -338,19 +338,19 @@ typearg:
 
 opt_typeparams: | typeparams;
 
-typeparams: LESSTHAN { mth.typeParams = new ArrayList(); } typeparamlist GREATERTHAN;
+typeparams: LESSTHAN { typeParams = new ArrayList(); } typeparamlist GREATERTHAN;
 
 typeparamlist:
     typeparam |
     typeparamlist COMMA typeparam;
 
 typeparam: 
-    IDENTIFIER { mth.typeParams.add(new TypeVariableDef($1)); } |
+    IDENTIFIER { typeParams.add(new TypeVariableDef($1)); } |
     IDENTIFIER EXTENDS { 
       typeVariable = new TypeVariableDef($1);
       typeVariable.bounds = new ArrayList();
     } typeboundlist {
-      mth.typeParams.add(typeVariable);
+      typeParams.add(typeVariable);
       typeVariable = null;
     };
 
@@ -403,6 +403,7 @@ classdefinition:
         cls.lineNumber = line;
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
         cls.name = $3;
+        cls.typeParams = typeParams;
         builder.beginClass(cls); 
         cls = new ClassDef(); 
     };
@@ -471,7 +472,8 @@ extrafields: |
 
 method:
     modifiers typeparams type IDENTIFIER {
-      builder.beginMethod();
+        builder.beginMethod();
+        mth.typeParams = typeParams;
     } methoddef dimensions opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
@@ -497,7 +499,7 @@ method:
 
 constructor:
     modifiers IDENTIFIER {
-      builder.beginMethod();
+        builder.beginMethod();
     } methoddef opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
@@ -507,7 +509,8 @@ constructor:
         mth = new MethodDef(); 
     } |
     modifiers typeparams IDENTIFIER {
-      builder.beginMethod();
+        builder.beginMethod();
+        mth.typeParams = typeParams;
     } methoddef opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
@@ -558,6 +561,7 @@ private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
+private List typeParams = new ArrayList(); //for both JavaClass and JavaMethod
 private List annotationStack = new ArrayList(); // Use ArrayList intead of Stack because it is unsynchronized 
 private Annotation annotation = null;
 private List annoValueListStack = new ArrayList(); // Use ArrayList intead of Stack because it is unsynchronized

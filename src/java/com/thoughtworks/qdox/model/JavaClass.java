@@ -35,6 +35,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private Type type;
     private Type superClass;
     private Type[] implementz = new Type[0];
+    private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
     private JavaClassContext context;
     
     //sourceless class can use this property
@@ -198,6 +199,16 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public void setImplementz(Type[] implementz) {
         this.implementz = implementz;
+    }
+    
+    public TypeVariable[] getTypeParameters()
+    {
+        return typeParameters;
+    }
+    
+    public void setTypeParameters( TypeVariable[] typeParameters )
+    {
+        this.typeParameters = typeParameters;
     }
 
     public void addField(JavaField javaField) {

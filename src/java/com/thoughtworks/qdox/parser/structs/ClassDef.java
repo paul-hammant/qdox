@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.parser.structs;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ClassDef extends LocatedDef {
@@ -12,6 +14,7 @@ public class ClassDef extends LocatedDef {
     
     public String name = "";
     public Set modifiers = new HashSet();
+    public List typeParams = new ArrayList(); //<TypeVariableDef>
     public Set extendz = new HashSet();
     public Set implementz = new HashSet();
     public String type = CLASS;
@@ -20,13 +23,14 @@ public class ClassDef extends LocatedDef {
         ClassDef classDef = (ClassDef) obj;
         return classDef.name.equals(name)
                 && classDef.type == type
+                && classDef.typeParams.equals( typeParams )
                 && classDef.modifiers.equals(modifiers)
                 && classDef.extendz.equals(extendz)
                 && classDef.implementz.equals(implementz);
     }
 
     public int hashCode() {
-        return name.hashCode() + type.hashCode() +
+        return name.hashCode() + type.hashCode() + typeParams.hashCode()+
                 modifiers.hashCode() + extendz.hashCode() +
                 implementz.hashCode();
     }
@@ -38,6 +42,7 @@ public class ClassDef extends LocatedDef {
         result.append(type);
         result.append(" ");
         result.append(name);
+        //typeParams
         result.append(" extends ");
         result.append(extendz);
         result.append(" implements ");

@@ -108,6 +108,17 @@ public class ModelBuilder implements Builder {
             def.modifiers.toArray(modifiers);
             currentClass.setModifiers(modifiers);
         }
+        
+        // typeParameters
+        if (def.typeParams != null) {
+            TypeVariable[] typeParams = new TypeVariable[def.typeParams.size()];
+            int index = 0;
+            for(Iterator iterator = def.typeParams.iterator(); iterator.hasNext();) {
+                TypeVariableDef typeVariableDef = (TypeVariableDef) iterator.next();
+                typeParams[index++] = createTypeVariable(typeVariableDef);
+            }
+            currentClass.setTypeParameters(typeParams);
+        }
 
         // javadoc
         addJavaDoc(currentClass);

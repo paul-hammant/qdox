@@ -378,4 +378,21 @@ public class JSR14Test extends TestCase {
         builder.addSource(new StringReader(source));
     }
     
+    // For QDox-205
+    public void testClassTypeParameters() throws Exception {
+        String source1 = "class GenericControllerImpl<T, K, D extends GenericDAO<T, K>>\n" + 
+        		"    implements GenericController<T, K>\n {}";
+        String source2 = "class GroupControllerImpl extends\n" + 
+        		"    GenericControllerImpl<Group, Long, GroupDAO>\n {}";
+        String source3 = "interface GenericController<T, K> {}";
+        builder.addSource(new StringReader(source1));
+        builder.addSource(new StringReader(source2));
+        builder.addSource(new StringReader(source3));
+        JavaClass genericControllerImpl = builder.getSources()[0].getClasses()[0];
+        assertEquals( 3, genericControllerImpl.getTypeParameters().length );
+        JavaClass groupControllerImpl = builder.getSources()[1].getClasses()[0];
+        assertEquals( 0, groupControllerImpl.getTypeParameters().length );
+        JavaClass genericController = builder.getSources()[2].getClasses()[0];
+        assertEquals( 2, genericController.getTypeParameters().length );
+    }
 }

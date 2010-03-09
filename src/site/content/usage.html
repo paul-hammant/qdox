@@ -21,7 +21,7 @@ JavaDocBuilder builder = new JavaDocBuilder();
 
 			<p>Java source code can then be added to the
 			<code><a href="apidocs/com/thoughtworks/qdox/JavaDocBuilder.html">JavaDocBuilder</a></code>.
-			Source can either beread one file at a time (using a java.io.Reader) or an entire source tree
+			Source can either be read one file at a time (using a java.io.Reader) or an entire source tree
 			can be added recursively.</p>
 
 <div class="Source Java"><pre>
@@ -41,16 +41,20 @@ builder.addSourceTree(new File("mysrcdir"));
 			<code><a href="apidocs/com/thoughtworks/qdox/model/ClassLibrary.html">ClassLibrary</a></code>
 			must be aware of other classes used in the project.</p>
 
-			<p>ClassLibrary has 3 ways to resolve classes:</p>
+			<p>ClassLibrary has 4 ways to resolve classes:</p>
 
 			<p><ul>
 				<li>By looking at other sources that have been added.</li>
+				<li>By searching through the supplied sourceFolders</li>
 				<li>By looking in the current classpath (including the standard JRE classes).</li>
 				<li>By looking at additional ClassLoaders specified at runtime.</li>
 			</ul></p>
 
-			<p>The first two are automaticly set by JavaDocBuilder. In most cases this shall be sufficient, however in some
-			situations you may want resolve the full classes in external libraries.</p>
+			<p>All sources and sourcetrees added to the JavaDocBuilder will be parsed. This is often much more than required. 
+			To increase efficiency use the ClassLibrary to add sourcefolders. Consider these files as lazy parsed sources.
+
+            <p>The current classpath is automaticly set by JavaDocBuilder. In most cases this shall be sufficient, however in some
+            situations you may want resolve the full classes in external libraries.</p>
 
 			<p>To resolve classes from different ClassLoaders (e.g. 3rd party Jar files), the
 			<code>addClassLoader()</code> method must be called on the ClassLibrary.</p>
@@ -59,11 +63,15 @@ builder.addSourceTree(new File("mysrcdir"));
 // Get the ClassLibrary
 ClassLibrary lib = builder.getClassLibrary();
 
+// Add a sourcefolder;
+lib.addSourceFolder( new File( "src/main/java" ) );
+lib.addSourceFolder( new File( "target/generated-sources/foobar" ) );
+
 // Add a custom ClassLoader
-lib.addClassLoader(myCustomClassLoader);
+lib.addClassLoader( myCustomClassLoader );
 
 // Ant example : add the &lt;classpath&gt; element's contents
-lib.addClassLoader(new AntClassLoader(getProject(), classpath));
+lib.addClassLoader( new AntClassLoader( getProject(), classpath ) );
 </pre></div>
 
 			<p>It is important that additional ClassLoaders are added before any source files are parsed.</p>

@@ -30,7 +30,7 @@ public class TypeVariable extends Type {
 	
 	
 	public String getValue() {
-		return bounds[0].getValue();
+		return (bounds == null || bounds.length == 0 ? ""  : bounds[0].getValue());
 	}
 	
 	public String getGenericValue() {

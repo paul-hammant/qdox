@@ -361,8 +361,11 @@
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <preparationGoals>clean install</preparationGoals>
+          <goals>deploy</goals>
           <tagBase>https://svn.codehaus.org/qdox/tags</tagBase>
+          <!-- 
           <arguments>-Dproject.rel.org.thoughtworks.qdox:qdox=${project.rel.org.thoughtworks.qdox:qdox} -Dproject.dev.org.thoughtworks.qdox:qdox=${project.dev.org.thoughtworks.qdox:qdox}</arguments>
+           -->
         </configuration>
       </plugin>
     </plugins>
@@ -467,6 +470,7 @@
         <qdox.byaccj.executable>${basedir}/bootstrap/yacc.exe</qdox.byaccj.executable>
       </properties>
     </profile>
+    <!-- 
     <profile>
       <id>release-site</id>
       <activation>
@@ -480,6 +484,7 @@
         </filters>
       </build>
     </profile>
+     -->
   </profiles>
 
   <!-- Reports -->

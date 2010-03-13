@@ -362,6 +362,7 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <preparationGoals>clean install</preparationGoals>
           <tagBase>https://svn.codehaus.org/qdox/tags</tagBase>
+          <arguments>-Dproject.rel.org.thoughtworks.qdox:qdox=${project.rel.org.thoughtworks.qdox:qdox} -Dproject.dev.org.thoughtworks.qdox:qdox=${project.dev.org.thoughtworks.qdox:qdox}</arguments>
         </configuration>
       </plugin>
     </plugins>

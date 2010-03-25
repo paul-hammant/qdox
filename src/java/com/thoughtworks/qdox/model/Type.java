@@ -146,6 +146,7 @@ public class Type implements Comparable, Serializable {
     		}
     		result.append(">");
     	}
+    	for (int i = 0; i < dimensions; i++) result.append("[]");
         return result.toString();
     }
     

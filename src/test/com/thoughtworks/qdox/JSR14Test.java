@@ -395,4 +395,11 @@ public class JSR14Test extends TestCase {
         JavaClass genericController = builder.getSources()[2].getClasses()[0];
         assertEquals( 2, genericController.getTypeParameters().length );
     }
+    
+    // For QDOX-206
+    public void testGenericsAndArrays() throws Exception {
+        JavaMethod method = buildMethod( "public Map<String[], Object[]> test(Map<String[], Object[]> input);" );
+        assertEquals("Map<java.lang.String[],java.lang.Object[]>", method.getReturns().toGenericString());
+        assertEquals("Map<java.lang.String[],java.lang.Object[]>", method.getParameters()[0].getType().toGenericString());
+    }
 }

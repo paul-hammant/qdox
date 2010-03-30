@@ -375,17 +375,29 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @return the matching method or null if no match is found.
      */
     public JavaMethod getMethodBySignature(String name, Type[] parameterTypes) {
+        return getMethod( name, parameterTypes, false );
+    }
+
+    /**
+     * This should be the signature for getMethodBySignature
+     * 
+     * @param name
+     * @param parameterTypes
+     * @param varArgs
+     * @return
+     */
+    public JavaMethod getMethod(String name, Type[] parameterTypes, boolean varArgs) {
         JavaMethod[] methods = getMethods();
 
         for (int i = 0; i < methods.length; i++) {
-            if (methods[i].signatureMatches(name, parameterTypes, false)) {
+            if (methods[i].signatureMatches(name, parameterTypes, varArgs)) {
                 return methods[i];
             }
         }
 
         return null;
     }
-
+    
     /**
      * 
      * @param name
@@ -408,6 +420,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      */
     public JavaMethod getMethodBySignature(String name, Type[] parameterTypes,
                                            boolean superclasses, boolean varArg) {
+        
         JavaMethod[] result = getMethodsBySignature(name, parameterTypes,
                 superclasses, varArg);
 
@@ -438,7 +451,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
                                               Type[] parameterTypes, boolean superclasses, boolean varArg) {
         List result = new ArrayList();
 
-        JavaMethod methodInThisClass = getMethodBySignature(name, parameterTypes);
+        JavaMethod methodInThisClass = getMethod(name, parameterTypes, varArg);
 
         if (methodInThisClass != null) {
             result.add(methodInThisClass);

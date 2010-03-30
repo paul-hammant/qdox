@@ -617,4 +617,23 @@ public class JavaClassTest extends TestCase {
     }
     
     
+    // QDOX-201
+    public void testGetVarArgMethodSignature() {
+        JavaMethod simpleMethod = new JavaMethod( "doSomething" );
+        simpleMethod.addParameter( new JavaParameter( new Type("String"), "param", false ) );
+        JavaMethod varArgMethod = new JavaMethod( "doSomething" );
+        varArgMethod.addParameter( new JavaParameter( new Type("String"), "param", true ) );
+        
+        cls.addMethod( simpleMethod );
+        cls.addMethod( varArgMethod );
+        
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")} ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, false ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, false, false ) );
+        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, false, true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, true, false ) );
+        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, true, true ) );
+    }
+    
 }

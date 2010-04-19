@@ -350,5 +350,73 @@ public class Type implements Comparable, Serializable {
         return "void".equals(getValue());
     }
 
+    /**
+     * 
+     * @param superClass
+     * @return
+     * @since 1.12.1
+     */
+    protected int getTypeVariableIndex( JavaClass superClass ) {
+        TypeVariable[] typeVariables = superClass.getTypeParameters();
+        for(int typeIndex=0;typeIndex<typeVariables.length; typeIndex++) {
+            if(typeVariables[typeIndex].getFullyQualifiedName().equals( getFullyQualifiedName())) {
+                return typeIndex;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 
+     * @param parentClass
+     * @return
+     * @since 1.12.1
+     */
+    protected Type resolve( JavaClass parentClass )
+    {
+        return resolve( parentClass, parentClass );
+    }
+
+    /**
+     * 
+     * @param parentClass
+     * @param subclass
+     * @return
+     * @since 1.12.1
+     */
+    protected Type resolve( JavaClass parentClass, JavaClass subclass )
+    {
+        Type result = this;
+        int typeIndex = getTypeVariableIndex( parentClass );
+        if ( typeIndex >= 0 )
+        {
+            String fqn = parentClass.getFullyQualifiedName();
+            if ( subclass.getSuperClass() != null && fqn.equals( subclass.getSuperClass().getFullyQualifiedName() ) ) {
+                result = subclass.getSuperClass().getActualTypeArguments()[typeIndex];    
+            }
+            else if ( subclass.getImplementedInterfaces() != null )
+            {
+                for ( int i = 0; i < subclass.getImplementedInterfaces().length; i++ )
+                {
+                    if ( fqn.equals( subclass.getImplements()[i].getFullyQualifiedName() ) ) 
+                    {
+                        result = subclass.getImplements()[i].getActualTypeArguments()[typeIndex];
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if ( this.actualArgumentTypes != null ) {
+            result = new Type( this.fullName, this.name, this.dimensions, this.context );
+            
+            result.actualArgumentTypes = new Type[this.actualArgumentTypes.length];
+            for (int i = 0; i < this.getActualTypeArguments().length; i++ )
+            {
+                result.actualArgumentTypes[i] = this.actualArgumentTypes[i].resolve( parentClass, subclass );
+            }
+        }
+        return result;
+    }
 
 }

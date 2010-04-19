@@ -2,6 +2,8 @@ package com.thoughtworks.qdox;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMethod;
+
 import junit.framework.TestCase;
 
 import java.io.StringReader;
@@ -251,5 +253,72 @@ public class GenericsTest extends TestCase {
         assertNotNull(envField);
         assertEquals("Map", envField.getType().getValue());
     } 
+    
+    // QDOX-207
+    public void testMethodReturnTypeExtends() throws Exception {
+        String superSource = "public abstract class Test<T> {\n" + 
+        		"        private T me;\n" + 
+        		"        public Test(T me) {\n" + 
+        		"            this.me = me;\n" + 
+        		"        }\n" + 
+        		"        public T getValue() {\n" + 
+        		"            return me;\n" + 
+        		"        }\n" + 
+        		"    }";
+        String subSource = "public class StringTest extends Test<String> {\n" + 
+        		"        public StringTest(String s) {\n" + 
+        		"            super(s);\n" + 
+        		"        }\n" + 
+        		"    }";
+        builder.addSource( new StringReader( superSource ) );
+        builder.addSource( new StringReader( subSource ) );
+        JavaMethod method = builder.getClassByName( "StringTest" ).getMethodBySignature( "getValue", null, true );
+        assertEquals( "T", method.getGenericReturnType().getFullyQualifiedName() );
+        assertEquals( "java.lang.Object", method.getReturnType().getFullyQualifiedName() );
+        assertEquals( "java.lang.Object", method.getReturnType( false ).getFullyQualifiedName() );
+        assertEquals( "java.lang.String", method.getReturnType( true ).getFullyQualifiedName() );
+    }
+    
+    public void testMethodReturnTypeImplements() throws Exception {
+        String source1="public interface GenericDao<TEntity, TKey> {\n" + 
+        		"public List<TEntity> getAll();\n" + 
+                "public TEntity getRandom();\n" + 
+        		"public TEntity findById(TKey key);\n" + 
+        		"public TEntity persist(TEntity entity);\n" + 
+        		"public TEntity[] persist(TEntity[] entities);\n" + 
+        		"public void delete(TEntity entity);\n" + 
+        		"public Map<TKey, TEntity> asMap();" +
+        		"}\r\n";
+        String source2="public interface SubjectDao extends GenericDao<Subject, Long> {\n" + 
+        		"public List<Subject> getEnabledSubjects();\n" + 
+        		"}\r\n";
+        String source3="public interface SubjectService extends RemoteService, SubjectDao {\r\n" + 
+        		"}";
+        builder.addSource( new StringReader( source1 ) );
+        builder.addSource( new StringReader( source2 ) );
+        builder.addSource( new StringReader( source3 ) );
+        JavaMethod method = builder.getClassByName( "GenericDao" ).getMethodBySignature( "getRandom", null, true );
+        assertEquals( "TEntity", method.getReturnType( true ).getGenericValue() );
+        method = builder.getClassByName( "GenericDao" ).getMethodBySignature( "getAll", null, true );
+        assertEquals( "List<TEntity>", method.getReturnType( true ).getGenericValue() );
+        method = builder.getClassByName( "GenericDao" ).getMethodBySignature( "asMap", null, true );
+        assertEquals( "Map<TKey,TEntity>", method.getReturnType( true ).getGenericValue() );
+
+        method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "getRandom", null, true );
+        assertEquals( "Subject", method.getReturnType( true ).getGenericValue() );
+        method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "getAll", null, true );
+        assertEquals( "List<Subject>", method.getReturnType( true ).getGenericValue() );
+        method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "asMap", null, true );
+        assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericValue() );
+        
+        method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "getRandom", null, true );
+        assertEquals( "Subject", method.getReturnType( true ).getGenericValue() );
+        method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "getAll", null, true );
+        assertEquals( "List<Subject>", method.getReturnType( true ).getGenericValue() );
+        method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "asMap", null, true );
+        assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericValue() );
+    }
+    
+    
 
 }

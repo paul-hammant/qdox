@@ -466,7 +466,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
                 // todo: ideally we should check on package privacy too. oh well.
                 if ((method != null) && !method.isPrivate()) {
-                    result.add(method);
+                    result.add( new JavaMethodDelegate( this, method ) );
                 }
             }
 
@@ -477,7 +477,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
                         parameterTypes, true, varArg );
 
                 if (method != null) {
-                    result.add(method);
+                    result.add( new JavaMethodDelegate( this, method ) );
                 }
             }
         }

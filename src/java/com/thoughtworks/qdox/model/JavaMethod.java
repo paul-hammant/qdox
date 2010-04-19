@@ -1,9 +1,9 @@
 package com.thoughtworks.qdox.model;
 
 import java.beans.Introspector;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ArrayList;
 
 public class JavaMethod extends AbstractInheritableJavaEntity implements Member {
 
@@ -387,4 +387,54 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
 		}
 		return result.toString();
 	}
+
+	/**
+	 * Equivalent of java.lang.reflect.Method.getGenericReturnType()
+	 * 
+	 * @return the generic returntype
+	 * @since 1.12.1
+	 */
+    public Type getGenericReturnType()
+    {
+        return returns;
+    }
+
+    /**
+     * Equivalent of java.lang.reflect.Method.getReturnType()
+     * 
+     * @return
+     * @since 1.12.1
+     */
+    public Type getReturnType() {
+	    return getReturnType( false );
+	}
+	
+    /**
+     * 
+     * @param resolve
+     * @return
+     * @since 1.12.1
+     */
+    public Type getReturnType( boolean resolve )
+    {
+        return getReturnType( resolve, getParentClass() );
+    }
+    
+    /**
+     * 
+     * @param resolve
+     * @param callingClass
+     * @return
+     * @since 1.12.1
+     */
+    protected Type getReturnType ( boolean resolve, JavaClass callingClass) {
+        Type result =  getReturns().resolve( this.getParentClass(), callingClass );
+        
+        //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
+        if ( !resolve && !returns.getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
+        {
+            result = new Type( "java.lang.Object" );
+        }
+        return result;
+    }
 }

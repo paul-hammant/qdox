@@ -7,7 +7,7 @@ import java.util.List;
  * This is especially useful when trying to resolve generics
  * 
  * @author Robert Scholte
- * @since 1.12.1
+ * @since 1.12
  */
 public class JavaMethodDelegate extends JavaMethod
 {

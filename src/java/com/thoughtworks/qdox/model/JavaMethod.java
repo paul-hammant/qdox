@@ -392,7 +392,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
 	 * Equivalent of java.lang.reflect.Method.getGenericReturnType()
 	 * 
 	 * @return the generic returntype
-	 * @since 1.12.1
+	 * @since 1.12
 	 */
     public Type getGenericReturnType()
     {
@@ -403,7 +403,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
      * Equivalent of java.lang.reflect.Method.getReturnType()
      * 
      * @return
-     * @since 1.12.1
+     * @since 1.12
      */
     public Type getReturnType() {
 	    return getReturnType( false );
@@ -413,7 +413,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
      * 
      * @param resolve
      * @return
-     * @since 1.12.1
+     * @since 1.12
      */
     public Type getReturnType( boolean resolve )
     {
@@ -425,7 +425,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
      * @param resolve
      * @param callingClass
      * @return
-     * @since 1.12.1
+     * @since 1.12
      */
     protected Type getReturnType ( boolean resolve, JavaClass callingClass) {
         Type result =  getReturns().resolve( this.getParentClass(), callingClass );

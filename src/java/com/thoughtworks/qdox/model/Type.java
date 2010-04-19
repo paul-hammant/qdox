@@ -354,7 +354,7 @@ public class Type implements Comparable, Serializable {
      * 
      * @param superClass
      * @return
-     * @since 1.12.1
+     * @since 1.12
      */
     protected int getTypeVariableIndex( JavaClass superClass ) {
         TypeVariable[] typeVariables = superClass.getTypeParameters();
@@ -370,7 +370,7 @@ public class Type implements Comparable, Serializable {
      * 
      * @param parentClass
      * @return
-     * @since 1.12.1
+     * @since 1.12
      */
     protected Type resolve( JavaClass parentClass )
     {
@@ -382,7 +382,7 @@ public class Type implements Comparable, Serializable {
      * @param parentClass
      * @param subclass
      * @return
-     * @since 1.12.1
+     * @since 1.12
      */
     protected Type resolve( JavaClass parentClass, JavaClass subclass )
     {

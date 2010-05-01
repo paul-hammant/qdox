@@ -9,6 +9,7 @@ import com.thoughtworks.qdox.testdata.PropertyClass;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -1253,5 +1254,30 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals("com.blah.Thing", thing.getFullyQualifiedName());
         assertNotNull(thing.getSource());
     }
+    
+    // for QDOX-209
+    public void testAnnotationMap() throws Exception{
+        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        String source = "import javax.persistence.JoinColumn;\n" + 
+        		"public class Instruction {\n" + 
+        		"    private static final int something = 40;\n" + 
+        		"    //-----------------------------------------------------------------------\r\n" + 
+        		"    @JoinColumn(name=\"test\",bla=\"hi\")\n" + 
+        		"    int testfield;\r\n" + 
+        		"}";
+        javaDocBuilder.addSource(new StringReader( source ));
+        JavaClass classByName = javaDocBuilder.getClassByName("Instruction");
+        JavaField fieldByName = classByName.getFieldByName("testfield");
+        Annotation[] annotations = fieldByName.getAnnotations();
+        
+        // Now we do have the annotation "JoinColumn" in annotations[0]
+        Map propertyMap = annotations[0].getNamedParameterMap();
+        // This one works
+        assertEquals("\"hi\"", propertyMap.get("bla"));
+        String string = (String) propertyMap.get("name");
+        // This one does not work
+        assertEquals("\"test\"", string);
+    }
+
 }
 

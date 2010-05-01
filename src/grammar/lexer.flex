@@ -162,6 +162,7 @@ JavadocEnd  = "*"+ "/"
     {Annotation} "(" {
         parenMode = ANNOTATION;
         yypushback(text().length()-1);
+        getCodeBody(); /* reset codebody */
         return Parser.AT;
     }
     "@"                 {

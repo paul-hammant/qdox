@@ -1255,6 +1255,26 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertNotNull(thing.getSource());
     }
     
+    // for QDOX-208
+    public void testMethodLineNumber() throws Exception {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        String source = "package com.foo;\n" +
+        		"public class Bar {\n" +
+        		"  public void method1() \n" +
+        		"  {}\n" +
+        		"\n" +
+        		"  /**\n" +
+        		"   * Method with javadoc\n" +
+        		"   */\n" +
+        		"   public void method1() { \n" +
+        		"   }\n" +
+        		"}";
+        builder.addSource( new StringReader( source ) );
+        JavaClass clazz = builder.getClasses()[0];
+        assertEquals( 3, clazz.getMethods()[0].getLineNumber() );
+        assertEquals( 9, clazz.getMethods()[1].getLineNumber() );
+    }
+    
     // for QDOX-209
     public void testAnnotationMap() throws Exception{
         JavaDocBuilder javaDocBuilder = new JavaDocBuilder();

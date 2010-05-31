@@ -339,9 +339,13 @@ public class GenericsTest extends TestCase {
         builder.addSource( new StringReader( source2 ) );
         builder.addSource( new StringReader( source3 ) );
         
-        JavaMethod method = builder.getClassByName( "SubjectService" ).getMethods( true )[0];
+        JavaClass clazz = builder.getClassByName( "SubjectService" );
+        JavaMethod method = clazz.getMethods( true )[0];
         assertEquals( "getAll", method.getName() );
         assertEquals( "java.util.List<Subject>", method.getReturnType( true ).getGenericValue() );
+        method = clazz.getMethods( true )[2];
+        assertEquals( "findById", method.getName() );
+        assertEquals( "java.lang.Long", method.getParameterTypes( true )[0].getGenericValue() );
     }
     
     

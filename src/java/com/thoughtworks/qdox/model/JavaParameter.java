@@ -29,7 +29,7 @@ public class JavaParameter extends AbstractBaseJavaEntity implements Serializabl
     public Type getType() {
         return type;
     }
-
+    
     public boolean equals(Object obj) {
         JavaParameter p = (JavaParameter) obj;
         // name isn't used in equality check.

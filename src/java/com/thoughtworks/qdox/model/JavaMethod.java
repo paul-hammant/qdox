@@ -437,4 +437,43 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         }
         return result;
     }
+    
+    /**
+     * 
+     * @return the parameter types as array
+     * @since 1.12
+     */
+    public Type[] getParameterTypes() {
+        return getParameterTypes( false );
+    }
+    
+    /**
+     * 
+     * @param resolve
+     * @return the parameter types as array
+     * @since 1.12
+     */
+    public Type[] getParameterTypes( boolean resolve ) {
+        return getParameterTypes( resolve, getParentClass() );
+    }
+
+    
+    protected Type[] getParameterTypes ( boolean resolve, JavaClass callingClass) {
+        Type[] result = new Type[getParameters().length];
+
+        for (int paramIndex = 0; paramIndex < getParameters().length; paramIndex++ )
+        {
+            Type curType = getParameters()[paramIndex].getType().resolve( this.getParentClass(), callingClass );
+            //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
+            if ( !resolve && !returns.getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
+            {
+                result[paramIndex] = new Type( "java.lang.Object" );
+            }
+            else {
+                result[paramIndex] = curType;
+            }
+            
+        }
+        return result;
+    }
 }

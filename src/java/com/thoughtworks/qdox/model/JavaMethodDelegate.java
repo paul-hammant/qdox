@@ -23,15 +23,32 @@ public class JavaMethodDelegate extends JavaMethod
     
     public Type getReturnType( boolean resolve )
     {
-        Type returnType = originalMethod.getReturnType( resolve, callingClass );  //TEntity
+        Type returnType = originalMethod.getReturnType( resolve, callingClass );
         return returnType.resolve( originalMethod.getParentClass(), callingClass );
     }
-    
-    protected Type getReturnType( boolean resolve, JavaClass callingClass )
+
+    protected Type getReturnType( boolean resolve, JavaClass _callingClass )
     {
+        //watch it!! use callingclass of constructor
         return super.getReturnType( resolve, this.callingClass );
     }
-
+    
+    public Type[] getParameterTypes( boolean resolve )
+    {
+        Type[] parameterTypes = originalMethod.getParameterTypes( resolve, callingClass );
+        for ( int paramIndex = 0; paramIndex < parameterTypes.length; paramIndex++ )
+        {
+            parameterTypes[paramIndex] = parameterTypes[paramIndex].resolve( originalMethod.getParentClass(), callingClass  );
+        }
+        return parameterTypes;
+    }
+    
+    protected Type[] getParameterTypes( boolean resolve, JavaClass _callingClass )
+    {
+        //watch it!! use callingclass of constructor
+        return super.getParameterTypes( resolve, this.callingClass );
+    }
+    
     //Delegating methods
     
     public void addParameter( JavaParameter javaParameter )
@@ -112,6 +129,11 @@ public class JavaMethodDelegate extends JavaMethod
     public JavaParameter[] getParameters()
     {
         return originalMethod.getParameters();
+    }
+    
+    public Type[] getParameterTypes()
+    {
+        return originalMethod.getParameterTypes();
     }
 
     public JavaClassParent getParent()

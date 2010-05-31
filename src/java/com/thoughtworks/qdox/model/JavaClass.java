@@ -329,24 +329,24 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     private void addMethodsFromSuperclassAndInterfaces(Set signatures,
-                                                       List methodList, JavaClass clazz) {
-        JavaMethod[] methods = clazz.getMethods();
+                                                       List methodList, JavaClass callingClazz) {
+        JavaMethod[] methods = callingClazz.getMethods();
 
         addNewMethods(signatures, methodList, methods);
 
-        JavaClass superclass = clazz.getSuperJavaClass();
+        JavaClass superclass = callingClazz.getSuperJavaClass();
 
         // TODO workaround for a bug in getSuperJavaClass
-        if ((superclass != null) && (superclass != clazz)) {
-            addMethodsFromSuperclassAndInterfaces(signatures, methodList,
+        if ((superclass != null) && (superclass != callingClazz)) {
+            callingClazz.addMethodsFromSuperclassAndInterfaces(signatures, methodList,
                     superclass);
         }
 
-        JavaClass[] implementz = clazz.getImplementedInterfaces();
+        JavaClass[] implementz = callingClazz.getImplementedInterfaces();
 
         for (int i = 0; i < implementz.length; i++) {
             if (implementz[i] != null) {
-                addMethodsFromSuperclassAndInterfaces(signatures, methodList,
+                callingClazz.addMethodsFromSuperclassAndInterfaces(signatures, methodList,
                         implementz[i]);
             }
         }
@@ -361,7 +361,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
                 String signature = method.getDeclarationSignature(false);
 
                 if (!signatures.contains(signature)) {
-                    methodList.add(method);
+                    methodList.add( new JavaMethodDelegate( this, method ) );
                     signatures.add(signature);
                 }
             }

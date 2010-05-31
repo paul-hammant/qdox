@@ -319,6 +319,31 @@ public class GenericsTest extends TestCase {
         assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericValue() );
     }
     
+    //for QDOX-210
+    public void testResolveTypeGetMethod() throws Exception {
+        String source1="import java.util.*;" +
+        "public interface GenericDao<TEntity, TKey> {\n" + 
+        "public List<TEntity> getAll();\n" + 
+        "public TEntity getRandom();\n" + 
+        "public TEntity findById(TKey key);\n" + 
+        "public TEntity persist(TEntity entity);\n" + 
+        "public TEntity[] persist(TEntity[] entities);\n" + 
+        "public void delete(TEntity entity);\n" + 
+        "public Map<TKey, TEntity> asMap();" +
+        "}\r\n";
+        String source2="public interface SubjectDao extends GenericDao<Subject, Long> {\n" + 
+        "}";
+        String source3="public interface SubjectService extends RemoteService, SubjectDao {\r\n" + 
+        "}";
+        builder.addSource( new StringReader( source1 ) );
+        builder.addSource( new StringReader( source2 ) );
+        builder.addSource( new StringReader( source3 ) );
+        
+        JavaMethod method = builder.getClassByName( "SubjectService" ).getMethods( true )[0];
+        assertEquals( "getAll", method.getName() );
+        assertEquals( "java.util.List<Subject>", method.getReturnType( true ).getGenericValue() );
+    }
+    
     
 
 }

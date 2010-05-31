@@ -115,7 +115,8 @@ public class Type implements Comparable, Serializable {
      * @return type representation for code usage
      */
     public String getValue() {
-        return getFullyQualifiedName().replaceAll( "\\$", "." );
+        String fqn = getFullyQualifiedName();
+        return ( fqn == null ? "" : fqn.replaceAll( "\\$", "." ) );
     }
     
     /**
@@ -400,10 +401,11 @@ public class Type implements Comparable, Serializable {
                 {
                     if ( fqn.equals( subclass.getImplements()[i].getFullyQualifiedName() ) ) 
                     {
-                        result = subclass.getImplements()[i].getActualTypeArguments()[typeIndex];
+                        result = subclass.getImplements()[i].getActualTypeArguments()[typeIndex].resolve( subclass.getImplementedInterfaces()[i] );
                         break;
                     }
                 }
+                //no direct interface available, try indirect
             }
         }
         

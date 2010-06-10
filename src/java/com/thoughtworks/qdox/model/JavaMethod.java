@@ -16,18 +16,37 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     private String sourceCode;
     private boolean varArgs;
 
+    /**
+     * The default constructor
+     */
     public JavaMethod() {
     }
 
+    /**
+     * Create new method without parameters and return type
+     * 
+     * @param name the name of the method
+     */
     public JavaMethod(String name) {
         setName(name);
     }
 
+    /**
+     * Create a new method without parameters
+     * 
+     * @param returns the return type
+     * @param name the name of this method
+     */
     public JavaMethod(Type returns, String name) {
         setReturns(returns);
         setName(name);
     }
     
+    /**
+     * 
+     * @return the return type
+     * @deprecated it is recommended to use getReturnType()
+     */
     public Type getReturns() {
         return returns;
     }
@@ -54,10 +73,18 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         return exceptions;
     }
 
+    /**
+     * 
+     * @return true is this method is a constructor
+     */
     public boolean isConstructor() {
         return constructor;
     }
     
+    /**
+     * 
+     * @return true is this method conains varArgs
+     */
     public boolean isVarArgs()
     {
         return varArgs;
@@ -144,6 +171,11 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
         return getSignature(false, false);
     }
 
+    /**
+     * Define the return type of this method
+     * 
+     * @param returns the return type
+     */
     public void setReturns(Type returns) {
         this.returns = returns;
     }
@@ -410,6 +442,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
 	}
 	
     /**
+     * If a class inherits this method from a generic class or interface, you can use this method to get the resolved return type
      * 
      * @param resolve
      * @return
@@ -448,6 +481,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     }
     
     /**
+     * If a class inherits this method from a generic class or interface, you can use this method to get the resolved parameter types
      * 
      * @param resolve
      * @return the parameter types as array

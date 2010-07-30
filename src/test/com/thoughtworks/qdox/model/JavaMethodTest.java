@@ -356,9 +356,17 @@ public class JavaMethodTest extends TestCase {
     	mthd.setModifiers(new String[]{"public"});
     	mthd.addParameter(new JavaParameter(new Type("java.lang.Object"), null));
     	assertEquals("public boolean java.lang.Object.equals(java.lang.Object)", mthd.toString());
-    	
+    }
+    
+    public void testConstructorToString() throws Exception {
+        JavaClass cls = new JavaClass("a.b.Executor");
+        JavaMethod constructor = new JavaMethod(null,"Executor");
+        constructor.setConstructor( true );
+        cls.addMethod(constructor);
+        assertEquals("a.b.Executor()", constructor.toString());
     }
 
+    
     private void assertNotEquals(Object o1, Object o2) {
         assertTrue(o1.toString() + " should not equals " + o2.toString(), !o1.equals(o2));
     }

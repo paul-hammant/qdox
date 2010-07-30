@@ -399,11 +399,18 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
 		if(isNative()) {
 			result.append("native ");
 		}
-		result.append(getReturns().getValue() + " ");
-		if(getParentClass() != null) {
-			result.append(getParentClass().getFullyQualifiedName() + ".");
+		if (!constructor) {
+		    result.append(getReturns().getValue() + " ");
 		}
-		result.append(getName());
+		if(getParentClass() != null) {
+			result.append(getParentClass().getFullyQualifiedName());
+			if (!constructor) {
+			    result.append(".");
+			}
+		}
+		if (!constructor) {
+		    result.append(getName());
+		}
 		result.append("(");
 		for(int paramIndex=0;paramIndex<getParameters().length;paramIndex++) {
 			if(paramIndex>0) {

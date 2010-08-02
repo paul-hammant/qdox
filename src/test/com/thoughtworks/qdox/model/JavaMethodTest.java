@@ -366,7 +366,21 @@ public class JavaMethodTest extends TestCase {
         assertEquals("a.b.Executor()", constructor.toString());
     }
 
-    
+    public void testConstructorReturnType() throws Exception {
+        JavaMethod constructor = new JavaMethod(null,"Executor");
+        constructor.setConstructor( true );
+        assertEquals(null, constructor.getReturnType());
+    }
+
+    public void testConstructorParameterTypes() throws Exception {
+        JavaClass cls = new JavaClass("a.b.Executor");
+        JavaMethod constructor = new JavaMethod(null,"Executor");
+        constructor.addParameter( new JavaParameter( new Type("a.b.C"), "param" ) );
+        constructor.setConstructor( true );
+        cls.addMethod(constructor);
+        assertEquals("a.b.C", constructor.getParameterTypes()[0].toString());
+    }
+
     private void assertNotEquals(Object o1, Object o2) {
         assertTrue(o1.toString() + " should not equals " + o2.toString(), !o1.equals(o2));
     }

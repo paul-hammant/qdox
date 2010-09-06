@@ -689,9 +689,6 @@ private String convertString(String str) {
 					value = 0;
 				}
 			}
-			else if(ch == '\\') {
-				escaped = true;
-			}
 			else if(escaped) {
 				if(ch == 'u' || ch == 'U') {
 					unicode = 4;
@@ -740,6 +737,9 @@ private String convertString(String str) {
 				}
 				
 				escaped = false;
+			}
+			else if(ch == '\\') {
+				escaped = true;
 			}
 			else {
 				buf.append( ch );

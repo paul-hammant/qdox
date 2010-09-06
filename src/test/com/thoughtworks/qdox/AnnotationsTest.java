@@ -255,4 +255,12 @@ public class AnnotationsTest extends TestCase {
         AnnotationFieldRef suppressWarnings = (AnnotationFieldRef) method.getAnnotations()[0].getProperty( "value" );
         assertEquals( builder.getClasses()[0].getFields()[0], suppressWarnings.getField());
     }
+    
+    public void testDoubleEscapedString() throws Exception {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        String source = "public class Foo {\n" +
+        		"@SuppressWarnings({\"abc\\\\d\"})\n" +
+        		"private void bar() { } }";
+        builder.addSource( new StringReader(source) );
+    }
 }

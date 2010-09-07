@@ -4,24 +4,35 @@ import junit.framework.TestCase;
 
 import java.util.HashMap;
 
-public class JavaSourceTest extends TestCase {
+public abstract class JavaSourceTest extends TestCase {
 
     private JavaSource source;
 
     public JavaSourceTest(String s) {
         super(s);
     }
+    
+    public abstract JavaSource newJavaSource();
+    public abstract JavaClass newJavaClass();
+    public abstract JavaPackage newJavaPackage(String name);
+    
+    public abstract void setClassLibrary(JavaSource source, ClassLibrary library);
+    public abstract void setPackage(JavaSource source, JavaPackage pckg);
+    public abstract void setName(JavaClass clazz, String name);
+    
+    public abstract void addClass(JavaSource source, JavaClass clazz);
+    public abstract void addImport(JavaSource source, String imp);
 
     protected void setUp() throws Exception {
         super.setUp();
-        source = new JavaSource();
-        source.setClassLibrary(new ClassLibrary());
+        source = newJavaSource();
+        setClassLibrary(source, new ClassLibrary());
     }
 
     public void testToStringOneClass() throws Exception {
-        JavaClass cls = new JavaClass();
-        cls.setName("MyClass");
-        source.addClass(cls);
+        JavaClass cls = newJavaClass();
+        setName(cls, "MyClass");
+        addClass(source, cls);
         String expected = ""
                 + "class MyClass {\n"
                 + "\n"
@@ -30,15 +41,15 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringMultipleClass() throws Exception {
-        JavaClass cls1 = new JavaClass();
-        cls1.setName("MyClass1");
-        source.addClass(cls1);
-        JavaClass cls2 = new JavaClass();
-        cls2.setName("MyClass2");
-        source.addClass(cls2);
-        JavaClass cls3 = new JavaClass();
-        cls3.setName("MyClass3");
-        source.addClass(cls3);
+        JavaClass cls1 = newJavaClass();
+        setName(cls1, "MyClass1");
+        addClass(source, cls1);
+        JavaClass cls2 = newJavaClass();
+        setName(cls2, "MyClass2");
+        addClass(source, cls2);
+        JavaClass cls3 = newJavaClass();
+        setName(cls3, "MyClass3");
+        addClass(source, cls3);
 
         String expected = ""
                 + "class MyClass1 {\n"
@@ -56,10 +67,10 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringPackage() throws Exception {
-        JavaClass cls = new JavaClass();
-        cls.setName("MyClass");
-        source.addClass(cls);
-        source.setPackage(new JavaPackage("com.thing", new HashMap()));
+        JavaClass cls = newJavaClass();
+        setName(cls, "MyClass");
+        addClass(source, cls);
+        setPackage(source, newJavaPackage("com.thing"));
         String expected = ""
                 + "package com.thing;\n"
                 + "\n"
@@ -70,10 +81,10 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringImport() throws Exception {
-        JavaClass cls = new JavaClass();
-        cls.setName("MyClass");
-        source.addClass(cls);
-        source.addImport("java.util.*");
+        JavaClass cls = newJavaClass();
+        setName(cls, "MyClass");
+        addClass(source, cls);
+        addImport(source, "java.util.*");
         String expected = ""
                 + "import java.util.*;\n"
                 + "\n"
@@ -84,12 +95,12 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringMultipleImports() throws Exception {
-        JavaClass cls = new JavaClass();
-        cls.setName("MyClass");
-        source.addClass(cls);
-        source.addImport("java.util.*");
-        source.addImport("com.blah.Thing");
-        source.addImport("xxx");
+        JavaClass cls = newJavaClass();
+        setName(cls, "MyClass");
+        addClass(source, cls);
+        addImport(source, "java.util.*");
+        addImport(source, "com.blah.Thing");
+        addImport(source, "xxx");
         String expected = ""
                 + "import java.util.*;\n"
                 + "import com.blah.Thing;\n"
@@ -102,11 +113,11 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testToStringImportAndPackage() throws Exception {
-        JavaClass cls = new JavaClass();
-        cls.setName("MyClass");
-        source.addClass(cls);
-        source.addImport("java.util.*");
-        source.setPackage(new JavaPackage("com.moo", new HashMap()));
+        JavaClass cls = newJavaClass();
+        setName(cls, "MyClass");
+        addClass(source, cls);
+        addImport(source, "java.util.*");
+        setPackage(source, newJavaPackage("com.moo"));
         String expected = ""
                 + "package com.moo;\n"
                 + "\n"
@@ -120,13 +131,13 @@ public class JavaSourceTest extends TestCase {
 
     public void testGetClassNamePrefix() {
         assertEquals("", source.getClassNamePrefix());
-        source.setPackage(new JavaPackage("foo.bar", new HashMap()));
+        setPackage(source, newJavaPackage("foo.bar"));
         assertEquals("foo.bar.", source.getClassNamePrefix());
        }
     
     public void testResolveJavaPrimitive() throws Exception {
-        source.addImport("bogus.int");
-        source.addImport("bogus.double");
+        addImport(source, "bogus.int");
+        addImport(source, "bogus.double");
         String[] primitives = new String[]{
             "boolean", "byte", "char", "double",
             "float", "int", "long", "short", "void"
@@ -146,15 +157,15 @@ public class JavaSourceTest extends TestCase {
     }
     
     public void testResolveFullyQualifiedImport() throws Exception {
-        source.addImport("foo.Bar");
+        addImport(source, "foo.Bar");
         source.getClassLibrary().add("foo.Bar");
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveChooseFirstMatchingImport() throws Exception {
-        source.addImport("bogus.package.MyType");
-        source.addImport("com.thoughtworks.qdox.model.Type");
-        source.addImport("another.package.Type");
+        addImport(source, "bogus.package.MyType");
+        addImport(source, "com.thoughtworks.qdox.model.Type");
+        addImport(source, "another.package.Type");
         source.getClassLibrary().add("bogus.package.MyType");
         source.getClassLibrary().add("com.thoughtworks.qdox.model.Type");
         source.getClassLibrary().add("another.package.Type");
@@ -162,21 +173,21 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testResolveSamePackage() throws Exception {
-        source.setPackage(new JavaPackage("foo", new HashMap()));
+        setPackage(source, newJavaPackage("foo"));
         source.getClassLibrary().add("foo.Bar");
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveFullyQualifiedTrumpsSamePackage() throws Exception {
-        source.setPackage(new JavaPackage("foo", new HashMap()));
+        setPackage(source, newJavaPackage("foo"));
         source.getClassLibrary().add("foo.Bar");
         source.getClassLibrary().add("open.Bar");
         assertEquals("open.Bar", source.resolveType("open.Bar"));
     }
 
     public void testResolveFullyQualifiedTrumpsWildCard() throws Exception {
-        source.addImport("bar.Bar");
-        source.addImport("foo.Bar");
+        addImport(source, "bar.Bar");
+        addImport(source, "foo.Bar");
         source.getClassLibrary().add("foo.*");
         source.getClassLibrary().add("bar.Bar");
         assertEquals("bar.Bar", source.resolveType("Bar"));
@@ -184,7 +195,7 @@ public class JavaSourceTest extends TestCase {
 
     public void testResolveWildcard() throws Exception {
         source.getClassLibrary().add("foo.Bar");
-        source.addImport("foo.*");
+        addImport(source, "foo.*");
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
@@ -194,22 +205,22 @@ public class JavaSourceTest extends TestCase {
     }
 
     public void testResolveSamePackageTrumpsWildcard() throws Exception {
-        source.addImport("com.thoughtworks.qdox.model.Type");
-        source.addImport("foo.*");
+        addImport(source, "com.thoughtworks.qdox.model.Type");
+        addImport(source, "foo.*");
         source.getClassLibrary().add("com.thoughtworks.qdox.model.Type");
         source.getClassLibrary().add("foo.Type");
         assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
     }
 
     public void testResolveFullyQualifiedInnerClass() throws Exception {
-        source.setPackage(new JavaPackage("foo", new HashMap()));
+        setPackage(source, newJavaPackage("foo"));
         source.getClassLibrary().add("foo.Bar$Fnord");
         assertEquals("foo.Bar$Fnord", source.resolveType("foo.Bar.Fnord"));
     }
 
     public void testResolvePartiallySpecifiedInnerClass() throws Exception {
-        source.setPackage(new JavaPackage("foo", new HashMap()));
-        source.addImport("java.util.*");
+        setPackage(source, newJavaPackage("foo"));
+        addImport(source, "java.util.*");
         source.getClassLibrary().add("foo.Bar$Fnord");
         source.getClassLibrary().addDefaultLoader();
         assertEquals("foo.Bar$Fnord", source.resolveType("Bar.Fnord"));

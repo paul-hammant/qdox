@@ -2,32 +2,48 @@ package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
 
-public class JavaFieldTest extends TestCase {
+public abstract class JavaFieldTest extends TestCase {
 
     public JavaFieldTest(String s) {
         super(s);
     }
+    
+    public abstract JavaField newJavaField();
+    public abstract JavaField newJavaField(Type type, String name);
+    public abstract Type newType(String fullname);
+    public abstract Type newType(String fullname, int dimensions);
+    public abstract JavaClass newJavaClass(String fullname);
+    public abstract JavaPackage newJavaPackage(String name);
+    
+    public abstract void setComment(JavaField fld, String comment);
+    public abstract void setInitializationExpression(JavaField fld, String expression);
+    public abstract void setModifiers(JavaField fld, String[] modifiers);
+    public abstract void setName(JavaField fld, String name);
+    public abstract void setType(JavaField fld, Type type);
+    
+    public abstract void addField(JavaClass clazz, JavaField fld);
+    public abstract void addClass(JavaPackage pckg, JavaClass clazz);
 
     public void testGetCodeBlock() throws Exception {
-        JavaField fld = new JavaField();
-        fld.setName("count");
-        fld.setType(new Type("int"));
+        JavaField fld = newJavaField();
+        setName(fld, "count");
+        setType(fld, newType("int"));
         assertEquals("int count;\n", fld.getCodeBlock());
     }
 
     public void testGetCodeBlockWithModifiers() throws Exception {
-        JavaField fld = new JavaField();
-        fld.setName("count");
-        fld.setType(new Type("int"));
-        fld.setModifiers(new String[]{"public", "final"});
+        JavaField fld = newJavaField();
+        setName(fld, "count");
+        setType(fld, newType("int"));
+        setModifiers(fld, new String[]{"public", "final"});
         assertEquals("public final int count;\n", fld.getCodeBlock());
     }
 
     public void testGetCodeBlockWithComment() throws Exception {
-        JavaField fld = new JavaField();
-        fld.setName("count");
-        fld.setType(new Type("int"));
-        fld.setComment("Hello");
+        JavaField fld = newJavaField();
+        setName(fld, "count");
+        setType(fld, newType("int"));
+        setComment(fld, "Hello");
         String expected = ""
                 + "/**\n"
                 + " * Hello\n"
@@ -37,69 +53,69 @@ public class JavaFieldTest extends TestCase {
     }
 
     public void testGetCodeBlock1dArray() throws Exception {
-        JavaField fld = new JavaField();
-        fld.setName("count");
-        fld.setType(new Type("int", 1));
+        JavaField fld = newJavaField();
+        setName(fld, "count");
+        setType(fld, newType("int", 1));
         String expected = "int[] count;\n";
         assertEquals(expected, fld.getCodeBlock());
     }
 
     public void testGetCodeBlock2dArray() throws Exception {
-        JavaField fld = new JavaField();
-        fld.setName("count");
-        fld.setType(new Type("int", 2));
+        JavaField fld = newJavaField();
+        setName(fld, "count");
+        setType(fld, newType("int", 2));
         String expected = "int[][] count;\n";
         assertEquals(expected, fld.getCodeBlock());
     }
 
     public void testGetCodeBlockWithValue() throws Exception {
-        JavaField fld = new JavaField();
-        fld.setName("stuff");
-        fld.setType(new Type("String"));
-        fld.setInitializationExpression("STUFF + getThing()");
+        JavaField fld = newJavaField();
+        setName(fld, "stuff");
+        setType(fld, newType("String"));
+        setInitializationExpression(fld, "STUFF + getThing()");
         String expected = "String stuff = STUFF + getThing();\n";
         assertEquals(expected, fld.getCodeBlock());
     }
     
     public void testShouldReturnFieldNameForCallSignature() throws Exception {
-        JavaField fld = new JavaField();
-        fld.setName("count");
-        fld.setType(new Type("int"));
-        fld.setModifiers(new String[]{"public", "final"});
+        JavaField fld = newJavaField();
+        setName(fld, "count");
+        setType(fld, newType("int"));
+        setModifiers(fld, new String[]{"public", "final"});
         assertEquals("count", fld.getCallSignature());
     }
 
     public void testShouldReturnProperDeclarationSignatureWithModifiers() throws Exception {
-        JavaField fld = new JavaField();
-        fld.setName("count");
-        fld.setType(new Type("int"));
-        fld.setModifiers(new String[]{"public", "final"});
+        JavaField fld = newJavaField();
+        setName(fld, "count");
+        setType(fld, newType("int"));
+        setModifiers(fld, new String[]{"public", "final"});
         assertEquals("public final int count", fld.getDeclarationSignature(true));
     }
 
     public void testShouldReturnProperDeclarationSignatureWithoutModifiers() throws Exception {
-        JavaField fld = new JavaField();
-        fld.setName("count");
-        fld.setType(new Type("int"));
-        fld.setModifiers(new String[]{"public", "final"});
+        JavaField fld = newJavaField();
+        setName(fld, "count");
+        setType(fld, newType("int"));
+        setModifiers(fld, new String[]{"public", "final"});
         assertEquals("int count", fld.getDeclarationSignature(false));
     }
     
     public void testToStringThreadMIN_PRIORITY() throws Exception {
-    	JavaClass cls = new JavaClass("java.lang.Thread");
-    	JavaField fld = new JavaField(new Type("int"), "MIN_PRIORITY");
-    	fld.setModifiers(new String[] {"final", "static", "public"});
-    	cls.addField(fld);
+    	JavaClass cls = newJavaClass("java.lang.Thread");
+    	JavaField fld = newJavaField(newType("int"), "MIN_PRIORITY");
+    	setModifiers(fld, new String[] {"final", "static", "public"});
+    	addField(cls, fld);
     	assertEquals("public static final int java.lang.Thread.MIN_PRIORITY", fld.toString());
     }
     
     public void testToStringFieldDescriptorFd() throws Exception {
-    	JavaPackage pckg =  new JavaPackage("java.io");
-    	JavaClass cls = new JavaClass("FileDescriptor");
-    	pckg.addClass(cls);
-    	JavaField fld =  new JavaField(new Type("int"), "fd");
-    	fld.setModifiers(new String[]{"private"});
-    	cls.addField(fld);
+    	JavaPackage pckg =  newJavaPackage("java.io");
+    	JavaClass cls = newJavaClass("FileDescriptor");
+    	addClass(pckg, cls);
+    	JavaField fld =  newJavaField(newType("int"), "fd");
+    	setModifiers(fld, new String[]{"private"});
+    	addField(cls, fld);
     	assertEquals("private int java.io.FileDescriptor.fd", fld.toString());
     }
 }

@@ -7,17 +7,27 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.JavaDocBuilder;
 
-public class TypeTest extends TestCase {
+public abstract class TypeTest extends TestCase {
 
     public TypeTest(String s) {
         super(s);
     }
+    
+    public abstract JavaSource newJavaSource();
+    public abstract JavaSource newJavaSource(JavaClassContext context);
+    public abstract Type newType(String fullname);
+    public abstract Type newType(String fullname, int dimensions);
+    public abstract Type newType(String fullname, int dimensions, JavaSource source);
+    
+    public abstract void setClassLibrary(JavaSource source, ClassLibrary library);
+    
+    public abstract void addImport(JavaSource source, String imp);
 
     public void testResolving() throws Exception {
         ClassLibrary classLib = new ClassLibrary();
-        JavaSource src = new JavaSource();
-        src.setClassLibrary(classLib);
-        src.addImport("foo.*");
+        JavaSource src = newJavaSource();
+        setClassLibrary(src, classLib);
+        addImport(src, "foo.*");
         Type type = Type.createUnresolved("Bar", 0, src);
         assertEquals(false, type.isResolved());
         classLib.add("foo.Bar");
@@ -26,32 +36,32 @@ public class TypeTest extends TestCase {
     }
 
     public void testArrayType() throws Exception {
-        Type type = new Type("int", 1);
+        Type type = newType("int", 1);
         assertTrue(type.isArray());
     }
 
     public void testToString() throws Exception {
-        assertEquals("int", new Type("int").toString());
-        assertEquals("int[]", new Type("int", 1).toString());
-        assertEquals("long[][][]", new Type("long", 3).toString());
+        assertEquals("int", newType("int").toString());
+        assertEquals("int[]", newType("int", 1).toString());
+        assertEquals("long[][][]", newType("long", 3).toString());
     }
 
     public void testEquals() throws Exception {
-        assertEquals(new Type("string"),
-                new Type("string"));
-        assertNotEquals(new Type("string"),
-                new Type("int"));
-        assertNotEquals(new Type("long", 1),
-                new Type("long"));
-        assertNotEquals(new Type("long"),
-                new Type("long", 2));
-        assertFalse(new Type("int").equals(null));
+        assertEquals(newType("string"),
+                newType("string"));
+        assertNotEquals(newType("string"),
+                newType("int"));
+        assertNotEquals(newType("long", 1),
+                newType("long"));
+        assertNotEquals(newType("long"),
+                newType("long", 2));
+        assertFalse(newType("int").equals(null));
     }
 
     public void testTypeHasJavaClass() {
-        JavaSource javaSource = new JavaSource(new JavaClassContext(new JavaDocBuilder()));
-        javaSource.setClassLibrary(new ClassLibrary());
-        Type type = new Type("java.util.HashSet", 0, javaSource);
+        JavaSource javaSource = newJavaSource(new JavaClassContext(new JavaDocBuilder()));
+        setClassLibrary(javaSource, new ClassLibrary());
+        Type type = newType("java.util.HashSet", 0, javaSource);
         JavaClass clazz = type.getJavaClass();
         JavaClass superClass = clazz.getSuperJavaClass();
         assertEquals("java.util.AbstractSet", superClass.getFullyQualifiedName());

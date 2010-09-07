@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import java.util.HashMap;
 
-public class JavaClassTest extends TestCase {
+public abstract class JavaClassTest extends TestCase {
 
     private JavaClass cls;
     private JavaSource src;
@@ -12,16 +12,51 @@ public class JavaClassTest extends TestCase {
     public JavaClassTest(String s) {
         super(s);
     }
+    
+    public abstract JavaClass newJavaClass();
+    public abstract JavaClass newJavaClass(String name);
+    public abstract JavaField newJavaField();
+    public abstract JavaMethod newJavaMethod();
+    public abstract JavaMethod newJavaMethod(String name);
+    public abstract JavaMethod newJavaMethod(Type returns, String name);
+    public abstract JavaPackage newJavaPackage(String name);
+    public abstract JavaParameter newJavaParameter(Type type, String name);
+    public abstract JavaParameter newJavaParameter(Type type, String name, boolean varArgs);
+    public abstract JavaSource newJavaSource();
+    public abstract Type newType(String fullname);
+    
+    public abstract void setComment(JavaClass clazz, String comment);
+    public abstract void setComment(JavaField field, String comment);
+    public abstract void setComment(JavaMethod method, String comment);
+    public abstract void setEnum(JavaClass clazz, boolean isEnum);
+    public abstract void setImplementz(JavaClass clazz, Type[] implementz);
+    public abstract void setInterface(JavaClass clazz, boolean isInterface);
+    public abstract void setModifiers(JavaClass clazz, String[] modifiers);
+    public abstract void setModifiers(JavaField field, String[] modifiers);
+    public abstract void setName(JavaClass clazz, String name);
+    public abstract void setName(JavaField field, String name);
+    public abstract void setName(JavaMethod method, String name);
+    public abstract void setPackage(JavaSource source, JavaPackage pckg);
+    public abstract void setReturns(JavaMethod clazz, Type returns);
+    public abstract void setSuperClass(JavaClass clazz, Type type);
+    public abstract void setType(JavaField field, Type type);
+    
+    public abstract void addClass(JavaClass clazz, JavaClass innerClazz);
+    public abstract void addClass(JavaPackage pckg, JavaClass clazz);
+    public abstract void addClass(JavaSource source, JavaClass clazz);
+    public abstract void addMethod(JavaClass clazz, JavaMethod method);
+    public abstract void addField(JavaClass clazz, JavaField field);
+    public abstract void addParameter(JavaMethod method, JavaParameter parameter);
 
     protected void setUp() throws Exception {
         super.setUp();
-        src = new JavaSource();
-        cls = new JavaClass();
-        src.addClass(cls);
+        src = newJavaSource();
+        cls = newJavaClass();
+        addClass(src, cls);
     }
 
     public void testGetCodeBlockSimpleClass() throws Exception {
-        cls.setName("MyClass");
+        setName(cls, "MyClass");
         String expected = ""
                 + "class MyClass {\n"
                 + "\n"
@@ -30,8 +65,8 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockSimpleInterface() throws Exception {
-        cls.setName("MyClass");
-        cls.setInterface(true);
+        setName(cls, "MyClass");
+        setInterface(cls, true);
         String expected = ""
                 + "interface MyClass {\n"
                 + "\n"
@@ -40,8 +75,8 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockSimpleEnum() throws Exception {
-        cls.setName("MyEnum");
-        cls.setEnum(true);
+        setName(cls, "MyEnum");
+        setEnum(cls, true);
         String expected = ""
                 + "enum MyEnum {\n"
                 + "\n"
@@ -50,8 +85,8 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassExtends() throws Exception {
-        cls.setName("MyClass");
-        cls.setSuperClass(new Type("SuperClass"));
+        setName(cls, "MyClass");
+        setSuperClass(cls, newType("SuperClass"));
         String expected = ""
                 + "class MyClass extends SuperClass {\n"
                 + "\n"
@@ -60,9 +95,9 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockInterfaceExtends() throws Exception {
-        cls.setName("MyClass");
-        cls.setImplementz(type(new String[]{"SomeInterface"}));
-        cls.setInterface(true);
+        setName(cls, "MyClass");
+        setImplementz(cls, type(new String[]{"SomeInterface"}));
+        setInterface(cls, true);
         String expected = ""
                 + "interface MyClass extends SomeInterface {\n"
                 + "\n"
@@ -71,9 +106,9 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockInterfaceExtendsTwo() throws Exception {
-        cls.setName("MyClass");
-        cls.setImplementz(type(new String[]{"SomeInterface", "AnotherInterface"}));
-        cls.setInterface(true);
+        setName(cls, "MyClass");
+        setImplementz(cls, type(new String[]{"SomeInterface", "AnotherInterface"}));
+        setInterface(cls, true);
         String expected = ""
                 + "interface MyClass extends SomeInterface, AnotherInterface {\n"
                 + "\n"
@@ -82,9 +117,9 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockInterfaceExtendsThree() throws Exception {
-        cls.setName("MyClass");
-        cls.setImplementz(type(new String[]{"SomeInterface", "AnotherInterface", "Thingy"}));
-        cls.setInterface(true);
+        setName(cls, "MyClass");
+        setImplementz(cls, type(new String[]{"SomeInterface", "AnotherInterface", "Thingy"}));
+        setInterface(cls, true);
         String expected = ""
                 + "interface MyClass extends SomeInterface, AnotherInterface, Thingy {\n"
                 + "\n"
@@ -93,8 +128,8 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassImplements() throws Exception {
-        cls.setName("MyClass");
-        cls.setImplementz(type(new String[]{"SomeInterface"}));
+        setName(cls, "MyClass");
+        setImplementz(cls, type(new String[]{"SomeInterface"}));
         String expected = ""
                 + "class MyClass implements SomeInterface {\n"
                 + "\n"
@@ -103,8 +138,8 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassImplementsTwo() throws Exception {
-        cls.setName("MyClass");
-        cls.setImplementz(type(new String[]{"SomeInterface", "AnotherInterface", "Xx"}));
+        setName(cls, "MyClass");
+        setImplementz(cls, type(new String[]{"SomeInterface", "AnotherInterface", "Xx"}));
         String expected = ""
                 + "class MyClass implements SomeInterface, AnotherInterface, Xx {\n"
                 + "\n"
@@ -113,9 +148,9 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassImplementsAndExtends() throws Exception {
-        cls.setName("MyClass");
-        cls.setImplementz(type(new String[]{"SomeInterface", "AnotherInterface", "Xx"}));
-        cls.setSuperClass(new Type("SubMarine"));
+        setName(cls, "MyClass");
+        setImplementz(cls, type(new String[]{"SomeInterface", "AnotherInterface", "Xx"}));
+        setSuperClass(cls, newType("SubMarine"));
         String expected = ""
                 + "class MyClass extends SubMarine implements SomeInterface, AnotherInterface, Xx {\n"
                 + "\n"
@@ -124,8 +159,8 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockModifers() throws Exception {
-        cls.setName("MyClass");
-        cls.setModifiers(new String[]{"public", "final"});
+        setName(cls, "MyClass");
+        setModifiers(cls, new String[]{"public", "final"});
         String expected = ""
                 + "public final class MyClass {\n"
                 + "\n"
@@ -134,15 +169,15 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockModifersProtectionAlwaysFirst() throws Exception {
-        cls.setName("MyClass");
-        cls.setModifiers(new String[]{"final", "public"});
+        setName(cls, "MyClass");
+        setModifiers(cls, new String[]{"final", "public"});
         String expected = ""
                 + "public final class MyClass {\n"
                 + "\n"
                 + "}\n";
         assertEquals(expected, cls.getCodeBlock());
 
-        cls.setModifiers(new String[]{"abstract", "protected"});
+        setModifiers(cls, new String[]{"abstract", "protected"});
         expected = ""
                 + "protected abstract class MyClass {\n"
                 + "\n"
@@ -151,11 +186,11 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassWithOneMethod() throws Exception {
-        cls.setName("MyClass");
-        JavaMethod mth = new JavaMethod();
-        mth.setName("doStuff");
-        mth.setReturns(new Type("void"));
-        cls.addMethod(mth);
+        setName(cls, "MyClass");
+        JavaMethod mth = newJavaMethod();
+        setName(mth, "doStuff");
+        setReturns(mth, newType("void"));
+        addMethod(cls, mth);
         String expected = ""
                 + "class MyClass {\n"
                 + "\n"
@@ -166,27 +201,26 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassWithThreeMethods() throws Exception {
-        cls.setName("MyClass");
-
+        setName(cls, "MyClass");
         {
-            JavaMethod mth = new JavaMethod();
-            mth.setName("doStuff");
-            mth.setReturns(new Type("void"));
-            cls.addMethod(mth);
+            JavaMethod mth = newJavaMethod();
+            setName(mth, "doStuff");
+            setReturns(mth, newType("void"));
+            addMethod(cls, mth);
         }
 
         {
-            JavaMethod mth = new JavaMethod();
-            mth.setName("somethingElse");
-            mth.setReturns(new Type("Goose"));
-            cls.addMethod(mth);
+            JavaMethod mth = newJavaMethod();
+            setName(mth, "somethingElse");
+            setReturns(mth, newType("Goose"));
+            addMethod(cls, mth);
         }
 
         {
-            JavaMethod mth = new JavaMethod();
-            mth.setName("eat");
-            mth.setReturns(new Type("void"));
-            cls.addMethod(mth);
+            JavaMethod mth = newJavaMethod();
+            setName(mth, "eat");
+            setReturns(mth, newType("void"));
+            addMethod(cls, mth);
         }
 
         String expected = ""
@@ -203,21 +237,20 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassWithTwoFields() throws Exception {
-        cls.setName("MyClass");
-
+        setName(cls, "MyClass");
         {
-            JavaField fld = new JavaField();
-            fld.setName("count");
-            fld.setType(new Type("int"));
-            cls.addField(fld);
+            JavaField fld = newJavaField();
+            setName(fld, "count");
+            setType(fld, newType("int"));
+            addField(cls, fld);
         }
 
         {
-            JavaField fld = new JavaField();
-            fld.setName("thing");
-            fld.setType(new Type("String"));
-            fld.setModifiers(new String[]{"public"});
-            cls.addField(fld);
+            JavaField fld = newJavaField();
+            setName(fld, "thing");
+            setType(fld, newType("String"));
+            setModifiers(fld, new String[]{"public"});
+            addField(cls, fld);
         }
 
         String expected = ""
@@ -232,10 +265,10 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassWithInnerClass() throws Exception {
-        cls.setName("Outer");
-        JavaClass innerClass = new JavaClass();
-        innerClass.setName("Inner");
-        cls.addClass(innerClass);
+        setName(cls, "Outer");
+        JavaClass innerClass = newJavaClass();
+        setName(innerClass, "Inner");
+        addClass(cls, innerClass);
 
         String expected = ""
                 + "class Outer {\n"
@@ -249,11 +282,11 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassWithInnerEnum() throws Exception {
-        cls.setName("Outer");
-        JavaClass innerEnum = new JavaClass();
-        innerEnum.setEnum(true);
-        innerEnum.setName("Inner");
-        cls.addClass(innerEnum);
+        setName(cls, "Outer");
+        JavaClass innerEnum = newJavaClass();
+        setEnum(innerEnum, true);
+        setName(innerEnum, "Inner");
+        addClass(cls, innerEnum);
 
         String expected = ""
                 + "class Outer {\n"
@@ -267,11 +300,11 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockEnumWithInnerClass() throws Exception {
-        cls.setName("Outer");
-        cls.setEnum(true);
-        JavaClass innerClass = new JavaClass();
-        innerClass.setName("Inner");
-        cls.addClass(innerClass);
+        setName(cls, "Outer");
+        setEnum(cls, true);
+        JavaClass innerClass = newJavaClass();
+        setName(innerClass, "Inner");
+        addClass(cls, innerClass);
 
         String expected = ""
                 + "enum Outer {\n"
@@ -286,8 +319,8 @@ public class JavaClassTest extends TestCase {
 
 
     public void testGetCodeBlockClassWithComment() throws Exception {
-        cls.setName("MyClass");
-        cls.setComment("Hello World");
+        setName(cls, "MyClass");
+        setComment(cls, "Hello World");
 
         String expected = ""
                 + "/**\n"
@@ -300,20 +333,20 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetCodeBlockClassWithIndentedCommentsForFieldAndMethod() throws Exception {
-        cls.setName("MyClass");
-        cls.setComment("Hello World");
+        setName(cls, "MyClass");
+        setComment(cls, "Hello World");
 
-        JavaMethod mth = new JavaMethod();
-        mth.setReturns(new Type("String"));
-        mth.setName("thingy");
-        mth.setComment("Hello Method");
-        cls.addMethod(mth);
+        JavaMethod mth = newJavaMethod();
+        setReturns(mth, newType("String"));
+        setName(mth, "thingy");
+        setComment(mth, "Hello Method");
+        addMethod(cls, mth);
 
-        JavaField fld = new JavaField();
-        fld.setType(new Type("String"));
-        fld.setName("thing");
-        fld.setComment("Hello Field");
-        cls.addField(fld);
+        JavaField fld = newJavaField();
+        setType(fld, newType("String"));
+        setName(fld, "thing");
+        setComment(fld, "Hello Field");
+        addField(cls, fld);
 
         String expected = ""
                 + "/**\n"
@@ -336,17 +369,17 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testIsPublic() {
-        cls.setName("MyClass");
+        setName(cls, "MyClass");
         assertTrue(!cls.isPublic());
 
-        cls.setModifiers(new String[]{"public"});
+        setModifiers(cls, new String[]{"public"});
         assertTrue(cls.isPublic());
     }
 
     public void testQualifiedType() throws Exception {
-        src.setPackage(new JavaPackage("com.thoughtworks.qdox", new HashMap()));
+        setPackage(src, newJavaPackage("com.thoughtworks.qdox"));
 
-        cls.setName("MyClass");
+        setName(cls, "MyClass");
 
         assertEquals("MyClass", cls.getName());
         assertEquals("com.thoughtworks.qdox", cls.getPackage().getName());
@@ -358,21 +391,21 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetClassNamePrefix() {
-        src.setPackage(new JavaPackage("foo.bar", new HashMap()));
-        cls.setName("Stanley");
+        setPackage(src, newJavaPackage("foo.bar"));
+        setName(cls, "Stanley");
         assertEquals("foo.bar.Stanley$", cls.getClassNamePrefix());
     }
     
     public void testInnerClass() throws Exception {
-        src.setPackage(new JavaPackage("foo.bar", new HashMap()));
+        setPackage(src, newJavaPackage("foo.bar"));
 
-        JavaClass outer = new JavaClass();
-        outer.setName("Outer");
-        src.addClass(outer);
+        JavaClass outer = newJavaClass();
+        setName(outer, "Outer");
+        addClass(src, outer);
 
-        JavaClass inner = new JavaClass();
-        inner.setName("Inner");
-        outer.addClass(inner);
+        JavaClass inner = newJavaClass();
+        setName(inner, "Inner");
+        addClass(outer, inner);
 
         assertEquals("Inner", inner.getName());
         assertEquals("foo.bar", inner.getPackage().getName());
@@ -382,39 +415,39 @@ public class JavaClassTest extends TestCase {
     }
     
     public void testDefaultPackageClass() {
-    	src.setPackage(null);
-    	cls.setName("DefaultPackageClass");
+    	setPackage(src, null);
+    	setName(cls, "DefaultPackageClass");
     	
     	assertEquals("", src.getClasses()[0].getPackageName());
     	assertEquals("DefaultPackageClass", src.getClasses()[0].getFullyQualifiedName());
     }
 
     public void testDefaultClassSuperclass() throws Exception {
-        cls.setName("MyClass");
+        setName(cls, "MyClass");
         assertEquals("java.lang.Object", cls.getSuperClass().getValue());
-        cls.setSuperClass(new Type("x.X"));
+        setSuperClass(cls, newType("x.X"));
         assertEquals("x.X", cls.getSuperClass().getValue());
     }
 
     public void testDefaultInterfaceSuperclass() throws Exception {
-        cls.setName("MyInterface");
-        cls.setInterface(true);
+        setName(cls, "MyInterface");
+        setInterface(cls, true);
         assertNull(cls.getSuperClass());
-        cls.setSuperClass(new Type("x.X"));
+        setSuperClass(cls, newType("x.X"));
         assertEquals("x.X", cls.getSuperClass().getValue());
     }
 
     public void testEnumSuperclass() throws Exception {
-        cls.setName("MyEnum");
-        cls.setEnum(true);
+        setName(cls, "MyEnum");
+        setEnum(cls, true);
         assertEquals("java.lang.Enum", cls.getSuperClass().getValue());
     }
 
     public void testEnumCannotExtendAnythingElse() throws Exception {
-        cls.setName("MyEnum");
-        cls.setEnum(true);
+        setName(cls, "MyEnum");
+        setEnum(cls, true);
         try {
-            cls.setSuperClass(new Type("x.X"));
+            setSuperClass(cls, newType("x.X"));
             fail("expected an exception");
         } catch (IllegalArgumentException e) {
             assertEquals("enums cannot extend other classes", e.getMessage());
@@ -422,22 +455,22 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testCanGetFieldByName() throws Exception {
-        JavaField fredField = new JavaField();
-        fredField.setName("fred");
-        fredField.setType(new Type("int"));
-        cls.addField(fredField);
+        JavaField fredField = newJavaField();
+        setName(fredField, "fred");
+        setType(fredField, newType("int"));
+        addField(cls, fredField);
 
         assertEquals(fredField, cls.getFieldByName("fred"));
         assertEquals(null, cls.getFieldByName("barney"));
     }
 
     public void testCanGetMethodBySignature() {
-        JavaMethod method = new JavaMethod();
-        method.setReturns(new Type("void"));
-        method.setName("doStuff");
-        method.addParameter( new JavaParameter(new Type("int"), "x") );
-        method.addParameter( new JavaParameter(new Type("double"), "y") );
-        cls.addMethod(method);
+        JavaMethod method = newJavaMethod();
+        setReturns(method, newType("void"));
+        setName(method, "doStuff");
+        addParameter(method, newJavaParameter(newType("int"), "x") );
+        addParameter(method, newJavaParameter(newType("double"), "y") );
+        addMethod(cls, method);
 
         Type[] correctTypes = type(new String[]{"int", "double"});
         assertSame(
@@ -455,25 +488,25 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testCanGetInnerClassByName() throws Exception {
-        JavaClass innerClass = new JavaClass();
-        innerClass.setName("Inner");
-        cls.addClass(innerClass);
+        JavaClass innerClass = newJavaClass();
+        setName(innerClass, "Inner");
+        addClass(cls, innerClass);
 
         assertEquals(innerClass, cls.getNestedClassByName("Inner"));
         assertEquals(null, cls.getNestedClassByName("Bogus"));
     }
 
     public void testResolveTypeDefaultsToParentScope() throws Exception {
-        cls.setName("X");
+        setName(cls, "X");
         assertEquals("int", cls.resolveType("int"));
     }
     
     public void testResolveTypeInnerClass() throws Exception {
-        src.setPackage(new JavaPackage("p", new HashMap()));
-        cls.setName("X");
-        JavaClass innerClass = new JavaClass();
-        innerClass.setName("DogFood");
-        cls.addClass(innerClass);
+        setPackage(src, newJavaPackage("p"));
+        setName(cls, "X");
+        JavaClass innerClass = newJavaClass();
+        setName(innerClass, "DogFood");
+        addClass(cls, innerClass);
         assertEquals("p.X$DogFood", cls.resolveType("DogFood"));
         assertEquals(null, cls.resolveType("Food"));
     }
@@ -483,112 +516,112 @@ public class JavaClassTest extends TestCase {
     }
 
     public void testGetBeanPropertiesFindsSimpleProperties() throws Exception {
-        JavaMethod setFooMethod = new JavaMethod("setFoo");
-        setFooMethod.addParameter(new JavaParameter(new Type("int"), "foo"));
-        cls.addMethod(setFooMethod);
+        JavaMethod setFooMethod = newJavaMethod("setFoo");
+        addParameter(setFooMethod, newJavaParameter(newType("int"), "foo"));
+        addMethod(cls, setFooMethod);
 
-        JavaMethod getFooMethod = new JavaMethod(new Type("int"), "getFoo");
-        cls.addMethod(getFooMethod);
+        JavaMethod getFooMethod = newJavaMethod(newType("int"), "getFoo");
+        addMethod(cls, getFooMethod);
         
         assertEquals(1, cls.getBeanProperties().length);
         BeanProperty fooProp = cls.getBeanProperties()[0];
         assertEquals("foo", fooProp.getName());
-        assertEquals(new Type("int"), fooProp.getType());
+        assertEquals(newType("int"), fooProp.getType());
         assertEquals(getFooMethod, fooProp.getAccessor());
         assertEquals(setFooMethod, fooProp.getMutator());
     }
     
     public void testToStringClass() {
-    	cls.setName("com.MyClass");
+    	setName(cls, "com.MyClass");
     	assertEquals("class com.MyClass", cls.toString());
     }
     
     public void testInnerClassToString() throws Exception {
-    	JavaPackage jPackage = new JavaPackage("com.thoughtworks.qdox.model");
-    	JavaClass jOuterClass = new JavaClass("OuterClass");
-    	jPackage.addClass(jOuterClass);
-    	JavaClass jInnerClass = new JavaClass("InnerClass");
-    	jOuterClass.addClass(jInnerClass);
+    	JavaPackage jPackage = newJavaPackage("com.thoughtworks.qdox.model");
+    	JavaClass jOuterClass = newJavaClass("OuterClass");
+    	addClass(jPackage, jOuterClass);
+    	JavaClass jInnerClass = newJavaClass("InnerClass");
+    	addClass(jOuterClass, jInnerClass);
     	assertEquals("class com.thoughtworks.qdox.model.OuterClass$InnerClass", jInnerClass.toString());
     }
     
     public void testInnerClassType() {
-        JavaPackage jPackage = new JavaPackage("com.thoughtworks.qdox.model");
-        JavaClass jOuterClass = new JavaClass("OuterClass");
-        jPackage.addClass(jOuterClass);
-        JavaClass jInnerClass = new JavaClass("InnerClass");
-        jOuterClass.addClass(jInnerClass);
+        JavaPackage jPackage = newJavaPackage("com.thoughtworks.qdox.model");
+        JavaClass jOuterClass = newJavaClass("OuterClass");
+        addClass(jPackage, jOuterClass);
+        JavaClass jInnerClass = newJavaClass("InnerClass");
+        addClass(jOuterClass, jInnerClass);
         assertEquals("com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.asType().getValue());
     }
     
     public void testInnerInterfaceToString() {
-    	JavaPackage jPackage = new JavaPackage("com.thoughtworks.qdox.model");
-    	JavaClass jOuterClass = new JavaClass("OuterClass");
-    	jPackage.addClass(jOuterClass);
-    	JavaClass jInnerInterface = new JavaClass("InnerInterface");
-    	jInnerInterface.setInterface(true);
-    	jOuterClass.addClass(jInnerInterface);
+    	JavaPackage jPackage = newJavaPackage("com.thoughtworks.qdox.model");
+    	JavaClass jOuterClass = newJavaClass("OuterClass");
+    	addClass(jPackage, jOuterClass);
+    	JavaClass jInnerInterface = newJavaClass("InnerInterface");
+    	setInterface(jInnerInterface, true);
+    	addClass(jOuterClass, jInnerInterface);
     	assertEquals("interface com.thoughtworks.qdox.model.OuterClass$InnerInterface", jInnerInterface.toString());
     }
     
     public void testToStringInterface() {
-    	cls.setName("com.MyClass");
-    	cls.setInterface(true);
+    	setName(cls, "com.MyClass");
+    	setInterface(cls, true);
     	assertEquals("interface com.MyClass", cls.toString());
     }
     
     public void testToStringVoid() {
-    	cls.setName("com.MyClass");
-    	cls.addMethod(new JavaMethod(Type.VOID, "doSomething"));
+    	setName(cls, "com.MyClass");
+    	addMethod(cls, newJavaMethod(Type.VOID, "doSomething"));
     	JavaMethod javaMethod = cls.getMethods()[0];
     	assertEquals("void", javaMethod.getReturns().toString());
     }
 
     public void testToStringBoolean() {
-    	cls.setName("com.MyClass");
-    	cls.addMethod(new JavaMethod(new Type("boolean"), "doSomething"));
+    	setName(cls, "com.MyClass");
+    	addMethod(cls, newJavaMethod(newType("boolean"), "doSomething"));
     	JavaMethod javaMethod = cls.getMethods()[0];
     	assertEquals("boolean", javaMethod.getReturns().toString());
     }
     
     public void testToStringInt() {
-    	cls.setName("com.MyClass");
-    	cls.addMethod(new JavaMethod(new Type("int"), "doSomething"));
+    	setName(cls, "com.MyClass");
+    	addMethod(cls,  newJavaMethod(newType("int"), "doSomething"));
     	JavaMethod javaMethod = cls.getMethods()[0];
     	assertEquals("int", javaMethod.getReturns().toString());
     }
 
     public void testToStringLong() {
-    	cls.setName("com.MyClass");
-    	cls.addMethod(new JavaMethod(new Type("long"), "doSomething"));
+    	setName(cls, "com.MyClass");
+    	addMethod(cls, newJavaMethod(newType("long"), "doSomething"));
     	JavaMethod javaMethod = cls.getMethods()[0];
     	assertEquals("long", javaMethod.getReturns().toString());
     }
 
     public void testToStringFloat() {
-    	cls.setName("com.MyClass");
-    	cls.addMethod(new JavaMethod(new Type("float"), "doSomething"));
+    	setName(cls, "com.MyClass");
+    	addMethod(cls, newJavaMethod(newType("float"), "doSomething"));
     	JavaMethod javaMethod = cls.getMethods()[0];
     	assertEquals("float", javaMethod.getReturns().toString());
     }
 
     public void testToStringDouble() {
-    	cls.setName("com.MyClass");
-    	cls.addMethod(new JavaMethod(new Type("double"), "doSomething"));
+    	setName(cls, "com.MyClass");
+    	addMethod(cls, newJavaMethod(newType("double"), "doSomething"));
     	JavaMethod javaMethod = cls.getMethods()[0];
     	assertEquals("double", javaMethod.getReturns().toString());
     }
     
     public void testToStringChar() {
-    	cls.setName("com.MyClass");
-    	cls.addMethod(new JavaMethod(new Type("char"), "doSomething"));
+    	setName(cls, "com.MyClass");
+    	addMethod(cls, newJavaMethod(newType("char"), "doSomething"));
     	JavaMethod javaMethod = cls.getMethods()[0];
     	assertEquals("char", javaMethod.getReturns().toString());
     }
 
     public void testToStringByte() {
-    	cls.setName("com.MyClass");
-    	cls.addMethod(new JavaMethod(new Type("byte"), "doSomething"));
+    	setName(cls, "com.MyClass");
+    	addMethod(cls, newJavaMethod(newType("byte"), "doSomething"));
     	JavaMethod javaMethod = cls.getMethods()[0];
     	assertEquals("byte", javaMethod.getReturns().toString());
     }
@@ -597,9 +630,9 @@ public class JavaClassTest extends TestCase {
      * @codehaus.jira QDOX-59
      */
     public void testBeanPropertiesAreReturnedInOrderDeclared() {
-        cls.addMethod(new JavaMethod(new Type("int"), "getFoo"));
-        cls.addMethod(new JavaMethod(new Type("int"), "getBar"));
-        cls.addMethod(new JavaMethod(new Type("String"), "getMcFnord"));
+        addMethod(cls, new JavaMethod(newType("int"), "getFoo"));
+        addMethod(cls, new JavaMethod(newType("int"), "getBar"));
+        addMethod(cls, new JavaMethod(newType("String"), "getMcFnord"));
 
         BeanProperty[] properties = cls.getBeanProperties();
         assertEquals(3, properties.length);
@@ -611,29 +644,28 @@ public class JavaClassTest extends TestCase {
     private Type[] type(String[] typeNames) {
         Type[] result = new Type[typeNames.length];
         for (int i = 0; i < typeNames.length; i++) {
-            result[i] = new Type(typeNames[i]);
+            result[i] = newType(typeNames[i]);
         }
         return result;
     }
     
-    
     // QDOX-201
     public void testGetVarArgMethodSignature() {
-        JavaMethod simpleMethod = new JavaMethod( "doSomething" );
-        simpleMethod.addParameter( new JavaParameter( new Type("String"), "param", false ) );
-        JavaMethod varArgMethod = new JavaMethod( "doSomething" );
-        varArgMethod.addParameter( new JavaParameter( new Type("String"), "param", true ) );
+        JavaMethod simpleMethod = newJavaMethod( "doSomething" );
+        addParameter(simpleMethod,  newJavaParameter( newType("String"), "param", false ) );
+        JavaMethod varArgMethod = newJavaMethod( "doSomething" );
+        addParameter( varArgMethod, newJavaParameter( newType("String"), "param", true ) );
         
-        cls.addMethod( simpleMethod );
-        cls.addMethod( varArgMethod );
+        addMethod(cls, simpleMethod );
+        addMethod(cls, varArgMethod );
         
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")} ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, false ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, true ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, false, false ) );
-        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, false, true ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, true, false ) );
-        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", new Type[] {new Type("String")}, true, true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")} ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, false ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, false, false ) );
+        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, false, true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, true, false ) );
+        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, true, true ) );
     }
     
 }

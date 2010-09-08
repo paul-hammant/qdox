@@ -171,7 +171,7 @@ public class JavaDocBuilder implements Serializable {
     }
 
     protected JavaClass createUnknownClass(String name) {
-        ModelBuilder unknownBuilder = new ModelBuilder(context, docletTagFactory, new HashMap());
+        ModelBuilder unknownBuilder = new ModelBuilder(context, docletTagFactory);
         ClassDef classDef = new ClassDef();
         classDef.name = name;
         unknownBuilder.beginClass(classDef);
@@ -190,7 +190,7 @@ public class JavaDocBuilder implements Serializable {
             try {
 				// Create a new builder and mimic the behaviour of the parser.
 				// We're getting all the information we need via reflection instead.
-				ModelBuilder binaryBuilder = new ModelBuilder(context, docletTagFactory, new HashMap());
+				ModelBuilder binaryBuilder = new ModelBuilder(context, docletTagFactory);
 
 				// Set the package name and class name
 				String packageName = getPackageName(name);
@@ -344,7 +344,7 @@ public class JavaDocBuilder implements Serializable {
     }
 
     public JavaSource addSource(Reader reader, String sourceInfo) {
-        ModelBuilder builder = new ModelBuilder(context, docletTagFactory, null);
+        ModelBuilder builder = new ModelBuilder(context, docletTagFactory);
         Lexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
         parser.setDebugLexer(debugLexer);

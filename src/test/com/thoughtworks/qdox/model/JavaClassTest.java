@@ -2,8 +2,6 @@ package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
 
-import java.util.HashMap;
-
 public abstract class JavaClassTest extends TestCase {
 
     private JavaClass cls;
@@ -667,5 +665,9 @@ public abstract class JavaClassTest extends TestCase {
         assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, true, false ) );
         assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, true, true ) );
     }
-    
+ 
+    public void testJavaLangObjectAsDefaultSuperClass() throws Exception {
+        JavaClass clazz = newJavaClass( "a.b.Sample" );
+        assertEquals( "java.lang.Object", clazz.getSuperClass().getJavaClass().getFullyQualifiedName() );
+    }
 }

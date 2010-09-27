@@ -24,6 +24,10 @@ public class JavaClassContext implements Serializable {
 	private JavaDocBuilder builder;
 	private Map packageMap = new HashMap(); // <String, JavaPackage> 
 	
+	public JavaClassContext(){
+	    cache = new DefaultJavaClassCache();
+	}
+	
 	public JavaClassContext(JavaDocBuilder builder) {
 		this.builder = builder;
 		this.cache = new DefaultJavaClassCache();

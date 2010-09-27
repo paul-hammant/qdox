@@ -46,11 +46,17 @@ public class ClassLibraryTest extends TestCase {
         assertEquals(4, all.size());
     }
 
+    /**
+     * @deprecated Moved to ClassLoaderLibraryTest
+     */
     public void testNoClassLoaders() throws Exception {
         ClassLibrary c = new ClassLibrary();
         assertTrue(!c.contains("java.lang.String"));
     }
 
+    /**
+     * @deprecated Moved to ClassLoaderLibraryTest
+     */
     public void testWithClassLoader() throws Exception {
         ClassLibrary c = new ClassLibrary();
         c.addClassLoader(getClass().getClassLoader());
@@ -59,6 +65,9 @@ public class ClassLibraryTest extends TestCase {
         assertTrue(!c.contains("java.util.GoatCrusher"));
     }
 
+    /**
+     * @deprecated Moved to ClassLoaderLibraryTest
+     */
     public void testDefaultClassLoader() throws Exception {
         ClassLibrary c = new ClassLibrary();
         c.addDefaultLoader();

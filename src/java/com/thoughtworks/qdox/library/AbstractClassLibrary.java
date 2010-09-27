@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.library;
 
 import com.thoughtworks.qdox.JavaClassContext;
+import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 
 public abstract class AbstractClassLibrary
@@ -8,7 +9,7 @@ public abstract class AbstractClassLibrary
 {
     private ClassLibrary parent;
 
-    private JavaClassContext context;
+    private JavaClassContext context = new JavaClassContext();
 
     public AbstractClassLibrary()
     {

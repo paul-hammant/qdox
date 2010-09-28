@@ -32,18 +32,20 @@ public class SourceLibrary
         super( parent );
     }
 
-    public void addSource( Reader reader )
+    public JavaClass addSource( Reader reader )
         throws ParseException
     {
         JavaClass clazz = parse( reader );
         javaClassesMap.put( clazz.getFullyQualifiedName(), clazz );
+        return clazz;
     }
 
-    public void addSource( InputStream stream )
+    public JavaClass addSource( InputStream stream )
         throws ParseException
     {
         JavaClass clazz = parse( stream );
         javaClassesMap.put( clazz.getFullyQualifiedName(), clazz );
+        return clazz;
     }
 
     protected JavaClass parse( Reader reader )

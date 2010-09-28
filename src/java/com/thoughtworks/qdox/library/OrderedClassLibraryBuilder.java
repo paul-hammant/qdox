@@ -8,6 +8,8 @@ import java.io.Reader;
 import java.net.URL;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
  * This library resolves JavaClasses in the order in which class sources are added.
@@ -18,14 +20,30 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
 {
 
     private ClassLibrary classLibrary;
+    
+    private ModelBuilderFactory modelBuilderFactory;
 
     private boolean debugLexer;
 
     private boolean debugParser;
-
+    
     public OrderedClassLibraryBuilder()
     {
+        modelBuilderFactory = new ModelBuilderFactory()
+        {
+            public ModelBuilder newInstance()
+            {
+                return new ModelBuilder();
+            }
+        };
         classLibrary = new ClassNameLibrary();
+    }
+
+    public OrderedClassLibraryBuilder( ModelBuilderFactory modelBuilderFactory )
+    {
+        this.modelBuilderFactory = modelBuilderFactory;
+        classLibrary = new ClassNameLibrary();
+        
     }
 
     /* (non-Javadoc)
@@ -48,7 +66,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         if ( !( classLibrary instanceof SourceFolderLibrary ) )
         {
-            classLibrary = new SourceFolderLibrary( classLibrary );
+            classLibrary = new SourceFolderLibrary( modelBuilderFactory, classLibrary );
         }
         SourceFolderLibrary sourceFolderLibrary = (SourceFolderLibrary) classLibrary;
         sourceFolderLibrary.setDebugLexer( debugLexer );
@@ -64,7 +82,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         if ( !( classLibrary instanceof SourceLibrary ) )
         {
-            classLibrary = new SourceLibrary( classLibrary );
+            classLibrary = new SourceLibrary( modelBuilderFactory, classLibrary );
         }
         SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
         sourceLibrary.setDebugLexer( debugLexer );
@@ -80,7 +98,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         if ( !( classLibrary instanceof SourceLibrary ) )
         {
-            classLibrary = new SourceLibrary( classLibrary );
+            classLibrary = new SourceLibrary( modelBuilderFactory, classLibrary );
         }
         SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
         sourceLibrary.setDebugLexer( debugLexer );
@@ -124,7 +142,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         if ( !( classLibrary instanceof SourceLibrary ) )
         {
-            classLibrary = new SourceLibrary( classLibrary );
+            classLibrary = new SourceLibrary( modelBuilderFactory, classLibrary );
         }
         SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
         sourceLibrary.setDebugLexer( debugLexer );
@@ -136,7 +154,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         if ( !( classLibrary instanceof SourceLibrary ) )
         {
-            classLibrary = new SourceLibrary( classLibrary );
+            classLibrary = new SourceLibrary( modelBuilderFactory, classLibrary );
         }
         SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
         sourceLibrary.setDebugLexer( debugLexer );

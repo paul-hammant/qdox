@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.ModelBuilderFactory;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
@@ -15,6 +16,8 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 public class SourceLibrary
     extends AbstractClassLibrary
 {
+    private ModelBuilderFactory modelBuilderFactory;
+    
     // parser and unused javaclasses
     private Map javaClassesMap = new Hashtable(); // <java.lang.String, com.thoughtworks.qdox.model.JavaClass>
 
@@ -22,12 +25,12 @@ public class SourceLibrary
 
     private boolean debugParser;
 
-    public SourceLibrary()
+    public SourceLibrary( ModelBuilderFactory modelBuilderFactory )
     {
         super();
     }
 
-    public SourceLibrary( ClassLibrary parent )
+    public SourceLibrary( ModelBuilderFactory modelBuilderFactory, ClassLibrary parent )
     {
         super( parent );
     }
@@ -64,7 +67,7 @@ public class SourceLibrary
         throws ParseException
     {
         JavaClass result = null;
-        ModelBuilder builder = new ModelBuilder();
+        ModelBuilder builder = modelBuilderFactory.newInstance();
         Parser parser = new Parser( lexer, builder );
         parser.setDebugLexer( debugLexer );
         parser.setDebugParser( debugParser );

@@ -8,6 +8,8 @@ import java.io.Reader;
 import java.net.URL;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
  * @author Robert Scholte
@@ -27,8 +29,23 @@ public class SortedClassLibraryBuilder
     {
         classNameLibrary = new ClassNameLibrary();
         classLoaderLibrary = new ClassLoaderLibrary( classNameLibrary );
-        sourceFolderLibrary = new SourceFolderLibrary( classLoaderLibrary );
-        sourceLibrary = new SourceLibrary( sourceFolderLibrary );
+        ModelBuilderFactory modelBuilderFactory = new ModelBuilderFactory()
+        {
+            public ModelBuilder newInstance()
+            {
+                return new ModelBuilder();
+            }
+        };
+        sourceFolderLibrary = new SourceFolderLibrary( modelBuilderFactory, classLoaderLibrary );
+        sourceLibrary = new SourceLibrary( modelBuilderFactory, sourceFolderLibrary );
+    }
+
+    public SortedClassLibraryBuilder( ModelBuilderFactory modelBuilderFactory )
+    {
+        classNameLibrary = new ClassNameLibrary();
+        classLoaderLibrary = new ClassLoaderLibrary( classNameLibrary );
+        sourceFolderLibrary = new SourceFolderLibrary( modelBuilderFactory, classLoaderLibrary );
+        sourceLibrary = new SourceLibrary( modelBuilderFactory, sourceFolderLibrary );
     }
 
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader )

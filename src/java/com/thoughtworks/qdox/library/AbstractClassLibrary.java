@@ -4,6 +4,14 @@ import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 
+/**
+ * A ClassLibrary can be compared with a java classloader. Its main task is to serve a JavaClass based on a FQN.
+ * This AbstractClassLibrary should be inherited by all ClassLibraries. 
+ * You can refer to a prent library, so these can be chained.
+ * Besides that it contains a context only for this library. It will hold the definitions of JavaClasses and JavaPackages 
+ * 
+ * @author Robert Scholte
+ */
 public abstract class AbstractClassLibrary
     implements ClassLibrary
 {

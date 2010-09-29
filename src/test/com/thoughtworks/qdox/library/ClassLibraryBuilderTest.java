@@ -18,6 +18,13 @@ public abstract class ClassLibraryBuilderTest
         assertSame( libraryBuilder, result );
     }
 
+    public final void testAppendDefaultClassLoaders() throws Exception
+    {
+        ClassLibraryBuilder libraryBuilder = getClassLibraryBuilder();
+        ClassLibraryBuilder result = libraryBuilder.appendDefaultClassLoaders();
+        assertSame( libraryBuilder, result );
+    }
+
     public final void testAppendSourceFolder() throws Exception
     {
         ClassLibraryBuilder libraryBuilder = getClassLibraryBuilder();

@@ -13,6 +13,8 @@ public interface ClassLibraryBuilder
 
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader );
 
+    public ClassLibraryBuilder appendDefaultClassLoaders();
+
     public ClassLibraryBuilder appendSourceFolder( File sourceFolder );
 
     public ClassLibraryBuilder appendSource( InputStream stream );
@@ -30,7 +32,7 @@ public interface ClassLibraryBuilder
     public JavaClass addSource( URL url ) throws IOException;
     
     public JavaClass addSource( File file ) throws IOException;
-
+    
     public ClassLibraryBuilder setDebugLexer( boolean debugLexer );
 
     public ClassLibraryBuilder setDebugParser( boolean debugParser );

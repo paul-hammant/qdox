@@ -3,7 +3,6 @@ package com.thoughtworks.qdox.library;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 
@@ -29,6 +28,8 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     
     private String encoding;
     
+    private boolean appendDefaultClassLoaders;
+    
     public OrderedClassLibraryBuilder()
     {
         modelBuilderFactory = new ModelBuilderFactory()
@@ -48,8 +49,10 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#addClassLoader(java.lang.ClassLoader)
+    /**
+     * If the appendDefaultClassLoaders has been set and hans't been used, add those
+     * classloaders and reset the value to false.
+     * Next add the classloader
      */
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader )
     {
@@ -57,7 +60,30 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         {
             classLibrary = new ClassLoaderLibrary( classLibrary );
         }
-        ( (ClassLoaderLibrary) classLibrary ).addClassLoader( classLoader );
+        ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
+        if ( appendDefaultClassLoaders ) {
+            classLoaderLibrary.addDefaultLoader();
+            appendDefaultClassLoaders = false;
+        }
+        classLoaderLibrary.addClassLoader( classLoader );
+        return this;
+    }
+
+    /**
+     * This method can be called both before or after appendClassLoader.
+     * If the current classLibrary is a ClassLoaderLibrary, add it immediately
+     * Otherwise keep this setting only for the first next ClassLoaderLibrary
+     */
+    public ClassLibraryBuilder appendDefaultClassLoaders()
+    {
+        if ( classLibrary instanceof ClassLoaderLibrary )
+        {
+            ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
+            classLoaderLibrary.addDefaultLoader();
+        }
+        else {
+            this.appendDefaultClassLoaders = true;
+        }
         return this;
     }
 

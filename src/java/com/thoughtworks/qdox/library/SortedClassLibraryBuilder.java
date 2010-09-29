@@ -53,6 +53,12 @@ public class SortedClassLibraryBuilder
         classLoaderLibrary.addClassLoader( classLoader );
         return this;
     }
+    
+    public ClassLibraryBuilder appendDefaultClassLoaders()
+    {
+        classLoaderLibrary.addDefaultLoader();
+        return this;
+    }
 
     public ClassLibraryBuilder appendSourceFolder( File sourceFolder )
     {

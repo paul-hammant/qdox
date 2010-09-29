@@ -27,6 +27,8 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
 
     private boolean debugParser;
     
+    private String encoding;
+    
     public OrderedClassLibraryBuilder()
     {
         modelBuilderFactory = new ModelBuilderFactory()
@@ -69,8 +71,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
             classLibrary = new SourceFolderLibrary( modelBuilderFactory, classLibrary );
         }
         SourceFolderLibrary sourceFolderLibrary = (SourceFolderLibrary) classLibrary;
-        sourceFolderLibrary.setDebugLexer( debugLexer );
-        sourceFolderLibrary.setDebugParser( debugParser );
+        prepareSourceLibrary( sourceFolderLibrary );
         sourceFolderLibrary.addSourceFolder( sourceFolder );
         return this;
     }
@@ -80,13 +81,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
      */
     public ClassLibraryBuilder appendSource( InputStream stream )
     {
-        if ( !( classLibrary instanceof SourceLibrary ) )
-        {
-            classLibrary = new SourceLibrary( modelBuilderFactory, classLibrary );
-        }
-        SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
-        sourceLibrary.setDebugLexer( debugLexer );
-        sourceLibrary.setDebugParser( debugParser );
+        SourceLibrary sourceLibrary = getSourceLibrary();
         sourceLibrary.addSource( stream );
         return this;
     }
@@ -96,13 +91,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
      */
     public ClassLibraryBuilder appendSource( Reader reader )
     {
-        if ( !( classLibrary instanceof SourceLibrary ) )
-        {
-            classLibrary = new SourceLibrary( modelBuilderFactory, classLibrary );
-        }
-        SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
-        sourceLibrary.setDebugLexer( debugLexer );
-        sourceLibrary.setDebugParser( debugParser );
+        SourceLibrary sourceLibrary = getSourceLibrary();
         sourceLibrary.addSource( reader );
         return this;
     }
@@ -124,6 +113,12 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         this.debugParser = debugParser;
         return this;
     }
+    
+    public ClassLibraryBuilder setEncoding( String encoding )
+    {
+        this.encoding = encoding;
+        return this;
+    }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#getClassLibrary()
@@ -133,38 +128,60 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         return classLibrary;
     }
 
-    public ClassLibraryBuilder appendSource( URL url, String encoding ) throws IOException
+    public ClassLibraryBuilder appendSource( URL url ) throws IOException
     {
-        return appendSource(new InputStreamReader(url.openStream(), encoding));
+        SourceLibrary sourceLibrary = getSourceLibrary();
+        sourceLibrary.addSource( url );
+        return this;
+    }
+    
+    public ClassLibraryBuilder appendSource( File file )
+        throws IOException
+    {
+        SourceLibrary sourceLibrary = getSourceLibrary();
+        sourceLibrary.addSource( file );
+        return this;
     }
 
     public JavaClass addSource( InputStream stream )
     {
-        if ( !( classLibrary instanceof SourceLibrary ) )
-        {
-            classLibrary = new SourceLibrary( modelBuilderFactory, classLibrary );
-        }
-        SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
-        sourceLibrary.setDebugLexer( debugLexer );
-        sourceLibrary.setDebugParser( debugParser );
+        SourceLibrary sourceLibrary = getSourceLibrary();
         return sourceLibrary.addSource( stream );
     }
 
     public JavaClass addSource( Reader reader )
     {
+        SourceLibrary sourceLibrary = getSourceLibrary();
+        return sourceLibrary.addSource( reader );
+    }
+
+    public JavaClass addSource( URL url ) throws IOException
+    {
+        SourceLibrary sourceLibrary = getSourceLibrary();
+        return sourceLibrary.addSource( url );
+    }
+    
+    public JavaClass addSource( File file )
+        throws IOException
+    {
+        SourceLibrary sourceLibrary = getSourceLibrary();
+        return sourceLibrary.addSource( file );
+    }
+    
+    private void prepareSourceLibrary( SourceLibrary sourceLibrary ) {
+        sourceLibrary.setDebugLexer( debugLexer );
+        sourceLibrary.setDebugParser( debugParser );
+        sourceLibrary.setEncoding( encoding );
+    }
+    
+    private SourceLibrary getSourceLibrary() {
         if ( !( classLibrary instanceof SourceLibrary ) )
         {
             classLibrary = new SourceLibrary( modelBuilderFactory, classLibrary );
         }
         SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
-        sourceLibrary.setDebugLexer( debugLexer );
-        sourceLibrary.setDebugParser( debugParser );
-        return sourceLibrary.addSource( reader );
-    }
-
-    public JavaClass addSource( URL url, String encoding ) throws IOException
-    {
-        return addSource(new InputStreamReader(url.openStream(), encoding));
+        prepareSourceLibrary( sourceLibrary );
+        return sourceLibrary;
     }
 
 }

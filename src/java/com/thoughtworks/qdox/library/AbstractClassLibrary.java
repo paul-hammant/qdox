@@ -1,7 +1,6 @@
 package com.thoughtworks.qdox.library;
 
 import com.thoughtworks.qdox.JavaClassContext;
-import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 
 /**

@@ -71,6 +71,20 @@ public class SortedClassLibraryBuilder
         sourceLibrary.addSource( reader );
         return this;
     }
+    
+    public ClassLibraryBuilder appendSource( URL url )
+    throws IOException
+    {
+        sourceLibrary.addSource( url );
+        return this;
+    }
+    
+    public ClassLibraryBuilder appendSource( File file )
+        throws IOException
+    {
+        sourceLibrary.addSource( file );
+        return this;
+    }
 
     public ClassLibraryBuilder setDebugLexer( boolean debugLexer )
     {
@@ -85,16 +99,17 @@ public class SortedClassLibraryBuilder
         sourceLibrary.setDebugParser( debugParser );
         return this;
     }
+    
+    public ClassLibraryBuilder setEncoding( String encoding )
+    {
+        sourceFolderLibrary.setEncoding( encoding );
+        sourceLibrary.setEncoding( encoding );
+        return this;
+    }
 
     public ClassLibrary getClassLibrary()
     {
         return sourceLibrary;
-    }
-
-    public ClassLibraryBuilder appendSource( URL url, String encoding )
-        throws IOException
-    {
-        return appendSource( new InputStreamReader( url.openStream(), encoding ) );
     }
 
     public JavaClass addSource( InputStream stream )
@@ -107,10 +122,16 @@ public class SortedClassLibraryBuilder
         return sourceLibrary.addSource( reader );
     }
 
-    public JavaClass addSource( URL url, String encoding )
+    public JavaClass addSource( URL url )
         throws IOException
     {
-        return addSource( new InputStreamReader( url.openStream(), encoding ) );
+        return sourceLibrary.addSource( url );
+    }
+    
+    public JavaClass addSource( File file )
+        throws IOException
+    {
+        return sourceLibrary.addSource( file );
     }
 
 }

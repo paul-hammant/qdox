@@ -19,17 +19,23 @@ public interface ClassLibraryBuilder
 
     public ClassLibraryBuilder appendSource( Reader reader );
 
-    public ClassLibraryBuilder appendSource( URL reader, String encoding ) throws IOException;
+    public ClassLibraryBuilder appendSource( URL url ) throws IOException;
+
+    public ClassLibraryBuilder appendSource( File file ) throws IOException;
 
     public JavaClass addSource( InputStream stream );
 
     public JavaClass addSource( Reader reader );
     
-    public JavaClass addSource( URL reader, String encoding ) throws IOException;
+    public JavaClass addSource( URL url ) throws IOException;
+    
+    public JavaClass addSource( File file ) throws IOException;
 
     public ClassLibraryBuilder setDebugLexer( boolean debugLexer );
 
     public ClassLibraryBuilder setDebugParser( boolean debugParser );
+    
+    public ClassLibraryBuilder setEncoding( String encoding );
 
     public ClassLibrary getClassLibrary();
 

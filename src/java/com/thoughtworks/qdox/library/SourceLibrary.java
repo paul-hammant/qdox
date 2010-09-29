@@ -1,7 +1,12 @@
 package com.thoughtworks.qdox.library;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -24,22 +29,29 @@ public class SourceLibrary
     private boolean debugLexer;
 
     private boolean debugParser;
+    
+    private String encoding;
 
     public SourceLibrary( ModelBuilderFactory modelBuilderFactory )
     {
         super();
+        this.modelBuilderFactory = modelBuilderFactory;
     }
 
     public SourceLibrary( ModelBuilderFactory modelBuilderFactory, ClassLibrary parent )
     {
         super( parent );
+        this.modelBuilderFactory = modelBuilderFactory;
     }
 
     public JavaClass addSource( Reader reader )
         throws ParseException
     {
         JavaClass clazz = parse( reader );
-        javaClassesMap.put( clazz.getFullyQualifiedName(), clazz );
+        if ( clazz != null )
+        {
+            javaClassesMap.put( clazz.getFullyQualifiedName(), clazz );
+        }
         return clazz;
     }
 
@@ -47,8 +59,22 @@ public class SourceLibrary
         throws ParseException
     {
         JavaClass clazz = parse( stream );
-        javaClassesMap.put( clazz.getFullyQualifiedName(), clazz );
+        if (clazz != null) {
+            javaClassesMap.put( clazz.getFullyQualifiedName(), clazz );
+        }
         return clazz;
+    }
+    
+    public JavaClass addSource( URL url )
+        throws ParseException, IOException
+    {
+        return addSource( new InputStreamReader( url.openStream(), encoding) );
+    }
+
+    public JavaClass addSource( File file )
+        throws ParseException, IOException
+    {
+        return addSource( new FileInputStream( file ) );
     }
 
     protected JavaClass parse( Reader reader )
@@ -71,7 +97,7 @@ public class SourceLibrary
         Parser parser = new Parser( lexer, builder );
         parser.setDebugLexer( debugLexer );
         parser.setDebugParser( debugParser );
-        if ( parser.parse() )
+        if ( parser.parse() && builder.getSource().getClasses().length > 0 )
         {
             result = builder.getSource().getClasses()[0];
         }
@@ -96,5 +122,10 @@ public class SourceLibrary
     public void setDebugParser( boolean debugParser )
     {
         this.debugParser = debugParser;
+    }
+    
+    public void setEncoding( String encoding )
+    {
+        this.encoding = encoding;
     }
 }

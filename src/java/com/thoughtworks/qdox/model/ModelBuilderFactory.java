@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.model;
 
-public interface ModelBuilderFactory
+import java.io.Serializable;
+
+public interface ModelBuilderFactory extends Serializable
 {
     public ModelBuilder newInstance();
 }

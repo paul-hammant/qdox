@@ -28,6 +28,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.ModelBuilderFactory;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
@@ -66,12 +67,13 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
  * @author Robert Scholte
  */
 public class JavaDocBuilder implements Serializable {
-
+    
+    final ModelBuilderFactory builderFactory;
+    
 	private final JavaClassContext context;
 	
     private Set packages = new HashSet();
     private List sources = new ArrayList();
-    private DocletTagFactory docletTagFactory;
     private String encoding = System.getProperty("file.encoding");
     private boolean debugLexer;
     private boolean debugParser;
@@ -91,22 +93,34 @@ public class JavaDocBuilder implements Serializable {
         this(new DefaultDocletTagFactory());
     }
 
-    public JavaDocBuilder(DocletTagFactory docletTagFactory) {
-        this.docletTagFactory = docletTagFactory;
+    public JavaDocBuilder(final DocletTagFactory docletTagFactory) {
         ClassLibrary classLibrary = new ClassLibrary();
         classLibrary.addDefaultLoader();
         this.context = new JavaClassContext(this);
         this.context.setClassLibrary(classLibrary);
+        this.builderFactory = new ModelBuilderFactory()
+        {
+            public ModelBuilder newInstance()
+            {
+                return new ModelBuilder( context, docletTagFactory );
+            }
+        };
     }
 
     public JavaDocBuilder(ClassLibrary classLibrary) {
         this(new DefaultDocletTagFactory(), classLibrary);
     }
 
-    public JavaDocBuilder(DocletTagFactory docletTagFactory, ClassLibrary classLibrary) {
-        this.docletTagFactory = docletTagFactory;
+    public JavaDocBuilder(final DocletTagFactory docletTagFactory, ClassLibrary classLibrary) {
         this.context = new JavaClassContext(this);
         this.context.setClassLibrary(classLibrary);
+        this.builderFactory = new ModelBuilderFactory()
+        {
+            public ModelBuilder newInstance()
+            {
+                return new ModelBuilder( context, docletTagFactory );
+            }
+        };
     }
 
     private void addClasses(JavaSource source) {
@@ -158,7 +172,7 @@ public class JavaDocBuilder implements Serializable {
     }
 
     protected JavaClass createUnknownClass(String name) {
-        ModelBuilder unknownBuilder = new ModelBuilder(context, docletTagFactory);
+        ModelBuilder unknownBuilder = builderFactory.newInstance();
         ClassDef classDef = new ClassDef();
         classDef.name = name;
         unknownBuilder.beginClass(classDef);
@@ -176,7 +190,7 @@ public class JavaDocBuilder implements Serializable {
         } else {
             // Create a new builder and mimic the behaviour of the parser.
             // We're getting all the information we need via reflection instead.
-            ModelBuilder binaryBuilder = new ModelBuilder(context, docletTagFactory);
+            ModelBuilder binaryBuilder = builderFactory.newInstance();
             BinaryClassParser parser  = new BinaryClassParser( clazz, binaryBuilder );
             parser.parse();
             
@@ -194,7 +208,7 @@ public class JavaDocBuilder implements Serializable {
     }
 
     public JavaSource addSource(Reader reader, String sourceInfo) {
-        ModelBuilder builder = new ModelBuilder(context, docletTagFactory);
+        ModelBuilder builder = builderFactory.newInstance();
         Lexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
         parser.setDebugLexer(debugLexer);

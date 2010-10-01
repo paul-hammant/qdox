@@ -2,6 +2,7 @@ package com.thoughtworks.qdox.library;
 
 import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 
 /**
  * A ClassLibrary can be compared with a java classloader. Its main task is to serve a JavaClass based on a FQN.
@@ -44,6 +45,8 @@ public abstract class AbstractClassLibrary
         if ( result != null )
         {
             context.add( result );
+            context.add( result.getPackage() );
+            //context.add( result.getSource() ); 
         }
         else if ( parent != null )
         {

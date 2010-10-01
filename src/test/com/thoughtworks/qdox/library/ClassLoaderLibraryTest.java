@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.library;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaSource;
 
 public class ClassLoaderLibraryTest
     extends TestCase
@@ -18,6 +19,18 @@ public class ClassLoaderLibraryTest
             public JavaClass getJavaClass( String name )
             {
                 return null;
+            }
+            public JavaSource[] getSources()
+            {
+                return null;
+            }
+            public JavaClass[] getClasses()
+            {
+                return null;
+            }
+            public boolean exists( String name )
+            {
+                return false;
             }
         });
     }

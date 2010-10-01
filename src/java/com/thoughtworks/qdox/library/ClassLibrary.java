@@ -13,4 +13,6 @@ public interface ClassLibrary
     public JavaClass[] getClasses();
     
     public JavaSource[] getSources();
+    
+    public boolean exists( String name );
 }

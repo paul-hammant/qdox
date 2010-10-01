@@ -76,4 +76,18 @@ public abstract class AbstractClassLibrary
     {
         return context.getClasses();
     }
+    
+    public boolean exists( String name )
+    {
+        boolean result = context.getClassByName( name ) != null;
+        if ( !result ) {
+            result = containsClassByName( name );
+        }
+        if ( !result && parent != null ) {
+            parent.exists( name );
+        }
+        return result;
+    }
+    
+    protected abstract boolean containsClassByName( String name );
 }

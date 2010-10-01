@@ -28,7 +28,7 @@ import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
  */
 public class ModelBuilder implements Builder {
 
-    private final JavaClassContext context;
+    private final JavaClassContext context; //@todo remove, already solved by AbstractLibrary
     private final JavaSource source;
     private JavaClassParent currentParent;
     private JavaClass currentClass;

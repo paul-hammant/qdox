@@ -30,5 +30,10 @@ public class ClassNameLibrary
         JavaClass result = unknownSource.getClasses()[0];
         return result;
     }
+    
+    protected boolean containsClassByName( String name )
+    {
+        return false;
+    }
 
 }

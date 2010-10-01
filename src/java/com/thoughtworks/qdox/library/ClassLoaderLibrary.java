@@ -108,4 +108,23 @@ public class ClassLoaderLibrary
             addDefaultLoader();
         }
     }
+    
+    protected boolean containsClassByName( String name )
+    {
+        boolean result = false;
+        Iterator iter = classLoaders.iterator();
+        while ( iter.hasNext() )
+        {
+            ClassLoader classLoader = (ClassLoader) iter.next();
+            try
+            {
+                Class clazz = classLoader.loadClass( name );
+                result = true;
+            }
+            catch ( ClassNotFoundException e )
+            {
+            }
+        }
+        return result;
+    }
 }

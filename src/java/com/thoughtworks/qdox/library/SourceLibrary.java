@@ -173,4 +173,9 @@ public class SourceLibrary
         }
         return result;
     }
+    
+    protected boolean containsClassByName( String name )
+    {
+        return javaClassMap.containsKey( name );
+    }
 }

@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model.util;
 
+import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -22,7 +23,7 @@ import java.util.Set;
  * 
  * @author Mike Williams
  */
-public class OrderedMap extends AbstractMap {
+public class OrderedMap extends AbstractMap implements Serializable {
 
     private Set _entrySet = new OrderedSet();
 
@@ -52,7 +53,7 @@ public class OrderedMap extends AbstractMap {
         return null;
     }
     
-    static class OrderedSet extends AbstractSet {
+    static class OrderedSet extends AbstractSet implements Serializable {
 
         private List _elementList = new LinkedList();
 
@@ -71,7 +72,7 @@ public class OrderedMap extends AbstractMap {
         
     }
 
-    static class Entry implements Map.Entry {
+    static class Entry implements Map.Entry, Serializable {
         
         Object _key;
         Object _value;

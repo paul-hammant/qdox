@@ -11,8 +11,10 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
 import com.thoughtworks.qdox.model.ModelBuilderFactory;
+import com.thoughtworks.qdox.model.util.OrderedMap;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
@@ -24,7 +26,8 @@ public class SourceLibrary
     private ModelBuilderFactory modelBuilderFactory;
     
     // parser and unused javaclasses
-    private Map javaClassesMap = new Hashtable(); // <java.lang.String, com.thoughtworks.qdox.model.JavaClass>
+    private Map javaClassMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaClass>
+    private Map javaSourceMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaSource>
 
     private boolean debugLexer;
 
@@ -50,7 +53,8 @@ public class SourceLibrary
         JavaClass clazz = parse( reader );
         if ( clazz != null )
         {
-            javaClassesMap.put( clazz.getFullyQualifiedName(), clazz );
+            javaClassMap.put( clazz.getFullyQualifiedName(), clazz );
+            javaSourceMap.put( clazz.getFullyQualifiedName(), clazz.getSource() );
         }
         return clazz;
     }
@@ -60,7 +64,8 @@ public class SourceLibrary
     {
         JavaClass clazz = parse( stream );
         if (clazz != null) {
-            javaClassesMap.put( clazz.getFullyQualifiedName(), clazz );
+            javaClassMap.put( clazz.getFullyQualifiedName(), clazz );
+            javaSourceMap.put( clazz.getFullyQualifiedName(), clazz.getSource() );
         }
         return clazz;
     }
@@ -111,7 +116,7 @@ public class SourceLibrary
     {
         // abstractLibrary only calls this when it can't find the source itself.
         // it will take over the reference
-        return (JavaClass) javaClassesMap.remove( name );
+        return (JavaClass) javaClassMap.remove( name );
     }
 
     public void setDebugLexer( boolean debugLexer )
@@ -127,5 +132,45 @@ public class SourceLibrary
     public void setEncoding( String encoding )
     {
         this.encoding = encoding;
+    }
+    
+    public JavaClass[] getClasses()
+    {
+        JavaClass[] result;
+        JavaClass[] usedClasses = super.getClasses();
+        JavaClass[] unusedClasses = (JavaClass[]) javaClassMap.values().toArray( new JavaClass[0] );
+        if ( usedClasses.length == 0 ) {
+            result = unusedClasses;
+        }
+        else if ( unusedClasses.length == 0 ) {
+            result = usedClasses;
+        }
+        else {
+            int totalClasses = usedClasses.length + unusedClasses.length;
+            result = new JavaClass[totalClasses]; 
+            System.arraycopy( usedClasses, 0, result, 0, usedClasses.length );
+            System.arraycopy( unusedClasses, 0, result, usedClasses.length, unusedClasses.length );
+        }
+        return result;
+    }
+    
+    public JavaSource[] getSources()
+    {
+        JavaSource[] result;
+        JavaSource[] usedSources = super.getSources();
+        JavaSource[] unusedSources = (JavaSource[]) javaSourceMap.values().toArray( new JavaSource[0] );
+        if ( usedSources.length == 0 ) {
+            result = unusedSources;
+        }
+        else if ( unusedSources.length == 0 ) {
+            result = usedSources;
+        }
+        else {
+            int totalSources = usedSources.length + unusedSources.length;
+            result = new JavaSource[totalSources]; 
+            System.arraycopy( usedSources, 0, result, 0, usedSources.length );
+            System.arraycopy( unusedSources, 0, result, usedSources.length, unusedSources.length );
+        }
+        return result;
     }
 }

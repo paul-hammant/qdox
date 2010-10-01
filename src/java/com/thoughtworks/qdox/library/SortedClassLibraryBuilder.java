@@ -29,6 +29,7 @@ public class SortedClassLibraryBuilder
     {
         classNameLibrary = new ClassNameLibrary();
         classLoaderLibrary = new ClassLoaderLibrary( classNameLibrary );
+        classLoaderLibrary.addDefaultLoader();
         ModelBuilderFactory modelBuilderFactory = new ModelBuilderFactory()
         {
             public ModelBuilder newInstance()

@@ -8,6 +8,8 @@ import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassCache;
 import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.util.OrderedMap;
 
 /**
  * JavaClassContext gives you a mechanism to get a JavaClass.
@@ -22,7 +24,8 @@ public class JavaClassContext implements Serializable {
 	private final JavaClassCache cache;
 	private ClassLibrary classLibrary;
 	private JavaDocBuilder builder;
-	private Map packageMap = new HashMap(); // <String, JavaPackage> 
+	private Map packageMap = new OrderedMap(); // <String, com.thoughtworks.qdox.model.JavaPackage> 
+	private Map sourceMap = new OrderedMap();  // <String, com.thoughtworks.qdox.model.JavaSource> 
 	
 	public JavaClassContext(){
 	    cache = new DefaultJavaClassCache();
@@ -119,5 +122,19 @@ public class JavaClassContext implements Serializable {
     {
         return (JavaPackage[]) packageMap.values().toArray( new JavaPackage[0] );
         
+    }
+
+    public void add( JavaSource source )
+    {
+        String key = source.getClasses()[0].getName();
+        if(!sourceMap.containsKey( key )) 
+        {
+            sourceMap.put( key, source );
+        }
+    }
+
+    public JavaSource[] getSources()
+    {
+        return (JavaSource[]) sourceMap.values().toArray( new JavaSource[0] );
     }
 }

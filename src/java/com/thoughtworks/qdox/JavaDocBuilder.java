@@ -70,13 +70,17 @@ public class JavaDocBuilder implements Serializable {
     
     final ModelBuilderFactory builderFactory;
     
+    //@todo should be replaced with the new ClassLibrary
 	private final JavaClassContext context;
 	
+	//@todo move to JavaClassContext
     private Set packages = new HashSet();
     private List sources = new ArrayList();
+
     private String encoding = System.getProperty("file.encoding");
     private boolean debugLexer;
     private boolean debugParser;
+    
     private ErrorHandler errorHandler = new DefaultErrorHandler();
 
     public static interface ErrorHandler {
@@ -129,13 +133,9 @@ public class JavaDocBuilder implements Serializable {
         JavaClass[] javaClasses = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
         for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
             JavaClass cls = javaClasses[classIndex];
-            addClass(cls);
+            context.add(cls);
+            cls.setJavaClassContext(context);
         }
-    }
-
-    private void addClass(JavaClass cls) {
-        context.add(cls);
-        cls.setJavaClassContext(context);
     }
 
     public JavaClass getClassByName(String name) {

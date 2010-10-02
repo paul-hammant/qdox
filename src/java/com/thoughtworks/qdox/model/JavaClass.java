@@ -662,7 +662,14 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      */
     public JavaClass[] getDerivedClasses() {
         List result = new ArrayList();
-        JavaClass[] classes = context.getClasses();
+        JavaClass[] classes;
+        if( source.getJavaClassLibrary() != null ) {
+            classes = source.getJavaClassLibrary().getClasses();
+        }
+        else {
+            classes = context.getClasses();    
+        }
+        
 
         for (int i = 0; i < classes.length; i++) {
             JavaClass clazz = classes[i];

@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.library;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 
 public class ClassLoaderLibraryTest
@@ -14,21 +15,14 @@ public class ClassLoaderLibraryTest
     protected void setUp()
         throws Exception
     {
-        classLoaderLibrary = new ClassLoaderLibrary(new ClassLibrary()
+        classLoaderLibrary = new ClassLoaderLibrary(new AbstractClassLibrary()
         {
-            public JavaClass getJavaClass( String name )
+            protected JavaClass resolveJavaClass( String name )
             {
                 return null;
             }
-            public JavaSource[] getSources()
-            {
-                return null;
-            }
-            public JavaClass[] getClasses()
-            {
-                return null;
-            }
-            public boolean exists( String name )
+            
+            protected boolean containsClassByName( String name )
             {
                 return false;
             }

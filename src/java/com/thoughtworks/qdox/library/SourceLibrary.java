@@ -38,7 +38,7 @@ public class SourceLibrary
         super();
     }
 
-    public SourceLibrary( ClassLibrary parent )
+    public SourceLibrary( AbstractClassLibrary parent )
     {
         super( parent );
     }

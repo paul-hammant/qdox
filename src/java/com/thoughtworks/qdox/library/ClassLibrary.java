@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.library;
 import java.io.Serializable;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 
 public interface ClassLibrary
@@ -15,4 +16,6 @@ public interface ClassLibrary
     public JavaSource[] getSources();
     
     public boolean exists( String name );
+
+    public JavaPackage[] getPackages();
 }

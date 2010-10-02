@@ -6,6 +6,7 @@ import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
 import com.thoughtworks.qdox.model.ModelBuilderFactory;
@@ -31,7 +32,7 @@ public abstract class AbstractClassLibrary
     {
     }
 
-    public AbstractClassLibrary( ClassLibrary parent )
+    public AbstractClassLibrary( AbstractClassLibrary parent )
     {
         this();
         this.parent = parent;
@@ -83,6 +84,11 @@ public abstract class AbstractClassLibrary
     public JavaClass[] getClasses()
     {
         return context.getClasses();
+    }
+    
+    public JavaPackage[] getPackages()
+    {
+        return context.getPackages();
     }
     
     public boolean exists( String name )

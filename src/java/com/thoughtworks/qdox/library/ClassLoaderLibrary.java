@@ -38,7 +38,7 @@ public class ClassLoaderLibrary
 
     private boolean defaultClassLoadersAdded = false;
 
-    public ClassLoaderLibrary( ClassLibrary parent )
+    public ClassLoaderLibrary( AbstractClassLibrary parent )
     {
         super( parent );
     }
@@ -48,7 +48,7 @@ public class ClassLoaderLibrary
         this.classLoaders.add( classLoader );
     }
 
-    public ClassLoaderLibrary( ClassLoader classLoader, ClassLibrary parent )
+    public ClassLoaderLibrary( ClassLoader classLoader, AbstractClassLibrary parent )
     {
         super( parent );
         this.classLoaders.add( classLoader );

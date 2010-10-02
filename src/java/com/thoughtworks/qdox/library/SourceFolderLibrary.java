@@ -14,7 +14,7 @@ public class SourceFolderLibrary
 {
     private List sourceFolders = new ArrayList(); // <java.io.File>
 
-    public SourceFolderLibrary( ClassLibrary parent  )
+    public SourceFolderLibrary( AbstractClassLibrary parent  )
     {
         super( parent );
     }
@@ -25,7 +25,7 @@ public class SourceFolderLibrary
         this.sourceFolders.add( sourceFolder );
     }
 
-    public SourceFolderLibrary( File sourceFolder, ClassLibrary parent )
+    public SourceFolderLibrary( File sourceFolder, AbstractClassLibrary parent )
     {
         super( parent );
         this.sourceFolders.add( sourceFolder );

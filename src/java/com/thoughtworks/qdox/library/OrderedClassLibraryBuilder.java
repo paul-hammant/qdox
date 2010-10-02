@@ -18,7 +18,7 @@ import com.thoughtworks.qdox.model.ModelBuilderFactory;
 public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
 {
 
-    private ClassLibrary classLibrary;
+    private AbstractClassLibrary classLibrary;
     
     private boolean debugLexer;
 

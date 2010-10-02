@@ -6,8 +6,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
@@ -162,25 +161,25 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         return this;
     }
 
-    public JavaClass addSource( InputStream stream )
+    public JavaSource addSource( InputStream stream )
     {
         SourceLibrary sourceLibrary = getSourceLibrary();
         return sourceLibrary.addSource( stream );
     }
 
-    public JavaClass addSource( Reader reader )
+    public JavaSource addSource( Reader reader )
     {
         SourceLibrary sourceLibrary = getSourceLibrary();
         return sourceLibrary.addSource( reader );
     }
 
-    public JavaClass addSource( URL url ) throws IOException
+    public JavaSource addSource( URL url ) throws IOException
     {
         SourceLibrary sourceLibrary = getSourceLibrary();
         return sourceLibrary.addSource( url );
     }
     
-    public JavaClass addSource( File file )
+    public JavaSource addSource( File file )
         throws IOException
     {
         SourceLibrary sourceLibrary = getSourceLibrary();

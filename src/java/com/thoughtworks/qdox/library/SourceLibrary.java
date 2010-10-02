@@ -7,13 +7,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
-import com.thoughtworks.qdox.model.ModelBuilderFactory;
 import com.thoughtworks.qdox.model.util.OrderedMap;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.ParseException;
@@ -25,8 +26,9 @@ public class SourceLibrary
 {
     // parser and unused javaclasses
     private Map javaClassMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaClass>
-    private Map javaSourceMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaSource>
-
+    private List javaSourceList = new ArrayList(); // <java.lang.String, com.thoughtworks.qdox.model.JavaSource>
+    private Map javaPackageMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaPackage>
+    
     private boolean debugLexer;
 
     private boolean debugParser;
@@ -43,64 +45,76 @@ public class SourceLibrary
         super( parent );
     }
     
-    public JavaClass addSource( Reader reader )
+    public JavaSource addSource( Reader reader )
         throws ParseException
     {
-        JavaClass clazz = parse( reader );
-        if ( clazz != null )
-        {
-            javaClassMap.put( clazz.getFullyQualifiedName(), clazz );
-            javaSourceMap.put( clazz.getFullyQualifiedName(), clazz.getSource() );
-        }
-        return clazz;
+        JavaSource source = parse( reader );
+        registerJavaSource(source);
+        return source;
     }
 
-    public JavaClass addSource( InputStream stream )
+    public JavaSource addSource( InputStream stream )
         throws ParseException
     {
-        JavaClass clazz = parse( stream );
-        if (clazz != null) {
-            javaClassMap.put( clazz.getFullyQualifiedName(), clazz );
-            javaSourceMap.put( clazz.getFullyQualifiedName(), clazz.getSource() );
-        }
-        return clazz;
+        JavaSource source = parse( stream );
+        registerJavaSource(source);
+        return source;
     }
     
-    public JavaClass addSource( URL url )
+    private void registerJavaSource(JavaSource source) {
+        javaSourceList.add( source );
+        if( !javaPackageMap.containsKey( source.getPackageName() ) ) {
+            javaPackageMap.put( source.getPackageName(), source.getPackage() );
+        }
+        for( int clazzIndex = 0; clazzIndex < source.getClasses().length; clazzIndex++ ) {
+            registerJavaClass( source.getClasses()[0] );
+        }
+    }
+    
+    private void registerJavaClass(JavaClass clazz) {
+        if (clazz != null) {
+            javaClassMap.put( clazz.getFullyQualifiedName(), clazz );
+        }
+        for( int clazzIndex = 0; clazzIndex < clazz.getNestedClasses().length; clazzIndex++ ) {
+            registerJavaClass( clazz.getNestedClasses()[0] );
+        }
+    }
+    
+    public JavaSource addSource( URL url )
         throws ParseException, IOException
     {
         return addSource( new InputStreamReader( url.openStream(), encoding) );
     }
 
-    public JavaClass addSource( File file )
+    public JavaSource addSource( File file )
         throws ParseException, IOException
     {
         return addSource( new FileInputStream( file ) );
     }
 
-    protected JavaClass parse( Reader reader )
+    protected JavaSource parse( Reader reader )
         throws ParseException
     {
         return parse( new JFlexLexer( reader ) );
     }
 
-    protected JavaClass parse( InputStream stream )
+    protected JavaSource parse( InputStream stream )
         throws ParseException
     {
         return parse( new JFlexLexer( stream ) );
     }
 
-    private JavaClass parse( Lexer lexer )
+    private JavaSource parse( Lexer lexer )
         throws ParseException
     {
-        JavaClass result = null;
+        JavaSource result = null;
         ModelBuilder builder = getModelBuilder();
         Parser parser = new Parser( lexer, builder );
         parser.setDebugLexer( debugLexer );
         parser.setDebugParser( debugParser );
-        if ( parser.parse() && builder.getSource().getClasses().length > 0 )
+        if ( parser.parse() )
         {
-            result = builder.getSource().getClasses()[0];
+            result = builder.getSource();
         }
         return result;
     }
@@ -130,11 +144,20 @@ public class SourceLibrary
         this.encoding = encoding;
     }
     
+    /**
+     * Get all classes, including those from parent SourceLibraries
+     */
     public JavaClass[] getClasses()
     {
         JavaClass[] result;
-        JavaClass[] usedClasses = super.getClasses();
         JavaClass[] unusedClasses = (JavaClass[]) javaClassMap.values().toArray( new JavaClass[0] );
+        JavaClass[] usedClasses = getJavaClasses( new ClassLibraryFilter()
+        {
+            public boolean accept( AbstractClassLibrary classLibrary )
+            {
+                return (classLibrary instanceof SourceLibrary);
+            }
+        });
         if ( usedClasses.length == 0 ) {
             result = unusedClasses;
         }
@@ -149,12 +172,50 @@ public class SourceLibrary
         }
         return result;
     }
+
+    /**
+     * Get all packages, including those from parent SourceLibraries
+     */
+    public JavaPackage[] getPackages()
+    {
+        JavaPackage[] result;
+        JavaPackage[] unusedPackages = (JavaPackage[]) javaPackageMap.values().toArray( new JavaPackage[0] );
+        JavaPackage[] usedPackages = getJavaPackages( new ClassLibraryFilter()
+        {
+            public boolean accept( AbstractClassLibrary classLibrary )
+            {
+                return (classLibrary instanceof SourceLibrary);
+            }
+        });
+        if ( usedPackages.length == 0 ) {
+            result = unusedPackages;
+        }
+        else if ( unusedPackages.length == 0 ) {
+            result = usedPackages;
+        }
+        else {
+            int totalPackages = usedPackages.length + unusedPackages.length;
+            result = new JavaPackage[totalPackages]; 
+            System.arraycopy( usedPackages, 0, result, 0, usedPackages.length );
+            System.arraycopy( unusedPackages, 0, result, usedPackages.length, unusedPackages.length );
+        }
+        return result;
+    }
     
+    /**
+     * Get all sources, including those from parent SourceLibraries
+     */
     public JavaSource[] getSources()
     {
         JavaSource[] result;
-        JavaSource[] usedSources = super.getSources();
-        JavaSource[] unusedSources = (JavaSource[]) javaSourceMap.values().toArray( new JavaSource[0] );
+        JavaSource[] unusedSources = (JavaSource[]) javaSourceList.toArray( new JavaSource[0] );
+        JavaSource[] usedSources = getJavaSources( new ClassLibraryFilter()
+        {
+            public boolean accept( AbstractClassLibrary classLibrary )
+            {
+                return (classLibrary instanceof SourceLibrary);
+            }
+        });
         if ( usedSources.length == 0 ) {
             result = unusedSources;
         }

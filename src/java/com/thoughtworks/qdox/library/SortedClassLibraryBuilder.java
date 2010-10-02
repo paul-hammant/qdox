@@ -3,12 +3,11 @@ package com.thoughtworks.qdox.library;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
@@ -121,23 +120,23 @@ public class SortedClassLibraryBuilder
         return sourceLibrary;
     }
 
-    public JavaClass addSource( InputStream stream )
+    public JavaSource addSource( InputStream stream )
     {
         return sourceLibrary.addSource( stream );
     }
 
-    public JavaClass addSource( Reader reader )
+    public JavaSource addSource( Reader reader )
     {
         return sourceLibrary.addSource( reader );
     }
 
-    public JavaClass addSource( URL url )
+    public JavaSource addSource( URL url )
         throws IOException
     {
         return sourceLibrary.addSource( url );
     }
     
-    public JavaClass addSource( File file )
+    public JavaSource addSource( File file )
         throws IOException
     {
         return sourceLibrary.addSource( file );

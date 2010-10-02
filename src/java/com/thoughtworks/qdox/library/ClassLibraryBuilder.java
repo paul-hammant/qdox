@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 
-import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 public interface ClassLibraryBuilder
@@ -26,13 +26,13 @@ public interface ClassLibraryBuilder
 
     public ClassLibraryBuilder appendSource( File file ) throws IOException;
 
-    public JavaClass addSource( InputStream stream );
+    public JavaSource addSource( InputStream stream );
 
-    public JavaClass addSource( Reader reader );
+    public JavaSource addSource( Reader reader );
     
-    public JavaClass addSource( URL url ) throws IOException;
+    public JavaSource addSource( URL url ) throws IOException;
     
-    public JavaClass addSource( File file ) throws IOException;
+    public JavaSource addSource( File file ) throws IOException;
     
     public ClassLibraryBuilder setDebugLexer( boolean debugLexer );
 

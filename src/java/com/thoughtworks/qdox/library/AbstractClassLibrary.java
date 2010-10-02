@@ -1,10 +1,7 @@
 package com.thoughtworks.qdox.library;
 
 import com.thoughtworks.qdox.JavaClassContext;
-import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.DocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -22,7 +19,7 @@ import com.thoughtworks.qdox.model.ModelBuilderFactory;
 public abstract class AbstractClassLibrary
     implements ClassLibrary
 {
-    private ClassLibrary parent;
+    private AbstractClassLibrary parent;
     
     private ModelBuilderFactory modelBuilderFactory;
 
@@ -81,14 +78,95 @@ public abstract class AbstractClassLibrary
         return context.getSources();
     }
     
+    protected final JavaSource[] getJavaSources( ClassLibraryFilter filter) {
+        JavaSource[] result = null; 
+        JavaSource[] thisJavaSources = null;
+        JavaSource[] parentJavaSources = null;
+        if ( parent != null ) {
+            parentJavaSources = parent.getJavaSources( filter );
+        }
+        if(filter.accept(this)) {
+            thisJavaSources = context.getSources();
+        }
+        
+        if ( parentJavaSources == null || parentJavaSources.length == 0) {
+            result = thisJavaSources;
+        }
+        else if( thisJavaSources == null || thisJavaSources.length == 0 ) {
+            result = parentJavaSources;
+        }
+        else {
+            int totalSources = thisJavaSources.length + parentJavaSources.length;
+            result = new JavaSource[totalSources]; 
+            System.arraycopy( thisJavaSources, 0, result, 0, thisJavaSources.length );
+            System.arraycopy( parentJavaSources, 0, result, thisJavaSources.length, parentJavaSources.length );
+
+        }
+        return result;
+    }
+    
     public JavaClass[] getClasses()
     {
         return context.getClasses();
     }
     
+    protected final JavaClass[] getJavaClasses( ClassLibraryFilter filter) {
+        JavaClass[] result = null; 
+        JavaClass[] thisJavaClasses = null;
+        JavaClass[] parentJavaClasses = null;
+        if ( parent != null ) {
+            parentJavaClasses = parent.getJavaClasses( filter );
+        }
+        if(filter.accept(this)) {
+            thisJavaClasses = context.getClasses();
+        }
+        
+        if ( parentJavaClasses == null || parentJavaClasses.length == 0) {
+            result = thisJavaClasses;
+        }
+        else if( thisJavaClasses == null || thisJavaClasses.length == 0 ) {
+            result = parentJavaClasses;
+        }
+        else {
+            int totalClasses = thisJavaClasses.length + parentJavaClasses.length;
+            result = new JavaClass[totalClasses]; 
+            System.arraycopy( thisJavaClasses, 0, result, 0, thisJavaClasses.length );
+            System.arraycopy( parentJavaClasses, 0, result, thisJavaClasses.length, parentJavaClasses.length );
+
+        }
+        return result;
+    }
+    
     public JavaPackage[] getPackages()
     {
         return context.getPackages();
+    }
+    
+    protected final JavaPackage[] getJavaPackages( ClassLibraryFilter filter) {
+        JavaPackage[] result = null; 
+        JavaPackage[] thisJavaPackages = null;
+        JavaPackage[] parentJavaPackages = null;
+        if ( parent != null ) {
+            parentJavaPackages = parent.getJavaPackages( filter );
+        }
+        if( filter.accept( this ) ) {
+            thisJavaPackages = context.getPackages();
+        }
+        
+        if ( parentJavaPackages == null || parentJavaPackages.length == 0) {
+            result = thisJavaPackages;
+        }
+        else if( thisJavaPackages == null || thisJavaPackages.length == 0 ) {
+            result = parentJavaPackages;
+        }
+        else {
+            int totalPackages = thisJavaPackages.length + parentJavaPackages.length;
+            result = new JavaPackage[totalPackages]; 
+            System.arraycopy( thisJavaPackages, 0, result, 0, thisJavaPackages.length );
+            System.arraycopy( parentJavaPackages, 0, result, thisJavaPackages.length, parentJavaPackages.length );
+
+        }
+        return result;
     }
     
     public boolean exists( String name )
@@ -124,4 +202,8 @@ public abstract class AbstractClassLibrary
             return new ModelBuilder( this, new DefaultDocletTagFactory());
         }
     }
+}
+interface ClassLibraryFilter
+{
+    boolean accept( AbstractClassLibrary classLibrary );
 }

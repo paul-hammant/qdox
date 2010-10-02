@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaSource;
 
 public class SourceFolderLibrary
     extends SourceLibrary
@@ -51,7 +52,8 @@ public class SourceFolderLibrary
             {
                 try
                 {
-                    result = parse( new FileReader( classFile ) );
+                    JavaSource source = parse( new FileReader( classFile ) );
+                    result = source.getNestedClassByName( className );
                 }
                 catch ( FileNotFoundException e )
                 {

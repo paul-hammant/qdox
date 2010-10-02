@@ -15,7 +15,9 @@ public interface ClassLibrary
     
     public JavaSource[] getSources();
     
-    public boolean exists( String name );
+    public boolean hasJavaClass( String name );
+    
+    public JavaPackage getJavaPackage( String name );
 
     public JavaPackage[] getPackages();
 }

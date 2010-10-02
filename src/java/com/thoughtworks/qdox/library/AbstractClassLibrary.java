@@ -142,6 +142,14 @@ public abstract class AbstractClassLibrary
         return context.getPackages();
     }
     
+    public JavaPackage getJavaPackage( String name ) {
+        JavaPackage result = context.getPackageByName( name );
+        if(result == null) {
+            result = parent.getJavaPackage( name );
+        }
+        return result;
+    }
+    
     protected final JavaPackage[] getJavaPackages( ClassLibraryFilter filter) {
         JavaPackage[] result = null; 
         JavaPackage[] thisJavaPackages = null;
@@ -169,14 +177,14 @@ public abstract class AbstractClassLibrary
         return result;
     }
     
-    public boolean exists( String name )
+    public boolean hasJavaClass( String name )
     {
         boolean result = context.getClassByName( name ) != null;
         if ( !result ) {
             result = containsClassByName( name );
         }
         if ( !result && parent != null ) {
-            parent.exists( name );
+            parent.hasJavaClass( name );
         }
         return result;
     }

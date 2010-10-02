@@ -30,23 +30,16 @@ public class SortedClassLibraryBuilder
         classNameLibrary = new ClassNameLibrary();
         classLoaderLibrary = new ClassLoaderLibrary( classNameLibrary );
         classLoaderLibrary.addDefaultLoader();
-        ModelBuilderFactory modelBuilderFactory = new ModelBuilderFactory()
-        {
-            public ModelBuilder newInstance()
-            {
-                return new ModelBuilder();
-            }
-        };
-        sourceFolderLibrary = new SourceFolderLibrary( modelBuilderFactory, classLoaderLibrary );
-        sourceLibrary = new SourceLibrary( modelBuilderFactory, sourceFolderLibrary );
+        sourceFolderLibrary = new SourceFolderLibrary( classLoaderLibrary );
+        sourceLibrary = new SourceLibrary( sourceFolderLibrary );
     }
 
     public SortedClassLibraryBuilder( ModelBuilderFactory modelBuilderFactory )
     {
         classNameLibrary = new ClassNameLibrary();
         classLoaderLibrary = new ClassLoaderLibrary( classNameLibrary );
-        sourceFolderLibrary = new SourceFolderLibrary( modelBuilderFactory, classLoaderLibrary );
-        sourceLibrary = new SourceLibrary( modelBuilderFactory, sourceFolderLibrary );
+        sourceFolderLibrary = new SourceFolderLibrary(  classLoaderLibrary );
+        sourceLibrary = new SourceLibrary( sourceFolderLibrary );
     }
 
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader )
@@ -111,6 +104,15 @@ public class SortedClassLibraryBuilder
     {
         sourceFolderLibrary.setEncoding( encoding );
         sourceLibrary.setEncoding( encoding );
+        return this;
+    }
+    
+    public ClassLibraryBuilder setModelBuilderFactory( ModelBuilderFactory factory )
+    {
+        classNameLibrary.setModelBuilderFactory( factory );
+        classLoaderLibrary.setModelBuilderFactory( factory );
+        sourceFolderLibrary.setModelBuilderFactory( factory );
+        sourceLibrary.setModelBuilderFactory( factory );
         return this;
     }
 

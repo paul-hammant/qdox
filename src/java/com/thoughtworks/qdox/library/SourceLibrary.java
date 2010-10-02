@@ -23,8 +23,6 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 public class SourceLibrary
     extends AbstractClassLibrary
 {
-    private ModelBuilderFactory modelBuilderFactory;
-    
     // parser and unused javaclasses
     private Map javaClassMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaClass>
     private Map javaSourceMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaSource>
@@ -35,18 +33,16 @@ public class SourceLibrary
     
     private String encoding;
 
-    public SourceLibrary( ModelBuilderFactory modelBuilderFactory )
+    public SourceLibrary( )
     {
         super();
-        this.modelBuilderFactory = modelBuilderFactory;
     }
 
-    public SourceLibrary( ModelBuilderFactory modelBuilderFactory, ClassLibrary parent )
+    public SourceLibrary( ClassLibrary parent )
     {
         super( parent );
-        this.modelBuilderFactory = modelBuilderFactory;
     }
-
+    
     public JavaClass addSource( Reader reader )
         throws ParseException
     {
@@ -98,7 +94,7 @@ public class SourceLibrary
         throws ParseException
     {
         JavaClass result = null;
-        ModelBuilder builder = modelBuilderFactory.newInstance();
+        ModelBuilder builder = getModelBuilder();
         Parser parser = new Parser( lexer, builder );
         parser.setDebugLexer( debugLexer );
         parser.setDebugParser( debugParser );

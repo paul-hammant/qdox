@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.net.URL;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 public interface ClassLibraryBuilder
 {
@@ -38,6 +39,8 @@ public interface ClassLibraryBuilder
     public ClassLibraryBuilder setDebugParser( boolean debugParser );
     
     public ClassLibraryBuilder setEncoding( String encoding );
+    
+    public ClassLibraryBuilder setModelBuilderFactory( ModelBuilderFactory factory );
 
     public ClassLibrary getClassLibrary();
 

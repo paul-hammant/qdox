@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.ModelBuilderFactory;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
 
 /**
@@ -33,7 +34,6 @@ import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
 public class ClassLoaderLibrary
     extends AbstractClassLibrary
 {
-
     private transient List classLoaders = new ArrayList(); // <java.lang.ClassLoader>
 
     private boolean defaultClassLoadersAdded = false;
@@ -82,7 +82,7 @@ public class ClassLoaderLibrary
             try
             {
                 Class clazz = classLoader.loadClass( name );
-                ModelBuilder builder = new ModelBuilder();
+                ModelBuilder builder = getModelBuilder();
                 BinaryClassParser parser = new BinaryClassParser( clazz, builder );
                 if ( parser.parse() )
                 {

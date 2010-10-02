@@ -30,6 +30,8 @@ public class JavaSource implements Serializable, JavaClassParent {
         PRIMITIVE_TYPES.add("void");
     }
 
+    private com.thoughtworks.qdox.library.ClassLibrary classLibrary;
+    
     private JavaPackage packge;
     private List imports = new LinkedList();
     private String[] importsArray;
@@ -46,7 +48,11 @@ public class JavaSource implements Serializable, JavaClassParent {
     public JavaSource(JavaClassContext context) {
     	this.context = context;
     }
-    
+
+    public JavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary) {
+        this.classLibrary = classLibrary;
+    }
+
     /**
      * @since 1.4
      */
@@ -227,7 +233,7 @@ public class JavaSource implements Serializable, JavaClassParent {
                 break lookup;
             }
 
-            if(context.getClassLibrary() != null) {
+            if(classLibrary != null || context.getClassLibrary() != null) {
                 // check for a class in the same package
                 resolvedName = resolveFromLibrary( getClassNamePrefix() + nestedName );
                 
@@ -273,11 +279,18 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
     
     private String resolveFromLibrary(String typeName) {
-        return context.getClassLibrary().contains( typeName ) ? typeName : null;
+        String result;
+        if(classLibrary != null) {
+            result = classLibrary.exists( typeName ) ? typeName : null;
+        }
+        else {
+            result = context.getClassLibrary().contains( typeName ) ? typeName : null;
+        }
+        return result;
     }
     
     private String resolveFullyQualifiedType(String typeName) {
-        if (context.getClassLibrary() != null) {
+        if (classLibrary != null || context.getClassLibrary() != null) {
             int indexOfLastDot = typeName.lastIndexOf('.');
             
             if (indexOfLastDot >= 0) {
@@ -291,7 +304,12 @@ public class JavaSource implements Serializable, JavaClassParent {
             }
     
             // check for fully-qualified class
-            if (context.getClassLibrary().contains(typeName)) {
+            if ( classLibrary != null) {
+                if( classLibrary.exists( typeName )) {
+                    return typeName;
+                }
+            }
+            else if (context.getClassLibrary().contains(typeName)) {
                 return typeName;
             }
         }
@@ -326,10 +344,15 @@ public class JavaSource implements Serializable, JavaClassParent {
     /**
      * 
      * @return
-     * @deprecated, use getJavaClassContext().getClassLibrary()
+     * @deprecated , use getJavaClassContext().getClassLibrary()
      */
 	public ClassLibrary getClassLibrary() {
 		return this.context.getClassLibrary();
+	}
+	
+	public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary()
+	{
+	    return classLibrary;
 	}
 
     public String getPackageName()

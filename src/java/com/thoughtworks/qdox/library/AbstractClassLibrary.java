@@ -1,9 +1,14 @@
 package com.thoughtworks.qdox.library;
 
 import com.thoughtworks.qdox.JavaClassContext;
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
+import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.DocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
  * A ClassLibrary can be compared with a java classloader. Its main task is to serve a JavaClass based on a FQN.
@@ -17,15 +22,18 @@ public abstract class AbstractClassLibrary
     implements ClassLibrary
 {
     private ClassLibrary parent;
+    
+    private ModelBuilderFactory modelBuilderFactory;
 
     private JavaClassContext context = new JavaClassContext();
-
+    
     public AbstractClassLibrary()
     {
     }
 
     public AbstractClassLibrary( ClassLibrary parent )
     {
+        this();
         this.parent = parent;
     }
 
@@ -90,4 +98,24 @@ public abstract class AbstractClassLibrary
     }
     
     protected abstract boolean containsClassByName( String name );
+    
+    public final void setModelBuilderFactory( ModelBuilderFactory factory ) {
+        this.modelBuilderFactory = factory;
+    }
+    
+    /**
+     * If there's a modelBuilderFactory available, ask it for a new instance.
+     * Otherwise, return a default ModelBuilder.
+     * In both cases, pass this library as argument.
+     * 
+     * @return a new instance of a ModelBuilder, never <code>null</code>
+     */
+    protected ModelBuilder getModelBuilder() {
+        if ( modelBuilderFactory != null) {
+            return modelBuilderFactory.newInstance( this ); 
+        }
+        else {
+            return new ModelBuilder( this, new DefaultDocletTagFactory());
+        }
+    }
 }

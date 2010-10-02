@@ -8,27 +8,26 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 public class SourceFolderLibrary
     extends SourceLibrary
 {
     private List sourceFolders = new ArrayList(); // <java.io.File>
 
-    public SourceFolderLibrary( ModelBuilderFactory modelBuilderFactory, ClassLibrary parent  )
+    public SourceFolderLibrary( ClassLibrary parent  )
     {
-        super( modelBuilderFactory, parent );
+        super( parent );
     }
 
-    public SourceFolderLibrary( ModelBuilderFactory modelBuilderFactory, File sourceFolder )
+    public SourceFolderLibrary( File sourceFolder )
     {
-        super( modelBuilderFactory );
+        super( );
         this.sourceFolders.add( sourceFolder );
     }
 
-    public SourceFolderLibrary( ModelBuilderFactory modelBuilderFactory, File sourceFolder, ClassLibrary parent )
+    public SourceFolderLibrary( File sourceFolder, ClassLibrary parent )
     {
-        super( modelBuilderFactory, parent );
+        super( parent );
         this.sourceFolders.add( sourceFolder );
     }
 

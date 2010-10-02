@@ -20,8 +20,6 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
 
     private ClassLibrary classLibrary;
     
-    private ModelBuilderFactory modelBuilderFactory;
-
     private boolean debugLexer;
 
     private boolean debugParser;
@@ -30,23 +28,11 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     
     private boolean appendDefaultClassLoaders;
     
+    private ModelBuilderFactory modelBuilderFactory;
+    
     public OrderedClassLibraryBuilder()
     {
-        modelBuilderFactory = new ModelBuilderFactory()
-        {
-            public ModelBuilder newInstance()
-            {
-                return new ModelBuilder();
-            }
-        };
         classLibrary = new ClassNameLibrary();
-    }
-
-    public OrderedClassLibraryBuilder( ModelBuilderFactory modelBuilderFactory )
-    {
-        this.modelBuilderFactory = modelBuilderFactory;
-        classLibrary = new ClassNameLibrary();
-        
     }
 
     /**
@@ -66,6 +52,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
             appendDefaultClassLoaders = false;
         }
         classLoaderLibrary.addClassLoader( classLoader );
+        classLoaderLibrary.setModelBuilderFactory( modelBuilderFactory );
         return this;
     }
 
@@ -82,7 +69,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
             classLoaderLibrary.addDefaultLoader();
         }
         else {
-            this.appendDefaultClassLoaders = true;
+            appendDefaultClassLoaders = true;
         }
         return this;
     }
@@ -94,7 +81,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         if ( !( classLibrary instanceof SourceFolderLibrary ) )
         {
-            classLibrary = new SourceFolderLibrary( modelBuilderFactory, classLibrary );
+            classLibrary = new SourceFolderLibrary( classLibrary );
         }
         SourceFolderLibrary sourceFolderLibrary = (SourceFolderLibrary) classLibrary;
         prepareSourceLibrary( sourceFolderLibrary );
@@ -143,6 +130,12 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     public ClassLibraryBuilder setEncoding( String encoding )
     {
         this.encoding = encoding;
+        return this;
+    }
+    
+    public ClassLibraryBuilder setModelBuilderFactory( ModelBuilderFactory modelBuilderFactory )
+    {
+        this.modelBuilderFactory = modelBuilderFactory;
         return this;
     }
 
@@ -195,6 +188,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     }
     
     private void prepareSourceLibrary( SourceLibrary sourceLibrary ) {
+        sourceLibrary.setModelBuilderFactory( modelBuilderFactory );
         sourceLibrary.setDebugLexer( debugLexer );
         sourceLibrary.setDebugParser( debugParser );
         sourceLibrary.setEncoding( encoding );
@@ -203,7 +197,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     private SourceLibrary getSourceLibrary() {
         if ( !( classLibrary instanceof SourceLibrary ) )
         {
-            classLibrary = new SourceLibrary( modelBuilderFactory, classLibrary );
+            classLibrary = new SourceLibrary( classLibrary );
         }
         SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
         prepareSourceLibrary( sourceLibrary );

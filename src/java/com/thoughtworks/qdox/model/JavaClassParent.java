@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import com.thoughtworks.qdox.JavaClassContext;
+import com.thoughtworks.qdox.library.ClassLibrary;
 
 public interface JavaClassParent {
 
@@ -21,5 +22,7 @@ public interface JavaClassParent {
     public void addClass(JavaClass cls);
     
     public JavaClass getNestedClassByName(String name);
+    
+    public ClassLibrary getJavaClassLibrary(); 
 
 }

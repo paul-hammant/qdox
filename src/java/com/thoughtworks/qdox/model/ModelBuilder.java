@@ -50,11 +50,24 @@ public class ModelBuilder implements Builder {
         currentAnnoDefs = new ArrayList();
     }
 
+    public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
+        this.context = null;
+        this.docletTagFactory = docletTagFactory;
+        source = new JavaSource(classLibrary);
+        currentParent = source;
+        currentAnnoDefs = new ArrayList();
+    }
+
     public void addPackage(PackageDef packageDef) {
-        JavaPackage jPackage = context.getPackageByName( packageDef.name );;
+        JavaPackage jPackage = null;
+        if(context != null) {
+            jPackage = context.getPackageByName( packageDef.name );;
+        }
         if (jPackage == null) {
             jPackage = new JavaPackage(packageDef.name);
-            context.add( jPackage );
+            if(context != null) {
+                context.add( jPackage );
+            }
         }
         jPackage.setLineNumber(packageDef.lineNumber);
     	setAnnotations(jPackage);
@@ -134,7 +147,9 @@ public class ModelBuilder implements Builder {
 
         currentParent.addClass(currentClass);
         currentParent = currentClass;
-        context.add(currentClass.getFullyQualifiedName());
+        if(context != null) {
+            context.add(currentClass.getFullyQualifiedName());
+        }
     }
 
     public void endClass() {

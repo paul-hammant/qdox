@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.library;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.model.ModelBuilderFactory;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 
 /**
@@ -21,7 +22,7 @@ public class ClassNameLibrary
      */
     protected JavaClass resolveJavaClass( String name )
     {
-        ModelBuilder unknownBuilder = new ModelBuilder();
+        ModelBuilder unknownBuilder = getModelBuilder();
         ClassDef classDef = new ClassDef();
         classDef.name = name;
         unknownBuilder.beginClass( classDef );

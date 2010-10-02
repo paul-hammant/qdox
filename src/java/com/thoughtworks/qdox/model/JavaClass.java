@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import com.thoughtworks.qdox.JavaClassContext;
+import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.util.OrderedMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -737,4 +738,14 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     	return sb.toString();
     }
 
+    public ClassLibrary getJavaClassLibrary()
+    {
+        //JavaClass should always have a source...
+        if(source != null) {
+            return source.getJavaClassLibrary();
+        }
+        else {
+            return null;
+        }
+    }
 }

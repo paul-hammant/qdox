@@ -720,7 +720,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 + " **/"
                 + "public class AClassName {\n"
                 + "}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
         JavaClass aClass =
                 builder.getClassByName("com.acme.thing.AClassName");
@@ -732,7 +731,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 + "public class A {\n"
                 + " int i,j=2,k[];"
                 + "}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
         JavaClass a = builder.getClassByName("A");
         assertEquals(3, a.getFields().length);
@@ -751,7 +749,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 + "  class WrappedInternalContextAdapter implements InternalContextAdapter {"
                 + "  }"
                 + "}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
         JavaClass clazz = builder.getClassByName("foo.bar.Outer");
 
@@ -774,7 +771,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
 
     public void testJiraQdox35() {
         String sourceCode = "package pack; public class Foo extends Bar implements Zap {}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
         JavaClass clazz = builder.getClassByName("pack.Foo");
         assertEquals(1, clazz.getImplementedInterfaces().length);
@@ -801,7 +797,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 "     *      fish=\"poisson\"\r" +
                 "     */\n" +
                 "     class MultiLine{}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         JavaClass multiline = builder.addSource(new StringReader(sourceCode)).getClasses()[0];
         DocletTag frenchEnglish = multiline.getTagByName("french.english");
 
@@ -858,7 +853,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 + "public class C {"
                 + "  boolean flag = (X < Y);"
                 + "}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
     }
 
@@ -869,7 +863,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 + "  @AnotherAnnotation\n"
                 + "  public void aMethod() {}\n"
                 + "}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
         JavaMethod javaMethod = javaSource.getClasses()[0].getMethods()[0];
         assertEquals("aMethod", javaMethod.getName());
@@ -882,14 +875,12 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 + "public class C {"
                 + "  public void aMethod() {}\n"
                 + "}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
         JavaClass javaClass = javaSource.getClasses()[0];
         assertEquals("C", javaClass.getName());
     }
 
     public void testMethodBody() {
-        JavaDocBuilder builder = new JavaDocBuilder();
         String sourceCode = "" +
                 "public class X {\n" +
                 "  public void doStuff() {\n" +
@@ -907,7 +898,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     }
 
     public void testMethodBodyWithConfusingCurlies() {
-        JavaDocBuilder builder = new JavaDocBuilder();
         String sourceCode = "" +
                 "public class X {\n" +
                 "  public void doStuff() {\n" +
@@ -925,7 +915,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     }
 
     public void testMethodBodyWithPrecedingStaticBlock() {
-        JavaDocBuilder builder = new JavaDocBuilder();
         String sourceCode = "" +
                 "public class X {\n" +
                 "  static {\n" +
@@ -946,7 +935,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     }
 
     public void testFieldDefinition() {
-        JavaDocBuilder builder = new JavaDocBuilder();
         String sourceCode = "" +
                 "public class X {\n" +
                 "  int x = new FlubberFactory<Y>(\"}\"){}.doCheese(spam/*c*/)\n" +
@@ -966,7 +954,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 "public class Thing {\n" +
                 " long[] bad = {1,2,3};\n" +  // as opposed to bad = new long[] {1,2,3}.
                 "}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         JavaSource javaSource = builder.addSource(new StringReader(source));
 
         JavaField field = javaSource.getClasses()[0].getFieldByName("bad");
@@ -976,7 +963,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     public void testDefaultsToThrowingExceptionWhenNotParseable() throws Exception {
         createFile("target/test-source/com/blah/Bad.java", "com.blah", "@%! BAD {}}}}");
 
-        JavaDocBuilder builder = new JavaDocBuilder();
         try {
             builder.addSourceTree(new File("target/test-source"));
             fail("Expected exception");
@@ -994,7 +980,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 .method("handle")
                 .with(isA(ParseException.class));
 
-        JavaDocBuilder builder = new JavaDocBuilder();
         builder.setErrorHandler((JavaDocBuilder.ErrorHandler) mockErrorHandler.proxy());
         builder.addSourceTree(new File("target/test-source"));
 
@@ -1002,7 +987,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     }
 
     public void testBinaryClassFieldModifiers() {
-        JavaDocBuilder builder = new JavaDocBuilder();
         JavaClass javaClass = builder.getClassByName(PropertyClass.class.getName());
         assertEquals("Class", PropertyClass.class.getName(), javaClass.getFullyQualifiedName());
         JavaField javaField = javaClass.getFieldByName("aField");
@@ -1021,7 +1005,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     			" b = 2,\n" +
     			" /** etc */\n" +
     			" c = 3; }";
-    	JavaDocBuilder builder = new JavaDocBuilder();
     	builder.addSource(new StringReader(sourceCode));
     	JavaClass javaClass = builder.getClasses()[0];
     	JavaField fieldA = javaClass.getFieldByName("a");
@@ -1034,7 +1017,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
 
     
     public void testJiraQdox117() throws Exception {
-    	JavaDocBuilder builder = new JavaDocBuilder();
         String sourceCode = "" +
                 "public class foo {\n" +
                 "{ dosomething(); }\n" +
@@ -1054,7 +1036,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         		"*/\n" + 
         		"public class TestClassImpl {\r\n" + 
         		"}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
         JavaClass jClass = builder.getClasses()[0];
         assertEquals( Arrays.toString( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}), Arrays.toString(jClass.getTags()[0].getParameters()));
@@ -1073,7 +1054,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 + " **/\n"
                 + "public class AClassName {\n"
                 + "}";
-        JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new StringReader(sourceCode));
         JavaClass aClass = builder.getClassByName("com.acme.thing.AClassName");
         assertEquals("This class does something.\n"
@@ -1178,7 +1158,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     
     // for QDOX-189
     public void testFinalAnnotationParam() {
-        JavaDocBuilder builder = new JavaDocBuilder();      
         String source = "public final class WSEndpointReference {\n" +
             "    public void writeTo(final @NotNull String localName, @NotNull XMLStreamWriter w) throws XMLStreamException {\n" +
             "    }\n" +
@@ -1188,7 +1167,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     
     // for QDOX-190
     public void testTwoCommentsBeforeEnumValue() {
-        JavaDocBuilder builder = new JavaDocBuilder();      
         String source = 
             "public enum Source {\n" +
             "    /** comment 1 */    \n" +
@@ -1201,7 +1179,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
 
     //for QDOX-191
     public void testLeftShift() {
-        JavaDocBuilder builder = new JavaDocBuilder();
         String source = 
             "private static class Flags {\n" +
             "   static final Flags LEFT_JUSTIFY = new Flags(1 << 0);\n" +
@@ -1210,7 +1187,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     }
     
     public void testGenericConstructor() {
-        JavaDocBuilder builder = new JavaDocBuilder();
         String source = 
             "public class MXBeanSupport {\n" +
             "  public <T> MXBeanSupport(T resource, Class<T> mxbeanInterface)\n" +
@@ -1241,7 +1217,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     }
     
     public void testSourceFolder() throws Exception {
-        JavaDocBuilder builder = new JavaDocBuilder();
         builder.getClassLibrary().addSourceFolder( new File("target/test-source") );
         String source = "package com.foo;\n" +
         		"import com.blah.*;\n" +
@@ -1257,7 +1232,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     
     // for QDOX-208
     public void testMethodLineNumber() throws Exception {
-        JavaDocBuilder builder = new JavaDocBuilder();
         String source = "package com.foo;\n" +
         		"public class Bar {\n" +
         		"  public void method1() \n" +
@@ -1277,7 +1251,6 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     
     // for QDOX-209
     public void testAnnotationMap() throws Exception{
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
         String source = "import javax.persistence.JoinColumn;\n" + 
         		"public class Instruction {\n" + 
         		"    private static final int something = 40;\n" + 
@@ -1285,8 +1258,8 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         		"    @JoinColumn(name=\"test\",bla=\"hi\")\n" + 
         		"    int testfield;\r\n" + 
         		"}";
-        javaDocBuilder.addSource(new StringReader( source ));
-        JavaClass classByName = javaDocBuilder.getClassByName("Instruction");
+        builder.addSource(new StringReader( source ));
+        JavaClass classByName = builder.getClassByName("Instruction");
         JavaField fieldByName = classByName.getFieldByName("testfield");
         Annotation[] annotations = fieldByName.getAnnotations();
         

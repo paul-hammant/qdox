@@ -184,7 +184,7 @@ public abstract class AbstractClassLibrary
             result = containsClassByName( name );
         }
         if ( !result && parent != null ) {
-            parent.hasJavaClass( name );
+            result = parent.hasJavaClass( name );
         }
         return result;
     }

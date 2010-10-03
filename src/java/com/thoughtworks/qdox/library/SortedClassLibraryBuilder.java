@@ -16,13 +16,13 @@ import com.thoughtworks.qdox.model.ModelBuilderFactory;
 public class SortedClassLibraryBuilder
     implements ClassLibraryBuilder
 {
-    private ClassNameLibrary classNameLibrary;
+    private final ClassNameLibrary classNameLibrary;
 
-    private ClassLoaderLibrary classLoaderLibrary;
+    private final ClassLoaderLibrary classLoaderLibrary;
 
-    private SourceFolderLibrary sourceFolderLibrary;
+    private final SourceFolderLibrary sourceFolderLibrary;
 
-    private SourceLibrary sourceLibrary;
+    private final SourceLibrary sourceLibrary;
 
     public SortedClassLibraryBuilder()
     {

@@ -147,7 +147,7 @@ public class SourceLibrary
     /**
      * Get all classes, including those from parent SourceLibraries
      */
-    public JavaClass[] getClasses()
+    public JavaClass[] getJavaClasses()
     {
         JavaClass[] result;
         JavaClass[] unusedClasses = (JavaClass[]) javaClassMap.values().toArray( new JavaClass[0] );
@@ -176,7 +176,7 @@ public class SourceLibrary
     /**
      * Get all packages, including those from parent SourceLibraries
      */
-    public JavaPackage[] getPackages()
+    public JavaPackage[] getJavaPackages()
     {
         JavaPackage[] result;
         JavaPackage[] unusedPackages = (JavaPackage[]) javaPackageMap.values().toArray( new JavaPackage[0] );
@@ -205,7 +205,7 @@ public class SourceLibrary
     /**
      * Get all sources, including those from parent SourceLibraries
      */
-    public JavaSource[] getSources()
+    public JavaSource[] getJavaSources()
     {
         JavaSource[] result;
         JavaSource[] unusedSources = (JavaSource[]) javaSourceList.toArray( new JavaSource[0] );

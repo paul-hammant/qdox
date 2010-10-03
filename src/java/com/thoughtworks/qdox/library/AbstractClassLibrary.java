@@ -10,11 +10,11 @@ import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
  * A ClassLibrary can be compared with a java classloader. Its main task is to serve a JavaClass based on a FQN.
- * This AbstractClassLibrary should be inherited by all ClassLibraries. 
- * You can refer to a prent library, so these can be chained.
+ * You can refer to a parent library, so these can be chained.
  * Besides that it contains a context only for this library. It will hold the definitions of JavaClasses and JavaPackages 
  * 
  * @author Robert Scholte
+ * @since 2.0
  */
 public abstract class AbstractClassLibrary
     implements ClassLibrary
@@ -25,13 +25,18 @@ public abstract class AbstractClassLibrary
 
     private JavaClassContext context = new JavaClassContext();
     
+    /**
+     * constructor for root ClassLibrary
+     */
     public AbstractClassLibrary()
     {
     }
 
+    /**
+     * constructor for chained ClassLibrary
+     */
     public AbstractClassLibrary( AbstractClassLibrary parent )
     {
-        this();
         this.parent = parent;
     }
 
@@ -73,11 +78,17 @@ public abstract class AbstractClassLibrary
      */
     protected abstract JavaClass resolveJavaClass( String name );
     
-    public JavaSource[] getSources()
+    public JavaSource[] getJavaSources()
     {
         return context.getSources();
     }
     
+    /**
+     * 
+     * 
+     * @param filter
+     * @return
+     */
     protected final JavaSource[] getJavaSources( ClassLibraryFilter filter) {
         JavaSource[] result = null; 
         JavaSource[] thisJavaSources = null;
@@ -105,11 +116,34 @@ public abstract class AbstractClassLibrary
         return result;
     }
     
-    public JavaClass[] getClasses()
+    /**
+     * Get all the sources of the current {@link AbstractClassLibrary}.
+     * Subclasses can overwrite this method by including the following code
+     * <code> 
+     * public JavaClass[] getClasses()
+     * {
+     *   return getJavaClasses( new ClassLibraryFilter()
+     *   {
+     *      public boolean accept( AbstractClassLibrary classLibrary )
+     *      {
+     *          return true;
+     *      }
+     *   });
+     * }
+     * </code>
+     * This example would return all created {@link JavaClass } objects, including those from the classloaders.
+     */
+    public JavaClass[] getJavaClasses()
     {
         return context.getClasses();
     }
-    
+
+    /**
+     * Subclasses can call this method to gather all JavaClass object, including those from the parent.
+     * 
+     * @param filter
+     * @return
+     */
     protected final JavaClass[] getJavaClasses( ClassLibraryFilter filter) {
         JavaClass[] result = null; 
         JavaClass[] thisJavaClasses = null;
@@ -137,7 +171,7 @@ public abstract class AbstractClassLibrary
         return result;
     }
     
-    public JavaPackage[] getPackages()
+    public JavaPackage[] getJavaPackages()
     {
         return context.getPackages();
     }
@@ -210,8 +244,9 @@ public abstract class AbstractClassLibrary
             return new ModelBuilder( this, new DefaultDocletTagFactory());
         }
     }
-}
-interface ClassLibraryFilter
-{
-    boolean accept( AbstractClassLibrary classLibrary );
+    
+    interface ClassLibraryFilter
+    {
+        boolean accept( AbstractClassLibrary classLibrary );
+    }
 }

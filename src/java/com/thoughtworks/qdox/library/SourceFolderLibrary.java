@@ -62,4 +62,18 @@ public class SourceFolderLibrary
         }
         return result;
     }
+    
+    protected boolean containsClassByName( String className )
+    {
+        boolean result = false;
+        for ( Iterator iterator = sourceFolders.iterator(); !result && iterator.hasNext(); )
+        {
+            File sourceFolder = (File) iterator.next();
+            String mainClassName = className.split( "\\$" )[0];
+            File classFile = new File( sourceFolder, mainClassName.replace( '.', File.separatorChar ) + ".java" );
+            result = ( classFile.exists() && classFile.isFile() );
+        }
+        return result;
+    }
+    
 }

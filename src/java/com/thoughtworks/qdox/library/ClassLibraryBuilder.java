@@ -4,12 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.net.URL;
 
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
-public interface ClassLibraryBuilder
+public interface ClassLibraryBuilder extends Serializable
 {
 
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader );

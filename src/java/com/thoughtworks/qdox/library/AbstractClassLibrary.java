@@ -178,7 +178,7 @@ public abstract class AbstractClassLibrary
     
     public JavaPackage getJavaPackage( String name ) {
         JavaPackage result = context.getPackageByName( name );
-        if(result == null) {
+        if(result == null  && parent != null ) {
             result = parent.getJavaPackage( name );
         }
         return result;

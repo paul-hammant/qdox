@@ -113,13 +113,13 @@ public class ClassLoaderLibrary
     {
         boolean result = false;
         Iterator iter = classLoaders.iterator();
-        while ( iter.hasNext() )
+        while (!result && iter.hasNext() )
         {
             ClassLoader classLoader = (ClassLoader) iter.next();
             try
             {
                 Class clazz = classLoader.loadClass( name );
-                result = true;
+                result = ( clazz != null );
             }
             catch ( ClassNotFoundException e )
             {

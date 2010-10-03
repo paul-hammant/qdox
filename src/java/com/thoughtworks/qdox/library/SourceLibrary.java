@@ -67,7 +67,7 @@ public class SourceLibrary
             javaPackageMap.put( source.getPackageName(), source.getPackage() );
         }
         for( int clazzIndex = 0; clazzIndex < source.getClasses().length; clazzIndex++ ) {
-            registerJavaClass( source.getClasses()[0] );
+            registerJavaClass( source.getClasses()[clazzIndex] );
         }
     }
     
@@ -76,7 +76,7 @@ public class SourceLibrary
             javaClassMap.put( clazz.getFullyQualifiedName(), clazz );
         }
         for( int clazzIndex = 0; clazzIndex < clazz.getNestedClasses().length; clazzIndex++ ) {
-            registerJavaClass( clazz.getNestedClasses()[0] );
+            registerJavaClass( clazz.getNestedClasses()[clazzIndex] );
         }
     }
     

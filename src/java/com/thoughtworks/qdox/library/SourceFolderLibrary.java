@@ -10,6 +10,11 @@ import java.util.List;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
 
+/**
+ * 
+ * @author Robert Scholte
+ * @since 2.0
+ */
 public class SourceFolderLibrary
     extends SourceLibrary
 {
@@ -20,13 +25,7 @@ public class SourceFolderLibrary
         super( parent );
     }
 
-    public SourceFolderLibrary( File sourceFolder )
-    {
-        super( );
-        this.sourceFolders.add( sourceFolder );
-    }
-
-    public SourceFolderLibrary( File sourceFolder, AbstractClassLibrary parent )
+    public SourceFolderLibrary( AbstractClassLibrary parent, File sourceFolder )
     {
         super( parent );
         this.sourceFolders.add( sourceFolder );

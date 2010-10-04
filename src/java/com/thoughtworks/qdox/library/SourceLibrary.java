@@ -21,10 +21,17 @@ import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
 
+/**
+ * 
+ * @author Robert Scholte
+ * @since 2.0
+ */
 public class SourceLibrary
     extends AbstractClassLibrary
 {
+    
     // parser and unused javaclasses
+    //@todo replace with a JavaClassContext
     private Map javaClassMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaClass>
     private List javaSourceList = new ArrayList(); // <java.lang.String, com.thoughtworks.qdox.model.JavaSource>
     private Map javaPackageMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaPackage>
@@ -34,11 +41,6 @@ public class SourceLibrary
     private boolean debugParser;
     
     private String encoding;
-
-    public SourceLibrary( )
-    {
-        super();
-    }
 
     public SourceLibrary( AbstractClassLibrary parent )
     {

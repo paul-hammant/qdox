@@ -30,6 +30,7 @@ import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  * @author Robert Scholte
+ * @since 2.0
  */
 public class ClassLoaderLibrary
     extends AbstractClassLibrary
@@ -43,12 +44,7 @@ public class ClassLoaderLibrary
         super( parent );
     }
 
-    public ClassLoaderLibrary( ClassLoader classLoader )
-    {
-        this.classLoaders.add( classLoader );
-    }
-
-    public ClassLoaderLibrary( ClassLoader classLoader, AbstractClassLibrary parent )
+    public ClassLoaderLibrary( AbstractClassLibrary parent, ClassLoader classLoader )
     {
         super( parent );
         this.classLoaders.add( classLoader );

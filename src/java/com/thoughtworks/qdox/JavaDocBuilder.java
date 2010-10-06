@@ -71,7 +71,9 @@ public class JavaDocBuilder implements Serializable {
     final ModelBuilderFactory builderFactory;
     
     //@todo should be replaced with the new ClassLibrary
+    //hold reference to both objects for better refactoring
 	private final JavaClassContext context;
+	private final ClassLibrary oldClassLibrary;
 	
 	//@todo move to JavaClassContext
     private Set packages = new HashSet();
@@ -98,10 +100,10 @@ public class JavaDocBuilder implements Serializable {
     }
 
     public JavaDocBuilder(final DocletTagFactory docletTagFactory) {
-        ClassLibrary classLibrary = new ClassLibrary();
-        classLibrary.addDefaultLoader();
+        this.oldClassLibrary = new ClassLibrary();
+        this.oldClassLibrary.addDefaultLoader();
         this.context = new JavaClassContext(this);
-        this.context.setClassLibrary(classLibrary);
+        this.context.setClassLibrary(oldClassLibrary);
         this.builderFactory = new ModelBuilderFactory()
         {
             public ModelBuilder newInstance()
@@ -122,6 +124,7 @@ public class JavaDocBuilder implements Serializable {
     public JavaDocBuilder(final DocletTagFactory docletTagFactory, ClassLibrary classLibrary) {
         this.context = new JavaClassContext(this);
         this.context.setClassLibrary(classLibrary);
+        this.oldClassLibrary = classLibrary;
         this.builderFactory = new ModelBuilderFactory()
         {
             public ModelBuilder newInstance()
@@ -192,7 +195,7 @@ public class JavaDocBuilder implements Serializable {
 
     protected JavaClass createBinaryClass(String name) {
         // First see if the class exists at all.
-        Class clazz = context.getClass(name);
+        Class clazz = oldClassLibrary.getClass(name);
         if (clazz == null) {
             return null;
         } else {
@@ -346,7 +349,7 @@ public class JavaDocBuilder implements Serializable {
 
     public List search(Searcher searcher) {
         List results = new LinkedList();
-        for (Iterator iterator = context.getClassLibrary().all().iterator(); iterator.hasNext();) {
+        for (Iterator iterator = oldClassLibrary.all().iterator(); iterator.hasNext();) {
             String clsName = (String) iterator.next();
             JavaClass cls = getClassByName(clsName);
             if (searcher.eval(cls)) {
@@ -357,7 +360,7 @@ public class JavaDocBuilder implements Serializable {
     }
 
     public ClassLibrary getClassLibrary() {
-        return context.getClassLibrary();
+        return oldClassLibrary;
     }
 
     public void save(File file) throws IOException {

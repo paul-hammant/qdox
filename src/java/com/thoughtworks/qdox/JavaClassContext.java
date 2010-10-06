@@ -1,7 +1,8 @@
 package com.thoughtworks.qdox;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.thoughtworks.qdox.model.ClassLibrary;
@@ -21,25 +22,22 @@ import com.thoughtworks.qdox.model.util.OrderedMap;
  */
 public class JavaClassContext implements Serializable {
 
-	private final JavaClassCache cache;
 	private ClassLibrary classLibrary;
 	private JavaDocBuilder builder;
+	private Map classMap = new OrderedMap();  // <String, com.thoughtworks.qdox.model.JavaClass>
 	private Map packageMap = new OrderedMap(); // <String, com.thoughtworks.qdox.model.JavaPackage> 
-	private Map sourceMap = new OrderedMap();  // <String, com.thoughtworks.qdox.model.JavaSource> 
+	private List sourceList = new ArrayList();  // <com.thoughtworks.qdox.model.JavaSource> 
 	
 	public JavaClassContext(){
-	    cache = new DefaultJavaClassCache();
 	}
 	
 	public JavaClassContext(JavaDocBuilder builder) {
 		this.builder = builder;
-		this.cache = new DefaultJavaClassCache();
 	}
 	
 	
 	public JavaClassContext(ClassLibrary classLibrary) {
 		this.classLibrary = classLibrary;
-		this.cache = new DefaultJavaClassCache();
 	}
 	
 	
@@ -58,7 +56,7 @@ public class JavaClassContext implements Serializable {
 	
 	
 	public JavaClass getClassByName(String name) {
-		JavaClass result = cache.getClassByName(name);
+		JavaClass result = (JavaClass) classMap.get( name );
 		if(result == null && builder != null) {
 			result = builder.createBinaryClass(name);
 			
@@ -78,10 +76,10 @@ public class JavaClassContext implements Serializable {
 	}
 	
 	public JavaClass[] getClasses() {
-		return cache.getClasses();
+		return (JavaClass[]) classMap.values().toArray( new JavaClass[0]);
 	}
 	public void add(JavaClass javaClass) {
-		cache.putClassByName(javaClass.getFullyQualifiedName(), javaClass);
+	    classMap.put(javaClass.getFullyQualifiedName(), javaClass);
 		
 		JavaPackage jPackage = getPackageByName( javaClass.getPackageName() );
 		if(jPackage != null) {
@@ -94,16 +92,10 @@ public class JavaClassContext implements Serializable {
 		classLibrary.add(fullyQualifiedClassName);
 	}
 
-	public Class getClass(String name) {
-		return classLibrary.getClass(name);
-	}
-
-
     public JavaPackage getPackageByName( String name )
     {
         return (JavaPackage) packageMap.get( name );
     }
-
 
     public void add( JavaPackage jPackage )
     {
@@ -126,15 +118,11 @@ public class JavaClassContext implements Serializable {
 
     public void add( JavaSource source )
     {
-        String key = source.getClasses()[0].getName();
-        if(!sourceMap.containsKey( key )) 
-        {
-            sourceMap.put( key, source );
-        }
+        sourceList.add( source );
     }
 
     public JavaSource[] getSources()
     {
-        return (JavaSource[]) sourceMap.values().toArray( new JavaSource[0] );
+        return (JavaSource[]) sourceList.toArray( new JavaSource[0] );
     }
 }

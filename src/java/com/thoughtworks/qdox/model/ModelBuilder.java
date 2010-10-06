@@ -28,7 +28,6 @@ import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
  */
 public class ModelBuilder implements Builder {
 
-    private final JavaClassContext context; //@todo remove, already solved by AbstractLibrary
     private final JavaSource source;
     private JavaClassParent currentParent;
     private JavaClass currentClass;
@@ -43,7 +42,6 @@ public class ModelBuilder implements Builder {
     }
 
     public ModelBuilder(JavaClassContext context, DocletTagFactory docletTagFactory) {
-        this.context = context;
         this.docletTagFactory = docletTagFactory;
         source = new JavaSource(context);
         currentParent = source;
@@ -51,7 +49,6 @@ public class ModelBuilder implements Builder {
     }
 
     public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
-        this.context = null;
         this.docletTagFactory = docletTagFactory;
         source = new JavaSource(classLibrary);
         currentParent = source;
@@ -60,13 +57,13 @@ public class ModelBuilder implements Builder {
 
     public void addPackage(PackageDef packageDef) {
         JavaPackage jPackage = null;
-        if(context != null) {
-            jPackage = context.getPackageByName( packageDef.name );;
+        if( source.getJavaClassContext() != null) {
+            jPackage =  source.getJavaClassContext().getPackageByName( packageDef.name );;
         }
         if (jPackage == null) {
             jPackage = new JavaPackage(packageDef.name);
-            if(context != null) {
-                context.add( jPackage );
+            if( source.getJavaClassContext() != null) {
+                source.getJavaClassContext().add( jPackage );
             }
         }
         jPackage.setLineNumber(packageDef.lineNumber);
@@ -147,8 +144,8 @@ public class ModelBuilder implements Builder {
 
         currentParent.addClass(currentClass);
         currentParent = currentClass;
-        if(context != null) {
-            context.add(currentClass.getFullyQualifiedName());
+        if( source.getJavaClassContext() != null) {
+            source.getJavaClassContext().add(currentClass.getFullyQualifiedName());
         }
     }
 

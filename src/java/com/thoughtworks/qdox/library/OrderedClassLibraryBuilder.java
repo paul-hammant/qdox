@@ -13,6 +13,7 @@ import com.thoughtworks.qdox.model.ModelBuilderFactory;
  * This library resolves JavaClasses in the order in which class sources are added.
  * 
  * @author Robert Scholte
+ * @since 2.0
  */
 public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
 {

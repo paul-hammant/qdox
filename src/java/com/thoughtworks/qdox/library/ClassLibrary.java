@@ -32,7 +32,7 @@ public interface ClassLibrary
     public JavaClass getJavaClass( String name );
 
     /**
-     * 
+     * Return all JavaClasses of the current library.
      * It's up to the library to decide if also collects JavaClasses from it's ancestors 
      * 
      * @return all JavaClasses, never <code>null</code>
@@ -40,7 +40,7 @@ public interface ClassLibrary
     public JavaClass[] getJavaClasses();
     
     /**
-     * 
+     * Return all JavaSources of the current library.
      * It's up to the library to decide if also collects JavaSources from it's ancestors 
      * 
      * @return all JavaSources, never <code>null</code>

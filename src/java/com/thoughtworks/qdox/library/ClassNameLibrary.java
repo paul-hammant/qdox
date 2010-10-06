@@ -3,11 +3,13 @@ package com.thoughtworks.qdox.library;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
-import com.thoughtworks.qdox.model.ModelBuilderFactory;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 
 /**
  * This library always resolve a className by generating an empty JavaClass Model
+ * 
+ * @author Robert Scholte
+ * @since 2.0
  */
 public class ClassNameLibrary
     extends AbstractClassLibrary

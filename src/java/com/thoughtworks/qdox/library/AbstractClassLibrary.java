@@ -9,9 +9,10 @@ import com.thoughtworks.qdox.model.ModelBuilder;
 import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
- * A ClassLibrary can be compared with a java classloader. Its main task is to serve a JavaClass based on a FQN.
- * You can refer to a parent library, so these can be chained.
- * Besides that it contains a context only for this library. It will hold the definitions of JavaClasses and JavaPackages 
+ * A ClassLibrary can be compared with a java classloader. 
+ * Its main task is to serve JavaClasses based on the Fully Qualified Name.
+ * AbstractClassLibraries hold a reference a parent library, in which way they can be chained.
+ * Besides that it contains a context only for this library. 
  * 
  * @author Robert Scholte
  * @since 2.0
@@ -171,6 +172,10 @@ public abstract class AbstractClassLibrary
         return result;
     }
     
+    /**
+     * 
+     * @return all JavaPackages of this ClassLibrary
+     */
     public JavaPackage[] getJavaPackages()
     {
         return context.getPackages();
@@ -211,6 +216,12 @@ public abstract class AbstractClassLibrary
         return result;
     }
     
+    /**
+     * First checks if the context already has a JavaClass with this name.
+     * If not, find out if this classlibrary is able to build a model for this class
+     * Otherwise ask the parent if it could build a JavaClass.
+     * 
+     */
     public boolean hasJavaClass( String name )
     {
         boolean result = context.getClassByName( name ) != null;
@@ -223,8 +234,20 @@ public abstract class AbstractClassLibrary
         return result;
     }
     
+    /**
+     * This method is used to detect if there´s a match with this classname.
+     * The name could be constructed based on imports and inner class paths.
+     * 
+     * @param name the fully qualifed name of the class
+     * @return true if this ClassLibrary has a reference to this class.
+     */
     protected abstract boolean containsClassByName( String name );
     
+    /**
+     * Set the ModelBuilderFactory for this classLibrary. 
+     * 
+     * @param factory
+     */
     public final void setModelBuilderFactory( ModelBuilderFactory factory ) {
         this.modelBuilderFactory = factory;
     }
@@ -245,6 +268,11 @@ public abstract class AbstractClassLibrary
         }
     }
     
+    /**
+     * A filter to use when checking all ancestors.
+     * 
+     * @author Robert Scholte
+     */
     interface ClassLibraryFilter
     {
         boolean accept( AbstractClassLibrary classLibrary );

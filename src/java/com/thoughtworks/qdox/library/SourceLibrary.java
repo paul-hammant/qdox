@@ -22,6 +22,9 @@ import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
 
 /**
+ * This Library will immediately parse the source and keeps its reference to a private context.
+ * Once the superclass explicitly asks for an instance if will be moved to the context f the supoerclass.
+ * If there's a request to get a certain JavaModel Object from a SourceLibrary, it will check all ancestor SourceLibraries as well.
  * 
  * @author Robert Scholte
  * @since 2.0
@@ -42,11 +45,23 @@ public class SourceLibrary
     
     private String encoding;
 
+    /**
+     * Create a new instance of SourceLibrary and chain it to the parent 
+     * 
+     * @param parent
+     */
     public SourceLibrary( AbstractClassLibrary parent )
     {
         super( parent );
     }
     
+    /**
+     * Add a {@link Reader} containing java code to this library
+     * 
+     * @param reader a {@link Reader} which should contain java code
+     * @return The constructed {@link JavaSource} object of this reader
+     * @throws ParseException if this content couldn't be parsed to a JavaModel
+     */
     public JavaSource addSource( Reader reader )
         throws ParseException
     {
@@ -55,6 +70,13 @@ public class SourceLibrary
         return source;
     }
 
+    /**
+     * Add an {@link InputStream} containing java code to this library
+     * 
+     * @param stream an {@link InputStream} which should contain java code
+     * @return The constructed {@link JavaSource} object of this stream
+     * @throws ParseException if this content couldn't be parsed to a JavaModel
+     */
     public JavaSource addSource( InputStream stream )
         throws ParseException
     {
@@ -63,31 +85,27 @@ public class SourceLibrary
         return source;
     }
     
-    private void registerJavaSource(JavaSource source) {
-        javaSourceList.add( source );
-        if( !javaPackageMap.containsKey( source.getPackageName() ) ) {
-            javaPackageMap.put( source.getPackageName(), source.getPackage() );
-        }
-        for( int clazzIndex = 0; clazzIndex < source.getClasses().length; clazzIndex++ ) {
-            registerJavaClass( source.getClasses()[clazzIndex] );
-        }
-    }
-    
-    private void registerJavaClass(JavaClass clazz) {
-        if (clazz != null) {
-            javaClassMap.put( clazz.getFullyQualifiedName(), clazz );
-        }
-        for( int clazzIndex = 0; clazzIndex < clazz.getNestedClasses().length; clazzIndex++ ) {
-            registerJavaClass( clazz.getNestedClasses()[clazzIndex] );
-        }
-    }
-    
+    /**
+     * Add a {@link URL} containing java code to this library
+     * 
+     * @param url a {@link URL} which should contain java code
+     * @return The constructed {@link JavaSource} object of this url
+     * @throws ParseException if this content couldn't be parsed to a JavaModel
+     */
     public JavaSource addSource( URL url )
         throws ParseException, IOException
     {
         return addSource( new InputStreamReader( url.openStream(), encoding) );
     }
 
+    /**
+     * Add a {@link File} containing java code to this library
+     * 
+     * @param file a {@link File} which should contain java code
+     * @return The constructed {@link JavaSource} object of this file
+     * @throws ParseException
+     * @throws IOException
+     */
     public JavaSource addSource( File file )
         throws ParseException, IOException
     {
@@ -130,17 +148,52 @@ public class SourceLibrary
         // it will take over the reference
         return (JavaClass) javaClassMap.remove( name );
     }
+    
+    private void registerJavaSource(JavaSource source) {
+        javaSourceList.add( source );
+        if( !javaPackageMap.containsKey( source.getPackageName() ) ) {
+            javaPackageMap.put( source.getPackageName(), source.getPackage() );
+        }
+        for( int clazzIndex = 0; clazzIndex < source.getClasses().length; clazzIndex++ ) {
+            registerJavaClass( source.getClasses()[clazzIndex] );
+        }
+    }
+    
+    //@todo move to JavaClassContext
+    private void registerJavaClass(JavaClass clazz) {
+        if (clazz != null) {
+            javaClassMap.put( clazz.getFullyQualifiedName(), clazz );
+        }
+        for( int clazzIndex = 0; clazzIndex < clazz.getNestedClasses().length; clazzIndex++ ) {
+            registerJavaClass( clazz.getNestedClasses()[clazzIndex] );
+        }
+    }
 
+    /**
+     * Use the Lexer in debug mode
+     * 
+     * @param debugLexer 
+     */
     public void setDebugLexer( boolean debugLexer )
     {
         this.debugLexer = debugLexer;
     }
     
+    /**
+     * Use the Parser in debug mode
+     * 
+     * @param debugParser
+     */
     public void setDebugParser( boolean debugParser )
     {
         this.debugParser = debugParser;
     }
     
+    /**
+     * Sets the encoding to use when parsing a URL or InputStreamReader
+     * 
+     * @param encoding
+     */
     public void setEncoding( String encoding )
     {
         this.encoding = encoding;
@@ -233,6 +286,9 @@ public class SourceLibrary
         return result;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     protected boolean containsClassByName( String name )
     {
         return javaClassMap.containsKey( name );

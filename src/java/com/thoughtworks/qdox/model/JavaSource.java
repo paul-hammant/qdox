@@ -42,7 +42,7 @@ public class JavaSource implements Serializable, JavaClassParent {
     private URL url;
 
     public JavaSource() {
-    	this(new JavaClassContext((ClassLibrary) null));
+    	this(new JavaClassContext());
     }
     
     public JavaSource(JavaClassContext context) {

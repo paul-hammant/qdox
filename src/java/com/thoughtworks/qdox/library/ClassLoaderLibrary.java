@@ -82,6 +82,7 @@ public class ClassLoaderLibrary
                 BinaryClassParser parser = new BinaryClassParser( clazz, builder );
                 if ( parser.parse() )
                 {
+                    //this works, classloaders parse the FQN (including nested classes) directly
                     result = builder.getSource().getClasses()[0];
                 }
                 break;

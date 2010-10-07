@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TagParser {
@@ -37,7 +38,7 @@ public class TagParser {
      * Extract a Map of named parameters  
      */
     public static Map parseNamedParameters(String tagValue) {
-        Map paramMap = new OrderedMap();
+        Map paramMap = new LinkedHashMap();
         StreamTokenizer tokenizer = makeTokenizer(tagValue);
         try {
             while (tokenizer.nextToken() == StreamTokenizer.TT_WORD) {

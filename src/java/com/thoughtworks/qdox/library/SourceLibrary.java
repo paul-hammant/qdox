@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,6 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
-import com.thoughtworks.qdox.model.util.OrderedMap;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
@@ -35,9 +35,9 @@ public class SourceLibrary
     
     // parser and unused javaclasses
     //@todo replace with a JavaClassContext
-    private Map javaClassMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaClass>
+    private Map javaClassMap = new LinkedHashMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaClass>
     private List javaSourceList = new ArrayList(); // <java.lang.String, com.thoughtworks.qdox.model.JavaSource>
-    private Map javaPackageMap = new OrderedMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaPackage>
+    private Map javaPackageMap = new LinkedHashMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaPackage>
     
     private boolean debugLexer;
 

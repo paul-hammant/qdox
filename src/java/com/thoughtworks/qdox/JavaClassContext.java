@@ -1,15 +1,15 @@
 package com.thoughtworks.qdox;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.util.OrderedMap;
 
 /**
  * JavaClassContext gives you a mechanism to get a JavaClass.
@@ -23,9 +23,9 @@ public class JavaClassContext implements Serializable {
 
 	private ClassLibrary classLibrary;
 	private JavaDocBuilder builder;
-	private Map classMap = new OrderedMap();  // <String, com.thoughtworks.qdox.model.JavaClass>
-	private Map packageMap = new OrderedMap(); // <String, com.thoughtworks.qdox.model.JavaPackage> 
-	private List sourceList = new ArrayList();  // <com.thoughtworks.qdox.model.JavaSource> 
+	private Map classMap = new LinkedHashMap();  // <String, com.thoughtworks.qdox.model.JavaClass>
+	private Map packageMap = new LinkedHashMap(); // <String, com.thoughtworks.qdox.model.JavaPackage> 
+	private Set sourceSet = new HashSet();  // <com.thoughtworks.qdox.model.JavaSource> 
 	
 	public JavaClassContext(){
 	}
@@ -117,11 +117,11 @@ public class JavaClassContext implements Serializable {
 
     public void add( JavaSource source )
     {
-        sourceList.add( source );
+        sourceSet.add( source );
     }
 
     public JavaSource[] getSources()
     {
-        return (JavaSource[]) sourceList.toArray( new JavaSource[0] );
+        return (JavaSource[]) sourceSet.toArray( new JavaSource[0] );
     }
 }

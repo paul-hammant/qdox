@@ -1,16 +1,17 @@
 package com.thoughtworks.qdox.model;
 
-import com.thoughtworks.qdox.JavaClassContext;
-import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.model.util.OrderedMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.thoughtworks.qdox.JavaClassContext;
+import com.thoughtworks.qdox.library.ClassLibrary;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -602,7 +603,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     private Map getBeanPropertyMap(boolean superclasses) {
         JavaMethod[] methods = getMethods(superclasses);
-        Map beanPropertyMap = new OrderedMap();
+        Map beanPropertyMap = new LinkedHashMap();
 
         // loop over the methods.
         for (int i = 0; i < methods.length; i++) {

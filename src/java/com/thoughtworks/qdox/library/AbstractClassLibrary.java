@@ -54,16 +54,17 @@ public abstract class AbstractClassLibrary
         if ( result == null )
         {
             result = resolveJavaClass( name );
-        }
-        if ( result != null )
-        {
-            context.add( result );
-            if( result.getPackage() != null ) {
-                context.add( result.getPackage() );
+
+            if ( result != null )  
+            {
+                context.add( result );
+                if( result.getPackage() != null ) {
+                    context.add( result.getPackage() );
+                }
+                context.add( result.getSource() ); 
             }
-            context.add( result.getSource() ); 
         }
-        else if ( parent != null )
+        if ( result == null && parent != null )
         {
             result = parent.getJavaClass( name );
         }

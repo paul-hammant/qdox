@@ -670,4 +670,13 @@ public abstract class JavaClassTest extends TestCase {
         JavaClass clazz = newJavaClass( "a.b.Sample" );
         assertEquals( "java.lang.Object", clazz.getSuperClass().getJavaClass().getFullyQualifiedName() );
     }
+    
+    public void testGetSource() {
+        JavaSource source = newJavaSource();
+        JavaClass clazz = newJavaClass();
+        source.addClass(clazz);
+        JavaField field = newJavaField();
+        clazz.addField(field);
+        assertEquals(source, field.getSource());
+    }
 }

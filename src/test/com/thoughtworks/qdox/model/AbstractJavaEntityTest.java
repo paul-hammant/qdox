@@ -7,12 +7,26 @@ import java.util.LinkedList;
 
 public class AbstractJavaEntityTest extends TestCase {
 
+    private AbstractJavaEntity newAbstractJavaEntity() {
+        return new AbstractJavaEntity()
+        {
+            public int compareTo( Object arg0 )
+            {
+                return 0;
+            }
+            
+            protected void writeBody( IndentBuffer result )
+            {
+            }
+        };
+    }
+    
     public AbstractJavaEntityTest(String s) {
         super(s);
     }
 
     public void testGetTagsByNameMethod() throws Exception {
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         List tags = new LinkedList();
         tags.add(new DefaultDocletTag("monkey", "is good"));
         tags.add(new DefaultDocletTag("monkey", "is funny"));
@@ -26,7 +40,7 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testGetSingleTagByName() throws Exception {
 
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         List tags = new LinkedList();
         tags.add(new DefaultDocletTag("monkey", "is good"));
         tags.add(new DefaultDocletTag("monkey", "is funny"));
@@ -41,7 +55,7 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testCommentToString() {
         // setup
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
         entity.setComment("Hello");
 
@@ -59,7 +73,7 @@ public class AbstractJavaEntityTest extends TestCase {
     }
     
     public void testMultilineCommentToString() {
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
         entity.setComment("Hello\nWorld");
 
@@ -80,7 +94,7 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testNoCommentToString() {
         // setup
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
 
         // expectation
@@ -95,7 +109,7 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testCommentWithTagToString() {
         // setup
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
         entity.setComment("Hello");
         List tags = new LinkedList();
@@ -119,7 +133,7 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testCommentWithMultipleTagsToString() {
         // setup
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
         entity.setComment("Hello");
         List tags = new LinkedList();
@@ -145,7 +159,7 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testTagButNoCommentToString() {
         // setup
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
         List tags = new LinkedList();
         tags.add(new DefaultDocletTag("monkey", "is in the tree"));
@@ -166,7 +180,7 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testTagWithNoValueToString() {
         // setup
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
         List tags = new LinkedList();
         tags.add(new DefaultDocletTag("monkey", ""));
@@ -186,26 +200,26 @@ public class AbstractJavaEntityTest extends TestCase {
     }
 
     public void testPublicModifer() {
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(new String[]{"public"});
         assertTrue(entity.isPublic());
     }
 
     public void testPrivateModifer() {
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(new String[]{"private"});
         assertTrue(entity.isPrivate());
     }
 
     public void testAbstractModifer() {
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(new String[]{"public", "abstract"});
         assertTrue(entity.isAbstract());
         assertTrue(!entity.isPrivate());
     }
 
     public void testProtectedModifer() {
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(new String[]{"protected", "abstract", "synchronized", "transient"});
         assertTrue(entity.isProtected());
         assertTrue(entity.isSynchronized());
@@ -213,14 +227,14 @@ public class AbstractJavaEntityTest extends TestCase {
     }
 
     public void testStaticModifer() {
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(new String[]{"public", "static", "final"});
         assertTrue(entity.isStatic());
         assertTrue(entity.isFinal());
     }
 
     public void testQDOX30() {
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(new String[]{"native", "volatile", "strictfp"});
         assertTrue(entity.isNative());
         assertTrue(entity.isVolatile());
@@ -228,17 +242,7 @@ public class AbstractJavaEntityTest extends TestCase {
     }
 
     public void testGetTagsReturnsEmptyArrayInsteadOfNull() throws Exception {
-        AbstractJavaEntity entity = new JavaField();
+        AbstractJavaEntity entity = newAbstractJavaEntity();
         assertEquals(0, entity.getTags().length);
     }
-    
-    public void testGetSource() {
-        JavaSource source = new JavaSource();
-        JavaClass clazz = new JavaClass();
-        source.addClass(clazz);
-        JavaField field = new JavaField();
-        clazz.addField(field);
-        assertEquals(source, field.getSource());
-    }
-
 }

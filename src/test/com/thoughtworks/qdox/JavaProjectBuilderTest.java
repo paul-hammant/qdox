@@ -513,7 +513,11 @@ public class JavaProjectBuilderTest
         assertNotNull(ctor);
     }
 
-    public void testSerializable() throws Exception {
+    /*
+     * The JavaDocBuilder has to be serializable, With JavaProjectBuilder, we only need to serialize the ClassLibraryBuilder
+     */
+    public void _testSerializable() throws Exception {
+        
         builder.addSource(new StringReader("package test; public class X{}"));
         assertEquals("X", builder.getSources()[0].getClasses()[0].getName());
 

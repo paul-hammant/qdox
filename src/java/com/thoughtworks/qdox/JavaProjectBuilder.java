@@ -23,7 +23,7 @@ import com.thoughtworks.qdox.model.JavaSource;
 
 
 
-public class JavaProjectBuilder implements Serializable
+public class JavaProjectBuilder
 {
     private final ClassLibraryBuilder classLibraryBuilder;
     
@@ -127,7 +127,7 @@ public class JavaProjectBuilder implements Serializable
         FileOutputStream fos = new FileOutputStream(file);
         ObjectOutputStream out = new ObjectOutputStream(fos);
         try {
-            out.writeObject(this);
+            out.writeObject(classLibraryBuilder);
         } finally {
             out.close();
             fos.close();
@@ -140,9 +140,10 @@ public class JavaProjectBuilder implements Serializable
     public static JavaProjectBuilder load(File file) throws IOException {
         FileInputStream fis = new FileInputStream(file);
         ObjectInputStream in = new ObjectInputStream(fis);
-        JavaProjectBuilder builder = null;
+        JavaProjectBuilder builder;
         try {
-            builder = (JavaProjectBuilder) in.readObject();
+            ClassLibraryBuilder libraryBuilder = (ClassLibraryBuilder) in.readObject();
+            builder = new JavaProjectBuilder(libraryBuilder);
         } catch (ClassNotFoundException e) {
             throw new Error("Couldn't load class : " + e.getMessage());
         } finally {

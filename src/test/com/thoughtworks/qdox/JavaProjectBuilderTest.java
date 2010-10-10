@@ -13,6 +13,7 @@ import java.util.Set;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
+import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.BeanProperty;
 import com.thoughtworks.qdox.model.DocletTag;
@@ -537,6 +538,21 @@ public class JavaProjectBuilderTest
 
         newBuilder.addSource(new StringReader("package x; import java.util.*; class Z extends List{}"));
         assertEquals("java.util.List", newBuilder.getClassByName("x.Z").getSuperClass().getValue());
+
+    }
+    
+    public void testSaveAndRestoreWithoutDefaultClassloaders() throws Exception {
+        builder = new JavaProjectBuilder( new OrderedClassLibraryBuilder() );
+        File file = new File("target/test-source/cache.obj");
+        builder.addSourceTree(new File("target/test-source"));
+        builder.save(file);
+
+        JavaProjectBuilder newBuilder = JavaProjectBuilder.load(file);
+        assertNotNull(newBuilder.getClassByName("com.blah.subpackage.Cheese"));
+
+        newBuilder.addSource(new StringReader("package x; import java.util.*; class Z extends List{}"));
+        //Here it's just List, since there we didn't use the defaultClassLoaders
+        assertEquals("List", newBuilder.getClassByName("x.Z").getSuperClass().getValue());
 
     }
 

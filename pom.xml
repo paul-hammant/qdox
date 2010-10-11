@@ -285,7 +285,7 @@
       <plugin>
         <groupId>org.codehaus.xsite</groupId>
         <artifactId>xsite-maven-plugin</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
         <configuration>
           <sitemapPath>content/website.xml</sitemapPath>
           <skinPath>templates/skin.html</skinPath>

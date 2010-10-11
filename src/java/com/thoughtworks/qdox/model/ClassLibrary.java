@@ -7,12 +7,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Map;
-import java.util.HashMap;
+
+import com.thoughtworks.qdox.JavaClassContext;
 
 /**
  * <strong>Important!! Be sure to add a classloader with the bootstrap classes.</strong>
@@ -37,9 +39,9 @@ import java.util.HashMap;
  * @author Robert Scholte
  */
 public class ClassLibrary implements Serializable {
-
+    
     private final Set classNames = new TreeSet();
-    private final Map classNameToClassMap = new HashMap();
+    
     private boolean defaultClassLoadersAdded = false;
     private transient List classLoaders = new ArrayList();
     private List sourceFolders = new ArrayList(); //<File>
@@ -85,29 +87,24 @@ public class ClassLibrary implements Serializable {
     }
 
     public Class getClass(String className) {
-        Class cachedClass = (Class) classNameToClassMap.get(className);
-        if (cachedClass != null) {
-            return cachedClass;
-        } else {
-            for (Iterator iterator = classLoaders.iterator(); iterator.hasNext();) {
-                ClassLoader classLoader = (ClassLoader) iterator.next();
-                if (classLoader == null) {
-                    continue;
+        Class result = null;
+        for (Iterator iterator = classLoaders.iterator(); iterator.hasNext();) {
+            ClassLoader classLoader = (ClassLoader) iterator.next();
+            if (classLoader == null) {
+                continue;
+            }
+            try {
+                result = classLoader.loadClass(className);
+                if (result != null) {
+                    break;
                 }
-                try {
-                    Class clazz = classLoader.loadClass(className);
-                    if (clazz != null) {
-                        classNameToClassMap.put(className, clazz);
-                        return clazz;
-                    }
-                } catch (ClassNotFoundException e) {
-                    // continue
-                } catch (NoClassDefFoundError e) {
-                    // continue
-                }
+            } catch (ClassNotFoundException e) {
+                // continue
+            } catch (NoClassDefFoundError e) {
+                // continue
             }
         }
-        return null;
+        return result;
     }
 
     public Collection all() {

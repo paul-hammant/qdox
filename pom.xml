@@ -165,7 +165,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.4.2</version>
+        <version>2.6</version>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -552,6 +552,7 @@
   </reporting>
   <properties>
     <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <timestamp>${maven.build.timestamp}</timestamp>
     <xsite.sourceDirectoryPath>${project.build.directory}/generated-site</xsite.sourceDirectoryPath>
   </properties>

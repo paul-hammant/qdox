@@ -13,6 +13,7 @@ import com.thoughtworks.qdox.parser.*;
 %column
 
 %{
+	private java.io.Writer writer;
 
     private int classDepth = 0;
     private int parenDepth = 0;
@@ -78,6 +79,16 @@ import com.thoughtworks.qdox.parser.*;
         codeBody = new StringBuffer(8192);
         return s;
     }
+    
+    public JFlexLexer( java.io.Reader reader, java.io.Writer writer ) {
+       this( reader );
+       this.writer = writer;
+  	}
+
+    public JFlexLexer( java.io.InputStream stream, java.io.Writer writer ) {
+       this( stream );
+       this.writer = writer;
+  	}
 
 %}
 

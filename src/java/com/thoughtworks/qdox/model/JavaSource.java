@@ -281,7 +281,7 @@ public class JavaSource implements Serializable, JavaClassParent {
     private String resolveFromLibrary(String typeName) {
         String result;
         if(classLibrary != null) {
-            result = classLibrary.hasJavaClass( typeName ) ? typeName : null;
+            result = classLibrary.hasClassReference( typeName ) ? typeName : null;
         }
         else {
             result = context.getClassLibrary().contains( typeName ) ? typeName : null;
@@ -305,7 +305,7 @@ public class JavaSource implements Serializable, JavaClassParent {
     
             // check for fully-qualified class
             if ( classLibrary != null) {
-                if( classLibrary.hasJavaClass( typeName )) {
+                if( classLibrary.hasClassReference( typeName )) {
                     return typeName;
                 }
             }

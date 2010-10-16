@@ -34,7 +34,7 @@ public class ClassNameLibrary
         return result;
     }
     
-    protected boolean containsClassByName( String name )
+    protected boolean containsClassReference( String name )
     {
         return false;
     }

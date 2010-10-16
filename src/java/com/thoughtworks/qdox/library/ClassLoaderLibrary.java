@@ -106,7 +106,7 @@ public class ClassLoaderLibrary
         }
     }
     
-    protected boolean containsClassByName( String name )
+    protected boolean containsClassReference( String name )
     {
         boolean result = false;
         Iterator iter = classLoaders.iterator();

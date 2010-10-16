@@ -15,7 +15,7 @@ public class AbstractClassLibraryTest
             return null;
         }
         
-        protected boolean containsClassByName( String name )
+        protected boolean containsClassReference( String name )
         {
             return false;
         }
@@ -34,7 +34,7 @@ public class AbstractClassLibraryTest
                 return new JavaClass(name);
             }
             
-            protected boolean containsClassByName( String name )
+            protected boolean containsClassReference( String name )
             {
                 throw new RuntimeException();
             }
@@ -47,7 +47,7 @@ public class AbstractClassLibraryTest
                 return new JavaClass(name);
             }
             
-            protected boolean containsClassByName( String name )
+            protected boolean containsClassReference( String name )
             {
                 throw new RuntimeException();
             }
@@ -59,7 +59,7 @@ public class AbstractClassLibraryTest
                 return null;
             }
             
-            protected boolean containsClassByName( String name )
+            protected boolean containsClassReference( String name )
             {
                 throw new RuntimeException();
             }

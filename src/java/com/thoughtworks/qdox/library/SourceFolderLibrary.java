@@ -68,7 +68,7 @@ public class SourceFolderLibrary
      * Loops over the sourceFolder
      * 
      */
-    protected boolean containsClassByName( String className )
+    protected boolean containsClassReference( String className )
     {
         boolean result = false;
         for ( Iterator iterator = sourceFolders.iterator(); !result && iterator.hasNext(); )

@@ -289,7 +289,7 @@ public class SourceLibrary
     /**
      * {@inheritDoc}
      */
-    protected boolean containsClassByName( String name )
+    protected boolean containsClassReference( String name )
     {
         return javaClassMap.containsKey( name );
     }

@@ -16,12 +16,12 @@ public interface ClassLibrary
     extends Serializable
 {
     /**
-     * Check if this library should be able to build the JavaClass
+     * Check if this library holds a reference based on the name.
      * 
-     * @param name
-     * @return
+     * @param name the Fully Qualified Name trying to resolve
+     * @return true if the classLibrary has a reference
      */
-    public boolean hasJavaClass( String name );
+    public boolean hasClassReference( String name );
 
     /**
      * Get the JavaClass or null if it's not possible
@@ -35,7 +35,7 @@ public interface ClassLibrary
      * Return all JavaClasses of the current library.
      * It's up to the library to decide if also collects JavaClasses from it's ancestors 
      * 
-     * @return all JavaClasses, never <code>null</code>
+     * @return all JavaClasses as array, never <code>null</code>
      */
     public JavaClass[] getJavaClasses();
     
@@ -43,7 +43,7 @@ public interface ClassLibrary
      * Return all JavaSources of the current library.
      * It's up to the library to decide if also collects JavaSources from it's ancestors 
      * 
-     * @return all JavaSources, never <code>null</code>
+     * @return all JavaSources as array, never <code>null</code>
      */
     public JavaSource[] getJavaSources();
     
@@ -59,7 +59,7 @@ public interface ClassLibrary
      * Return all JavaPackages of the current library.
      * It's up to the library to decide if also collects JavaPackages from it's ancestors 
      * 
-     * @return  
+     * @return all JavaPackages as array, never <code>null</code>
      */
     public JavaPackage[] getJavaPackages();
 }

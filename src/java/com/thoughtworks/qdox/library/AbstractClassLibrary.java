@@ -223,14 +223,14 @@ public abstract class AbstractClassLibrary
      * Otherwise ask the parent if it could build a JavaClass.
      * 
      */
-    public boolean hasJavaClass( String name )
+    public boolean hasClassReference( String name )
     {
         boolean result = context.getClassByName( name ) != null;
         if ( !result ) {
-            result = containsClassByName( name );
+            result = containsClassReference( name );
         }
         if ( !result && parent != null ) {
-            result = parent.hasJavaClass( name );
+            result = parent.hasClassReference( name );
         }
         return result;
     }
@@ -242,7 +242,7 @@ public abstract class AbstractClassLibrary
      * @param name the fully qualifed name of the class
      * @return true if this ClassLibrary has a reference to this class.
      */
-    protected abstract boolean containsClassByName( String name );
+    protected abstract boolean containsClassReference( String name );
     
     /**
      * Set the ModelBuilderFactory for this classLibrary. 

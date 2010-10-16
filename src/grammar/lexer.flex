@@ -25,20 +25,12 @@ import com.thoughtworks.qdox.parser.*;
     private int[] stateStack = new int[10];
     private int braceMode = CODEBLOCK;
     private int parenMode = -1;
-    private String className;
-    private boolean javaDocNewLine;
-    private boolean javaDocStartedContent;
     private StringBuffer codeBody = new StringBuffer(8192);
     private boolean newMode;
     private boolean bracketMode;
     private boolean anonymousMode;
     private boolean appendingToCodeBody;
-    private boolean shouldCaptureCodeBody;
     private boolean isConstructor;
-
-    public void setCaptureCodeBody(boolean shouldCaptureCodeBody) {
-        this.shouldCaptureCodeBody = shouldCaptureCodeBody;
-    }
 
     public String text() {
         return yytext();

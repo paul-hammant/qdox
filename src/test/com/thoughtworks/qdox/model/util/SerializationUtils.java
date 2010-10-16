@@ -17,7 +17,7 @@ public class SerializationUtils {
             return buffer.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("error writing to byte-array!");
+            throw new RuntimeException("error writing to byte-array!", e);
         }
     }
 
@@ -29,7 +29,7 @@ public class SerializationUtils {
             return ois.readObject();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("error reading from byte-array!");
+            throw new RuntimeException("error reading from byte-array!", e);
         }
     }
 

@@ -3,6 +3,7 @@ package com.thoughtworks.qdox;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.NotSerializableException;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -517,15 +518,23 @@ public class JavaProjectBuilderTest
     /*
      * The JavaDocBuilder has to be serializable, With JavaProjectBuilder, we only need to serialize the ClassLibraryBuilder
      */
-    public void _testSerializable() throws Exception {
+    public void testSerializable() throws Exception {
         
         builder.addSource(new StringReader("package test; public class X{}"));
         assertEquals("X", builder.getSources()[0].getClasses()[0].getName());
+        try {
+            JavaProjectBuilder newBuilder = (JavaProjectBuilder) SerializationUtils.serializedCopy(builder);
 
-        JavaProjectBuilder newBuilder = (JavaProjectBuilder) SerializationUtils.serializedCopy(builder);
-
-        assertEquals("X", newBuilder.getSources()[0].getClasses()[0].getName());
-
+            //
+            fail("JavaProjectBuilder should not serializable, but its ClassLibraryBuilder");
+            
+            assertEquals("X", newBuilder.getSources()[0].getClasses()[0].getName());
+        }
+        catch(RuntimeException ex) {
+            if ( !(ex.getCause() instanceof NotSerializableException)) {
+                fail("Unexpected RuntimeException caught: " + ex.getMessage());
+            }
+        }
     }
 
     public void testSaveAndRestore() throws Exception {

@@ -42,9 +42,10 @@ public class ModelBuilder implements Builder {
     }
 
     public ModelBuilder(JavaClassContext context, ClassLibrary library, DocletTagFactory docletTagFactory) {
-        context.setClassLibrary( library );
+        context.setClassLibrary( library ); //cross refs, this one should be removed
+        library.setContext( context );
         this.docletTagFactory = docletTagFactory;
-        source = new JavaSource(context);
+        source = new JavaSource(library);
         currentParent = source;
         currentAnnoDefs = new ArrayList();
     }

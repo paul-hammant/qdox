@@ -31,6 +31,7 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
 
     private com.thoughtworks.qdox.library.ClassLibrary classLibrary;
+    private com.thoughtworks.qdox.model.ClassLibrary oldClassLibrary;
     
     private JavaPackage packge;
     private List imports = new LinkedList();
@@ -47,6 +48,11 @@ public class JavaSource implements Serializable, JavaClassParent {
     
     public JavaSource(JavaClassContext context) {
     	this.context = context;
+    }
+    
+    public JavaSource(com.thoughtworks.qdox.model.ClassLibrary classLibrary) {
+        this.oldClassLibrary = classLibrary;
+        this.context = classLibrary.getContext();
     }
 
     public JavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary) {

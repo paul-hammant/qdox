@@ -103,7 +103,8 @@ public class JavaDocBuilder implements Serializable {
         this.oldClassLibrary = new ClassLibrary();
         this.oldClassLibrary.addDefaultLoader();
         this.context = new JavaClassContext(this);
-        this.context.setClassLibrary(oldClassLibrary);
+        this.context.setClassLibrary(oldClassLibrary); //cross refs, this one should be removed
+        this.oldClassLibrary.setContext( context );
         this.builderFactory = new ModelBuilderFactory()
         {
             public ModelBuilder newInstance()
@@ -122,9 +123,10 @@ public class JavaDocBuilder implements Serializable {
     }
 
     public JavaDocBuilder(final DocletTagFactory docletTagFactory, ClassLibrary classLibrary) {
-        this.context = new JavaClassContext(this);
-        this.context.setClassLibrary(classLibrary);
         this.oldClassLibrary = classLibrary;
+        this.context = new JavaClassContext(this);
+        this.context.setClassLibrary(classLibrary); //cross refs, this one should be removed
+        this.oldClassLibrary.setContext( context );
         this.builderFactory = new ModelBuilderFactory()
         {
             public ModelBuilder newInstance()

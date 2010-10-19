@@ -40,6 +40,8 @@ import com.thoughtworks.qdox.JavaClassContext;
  */
 public class ClassLibrary implements Serializable {
     
+    private JavaClassContext context = new JavaClassContext();
+    
     private final Set classNames = new TreeSet();
     
     private boolean defaultClassLoadersAdded = false;
@@ -56,6 +58,16 @@ public class ClassLibrary implements Serializable {
      */
     public ClassLibrary(ClassLoader loader) {
     	classLoaders.add(loader);
+    }
+    
+    public void setContext( JavaClassContext context )
+    {
+        this.context = context;
+    }
+    
+    public JavaClassContext getContext()
+    {
+        return context;
     }
     
     public void add(String className) {

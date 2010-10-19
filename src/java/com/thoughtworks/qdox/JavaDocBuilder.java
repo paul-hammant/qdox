@@ -232,6 +232,15 @@ public class JavaDocBuilder implements Serializable {
             e.setSourceInfo(sourceInfo);
             errorHandler.handle(e);
         }
+        finally {
+            try
+            {
+                reader.close();
+            }
+            catch ( IOException e )
+            {
+            }
+        }
         JavaSource source = builder.getSource();
         sources.add(source);
         addClasses(source);

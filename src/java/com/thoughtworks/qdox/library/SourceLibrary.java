@@ -115,13 +115,33 @@ public class SourceLibrary
     protected JavaSource parse( Reader reader )
         throws ParseException
     {
-        return parse( new JFlexLexer( reader ) );
+        try {
+            return parse( new JFlexLexer( reader ) );
+        }
+        finally {
+            try
+            {
+                reader.close();
+            }
+            catch ( IOException e ) {
+            }
+        }
     }
 
     protected JavaSource parse( InputStream stream )
         throws ParseException
     {
-        return parse( new JFlexLexer( stream ) );
+        try {
+            return parse( new JFlexLexer( stream ) );
+        }
+        finally {
+            try
+            {
+                stream.close();
+            }
+            catch ( IOException e ) {
+            }
+        }
     }
 
     private JavaSource parse( Lexer lexer )

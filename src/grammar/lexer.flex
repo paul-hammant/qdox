@@ -32,11 +32,25 @@ import com.thoughtworks.qdox.parser.*;
     private boolean appendingToCodeBody;
     private boolean isConstructor;
 
+	private void write() {
+		write( text() );
+	}
+ 
+	private void write( String text ) {
+    	try {
+            if( writer != null ) {
+                writer.write( text );
+            }
+        }
+        catch( java.io.IOException ioe ) {}
+	}
+
     public String text() {
         return yytext();
     }
 
     public int lex() throws java.io.IOException {
+//    	write();
         return yylex();
     }
     
@@ -64,6 +78,11 @@ import com.thoughtworks.qdox.parser.*;
       else {
         return stateStack[stateDepth - relative];
       }
+    }
+    
+    private void popStream() throws java.io.IOException {
+    	write();
+    	yypopStream();
     }
     
     public String getCodeBody(){

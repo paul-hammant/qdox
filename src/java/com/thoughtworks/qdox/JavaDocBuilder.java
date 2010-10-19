@@ -108,7 +108,7 @@ public class JavaDocBuilder implements Serializable {
         {
             public ModelBuilder newInstance()
             {
-                return new ModelBuilder( context, docletTagFactory );
+                return new ModelBuilder( context, oldClassLibrary, docletTagFactory );
             }
             public ModelBuilder newInstance( com.thoughtworks.qdox.library.ClassLibrary library )
             {
@@ -129,7 +129,7 @@ public class JavaDocBuilder implements Serializable {
         {
             public ModelBuilder newInstance()
             {
-                return new ModelBuilder( context, docletTagFactory );
+                return new ModelBuilder( context, oldClassLibrary, docletTagFactory );
             }
             public ModelBuilder newInstance( com.thoughtworks.qdox.library.ClassLibrary library )
             {

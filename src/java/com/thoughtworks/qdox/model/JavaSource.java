@@ -130,7 +130,8 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
 
     public void setClassLibrary(ClassLibrary classLibrary) {
-        this.context.setClassLibrary(classLibrary);
+        this.oldClassLibrary = classLibrary;
+        this.context.setClassLibrary(classLibrary); //should be removed
     }
 
     public String getCodeBlock() {
@@ -352,7 +353,7 @@ public class JavaSource implements Serializable, JavaClassParent {
      * @deprecated , use getJavaClassContext().getClassLibrary()
      */
 	public ClassLibrary getClassLibrary() {
-		return this.context.getClassLibrary();
+		return oldClassLibrary;
 	}
 	
 	public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary()

@@ -30,6 +30,7 @@ public class DefaultJavaSourceTest extends JavaSourceTest
 
     public void addClass( JavaSource source, JavaClass clazz )
     {
+        clazz.setSource( source );
         source.addClass( clazz );
     }
 

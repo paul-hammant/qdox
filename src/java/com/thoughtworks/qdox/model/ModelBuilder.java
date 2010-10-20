@@ -87,7 +87,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void beginClass(ClassDef def) {
-        currentClass = new JavaClass();
+        currentClass = new JavaClass(source);
         currentClass.setLineNumber(def.lineNumber);
 
         // basic details

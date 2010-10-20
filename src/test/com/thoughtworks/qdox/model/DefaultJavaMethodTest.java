@@ -86,6 +86,7 @@ public class DefaultJavaMethodTest
 
     public void addClass( JavaSource source, JavaClass clazz )
     {
+        clazz.setSource( source );
         source.addClass( clazz );
     }
 

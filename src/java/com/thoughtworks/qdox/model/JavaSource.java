@@ -113,7 +113,6 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
 
     public void addClass(JavaClass cls) {
-        cls.setSource( this );
         classes.add(cls);
         classesArray = null;
     }

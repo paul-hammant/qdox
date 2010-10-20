@@ -675,6 +675,7 @@ public abstract class JavaClassTest extends TestCase {
         JavaSource source = newJavaSource();
         JavaClass clazz = newJavaClass();
         source.addClass(clazz);
+        clazz.setSource( source );
         JavaField field = newJavaField();
         clazz.addField(field);
         assertEquals(source, field.getSource());

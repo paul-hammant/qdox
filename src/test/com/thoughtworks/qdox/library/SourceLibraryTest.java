@@ -94,7 +94,7 @@ public class SourceLibraryTest
         catch(ParseException ex) {
             try {
                 reader.read();
-                fail("Stream should be closed");
+                fail("Reader should be closed");
             }
             catch(IOException ioe) {}
         }

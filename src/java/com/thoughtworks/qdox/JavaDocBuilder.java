@@ -155,7 +155,7 @@ public class JavaDocBuilder implements Serializable {
         if (name == null) {
             return null;
         }
-        return context.getClassByName(name);
+        return oldClassLibrary.getJavaClass(name);
     }
     
     protected JavaClass createSourceClass(String name) {

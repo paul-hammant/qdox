@@ -43,7 +43,7 @@ public class SourceLibrary
 
     private boolean debugParser;
     
-    private String encoding;
+    private String encoding = System.getProperty("file.encoding");
 
     /**
      * Create a new instance of SourceLibrary and chain it to the parent 

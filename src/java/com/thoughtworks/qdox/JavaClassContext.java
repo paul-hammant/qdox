@@ -34,12 +34,6 @@ public class JavaClassContext implements Serializable {
 		this.builder = builder;
 	}
 	
-	
-	public JavaClassContext(ClassLibrary classLibrary) {
-		this.classLibrary = classLibrary;
-	}
-	
-	
 	public void setClassLibrary(ClassLibrary classLibrary) {
 		this.classLibrary = classLibrary;
 	}

@@ -242,7 +242,7 @@ public class JavaSource implements Serializable, JavaClassParent {
                 break lookup;
             }
 
-            if(classLibrary != null || context.getClassLibrary() != null) {
+            if(classLibrary != null || oldClassLibrary != null) {
                 // check for a class in the same package
                 resolvedName = resolveFromLibrary( getClassNamePrefix() + nestedName );
                 
@@ -293,13 +293,13 @@ public class JavaSource implements Serializable, JavaClassParent {
             result = classLibrary.hasClassReference( typeName ) ? typeName : null;
         }
         else {
-            result = context.getClassLibrary().contains( typeName ) ? typeName : null;
+            result = oldClassLibrary.contains( typeName ) ? typeName : null;
         }
         return result;
     }
     
     private String resolveFullyQualifiedType(String typeName) {
-        if (classLibrary != null || context.getClassLibrary() != null) {
+        if (classLibrary != null || oldClassLibrary != null) {
             int indexOfLastDot = typeName.lastIndexOf('.');
             
             if (indexOfLastDot >= 0) {
@@ -318,7 +318,7 @@ public class JavaSource implements Serializable, JavaClassParent {
                     return typeName;
                 }
             }
-            else if (context.getClassLibrary().contains(typeName)) {
+            else if (oldClassLibrary.contains(typeName)) {
                 return typeName;
             }
         }

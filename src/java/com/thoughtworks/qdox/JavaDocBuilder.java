@@ -148,7 +148,7 @@ public class JavaDocBuilder implements Serializable {
     }
     
     protected JavaClass createSourceClass(String name) {
-        File sourceFile = context.getClassLibrary().getSourceFile( name );
+        File sourceFile = oldClassLibrary.getSourceFile( name );
         if (sourceFile != null) {
             try
             {

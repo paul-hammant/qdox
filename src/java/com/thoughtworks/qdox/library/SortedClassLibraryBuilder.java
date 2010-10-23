@@ -33,14 +33,6 @@ public class SortedClassLibraryBuilder
         sourceLibrary = new SourceLibrary( sourceFolderLibrary );
     }
 
-    public SortedClassLibraryBuilder( ModelBuilderFactory modelBuilderFactory )
-    {
-        classNameLibrary = new ClassNameLibrary();
-        classLoaderLibrary = new ClassLoaderLibrary( classNameLibrary );
-        sourceFolderLibrary = new SourceFolderLibrary(  classLoaderLibrary );
-        sourceLibrary = new SourceLibrary( sourceFolderLibrary );
-    }
-
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader )
     {
         classLoaderLibrary.addClassLoader( classLoader );

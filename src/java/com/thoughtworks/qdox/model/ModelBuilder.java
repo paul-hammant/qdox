@@ -146,8 +146,9 @@ public class ModelBuilder implements Builder {
 
         currentParent.addClass(currentClass);
         currentParent = currentClass;
-        if( source.getJavaClassContext() != null) {
-            source.getJavaClassContext().add(currentClass.getFullyQualifiedName());
+        
+        if( source.getClassLibrary() != null) {
+            source.getClassLibrary().add(currentClass.getFullyQualifiedName());
         }
     }
 

@@ -86,11 +86,6 @@ public class JavaClassContext implements Serializable {
 		}
 	}
 	
-	
-	public void add(String fullyQualifiedClassName) {
-		classLibrary.add(fullyQualifiedClassName);
-	}
-
     public JavaPackage getPackageByName( String name )
     {
         return (JavaPackage) packageMap.get( name );

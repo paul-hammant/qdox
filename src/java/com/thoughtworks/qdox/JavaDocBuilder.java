@@ -140,17 +140,6 @@ public class JavaDocBuilder implements Serializable {
         };
     }
 
-    private void addClasses(JavaSource source) {
-        Set resultSet = new HashSet();
-        addClassesRecursive(source, resultSet);
-        JavaClass[] javaClasses = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
-        for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
-            JavaClass cls = javaClasses[classIndex];
-            context.add(cls);
-            cls.setJavaClassContext(context);
-        }
-    }
-
     public JavaClass getClassByName(String name) {
         if (name == null) {
             return null;
@@ -243,7 +232,17 @@ public class JavaDocBuilder implements Serializable {
         }
         JavaSource source = builder.getSource();
         sources.add(source);
-        addClasses(source);
+        
+        {
+            Set resultSet = new HashSet();
+            addClassesRecursive(source, resultSet);
+            JavaClass[] javaClasses = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
+            for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
+                JavaClass cls = javaClasses[classIndex];
+                context.add(cls);
+                cls.setJavaClassContext(context);
+            }
+        }
 
         JavaPackage pkg = context.getPackageByName( source.getPackageName() );
         if (!packages.contains(pkg)) {

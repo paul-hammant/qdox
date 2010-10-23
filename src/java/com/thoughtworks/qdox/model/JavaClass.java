@@ -672,8 +672,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         if( source.getJavaClassLibrary() != null ) {
             classes = source.getJavaClassLibrary().getJavaClasses();
         }
+        else if (source.getClassLibrary() != null ) {
+            classes = source.getClassLibrary().getJavaClasses();
+        }
         else {
-            classes = context.getClasses();    
+            classes = new JavaClass[0];
         }
         
 

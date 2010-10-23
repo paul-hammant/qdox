@@ -240,7 +240,6 @@ public class JavaDocBuilder implements Serializable {
             for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
                 JavaClass cls = javaClasses[classIndex];
                 context.add(cls);
-                cls.setJavaClassContext(context);
             }
         }
 

@@ -42,14 +42,17 @@ public class JavaSource implements Serializable, JavaClassParent {
     private Map resolvedTypeCache = new HashMap();
     private URL url;
 
+    //@todo remove
     public JavaSource() {
     	this(new JavaClassContext());
     }
     
+    //@todo remove
     public JavaSource(JavaClassContext context) {
     	this.context = context;
     }
     
+    //@todo remove
     public JavaSource(com.thoughtworks.qdox.model.ClassLibrary classLibrary) {
         this.oldClassLibrary = classLibrary;
         this.context = classLibrary.getContext();

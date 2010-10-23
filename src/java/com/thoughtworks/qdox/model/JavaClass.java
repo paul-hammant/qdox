@@ -764,4 +764,15 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
             return null;
         }
     }
+    
+    public com.thoughtworks.qdox.model.ClassLibrary getClassLibrary()
+    {
+        //JavaClass should always have a source...
+        if(source != null) {
+            return source.getClassLibrary();
+        }
+        else {
+            return null;
+        }
+    }
 }

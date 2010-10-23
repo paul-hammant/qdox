@@ -1,12 +1,10 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Set;
 
 import com.thoughtworks.qdox.JavaClassContext;
@@ -42,7 +40,6 @@ public class ModelBuilder implements Builder {
     }
 
     public ModelBuilder(JavaClassContext context, ClassLibrary library, DocletTagFactory docletTagFactory) {
-        context.setClassLibrary( library ); //cross refs, this one should be removed
         library.setContext( context );
         this.docletTagFactory = docletTagFactory;
         source = new JavaSource(library);

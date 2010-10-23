@@ -288,9 +288,11 @@ public class Type implements Comparable, Serializable {
 	            if(javaClassParent.getJavaClassLibrary() != null) {
 	                result = javaClassParent.getJavaClassLibrary().getJavaClass( getFullyQualifiedName() );
 	            }
-	            JavaClassContext context = javaClassParent.getJavaClassContext();
-	            if (context != null && context.getClassLibrary() != null) {
-	            	result = context.getClassByName(getFullyQualifiedName());
+	            else {
+	                JavaClassContext context = javaClassParent.getJavaClassContext();
+	                if (context != null && javaClassParent.getClassLibrary() != null) {
+	                    result = context.getClassByName(getFullyQualifiedName());
+	                }
 	            }
 	        }
         }

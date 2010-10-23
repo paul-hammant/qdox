@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -21,7 +20,6 @@ import com.thoughtworks.qdox.model.JavaSource;
  */
 public class JavaClassContext implements Serializable {
 
-	private ClassLibrary classLibrary;
 	private JavaDocBuilder builder;
 	private Map classMap = new LinkedHashMap();  // <String, com.thoughtworks.qdox.model.JavaClass>
 	private Map packageMap = new LinkedHashMap(); // <String, com.thoughtworks.qdox.model.JavaPackage> 
@@ -33,20 +31,6 @@ public class JavaClassContext implements Serializable {
 	public JavaClassContext(JavaDocBuilder builder) {
 		this.builder = builder;
 	}
-	
-	public void setClassLibrary(ClassLibrary classLibrary) {
-		this.classLibrary = classLibrary;
-	}
-	
-	/**
-	 * temporary, this should be hidden
-	 * @return classLibrary
-	 * @todo remove
-	 */
-	public ClassLibrary getClassLibrary() {
-		return classLibrary;
-	}
-	
 	
 	public JavaClass getClassByName(String name) {
 		JavaClass result = (JavaClass) classMap.get( name );

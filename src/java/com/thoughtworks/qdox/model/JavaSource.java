@@ -134,7 +134,6 @@ public class JavaSource implements Serializable, JavaClassParent {
 
     public void setClassLibrary(ClassLibrary classLibrary) {
         this.oldClassLibrary = classLibrary;
-        this.context.setClassLibrary(classLibrary); //should be removed
     }
 
     public String getCodeBlock() {

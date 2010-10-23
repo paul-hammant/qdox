@@ -23,6 +23,8 @@ public interface JavaClassParent {
     
     public JavaClass getNestedClassByName(String name);
     
-    public ClassLibrary getJavaClassLibrary(); 
+    public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary(); 
+    
+    public com.thoughtworks.qdox.model.ClassLibrary getClassLibrary();
 
 }

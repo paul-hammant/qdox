@@ -59,8 +59,11 @@ public abstract class TypeTest extends TestCase {
     }
 
     public void testTypeHasJavaClass() {
-        JavaSource javaSource = newJavaSource(new JavaClassContext(new JavaDocBuilder()));
-        setClassLibrary(javaSource, new ClassLibrary());
+        JavaClassContext context = new JavaClassContext(new JavaDocBuilder());
+        JavaSource javaSource = newJavaSource(context);
+        ClassLibrary classLibrary = new ClassLibrary();
+        classLibrary.setContext( context );
+        setClassLibrary(javaSource, classLibrary);
         Type type = newType("java.util.HashSet", 0, javaSource);
         JavaClass clazz = type.getJavaClass();
         JavaClass superClass = clazz.getSuperJavaClass();

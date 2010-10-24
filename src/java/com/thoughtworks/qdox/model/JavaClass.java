@@ -57,6 +57,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         this.source = source;
     }
 
+    //@todo remove, Object should not be resolved like this
     public void setJavaClassContext(JavaClassContext context) {
 		this.context = context;
 

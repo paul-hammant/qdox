@@ -46,7 +46,7 @@ public class JavaClassContext implements Serializable {
 			
 			if(result != null) {
 				add(result);
-		        result.setJavaClassContext(this);
+		        result.setJavaClassContext(this); //@todo remove
 			}
 		}
 		return result;

@@ -181,7 +181,6 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member 
     }
 
     public void addParameter(JavaParameter javaParameter) {
-        javaParameter.setParentMethod( this );
         parameters.add( javaParameter );
         parametersArray = null;
         this.varArgs = javaParameter.isVarArgs();

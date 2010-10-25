@@ -98,6 +98,7 @@ public class DefaultJavaMethodTest
     public void addParameter( JavaMethod method, JavaParameter parameter )
     {
         method.addParameter( parameter );
+        parameter.setParentMethod( method );
     }
 
     public void setSourceCode( JavaMethod method, String code )

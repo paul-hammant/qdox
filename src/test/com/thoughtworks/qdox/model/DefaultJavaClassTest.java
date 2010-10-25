@@ -94,6 +94,7 @@ public class DefaultJavaClassTest
     public void addParameter( JavaMethod method, JavaParameter parameter )
     {
         method.addParameter( parameter );
+        parameter.setParentMethod( method );
     }
 
     // Set-methods

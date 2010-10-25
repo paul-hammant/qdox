@@ -195,7 +195,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public void addMethod(JavaMethod meth) {
-        meth.setParentClass( this );
         methods.add(meth);
         methodsArray = null;
     }

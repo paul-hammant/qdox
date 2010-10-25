@@ -93,6 +93,7 @@ public class DefaultJavaMethodTest
     public void addMethod( JavaClass clazz, JavaMethod method )
     {
         clazz.addMethod( method );
+        method.setParentClass( clazz );
     }
 
     public void addParameter( JavaMethod method, JavaParameter parameter )

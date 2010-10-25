@@ -259,6 +259,7 @@ public class ModelBuilder implements Builder {
         addJavaDoc(currentMethod);
 
         currentClass.addMethod(currentMethod);
+        currentMethod.setParentClass(currentClass);
     }
 
     public TypeVariable createTypeVariable(TypeVariableDef typeVariableDef) {

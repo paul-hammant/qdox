@@ -46,12 +46,12 @@ public class DefaultJavaClassTest
 
     public JavaParameter newJavaParameter( Type type, String name )
     {
-        return new JavaParameter( type, name );
+        return new DefaultJavaParameter( type, name );
     }
 
     public JavaParameter newJavaParameter( Type type, String name, boolean varArgs )
     {
-        return new JavaParameter( type, name, varArgs );
+        return new DefaultJavaParameter( type, name, varArgs );
     }
 
     public JavaSource newJavaSource()
@@ -95,7 +95,7 @@ public class DefaultJavaClassTest
     public void addParameter( JavaMethod method, JavaParameter parameter )
     {
         method.addParameter( parameter );
-        parameter.setParentMethod( method );
+        ((DefaultJavaParameter) parameter).setParentMethod( method );
     }
 
     // Set-methods

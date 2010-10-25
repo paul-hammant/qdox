@@ -15,7 +15,7 @@ public class DefaultJavaParameterTest extends JavaParameterTest
 
     public JavaParameter newJavaParameter( Type type, String name )
     {
-        return new JavaParameter(type, name);
+        return new DefaultJavaParameter(type, name);
     }
 
     public JavaMethod newJavaMethod()
@@ -26,7 +26,7 @@ public class DefaultJavaParameterTest extends JavaParameterTest
     public void addParameter( JavaMethod method, JavaParameter parameter )
     {
         method.addParameter( parameter );
-        parameter.setParentMethod( method );
+        ((DefaultJavaParameter) parameter).setParentMethod( method );
     }
 
 }

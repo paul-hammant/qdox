@@ -796,7 +796,7 @@ public class ModelBuilderTest extends TestCase {
         fieldDef.name = "hello";
         assertTrue(fieldDef.hashCode() > 0);
 
-        JavaParameter javaParameter = new JavaParameter(new Type("q"), "w");
+        JavaParameter javaParameter = new DefaultJavaParameter(new Type("q"), "w");
         assertTrue(javaParameter.hashCode() > 0);
 
     }

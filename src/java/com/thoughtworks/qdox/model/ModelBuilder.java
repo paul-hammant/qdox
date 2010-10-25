@@ -305,7 +305,7 @@ public class ModelBuilder implements Builder {
     }
 	
 	public void addParameter(FieldDef fieldDef) {
-        JavaParameter jParam = new JavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name, fieldDef.isVarArgs);
+	    DefaultJavaParameter jParam = new DefaultJavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name, fieldDef.isVarArgs);
         jParam.setParentMethod( currentMethod );
         setAnnotations( jParam );
         currentMethod.addParameter( jParam );

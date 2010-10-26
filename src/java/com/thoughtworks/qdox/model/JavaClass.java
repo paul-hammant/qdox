@@ -17,7 +17,7 @@ import com.thoughtworks.qdox.library.ClassLibrary;
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  */
-public class JavaClass extends AbstractInheritableJavaEntity implements JavaClassParent {
+public class JavaClass extends AbstractInheritableJavaEntity implements JavaClassParent, JavaMember {
 
     private static Type OBJECT = new Type("java.lang.Object");
     private static Type ENUM = new Type("java.lang.Enum");
@@ -79,6 +79,17 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      */
     public boolean isEnum() {
         return isEnum;
+    }
+    
+    /**
+     * (don't know if this is required)
+     * 
+     * @return
+     * @since 2.0 
+     */
+    public boolean isAnnotation()
+    {
+        return isAnnotation;
     }
 
     public Type getSuperClass() {

@@ -242,7 +242,7 @@ public class AbstractJavaEntityTest extends TestCase {
     }
 
     public void testGetTagsReturnsEmptyArrayInsteadOfNull() throws Exception {
-        AbstractJavaEntity entity = newAbstractJavaEntity();
+        JavaModel entity = newAbstractJavaEntity();
         assertEquals(0, entity.getTags().length);
     }
 }

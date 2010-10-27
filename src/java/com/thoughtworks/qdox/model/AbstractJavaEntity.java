@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements Comparable {
+public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements Comparable, JavaModel {
 
     protected List modifiers = new ArrayList();
     private String comment;
@@ -20,14 +20,23 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         return (String[]) modifiers.toArray(new String[modifiers.size()]);
     }
 
+    /* (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaModel#getComment()
+     */
     public String getComment() {
         return comment;
     }
 
+    /* (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaModel#getTags()
+     */
     public DocletTag[] getTags() {
         return tags;
     }
 
+    /* (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaModel#getTagsByName(java.lang.String)
+     */
     public DocletTag[] getTagsByName(String name) {
         List specifiedTags = new ArrayList();
         for (int i = 0; i < tags.length; i++) {
@@ -39,6 +48,9 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         return (DocletTag[]) specifiedTags.toArray(new DocletTag[specifiedTags.size()]);
     }
 
+    /* (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaModel#getTagByName(java.lang.String)
+     */
     public DocletTag getTagByName(String name) {
         for (int i = 0; i < tags.length; i++) {
             DocletTag docletTag = tags[i];
@@ -100,6 +112,9 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaModel#getCodeBlock()
+     */
     public String getCodeBlock() {
         IndentBuffer result = new IndentBuffer();
         write(result);
@@ -213,6 +228,9 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         }
     }
     
+    /* (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaModel#getSource()
+     */
     public JavaSource getSource() { 
         return parentClass.getParentSource(); 
     }

@@ -221,7 +221,7 @@ public class DefaultModelWriter implements ModelWriter
         }
     }
     
-    private void commentHeader(AbstractJavaEntity entity) {
+    private void commentHeader(JavaModel entity) {
         if (entity.getComment() == null && (entity.getTags().length == 0)) {
             return;
         } else {

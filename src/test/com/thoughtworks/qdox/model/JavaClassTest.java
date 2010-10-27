@@ -678,6 +678,7 @@ public abstract class JavaClassTest extends TestCase {
         clazz.setSource( source );
         JavaField field = newJavaField();
         clazz.addField(field);
+        field.setParentClass( clazz );
         assertEquals(source, field.getSource());
     }
 }

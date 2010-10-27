@@ -68,6 +68,7 @@ public class DefaultJavaFieldTest
     public void addField( JavaClass clazz, JavaField fld )
     {
         clazz.addField( fld );
+        fld.setParentClass( clazz );
     }
 
     public void addClass( JavaPackage pckg, JavaClass clazz )

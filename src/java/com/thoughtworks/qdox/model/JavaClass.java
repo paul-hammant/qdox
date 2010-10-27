@@ -230,7 +230,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public void addField(JavaField javaField) {
-        javaField.setParentClass( this );
         fields.add(javaField);
         fieldsArray = null;
     }

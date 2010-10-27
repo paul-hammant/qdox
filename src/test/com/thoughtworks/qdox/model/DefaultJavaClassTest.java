@@ -84,6 +84,7 @@ public class DefaultJavaClassTest
     public void addField( JavaClass clazz, JavaField field )
     {
         clazz.addField( field );
+        field.setParentClass( clazz );
     }
 
     public void addMethod( JavaClass clazz, JavaMethod method )

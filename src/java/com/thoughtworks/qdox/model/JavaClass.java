@@ -304,10 +304,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return getParent().resolveType(typeName);
     }
 
-    public JavaClassContext getJavaClassContext() {
-        return getParent().getJavaClassContext();
-    }
-
     public String getClassNamePrefix() {
         return getFullyQualifiedName() + "$";
     }

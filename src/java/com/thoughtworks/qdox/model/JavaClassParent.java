@@ -13,8 +13,6 @@ public interface JavaClassParent {
      */
     public String resolveType(String typeName);
 
-    public JavaClassContext getJavaClassContext();
-
     public String getClassNamePrefix();
 
     public JavaSource getParentSource();

@@ -19,8 +19,8 @@ import com.thoughtworks.qdox.library.ClassLibrary;
  */
 public class JavaClass extends AbstractInheritableJavaEntity implements JavaClassParent, JavaMember {
 
-    private static Type OBJECT = new Type("java.lang.Object");
-    private static Type ENUM = new Type("java.lang.Enum");
+    private static Type OBJECT;
+    private static Type ENUM;
     private static Type ANNOTATION = new Type("java.lang.annotation.Annotation");
 
     private List methods = new LinkedList();
@@ -56,14 +56,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         this.source = source;
     }
 
-    //@todo remove, Object should not be resolved like this
-    public void setJavaClassContext(JavaClassContext context) {
-        // reassign OBJECT. This will make it have a "source" too,
-        // causing Type.getJavaClass() to return a JavaClass, instead
-        // of null.
-        OBJECT = context.getClassByName("java.lang.Object").asType();
-    }
-
     /**
      * is interface?  (otherwise enum or class)
      */
@@ -90,6 +82,17 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public Type getSuperClass() {
+        if(OBJECT == null) {
+            if(source.getJavaClassLibrary() != null) {
+                OBJECT = source.getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
+                ENUM = source.getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
+            }
+            else if(source.getClassLibrary() != null) {
+                OBJECT = source.getClassLibrary().getJavaClass( "java.lang.Object" ).asType();
+                ENUM = source.getClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
+            } 
+        }
+        
         boolean iAmJavaLangObject = OBJECT.equals(asType());
 
         if (isEnum) {

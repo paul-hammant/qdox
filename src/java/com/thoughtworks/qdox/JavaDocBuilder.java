@@ -72,7 +72,6 @@ public class JavaDocBuilder implements Serializable {
     
     //@todo should be replaced with the new ClassLibrary
     //hold reference to both objects for better refactoring
-	private final JavaClassContext context;
 	private final ClassLibrary oldClassLibrary;
 	
 	//@todo move to JavaClassContext
@@ -103,8 +102,6 @@ public class JavaDocBuilder implements Serializable {
         this.oldClassLibrary = new ClassLibrary();
         this.oldClassLibrary.addDefaultLoader();
         this.oldClassLibrary.setBuilder( this );
-        this.context = new JavaClassContext();
-        this.oldClassLibrary.setContext( context );
         this.builderFactory = new ModelBuilderFactory()
         {
             public ModelBuilder newInstance()
@@ -125,8 +122,6 @@ public class JavaDocBuilder implements Serializable {
     public JavaDocBuilder(final DocletTagFactory docletTagFactory, ClassLibrary classLibrary) {
         this.oldClassLibrary = classLibrary;
         this.oldClassLibrary.setBuilder( this );
-        this.context = new JavaClassContext();
-        this.oldClassLibrary.setContext( context );
         this.builderFactory = new ModelBuilderFactory()
         {
             public ModelBuilder newInstance()
@@ -239,11 +234,11 @@ public class JavaDocBuilder implements Serializable {
             JavaClass[] javaClasses = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
             for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
                 JavaClass cls = javaClasses[classIndex];
-                context.add(cls);
+                oldClassLibrary.getContext().add(cls);
             }
         }
 
-        JavaPackage pkg = context.getPackageByName( source.getPackageName() );
+        JavaPackage pkg = oldClassLibrary.getContext().getPackageByName( source.getPackageName() );
         if (!packages.contains(pkg)) {
             packages.add(pkg);
         }

@@ -33,6 +33,8 @@ public class JavaSource implements Serializable, JavaClassParent {
     private com.thoughtworks.qdox.library.ClassLibrary classLibrary;
     private com.thoughtworks.qdox.model.ClassLibrary oldClassLibrary;
     
+    private ModelWriterFactory modelWriterFactory;
+    
     private JavaPackage packge;
     private List imports = new LinkedList();
     private String[] importsArray;
@@ -62,6 +64,11 @@ public class JavaSource implements Serializable, JavaClassParent {
         this.classLibrary = classLibrary;
     }
 
+    public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
+    {
+        this.modelWriterFactory = modelWriterFactory;
+    }
+    
     /**
      * @since 1.4
      */
@@ -107,6 +114,11 @@ public class JavaSource implements Serializable, JavaClassParent {
         importsArray = null;
     }
 
+    /**
+     * Retrieve all the import
+     * 
+     * @return the imports, never null
+     */
     public String[] getImports() {
         if (importsArray == null) {
             importsArray = new String[imports.size()];
@@ -135,39 +147,17 @@ public class JavaSource implements Serializable, JavaClassParent {
     public void setClassLibrary(ClassLibrary classLibrary) {
         this.oldClassLibrary = classLibrary;
     }
+    
 
     public String getCodeBlock() {
-        IndentBuffer result = new IndentBuffer();
-
-        // package statement
-        if (packge != null) {
-            result.write("package ");
-            result.write(packge.getName());
-            result.write(';');
-            result.newline();
-            result.newline();
+        ModelWriter modelWriter;
+        if(modelWriterFactory != null) {
+            modelWriter = modelWriterFactory.newInstance();
         }
-
-        // import statement
-        String[] imports = getImports();
-        for (int i = 0; imports != null && i < imports.length; i++) {
-            result.write("import ");
-            result.write(imports[i]);
-            result.write(';');
-            result.newline();
+        else {
+            modelWriter = new DefaultModelWriter();
         }
-        if (imports != null && imports.length > 0) {
-            result.newline();
-        }
-
-        // classes
-        JavaClass[] classes = getClasses();
-        for (int i = 0; i < classes.length; i++) {
-            if (i > 0) result.newline();
-            classes[i].write(result);
-        }
-
-        return result.toString();
+        return modelWriter.writeSource( this ).toString();
     }
     
     public String toString() {

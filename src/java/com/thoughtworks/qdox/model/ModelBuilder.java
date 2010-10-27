@@ -53,6 +53,11 @@ public class ModelBuilder implements Builder {
         currentParent = source;
         currentAnnoDefs = new ArrayList();
     }
+    
+    public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
+    {
+        this.source.setModelWriterFactory( modelWriterFactory );
+    }
 
     public void addPackage(PackageDef packageDef) {
         JavaPackage jPackage = null;

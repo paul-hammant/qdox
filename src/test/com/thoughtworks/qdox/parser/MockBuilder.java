@@ -4,6 +4,7 @@ import org.jmock.expectation.ExpectationCounter;
 import org.jmock.expectation.ExpectationList;
 
 import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.ModelWriterFactory;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -32,7 +33,7 @@ class MockBuilder implements Builder {
     private ExpectationList myAddFieldParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.addField() : com.thoughtworks.qdox.parser.structs.FieldDef def");
     private ExpectationCounter myAddParameterCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder AddParameterCalls");
     private ExpectationList myAddParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.addParameter() : com.thoughtworks.qdox.parser.structs.FieldDef def");
-
+    private ExpectationCounter mySetModelBuilderFactoryCalls = new ExpectationCounter( "com.thoughtworks.qdox.parser.Builder.setModelWriterCalls" );
     
     public void setExpectedAddPackageCalls(int calls) {
         myAddPackageCalls.setExpected(calls);
@@ -158,6 +159,7 @@ class MockBuilder implements Builder {
         myEndMethodParameter0Values.verify();
         myAddFieldCalls.verify();
         myAddFieldParameter0Values.verify();
+        mySetModelBuilderFactoryCalls.verify();
     }
 
     public Type createType( String name, int dimensions ) {
@@ -179,5 +181,10 @@ class MockBuilder implements Builder {
     public void addParameter(FieldDef arg0) {
         myAddParameterCalls.inc();
         myAddParameter0Values.addActual(arg0);
+    }
+    
+    public void setModelWriterFactory( ModelWriterFactory writer )
+    {
+        mySetModelBuilderFactoryCalls.inc();
     }
 }

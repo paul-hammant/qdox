@@ -103,7 +103,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
         return superClass;
     }
-
+    
     /**
      * Shorthand for getSuperClass().getJavaClass() with null checking.
      */

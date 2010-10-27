@@ -3,8 +3,38 @@ package com.thoughtworks.qdox.model;
 
 public class DefaultModelWriter implements ModelWriter
 {
-    private IndentBuffer buffer;
+    private IndentBuffer buffer = new IndentBuffer();
 
+    public ModelWriter writeSource( JavaSource source )
+    {
+        // package statement
+        if (source.getPackage() != null) {
+            buffer.write("package ");
+            buffer.write(source.getPackageName());
+            buffer.write(';');
+            buffer.newline();
+            buffer.newline();
+        }
+
+        // import statement
+        for (int i = 0; i < source.getImports().length; i++) {
+            buffer.write("import ");
+            buffer.write(source.getImports()[i]);
+            buffer.write(';');
+            buffer.newline();
+        }
+        if (source.getImports().length > 0) {
+            buffer.newline();
+        }
+
+        // classes
+        for (int i = 0; i < source.getClasses().length; i++) {
+            if (i > 0) buffer.newline();
+            writeClass( source.getClasses()[i] );
+        }
+        return this;
+    }
+    
     public ModelWriter writeClass( JavaClass clazz )
     {
         commentHeader( clazz );
@@ -18,7 +48,7 @@ public class DefaultModelWriter implements ModelWriter
         buffer.write(clazz.getName());
 
         // subclass
-        if (clazz.getSuperClass() != null) {
+        if (clazz.getSuperClass() != null && !"java.lang.Object".equals( clazz.getSuperClass().getValue())) {
             buffer.write(" extends ");
             buffer.write(clazz.getSuperClass().getValue());
         }

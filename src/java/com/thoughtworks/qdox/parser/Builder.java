@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.parser;
 
 import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.ModelWriterFactory;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -11,6 +12,8 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 public interface Builder {
 
+    void setModelWriterFactory(ModelWriterFactory writer);
+    
     void addPackage(PackageDef packageDef);
 
     void addImport(String importName);

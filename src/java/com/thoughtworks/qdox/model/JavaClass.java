@@ -38,7 +38,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private Type superClass;
     private Type[] implementz = new Type[0];
     private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
-    private JavaClassContext context;
     
     //sourceless class can use this property
 	private JavaPackage javaPackage;
@@ -59,8 +58,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     //@todo remove, Object should not be resolved like this
     public void setJavaClassContext(JavaClassContext context) {
-		this.context = context;
-
         // reassign OBJECT. This will make it have a "source" too,
         // causing Type.getJavaClass() to return a JavaClass, instead
         // of null.

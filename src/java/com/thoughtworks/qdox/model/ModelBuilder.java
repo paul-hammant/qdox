@@ -36,11 +36,10 @@ public class ModelBuilder implements Builder {
     private DocletTagFactory docletTagFactory;
 
     public ModelBuilder() {
-        this(new JavaClassContext(), new ClassLibrary(), new DefaultDocletTagFactory());
+        this(new ClassLibrary(), new DefaultDocletTagFactory());
     }
 
-    public ModelBuilder(JavaClassContext context, ClassLibrary library, DocletTagFactory docletTagFactory) {
-        library.setContext( context );
+    public ModelBuilder(ClassLibrary library, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
         source = new JavaSource(library);
         currentParent = source;

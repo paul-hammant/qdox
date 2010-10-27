@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.thoughtworks.qdox.JavaClassContext;
+import com.thoughtworks.qdox.JavaDocBuilder;
 
 /**
  * <strong>Important!! Be sure to add a classloader with the bootstrap classes.</strong>
@@ -42,6 +43,8 @@ public class ClassLibrary implements Serializable {
     
     private JavaClassContext context = new JavaClassContext();
     
+    private JavaDocBuilder builder;
+    
     private final Set classNames = new TreeSet();
     
     private boolean defaultClassLoadersAdded = false;
@@ -58,6 +61,11 @@ public class ClassLibrary implements Serializable {
      */
     public ClassLibrary(ClassLoader loader) {
     	classLoaders.add(loader);
+    }
+    
+    public void setBuilder( JavaDocBuilder builder )
+    {
+        this.builder = builder;
     }
     
     public void setContext( JavaClassContext context )
@@ -149,7 +157,22 @@ public class ClassLibrary implements Serializable {
     }
 
     public JavaClass getJavaClass(String name) {
-        return context.getClassByName( name );
+        JavaClass result = context.getClassByName( name );
+        if(result == null && builder != null) {
+            result = builder.createBinaryClass(name);
+            
+            if ( result == null ) {
+                result = builder.createSourceClass(name);
+            }
+            if ( result == null ) {
+                result = builder.createUnknownClass(name);
+            }
+            
+            if(result != null) {
+                context.add(result);
+            }
+        }
+        return result;
     }
     
     public JavaClass[] getJavaClasses() {

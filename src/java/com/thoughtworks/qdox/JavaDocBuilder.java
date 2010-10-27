@@ -102,7 +102,8 @@ public class JavaDocBuilder implements Serializable {
     public JavaDocBuilder(final DocletTagFactory docletTagFactory) {
         this.oldClassLibrary = new ClassLibrary();
         this.oldClassLibrary.addDefaultLoader();
-        this.context = new JavaClassContext(this);
+        this.oldClassLibrary.setBuilder( this );
+        this.context = new JavaClassContext();
         this.oldClassLibrary.setContext( context );
         this.builderFactory = new ModelBuilderFactory()
         {
@@ -123,7 +124,8 @@ public class JavaDocBuilder implements Serializable {
 
     public JavaDocBuilder(final DocletTagFactory docletTagFactory, ClassLibrary classLibrary) {
         this.oldClassLibrary = classLibrary;
-        this.context = new JavaClassContext(this);
+        this.oldClassLibrary.setBuilder( this );
+        this.context = new JavaClassContext();
         this.oldClassLibrary.setContext( context );
         this.builderFactory = new ModelBuilderFactory()
         {
@@ -145,7 +147,7 @@ public class JavaDocBuilder implements Serializable {
         return oldClassLibrary.getJavaClass(name);
     }
     
-    protected JavaClass createSourceClass(String name) {
+    public JavaClass createSourceClass(String name) {
         File sourceFile = oldClassLibrary.getSourceFile( name );
         if (sourceFile != null) {
             try
@@ -171,7 +173,7 @@ public class JavaDocBuilder implements Serializable {
         return null;
     }
 
-    protected JavaClass createUnknownClass(String name) {
+    public JavaClass createUnknownClass(String name) {
         ModelBuilder unknownBuilder = builderFactory.newInstance();
         ClassDef classDef = new ClassDef();
         classDef.name = name;
@@ -182,7 +184,7 @@ public class JavaDocBuilder implements Serializable {
         return result;
     }
 
-    protected JavaClass createBinaryClass(String name) {
+    public JavaClass createBinaryClass(String name) {
         // First see if the class exists at all.
         Class clazz = oldClassLibrary.getClass(name);
         if (clazz == null) {

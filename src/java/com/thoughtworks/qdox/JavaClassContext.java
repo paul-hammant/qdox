@@ -20,7 +20,7 @@ import com.thoughtworks.qdox.model.JavaSource;
  */
 public class JavaClassContext implements Serializable {
 
-	private JavaDocBuilder builder;
+	
 	private Map classMap = new LinkedHashMap();  // <String, com.thoughtworks.qdox.model.JavaClass>
 	private Map packageMap = new LinkedHashMap(); // <String, com.thoughtworks.qdox.model.JavaPackage> 
 	private Set sourceSet = new HashSet();  // <com.thoughtworks.qdox.model.JavaSource> 
@@ -28,26 +28,8 @@ public class JavaClassContext implements Serializable {
 	public JavaClassContext(){
 	}
 	
-	public JavaClassContext(JavaDocBuilder builder) {
-		this.builder = builder;
-	}
-	
 	public JavaClass getClassByName(String name) {
 		JavaClass result = (JavaClass) classMap.get( name );
-		if(result == null && builder != null) {
-			result = builder.createBinaryClass(name);
-			
-			if ( result == null ) {
-			    result = builder.createSourceClass(name);
-			}
-			if ( result == null ) {
-                result = builder.createUnknownClass(name);
-			}
-			
-			if(result != null) {
-				add(result);
-			}
-		}
 		return result;
 	}
 	

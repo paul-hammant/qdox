@@ -1,11 +1,11 @@
 package com.thoughtworks.qdox.model;
 
 
-public class DefaultModelWriter
+public class DefaultModelWriter implements ModelWriter
 {
     private IndentBuffer buffer;
 
-    public DefaultModelWriter writeClass( JavaClass clazz )
+    public ModelWriter writeClass( JavaClass clazz )
     {
         commentHeader( clazz );
         
@@ -72,7 +72,7 @@ public class DefaultModelWriter
         return this;
     }
     
-    public DefaultModelWriter writeField(JavaField field) {
+    public ModelWriter writeField(JavaField field) {
         commentHeader( field );
         
         writeAllModifiers(field);
@@ -88,7 +88,7 @@ public class DefaultModelWriter
         return this;
     }
     
-    public DefaultModelWriter writeMethod( JavaMethod method )
+    public ModelWriter writeMethod( JavaMethod method )
     {
         commentHeader( method );
         writeMethodBody( method, true, true, true );

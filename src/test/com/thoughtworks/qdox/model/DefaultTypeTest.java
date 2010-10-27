@@ -15,11 +15,6 @@ public class DefaultTypeTest extends TypeTest
         return new JavaSource();
     }
 
-    public JavaSource newJavaSource( JavaClassContext context )
-    {
-        return new JavaSource(context);
-    }
-
     public Type newType( String fullname )
     {
         return new Type(fullname);

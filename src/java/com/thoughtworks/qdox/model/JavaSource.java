@@ -46,12 +46,6 @@ public class JavaSource implements Serializable, JavaClassParent {
 
     //@todo remove
     public JavaSource() {
-    	this(new JavaClassContext());
-    }
-    
-    //@todo remove
-    public JavaSource(JavaClassContext context) {
-    	this.context = context;
     }
     
     //@todo remove

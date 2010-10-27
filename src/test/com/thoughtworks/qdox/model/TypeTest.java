@@ -14,7 +14,6 @@ public abstract class TypeTest extends TestCase {
     }
     
     public abstract JavaSource newJavaSource();
-    public abstract JavaSource newJavaSource(JavaClassContext context);
     public abstract Type newType(String fullname);
     public abstract Type newType(String fullname, int dimensions);
     public abstract Type newType(String fullname, int dimensions, JavaSource source);
@@ -59,8 +58,8 @@ public abstract class TypeTest extends TestCase {
     }
 
     public void testTypeHasJavaClass() {
+        JavaSource javaSource = newJavaSource();
         JavaClassContext context = new JavaClassContext();
-        JavaSource javaSource = newJavaSource(context);
         ClassLibrary classLibrary = new ClassLibrary();
         classLibrary.setContext( context );
         classLibrary.setBuilder( new JavaDocBuilder() );

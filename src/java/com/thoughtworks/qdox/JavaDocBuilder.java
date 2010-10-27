@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -75,7 +76,7 @@ public class JavaDocBuilder implements Serializable {
 	private final ClassLibrary oldClassLibrary;
 	
 	//@todo move to JavaClassContext
-    private Set packages = new HashSet();
+    private Set packages = new LinkedHashSet();
     private List sources = new ArrayList();
 
     private String encoding = System.getProperty("file.encoding");

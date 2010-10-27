@@ -175,9 +175,11 @@ public class ClassLibrary implements Serializable {
         return result;
     }
     
-    
-    
     public JavaClass[] getJavaClasses() {
         return context.getClasses();
+    }
+    
+    public JavaPackage[] getJavaPackages() {
+        return context.getPackages();
     }
 }

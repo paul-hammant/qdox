@@ -113,10 +113,10 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         builder.addSourceTree(new File("target/test-source"));
         JavaPackage[] packages = builder.getPackages();
         assertEquals(2, packages.length);
-        JavaPackage comBlahSubpackage = packages[0];
-        assertEquals("com.blah.subpackage", comBlahSubpackage.getName());
-        JavaPackage comBlah = packages[1];
+        JavaPackage comBlah = packages[0];
         assertEquals("com.blah", comBlah.getName());
+        JavaPackage comBlahSubpackage = packages[1];
+        assertEquals("com.blah.subpackage", comBlahSubpackage.getName());
         JavaClass[] classes = comBlahSubpackage.getClasses();
         assertEquals(1, classes.length);
         assertEquals("Cheese", classes[0].getName());

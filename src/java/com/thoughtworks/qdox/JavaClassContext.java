@@ -28,18 +28,40 @@ public class JavaClassContext implements Serializable {
 	public JavaClassContext(){
 	}
 	
+	/**
+	 * Retrieve the {@link JavaClass} based on the name
+	 * 
+	 * @param name the fully qualified name of the class
+	 * @return the stored {@link JavaClass}, otherwise <code>null</code>
+	 */
 	public JavaClass getClassByName(String name) {
-		JavaClass result = (JavaClass) classMap.get( name );
-		return result;
+		return (JavaClass) classMap.get( name );
 	}
 	
+	/**
+	 * Remove and return the {@link JavaClass} based on the name
+	 * 
+	 * @param name the fully qualified name of the class
+	 * @return the removed {@link JavaClass}, otherwise <code>null</code> 
+	 */
 	public JavaClass removeClassByName(String name) {
 	    return (JavaClass) classMap.remove( name );
 	}
 	
+	/**
+	 * Return all stored JavaClasses
+	 * 
+	 * @return an array of JavaClasses, never <code>null</code>
+	 */
 	public JavaClass[] getClasses() {
 		return (JavaClass[]) classMap.values().toArray( new JavaClass[0]);
 	}
+	
+	/**
+	 * Store this JavaClass based on its fully qualified name
+	 * 
+	 * @param javaClass the {@link JavaClass} to add
+	 */
 	public void add(JavaClass javaClass) {
 	    classMap.put(javaClass.getFullyQualifiedName(), javaClass);
 		
@@ -49,16 +71,33 @@ public class JavaClassContext implements Serializable {
 		}
 	}
 	
+	/**
+	 * Retrieve the {@link JavaPackage} based on the name
+	 * 
+	 * @param name the fully qualified name of the package
+	 * @return the stored {@link JavaPackage}, otherwise <code>null</code>
+	 */
     public JavaPackage getPackageByName( String name )
     {
         return (JavaPackage) packageMap.get( name );
     }
     
+    /**
+     * Remove and return the {@link JavaPacakge} based on the name
+     * 
+     * @param name the fully qualified name of the class
+     * @return the removed {@link JavaPackage}, otherwise <code>null</code> 
+     */
     public JavaPackage removePackageByName( String name )
     {
         return (JavaPackage) packageMap.remove( name );
     }
 
+    /**
+     * A null-safe implementation to store a JavaPackage in this context 
+     * 
+     * @param jPackage the {@link JavaPackage} to add
+     */
     public void add( JavaPackage jPackage )
     {
         if(jPackage != null) {
@@ -73,18 +112,32 @@ public class JavaClassContext implements Serializable {
         }
     }
 
-
+    /**
+     * Return all stored JavaPackages
+     * 
+     * @return an array of JavaPackages, never <code>null</code>
+     */
     public JavaPackage[] getPackages()
     {
         return (JavaPackage[]) packageMap.values().toArray( new JavaPackage[0] );
         
     }
 
+    /**
+     * Store a {@link JavaSource} in this context 
+     * 
+     * @param source the {@link JavaSource} to add
+     */
     public void add( JavaSource source )
     {
         sourceSet.add( source );
     }
 
+    /**
+     * Return all stored JavaSources
+     * 
+     * @return an array of JavaSources, never <code>null</code>
+     */
     public JavaSource[] getSources()
     {
         return (JavaSource[]) sourceSet.toArray( new JavaSource[0] );

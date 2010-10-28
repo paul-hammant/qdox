@@ -76,7 +76,7 @@ public class JavaDocBuilder implements Serializable {
 	private final ClassLibrary oldClassLibrary;
 	
 	//@todo move to JavaClassContext
-    private Set packages = new LinkedHashSet();
+//    private Set packages = new LinkedHashSet();
     private List sources = new ArrayList();
 
     private String encoding = System.getProperty("file.encoding");
@@ -238,18 +238,6 @@ public class JavaDocBuilder implements Serializable {
                 oldClassLibrary.getContext().add(cls);
             }
         }
-
-        JavaPackage pkg = oldClassLibrary.getContext().getPackageByName( source.getPackageName() );
-        if (!packages.contains(pkg)) {
-            packages.add(pkg);
-        }
-//        JavaClass[] classes = source.getClasses();
-//        for (int i = 0; i < classes.length; i++) {
-//            if (pkg != null) {
-//                pkg.addClass(classes[i]);
-//            }
-//        }
-
         return source;
     }
 
@@ -296,7 +284,7 @@ public class JavaDocBuilder implements Serializable {
      * @since 1.9
      */
     public JavaPackage[] getPackages() {
-        return (JavaPackage[]) packages.toArray(new JavaPackage[packages.size()]);
+        return oldClassLibrary.getJavaPackages();
     }
 
     private void addClassesRecursive(JavaSource javaSource, Set resultSet) {
@@ -417,16 +405,7 @@ public class JavaDocBuilder implements Serializable {
 
     public JavaPackage getPackageByName( String name )
     {
-        if(name != null) {
-            Iterator iter = packages.iterator();
-            while(iter.hasNext()) {
-                JavaPackage pkg = (JavaPackage) iter.next();
-                if(name.equals( pkg.getName() )) {
-                    return pkg;
-                }
-            }
-        }
-        return null;
+        return oldClassLibrary.getJavaPackage( name );
     }
 
 }

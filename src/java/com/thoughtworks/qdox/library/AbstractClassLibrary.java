@@ -20,7 +20,7 @@ import com.thoughtworks.qdox.model.ModelBuilderFactory;
 public abstract class AbstractClassLibrary
     implements ClassLibrary
 {
-    private AbstractClassLibrary parent;
+    private AbstractClassLibrary parentClassLibrary;
     
     private ModelBuilderFactory modelBuilderFactory;
 
@@ -38,7 +38,7 @@ public abstract class AbstractClassLibrary
      */
     public AbstractClassLibrary( AbstractClassLibrary parent )
     {
-        this.parent = parent;
+        this.parentClassLibrary = parent;
     }
 
     /**
@@ -64,9 +64,9 @@ public abstract class AbstractClassLibrary
                 context.add( result.getSource() ); 
             }
         }
-        if ( result == null && parent != null )
+        if ( result == null && parentClassLibrary != null )
         {
-            result = parent.getJavaClass( name );
+            result = parentClassLibrary.getJavaClass( name );
         }
         return result;
     }
@@ -95,8 +95,8 @@ public abstract class AbstractClassLibrary
         JavaSource[] result = null; 
         JavaSource[] thisJavaSources = null;
         JavaSource[] parentJavaSources = null;
-        if ( parent != null ) {
-            parentJavaSources = parent.getJavaSources( filter );
+        if ( parentClassLibrary != null ) {
+            parentJavaSources = parentClassLibrary.getJavaSources( filter );
         }
         if(filter.accept(this)) {
             thisJavaSources = context.getSources();
@@ -150,8 +150,8 @@ public abstract class AbstractClassLibrary
         JavaClass[] result = null; 
         JavaClass[] thisJavaClasses = null;
         JavaClass[] parentJavaClasses = null;
-        if ( parent != null ) {
-            parentJavaClasses = parent.getJavaClasses( filter );
+        if ( parentClassLibrary != null ) {
+            parentJavaClasses = parentClassLibrary.getJavaClasses( filter );
         }
         if(filter.accept(this)) {
             thisJavaClasses = context.getClasses();
@@ -184,8 +184,8 @@ public abstract class AbstractClassLibrary
     
     public JavaPackage getJavaPackage( String name ) {
         JavaPackage result = context.getPackageByName( name );
-        if(result == null  && parent != null ) {
-            result = parent.getJavaPackage( name );
+        if(result == null  && parentClassLibrary != null ) {
+            result = parentClassLibrary.getJavaPackage( name );
         }
         return result;
     }
@@ -194,8 +194,8 @@ public abstract class AbstractClassLibrary
         JavaPackage[] result = null; 
         JavaPackage[] thisJavaPackages = null;
         JavaPackage[] parentJavaPackages = null;
-        if ( parent != null ) {
-            parentJavaPackages = parent.getJavaPackages( filter );
+        if ( parentClassLibrary != null ) {
+            parentJavaPackages = parentClassLibrary.getJavaPackages( filter );
         }
         if( filter.accept( this ) ) {
             thisJavaPackages = context.getPackages();
@@ -229,8 +229,8 @@ public abstract class AbstractClassLibrary
         if ( !result ) {
             result = containsClassReference( name );
         }
-        if ( !result && parent != null ) {
-            result = parent.hasClassReference( name );
+        if ( !result && parentClassLibrary != null ) {
+            result = parentClassLibrary.hasClassReference( name );
         }
         return result;
     }

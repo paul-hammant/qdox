@@ -1,8 +1,8 @@
 package com.thoughtworks.qdox;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +23,7 @@ public class JavaClassContext implements Serializable {
 	
 	private Map classMap = new LinkedHashMap();  // <String, com.thoughtworks.qdox.model.JavaClass>
 	private Map packageMap = new LinkedHashMap(); // <String, com.thoughtworks.qdox.model.JavaPackage> 
-	private Set sourceSet = new HashSet();  // <com.thoughtworks.qdox.model.JavaSource> 
+	private Set sourceSet = new LinkedHashSet();  // <com.thoughtworks.qdox.model.JavaSource> 
 	
 	public JavaClassContext(){
 	}
@@ -61,14 +61,16 @@ public class JavaClassContext implements Serializable {
 
     public void add( JavaPackage jPackage )
     {
-        String packageName = jPackage.getName();
-        JavaPackage javaPackage = getPackageByName( packageName );
-        if ( javaPackage == null ) {
-            javaPackage = new JavaPackage( packageName );
-            javaPackage.setContext( this );
-            packageMap.put( packageName, javaPackage );
+        if(jPackage != null) {
+            String packageName = jPackage.getName();
+            JavaPackage javaPackage = getPackageByName( packageName );
+            if ( javaPackage == null ) {
+                javaPackage = new JavaPackage( packageName );
+                javaPackage.setContext( this );
+                packageMap.put( packageName, javaPackage );
+            }
+            jPackage.setContext( this );
         }
-        jPackage.setContext( this );
     }
 
 

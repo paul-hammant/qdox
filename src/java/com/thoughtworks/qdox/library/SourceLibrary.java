@@ -7,11 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
+import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -32,12 +29,8 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 public class SourceLibrary
     extends AbstractClassLibrary
 {
-    
-    // parser and unused javaclasses
-    //@todo replace with a JavaClassContext
-    private Map javaClassMap = new LinkedHashMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaClass>
-    private List javaSourceList = new ArrayList(); // <java.lang.String, com.thoughtworks.qdox.model.JavaSource>
-    private Map javaPackageMap = new LinkedHashMap(); // <java.lang.String, com.thoughtworks.qdox.model.JavaPackage>
+    // parser and unused JavaSources, JavaClasses and JavaPackages
+    private JavaClassContext context = new JavaClassContext();
     
     private boolean debugLexer;
 
@@ -166,13 +159,14 @@ public class SourceLibrary
     {
         // abstractLibrary only calls this when it can't find the source itself.
         // it will take over the reference
-        return (JavaClass) javaClassMap.remove( name );
+        return (JavaClass) context.removeClassByName( name );
     }
     
     private void registerJavaSource(JavaSource source) {
-        javaSourceList.add( source );
-        if( !javaPackageMap.containsKey( source.getPackageName() ) ) {
-            javaPackageMap.put( source.getPackageName(), source.getPackage() );
+        context.add( source );
+        
+        if( context.getPackageByName( source.getPackageName() ) == null ) {
+            context.add( source.getPackage() );
         }
         for( int clazzIndex = 0; clazzIndex < source.getClasses().length; clazzIndex++ ) {
             registerJavaClass( source.getClasses()[clazzIndex] );
@@ -182,7 +176,7 @@ public class SourceLibrary
     //@todo move to JavaClassContext
     private void registerJavaClass(JavaClass clazz) {
         if (clazz != null) {
-            javaClassMap.put( clazz.getFullyQualifiedName(), clazz );
+            context.add( clazz );
         }
         for( int clazzIndex = 0; clazzIndex < clazz.getNestedClasses().length; clazzIndex++ ) {
             registerJavaClass( clazz.getNestedClasses()[clazzIndex] );
@@ -225,7 +219,7 @@ public class SourceLibrary
     public JavaClass[] getJavaClasses()
     {
         JavaClass[] result;
-        JavaClass[] unusedClasses = (JavaClass[]) javaClassMap.values().toArray( new JavaClass[0] );
+        JavaClass[] unusedClasses = context.getClasses();
         JavaClass[] usedClasses = getJavaClasses( new ClassLibraryFilter()
         {
             public boolean accept( AbstractClassLibrary classLibrary )
@@ -254,7 +248,7 @@ public class SourceLibrary
     public JavaPackage[] getJavaPackages()
     {
         JavaPackage[] result;
-        JavaPackage[] unusedPackages = (JavaPackage[]) javaPackageMap.values().toArray( new JavaPackage[0] );
+        JavaPackage[] unusedPackages = context.getPackages();
         JavaPackage[] usedPackages = getJavaPackages( new ClassLibraryFilter()
         {
             public boolean accept( AbstractClassLibrary classLibrary )
@@ -283,7 +277,7 @@ public class SourceLibrary
     public JavaSource[] getJavaSources()
     {
         JavaSource[] result;
-        JavaSource[] unusedSources = (JavaSource[]) javaSourceList.toArray( new JavaSource[0] );
+        JavaSource[] unusedSources = context.getSources();
         JavaSource[] usedSources = getJavaSources( new ClassLibraryFilter()
         {
             public boolean accept( AbstractClassLibrary classLibrary )
@@ -311,6 +305,6 @@ public class SourceLibrary
      */
     protected boolean containsClassReference( String name )
     {
-        return javaClassMap.containsKey( name );
+        return context.getClassByName( name ) != null;
     }
 }

@@ -11,10 +11,8 @@ import java.io.ObjectOutputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -74,10 +72,6 @@ public class JavaDocBuilder implements Serializable {
     //@todo should be replaced with the new ClassLibrary
     //hold reference to both objects for better refactoring
 	private final ClassLibrary oldClassLibrary;
-	
-	//@todo move to JavaClassContext
-//    private Set packages = new LinkedHashSet();
-    private List sources = new ArrayList();
 
     private String encoding = System.getProperty("file.encoding");
     private boolean debugLexer;
@@ -227,7 +221,7 @@ public class JavaDocBuilder implements Serializable {
             }
         }
         JavaSource source = builder.getSource();
-        sources.add(source);
+        oldClassLibrary.getContext().add(source);
         
         {
             Set resultSet = new HashSet();
@@ -256,7 +250,7 @@ public class JavaDocBuilder implements Serializable {
     }
 
     public JavaSource[] getSources() {
-        return (JavaSource[]) sources.toArray(new JavaSource[sources.size()]);
+        return oldClassLibrary.getJavaSources();
     }
 
     /**

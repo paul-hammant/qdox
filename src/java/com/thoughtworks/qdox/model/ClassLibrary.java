@@ -186,4 +186,8 @@ public class ClassLibrary implements Serializable {
     public JavaPackage[] getJavaPackages() {
         return context.getPackages();
     }
+    
+    public JavaSource[] getJavaSources() {
+        return context.getSources();
+    }
 }

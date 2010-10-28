@@ -26,8 +26,6 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     
     private String encoding;
     
-    private boolean appendDefaultClassLoaders;
-    
     private ModelBuilderFactory modelBuilderFactory;
     
     public OrderedClassLibraryBuilder()
@@ -35,11 +33,6 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         classLibrary = new ClassNameLibrary();
     }
 
-    /**
-     * If the appendDefaultClassLoaders has been set and hans't been used, add those
-     * classloaders and reset the value to false.
-     * Next add the classloader
-     */
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader )
     {
         if ( !( classLibrary instanceof ClassLoaderLibrary ) )
@@ -47,30 +40,20 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
             classLibrary = new ClassLoaderLibrary( classLibrary );
         }
         ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
-        if ( appendDefaultClassLoaders ) {
-            classLoaderLibrary.addDefaultLoader();
-            appendDefaultClassLoaders = false;
-        }
         classLoaderLibrary.addClassLoader( classLoader );
         classLoaderLibrary.setModelBuilderFactory( modelBuilderFactory );
         return this;
     }
 
-    /**
-     * This method can be called both before or after appendClassLoader.
-     * If the current classLibrary is a ClassLoaderLibrary, add it immediately
-     * Otherwise keep this setting only for the first next ClassLoaderLibrary
-     */
     public ClassLibraryBuilder appendDefaultClassLoaders()
     {
-        if ( classLibrary instanceof ClassLoaderLibrary )
+        if ( !( classLibrary instanceof ClassLoaderLibrary ) )
         {
-            ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
-            classLoaderLibrary.addDefaultLoader();
+            classLibrary = new ClassLoaderLibrary( classLibrary );
         }
-        else {
-            appendDefaultClassLoaders = true;
-        }
+        ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
+        classLoaderLibrary.addDefaultLoader();
+        classLoaderLibrary.setModelBuilderFactory( modelBuilderFactory );
         return this;
     }
 

@@ -22,45 +22,45 @@ import com.thoughtworks.qdox.model.ModelBuilderFactory;
 public interface ClassLibraryBuilder extends Serializable
 {
     /**
-     * Append a classloader and return itseld
+     * Append a classloader and return itself
      * 
      * @param classLoader the classloader to add
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      */
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader );
 
     /**
-     * Trigger the library to add the default ClassLoaders
+     * Add the defaultClassLoaders and return itse
      * 
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      */
     public ClassLibraryBuilder appendDefaultClassLoaders();
 
     /**
      * 
      * @param sourceFolder
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      */
     public ClassLibraryBuilder appendSourceFolder( File sourceFolder );
 
     /**
      * 
      * @param stream
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      */
     public ClassLibraryBuilder appendSource( InputStream stream );
 
     /**
      * 
      * @param reader
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      */
     public ClassLibraryBuilder appendSource( Reader reader );
 
     /**
      * 
      * @param url
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      * @throws IOException
      */
     public ClassLibraryBuilder appendSource( URL url ) throws IOException;
@@ -68,37 +68,60 @@ public interface ClassLibraryBuilder extends Serializable
     /**
      * 
      * @param file
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      * @throws IOException
      */
     public ClassLibraryBuilder appendSource( File file ) throws IOException;
 
+    /**
+     * 
+     * @param stream
+     * @return the created JavaSource
+     */
     public JavaSource addSource( InputStream stream );
 
+    /**
+     * Add the source content of the reader to the ClassLibrary and return the generated JavaSource
+     * 
+     * @param reader
+     * @return the created JavaSource
+     */
     public JavaSource addSource( Reader reader );
     
+    /**
+     * 
+     * @param url
+     * @return the created JavaSource
+     * @throws IOException
+     */
     public JavaSource addSource( URL url ) throws IOException;
     
+    /**
+     * 
+     * @param file
+     * @return the created JavaSource
+     * @throws IOException
+     */
     public JavaSource addSource( File file ) throws IOException;
     
     /**
      * 
      * @param debugLexer
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      */
     public ClassLibraryBuilder setDebugLexer( boolean debugLexer );
 
     /**
      * 
      * @param debugParser
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      */
     public ClassLibraryBuilder setDebugParser( boolean debugParser );
     
     /**
      * 
      * @param encoding
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      */
     public ClassLibraryBuilder setEncoding( String encoding );
     
@@ -106,7 +129,7 @@ public interface ClassLibraryBuilder extends Serializable
      * Define the {@link ModelBuilderFactory} which the parsers should use to construct the JavaModel Objects
      * 
      * @param factory
-     * @return this ClassLibrary instance
+     * @return this ClassLibraryBuilder instance
      */
     public ClassLibraryBuilder setModelBuilderFactory( ModelBuilderFactory factory );
 

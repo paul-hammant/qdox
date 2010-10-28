@@ -81,10 +81,6 @@ public class JavaClassContext implements Serializable {
     public void add( JavaSource source )
     {
         sourceSet.add( source );
-        add(source.getPackage());
-        for(int index = 0; index < source.getClasses().length; index++) {
-            add(source.getClasses()[index]);
-        }
     }
 
     public JavaSource[] getSources()

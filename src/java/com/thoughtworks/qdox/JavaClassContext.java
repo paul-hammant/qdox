@@ -33,6 +33,10 @@ public class JavaClassContext implements Serializable {
 		return result;
 	}
 	
+	public JavaClass removeClassByName(String name) {
+	    return (JavaClass) classMap.remove( name );
+	}
+	
 	public JavaClass[] getClasses() {
 		return (JavaClass[]) classMap.values().toArray( new JavaClass[0]);
 	}
@@ -48,6 +52,11 @@ public class JavaClassContext implements Serializable {
     public JavaPackage getPackageByName( String name )
     {
         return (JavaPackage) packageMap.get( name );
+    }
+    
+    public JavaPackage removePackageByName( String name )
+    {
+        return (JavaPackage) packageMap.remove( name );
     }
 
     public void add( JavaPackage jPackage )
@@ -72,6 +81,10 @@ public class JavaClassContext implements Serializable {
     public void add( JavaSource source )
     {
         sourceSet.add( source );
+        add(source.getPackage());
+        for(int index = 0; index < source.getClasses().length; index++) {
+            add(source.getClasses()[index]);
+        }
     }
 
     public JavaSource[] getSources()

@@ -16,6 +16,8 @@ import java.util.TreeSet;
 
 import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
+import com.thoughtworks.qdox.parser.structs.ClassDef;
 
 /**
  * <strong>Important!! Be sure to add a classloader with the bootstrap classes.</strong>
@@ -42,14 +44,17 @@ import com.thoughtworks.qdox.JavaDocBuilder;
 public class ClassLibrary implements Serializable {
     
     private JavaClassContext context = new JavaClassContext();
+
+    private ModelBuilderFactory modelBuilderFactory;
     
-    private JavaDocBuilder builder;
+    private JavaDocBuilder builder; //@todo remove
     
     private final Set classNames = new TreeSet();
     
     private boolean defaultClassLoadersAdded = false;
     private transient List classLoaders = new ArrayList();
     private List sourceFolders = new ArrayList(); //<File>
+
     
     /**
      * Remember to add bootstrap classes
@@ -165,13 +170,24 @@ public class ClassLibrary implements Serializable {
                 result = builder.createSourceClass(name);
             }
             if ( result == null ) {
-                result = builder.createUnknownClass(name);
+                result = createUnknownClass(name);
             }
             
             if(result != null) {
                 context.add(result);
             }
         }
+        return result;
+    }
+    
+    private JavaClass createUnknownClass(String name) {
+        ModelBuilder unknownBuilder = modelBuilderFactory.newInstance();
+        ClassDef classDef = new ClassDef();
+        classDef.name = name;
+        unknownBuilder.beginClass(classDef);
+        unknownBuilder.endClass();
+        JavaSource unknownSource = unknownBuilder.getSource();
+        JavaClass result = unknownSource.getClasses()[0];
         return result;
     }
     
@@ -189,5 +205,10 @@ public class ClassLibrary implements Serializable {
     
     public JavaSource[] getJavaSources() {
         return context.getSources();
+    }
+
+    public void setModelBuilderFactory( ModelBuilderFactory builderFactory )
+    {
+        this.modelBuilderFactory = builderFactory;
     }
 }

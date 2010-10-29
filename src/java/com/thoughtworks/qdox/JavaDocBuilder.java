@@ -108,6 +108,7 @@ public class JavaDocBuilder implements Serializable {
                 return new ModelBuilder( library, docletTagFactory );
             }
         };
+        this.oldClassLibrary.setModelBuilderFactory(builderFactory);
     }
 
     public JavaDocBuilder(ClassLibrary classLibrary) {
@@ -128,6 +129,7 @@ public class JavaDocBuilder implements Serializable {
                 return new ModelBuilder( library, docletTagFactory );
             }
         };
+        this.oldClassLibrary.setModelBuilderFactory(builderFactory);
     }
 
     public JavaClass getClassByName(String name) {
@@ -161,17 +163,6 @@ public class JavaDocBuilder implements Serializable {
             }
         }
         return null;
-    }
-
-    public JavaClass createUnknownClass(String name) {
-        ModelBuilder unknownBuilder = builderFactory.newInstance();
-        ClassDef classDef = new ClassDef();
-        classDef.name = name;
-        unknownBuilder.beginClass(classDef);
-        unknownBuilder.endClass();
-        JavaSource unknownSource = unknownBuilder.getSource();
-        JavaClass result = unknownSource.getClasses()[0];
-        return result;
     }
 
     public JavaClass createBinaryClass(String name) {

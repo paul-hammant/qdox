@@ -164,7 +164,7 @@ public class ClassLibrary implements Serializable {
     public JavaClass getJavaClass(String name) {
         JavaClass result = context.getClassByName( name );
         if(result == null && builder != null) {
-            result = builder.createBinaryClass(name);
+            result = createBinaryClass(name);
             
             if ( result == null ) {
                 result = builder.createSourceClass(name);
@@ -178,6 +178,25 @@ public class ClassLibrary implements Serializable {
             }
         }
         return result;
+    }
+    
+    private JavaClass createBinaryClass(String name) {
+        // First see if the class exists at all.
+        Class clazz = getClass(name);
+        if (clazz == null) {
+            return null;
+        } else {
+            // Create a new builder and mimic the behaviour of the parser.
+            // We're getting all the information we need via reflection instead.
+            ModelBuilder binaryBuilder = modelBuilderFactory.newInstance();
+            BinaryClassParser parser  = new BinaryClassParser( clazz, binaryBuilder );
+            parser.parse();
+            
+            JavaSource binarySource = binaryBuilder.getSource();
+            // There is always only one class in a "binary" source.
+            JavaClass result = binarySource.getClasses()[0];
+            return result;
+        }
     }
     
     private JavaClass createUnknownClass(String name) {

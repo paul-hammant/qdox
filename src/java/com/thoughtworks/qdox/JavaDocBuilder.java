@@ -165,27 +165,6 @@ public class JavaDocBuilder implements Serializable {
         return null;
     }
 
-    public JavaClass createBinaryClass(String name) {
-        // First see if the class exists at all.
-        Class clazz = oldClassLibrary.getClass(name);
-        if (clazz == null) {
-            return null;
-        } else {
-            // Create a new builder and mimic the behaviour of the parser.
-            // We're getting all the information we need via reflection instead.
-            ModelBuilder binaryBuilder = builderFactory.newInstance();
-            BinaryClassParser parser  = new BinaryClassParser( clazz, binaryBuilder );
-            parser.parse();
-            
-            JavaSource binarySource = binaryBuilder.getSource();
-            // There is always only one class in a "binary" source.
-            JavaClass result = binarySource.getClasses()[0];
-            return result;
-        }
-    }
-
-    
-
     public JavaSource addSource(Reader reader) {
         return addSource(reader, "UNKNOWN SOURCE");
     }

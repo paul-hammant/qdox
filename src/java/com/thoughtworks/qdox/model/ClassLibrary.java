@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.thoughtworks.qdox.JavaClassContext;
-import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.JavaDocBuilder.DefaultErrorHandler;
 import com.thoughtworks.qdox.JavaDocBuilder.ErrorHandler;
 import com.thoughtworks.qdox.parser.Lexer;
@@ -53,6 +52,7 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library.ClassLibrary  {
     
     private JavaClassContext context = new JavaClassContext();
+    private JavaClassContext sourceContext = new JavaClassContext();
 
     private ModelBuilderFactory modelBuilderFactory;
     
@@ -103,7 +103,7 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     
     public JavaClassContext getContext()
     {
-        return context;
+        return sourceContext;
     }
     
     public void add(String className) {
@@ -185,7 +185,10 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     }
 
     public JavaClass getJavaClass(String name) {
-        JavaClass result = context.getClassByName( name );
+        JavaClass result = sourceContext.getClassByName( name );
+        if (result == null) {
+            result = context.getClassByName( name );
+        }
         if(result == null) {
             result = createBinaryClass(name);
             
@@ -194,10 +197,6 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
             }
             if ( result == null ) {
                 result = createUnknownClass(name);
-            }
-            
-            if(result != null) {
-                context.add(result);
             }
         }
         return result;
@@ -215,6 +214,11 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
                         return clazz;
                     }
                 }
+                sourceContext.add( source );
+                for(int index = 0; index < source.getClasses().length; index++) {
+                    sourceContext.add( source.getClasses()[index]);
+                }
+                sourceContext.add( source.getPackage() );
                 return source.getNestedClassByName( name );
             }
             catch ( FileNotFoundException e )
@@ -244,6 +248,9 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
             JavaSource binarySource = binaryBuilder.getSource();
             // There is always only one class in a "binary" source.
             JavaClass result = binarySource.getClasses()[0];
+            
+            context.add( result );
+            
             return result;
         }
     }
@@ -256,23 +263,26 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         unknownBuilder.endClass();
         JavaSource unknownSource = unknownBuilder.getSource();
         JavaClass result = unknownSource.getClasses()[0];
+        
+        context.add( result );
+        
         return result;
     }
     
     public JavaClass[] getJavaClasses() {
-        return context.getClasses();
+        return sourceContext.getClasses();
     }
     
     public JavaPackage getJavaPackage( String name) {
-        return context.getPackageByName( name );
+        return sourceContext.getPackageByName( name );
     }
     
     public JavaPackage[] getJavaPackages() {
-        return context.getPackages();
+        return sourceContext.getPackages();
     }
     
     public JavaSource[] getJavaSources() {
-        return context.getSources();
+        return sourceContext.getSources();
     }
     
     public boolean hasClassReference( String name )

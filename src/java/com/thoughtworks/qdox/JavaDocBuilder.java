@@ -236,9 +236,8 @@ public class JavaDocBuilder implements Serializable {
 
     public List search(Searcher searcher) {
         List results = new LinkedList();
-        for (Iterator iterator = oldClassLibrary.all().iterator(); iterator.hasNext();) {
-            String clsName = (String) iterator.next();
-            JavaClass cls = getClassByName(clsName);
+        for(int index = 0; index < oldClassLibrary.getJavaClasses().length; index++ ) {
+            JavaClass cls = oldClassLibrary.getJavaClasses()[index];
             if (searcher.eval(cls)) {
                 results.add(cls);
             }

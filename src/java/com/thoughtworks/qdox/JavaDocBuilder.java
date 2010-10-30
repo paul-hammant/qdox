@@ -73,12 +73,6 @@ public class JavaDocBuilder implements Serializable {
     //hold reference to both objects for better refactoring
 	private final ClassLibrary oldClassLibrary;
 
-    private String encoding = System.getProperty("file.encoding");
-    private boolean debugLexer;
-    private boolean debugParser;
-    
-    private ErrorHandler errorHandler = new DefaultErrorHandler();
-
     public static interface ErrorHandler {
         void handle(ParseException parseException);
     }
@@ -139,84 +133,26 @@ public class JavaDocBuilder implements Serializable {
         return oldClassLibrary.getJavaClass(name);
     }
     
-    public JavaClass createSourceClass(String name) {
-        File sourceFile = oldClassLibrary.getSourceFile( name );
-        if (sourceFile != null) {
-            try
-            {
-                JavaSource source = addSource( sourceFile );
-                for (int index = 0; index < source.getClasses().length; index++) {
-                    JavaClass clazz = source.getClasses()[index];
-                    if (name.equals(clazz.getFullyQualifiedName())) {
-                        return clazz;
-                    }
-                }
-                return source.getNestedClassByName( name );
-            }
-            catch ( FileNotFoundException e )
-            {
-                //nop
-            }
-            catch ( IOException e )
-            {
-                //nop
-            }
-        }
-        return null;
-    }
+    
 
     public JavaSource addSource(Reader reader) {
         return addSource(reader, "UNKNOWN SOURCE");
     }
 
     public JavaSource addSource(Reader reader, String sourceInfo) {
-        ModelBuilder builder = builderFactory.newInstance();
-        Lexer lexer = new JFlexLexer(reader);
-        Parser parser = new Parser(lexer, builder);
-        parser.setDebugLexer(debugLexer);
-        parser.setDebugParser(debugParser);
-        try {
-            parser.parse();
-        } catch (ParseException e) {
-            e.setSourceInfo(sourceInfo);
-            errorHandler.handle(e);
-        }
-        finally {
-            try
-            {
-                reader.close();
-            }
-            catch ( IOException e )
-            {
-            }
-        }
-        JavaSource source = builder.getSource();
-        oldClassLibrary.getContext().add(source);
-        
-        {
-            Set resultSet = new HashSet();
-            addClassesRecursive(source, resultSet);
-            JavaClass[] javaClasses = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
-            for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
-                JavaClass cls = javaClasses[classIndex];
-                oldClassLibrary.getContext().add(cls);
-            }
-        }
-        return source;
+        return oldClassLibrary.addSource( reader, sourceInfo );
     }
 
     public JavaSource addSource(File file) throws IOException, FileNotFoundException {
-        return addSource(file.toURL());
+        return oldClassLibrary.addSource( file );
     }
 
     public JavaSource addSource(URL url) throws IOException, FileNotFoundException {
-        JavaSource source = addSource(new InputStreamReader(url.openStream(),encoding), url.toExternalForm());
-        source.setURL(url);
-        return source;
+        return oldClassLibrary.addSource( url );
     }
 
     public void setErrorHandler(ErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
+        oldClassLibrary.setErrorHandler( errorHandler );
     }
 
     public JavaSource[] getSources() {
@@ -251,6 +187,7 @@ public class JavaDocBuilder implements Serializable {
         return oldClassLibrary.getJavaPackages();
     }
 
+    //@todo remove
     private void addClassesRecursive(JavaSource javaSource, Set resultSet) {
         JavaClass[] classes = javaSource.getClasses();
         for (int j = 0; j < classes.length; j++) {
@@ -259,6 +196,7 @@ public class JavaDocBuilder implements Serializable {
         }
     }
 
+    //@todo remove
     private void addClassesRecursive(JavaClass javaClass, Set set) {
         // Add the class...
         set.add(javaClass);
@@ -350,21 +288,21 @@ public class JavaDocBuilder implements Serializable {
     }
 
     public void setEncoding(String encoding) {
-        this.encoding = encoding;		
+        oldClassLibrary.setEncoding( encoding );
     }
 
     /**
      * Forces QDox to dump tokens returned from lexer to System.err.
      */
     public void setDebugLexer(boolean debugLexer) {
-        this.debugLexer = debugLexer;
+        oldClassLibrary.setDebugLexer( debugLexer );
     }
 
     /**
      * Forces QDox to dump parser states to System.out.
      */
     public void setDebugParser(boolean debugParser) {
-        this.debugParser = debugParser;
+        oldClassLibrary.setDebugParser( debugParser );
     }
 
     public JavaPackage getPackageByName( String name )

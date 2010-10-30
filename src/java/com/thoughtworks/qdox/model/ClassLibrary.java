@@ -1,22 +1,31 @@
 package com.thoughtworks.qdox.model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.Reader;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.JavaDocBuilder.DefaultErrorHandler;
+import com.thoughtworks.qdox.JavaDocBuilder.ErrorHandler;
+import com.thoughtworks.qdox.parser.Lexer;
+import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
+import com.thoughtworks.qdox.parser.impl.JFlexLexer;
+import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 
 /**
@@ -55,6 +64,12 @@ public class ClassLibrary implements Serializable {
     private transient List classLoaders = new ArrayList();
     private List sourceFolders = new ArrayList(); //<File>
 
+    private String encoding = System.getProperty("file.encoding");
+    private boolean debugLexer;
+    private boolean debugParser;
+    
+    private ErrorHandler errorHandler = new DefaultErrorHandler();
+
     
     /**
      * Remember to add bootstrap classes
@@ -76,6 +91,26 @@ public class ClassLibrary implements Serializable {
     public void setContext( JavaClassContext context )
     {
         this.context = context;
+    }
+    
+    public void setDebugLexer( boolean debugLexer )
+    {
+        this.debugLexer = debugLexer;
+    }
+    
+    public void setDebugParser( boolean debugParser )
+    {
+        this.debugParser = debugParser;
+    }
+    
+    public void setEncoding( String encoding )
+    {
+        this.encoding = encoding;
+    }
+    
+    public void setErrorHandler( ErrorHandler errorHandler )
+    {
+        this.errorHandler = errorHandler;
     }
     
     public JavaClassContext getContext()
@@ -167,7 +202,7 @@ public class ClassLibrary implements Serializable {
             result = createBinaryClass(name);
             
             if ( result == null ) {
-                result = builder.createSourceClass(name);
+                result = createSourceClass(name);
             }
             if ( result == null ) {
                 result = createUnknownClass(name);
@@ -178,6 +213,32 @@ public class ClassLibrary implements Serializable {
             }
         }
         return result;
+    }
+    
+    private JavaClass createSourceClass(String name) {
+        File sourceFile = getSourceFile( name );
+        if (sourceFile != null) {
+            try
+            {
+                JavaSource source = addSource( sourceFile );
+                for (int index = 0; index < source.getClasses().length; index++) {
+                    JavaClass clazz = source.getClasses()[index];
+                    if (name.equals(clazz.getFullyQualifiedName())) {
+                        return clazz;
+                    }
+                }
+                return source.getNestedClassByName( name );
+            }
+            catch ( FileNotFoundException e )
+            {
+                //nop
+            }
+            catch ( IOException e )
+            {
+                //nop
+            }
+        }
+        return null;
     }
     
     private JavaClass createBinaryClass(String name) {
@@ -230,4 +291,71 @@ public class ClassLibrary implements Serializable {
     {
         this.modelBuilderFactory = builderFactory;
     }
+
+    public JavaSource addSource( File file ) throws IOException, FileNotFoundException 
+    {
+        return addSource(file.toURL());
+    }
+    
+    public JavaSource addSource(URL url) throws IOException, FileNotFoundException {
+        JavaSource source = addSource(new InputStreamReader(url.openStream(),encoding), url.toExternalForm());
+        source.setURL(url);
+        return source;
+    }
+    
+    public JavaSource addSource(Reader reader, String sourceInfo) {
+        ModelBuilder builder = modelBuilderFactory.newInstance();
+        Lexer lexer = new JFlexLexer(reader);
+        Parser parser = new Parser(lexer, builder);
+        parser.setDebugLexer(debugLexer);
+        parser.setDebugParser(debugParser);
+        try {
+            parser.parse();
+        } catch (ParseException e) {
+            e.setSourceInfo(sourceInfo);
+            errorHandler.handle(e);
+        }
+        finally {
+            try
+            {
+                reader.close();
+            }
+            catch ( IOException e )
+            {
+            }
+        }
+        JavaSource source = builder.getSource();
+        getContext().add(source);
+        {
+            Set resultSet = new HashSet();
+            addClassesRecursive(source, resultSet);
+            JavaClass[] javaClasses = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
+            for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
+                JavaClass cls = javaClasses[classIndex];
+                getContext().add(cls);
+            }
+        }
+        return source;
+    }
+
+    private void addClassesRecursive(JavaSource javaSource, Set resultSet) {
+        JavaClass[] classes = javaSource.getClasses();
+        for (int j = 0; j < classes.length; j++) {
+            JavaClass javaClass = classes[j];
+            addClassesRecursive(javaClass, resultSet);
+        }
+    }
+    
+    private void addClassesRecursive(JavaClass javaClass, Set set) {
+        // Add the class...
+        set.add(javaClass);
+
+        // And recursively all of its inner classes
+        JavaClass[] innerClasses = javaClass.getNestedClasses();
+        for (int i = 0; i < innerClasses.length; i++) {
+            JavaClass innerClass = innerClasses[i];
+            addClassesRecursive(innerClass, set);
+        }
+    }
+
 }

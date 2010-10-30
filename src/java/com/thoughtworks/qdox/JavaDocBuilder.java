@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
@@ -28,12 +27,7 @@ import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.ModelBuilder;
 import com.thoughtworks.qdox.model.ModelBuilderFactory;
-import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.ParseException;
-import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
-import com.thoughtworks.qdox.parser.impl.JFlexLexer;
-import com.thoughtworks.qdox.parser.impl.Parser;
-import com.thoughtworks.qdox.parser.structs.ClassDef;
 
 /**
  * Simple facade to QDox allowing a source tree to be parsed and the resulting object model navigated.

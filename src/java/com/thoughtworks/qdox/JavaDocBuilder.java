@@ -84,7 +84,6 @@ public class JavaDocBuilder implements Serializable {
     public JavaDocBuilder(final DocletTagFactory docletTagFactory) {
         this.oldClassLibrary = new ClassLibrary();
         this.oldClassLibrary.addDefaultLoader();
-        this.oldClassLibrary.setBuilder( this );
         this.builderFactory = new ModelBuilderFactory()
         {
             public ModelBuilder newInstance()
@@ -105,7 +104,6 @@ public class JavaDocBuilder implements Serializable {
 
     public JavaDocBuilder(final DocletTagFactory docletTagFactory, ClassLibrary classLibrary) {
         this.oldClassLibrary = classLibrary;
-        this.oldClassLibrary.setBuilder( this );
         this.builderFactory = new ModelBuilderFactory()
         {
             public ModelBuilder newInstance()

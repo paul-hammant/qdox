@@ -56,8 +56,6 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
 
     private ModelBuilderFactory modelBuilderFactory;
     
-    private JavaDocBuilder builder; //@todo remove
-    
     private final Set classNames = new TreeSet();
     
     private boolean defaultClassLoadersAdded = false;
@@ -81,11 +79,6 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
      */
     public ClassLibrary(ClassLoader loader) {
     	classLoaders.add(loader);
-    }
-    
-    public void setBuilder( JavaDocBuilder builder )
-    {
-        this.builder = builder;
     }
     
     public void setContext( JavaClassContext context )
@@ -198,7 +191,7 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
 
     public JavaClass getJavaClass(String name) {
         JavaClass result = context.getClassByName( name );
-        if(result == null && builder != null) {
+        if(result == null) {
             result = createBinaryClass(name);
             
             if ( result == null ) {

@@ -14,5 +14,7 @@ public interface JavaModel
     public String getCodeBlock();
 
     public JavaSource getSource();
+    
+    public int getLineNumber();
 
 }

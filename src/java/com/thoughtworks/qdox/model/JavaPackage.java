@@ -22,16 +22,6 @@ public class JavaPackage extends AbstractBaseJavaEntity implements JavaAnnotated
 	}
 
     public JavaPackage(String name) {
-    	this(name, null);
-	}
-    
-    /**
-     * 
-     * @param name
-     * @param allPackages
-     * @deprecated allPackages is solved with the context 
-     */
-	public JavaPackage(String name, Map allPackages) {
 		this.name= name;
     }
 

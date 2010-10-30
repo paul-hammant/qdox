@@ -1,6 +1,6 @@
 package com.thoughtworks.qdox.model;
 
-public class JavaField extends AbstractJavaEntity implements Member, JavaMember {
+public class JavaField extends AbstractJavaEntity implements Member, JavaAnnotatedElement, JavaMember {
 
     private Type type;
     private String initializationExpression;

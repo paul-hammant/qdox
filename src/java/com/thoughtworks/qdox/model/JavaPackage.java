@@ -10,7 +10,7 @@ import com.thoughtworks.qdox.JavaClassContext;
  * A representation of a package.
  * @since 1.9
  */
-public class JavaPackage extends AbstractBaseJavaEntity {
+public class JavaPackage extends AbstractBaseJavaEntity implements JavaAnnotatedElement {
 
     private JavaClassContext context;
 	private String name;

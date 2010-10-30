@@ -17,7 +17,7 @@ import com.thoughtworks.qdox.library.ClassLibrary;
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  */
-public class JavaClass extends AbstractInheritableJavaEntity implements JavaClassParent, JavaMember {
+public class JavaClass extends AbstractInheritableJavaEntity implements JavaClassParent, JavaAnnotatedElement, JavaMember {
 
     private static Type OBJECT;
     private static Type ENUM;

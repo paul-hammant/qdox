@@ -55,7 +55,6 @@ public class JavaPackage extends AbstractBaseJavaEntity implements JavaAnnotated
     }
 
 	public void addClass(JavaClass clazz) {
-		clazz.setJavaPackage(this);
 		classes.add(clazz);
 	}
 

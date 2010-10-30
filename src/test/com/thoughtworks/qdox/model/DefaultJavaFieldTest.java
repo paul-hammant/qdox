@@ -74,6 +74,7 @@ public class DefaultJavaFieldTest
     public void addClass( JavaPackage pckg, JavaClass clazz )
     {
         pckg.addClass( clazz );
+        clazz.setJavaPackage( pckg );
     }
 
 }

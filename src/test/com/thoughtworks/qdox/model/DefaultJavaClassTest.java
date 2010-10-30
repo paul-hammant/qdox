@@ -73,6 +73,7 @@ public class DefaultJavaClassTest
     public void addClass( JavaPackage pckg, JavaClass clazz )
     {
         pckg.addClass( clazz );
+        clazz.setJavaPackage( pckg );
     }
 
     public void addClass( JavaSource source, JavaClass clazz )

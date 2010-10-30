@@ -50,7 +50,7 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
  * @author Aslak Helles&oslash;y
  * @author Robert Scholte
  */
-public class ClassLibrary implements Serializable {
+public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library.ClassLibrary  {
     
     private JavaClassContext context = new JavaClassContext();
 
@@ -285,6 +285,11 @@ public class ClassLibrary implements Serializable {
     
     public JavaSource[] getJavaSources() {
         return context.getSources();
+    }
+    
+    public boolean hasClassReference( String name )
+    {
+        return contains( name );
     }
 
     public void setModelBuilderFactory( ModelBuilderFactory builderFactory )

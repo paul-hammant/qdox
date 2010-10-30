@@ -81,11 +81,6 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     	classLoaders.add(loader);
     }
     
-    public void setContext( JavaClassContext context )
-    {
-        this.context = context;
-    }
-    
     public void setDebugLexer( boolean debugLexer )
     {
         this.debugLexer = debugLexer;

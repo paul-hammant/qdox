@@ -23,6 +23,14 @@ public interface JavaMember
      */
     public String[] getModifiers();
     
+    
+    /**
+     * Equivalent of {@link Member#getName()}
+     * 
+     * @return the name of this member
+     */
+    public String getName();
+    
     /**
      * Equivalent of {@link Modifier#isAbstract(int)}
      * 

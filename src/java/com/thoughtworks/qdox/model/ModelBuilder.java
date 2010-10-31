@@ -59,16 +59,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void addPackage(PackageDef packageDef) {
-        JavaPackage jPackage = null;
-        if( source.getJavaClassContext() != null) {
-            jPackage =  source.getJavaClassContext().getPackageByName( packageDef.name );;
-        }
-        if (jPackage == null) {
-            jPackage = new JavaPackage(packageDef.name);
-            if( source.getJavaClassContext() != null) {
-                source.getJavaClassContext().add( jPackage );
-            }
-        }
+        JavaPackage jPackage = new JavaPackage(packageDef.name);
         jPackage.setLineNumber(packageDef.lineNumber);
     	setAnnotations(jPackage);
         source.setPackage(jPackage);

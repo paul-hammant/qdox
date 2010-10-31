@@ -40,7 +40,6 @@ public class JavaSource implements Serializable, JavaClassParent {
     private String[] importsArray;
     private List classes = new LinkedList();
     private JavaClass[] classesArray;
-    private JavaClassContext context;
     private Map resolvedTypeCache = new HashMap();
     private URL url;
 
@@ -51,7 +50,6 @@ public class JavaSource implements Serializable, JavaClassParent {
     //@todo remove
     public JavaSource(com.thoughtworks.qdox.model.ClassLibrary classLibrary) {
         this.oldClassLibrary = classLibrary;
-        this.context = classLibrary.getContext();
     }
 
     public JavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary) {
@@ -132,10 +130,6 @@ public class JavaSource implements Serializable, JavaClassParent {
             classes.toArray(classesArray);
         }
         return classesArray;
-    }
-
-    public JavaClassContext getJavaClassContext() {
-        return this.context;
     }
 
     public void setClassLibrary(ClassLibrary classLibrary) {

@@ -164,10 +164,8 @@ public class SourceLibrary
     
     private void registerJavaSource(JavaSource source) {
         context.add( source );
-        
-        if( context.getPackageByName( source.getPackageName() ) == null ) {
-            context.add( source.getPackage() );
-        }
+        context.add( source.getPackage() );
+
         for( int clazzIndex = 0; clazzIndex < source.getClasses().length; clazzIndex++ ) {
             registerJavaClass( source.getClasses()[clazzIndex] );
         }

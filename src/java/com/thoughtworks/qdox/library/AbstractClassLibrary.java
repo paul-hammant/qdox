@@ -58,9 +58,7 @@ public abstract class AbstractClassLibrary
             if ( result != null )  
             {
                 context.add( result );
-                if( result.getPackage() != null ) {
-                    context.add( result.getPackage() );
-                }
+                context.add( result.getPackage() );
                 context.add( result.getSource() ); 
             }
         }

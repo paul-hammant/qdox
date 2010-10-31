@@ -29,23 +29,6 @@ public class ClassLibraryTest extends TestCase {
         assertTrue(!c.contains("com.not.You"));
     }
 
-    public void testListAll() throws Exception {
-        ClassLibrary c = new ClassLibrary();
-        c.add("com.blah.Ping");
-        c.add("com.thing.Ping");
-        c.add("com.x.Goat");
-        c.add("com.y.Goat");
-
-        Collection all = c.all();
-        assertTrue(all.contains("com.blah.Ping"));
-        assertTrue(all.contains("com.thing.Ping"));
-        assertTrue(all.contains("com.x.Goat"));
-        assertTrue(all.contains("com.y.Goat"));
-
-        assertTrue(!all.contains("com.not.True"));
-        assertEquals(4, all.size());
-    }
-
     /**
      * @deprecated Moved to ClassLoaderLibraryTest
      */

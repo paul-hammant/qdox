@@ -155,10 +155,6 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         return result;
     }
 
-    public Collection all() {
-        return Collections.unmodifiableCollection(classNames);
-    }
-
     public void addClassLoader(ClassLoader classLoader) {
         classLoaders.add(classLoader);
     }

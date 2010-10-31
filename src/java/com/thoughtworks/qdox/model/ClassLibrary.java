@@ -324,15 +324,15 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
             }
         }
         JavaSource source = builder.getSource();
-        getContext().add(source);
-        getContext().add(source.getPackage());
+        sourceContext.add(source);
+        sourceContext.add(source.getPackage());
         {
             Set resultSet = new HashSet();
             addClassesRecursive(source, resultSet);
             JavaClass[] javaClasses = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
             for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
                 JavaClass cls = javaClasses[classIndex];
-                getContext().add(cls);
+                sourceContext.add(cls);
             }
         }
         return source;

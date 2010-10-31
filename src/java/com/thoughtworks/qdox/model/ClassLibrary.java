@@ -329,6 +329,7 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         }
         JavaSource source = builder.getSource();
         getContext().add(source);
+        getContext().add(source.getPackage());
         {
             Set resultSet = new HashSet();
             addClassesRecursive(source, resultSet);

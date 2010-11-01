@@ -152,13 +152,13 @@ public abstract class JavaSourceTest extends TestCase {
     }
 
     public void testResolveFullyQualifiedName() throws Exception {
-        source.getClassLibrary().add("open.Bar");
+        source.getJavaClassLibrary().getJavaClass("open.Bar");
         assertEquals("open.Bar", source.resolveType("open.Bar"));
     }
     
     public void testResolveFullyQualifiedImport() throws Exception {
         addImport(source, "foo.Bar");
-        source.getClassLibrary().add("foo.Bar");
+        source.getJavaClassLibrary().getJavaClass("foo.Bar");
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
@@ -166,63 +166,62 @@ public abstract class JavaSourceTest extends TestCase {
         addImport(source, "bogus.package.MyType");
         addImport(source, "com.thoughtworks.qdox.model.Type");
         addImport(source, "another.package.Type");
-        source.getClassLibrary().add("bogus.package.MyType");
-        source.getClassLibrary().add("com.thoughtworks.qdox.model.Type");
-        source.getClassLibrary().add("another.package.Type");
+        source.getJavaClassLibrary().getJavaClass("bogus.package.MyType");
+        source.getJavaClassLibrary().getJavaClass("com.thoughtworks.qdox.model.Type");
+        source.getJavaClassLibrary().getJavaClass("another.package.Type");
         assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
     }
 
     public void testResolveSamePackage() throws Exception {
         setPackage(source, newJavaPackage("foo"));
-        source.getClassLibrary().add("foo.Bar");
+        source.getJavaClassLibrary().getJavaClass("foo.Bar");
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveFullyQualifiedTrumpsSamePackage() throws Exception {
         setPackage(source, newJavaPackage("foo"));
-        source.getClassLibrary().add("foo.Bar");
-        source.getClassLibrary().add("open.Bar");
+        source.getJavaClassLibrary().getJavaClass("foo.Bar");
+        source.getJavaClassLibrary().getJavaClass("open.Bar");
         assertEquals("open.Bar", source.resolveType("open.Bar"));
     }
 
     public void testResolveFullyQualifiedTrumpsWildCard() throws Exception {
         addImport(source, "bar.Bar");
         addImport(source, "foo.Bar");
-        source.getClassLibrary().add("foo.*");
-        source.getClassLibrary().add("bar.Bar");
+        source.getJavaClassLibrary().getJavaClass("foo.*");
+        source.getJavaClassLibrary().getJavaClass("bar.Bar");
         assertEquals("bar.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveWildcard() throws Exception {
-        source.getClassLibrary().add("foo.Bar");
+        source.getJavaClassLibrary().getJavaClass("foo.Bar");
         addImport(source, "foo.*");
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveJavaLangClass() throws Exception {
-        source.getClassLibrary().add("java.lang.System");
+        source.getJavaClassLibrary().getJavaClass("java.lang.System");
         assertEquals("java.lang.System", source.resolveType("System"));
     }
 
     public void testResolveSamePackageTrumpsWildcard() throws Exception {
         addImport(source, "com.thoughtworks.qdox.model.Type");
         addImport(source, "foo.*");
-        source.getClassLibrary().add("com.thoughtworks.qdox.model.Type");
-        source.getClassLibrary().add("foo.Type");
+        source.getJavaClassLibrary().getJavaClass("com.thoughtworks.qdox.model.Type");
+        source.getJavaClassLibrary().getJavaClass("foo.Type");
         assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
     }
 
     public void testResolveFullyQualifiedInnerClass() throws Exception {
         setPackage(source, newJavaPackage("foo"));
-        source.getClassLibrary().add("foo.Bar$Fnord");
+        source.getJavaClassLibrary().getJavaClass("foo.Bar$Fnord");
         assertEquals("foo.Bar$Fnord", source.resolveType("foo.Bar.Fnord"));
     }
 
     public void testResolvePartiallySpecifiedInnerClass() throws Exception {
         setPackage(source, newJavaPackage("foo"));
         addImport(source, "java.util.*");
-        source.getClassLibrary().add("foo.Bar$Fnord");
-        source.getClassLibrary().addDefaultLoader();
+        source.getJavaClassLibrary().getJavaClass("foo.Bar$Fnord");
         assertEquals("foo.Bar$Fnord", source.resolveType("Bar.Fnord"));
         assertEquals("java.util.Map$Entry", source.resolveType("Map.Entry"));
     }

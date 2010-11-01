@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
+
 public class DefaultJavaClassTest
     extends JavaClassTest
 {
@@ -56,7 +58,7 @@ public class DefaultJavaClassTest
 
     public JavaSource newJavaSource()
     {
-        return new JavaSource();
+        return new JavaSource(new SortedClassLibraryBuilder().getClassLibrary());
     }
 
     public Type newType( String fullname )

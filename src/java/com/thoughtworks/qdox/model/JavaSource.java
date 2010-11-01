@@ -12,8 +12,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.thoughtworks.qdox.JavaClassContext;
-
 public class JavaSource implements Serializable, JavaClassParent {
 
     private static final Set PRIMITIVE_TYPES = new HashSet();
@@ -270,7 +268,7 @@ public class JavaSource implements Serializable, JavaClassParent {
             result = classLibrary.hasClassReference( typeName ) ? typeName : null;
         }
         else {
-            result = oldClassLibrary.contains( typeName ) ? typeName : null;
+            result = oldClassLibrary.hasClassReference( typeName ) ? typeName : null;
         }
         return result;
     }
@@ -295,7 +293,7 @@ public class JavaSource implements Serializable, JavaClassParent {
                     return typeName;
                 }
             }
-            else if (oldClassLibrary.contains(typeName)) {
+            else if (oldClassLibrary.hasClassReference(typeName)) {
                 return typeName;
             }
         }

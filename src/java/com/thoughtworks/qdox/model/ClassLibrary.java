@@ -110,17 +110,6 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         classNames.add(className);
     }
 
-    public boolean contains(String className) {
-        if (classNames.contains(className)) {
-            return true;
-        }
-        else if (getSourceFile(className) != null) {
-            return true;
-        } else {
-            return getClass(className) != null;
-        }
-    }
-
     public File getSourceFile( String className )
     {
         for(Iterator iterator = sourceFolders.iterator(); iterator.hasNext();) {
@@ -283,7 +272,14 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     
     public boolean hasClassReference( String name )
     {
-        return contains( name );
+        if (classNames.contains(name)) {
+            return true;
+        }
+        else if (getSourceFile(name) != null) {
+            return true;
+        } else {
+            return getClass(name) != null;
+        }
     }
 
     public void setModelBuilderFactory( ModelBuilderFactory builderFactory )

@@ -21,7 +21,7 @@ public class ModelBuilderTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        builder = new ModelBuilder();
+        builder = new ModelBuilder(new ClassLibrary(), new DefaultDocletTagFactory());
     }
 
     public void testNumberOfClassesGrows() throws Exception {

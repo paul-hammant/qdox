@@ -35,10 +35,6 @@ public class ModelBuilder implements Builder {
     private List lastTagSet;
     private DocletTagFactory docletTagFactory;
 
-    public ModelBuilder() {
-        this(new ClassLibrary(), new DefaultDocletTagFactory());
-    }
-
     public ModelBuilder(ClassLibrary library, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
         source = new JavaSource(library);

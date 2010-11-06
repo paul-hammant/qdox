@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.library.ClassNameLibrary;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -21,7 +22,7 @@ public class ModelBuilderTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        builder = new ModelBuilder(new ClassLibrary(), new DefaultDocletTagFactory());
+        builder = new ModelBuilder(new ClassNameLibrary(), new DefaultDocletTagFactory());
     }
 
     public void testNumberOfClassesGrows() throws Exception {
@@ -114,6 +115,8 @@ public class ModelBuilderTest extends TestCase {
         assertEquals(0, source.getClasses()[0].getImplements().length);
         assertEquals(0, source.getClasses()[1].getImplements().length);
 
+// With qdox-2.0 it's not possible to inspect the source during parsing, so this has become an invalid test
+/* 
         //Add another class and see if Another gets resolved
         builder.addPackage(new PackageDef("com.thoughtworks"));
         ClassDef anotherCls = new ClassDef();
@@ -122,6 +125,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         assertEquals("com.thoughtworks.Another", source.getClasses()[1].getSuperClass().getValue());
+*/
     }
 
     public void testInterfaceExtends() throws Exception {

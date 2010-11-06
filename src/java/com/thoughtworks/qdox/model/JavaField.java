@@ -20,6 +20,11 @@ public class JavaField extends AbstractJavaEntity implements Member, JavaAnnotat
     public Type getType() {
         return type;
     }
+    
+    public String getCodeBlock()
+    {
+        return getSource().getModelWriter().writeField( this ).toString();
+    }
 
     protected void writeBody(IndentBuffer result) {
         writeAllModifiers(result);

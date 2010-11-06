@@ -29,7 +29,6 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
 
     private final com.thoughtworks.qdox.library.ClassLibrary classLibrary;
-    private com.thoughtworks.qdox.model.ClassLibrary oldClassLibrary;
     
     private ModelWriterFactory modelWriterFactory;
     
@@ -212,7 +211,7 @@ public class JavaSource implements Serializable, JavaClassParent {
                 break lookup;
             }
 
-            if(classLibrary != null || oldClassLibrary != null) {
+            if(classLibrary != null) {
                 // check for a class in the same package
                 resolvedName = resolveFromLibrary( getClassNamePrefix() + nestedName );
                 
@@ -258,18 +257,11 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
     
     private String resolveFromLibrary(String typeName) {
-        String result;
-        if(classLibrary != null) {
-            result = classLibrary.hasClassReference( typeName ) ? typeName : null;
-        }
-        else {
-            result = oldClassLibrary.hasClassReference( typeName ) ? typeName : null;
-        }
-        return result;
+        return classLibrary.hasClassReference( typeName ) ? typeName : null;
     }
     
     private String resolveFullyQualifiedType(String typeName) {
-        if (classLibrary != null || oldClassLibrary != null) {
+        if (classLibrary != null) {
             int indexOfLastDot = typeName.lastIndexOf('.');
             
             if (indexOfLastDot >= 0) {
@@ -287,9 +279,6 @@ public class JavaSource implements Serializable, JavaClassParent {
                 if( classLibrary.hasClassReference( typeName )) {
                     return typeName;
                 }
-            }
-            else if (oldClassLibrary.hasClassReference(typeName)) {
-                return typeName;
             }
         }
 
@@ -320,15 +309,6 @@ public class JavaSource implements Serializable, JavaClassParent {
         return result;
     }
 
-    /**
-     * 
-     * @return
-     * @deprecated , use getJavaClassContext().getClassLibrary()
-     */
-	public ClassLibrary getClassLibrary() {
-		return oldClassLibrary;
-	}
-	
 	public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary()
 	{
 	    return classLibrary;

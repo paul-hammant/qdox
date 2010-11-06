@@ -21,6 +21,4 @@ public interface JavaClassParent {
     
     public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary(); 
     
-    public com.thoughtworks.qdox.model.ClassLibrary getClassLibrary();
-
 }

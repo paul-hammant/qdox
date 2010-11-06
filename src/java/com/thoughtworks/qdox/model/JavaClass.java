@@ -86,10 +86,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
                 OBJECT = source.getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
                 ENUM = source.getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
             }
-            else if(source.getClassLibrary() != null) {
-                OBJECT = source.getClassLibrary().getJavaClass( "java.lang.Object" ).asType();
-                ENUM = source.getClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
-            } 
         }
         
         boolean iAmJavaLangObject = OBJECT.equals(asType());
@@ -677,9 +673,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         if( source.getJavaClassLibrary() != null ) {
             classes = source.getJavaClassLibrary().getJavaClasses();
         }
-        else if (source.getClassLibrary() != null ) {
-            classes = source.getClassLibrary().getJavaClasses();
-        }
         else {
             classes = new JavaClass[0];
         }
@@ -764,17 +757,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         //JavaClass should always have a source...
         if(source != null) {
             return source.getJavaClassLibrary();
-        }
-        else {
-            return null;
-        }
-    }
-    
-    public com.thoughtworks.qdox.model.ClassLibrary getClassLibrary()
-    {
-        //JavaClass should always have a source...
-        if(source != null) {
-            return source.getClassLibrary();
         }
         else {
             return null;

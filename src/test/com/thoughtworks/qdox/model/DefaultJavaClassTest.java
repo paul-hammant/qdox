@@ -21,9 +21,11 @@ public class DefaultJavaClassTest
         return new JavaClass( name );
     }
 
-    public JavaField newJavaField()
+    public JavaField newJavaField(JavaClass parentClass)
     {
-        return new JavaField();
+        DefaultJavaField result = new DefaultJavaField();
+        result.setParentClass( parentClass );
+        return result;
     }
 
     public JavaMethod newJavaMethod()
@@ -87,7 +89,7 @@ public class DefaultJavaClassTest
     public void addField( JavaClass clazz, JavaField field )
     {
         clazz.addField( field );
-        field.setParentClass( clazz );
+        ((DefaultJavaField) field).setParentClass( clazz );
     }
 
     public void addMethod( JavaClass clazz, JavaMethod method )
@@ -110,7 +112,7 @@ public class DefaultJavaClassTest
 
     public void setComment( JavaField field, String comment )
     {
-        field.setComment( comment );
+        ((DefaultJavaField) field).setComment( comment );
     }
 
     public void setComment( JavaMethod method, String comment )
@@ -140,7 +142,7 @@ public class DefaultJavaClassTest
 
     public void setModifiers( JavaField field, String[] modifiers )
     {
-        field.setModifiers( modifiers );
+        ((DefaultJavaField) field).setModifiers( modifiers );
     }
 
     public void setName( JavaClass clazz, String name )
@@ -150,7 +152,7 @@ public class DefaultJavaClassTest
 
     public void setName( JavaField field, String name )
     {
-        field.setName( name );
+        ((DefaultJavaField) field).setName( name );
     }
 
     public void setName( JavaMethod method, String name )
@@ -175,7 +177,7 @@ public class DefaultJavaClassTest
 
     public void setType( JavaField field, Type type )
     {
-        field.setType( type );
+        ((DefaultJavaField) field).setType( type );
     }
 
 }

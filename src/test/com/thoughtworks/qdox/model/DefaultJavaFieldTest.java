@@ -13,14 +13,14 @@ public class DefaultJavaFieldTest
     {
         JavaSource source = new JavaSource( null );
         JavaClass javaClass = new JavaClass( source );
-        JavaField result = new JavaField();
+        DefaultJavaField result = new DefaultJavaField();
         result.setParentClass( javaClass );
         return result;
     }
 
     public JavaField newJavaField( Type type, String name )
     {
-        return new JavaField(type, name);
+        return new DefaultJavaField(type, name);
     }
 
     public JavaClass newJavaClass( String fullname )
@@ -45,34 +45,34 @@ public class DefaultJavaFieldTest
 
     public void setComment( JavaField fld, String comment )
     {
-        fld.setComment( comment );
+        ((DefaultJavaField) fld).setComment( comment );
     }
 
     public void setInitializationExpression( JavaField fld, String expression )
     {
-        fld.setInitializationExpression( expression );
+        ((DefaultJavaField) fld).setInitializationExpression( expression );
     }
 
     public void setModifiers( JavaField fld, String[] modifiers )
     {
-        fld.setModifiers( modifiers );
+        ((DefaultJavaField) fld).setModifiers( modifiers );
     }
 
     public void setName( JavaField fld, String name )
     {
-        fld.setName( name );
+        ((DefaultJavaField) fld).setName( name );
     }
 
     public void setType( JavaField fld, Type type )
     {
-        fld.setType( type );
+        ((DefaultJavaField) fld).setType( type );
     }
 
 
     public void addField( JavaClass clazz, JavaField fld )
     {
         clazz.addField( fld );
-        fld.setParentClass( clazz );
+        ((DefaultJavaField) fld).setParentClass( clazz );
     }
 
     public void addClass( JavaPackage pckg, JavaClass clazz )

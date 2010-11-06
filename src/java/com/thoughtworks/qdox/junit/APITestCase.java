@@ -1,13 +1,5 @@
 package com.thoughtworks.qdox.junit;
 
-import com.thoughtworks.qdox.JavaDocBuilder;
-import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
-import com.thoughtworks.qdox.model.AbstractJavaEntity;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaSource;
-import junit.framework.TestCase;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,6 +9,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import junit.framework.TestCase;
+
+import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMember;
+import com.thoughtworks.qdox.model.JavaSource;
 
 /**
  * APITestCase is a JUnit extension that will let you compare two sources
@@ -293,8 +294,8 @@ public abstract class APITestCase extends TestCase {
      * comparison is still right.</p>
      */
     private static void assertModifiersEquals(String msg,
-                                              AbstractJavaEntity expected,
-                                              AbstractJavaEntity actual) {
+                                              JavaMember expected,
+                                              JavaMember actual) {
 
         List expectedModifiers = Arrays.asList(expected.getModifiers());
         Collections.sort(expectedModifiers);

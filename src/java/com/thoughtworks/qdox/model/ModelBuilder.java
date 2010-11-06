@@ -257,7 +257,7 @@ public class ModelBuilder implements Builder {
 	}
 
 	public void addField(FieldDef def) {
-        JavaField currentField = new JavaField();
+        DefaultJavaField currentField = new DefaultJavaField();
         currentField.setParentClass(currentClass);
         currentField.setLineNumber(def.lineNumber);
 

@@ -13,7 +13,7 @@ public abstract class JavaClassTest extends TestCase {
     
     public abstract JavaClass newJavaClass();
     public abstract JavaClass newJavaClass(String name);
-    public abstract JavaField newJavaField();
+    public abstract JavaField newJavaField(JavaClass jClass);
     public abstract JavaMethod newJavaMethod();
     public abstract JavaMethod newJavaMethod(String name);
     public abstract JavaMethod newJavaMethod(Type returns, String name);
@@ -237,14 +237,14 @@ public abstract class JavaClassTest extends TestCase {
     public void testGetCodeBlockClassWithTwoFields() throws Exception {
         setName(cls, "MyClass");
         {
-            JavaField fld = newJavaField();
+            JavaField fld = newJavaField(null);
             setName(fld, "count");
             setType(fld, newType("int"));
             addField(cls, fld);
         }
 
         {
-            JavaField fld = newJavaField();
+            JavaField fld = newJavaField(null);
             setName(fld, "thing");
             setType(fld, newType("String"));
             setModifiers(fld, new String[]{"public"});
@@ -340,7 +340,7 @@ public abstract class JavaClassTest extends TestCase {
         setComment(mth, "Hello Method");
         addMethod(cls, mth);
 
-        JavaField fld = newJavaField();
+        JavaField fld = newJavaField(null);
         setType(fld, newType("String"));
         setName(fld, "thing");
         setComment(fld, "Hello Field");
@@ -453,7 +453,7 @@ public abstract class JavaClassTest extends TestCase {
     }
 
     public void testCanGetFieldByName() throws Exception {
-        JavaField fredField = newJavaField();
+        JavaField fredField = newJavaField(null);
         setName(fredField, "fred");
         setType(fredField, newType("int"));
         addField(cls, fredField);
@@ -676,9 +676,8 @@ public abstract class JavaClassTest extends TestCase {
         JavaClass clazz = newJavaClass();
         source.addClass(clazz);
         clazz.setSource( source );
-        JavaField field = newJavaField();
+        JavaField field = newJavaField(clazz);
         clazz.addField(field);
-        field.setParentClass( clazz );
         assertEquals(source, field.getSource());
     }
 }

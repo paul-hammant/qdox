@@ -11,7 +11,11 @@ public class DefaultJavaFieldTest
 
     public JavaField newJavaField()
     {
-        return new JavaField();
+        JavaSource source = new JavaSource( null );
+        JavaClass javaClass = new JavaClass( source );
+        JavaField result = new JavaField();
+        result.setParentClass( javaClass );
+        return result;
     }
 
     public JavaField newJavaField( Type type, String name )

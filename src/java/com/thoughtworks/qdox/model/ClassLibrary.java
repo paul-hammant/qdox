@@ -273,6 +273,12 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         if (classNames.contains(name)) {
             return true;
         }
+        else if (sourceContext.getClassByName( name ) != null) {
+            return true;
+        }
+        else if (context.getClassByName( name ) != null) {
+            return true;
+        }
         else if (getSourceFile(name) != null) {
             return true;
         } else {

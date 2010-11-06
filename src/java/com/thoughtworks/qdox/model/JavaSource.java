@@ -209,6 +209,15 @@ public class JavaSource implements Serializable, JavaClassParent {
             if(resolvedName != null) {
                 break lookup;
             }
+            
+            // check for class in the same package
+            if (getPackage() != null) {
+                resolvedName = resolveFullyQualifiedType( getPackageName() + "." + typeName );
+                
+                if(resolvedName != null) {
+                    break lookup;
+                }
+            }
 
             // check for a class globally
             resolvedName = resolveFullyQualifiedType( typeName );

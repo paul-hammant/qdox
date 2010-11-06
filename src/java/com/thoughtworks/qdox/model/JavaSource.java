@@ -45,11 +45,6 @@ public class JavaSource implements Serializable, JavaClassParent {
     public JavaSource() {
     }
     
-    //@todo remove
-    public JavaSource(com.thoughtworks.qdox.model.ClassLibrary classLibrary) {
-        this.oldClassLibrary = classLibrary;
-    }
-
     public JavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary) {
         this.classLibrary = classLibrary;
     }

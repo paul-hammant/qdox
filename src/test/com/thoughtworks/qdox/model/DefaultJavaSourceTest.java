@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 
 public class DefaultJavaSourceTest extends JavaSourceTest
 {
@@ -10,19 +9,14 @@ public class DefaultJavaSourceTest extends JavaSourceTest
         super( s );
     }
 
-    public JavaSource newJavaSource()
+    public JavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary)
     {
-        return new JavaSource(new SortedClassLibraryBuilder().getClassLibrary());
+        return new JavaSource(classLibrary);
     }
 
     public JavaClass newJavaClass()
     {
         return new JavaClass();
-    }
-
-    public void setClassLibrary( JavaSource source, ClassLibrary library )
-    {
-        source.setClassLibrary( library );
     }
 
     public void setName( JavaClass clazz, String name )

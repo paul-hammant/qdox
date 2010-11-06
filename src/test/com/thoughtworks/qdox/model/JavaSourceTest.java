@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
+
 import junit.framework.TestCase;
 
 public abstract class JavaSourceTest extends TestCase {
@@ -10,11 +12,10 @@ public abstract class JavaSourceTest extends TestCase {
         super(s);
     }
     
-    public abstract JavaSource newJavaSource();
+    public abstract JavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary);
     public abstract JavaClass newJavaClass();
     public abstract JavaPackage newJavaPackage(String name);
     
-    public abstract void setClassLibrary(JavaSource source, ClassLibrary library);
     public abstract void setPackage(JavaSource source, JavaPackage pckg);
     public abstract void setName(JavaClass clazz, String name);
     
@@ -23,8 +24,7 @@ public abstract class JavaSourceTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        source = newJavaSource();
-        setClassLibrary(source, new ClassLibrary());
+        source = newJavaSource(new SortedClassLibraryBuilder().getClassLibrary());
     }
 
     public void testToStringOneClass() throws Exception {

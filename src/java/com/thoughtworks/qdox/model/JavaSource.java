@@ -121,11 +121,6 @@ public class JavaSource implements Serializable, JavaClassParent {
         return classesArray;
     }
 
-    public void setClassLibrary(ClassLibrary classLibrary) {
-        this.oldClassLibrary = classLibrary;
-    }
-    
-
     public String getCodeBlock() {
         ModelWriter modelWriter;
         if(modelWriterFactory != null) {

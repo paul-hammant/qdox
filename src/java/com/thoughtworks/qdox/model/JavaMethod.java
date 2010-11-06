@@ -89,6 +89,11 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
     {
         return varArgs;
     }
+    
+    public String getCodeBlock()
+    {
+        return getSource().getModelWriter().writeMethod( this ).toString();
+    }
 
     protected void writeBody(IndentBuffer result) {
         writeBody(result, true, true, true);

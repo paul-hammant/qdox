@@ -44,9 +44,31 @@ public class JavaSource implements Serializable, JavaClassParent {
         this.classLibrary = classLibrary;
     }
 
+    /**
+     * 
+     * @param modelWriterFactory
+     * @since 2.0
+     */
     public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
     {
         this.modelWriterFactory = modelWriterFactory;
+    }
+    
+    /**
+     * 
+     * @return
+     * @since 2.0
+     */
+    public ModelWriter getModelWriter()
+    {
+        ModelWriter result; 
+        if (modelWriterFactory != null) {
+            result = modelWriterFactory.newInstance();
+        }
+        else {
+            result = new DefaultModelWriter();
+        }
+        return result;
     }
     
     /**
@@ -121,14 +143,7 @@ public class JavaSource implements Serializable, JavaClassParent {
     }
 
     public String getCodeBlock() {
-        ModelWriter modelWriter;
-        if(modelWriterFactory != null) {
-            modelWriter = modelWriterFactory.newInstance();
-        }
-        else {
-            modelWriter = new DefaultModelWriter();
-        }
-        return modelWriter.writeSource( this ).toString();
+        return getModelWriter().writeSource( this ).toString();
     }
     
     public String toString() {

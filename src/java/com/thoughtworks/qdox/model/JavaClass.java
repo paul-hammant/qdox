@@ -128,6 +128,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return result;
     }
 
+    public String getCodeBlock()
+    {
+        return getSource().getModelWriter().writeClass( this ).toString();
+    }
+    
     protected void writeBody(IndentBuffer result) {
         writeAccessibilityModifier(result);
         writeNonAccessibilityModifiers(result);

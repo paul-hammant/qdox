@@ -48,9 +48,12 @@ public class DefaultModelWriter implements ModelWriter
         buffer.write(clazz.getName());
 
         // subclass
-        if (clazz.getSuperClass() != null && !"java.lang.Object".equals( clazz.getSuperClass().getValue())) {
-            buffer.write(" extends ");
-            buffer.write(clazz.getSuperClass().getValue());
+        if (clazz.getSuperClass() != null) {
+            String className = clazz.getSuperClass().getValue();
+            if(!"java.lang.Object".equals(className) && !"java.lang.Enum".equals(className)) {
+                buffer.write(" extends ");
+                buffer.write(clazz.getSuperClass().getValue());
+            }
         }
 
         // implements

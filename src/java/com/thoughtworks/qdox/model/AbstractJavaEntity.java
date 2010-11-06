@@ -112,15 +112,6 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         }
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaModel#getCodeBlock()
-     */
-    public String getCodeBlock() {
-        IndentBuffer result = new IndentBuffer();
-        write(result);
-        return result.toString();
-    }
-
     protected void write(IndentBuffer result) {
         commentHeader(result);
         writeBody(result);

@@ -18,6 +18,11 @@ public class AbstractJavaEntityTest extends TestCase {
             protected void writeBody( IndentBuffer result )
             {
             }
+            
+            public String getCodeBlock()
+            {
+                return null;
+            }
         };
     }
     

@@ -9,9 +9,9 @@ public class DefaultTypeTest extends TypeTest
         super( s );
     }
 
-    public JavaSource newJavaSource()
+    public JavaSource newJavaSource( com.thoughtworks.qdox.library.ClassLibrary library )
     {
-        return new JavaSource();
+        return new JavaSource(library);
     }
 
     public Type newType( String fullname )
@@ -27,11 +27,6 @@ public class DefaultTypeTest extends TypeTest
     public Type newType( String fullname, int dimensions, JavaSource source )
     {
         return new Type(fullname, dimensions, source);
-    }
-
-    public void setClassLibrary( JavaSource source, ClassLibrary library )
-    {
-        source.setClassLibrary( library );
     }
 
     public void addImport( JavaSource source, String imp )

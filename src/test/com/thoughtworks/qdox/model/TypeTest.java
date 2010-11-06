@@ -5,6 +5,7 @@ import java.io.StringReader;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.library.ClassLoaderLibrary;
 
 public abstract class TypeTest extends TestCase {
 
@@ -12,19 +13,16 @@ public abstract class TypeTest extends TestCase {
         super(s);
     }
     
-    public abstract JavaSource newJavaSource();
+    public abstract JavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary library);
     public abstract Type newType(String fullname);
     public abstract Type newType(String fullname, int dimensions);
     public abstract Type newType(String fullname, int dimensions, JavaSource source);
-    
-    public abstract void setClassLibrary(JavaSource source, ClassLibrary library);
     
     public abstract void addImport(JavaSource source, String imp);
 
     public void testResolving() throws Exception {
         ClassLibrary classLib = new ClassLibrary();
-        JavaSource src = newJavaSource();
-        setClassLibrary(src, classLib);
+        JavaSource src = newJavaSource(classLib);
         addImport(src, "foo.*");
         Type type = Type.createUnresolved("Bar", 0, src);
         assertEquals(false, type.isResolved());
@@ -57,9 +55,9 @@ public abstract class TypeTest extends TestCase {
     }
 
     public void testTypeHasJavaClass() {
-        JavaSource javaSource = newJavaSource();
-        JavaDocBuilder builder = new JavaDocBuilder();
-        setClassLibrary(javaSource, builder.getClassLibrary());
+        ClassLoaderLibrary library = new ClassLoaderLibrary( null );
+        library.addDefaultLoader();
+        JavaSource javaSource = newJavaSource(library);
         Type type = newType("java.util.HashSet", 0, javaSource);
         JavaClass clazz = type.getJavaClass();
         JavaClass superClass = clazz.getSuperJavaClass();

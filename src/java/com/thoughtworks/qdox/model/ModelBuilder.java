@@ -34,13 +34,6 @@ public class ModelBuilder implements Builder {
     private List lastTagSet;
     private DocletTagFactory docletTagFactory;
 
-    public ModelBuilder(ClassLibrary library, DocletTagFactory docletTagFactory) {
-        this.docletTagFactory = docletTagFactory;
-        source = new JavaSource(library);
-        currentParent = source;
-        currentAnnoDefs = new ArrayList();
-    }
-
     public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
         source = new JavaSource(classLibrary);

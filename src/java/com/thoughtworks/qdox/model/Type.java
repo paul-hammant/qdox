@@ -2,7 +2,6 @@ package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
 
-import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
 import com.thoughtworks.qdox.model.annotation.AnnotationVisitor;
 import com.thoughtworks.qdox.model.annotation.RecursiveAnnotationVisitor;

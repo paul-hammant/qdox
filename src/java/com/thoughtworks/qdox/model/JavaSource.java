@@ -28,7 +28,7 @@ public class JavaSource implements Serializable, JavaClassParent {
         PRIMITIVE_TYPES.add("void");
     }
 
-    private com.thoughtworks.qdox.library.ClassLibrary classLibrary;
+    private final com.thoughtworks.qdox.library.ClassLibrary classLibrary;
     private com.thoughtworks.qdox.model.ClassLibrary oldClassLibrary;
     
     private ModelWriterFactory modelWriterFactory;
@@ -41,10 +41,6 @@ public class JavaSource implements Serializable, JavaClassParent {
     private Map resolvedTypeCache = new HashMap();
     private URL url;
 
-    //@todo remove
-    public JavaSource() {
-    }
-    
     public JavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary) {
         this.classLibrary = classLibrary;
     }

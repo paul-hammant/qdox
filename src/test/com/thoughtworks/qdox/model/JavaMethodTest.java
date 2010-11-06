@@ -1,5 +1,8 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.library.ClassNameLibrary;
+
 import junit.framework.TestCase;
 
 public abstract class JavaMethodTest extends TestCase {
@@ -18,7 +21,7 @@ public abstract class JavaMethodTest extends TestCase {
     public abstract JavaMethod newJavaMethod(Type returns, String name);
     public abstract JavaParameter newJavaParameter(Type type, String name);
     public abstract JavaParameter newJavaParameter(Type type, String name, boolean varArgs);
-    public abstract JavaSource newJavaSource();
+    public abstract JavaSource newJavaSource(ClassLibrary classLibrary );
     public abstract Type newType(String fullname);
     public abstract Type newType(String fullname, int dimensions);
     
@@ -35,7 +38,7 @@ public abstract class JavaMethodTest extends TestCase {
     public abstract void addParameter(JavaMethod method, JavaParameter parameter);
 
     protected void setUp() throws Exception {
-        source = newJavaSource();
+        source = newJavaSource(new ClassNameLibrary());
         clazz = newJavaClass();
         addClass(source, clazz);
         mth = newJavaMethod();

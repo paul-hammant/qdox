@@ -124,7 +124,7 @@ public class JavaClassContextTest
 
     public void testAddJavaSource() throws Exception
     {
-        JavaSource source = new JavaSource();
+        JavaSource source = new JavaSource(null);
         context.add( source );
         
         //null-safe
@@ -136,12 +136,12 @@ public class JavaClassContextTest
         assertNotNull( context.getSources() );
         assertEquals( 0, context.getSources().length );
 
-        JavaSource source = new JavaSource();
+        JavaSource source = new JavaSource(null);
         context.add( source );
         assertEquals( 1, context.getSources().length );
 
         //every source is unique, just add it
-        JavaSource source_copy = new JavaSource();
+        JavaSource source_copy = new JavaSource(null);
         context.add( source_copy );
         assertEquals( 2, context.getSources().length );
     }

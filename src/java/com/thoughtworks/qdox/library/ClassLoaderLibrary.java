@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.ModelBuilder;
-import com.thoughtworks.qdox.model.ModelBuilderFactory;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
 
 /**

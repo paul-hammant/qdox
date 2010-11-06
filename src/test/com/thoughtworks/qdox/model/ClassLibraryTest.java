@@ -20,14 +20,15 @@ public class ClassLibraryTest extends TestCase {
         return new JavaClass[0];
     }
   
-    public void testAdd() throws Exception {
-        ClassLibrary c = new ClassLibrary();
-        c.add("com.blah.Ping");
-        c.add("com.moo.Poo");
-        assertTrue(c.hasClassReference("com.blah.Ping"));
-        assertTrue(c.hasClassReference("com.moo.Poo"));
-        assertTrue(!c.hasClassReference("com.not.You"));
-    }
+    //Moved to JavaClassContextText
+//    public void testAdd() throws Exception {
+//        ClassLibrary c = new ClassLibrary();
+//        c.add("com.blah.Ping");
+//        c.add("com.moo.Poo");
+//        assertTrue(c.hasClassReference("com.blah.Ping"));
+//        assertTrue(c.hasClassReference("com.moo.Poo"));
+//        assertTrue(!c.hasClassReference("com.not.You"));
+//    }
 
     /**
      * @deprecated Moved to ClassLoaderLibraryTest

@@ -126,10 +126,6 @@ public class ModelBuilder implements Builder {
 
         currentParent.addClass(currentClass);
         currentParent = currentClass;
-        
-        if( source.getClassLibrary() != null) {
-            source.getClassLibrary().add(currentClass.getFullyQualifiedName());
-        }
     }
 
     public void endClass() {

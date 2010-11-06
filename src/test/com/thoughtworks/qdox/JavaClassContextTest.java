@@ -2,6 +2,7 @@ package com.thoughtworks.qdox;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -145,5 +146,14 @@ public class JavaClassContextTest
         context.add( source_copy );
         assertEquals( 2, context.getSources().length );
     }
+    
+    public void testAdd() throws Exception {
+        context.add(new JavaClass("com.blah.Ping"));
+        context.add(new JavaClass("com.moo.Poo"));
+        assertTrue(context.getClassByName("com.blah.Ping") != null );
+        assertTrue(context.getClassByName("com.moo.Poo") != null);
+        assertTrue(context.getClassByName("com.not.You") == null);
+    }
+
 
 }

@@ -54,8 +54,6 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
 
     private ModelBuilderFactory modelBuilderFactory;
     
-    private final Set classNames = new TreeSet();
-    
     private boolean defaultClassLoadersAdded = false;
     private transient List classLoaders = new ArrayList();
     private List sourceFolders = new ArrayList(); //<File>
@@ -104,10 +102,6 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         return sourceContext;
     }
     
-    public void add(String className) {
-        classNames.add(className);
-    }
-
     public File getSourceFile( String className )
     {
         for(Iterator iterator = sourceFolders.iterator(); iterator.hasNext();) {
@@ -270,10 +264,7 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     
     public boolean hasClassReference( String name )
     {
-        if (classNames.contains(name)) {
-            return true;
-        }
-        else if (sourceContext.getClassByName( name ) != null) {
+        if (sourceContext.getClassByName( name ) != null) {
             return true;
         }
         else if (context.getClassByName( name ) != null) {

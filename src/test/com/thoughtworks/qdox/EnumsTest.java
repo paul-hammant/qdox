@@ -1,12 +1,10 @@
 package com.thoughtworks.qdox;
 
-import junit.framework.TestCase;
-
 import java.io.StringReader;
 
+import junit.framework.TestCase;
+
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.parser.Lexer;
-import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 
 public class EnumsTest extends TestCase {
 

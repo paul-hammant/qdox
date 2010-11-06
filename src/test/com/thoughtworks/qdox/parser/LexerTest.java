@@ -1,13 +1,13 @@
 package com.thoughtworks.qdox.parser;
 
-import junit.framework.TestCase;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+
+import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;

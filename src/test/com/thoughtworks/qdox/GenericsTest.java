@@ -1,12 +1,12 @@
 package com.thoughtworks.qdox;
 
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaMethod;
+import java.io.StringReader;
 
 import junit.framework.TestCase;
 
-import java.io.StringReader;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMethod;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>

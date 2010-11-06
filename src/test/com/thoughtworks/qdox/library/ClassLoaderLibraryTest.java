@@ -3,8 +3,6 @@ package com.thoughtworks.qdox.library;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaPackage;
-import com.thoughtworks.qdox.model.JavaSource;
 
 public class ClassLoaderLibraryTest
     extends TestCase

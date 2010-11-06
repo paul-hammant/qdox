@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import com.thoughtworks.qdox.JavaClassContext;
 
 public class DefaultTypeTest extends TypeTest
 {

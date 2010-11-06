@@ -1,8 +1,8 @@
 package com.thoughtworks.qdox;
 
-import junit.framework.TestCase;
-
 import java.io.StringReader;
+
+import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;

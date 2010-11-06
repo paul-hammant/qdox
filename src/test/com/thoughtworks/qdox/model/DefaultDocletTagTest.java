@@ -1,7 +1,8 @@
 package com.thoughtworks.qdox.model;
 
-import com.thoughtworks.qdox.model.util.SerializationUtils;
 import java.util.Map;
+
+import com.thoughtworks.qdox.model.util.SerializationUtils;
 
 /**
  *

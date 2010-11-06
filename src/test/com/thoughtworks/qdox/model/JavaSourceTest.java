@@ -2,8 +2,6 @@ package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
 
-import java.util.HashMap;
-
 public abstract class JavaSourceTest extends TestCase {
 
     private JavaSource source;

@@ -1,13 +1,14 @@
 package com.thoughtworks.qdox;
 
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.model.JavaParameter;
+import java.io.StringReader;
+
 import junit.framework.TestCase;
 
-import java.io.StringReader;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.Type;
 
 public class MethodsTest extends TestCase {
 

@@ -3,9 +3,10 @@ package com.thoughtworks.qdox.parser;
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
+
 import com.thoughtworks.qdox.parser.impl.Parser;
-import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;

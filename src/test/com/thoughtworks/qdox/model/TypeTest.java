@@ -4,7 +4,6 @@ import java.io.StringReader;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.JavaDocBuilder;
 
 public abstract class TypeTest extends TestCase {

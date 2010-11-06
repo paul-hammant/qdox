@@ -1,14 +1,19 @@
 package com.thoughtworks.qdox.ant;
 
-import junit.framework.TestCase;
-
 import java.io.File;
 
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.DirectoryScanner;
+import junit.framework.TestCase;
+
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
-import com.thoughtworks.qdox.model.*;
+
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
+import com.thoughtworks.qdox.model.DefaultDocletTag;
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.JavaClass;
 
 // Not really abstract, but a test of the abstract.
 

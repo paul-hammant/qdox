@@ -1,20 +1,31 @@
 
 package com.thoughtworks.qdox;
 
-import com.thoughtworks.qdox.model.*;
-import com.thoughtworks.qdox.model.util.SerializationUtils;
-import com.thoughtworks.qdox.parser.ParseException;
-import com.thoughtworks.qdox.testdata.PropertyClass;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
 
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
+
+import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.BeanProperty;
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.util.SerializationUtils;
+import com.thoughtworks.qdox.parser.ParseException;
+import com.thoughtworks.qdox.testdata.PropertyClass;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>

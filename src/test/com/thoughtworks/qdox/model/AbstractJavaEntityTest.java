@@ -1,9 +1,9 @@
 package com.thoughtworks.qdox.model;
 
-import junit.framework.TestCase;
-
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
+
+import junit.framework.TestCase;
 
 public class AbstractJavaEntityTest extends TestCase {
 

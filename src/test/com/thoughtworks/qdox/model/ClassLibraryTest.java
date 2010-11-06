@@ -2,8 +2,6 @@ package com.thoughtworks.qdox.model;
 
 import junit.framework.TestCase;
 
-import java.util.Collection;
-
 public class ClassLibraryTest extends TestCase {
 
     public ClassLibraryTest(String s) {

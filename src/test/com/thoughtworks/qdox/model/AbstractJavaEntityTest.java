@@ -15,10 +15,6 @@ public class AbstractJavaEntityTest extends TestCase {
                 return 0;
             }
             
-            protected void writeBody( IndentBuffer result )
-            {
-            }
-            
             public String getCodeBlock()
             {
                 return null;

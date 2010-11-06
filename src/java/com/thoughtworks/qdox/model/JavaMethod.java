@@ -95,10 +95,6 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         return getSource().getModelWriter().writeMethod( this ).toString();
     }
 
-    protected void writeBody(IndentBuffer result) {
-        writeBody(result, true, true, true);
-    }
-
     /**
      * @since 1.3
      */

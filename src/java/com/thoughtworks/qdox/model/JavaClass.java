@@ -133,66 +133,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return getSource().getModelWriter().writeClass( this ).toString();
     }
     
-    protected void writeBody(IndentBuffer result) {
-        writeAccessibilityModifier(result);
-        writeNonAccessibilityModifiers(result);
-
-        result.write(isEnum ? "enum " : interfce ? "interface " : isAnnotation ? "@interface " : "class ");
-        result.write(name);
-
-        // subclass
-        if (superClass != null) {
-            result.write(" extends ");
-            result.write(superClass.getValue());
-        }
-
-        // implements
-        if (implementz.length > 0) {
-            result.write(interfce ? " extends " : " implements ");
-
-            for (int i = 0; i < implementz.length; i++) {
-                if (i > 0) {
-                    result.write(", ");
-                }
-
-                result.write(implementz[i].getValue());
-            }
-        }
-
-        result.write(" {");
-        result.newline();
-        result.indent();
-
-        // fields
-        for (Iterator iterator = fields.iterator(); iterator.hasNext();) {
-            JavaField javaField = (JavaField) iterator.next();
-
-            result.newline();
-            javaField.write(result);
-        }
-
-        // methods
-        for (Iterator iterator = methods.iterator(); iterator.hasNext();) {
-            JavaMethod javaMethod = (JavaMethod) iterator.next();
-
-            result.newline();
-            javaMethod.write(result);
-        }
-
-        // inner-classes
-        for (Iterator iterator = classes.iterator(); iterator.hasNext();) {
-            JavaClass javaClass = (JavaClass) iterator.next();
-
-            result.newline();
-            javaClass.write(result);
-        }
-
-        result.deindent();
-        result.newline();
-        result.write('}');
-        result.newline();
-    }
-
     public void setInterface(boolean interfce) {
         this.interfce = interfce;
     }

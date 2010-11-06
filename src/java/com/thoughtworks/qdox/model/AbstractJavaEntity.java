@@ -114,10 +114,8 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
 
     protected void write(IndentBuffer result) {
         commentHeader(result);
-        writeBody(result);
+//        writeBody(result);
     }
-
-    protected abstract void writeBody(IndentBuffer result);
 
     public void setModifiers(String[] modifiers) {
         this.modifiers = Arrays.asList(modifiers);

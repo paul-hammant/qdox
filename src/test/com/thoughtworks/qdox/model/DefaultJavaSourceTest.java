@@ -32,7 +32,7 @@ public class DefaultJavaSourceTest extends JavaSourceTest
 
     public JavaPackage newJavaPackage( String name )
     {
-        return new JavaPackage(name);
+        return new DefaultJavaPackage(name);
     }
 
     public void setPackage( JavaSource source, JavaPackage pckg )

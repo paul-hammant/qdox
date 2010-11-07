@@ -45,7 +45,7 @@ public class DefaultJavaClassTest
 
     public JavaPackage newJavaPackage( String name )
     {
-        return new JavaPackage( name );
+        return new DefaultJavaPackage( name );
     }
 
     public JavaParameter newJavaParameter( Type type, String name )
@@ -76,7 +76,7 @@ public class DefaultJavaClassTest
 
     public void addClass( JavaPackage pckg, JavaClass clazz )
     {
-        pckg.addClass( clazz );
+        ((DefaultJavaPackage) pckg).addClass( clazz );
         clazz.setJavaPackage( pckg );
     }
 

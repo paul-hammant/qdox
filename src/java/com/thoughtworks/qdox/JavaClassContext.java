@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -65,7 +66,7 @@ public class JavaClassContext implements Serializable {
 	public void add(JavaClass javaClass) {
 	    classMap.put(javaClass.getFullyQualifiedName(), javaClass);
 		
-		JavaPackage jPackage = getPackageByName( javaClass.getPackageName() );
+		DefaultJavaPackage jPackage = (DefaultJavaPackage) getPackageByName( javaClass.getPackageName() );
 		if(jPackage != null) {
 		    jPackage.addClass( javaClass );
 		}
@@ -102,13 +103,13 @@ public class JavaClassContext implements Serializable {
     {
         if(jPackage != null) {
             String packageName = jPackage.getName();
-            JavaPackage javaPackage = getPackageByName( packageName );
+            DefaultJavaPackage javaPackage = (DefaultJavaPackage) getPackageByName( packageName );
             if ( javaPackage == null ) {
-                javaPackage = new JavaPackage( packageName );
+                javaPackage = new DefaultJavaPackage( packageName );
                 javaPackage.setContext( this );
                 packageMap.put( packageName, javaPackage );
             }
-            jPackage.setContext( this );
+            ((DefaultJavaPackage) jPackage).setContext( this );
         }
     }
 

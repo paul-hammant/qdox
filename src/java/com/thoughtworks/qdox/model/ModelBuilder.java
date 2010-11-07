@@ -47,7 +47,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void addPackage(PackageDef packageDef) {
-        JavaPackage jPackage = new JavaPackage(packageDef.name);
+        DefaultJavaPackage jPackage = new DefaultJavaPackage(packageDef.name);
         jPackage.setLineNumber(packageDef.lineNumber);
     	setAnnotations(jPackage);
         source.setPackage(jPackage);

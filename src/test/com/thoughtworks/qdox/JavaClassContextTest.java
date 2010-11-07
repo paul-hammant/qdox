@@ -2,6 +2,7 @@ package com.thoughtworks.qdox;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
@@ -79,7 +80,7 @@ public class JavaClassContextTest
     {
         assertNull( context.getPackageByName( null ) );
         assertNull( context.getPackageByName( "java.lang" ) );
-        JavaPackage pckg = new JavaPackage("com.foo");
+        JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
         assertEquals( pckg, context.getPackageByName( "com.foo" ) );
     }
@@ -88,14 +89,14 @@ public class JavaClassContextTest
     {
         assertNull( context.removePackageByName( null ) );
         assertNull( context.removePackageByName( "com.foo" ) );
-        JavaPackage pckg = new JavaPackage("com.foo");
+        JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
         assertEquals( pckg, context.removePackageByName( "com.foo" ) );
     }
 
     public void testAddJavaPackage() throws Exception
     {
-        JavaPackage pckg = new JavaPackage("com.foo");
+        JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
         //check case sensitive
         assertNull( context.getClassByName( "com.bar" ) ); 
@@ -110,11 +111,11 @@ public class JavaClassContextTest
         assertNotNull( context.getPackages() );
         assertEquals( 0, context.getPackages().length );
 
-        JavaPackage pckg = new JavaPackage("com.foo");
+        JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
         assertEquals( 1, context.getPackages().length );
         //add same package
-        JavaPackage pckg_copy = new JavaPackage("com.foo");
+        JavaPackage pckg_copy = new DefaultJavaPackage("com.foo");
         context.add( pckg_copy );
         assertEquals( 1, context.getPackages().length );
         

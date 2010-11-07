@@ -30,7 +30,7 @@ public class DefaultJavaFieldTest
 
     public JavaPackage newJavaPackage( String name )
     {
-        return new JavaPackage(name);
+        return new DefaultJavaPackage(name);
     }
 
     public Type newType( String fullname )
@@ -77,7 +77,7 @@ public class DefaultJavaFieldTest
 
     public void addClass( JavaPackage pckg, JavaClass clazz )
     {
-        pckg.addClass( clazz );
+        ((DefaultJavaPackage) pckg).addClass( clazz );
         clazz.setJavaPackage( pckg );
     }
 

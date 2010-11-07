@@ -5,7 +5,7 @@ public class DefaultJavaPackageTest extends JavaPackageTest
 
     public JavaPackage newJavaPackage( String name )
     {
-        return new JavaPackage( name );
+        return new DefaultJavaPackage( name );
     }
 
 }

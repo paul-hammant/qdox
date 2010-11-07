@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class JavaMethod extends AbstractInheritableJavaEntity implements Member, JavaAnnotatedElement, JavaMember {
+public class JavaMethod extends AbstractInheritableJavaEntity implements Member, JavaAnnotatedElement, JavaMember, JavaModel {
 
 	private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
     private Type returns = Type.VOID;

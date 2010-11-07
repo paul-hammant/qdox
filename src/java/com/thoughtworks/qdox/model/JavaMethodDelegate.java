@@ -30,7 +30,7 @@ public class JavaMethodDelegate extends JavaMethod
     protected Type getReturnType( boolean resolve, JavaClass _callingClass )
     {
         //watch it!! use callingclass of constructor
-        return super.getReturnType( resolve, this.callingClass );
+        return originalMethod.getReturnType( resolve, this.callingClass );
     }
     
     public Type[] getParameterTypes( boolean resolve )
@@ -46,7 +46,7 @@ public class JavaMethodDelegate extends JavaMethod
     protected Type[] getParameterTypes( boolean resolve, JavaClass _callingClass )
     {
         //watch it!! use callingclass of constructor
-        return super.getParameterTypes( resolve, this.callingClass );
+        return originalMethod.getParameterTypes( resolve, this.callingClass );
     }
     
     //Delegating methods

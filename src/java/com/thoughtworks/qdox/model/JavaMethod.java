@@ -469,11 +469,11 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
      */
     protected Type getReturnType ( boolean resolve, JavaClass callingClass) {
         Type result = null;
-        if (getReturns() != null) {
-            result =  getReturns().resolve( this.getParentClass(), callingClass );
+        if (this.getReturns() != null) {
+            result =  this.getReturns().resolve( this.getParentClass(), callingClass );
             
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
-            if ( !resolve && !returns.getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
+            if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
             {
                 result = new Type( "java.lang.Object" );
             }
@@ -503,13 +503,13 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
 
     
     protected Type[] getParameterTypes ( boolean resolve, JavaClass callingClass) {
-        Type[] result = new Type[getParameters().length];
+        Type[] result = new Type[this.getParameters().length];
 
-        for (int paramIndex = 0; paramIndex < getParameters().length; paramIndex++ )
+        for (int paramIndex = 0; paramIndex < this.getParameters().length; paramIndex++ )
         {
-            Type curType = getParameters()[paramIndex].getType().resolve( this.getParentClass(), callingClass );
+            Type curType = this.getParameters()[paramIndex].getType().resolve( this.getParentClass(), callingClass );
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
-            if ( !resolve && returns != null && !returns.getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
+            if ( !resolve && this.getReturns() != null && !this.getReturns().getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
             {
                 result[paramIndex] = new Type( "java.lang.Object" );
             }

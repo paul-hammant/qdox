@@ -92,11 +92,11 @@ public class JavaPackage extends AbstractBaseJavaEntity implements JavaAnnotated
 
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof JavaPackage)) return false;
 
         JavaPackage that = (JavaPackage) o;
 
-        if (!name.equals(that.name)) return false;
+        if (!name.equals(that.getName())) return false;
 
         return true;
     }

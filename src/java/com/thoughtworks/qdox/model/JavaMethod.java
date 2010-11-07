@@ -214,7 +214,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
             if (!otherParams[i].equals(myParams[i])) return false;
         }
 
-        return this.varArgs == m.varArgs;
+        return this.varArgs == m.isVarArgs();
     }
 
     /**

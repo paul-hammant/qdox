@@ -11,7 +11,7 @@ public class DefaultTypeTest extends TypeTest
 
     public JavaSource newJavaSource( com.thoughtworks.qdox.library.ClassLibrary library )
     {
-        return new JavaSource(library);
+        return new DefaultJavaSource(library);
     }
 
     public Type newType( String fullname )
@@ -31,7 +31,7 @@ public class DefaultTypeTest extends TypeTest
 
     public void addImport( JavaSource source, String imp )
     {
-        source.addImport( imp );
+        ((DefaultJavaSource) source).addImport( imp );
     }
 
 }

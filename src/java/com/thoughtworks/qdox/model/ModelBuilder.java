@@ -25,7 +25,7 @@ import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
  */
 public class ModelBuilder implements Builder {
 
-    private final JavaSource source;
+    private final DefaultJavaSource source;
     private JavaClassParent currentParent;
     private JavaClass currentClass;
     private JavaMethod currentMethod;
@@ -36,7 +36,7 @@ public class ModelBuilder implements Builder {
 
     public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
-        source = new JavaSource(classLibrary);
+        source = new DefaultJavaSource(classLibrary);
         currentParent = source;
         currentAnnoDefs = new ArrayList();
     }

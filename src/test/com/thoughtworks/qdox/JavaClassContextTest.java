@@ -2,6 +2,7 @@ package com.thoughtworks.qdox;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -124,7 +125,7 @@ public class JavaClassContextTest
 
     public void testAddJavaSource() throws Exception
     {
-        JavaSource source = new JavaSource(null);
+        JavaSource source = new DefaultJavaSource(null);
         context.add( source );
         
         //null-safe
@@ -136,12 +137,12 @@ public class JavaClassContextTest
         assertNotNull( context.getSources() );
         assertEquals( 0, context.getSources().length );
 
-        JavaSource source = new JavaSource(null);
+        JavaSource source = new DefaultJavaSource(null);
         context.add( source );
         assertEquals( 1, context.getSources().length );
 
         //every source is unique, just add it
-        JavaSource source_copy = new JavaSource(null);
+        JavaSource source_copy = new DefaultJavaSource(null);
         context.add( source_copy );
         assertEquals( 2, context.getSources().length );
     }

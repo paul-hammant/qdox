@@ -289,7 +289,9 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     
     public JavaSource addSource(URL url) throws IOException, FileNotFoundException {
         JavaSource source = addSource(new InputStreamReader(url.openStream(),encoding), url.toExternalForm());
-        source.setURL(url);
+        if(source instanceof DefaultJavaSource) {
+            ((DefaultJavaSource) source).setURL(url);
+        } 
         return source;
     }
     

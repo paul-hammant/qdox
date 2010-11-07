@@ -60,7 +60,7 @@ public class DefaultJavaClassTest
 
     public JavaSource newJavaSource()
     {
-        return new JavaSource(new SortedClassLibraryBuilder().getClassLibrary());
+        return new DefaultJavaSource(new SortedClassLibraryBuilder().getClassLibrary());
     }
 
     public Type newType( String fullname )
@@ -162,7 +162,7 @@ public class DefaultJavaClassTest
 
     public void setPackage( JavaSource source, JavaPackage pckg )
     {
-        source.setPackage( pckg );
+        ((DefaultJavaSource) source).setPackage( pckg );
     }
 
     public void setReturns( JavaMethod clazz, Type returns )

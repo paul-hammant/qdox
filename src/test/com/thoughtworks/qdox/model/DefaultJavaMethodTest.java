@@ -41,7 +41,7 @@ public class DefaultJavaMethodTest
 
     public JavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary )
     {
-        return new JavaSource(classLibrary);
+        return new DefaultJavaSource(classLibrary);
     }
 
     public Type newType( String fullname )

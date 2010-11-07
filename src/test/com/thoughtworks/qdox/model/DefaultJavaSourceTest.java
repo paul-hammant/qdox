@@ -11,7 +11,7 @@ public class DefaultJavaSourceTest extends JavaSourceTest
 
     public JavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary)
     {
-        return new JavaSource(classLibrary);
+        return new DefaultJavaSource(classLibrary);
     }
 
     public JavaClass newJavaClass()
@@ -37,11 +37,11 @@ public class DefaultJavaSourceTest extends JavaSourceTest
 
     public void setPackage( JavaSource source, JavaPackage pckg )
     {
-        source.setPackage( pckg );
+        ((DefaultJavaSource) source).setPackage( pckg );
     }
 
     public void addImport( JavaSource source, String imp )
     {
-        source.addImport( imp );
+        ((DefaultJavaSource) source).addImport( imp );
     }
 }

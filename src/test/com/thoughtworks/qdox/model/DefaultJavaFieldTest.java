@@ -11,7 +11,7 @@ public class DefaultJavaFieldTest
 
     public JavaField newJavaField()
     {
-        JavaSource source = new JavaSource( null );
+        JavaSource source = new DefaultJavaSource( null );
         JavaClass javaClass = new JavaClass( source );
         DefaultJavaField result = new DefaultJavaField();
         result.setParentClass( javaClass );

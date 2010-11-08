@@ -11,8 +11,6 @@ public interface JavaClassParent {
      */
     public String resolveType(String typeName);
 
-    public String getClassNamePrefix();
-
     public JavaSource getParentSource();
 
     public void addClass(JavaClass cls);

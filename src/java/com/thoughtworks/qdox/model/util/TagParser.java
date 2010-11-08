@@ -93,7 +93,7 @@ public class TagParser {
         ArrayList wordList = new ArrayList();
         try {
             while (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
-                StringBuilder param = new StringBuilder();
+                StringBuffer param = new StringBuffer();
                 if (tokenizer.sval != null) {
                     param.append( tokenizer.sval );
                 }

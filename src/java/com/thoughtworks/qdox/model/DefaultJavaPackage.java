@@ -78,10 +78,10 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
 
     public List<JavaPackage> getSubPackages() {
         String expected = name + ".";
-        JavaPackage[] jPackages = context.getPackages();
+        List<JavaPackage> jPackages = context.getPackages();
         List<JavaPackage> retList = new ArrayList<JavaPackage>();
-        for (int index = 0; index < jPackages.length;index++) {
-            String pName = jPackages[index].getName();
+        for (int index = 0; index < jPackages.size();index++) {
+            String pName = jPackages.get(index).getName();
             if (pName.startsWith(expected) && !(pName.substring(expected.length()).indexOf(".") > -1)) {
                 retList.add(context.getPackageByName( pName ));
             }

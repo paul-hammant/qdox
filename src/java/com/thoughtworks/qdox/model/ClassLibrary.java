@@ -248,7 +248,7 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     }
     
     public List<JavaClass> getJavaClasses() {
-        return Arrays.asList( sourceContext.getClasses() );
+        return sourceContext.getClasses();
     }
     
     public JavaPackage getJavaPackage( String name) {
@@ -256,11 +256,11 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     }
     
     public List<JavaPackage> getJavaPackages() {
-        return Arrays.asList( sourceContext.getPackages() );
+        return sourceContext.getPackages();
     }
     
     public List<JavaSource> getJavaSources() {
-        return Arrays.asList( sourceContext.getSources() );
+        return sourceContext.getSources();
     }
     
     public boolean hasClassReference( String name )

@@ -221,16 +221,16 @@ public class SourceLibrary
     public List<JavaClass> getJavaClasses()
     {
         List<JavaClass> result = new ArrayList<JavaClass>();
-        JavaClass[] unusedClasses = context.getClasses();
-        JavaClass[] usedClasses = getJavaClasses( new ClassLibraryFilter()
+        List<JavaClass> unusedClasses = context.getClasses();
+        List<JavaClass> usedClasses = getJavaClasses( new ClassLibraryFilter()
         {
             public boolean accept( AbstractClassLibrary classLibrary )
             {
                 return (classLibrary instanceof SourceLibrary);
             }
         });
-        result.addAll(Arrays.asList( usedClasses ));
-        result.addAll(Arrays.asList( unusedClasses ));
+        result.addAll( usedClasses );
+        result.addAll( unusedClasses );
         return Collections.unmodifiableList( result );
     }
 
@@ -240,16 +240,16 @@ public class SourceLibrary
     public List<JavaPackage> getJavaPackages()
     {
         List<JavaPackage> result = new ArrayList<JavaPackage>();
-        JavaPackage[] unusedPackages = context.getPackages();
-        JavaPackage[] usedPackages = getJavaPackages( new ClassLibraryFilter()
+        List<JavaPackage> unusedPackages = context.getPackages();
+        List<JavaPackage> usedPackages = getJavaPackages( new ClassLibraryFilter()
         {
             public boolean accept( AbstractClassLibrary classLibrary )
             {
                 return (classLibrary instanceof SourceLibrary);
             }
         });
-        result.addAll( Arrays.asList( usedPackages ) );
-        result.addAll( Arrays.asList( unusedPackages ) );
+        result.addAll( usedPackages );
+        result.addAll( unusedPackages );
         return Collections.unmodifiableList( result );
     }
     
@@ -259,16 +259,16 @@ public class SourceLibrary
     public List<JavaSource> getJavaSources()
     {
         List<JavaSource> result = new ArrayList<JavaSource>();
-        JavaSource[] unusedSources = context.getSources();
-        JavaSource[] usedSources = getJavaSources( new ClassLibraryFilter()
+        List<JavaSource> unusedSources = context.getSources();
+        List<JavaSource> usedSources = getJavaSources( new ClassLibraryFilter()
         {
             public boolean accept( AbstractClassLibrary classLibrary )
             {
                 return (classLibrary instanceof SourceLibrary);
             }
         });
-        result.addAll( Arrays.asList( usedSources ) );
-        result.addAll( Arrays.asList( unusedSources ) );
+        result.addAll( usedSources );
+        result.addAll( unusedSources );
         return Collections.unmodifiableList( result );
     }
     

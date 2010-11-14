@@ -45,20 +45,20 @@ public class JavaClassContextTest
     public void testGetClasses() throws Exception
     {
         assertNotNull( context.getClasses() );
-        assertEquals( 0, context.getClasses().length );
+        assertEquals( 0, context.getClasses().size() );
 
         JavaClass clazz = new JavaClass( "com.foo.Bar" );
         context.add( clazz );
-        assertEquals( 1, context.getClasses().length );
+        assertEquals( 1, context.getClasses().size() );
         //weird case, add same class 
         JavaClass clazz_copy = new JavaClass( "com.foo.Bar" );
         context.add( clazz_copy );
-        assertEquals( 1, context.getClasses().length );
+        assertEquals( 1, context.getClasses().size() );
         
         context.removeClassByName( "com.foo.Bar" );
         
         assertNotNull( context.getClasses() );
-        assertEquals( 0, context.getClasses().length );
+        assertEquals( 0, context.getClasses().size() );
     }
 
     public void testAddJavaClass() throws Exception
@@ -109,19 +109,19 @@ public class JavaClassContextTest
     public void testGetPackages() throws Exception
     {
         assertNotNull( context.getPackages() );
-        assertEquals( 0, context.getPackages().length );
+        assertEquals( 0, context.getPackages().size() );
 
         JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
-        assertEquals( 1, context.getPackages().length );
+        assertEquals( 1, context.getPackages().size() );
         //add same package
         JavaPackage pckg_copy = new DefaultJavaPackage("com.foo");
         context.add( pckg_copy );
-        assertEquals( 1, context.getPackages().length );
+        assertEquals( 1, context.getPackages().size() );
         
         context.removePackageByName( "com.foo" );        
         assertNotNull( context.getPackages() );
-        assertEquals( 0, context.getPackages().length );
+        assertEquals( 0, context.getPackages().size() );
     }
 
     public void testAddJavaSource() throws Exception
@@ -136,16 +136,16 @@ public class JavaClassContextTest
     public void testGetSources() throws Exception
     {
         assertNotNull( context.getSources() );
-        assertEquals( 0, context.getSources().length );
+        assertEquals( 0, context.getSources().size() );
 
         JavaSource source = new DefaultJavaSource(null);
         context.add( source );
-        assertEquals( 1, context.getSources().length );
+        assertEquals( 1, context.getSources().size() );
 
         //every source is unique, just add it
         JavaSource source_copy = new DefaultJavaSource(null);
         context.add( source_copy );
-        assertEquals( 2, context.getSources().length );
+        assertEquals( 2, context.getSources().size() );
     }
     
     public void testAdd() throws Exception {

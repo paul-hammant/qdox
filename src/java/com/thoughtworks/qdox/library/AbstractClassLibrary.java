@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.library;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.thoughtworks.qdox.JavaClassContext;
@@ -83,7 +84,7 @@ public abstract class AbstractClassLibrary
     
     public List<JavaSource> getJavaSources()
     {
-        return Arrays.asList( context.getSources() );
+        return context.getSources();
     }
     
     /**
@@ -92,31 +93,15 @@ public abstract class AbstractClassLibrary
      * @param filter
      * @return
      */
-    protected final JavaSource[] getJavaSources( ClassLibraryFilter filter) {
-        JavaSource[] result = null; 
-        JavaSource[] thisJavaSources = null;
-        JavaSource[] parentJavaSources = null;
-        if ( parentClassLibrary != null ) {
-            parentJavaSources = parentClassLibrary.getJavaSources( filter );
-        }
+    protected final List<JavaSource> getJavaSources( ClassLibraryFilter filter) {
+        List<JavaSource> result = new ArrayList<JavaSource>(); 
         if(filter.accept(this)) {
-            thisJavaSources = context.getSources();
+            result.addAll( context.getSources() );
         }
-        
-        if ( parentJavaSources == null || parentJavaSources.length == 0) {
-            result = thisJavaSources;
+        if ( parentClassLibrary != null ) {
+            result.addAll( parentClassLibrary.getJavaSources( filter ) );
         }
-        else if( thisJavaSources == null || thisJavaSources.length == 0 ) {
-            result = parentJavaSources;
-        }
-        else {
-            int totalSources = thisJavaSources.length + parentJavaSources.length;
-            result = new JavaSource[totalSources]; 
-            System.arraycopy( thisJavaSources, 0, result, 0, thisJavaSources.length );
-            System.arraycopy( parentJavaSources, 0, result, thisJavaSources.length, parentJavaSources.length );
-
-        }
-        return result;
+        return Collections.unmodifiableList( result );
     }
     
     /**
@@ -138,7 +123,7 @@ public abstract class AbstractClassLibrary
      */
     public List<JavaClass> getJavaClasses()
     {
-        return Arrays.asList( context.getClasses());
+        return context.getClasses();
     }
 
     /**
@@ -147,31 +132,15 @@ public abstract class AbstractClassLibrary
      * @param filter
      * @return
      */
-    protected final JavaClass[] getJavaClasses( ClassLibraryFilter filter) {
-        JavaClass[] result = null; 
-        JavaClass[] thisJavaClasses = null;
-        JavaClass[] parentJavaClasses = null;
-        if ( parentClassLibrary != null ) {
-            parentJavaClasses = parentClassLibrary.getJavaClasses( filter );
-        }
+    protected final List<JavaClass> getJavaClasses( ClassLibraryFilter filter) {
+        List<JavaClass> result = new ArrayList<JavaClass>(); 
         if(filter.accept(this)) {
-            thisJavaClasses = context.getClasses();
+            result.addAll( context.getClasses() );
         }
-        
-        if ( parentJavaClasses == null || parentJavaClasses.length == 0) {
-            result = thisJavaClasses;
+        if ( parentClassLibrary != null ) {
+            result.addAll( parentClassLibrary.getJavaClasses( filter ) );
         }
-        else if( thisJavaClasses == null || thisJavaClasses.length == 0 ) {
-            result = parentJavaClasses;
-        }
-        else {
-            int totalClasses = thisJavaClasses.length + parentJavaClasses.length;
-            result = new JavaClass[totalClasses]; 
-            System.arraycopy( thisJavaClasses, 0, result, 0, thisJavaClasses.length );
-            System.arraycopy( parentJavaClasses, 0, result, thisJavaClasses.length, parentJavaClasses.length );
-
-        }
-        return result;
+        return Collections.unmodifiableList( result );
     }
     
     /**
@@ -180,7 +149,7 @@ public abstract class AbstractClassLibrary
      */
     public List<JavaPackage> getJavaPackages()
     {
-        return Arrays.asList(context.getPackages());
+        return context.getPackages();
     }
     
     public JavaPackage getJavaPackage( String name ) {
@@ -191,31 +160,15 @@ public abstract class AbstractClassLibrary
         return result;
     }
     
-    protected final JavaPackage[] getJavaPackages( ClassLibraryFilter filter) {
-        JavaPackage[] result = null; 
-        JavaPackage[] thisJavaPackages = null;
-        JavaPackage[] parentJavaPackages = null;
-        if ( parentClassLibrary != null ) {
-            parentJavaPackages = parentClassLibrary.getJavaPackages( filter );
-        }
+    protected final List<JavaPackage> getJavaPackages( ClassLibraryFilter filter) {
+        List<JavaPackage> result = new ArrayList<JavaPackage>(); 
         if( filter.accept( this ) ) {
-            thisJavaPackages = context.getPackages();
+            result.addAll( context.getPackages() );
         }
-        
-        if ( parentJavaPackages == null || parentJavaPackages.length == 0) {
-            result = thisJavaPackages;
+        if ( parentClassLibrary != null ) {
+            result.addAll( parentClassLibrary.getJavaPackages( filter ) );
         }
-        else if( thisJavaPackages == null || thisJavaPackages.length == 0 ) {
-            result = parentJavaPackages;
-        }
-        else {
-            int totalPackages = thisJavaPackages.length + parentJavaPackages.length;
-            result = new JavaPackage[totalPackages]; 
-            System.arraycopy( thisJavaPackages, 0, result, 0, thisJavaPackages.length );
-            System.arraycopy( parentJavaPackages, 0, result, thisJavaPackages.length, parentJavaPackages.length );
-
-        }
-        return result;
+        return Collections.unmodifiableList( result );
     }
     
     /**

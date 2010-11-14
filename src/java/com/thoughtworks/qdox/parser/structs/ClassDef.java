@@ -13,10 +13,10 @@ public class ClassDef extends LocatedDef {
     public static final String ANNOTATION_TYPE = "@interface";
     
     public String name = "";
-    public Set modifiers = new HashSet();
-    public List typeParams = new ArrayList(); //<TypeVariableDef>
-    public Set extendz = new HashSet();
-    public Set implementz = new HashSet();
+    public Set<String> modifiers = new HashSet<String>();
+    public List<TypeVariableDef> typeParams = new ArrayList<TypeVariableDef>();
+    public Set<TypeDef> extendz = new HashSet<TypeDef>();
+    public Set<TypeDef> implementz = new HashSet<TypeDef>();
     public String type = CLASS;
 
     public boolean equals(Object obj) {

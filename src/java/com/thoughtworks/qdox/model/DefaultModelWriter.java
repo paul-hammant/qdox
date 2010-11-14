@@ -222,7 +222,7 @@ public class DefaultModelWriter implements ModelWriter
     }
     
     private void commentHeader(JavaModel entity) {
-        if (entity.getComment() == null && (entity.getTags().length == 0)) {
+        if (entity.getComment() == null && (entity.getTags().size() == 0)) {
             return;
         } else {
             buffer.write("/**");
@@ -236,13 +236,12 @@ public class DefaultModelWriter implements ModelWriter
                 buffer.newline();
             }
 
-            if (entity.getTags().length > 0) {
+            if (entity.getTags().size() > 0) {
                 if (entity.getComment() != null && entity.getComment().length() > 0) {
                     buffer.write(" *");
                     buffer.newline();
                 }
-                for (int i = 0; i < entity.getTags().length; i++) {
-                    DocletTag docletTag = entity.getTags()[i];
+                for (DocletTag docletTag : entity.getTags()) {
                     buffer.write(" * @");
                     buffer.write(docletTag.getName());
                     if (docletTag.getValue().length() > 0) {

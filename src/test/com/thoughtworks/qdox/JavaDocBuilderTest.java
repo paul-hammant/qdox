@@ -1049,7 +1049,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         		"}";
         builder.addSource(new StringReader(sourceCode));
         JavaClass jClass = builder.getClasses()[0];
-        assertEquals( Arrays.toString( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}), Arrays.toString(jClass.getTags()[0].getParameters()));
+        assertEquals( Arrays.toString( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}), Arrays.toString(jClass.getTags().get(0).getParameters()));
         //assertTrue( Arrays.equals( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}, jClass.getTags()[0].getParameters() ));
     }
     
@@ -1162,9 +1162,9 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	assertEquals("Some text\nmore text\nand even more", javaClass.getComment());
-    	assertEquals("throws", javaClass.getTags()[0].getName());
-    	assertEquals("Exception", javaClass.getTags()[0].getValue());
-    	assertEquals("deprecated", javaClass.getTags()[1].getName());
+    	assertEquals("throws", javaClass.getTags().get(0).getName());
+    	assertEquals("Exception", javaClass.getTags().get(0).getValue());
+    	assertEquals("deprecated", javaClass.getTags().get(1).getName());
     }
     
     // for QDOX-189

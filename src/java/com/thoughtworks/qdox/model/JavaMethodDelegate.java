@@ -186,7 +186,7 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.getTagByName( name );
     }
 
-    public DocletTag[] getTags()
+    public List<DocletTag> getTags()
     {
         return originalMethod.getTags();
     }
@@ -196,7 +196,7 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.getTagsByName( name, inherited );
     }
 
-    public DocletTag[] getTagsByName( String name )
+    public List<DocletTag> getTagsByName( String name )
     {
         return originalMethod.getTagsByName( name );
     }

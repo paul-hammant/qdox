@@ -622,7 +622,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     private void addTagsRecursive(List<DocletTag> result, JavaClass javaClass,
                                   String name, boolean superclasses) {
-        DocletTag[] tags = javaClass.getTagsByName(name);
+        List<DocletTag> tags = javaClass.getTagsByName(name);
 
         addNewTags(result, tags);
 
@@ -645,10 +645,8 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         }
     }
 
-    private void addNewTags(List<DocletTag> list, DocletTag[] tags) {
-        for (int i = 0; i < tags.length; i++) {
-            DocletTag superTag = tags[i];
-
+    private void addNewTags(List<DocletTag> list, List<DocletTag> tags) {
+        for (DocletTag superTag : tags) {
             if (!list.contains(superTag)) {
                 list.add(superTag);
             }

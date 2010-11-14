@@ -670,9 +670,9 @@ public class ModelBuilderTest extends TestCase {
         JavaSource source = builder.getSource();
 
         assertEquals("Hello", source.getClasses().get(0).getComment());
-        assertEquals(1, source.getClasses().get(0).getTags().length);
-        assertEquals("cheese", source.getClasses().get(0).getTags()[0].getName());
-        assertEquals("is good", source.getClasses().get(0).getTags()[0].getValue());
+        assertEquals(1, source.getClasses().get(0).getTags().size());
+        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
+        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
     }
 
     public void testDocletTagWithNoComment() throws Exception {
@@ -685,9 +685,9 @@ public class ModelBuilderTest extends TestCase {
         JavaSource source = builder.getSource();
 
         assertEquals("", source.getClasses().get(0).getComment());
-        assertEquals(1, source.getClasses().get(0).getTags().length);
-        assertEquals("cheese", source.getClasses().get(0).getTags()[0].getName());
-        assertEquals("is good", source.getClasses().get(0).getTags()[0].getValue());
+        assertEquals(1, source.getClasses().get(0).getTags().size());
+        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
+        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
     }
 
     public void testMultipleDocletTags() throws Exception {
@@ -702,13 +702,13 @@ public class ModelBuilderTest extends TestCase {
         JavaSource source = builder.getSource();
 
         assertEquals("Hello", source.getClasses().get(0).getComment());
-        assertEquals(3, source.getClasses().get(0).getTags().length);
-        assertEquals("cheese", source.getClasses().get(0).getTags()[0].getName());
-        assertEquals("is good", source.getClasses().get(0).getTags()[0].getValue());
-        assertEquals("food", source.getClasses().get(0).getTags()[1].getName());
-        assertEquals("is great", source.getClasses().get(0).getTags()[1].getValue());
-        assertEquals("chairs", source.getClasses().get(0).getTags()[2].getName());
-        assertEquals("are boring", source.getClasses().get(0).getTags()[2].getValue());
+        assertEquals(3, source.getClasses().get(0).getTags().size());
+        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
+        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
+        assertEquals("food", source.getClasses().get(0).getTags().get(1).getName());
+        assertEquals("is great", source.getClasses().get(0).getTags().get(1).getValue());
+        assertEquals("chairs", source.getClasses().get(0).getTags().get(2).getName());
+        assertEquals("are boring", source.getClasses().get(0).getTags().get(2).getValue());
     }
 
     public void testDocletTagsOnMethodsAndFields() throws Exception {
@@ -727,12 +727,12 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals("cheese", source.getClasses().get(0).getTags()[0].getName());
-        assertEquals("is good", source.getClasses().get(0).getTags()[0].getValue());
-        assertEquals("food", source.getClasses().get(0).getMethods()[0].getTags()[0].getName());
-        assertEquals("is great", source.getClasses().get(0).getMethods()[0].getTags()[0].getValue());
-        assertEquals("chairs", source.getClasses().get(0).getFields()[0].getTags()[0].getName());
-        assertEquals("are boring", source.getClasses().get(0).getFields()[0].getTags()[0].getValue());
+        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
+        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
+        assertEquals("food", source.getClasses().get(0).getMethods()[0].getTags().get(0).getName());
+        assertEquals("is great", source.getClasses().get(0).getMethods()[0].getTags().get(0).getValue());
+        assertEquals("chairs", source.getClasses().get(0).getFields()[0].getTags().get(0).getName());
+        assertEquals("are boring", source.getClasses().get(0).getFields()[0].getTags().get(0).getValue());
     }
 
     public void testRetrieveJavaSource() throws Exception {

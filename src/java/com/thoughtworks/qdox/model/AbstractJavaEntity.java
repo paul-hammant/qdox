@@ -1,15 +1,15 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements Comparable, JavaModel {
 
-    protected List<String> modifiers = new ArrayList<String>();
+    protected List<String> modifiers = new LinkedList<String>();
     private String comment;
-    private DocletTag[] tags = new DocletTag[0];
+    private List<DocletTag> tags = new LinkedList<DocletTag>();
     
     private JavaClass parentClass;
     /**
@@ -30,30 +30,28 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaModel#getTags()
      */
-    public DocletTag[] getTags() {
+    public List<DocletTag> getTags() {
         return tags;
     }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaModel#getTagsByName(java.lang.String)
      */
-    public DocletTag[] getTagsByName(String name) {
-        List<DocletTag> specifiedTags = new ArrayList<DocletTag>();
-        for (int i = 0; i < tags.length; i++) {
-            DocletTag docletTag = tags[i];
+    public List<DocletTag> getTagsByName(String name) {
+        List<DocletTag> specifiedTags = new LinkedList<DocletTag>();
+        for ( DocletTag docletTag : tags ) {
             if (docletTag.getName().equals(name)) {
                 specifiedTags.add(docletTag);
             }
         }
-        return specifiedTags.toArray(new DocletTag[specifiedTags.size()]);
+        return specifiedTags;
     }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaModel#getTagByName(java.lang.String)
      */
     public DocletTag getTagByName(String name) {
-        for (int i = 0; i < tags.length; i++) {
-            DocletTag docletTag = tags[i];
+        for (DocletTag docletTag : tags) {
             if (docletTag.getName().equals(name)) {
                 return docletTag;
             }
@@ -76,7 +74,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     void commentHeader(IndentBuffer buffer) {
-        if (comment == null && (tags == null || tags.length == 0)) {
+        if (comment == null && tags.isEmpty()) {
             return;
         } else {
             buffer.write("/**");
@@ -90,13 +88,12 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
                 buffer.newline();
             }
 
-            if (tags != null && tags.length > 0) {
+            if (!tags.isEmpty()) {
                 if (comment != null && comment.length() > 0) {
                     buffer.write(" *");
                     buffer.newline();
                 }
-                for (int i = 0; i < tags.length; i++) {
-                    DocletTag docletTag = tags[i];
+                for (DocletTag docletTag : tags) {
                     buffer.write(" * @");
                     buffer.write(docletTag.getName());
                     if (docletTag.getValue().length() > 0) {
@@ -121,8 +118,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     public void setTags(List<DocletTag> tagList) {
-        this.tags = new DocletTag[tagList.size()];
-        tagList.toArray(this.tags);
+        this.tags = tagList;
     }
 
     //helper methods for querying the modifiers

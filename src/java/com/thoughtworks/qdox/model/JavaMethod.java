@@ -331,9 +331,8 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         List<DocletTag> result = new ArrayList<DocletTag>();
         for (int i = 0; i < methods.length; i++) {
             JavaMethod method = methods[i];
-            DocletTag[] tags = method.getTagsByName(name);
-            for (int j = 0; j < tags.length; j++) {
-                DocletTag tag = tags[j];
+            List<DocletTag> tags = method.getTagsByName(name);
+            for (DocletTag tag : tags) {
                 if(!result.contains(tag)) {
                     result.add(tag);
                 }

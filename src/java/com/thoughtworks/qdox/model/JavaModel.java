@@ -1,13 +1,15 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.List;
+
 public interface JavaModel
 {
 
     public String getComment();
 
-    public DocletTag[] getTags();
+    public List<DocletTag> getTags();
 
-    public DocletTag[] getTagsByName( String name );
+    public List<DocletTag> getTagsByName( String name );
 
     public DocletTag getTagByName( String name );
 

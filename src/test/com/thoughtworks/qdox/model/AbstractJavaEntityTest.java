@@ -34,9 +34,9 @@ public class AbstractJavaEntityTest extends TestCase {
         tags.add(new DefaultDocletTag("horse", "not so much"));
         entity.setTags(tags);
 
-        assertEquals(2, entity.getTagsByName("monkey").length);
-        assertEquals(1, entity.getTagsByName("horse").length);
-        assertEquals(0, entity.getTagsByName("non existent tag").length);
+        assertEquals(2, entity.getTagsByName("monkey").size());
+        assertEquals(1, entity.getTagsByName("horse").size());
+        assertEquals(0, entity.getTagsByName("non existent tag").size());
     }
 
     public void testGetSingleTagByName() throws Exception {
@@ -244,6 +244,6 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testGetTagsReturnsEmptyArrayInsteadOfNull() throws Exception {
         JavaModel entity = newAbstractJavaEntity();
-        assertEquals(0, entity.getTags().length);
+        assertEquals(0, entity.getTags().size());
     }
 }

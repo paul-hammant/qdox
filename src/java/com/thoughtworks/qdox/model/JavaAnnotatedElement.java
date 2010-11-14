@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.List;
+
 public interface JavaAnnotatedElement
 {
-    public Annotation[] getAnnotations();
+    public List<Annotation> getAnnotations();
 }

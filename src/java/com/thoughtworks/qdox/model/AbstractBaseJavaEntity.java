@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public class AbstractBaseJavaEntity implements Serializable {
 
@@ -21,8 +23,8 @@ public class AbstractBaseJavaEntity implements Serializable {
 	    return name;
 	}
 
-	public Annotation[] getAnnotations() {
-	    return annotations;
+	public List<Annotation> getAnnotations() {
+	    return Arrays.asList( annotations );
 	}
 
 	public void setName(String name) {

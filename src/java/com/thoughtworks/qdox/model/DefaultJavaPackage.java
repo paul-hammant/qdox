@@ -33,8 +33,8 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
 		this.name = name;
 	}
 
-	public Annotation[] getAnnotations() {
-		return annotations.toArray( new Annotation[0] );
+	public List<Annotation> getAnnotations() {
+		return annotations;
 	}
 
 	public void setAnnotations(Annotation[] annotations) {

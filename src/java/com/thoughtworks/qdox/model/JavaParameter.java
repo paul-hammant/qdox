@@ -1,6 +1,12 @@
 package com.thoughtworks.qdox.model;
 
-public interface JavaParameter
+/**
+ * JavaParameter is an extended version of JavaClass and doesn't exist in the java api. 
+ * 
+ * @author Robert Scholte
+ *
+ */
+public interface JavaParameter extends JavaAnnotatedElement
 {
 
     public static final JavaParameter[] EMPTY_ARRAY = new JavaParameter[0];
@@ -33,7 +39,4 @@ public interface JavaParameter
     public String getResolvedValue();
 
     public String getResolvedGenericValue();
-
-    public Annotation[] getAnnotations();
-
 }

@@ -66,7 +66,7 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.equals( obj );
     }
 
-    public Annotation[] getAnnotations()
+    public List<Annotation> getAnnotations()
     {
         return originalMethod.getAnnotations();
     }

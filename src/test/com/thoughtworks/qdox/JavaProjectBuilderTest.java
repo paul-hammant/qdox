@@ -1063,7 +1063,7 @@ public class JavaProjectBuilderTest
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
         JavaClass javaClass = javaSource.getClasses().get(0);
         JavaMethod javaMethod = javaClass.getMethods()[0];
-        assertEquals("\"test blah blah\"", javaMethod.getAnnotations()[0].getNamedParameter("description").toString());
+        assertEquals("\"test blah blah\"", javaMethod.getAnnotations().get(0).getNamedParameter("description").toString());
     }
     
     public void testJiraQdox134() throws Exception {
@@ -1168,7 +1168,7 @@ public class JavaProjectBuilderTest
                 "public class Foo{}"; 
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        assertNotNull(javaClass.getAnnotations()[0].getNamedParameter("cascade"));
+        assertNotNull(javaClass.getAnnotations().get(0).getNamedParameter("cascade"));
     } 
     
     /**
@@ -1247,8 +1247,8 @@ public class JavaProjectBuilderTest
         assertEquals( 2, javaSource1.getPackage().getClasses().size() );
         assertEquals( 2, javaSource2.getPackage().getClasses().size() );
         assertNotSame( javaSource1.getPackage(), javaSource2.getPackage() );
-        assertEquals( 1, javaSource1.getPackage().getAnnotations().length );
-        assertEquals( 0, javaSource2.getPackage().getAnnotations().length );
+        assertEquals( 1, javaSource1.getPackage().getAnnotations().size() );
+        assertEquals( 0, javaSource2.getPackage().getAnnotations().size() );
         assertEquals( 2, javaSource1.getPackage().getLineNumber() );
         assertEquals( 1, javaSource2.getPackage().getLineNumber() );
     }
@@ -1298,10 +1298,10 @@ public class JavaProjectBuilderTest
         builder.addSource(new StringReader( source ));
         JavaClass classByName = builder.getClassByName("Instruction");
         JavaField fieldByName = classByName.getFieldByName("testfield");
-        Annotation[] annotations = fieldByName.getAnnotations();
+        List<Annotation> annotations = fieldByName.getAnnotations();
         
         // Now we do have the annotation "JoinColumn" in annotations[0]
-        Map propertyMap = annotations[0].getNamedParameterMap();
+        Map propertyMap = annotations.get(0).getNamedParameterMap();
         // This one works
         assertEquals("\"hi\"", propertyMap.get("bla"));
         String string = (String) propertyMap.get("name");

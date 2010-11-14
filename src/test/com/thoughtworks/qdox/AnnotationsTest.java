@@ -104,10 +104,10 @@ public class AnnotationsTest extends TestCase {
 
         builder.addSource(new StringReader(source));
         assertNotNull(builder.getClassByName("BitTwiddle"));
-        assertNotNull( builder.getClassByName("BitTwiddle").getAnnotations()[0].getNamedParameter("value") );
+        assertNotNull( builder.getClassByName("BitTwiddle").getAnnotations().get(0).getNamedParameter("value") );
         assertEquals( "Author", builder.getClassByName("BitTwiddle")
         	.getMethodBySignature("doStuff", new Type[] {})
-        		.getAnnotations()[0].getType().getValue() );
+        		.getAnnotations().get(0).getType().getValue() );
     }
 
     public void testShouldIgnoreAnnotationDeclaration() {
@@ -180,7 +180,7 @@ public class AnnotationsTest extends TestCase {
     	String source = "@Anno(run = \"1.0\")"+
     	"public interface Foo {}";
         builder.addSource(new StringReader(source));
-        assertEquals("\"1.0\"", builder.getClassByName("Foo").getAnnotations()[0].getProperty("run").getParameterValue());
+        assertEquals("\"1.0\"", builder.getClassByName("Foo").getAnnotations().get(0).getProperty("run").getParameterValue());
     }
 
     // from QDOX-135
@@ -196,7 +196,7 @@ public class AnnotationsTest extends TestCase {
     	JavaClass clazz = builder.getClassByName("Foo");
     	JavaMethod mth = clazz.getMethods()[0];
     	assertEquals("Foo", clazz.getName());
-    	assertEquals("X", mth.getAnnotations()[0].getType().getJavaClass().getName());
+    	assertEquals("X", mth.getAnnotations().get(0).getType().getJavaClass().getName());
     }
 
     // from QDOX-142
@@ -204,7 +204,7 @@ public class AnnotationsTest extends TestCase {
     	String source = "@MyAnnotation()\n" +
     			"public class MyClass {}";
     	builder.addSource(new StringReader(source));
-    	assertEquals("MyAnnotation", builder.getClasses()[0].getAnnotations()[0].getType().getValue());
+    	assertEquals("MyAnnotation", builder.getClasses()[0].getAnnotations().get(0).getType().getValue());
     }
     
     public void testMethodAnnotationBeforeComment() throws Exception {
@@ -216,7 +216,7 @@ public class AnnotationsTest extends TestCase {
     			" public boolean isPostback() { return true;}\n" +
     			"}";
     	builder.addSource(new StringReader(source));
-    	assertEquals("java.lang.Override", builder.getClasses()[0].getMethods()[0].getAnnotations()[0].getType().getValue());
+    	assertEquals("java.lang.Override", builder.getClasses()[0].getMethods()[0].getAnnotations().get(0).getType().getValue());
     }
     
     public void testEnumsWithAnnotations() throws Exception {
@@ -238,8 +238,8 @@ public class AnnotationsTest extends TestCase {
         		"}";
         builder.addSource( new StringReader( source ) );
         JavaMethod jMethod = builder.getClasses()[0].getMethods()[0];
-        assertEquals( "NativeAccessible", jMethod.getAnnotations()[0].getType().getValue() );
-        Annotation annotation = jMethod.getParameters()[1].getAnnotations()[0];
+        assertEquals( "NativeAccessible", jMethod.getAnnotations().get(0).getType().getValue() );
+        Annotation annotation = jMethod.getParameters()[1].getAnnotations().get(0);
         assertEquals( "ParamInfo", annotation.getType().getValue() );
         assertEquals( "ParamInfo.Direction.OUT", annotation.getProperty( "direction" ).getParameterValue() );
     }
@@ -252,7 +252,7 @@ public class AnnotationsTest extends TestCase {
         		"}";
         builder.addSource( new StringReader( source ) );
         JavaMethod method = builder.getClasses()[0].getMethods()[0];
-        AnnotationFieldRef suppressWarnings = (AnnotationFieldRef) method.getAnnotations()[0].getProperty( "value" );
+        AnnotationFieldRef suppressWarnings = (AnnotationFieldRef) method.getAnnotations().get(0).getProperty( "value" );
         assertEquals( builder.getClasses()[0].getFields()[0], suppressWarnings.getField());
     }
     

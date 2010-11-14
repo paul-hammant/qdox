@@ -5,6 +5,7 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TagParser {
@@ -37,8 +38,8 @@ public class TagParser {
     /**
      * Extract a Map of named parameters  
      */
-    public static Map parseNamedParameters(String tagValue) {
-        Map paramMap = new LinkedHashMap();
+    public static Map<String, String> parseNamedParameters(String tagValue) {
+        Map<String, String> paramMap = new LinkedHashMap<String, String>();
         StreamTokenizer tokenizer = makeTokenizer(tagValue);
         try {
             while (tokenizer.nextToken() == StreamTokenizer.TT_WORD) {
@@ -66,7 +67,7 @@ public class TagParser {
      */
     public static String[] parseWords(String tagValue) {
         StreamTokenizer tokenizer = makeTokenizer(tagValue);
-        ArrayList wordList = new ArrayList();
+        List<String> wordList = new ArrayList<String>();
         try {
             while (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
                 if (tokenizer.sval == null) {
@@ -79,9 +80,7 @@ public class TagParser {
             e.printStackTrace();
             throw new RuntimeException("error tokenizing tag");
         }
-        String[] wordArray = new String[wordList.size()];
-        wordList.toArray(wordArray);
-        return wordArray;
+        return wordList.toArray(new String[0]);
     }
     
     /**
@@ -90,7 +89,7 @@ public class TagParser {
      */
     public static String[] parseParameters(String tagValue) {
         StreamTokenizer tokenizer = makeTokenizer(tagValue);
-        ArrayList wordList = new ArrayList();
+        List<String> wordList = new ArrayList<String>();
         try {
             while (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
                 StringBuffer param = new StringBuffer();
@@ -117,9 +116,7 @@ public class TagParser {
             e.printStackTrace();
             throw new RuntimeException("error tokenizing tag");
         }
-        String[] wordArray = new String[wordList.size()];
-        wordList.toArray(wordArray);
-        return wordArray;
+        return wordList.toArray(new String[0]);
     }
     
 }

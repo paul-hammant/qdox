@@ -1028,8 +1028,8 @@ public class JavaProjectBuilderTest
         assertEquals("Class", PropertyClass.class.getName(), javaClass.getFullyQualifiedName());
         JavaField javaField = javaClass.getFieldByName("aField");
         assertNotNull("Field", javaField);
-        Set modifiers = new HashSet(Arrays.asList(javaField.getModifiers()));
-        assertEquals("Modifier count", 2, javaField.getModifiers().length);
+        Set modifiers = new HashSet(javaField.getModifiers());
+        assertEquals("Modifier count", 2, javaField.getModifiers().size());
         assertTrue("Static", modifiers.contains("static"));
         assertTrue("Public", modifiers.contains("public"));
     }

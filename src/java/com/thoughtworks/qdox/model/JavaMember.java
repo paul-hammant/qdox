@@ -2,6 +2,7 @@ package com.thoughtworks.qdox.model;
 
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
+import java.util.List;
 
 /**
  * JavaModel representation of a {@link Member} including related methods of {@ Modifier}
@@ -21,7 +22,7 @@ public interface JavaMember
      * 
      * @return all modifiers is this member
      */
-    public String[] getModifiers();
+    public List<String> getModifiers();
     
     
     /**

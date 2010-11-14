@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -239,14 +241,14 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(0, source.getClasses().get(0).getModifiers().length);
-        assertEquals(2, source.getClasses().get(1).getModifiers().length);
+        assertEquals(0, source.getClasses().get(0).getModifiers().size());
+        assertEquals(2, source.getClasses().get(1).getModifiers().size());
 
         // sorted
-        String[] modifiers = source.getClasses().get(1).getModifiers();
-        Arrays.sort(modifiers);
-        assertEquals("final", modifiers[0]);
-        assertEquals("public", modifiers[1]);
+        List<String> modifiers = source.getClasses().get(1).getModifiers();
+        Collections.sort(modifiers);
+        assertEquals("final", modifiers.get(0));
+        assertEquals("public", modifiers.get(1));
     }
 
     public void testAddMethodsToCorrectClass() throws Exception {
@@ -319,7 +321,7 @@ public class ModelBuilderTest extends TestCase {
         assertEquals("void", doSomething.getReturns().getValue());
         JavaSource parentSource = doSomething.getReturns().getJavaClassParent().getParentSource();
         assertSame(source, parentSource);
-        assertEquals(0, doSomething.getModifiers().length);
+        assertEquals(0, doSomething.getModifiers().size());
         assertEquals(0, doSomething.getParameters().length);
         assertEquals(0, doSomething.getExceptions().length);
     }
@@ -453,13 +455,13 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
         JavaMethod result = source.getClasses().get(0).getMethods()[0];
-        assertEquals(3, result.getModifiers().length);
+        assertEquals(3, result.getModifiers().size());
         // sorted
-        String[] modifiers = result.getModifiers();
-        Arrays.sort(modifiers);
-        assertEquals("final", modifiers[0]);
-        assertEquals("public", modifiers[1]);
-        assertEquals("synchronized", modifiers[2]);
+        List<String> modifiers = result.getModifiers();
+        Collections.sort(modifiers);
+        assertEquals("final", modifiers.get(0));
+        assertEquals("public", modifiers.get(1));
+        assertEquals("synchronized", modifiers.get(2));
     }
 
     public void testSimpleField() throws Exception {
@@ -484,8 +486,8 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
 
         FieldDef fld = new FieldDef();
-        fld.modifiers.add("blah");
         fld.modifiers.add("blah2");
+        fld.modifiers.add("blah");
         builder.addField(fld);
         builder.endClass();
 
@@ -494,9 +496,9 @@ public class ModelBuilderTest extends TestCase {
         JavaField result = source.getClasses().get(0).getFields()[0];
         assertNotNull(result);
         assertNotNull(result.getModifiers());
-        Arrays.sort(result.getModifiers());
-        assertEquals("blah2", result.getModifiers()[0]);
-        assertEquals("blah", result.getModifiers()[1]);
+        Collections.sort(result.getModifiers());
+        assertEquals("blah", result.getModifiers().get(0));
+        assertEquals("blah2", result.getModifiers().get(1));
     }
 
     public void testFieldNoArray() throws Exception {

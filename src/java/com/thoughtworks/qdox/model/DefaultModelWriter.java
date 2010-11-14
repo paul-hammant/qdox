@@ -197,8 +197,7 @@ public class DefaultModelWriter implements ModelWriter
     
     private void writeNonAccessibilityModifiers(JavaMember member) {
         // modifiers (anything else)
-        for ( int index = 0; index < member.getModifiers().length; index++) {
-            String modifier = member.getModifiers()[index];
+        for ( String modifier: member.getModifiers() ) {
             if (!modifier.startsWith("p")) {
                 buffer.write(modifier);
                 buffer.write(' ');
@@ -207,8 +206,7 @@ public class DefaultModelWriter implements ModelWriter
     }
 
     private void writeAccessibilityModifier(JavaMember member) {
-        for ( int index = 0; index < member.getModifiers().length; index++) {
-            String modifier = member.getModifiers()[index];
+        for ( String modifier: member.getModifiers() ) {
             if (modifier.startsWith("p")) {
                 buffer.write(modifier);
                 buffer.write(' ');
@@ -217,8 +215,7 @@ public class DefaultModelWriter implements ModelWriter
     }
 
     private void writeAllModifiers(JavaMember member) {
-        for ( int index = 0; index < member.getModifiers().length; index++) {
-            String modifier = member.getModifiers()[index];
+        for ( String modifier: member.getModifiers() ) {
             buffer.write(modifier);
             buffer.write(' ');
         }

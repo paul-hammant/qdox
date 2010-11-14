@@ -106,7 +106,7 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.getLineNumber();
     }
 
-    public String[] getModifiers()
+    public List<String> getModifiers()
     {
         return originalMethod.getModifiers();
     }

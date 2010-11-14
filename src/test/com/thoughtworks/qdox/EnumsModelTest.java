@@ -55,8 +55,8 @@ public class EnumsModelTest extends TestCase {
         
         JavaField enum1a = fields1[0];
         assertNull( enum1a.getComment() );
-        assertEquals( 1, enum1a.getModifiers().length );
-        assertEquals( "public", enum1a.getModifiers()[0] );
+        assertEquals( 1, enum1a.getModifiers().size() );
+        assertEquals( "public", enum1a.getModifiers().get(0) );
         assertEquals( 0, enum1a.getAnnotations().size() );
         assertEquals( "Enum1", enum1a.getType().toString() );
         assertEquals( "a", enum1a.getName() );
@@ -69,7 +69,7 @@ public class EnumsModelTest extends TestCase {
         
         JavaField enum2d = fields2[1];
         assertNotNull( enum2d.getComment() );
-        assertEquals( 0, enum2d.getModifiers().length );
+        assertEquals( 0, enum2d.getModifiers().size() );
         assertEquals( 0, enum2d.getAnnotations().size() );
         assertEquals( "X$Enum2", enum2d.getType().getFullyQualifiedName() );
         assertEquals( "d", enum2d.getName() );
@@ -154,7 +154,7 @@ public class EnumsModelTest extends TestCase {
         
         JavaField enum1c = fields[0];
         assertNull( enum1c.getComment() );
-        assertEquals( 0, enum1c.getModifiers().length );
+        assertEquals( 0, enum1c.getModifiers().size() );
         assertEquals( 0, enum1c.getAnnotations().size() );
         assertEquals( "X$EnumWithConstructors", enum1c.getType().getFullyQualifiedName() );
         assertEquals( "c", enum1c.getName() );
@@ -163,7 +163,7 @@ public class EnumsModelTest extends TestCase {
         
         JavaField enum1d = fields[1];
         assertNull( enum1d.getComment() );
-        assertEquals( 0, enum1d.getModifiers().length );
+        assertEquals( 0, enum1d.getModifiers().size() );
         assertEquals( "X$EnumWithConstructors", enum1d.getType().getFullyQualifiedName() );
         assertEquals( "d", enum1d.getName() );
 

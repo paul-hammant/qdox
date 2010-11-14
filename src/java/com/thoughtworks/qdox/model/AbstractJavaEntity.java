@@ -16,8 +16,8 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
      * Return list of modifiers as Strings.
      * (public, private, protected, final, abstract, static)
      */
-    public String[] getModifiers() {
-        return modifiers.toArray(new String[modifiers.size()]);
+    public List<String> getModifiers() {
+        return modifiers;
     }
 
     /* (non-Javadoc)

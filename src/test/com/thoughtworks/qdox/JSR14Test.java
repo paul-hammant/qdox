@@ -386,11 +386,11 @@ public class JSR14Test extends TestCase {
         builder.addSource(new StringReader(source2));
         builder.addSource(new StringReader(source3));
         JavaClass genericControllerImpl = builder.getSources()[0].getClasses().get(0);
-        assertEquals( 3, genericControllerImpl.getTypeParameters().length );
+        assertEquals( 3, genericControllerImpl.getTypeParameters().size() );
         JavaClass groupControllerImpl = builder.getSources()[1].getClasses().get(0);
-        assertEquals( 0, groupControllerImpl.getTypeParameters().length );
+        assertEquals( 0, groupControllerImpl.getTypeParameters().size() );
         JavaClass genericController = builder.getSources()[2].getClasses().get(0);
-        assertEquals( 2, genericController.getTypeParameters().length );
+        assertEquals( 2, genericController.getTypeParameters().size() );
     }
     
     // For QDOX-206

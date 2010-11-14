@@ -356,9 +356,9 @@ public class Type implements Comparable, Serializable {
      * @since 1.12
      */
     protected int getTypeVariableIndex( JavaClass superClass ) {
-        TypeVariable[] typeVariables = superClass.getTypeParameters();
-        for(int typeIndex=0;typeIndex<typeVariables.length; typeIndex++) {
-            if(typeVariables[typeIndex].getFullyQualifiedName().equals( getFullyQualifiedName())) {
+        List<TypeVariable> typeVariables = superClass.getTypeParameters();
+        for(int typeIndex=0;typeIndex<typeVariables.size(); typeIndex++) {
+            if(typeVariables.get(typeIndex).getFullyQualifiedName().equals( getFullyQualifiedName())) {
                 return typeIndex;
             }
         }
@@ -395,11 +395,11 @@ public class Type implements Comparable, Serializable {
             }
             else if ( subclass.getImplementedInterfaces() != null )
             {
-                for ( int i = 0; i < subclass.getImplementedInterfaces().length; i++ )
+                for ( int i = 0; i < subclass.getImplementedInterfaces().size(); i++ )
                 {
                     if ( fqn.equals( subclass.getImplements().get(i).getFullyQualifiedName() ) ) 
                     {
-                        result = subclass.getImplements().get(i).getActualTypeArguments()[typeIndex].resolve( subclass.getImplementedInterfaces()[i] );
+                        result = subclass.getImplements().get(i).getActualTypeArguments()[typeIndex].resolve( subclass.getImplementedInterfaces().get(i) );
                         break;
                     }
                 }

@@ -103,11 +103,10 @@ public class ModelBuilder implements Builder {
         
         // typeParameters
         if (def.typeParams != null) {
-            TypeVariable[] typeParams = new TypeVariable[def.typeParams.size()];
-            int index = 0;
+            List<TypeVariable> typeParams = new LinkedList<TypeVariable>();
             for(Iterator<TypeVariableDef> iterator = def.typeParams.iterator(); iterator.hasNext();) {
                 TypeVariableDef typeVariableDef = (TypeVariableDef) iterator.next();
-                typeParams[index++] = createTypeVariable(typeVariableDef);
+                typeParams.add(createTypeVariable(typeVariableDef));
             }
             currentClass.setTypeParameters(typeParams);
         }

@@ -32,7 +32,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private Type type;
     private Type superClass;
     private List<Type> implementz = new LinkedList<Type>();
-    private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
+    private List<TypeVariable> typeParameters = new LinkedList<TypeVariable>(); 
     
     //sourceless class can use this property
 	private JavaPackage javaPackage;
@@ -113,12 +113,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     /**
      * @since 1.3
      */
-    public JavaClass[] getImplementedInterfaces() {
-        List<Type> type = getImplements();
-        JavaClass[] result = new JavaClass[type.size()];
+    public List<JavaClass> getImplementedInterfaces() {
+        List<JavaClass> result = new LinkedList<JavaClass>();
 
-        for (int i = 0; i < result.length; i++) {
-            result[i] = type.get(i).getJavaClass();
+        for (Type type : getImplements()) {
+            result.add(type.getJavaClass());
         }
 
         return result;
@@ -154,12 +153,12 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         this.implementz = implementz;
     }
     
-    public TypeVariable[] getTypeParameters()
+    public List<TypeVariable> getTypeParameters()
     {
         return typeParameters;
     }
     
-    public void setTypeParameters( TypeVariable[] typeParameters )
+    public void setTypeParameters( List<TypeVariable> typeParameters )
     {
         this.typeParameters = typeParameters;
     }
@@ -284,12 +283,10 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
                     superclass);
         }
 
-        JavaClass[] implementz = callingClazz.getImplementedInterfaces();
-
-        for (int i = 0; i < implementz.length; i++) {
-            if (implementz[i] != null) {
+        for (JavaClass clazz : callingClazz.getImplementedInterfaces()) {
+            if (clazz!= null) {
                 callingClazz.addMethodsFromSuperclassAndInterfaces(signatures, methodList,
-                        implementz[i]);
+                        clazz);
             }
         }
     }
@@ -412,12 +409,8 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
                 }
             }
 
-            JavaClass[] implementz = getImplementedInterfaces();
-
-            for (int i = 0; i < implementz.length; i++) {
-                JavaMethod method = implementz[i].getMethodBySignature(name,
-                        parameterTypes, true, varArg );
-
+            for (JavaClass clazz : getImplementedInterfaces()) {
+                JavaMethod method = clazz.getMethodBySignature(name, parameterTypes, true, varArg );
                 if (method != null) {
                     result.add( new JavaMethodDelegate( this, method ) );
                 }
@@ -635,11 +628,9 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
                 addTagsRecursive(result, superclass, name, superclasses);
             }
 
-            JavaClass[] implementz = javaClass.getImplementedInterfaces();
-
-            for (int h = 0; h < implementz.length; h++) {
-                if (implementz[h] != null) {
-                    addTagsRecursive(result, implementz[h], name, superclasses);
+            for (JavaClass implementz : javaClass.getImplementedInterfaces()) {
+                if (implementz != null) {
+                    addTagsRecursive(result, implementz, name, superclasses);
                 }
             }
         }

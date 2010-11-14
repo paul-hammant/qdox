@@ -3,8 +3,8 @@ package com.thoughtworks.qdox.library;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
@@ -18,7 +18,7 @@ import com.thoughtworks.qdox.model.JavaSource;
 public class SourceFolderLibrary
     extends SourceLibrary
 {
-    private List sourceFolders = new ArrayList(); // <java.io.File>
+    private List<File> sourceFolders = new LinkedList<File>();
 
     public SourceFolderLibrary( AbstractClassLibrary parent  )
     {
@@ -42,9 +42,8 @@ public class SourceFolderLibrary
     protected JavaClass resolveJavaClass( String className )
     {
         JavaClass result = null;
-        for ( Iterator iterator = sourceFolders.iterator(); iterator.hasNext(); )
+        for ( File sourceFolder : sourceFolders )
         {
-            File sourceFolder = (File) iterator.next();
             String mainClassName = className.split( "\\$" )[0];
             File classFile = new File( sourceFolder, mainClassName.replace( '.', File.separatorChar ) + ".java" );
             if ( classFile.exists() && classFile.isFile() )
@@ -69,7 +68,7 @@ public class SourceFolderLibrary
     protected boolean containsClassReference( String className )
     {
         boolean result = false;
-        for ( Iterator iterator = sourceFolders.iterator(); !result && iterator.hasNext(); )
+        for ( Iterator<File> iterator = sourceFolders.iterator(); !result && iterator.hasNext(); )
         {
             File sourceFolder = (File) iterator.next();
             String mainClassName = className.split( "\\$" )[0];

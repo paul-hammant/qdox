@@ -17,10 +17,10 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 public class BinaryClassParser
 {
-    private Class clazz;
+    private Class<?> clazz;
     private ModelBuilder binaryBuilder;
     
-    public BinaryClassParser(Class clazz, ModelBuilder modelBuilder)
+    public BinaryClassParser(Class<?> clazz, ModelBuilder modelBuilder)
     {
         this.clazz = clazz;
         this.binaryBuilder = modelBuilder;
@@ -38,21 +38,21 @@ public class BinaryClassParser
             classDef.name = getClassName(name);
 
             // Set the extended class and interfaces.
-            Class[] interfaces = clazz.getInterfaces();
+            Class<?>[] interfaces = clazz.getInterfaces();
             if (clazz.isInterface()) {
                 // It's an interface
                 classDef.type = ClassDef.INTERFACE;
                 for (int i = 0; i < interfaces.length; i++) {
-                    Class anInterface = interfaces[i];
+                    Class<?> anInterface = interfaces[i];
                     classDef.extendz.add(new TypeDef(anInterface.getName()));
                 }
             } else {
                 // It's a class
                 for (int i = 0; i < interfaces.length; i++) {
-                    Class anInterface = interfaces[i];
+                    Class<?> anInterface = interfaces[i];
                     classDef.implementz.add(new TypeDef(anInterface.getName()));
                 }
-                Class superclass = clazz.getSuperclass();
+                Class<?> superclass = clazz.getSuperclass();
                 if (superclass != null) {
                     classDef.extendz.add(new TypeDef(superclass.getName()));
                 }
@@ -67,7 +67,7 @@ public class BinaryClassParser
             // This also adds the default constructor if any which is different
             // to the source code as that does not create a default constructor
             // if no constructor exists.
-            Constructor[] constructors = clazz.getDeclaredConstructors();
+            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
             for (int i = 0; i < constructors.length; i++) {
                 addMethodOrConstructor(constructors[i], binaryBuilder);
             }
@@ -91,7 +91,7 @@ public class BinaryClassParser
         }
     }
     
-    private void addModifiers(Set set, int modifier) {
+    private void addModifiers(Set<String> set, int modifier) {
         String modifierString = Modifier.toString(modifier);
         for (StringTokenizer stringTokenizer = new StringTokenizer(modifierString); stringTokenizer.hasMoreTokens();) {
             set.add(stringTokenizer.nextToken());
@@ -100,7 +100,7 @@ public class BinaryClassParser
 
     private void addField(Field field, ModelBuilder binaryBuilder) {
         FieldDef fieldDef = new FieldDef();
-        Class fieldType = field.getType();
+        Class<?> fieldType = field.getType();
         fieldDef.name = field.getName();
         fieldDef.type = getTypeDef(fieldType);
         fieldDef.dimensions = getDimension(fieldType);
@@ -116,8 +116,8 @@ public class BinaryClassParser
         methodDef.name = member.getName().substring(lastDot + 1);
 
         addModifiers(methodDef.modifiers, member.getModifiers());
-        Class[] exceptions;
-        Class[] parameterTypes;
+        Class<?>[] exceptions;
+        Class<?>[] parameterTypes;
         if (member instanceof Method) {
             methodDef.constructor = false;
 
@@ -126,24 +126,24 @@ public class BinaryClassParser
             exceptions = ((Method) member).getExceptionTypes();
             parameterTypes = ((Method) member).getParameterTypes();
 
-            Class returnType = ((Method) member).getReturnType();
+            Class<?> returnType = ((Method) member).getReturnType();
             methodDef.returnType = getTypeDef(returnType);
             methodDef.dimensions = getDimension(returnType);
 
         } else {
             methodDef.constructor = true;
 
-            exceptions = ((Constructor) member).getExceptionTypes();
-            parameterTypes = ((Constructor) member).getParameterTypes();
+            exceptions = ((Constructor<?>) member).getExceptionTypes();
+            parameterTypes = ((Constructor<?>) member).getParameterTypes();
         }
         for (int j = 0; j < exceptions.length; j++) {
-            Class exception = exceptions[j];
+            Class<?> exception = exceptions[j];
             methodDef.exceptions.add(exception.getName());
         }
         binaryBuilder.addMethod(methodDef);
         for (int j = 0; j < parameterTypes.length; j++) {
             FieldDef param = new FieldDef();
-            Class parameterType = parameterTypes[j];
+            Class<?> parameterType = parameterTypes[j];
             param.name = "p" + j;
             param.type = getTypeDef(parameterType);
             param.dimensions = getDimension(parameterType);
@@ -151,15 +151,15 @@ public class BinaryClassParser
         }
     }
 
-    private static final int getDimension(Class c) {
+    private static final int getDimension(Class<?> c) {
         return c.getName().lastIndexOf('[') + 1;
     }
 
-    private static String getTypeName(Class c) {
+    private static String getTypeName(Class<?> c) {
         return c.getComponentType() != null ? c.getComponentType().getName() : c.getName();
     }
     
-    private static TypeDef getTypeDef(Class c) {
+    private static TypeDef getTypeDef(Class<?> c) {
         return new TypeDef(getTypeName(c));
     }
     

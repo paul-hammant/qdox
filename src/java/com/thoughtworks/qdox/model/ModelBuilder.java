@@ -29,16 +29,16 @@ public class ModelBuilder implements Builder {
     private JavaClassParent currentParent;
     private JavaClass currentClass;
     private JavaMethod currentMethod;
-    private List currentAnnoDefs;
+    private List<Annotation> currentAnnoDefs;
     private String lastComment;
-    private List lastTagSet;
+    private List<TagDef> lastTagSet;
     private DocletTagFactory docletTagFactory;
 
     public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
         source = new DefaultJavaSource(classLibrary);
         currentParent = source;
-        currentAnnoDefs = new ArrayList();
+        currentAnnoDefs = new ArrayList<Annotation>();
     }
     
     public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
@@ -59,7 +59,7 @@ public class ModelBuilder implements Builder {
 
     public void addJavaDoc(String text) {
         lastComment = text;
-        lastTagSet = new LinkedList();
+        lastTagSet = new LinkedList<TagDef>();
     }
 
     public void addJavaDocTag(TagDef tagDef) {
@@ -85,11 +85,11 @@ public class ModelBuilder implements Builder {
 
         // implements
         {
-            Set implementSet = currentClass.isInterface() ? def.extendz : def.implementz;
-            Iterator implementIt = implementSet.iterator();
+            Set<TypeDef> implementSet = currentClass.isInterface() ? def.extendz : def.implementz;
+            Iterator<TypeDef> implementIt = implementSet.iterator();
             Type[] implementz = new Type[implementSet.size()];
             for (int i = 0; i < implementz.length && implementIt.hasNext(); i++) {
-                implementz[i] = createType((TypeDef) implementIt.next(), 0);
+                implementz[i] = createType(implementIt.next(), 0);
             }
             currentClass.setImplementz(implementz);
         }
@@ -105,7 +105,7 @@ public class ModelBuilder implements Builder {
         if (def.typeParams != null) {
             TypeVariable[] typeParams = new TypeVariable[def.typeParams.size()];
             int index = 0;
-            for(Iterator iterator = def.typeParams.iterator(); iterator.hasNext();) {
+            for(Iterator<TypeVariableDef> iterator = def.typeParams.iterator(); iterator.hasNext();) {
                 TypeVariableDef typeVariableDef = (TypeVariableDef) iterator.next();
                 typeParams[index++] = createTypeVariable(typeVariableDef);
             }
@@ -169,10 +169,10 @@ public class ModelBuilder implements Builder {
 
         entity.setComment(lastComment);
         
-        Iterator tagDefIterator = lastTagSet.iterator();
-        List tagList = new ArrayList();
+        Iterator<TagDef> tagDefIterator = lastTagSet.iterator();
+        List<DocletTag> tagList = new ArrayList<DocletTag>();
         while (tagDefIterator.hasNext()) {
-            TagDef tagDef = (TagDef) tagDefIterator.next();
+            TagDef tagDef = tagDefIterator.next();
             tagList.add( 
                 docletTagFactory.createDocletTag(
                     tagDef.name, tagDef.text, 
@@ -208,7 +208,7 @@ public class ModelBuilder implements Builder {
         if (def.typeParams != null) {
         	TypeVariable[] typeParams = new TypeVariable[def.typeParams.size()];
         	int index = 0;
-        	for(Iterator iterator = def.typeParams.iterator(); iterator.hasNext();) {
+        	for(Iterator<TypeVariableDef> iterator = def.typeParams.iterator(); iterator.hasNext();) {
         		TypeVariableDef typeVariableDef = (TypeVariableDef) iterator.next();
         		typeParams[index++] = createTypeVariable(typeVariableDef);
         	}
@@ -219,7 +219,7 @@ public class ModelBuilder implements Builder {
         {
             Type[] exceptions = new Type[def.exceptions.size()];
             int index = 0;
-            for (Iterator iter = def.exceptions.iterator(); iter.hasNext();) {
+            for (Iterator<String> iter = def.exceptions.iterator(); iter.hasNext();) {
                 exceptions[index++] = createType((String) iter.next(), 0);
             }
             currentMethod.setExceptions(exceptions);
@@ -249,7 +249,7 @@ public class ModelBuilder implements Builder {
 
 	}
 
-	public TypeVariable createTypeVariable(String name, List typeParams) {
+	public TypeVariable createTypeVariable(String name, List<TypeDef> typeParams) {
     	if( name == null || name.equals( "" ) )
             return null;
     	
@@ -305,8 +305,8 @@ public class ModelBuilder implements Builder {
             };
 
             Annotation[] annotations = new Annotation[currentAnnoDefs.size()];
-            for( ListIterator iter = currentAnnoDefs.listIterator(); iter.hasNext(); ) {
-                Annotation annotation = (Annotation) iter.next();
+            for( ListIterator<Annotation> iter = currentAnnoDefs.listIterator(); iter.hasNext(); ) {
+                Annotation annotation = iter.next();
                 annotation.accept(visitor);
                 annotations[iter.previousIndex()] = annotation;
             }

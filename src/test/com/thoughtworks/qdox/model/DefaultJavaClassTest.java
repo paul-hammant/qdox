@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.Arrays;
+
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 
 public class DefaultJavaClassTest
@@ -127,7 +129,7 @@ public class DefaultJavaClassTest
 
     public void setImplementz( JavaClass clazz, Type[] implementz )
     {
-        clazz.setImplementz( implementz );
+        clazz.setImplementz( Arrays.asList( implementz ) );
     }
 
     public void setInterface( JavaClass clazz, boolean isInterface )

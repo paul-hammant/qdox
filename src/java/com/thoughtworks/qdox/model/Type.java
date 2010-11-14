@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
@@ -302,9 +303,8 @@ public class Type implements Comparable, Serializable {
             JavaClass javaClass = getJavaClass();
             if (javaClass != null) {
                 // ask our interfaces
-                Type[] implementz = javaClass.getImplements();
-                for (int i = 0; i < implementz.length; i++) {
-                    if (implementz[i].isA(type)) {
+                for (Type implementz : javaClass.getImplements()) {
+                    if (implementz.isA(type)) {
                         return true;
                     }
                 }
@@ -397,9 +397,9 @@ public class Type implements Comparable, Serializable {
             {
                 for ( int i = 0; i < subclass.getImplementedInterfaces().length; i++ )
                 {
-                    if ( fqn.equals( subclass.getImplements()[i].getFullyQualifiedName() ) ) 
+                    if ( fqn.equals( subclass.getImplements().get(i).getFullyQualifiedName() ) ) 
                     {
-                        result = subclass.getImplements()[i].getActualTypeArguments()[typeIndex].resolve( subclass.getImplementedInterfaces()[i] );
+                        result = subclass.getImplements().get(i).getActualTypeArguments()[typeIndex].resolve( subclass.getImplementedInterfaces()[i] );
                         break;
                     }
                 }

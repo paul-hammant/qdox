@@ -87,9 +87,9 @@ public class ModelBuilder implements Builder {
         {
             Set<TypeDef> implementSet = currentClass.isInterface() ? def.extendz : def.implementz;
             Iterator<TypeDef> implementIt = implementSet.iterator();
-            Type[] implementz = new Type[implementSet.size()];
-            for (int i = 0; i < implementz.length && implementIt.hasNext(); i++) {
-                implementz[i] = createType(implementIt.next(), 0);
+            List<Type> implementz = new LinkedList<Type>();
+            while (implementIt.hasNext()) {
+                implementz.add(createType(implementIt.next(), 0));
             }
             currentClass.setImplementz(implementz);
         }

@@ -57,15 +57,15 @@ public class DefaultModelWriter implements ModelWriter
         }
 
         // implements
-        if (clazz.getImplements().length > 0) {
+        if (clazz.getImplements().size() > 0) {
             buffer.write(clazz.isInterface() ? " extends " : " implements ");
 
-            for (int i = 0; i < clazz.getImplements().length; i++) {
+            for (int i = 0; i < clazz.getImplements().size(); i++) {
                 if (i > 0) {
                     buffer.write(", ");
                 }
 
-                buffer.write(clazz.getImplements()[i].getValue());
+                buffer.write(clazz.getImplements().get(i).getValue());
             }
         }
 

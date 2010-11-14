@@ -233,7 +233,7 @@ public class JSR14Test extends TestCase {
         String source = "public class Something implements java.util.List<String> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        Type implementsClass = javaClass.getImplements()[0];
+        Type implementsClass = javaClass.getImplements().get(0);
         assertEquals("java.util.List<java.lang.String>", implementsClass.getGenericValue());
     }
     
@@ -241,7 +241,7 @@ public class JSR14Test extends TestCase {
         String source = "public class Something implements java.util.Map<String, Object> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        Type implementsClass = javaClass.getImplements()[0];
+        Type implementsClass = javaClass.getImplements().get(0);
         assertEquals("java.util.Map<java.lang.String,java.lang.Object>", implementsClass.getGenericValue());
     }
     
@@ -249,7 +249,7 @@ public class JSR14Test extends TestCase {
     	String source = "public class Something implements java.util.List<?>{}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements()[0];
+    	Type implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List<?>", implementsClass.getGenericValue());
     }
 
@@ -257,7 +257,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something implements java.util.List<? extends Number> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements()[0];
+    	Type implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List<? extends java.lang.Number>", implementsClass.getGenericValue());
     }
 	
@@ -265,7 +265,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something implements java.util.List<? super Integer> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements()[0];
+    	Type implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List<? super java.lang.Integer>", implementsClass.getGenericValue());
     }
 	
@@ -273,7 +273,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something implements java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements()[0];
+    	Type implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericValue());
     }
     
@@ -281,7 +281,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something implements java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements()[0];
+    	Type implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericValue());
     }
     

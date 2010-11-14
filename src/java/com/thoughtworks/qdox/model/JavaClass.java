@@ -31,7 +31,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     // Don't access this directly. Use asType() to get my Type
     private Type type;
     private Type superClass;
-    private Type[] implementz = new Type[0];
+    private List<Type> implementz = new LinkedList<Type>();
     private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
     
     //sourceless class can use this property
@@ -106,7 +106,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         }
     }
 
-    public Type[] getImplements() {
+    public List<Type> getImplements() {
         return implementz;
     }
 
@@ -114,11 +114,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @since 1.3
      */
     public JavaClass[] getImplementedInterfaces() {
-        Type[] type = getImplements();
-        JavaClass[] result = new JavaClass[type.length];
+        List<Type> type = getImplements();
+        JavaClass[] result = new JavaClass[type.size()];
 
         for (int i = 0; i < result.length; i++) {
-            result[i] = type[i].getJavaClass();
+            result[i] = type.get(i).getJavaClass();
         }
 
         return result;
@@ -150,7 +150,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         superClass = type;
     }
 
-    public void setImplementz(Type[] implementz) {
+    public void setImplementz(List<Type> implementz) {
         this.implementz = implementz;
     }
     

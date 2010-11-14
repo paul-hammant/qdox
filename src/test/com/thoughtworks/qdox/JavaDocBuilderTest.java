@@ -285,10 +285,9 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
 
         assertEquals("java.util.ArrayList", returnClass.getFullyQualifiedName());
 
-        Type[] returnImplementz = returnClass.getImplements();
+        List<Type> returnImplementz = returnClass.getImplements();
         boolean foundList = false;
-        for (int i = 0; i < returnImplementz.length; i++) {
-            Type type = returnImplementz[i];
+        for (Type type : returnImplementz) {
             if (type.getValue().equals("java.util.List")) {
                 foundList = true;
             }
@@ -299,7 +298,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaClass list = builder.getClassByName("java.util.List");
         assertTrue(list.isInterface());
         assertNull(list.getSuperJavaClass());
-        assertEquals("java.util.Collection", list.getImplements()[0].getValue());
+        assertEquals("java.util.Collection", list.getImplements().get(0).getValue());
     }
 
     public void testSuperclassOfObjectIsNull() throws Exception {

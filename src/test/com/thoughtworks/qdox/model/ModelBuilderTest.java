@@ -114,8 +114,8 @@ public class ModelBuilderTest extends TestCase {
         assertEquals("java.lang.Object", source.getClasses().get(0).getSuperClass().getValue());
         assertEquals("Another", source.getClasses().get(1).getSuperClass().getValue());
 
-        assertEquals(0, source.getClasses().get(0).getImplements().length);
-        assertEquals(0, source.getClasses().get(1).getImplements().length);
+        assertEquals(0, source.getClasses().get(0).getImplements().size());
+        assertEquals(0, source.getClasses().get(1).getImplements().size());
 
 // With qdox-2.0 it's not possible to inspect the source during parsing, so this has become an invalid test
 /* 
@@ -144,9 +144,9 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(0, source.getClasses().get(0).getImplements().length);
-        assertEquals(1, source.getClasses().get(1).getImplements().length);
-        assertEquals("Another", source.getClasses().get(1).getImplements()[0].getValue());
+        assertEquals(0, source.getClasses().get(0).getImplements().size());
+        assertEquals(1, source.getClasses().get(1).getImplements().size());
+        assertEquals("Another", source.getClasses().get(1).getImplements().get(0).getValue());
 
         assertNull(source.getClasses().get(0).getSuperClass());
         assertNull(source.getClasses().get(1).getSuperClass());
@@ -164,11 +164,11 @@ public class ModelBuilderTest extends TestCase {
         JavaSource source = builder.getSource();
 
         // sorted
-        Arrays.sort(source.getClasses().get(0).getImplements());
-        assertEquals(3, source.getClasses().get(0).getImplements().length);
-        assertEquals("Another", source.getClasses().get(0).getImplements()[0].getValue());
-        assertEquals("BottleOpener", source.getClasses().get(0).getImplements()[1].getValue());
-        assertEquals("java.io.Serializable", source.getClasses().get(0).getImplements()[2].getValue());
+        Collections.sort(source.getClasses().get(0).getImplements());
+        assertEquals(3, source.getClasses().get(0).getImplements().size());
+        assertEquals("Another", source.getClasses().get(0).getImplements().get(0).getValue());
+        assertEquals("BottleOpener", source.getClasses().get(0).getImplements().get(1).getValue());
+        assertEquals("java.io.Serializable", source.getClasses().get(0).getImplements().get(2).getValue());
 
         assertNull(source.getClasses().get(0).getSuperClass());
     }
@@ -185,10 +185,10 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(0, source.getClasses().get(0).getImplements().length);
-        assertEquals(1, source.getClasses().get(1).getImplements().length);
+        assertEquals(0, source.getClasses().get(0).getImplements().size());
+        assertEquals(1, source.getClasses().get(1).getImplements().size());
 
-        assertEquals("SomeInterface", source.getClasses().get(1).getImplements()[0].getValue());
+        assertEquals("SomeInterface", source.getClasses().get(1).getImplements().get(0).getValue());
 
         assertEquals("java.lang.Object", source.getClasses().get(0).getSuperClass().getValue());
         assertEquals("java.lang.Object", source.getClasses().get(1).getSuperClass().getValue());
@@ -203,11 +203,11 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(2, source.getClasses().get(0).getImplements().length);
+        assertEquals(2, source.getClasses().get(0).getImplements().size());
 
-        Arrays.sort(source.getClasses().get(0).getImplements());
-        assertEquals("SomeInterface", source.getClasses().get(0).getImplements()[0].getValue());
-        assertEquals("XX", source.getClasses().get(0).getImplements()[1].getValue());
+        Collections.sort(source.getClasses().get(0).getImplements());
+        assertEquals("SomeInterface", source.getClasses().get(0).getImplements().get(0).getValue());
+        assertEquals("XX", source.getClasses().get(0).getImplements().get(1).getValue());
     }
 
     public void testClassExtendsAndImplements() throws Exception {
@@ -220,11 +220,11 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(2, source.getClasses().get(0).getImplements().length);
+        assertEquals(2, source.getClasses().get(0).getImplements().size());
 
-        Arrays.sort(source.getClasses().get(0).getImplements());
-        assertEquals("SomeInterface", source.getClasses().get(0).getImplements()[0].getValue());
-        assertEquals("XX", source.getClasses().get(0).getImplements()[1].getValue());
+        Collections.sort(source.getClasses().get(0).getImplements());
+        assertEquals("SomeInterface", source.getClasses().get(0).getImplements().get(0).getValue());
+        assertEquals("XX", source.getClasses().get(0).getImplements().get(1).getValue());
 
         assertEquals("SubClass", source.getClasses().get(0).getSuperClass().getValue());
     }

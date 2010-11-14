@@ -9,8 +9,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
 
 	private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
     private Type returns = Type.VOID;
-    private List parameters = new LinkedList();
-    private JavaParameter[] parametersArray = JavaParameter.EMPTY_ARRAY;
+    private List<JavaParameter> parameters = new LinkedList<JavaParameter>();
     private Type[] exceptions = Type.EMPTY_ARRAY;
     private boolean constructor;
     private String sourceCode;
@@ -52,11 +51,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
     }
 
     public JavaParameter[] getParameters() {
-        if(parametersArray == null) {
-            parametersArray = new JavaParameter[parameters.size()];
-            parameters.toArray( parametersArray );
-        }
-        return parametersArray;
+        return parameters.toArray( new JavaParameter[0]);
     }
 
     public JavaParameter getParameterByName(String name) {
@@ -114,7 +109,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         result.write(name);
         result.write('(');
         for (int i = 0; i < getParameters().length; i++) {
-            JavaParameter parameter = parametersArray[i];
+            JavaParameter parameter = parameters.get(i);
             if (i > 0) result.write(", ");
             if (isDeclaration) {
                 result.write(parameter.getType().toString());
@@ -183,7 +178,6 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
 
     public void addParameter(JavaParameter javaParameter) {
         parameters.add( javaParameter );
-        parametersArray = null;
         this.varArgs = javaParameter.isVarArgs();
     }
 
@@ -238,8 +232,8 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         if (!name.equals(this.name)) return false;
         parameterTypes = (parameterTypes == null ? new Type[0] : parameterTypes);
         if (parameterTypes.length != this.getParameters().length) return false;
-        for (int i = 0; i < parametersArray.length; i++) {
-            if (!parametersArray[i].getType().equals(parameterTypes[i])) {
+        for (int i = 0; i < parameters.size(); i++) {
+            if (!parameters.get(i).getType().equals(parameterTypes[i])) {
                 return false;
             }
         }
@@ -334,7 +328,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         }
         JavaMethod[] methods = clazz.getMethodsBySignature(getName(), types, true);
 
-        List result = new ArrayList();
+        List<DocletTag> result = new ArrayList<DocletTag>();
         for (int i = 0; i < methods.length; i++) {
             JavaMethod method = methods[i];
             DocletTag[] tags = method.getTagsByName(name);
@@ -345,7 +339,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
                 }
             }
         }
-        return (DocletTag[]) result.toArray(new DocletTag[result.size()]);
+        return result.toArray(new DocletTag[result.size()]);
     }
 
     public int compareTo(Object o) {

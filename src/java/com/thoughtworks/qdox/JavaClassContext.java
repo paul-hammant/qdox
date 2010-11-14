@@ -22,9 +22,9 @@ import com.thoughtworks.qdox.model.JavaSource;
 public class JavaClassContext implements Serializable {
 
 	
-	private Map classMap = new LinkedHashMap();  // <String, com.thoughtworks.qdox.model.JavaClass>
-	private Map packageMap = new LinkedHashMap(); // <String, com.thoughtworks.qdox.model.JavaPackage> 
-	private Set sourceSet = new LinkedHashSet();  // <com.thoughtworks.qdox.model.JavaSource> 
+	private Map<String, JavaClass> classMap = new LinkedHashMap<String, JavaClass>();
+	private Map<String, JavaPackage> packageMap = new LinkedHashMap<String, JavaPackage>();  
+	private Set<JavaSource> sourceSet = new LinkedHashSet<JavaSource>(); 
 	
 	public JavaClassContext(){
 	}
@@ -36,7 +36,7 @@ public class JavaClassContext implements Serializable {
 	 * @return the stored {@link JavaClass}, otherwise <code>null</code>
 	 */
 	public JavaClass getClassByName(String name) {
-		return (JavaClass) classMap.get( name );
+		return classMap.get( name );
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public class JavaClassContext implements Serializable {
 	 * @return the removed {@link JavaClass}, otherwise <code>null</code> 
 	 */
 	public JavaClass removeClassByName(String name) {
-	    return (JavaClass) classMap.remove( name );
+	    return classMap.remove( name );
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class JavaClassContext implements Serializable {
 	 */
     public JavaPackage getPackageByName( String name )
     {
-        return (JavaPackage) packageMap.get( name );
+        return packageMap.get( name );
     }
     
     /**
@@ -91,7 +91,7 @@ public class JavaClassContext implements Serializable {
      */
     public JavaPackage removePackageByName( String name )
     {
-        return (JavaPackage) packageMap.remove( name );
+        return packageMap.remove( name );
     }
 
     /**

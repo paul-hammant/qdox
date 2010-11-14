@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.thoughtworks.qdox.JavaClassContext;
@@ -13,9 +14,9 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
 
     private JavaClassContext context;
 	private String name;
-    private Annotation[] annotations = new Annotation[0];
+    private List<Annotation> annotations = new ArrayList<Annotation>();
 	private int lineNumber = -1;
-	private List classes = new ArrayList();
+	private List<JavaClass> classes = new ArrayList<JavaClass>();
 
     public DefaultJavaPackage() {
 	}
@@ -33,11 +34,11 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
 	}
 
 	public Annotation[] getAnnotations() {
-		return annotations;
+		return annotations.toArray( new Annotation[0] );
 	}
 
 	public void setAnnotations(Annotation[] annotations) {
-		this.annotations = annotations;
+		this.annotations = Arrays.asList( annotations );
 	}
 
 	public int getLineNumber() {
@@ -63,7 +64,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
 	public JavaClass[] getClasses() {
 	    //avoid infinitive  recursion
 	    if (this == context.getPackageByName( name )) {
-	        return (JavaClass[]) classes.toArray(new JavaClass[classes.size()]);
+	        return classes.toArray(new JavaClass[classes.size()]);
 	    }
 	    else {
 	        return context.getPackageByName( name ).getClasses();
@@ -72,20 +73,20 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
 
     public JavaPackage getParentPackage() {
         String parentName = name.substring(0,name.lastIndexOf("."));
-        return (JavaPackage) context.getPackageByName( parentName );
+        return context.getPackageByName( parentName );
     }
 
     public JavaPackage[] getSubPackages() {
         String expected = name + ".";
         JavaPackage[] jPackages = context.getPackages();
-        List retList = new ArrayList();
+        List<JavaPackage> retList = new ArrayList<JavaPackage>();
         for (int index = 0; index < jPackages.length;index++) {
             String pName = jPackages[index].getName();
             if (pName.startsWith(expected) && !(pName.substring(expected.length()).indexOf(".") > -1)) {
                 retList.add(context.getPackageByName( pName ));
             }
         }
-        return (JavaPackage[]) retList.toArray(new JavaPackage[retList.size()]);
+        return retList.toArray(new JavaPackage[retList.size()]);
     }
 
     public boolean equals(Object o) {

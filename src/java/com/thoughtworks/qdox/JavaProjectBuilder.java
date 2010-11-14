@@ -174,17 +174,17 @@ public class JavaProjectBuilder
 
     // Searcher
     
-    public JavaClass[] search( Searcher searcher )
+    public List<JavaClass> search( Searcher searcher )
     {
-        List<JavaClass> results = new LinkedList<JavaClass>();
+        List<JavaClass> result = new LinkedList<JavaClass>();
         List<JavaClass> classArray = classLibraryBuilder.getClassLibrary().getJavaClasses();
         for (int classIndex = 0;classIndex < classArray.size(); classIndex++) {
             JavaClass clazz = classArray.get(classIndex);
             if (searcher.eval(clazz)) {
-                results.add(clazz);
+                result.add(clazz);
             }
         }
-        return (JavaClass[]) results.toArray( new JavaClass[0] );
+        return result;
     }
 
     /**

@@ -176,15 +176,15 @@ public class JavaProjectBuilderTest
     public void testSearcher() throws Exception {
         builder.addSourceTree(new File("target/test-source"));
 
-        JavaClass[] results = builder.search(new Searcher() {
+        List<JavaClass> results = builder.search(new Searcher() {
             public boolean eval(JavaClass cls) {
                 return cls.getPackage().getName().equals("com.blah");
             }
         });
 
-        assertEquals(2, results.length);
-        assertEquals("Another", ((JavaClass) results[0]).getName());
-        assertEquals("Thing", ((JavaClass) results[1]).getName());
+        assertEquals(2, results.size());
+        assertEquals("Another", ((JavaClass) results.get(0)).getName());
+        assertEquals("Thing", ((JavaClass) results.get(1)).getName());
     }
 
     private void createFile(String fileName, String packageName, String className) throws Exception {
@@ -848,13 +848,13 @@ public class JavaProjectBuilderTest
             "class Y implements SomeInterface { }")
         );
 
-        JavaClass[] results = builder.search(new Searcher() {
+        List<JavaClass> results = builder.search(new Searcher() {
             public boolean eval(JavaClass javaClass) {
                 return javaClass.isA("SomeInterface");
             }
         });
 
-        assertEquals(1, results.length);
+        assertEquals(1, results.size());
     } 
     
     public void testJiraQdox63() {

@@ -34,7 +34,7 @@ import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
 public class ClassLoaderLibrary
     extends AbstractClassLibrary
 {
-    private transient List classLoaders = new ArrayList(); // <java.lang.ClassLoader>
+    private transient List<ClassLoader> classLoaders = new ArrayList<ClassLoader>();
 
     private boolean defaultClassLoadersAdded = false;
 
@@ -70,13 +70,13 @@ public class ClassLoaderLibrary
     protected JavaClass resolveJavaClass( String name )
     {
         JavaClass result = null;
-        Iterator iter = classLoaders.iterator();
+        Iterator<ClassLoader> iter = classLoaders.iterator();
         while ( iter.hasNext() )
         {
             ClassLoader classLoader = (ClassLoader) iter.next();
             try
             {
-                Class clazz = classLoader.loadClass( name );
+                Class<?> clazz = classLoader.loadClass( name );
                 ModelBuilder builder = getModelBuilder();
                 BinaryClassParser parser = new BinaryClassParser( clazz, builder );
                 if ( parser.parse() )
@@ -97,7 +97,7 @@ public class ClassLoaderLibrary
         throws IOException, ClassNotFoundException
     {
         in.defaultReadObject();
-        classLoaders = new ArrayList();
+        classLoaders = new ArrayList<ClassLoader>();
         if ( defaultClassLoadersAdded )
         {
             defaultClassLoadersAdded = false;
@@ -108,13 +108,13 @@ public class ClassLoaderLibrary
     protected boolean containsClassReference( String name )
     {
         boolean result = false;
-        Iterator iter = classLoaders.iterator();
+        Iterator<ClassLoader> iter = classLoaders.iterator();
         while (!result && iter.hasNext() )
         {
             ClassLoader classLoader = (ClassLoader) iter.next();
             try
             {
-                Class clazz = classLoader.loadClass( name );
+                Class<?> clazz = classLoader.loadClass( name );
                 result = ( clazz != null );
             }
             catch ( ClassNotFoundException e )

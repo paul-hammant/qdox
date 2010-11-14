@@ -3,7 +3,6 @@ package com.thoughtworks.qdox.traversal;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
-import com.thoughtworks.qdox.ant.AbstractQdoxTaskTest;
 import com.thoughtworks.qdox.model.AbstractInheritableJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -18,7 +17,7 @@ public class TraversalTest extends TestCase {
 
     protected void setUp() throws Exception {
         builder = new JavaDocBuilder();
-        builder.addSourceTree(AbstractQdoxTaskTest.getUnderJUnitFile("src/java"));
+        //by default current classloader is already added, so QDox-classes can be found
     }
 
     public void testParentClassTraversal() throws Exception {

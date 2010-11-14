@@ -8,11 +8,11 @@ import java.util.Set;
 
 public class MethodDef extends LocatedDef {
     public String name = "";
-    public List typeParams; //<TypeVariableDef>
+    public List<TypeVariableDef> typeParams;
     public TypeDef returnType;
-    public Set modifiers = new HashSet();
-    public List params = new ArrayList();
-    public Set exceptions = new LinkedHashSet();
+    public Set<String> modifiers = new HashSet<String>();
+    public List<TypeVariableDef> params = new ArrayList<TypeVariableDef>();
+    public Set<String> exceptions = new LinkedHashSet<String>();
     public boolean constructor = false;
     public int dimensions;
     public String body;

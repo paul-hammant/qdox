@@ -82,7 +82,7 @@ public class ClassLoaderLibrary
                 if ( parser.parse() )
                 {
                     //this works, classloaders parse the FQN (including nested classes) directly
-                    result = builder.getSource().getClasses()[0];
+                    result = builder.getSource().getClasses().get( 0 );
                 }
                 break;
             }

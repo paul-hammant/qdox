@@ -17,20 +17,20 @@ public class DefaultModelWriter implements ModelWriter
         }
 
         // import statement
-        for (int i = 0; i < source.getImports().length; i++) {
+        for (int i = 0; i < source.getImports().size(); i++) {
             buffer.write("import ");
-            buffer.write(source.getImports()[i]);
+            buffer.write(source.getImports().get(i));
             buffer.write(';');
             buffer.newline();
         }
-        if (source.getImports().length > 0) {
+        if (source.getImports().size() > 0) {
             buffer.newline();
         }
 
         // classes
-        for (int i = 0; i < source.getClasses().length; i++) {
+        for (int i = 0; i < source.getClasses().size(); i++) {
             if (i > 0) buffer.newline();
-            writeClass( source.getClasses()[i] );
+            writeClass( source.getClasses().get(i) );
         }
         return this;
     }

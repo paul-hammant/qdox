@@ -181,9 +181,7 @@ public class JavaDocBuilder implements Serializable {
 
     //@todo remove
     private void addClassesRecursive(JavaSource javaSource, Set resultSet) {
-        JavaClass[] classes = javaSource.getClasses();
-        for (int j = 0; j < classes.length; j++) {
-            JavaClass javaClass = classes[j];
+        for (JavaClass javaClass : javaSource.getClasses()) {
             addClassesRecursive(javaClass, resultSet);
         }
     }

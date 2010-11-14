@@ -2,6 +2,7 @@ package com.thoughtworks.qdox.model;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
 public interface JavaSource extends JavaClassParent
 {
@@ -30,9 +31,9 @@ public interface JavaSource extends JavaClassParent
      * 
      * @return the imports, never null
      */
-    public String[] getImports();
+    public List<String> getImports();
 
-    public JavaClass[] getClasses();
+    public List<JavaClass> getClasses();
 
     public String getCodeBlock();
 

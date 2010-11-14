@@ -166,8 +166,8 @@ public class SourceLibrary
         context.add( source );
         context.add( source.getPackage() );
 
-        for( int clazzIndex = 0; clazzIndex < source.getClasses().length; clazzIndex++ ) {
-            registerJavaClass( source.getClasses()[clazzIndex] );
+        for( JavaClass clazz : source.getClasses()) {
+            registerJavaClass( clazz );
         }
     }
     

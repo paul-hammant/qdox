@@ -54,11 +54,11 @@ public class JavaProjectBuilderTest
         JavaSource[] sources = builder.getSources();
         assertEquals(2, sources.length);
 
-        JavaClass testClassList = sources[0].getClasses()[0];
+        JavaClass testClassList = sources[0].getClasses().get(0);
         assertEquals("TestClassList", testClassList.getName());
         assertEquals("com.thoughtworks.util.TestClass", testClassList.getSuperClass().getValue());
 
-        JavaClass testClass = sources[1].getClasses()[0];
+        JavaClass testClass = sources[1].getClasses().get(0);
         assertEquals("TestClass", testClass.getName());
 
         JavaClass testClassListByName = builder.getClassByName("com.thoughtworks.qdox.TestClassList");
@@ -94,7 +94,7 @@ public class JavaProjectBuilderTest
         JavaSource[] sources = builder.getSources();
         assertEquals(1, sources.length);
 
-        JavaClass outer = sources[0].getClasses()[0];
+        JavaClass outer = sources[0].getClasses().get(0);
         assertEquals("Outer", outer.getName());
         assertEquals("foo.bar.Outer", outer.getFullyQualifiedName());
 
@@ -521,14 +521,14 @@ public class JavaProjectBuilderTest
     public void testSerializable() throws Exception {
         
         builder.addSource(new StringReader("package test; public class X{}"));
-        assertEquals("X", builder.getSources()[0].getClasses()[0].getName());
+        assertEquals("X", builder.getSources()[0].getClasses().get(0).getName());
         try {
             JavaProjectBuilder newBuilder = (JavaProjectBuilder) SerializationUtils.serializedCopy(builder);
 
             //
             fail("JavaProjectBuilder should not serializable, but its ClassLibraryBuilder");
             
-            assertEquals("X", newBuilder.getSources()[0].getClasses()[0].getName());
+            assertEquals("X", newBuilder.getSources()[0].getClasses().get(0).getName());
         }
         catch(RuntimeException ex) {
             if ( !(ex.getCause() instanceof NotSerializableException)) {
@@ -834,7 +834,7 @@ public class JavaProjectBuilderTest
                 "     *      fish=\"poisson\"\r" +
                 "     */\n" +
                 "     class MultiLine{}";
-        JavaClass multiline = builder.addSource(new StringReader(sourceCode)).getClasses()[0];
+        JavaClass multiline = builder.addSource(new StringReader(sourceCode)).getClasses().get(0);
         DocletTag frenchEnglish = multiline.getTagByName("french.english");
 
         Set expected = new HashSet();
@@ -901,7 +901,7 @@ public class JavaProjectBuilderTest
                 + "  public void aMethod() {}\n"
                 + "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
-        JavaMethod javaMethod = javaSource.getClasses()[0].getMethods()[0];
+        JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods()[0];
         assertEquals("aMethod", javaMethod.getName());
     }
 
@@ -913,7 +913,7 @@ public class JavaProjectBuilderTest
                 + "  public void aMethod() {}\n"
                 + "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         assertEquals("C", javaClass.getName());
     }
 
@@ -926,7 +926,7 @@ public class JavaProjectBuilderTest
                 "  } // not this \n" +
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         JavaMethod javaMethod = javaClass.getMethods()[0];
         String expected = "" +
                 "    System.out.println(\"hi\"); // comment\n" +
@@ -943,7 +943,7 @@ public class JavaProjectBuilderTest
                 "  } // not this \n" +
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         JavaMethod javaMethod = javaClass.getMethods()[0];
         String expected = "" +
                 "    System.out.println(\"}}} \\\"\"); // }\n" +
@@ -963,7 +963,7 @@ public class JavaProjectBuilderTest
                 "  } // not this \n" +
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         JavaMethod javaMethod = javaClass.getMethods()[0];
         String expected = "" +
                 "    System.out.println(\"hi\"); // comment\n" +
@@ -978,7 +978,7 @@ public class JavaProjectBuilderTest
                 "    [9] /*comment*/ //more\n; /*somethingelse*/" +
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         JavaField javaField = javaClass.getFields()[0];
         String expected = "" +
                 "new FlubberFactory<Y>(\"}\"){}.doCheese(spam/*c*/)\n" +
@@ -993,7 +993,7 @@ public class JavaProjectBuilderTest
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
 
-        JavaField field = javaSource.getClasses()[0].getFieldByName("bad");
+        JavaField field = javaSource.getClasses().get(0).getFieldByName("bad");
         assertEquals("{1,2,3}", field.getInitializationExpression().trim());
     }
 
@@ -1061,7 +1061,7 @@ public class JavaProjectBuilderTest
                 "public void myTest() {}\n" +
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         JavaMethod javaMethod = javaClass.getMethods()[0];
         assertEquals("\"test blah blah\"", javaMethod.getAnnotations()[0].getNamedParameter("description").toString());
     }
@@ -1104,7 +1104,7 @@ public class JavaProjectBuilderTest
                 "public abstract class AbstractSayHello extends UIOutput {\n" +
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         assertEquals(javaClass.getSuperClass().getValue(), "javax.faces.component.UIOutput");
     }
     
@@ -1133,7 +1133,7 @@ public class JavaProjectBuilderTest
                 "    }\n" +
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         JavaMethod method1 = javaClass.getMethods()[0];
         assertEquals( "A Javadoc sample.", method1.getComment());
         assertEquals( "The size.", method1.getTagByName( "return" ).getValue());
@@ -1147,7 +1147,7 @@ public class JavaProjectBuilderTest
                 "public static final char SEPARATOR = ',';" +
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         assertEquals(javaClass.getFieldByName( "SEPARATOR" ).getInitializationExpression(), "','");
     }
     
@@ -1159,7 +1159,7 @@ public class JavaProjectBuilderTest
                 "public static final String TEST2 = \"test2\";\n" +
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         assertEquals(javaClass.getFieldByName( "TEST2" ).getInitializationExpression(), "\"test2\"");
     }
     
@@ -1167,7 +1167,7 @@ public class JavaProjectBuilderTest
         String source = "@OneToMany(cascade = {/* CascadeType.PERSIST */}, fetch = FetchType.LAZY)\n" +
                 "public class Foo{}"; 
         JavaSource javaSource = builder.addSource(new StringReader(source));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         assertNotNull(javaClass.getAnnotations()[0].getNamedParameter("cascade"));
     } 
     
@@ -1186,7 +1186,7 @@ public class JavaProjectBuilderTest
                 "     */\n" + 
                 "public class Foo{}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         assertEquals("Some text\nmore text\nand even more", javaClass.getComment());
         assertEquals("throws", javaClass.getTags()[0].getName());
         assertEquals("Exception", javaClass.getTags()[0].getValue());
@@ -1211,7 +1211,7 @@ public class JavaProjectBuilderTest
             "    JDK1_2(\"1.2\");\n" +
             "}\n";  
         JavaSource src = builder.addSource(new StringReader(source));
-        assertEquals( "comment 2", src.getClasses()[0].getFieldByName( "JDK1_2" ).getComment() ); 
+        assertEquals( "comment 2", src.getClasses().get(0).getFieldByName( "JDK1_2" ).getComment() ); 
     }
 
     //for QDOX-191
@@ -1261,7 +1261,7 @@ public class JavaProjectBuilderTest
                 " public abstract Thing getThing(); " +
                 "}";
         builder.addSource( new StringReader( source ) );
-        JavaClass clazz = builder.addSource( new StringReader( source ) ).getClasses()[0];
+        JavaClass clazz = builder.addSource( new StringReader( source ) ).getClasses().get(0);
         JavaClass thing = clazz.getMethods()[0].getReturns().getJavaClass();
         assertEquals("com.blah.Thing", thing.getFullyQualifiedName());
         assertNotNull(thing.getSource());

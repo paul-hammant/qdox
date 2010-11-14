@@ -30,7 +30,7 @@ public class ClassNameLibrary
         unknownBuilder.beginClass( classDef );
         unknownBuilder.endClass();
         JavaSource unknownSource = unknownBuilder.getSource();
-        JavaClass result = unknownSource.getClasses()[0];
+        JavaClass result = unknownSource.getClasses().get( 0 );
         return result;
     }
     

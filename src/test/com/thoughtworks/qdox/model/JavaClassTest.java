@@ -416,8 +416,8 @@ public abstract class JavaClassTest extends TestCase {
     	setPackage(src, null);
     	setName(cls, "DefaultPackageClass");
     	
-    	assertEquals("", src.getClasses()[0].getPackageName());
-    	assertEquals("DefaultPackageClass", src.getClasses()[0].getFullyQualifiedName());
+    	assertEquals("", src.getClasses().get(0).getPackageName());
+    	assertEquals("DefaultPackageClass", src.getClasses().get(0).getFullyQualifiedName());
     }
 
     public void testDefaultClassSuperclass() throws Exception {

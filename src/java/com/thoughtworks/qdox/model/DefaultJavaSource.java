@@ -117,8 +117,8 @@ public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSou
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaSource#getImports()
      */
-    public String[] getImports() {
-        return imports.toArray( new String[0] );
+    public List<String> getImports() {
+        return imports;
     }
 
     public void addClass(JavaClass cls) {
@@ -128,8 +128,8 @@ public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSou
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaSource#getClasses()
      */
-    public JavaClass[] getClasses() {
-      return classes.toArray(new JavaClass[0]);
+    public List<JavaClass> getClasses() {
+      return classes;
     }
 
     /* (non-Javadoc)
@@ -250,13 +250,13 @@ public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSou
     }
     
     private String resolveImportedType( String importSpec, String typeName, boolean fullMatch ) {
-        String[] imports = getImports();
+        List<String> imports = getImports();
         String resolvedName = null;
         String dotSuffix = "." + importSpec;
             
-        for (int i = 0; i < imports.length && resolvedName == null; i++) {
-            if (imports[i].equals(importSpec) || (!fullMatch && imports[i].endsWith(dotSuffix))) {
-                String candidateName = imports[i].substring( 0, imports[i].length() - importSpec.length()) + typeName;
+        for (int i = 0; i < imports.size() && resolvedName == null; i++) {
+            if (imports.get(i).equals(importSpec) || (!fullMatch && imports.get(i).endsWith(dotSuffix))) {
+                String candidateName = imports.get(i).substring( 0, imports.get(i).length() - importSpec.length()) + typeName;
                 resolvedName = resolveFullyQualifiedType( candidateName );
                 if(resolvedName == null && !"*".equals(importSpec)) {
                 	resolvedName = candidateName;

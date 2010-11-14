@@ -45,7 +45,7 @@ public class MethodsTest extends TestCase {
     private JavaMethod buildMethod(String methodSource) {
         String source = "interface Something { " + methodSource + " }";
         JavaSource javaSource = builder.addSource(new StringReader(source));
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaClass javaClass = javaSource.getClasses().get(0);
         JavaMethod javaMethod = javaClass.getMethods()[0];
         return javaMethod;
     }

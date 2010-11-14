@@ -26,13 +26,13 @@ public class ModelBuilderTest extends TestCase {
     }
 
     public void testNumberOfClassesGrows() throws Exception {
-        assertEquals(0, builder.getSource().getClasses().length);
+        assertEquals(0, builder.getSource().getClasses().size());
         builder.beginClass(new ClassDef());
         builder.endClass();
-        assertEquals(1, builder.getSource().getClasses().length);
+        assertEquals(1, builder.getSource().getClasses().size());
         builder.beginClass(new ClassDef());
         builder.endClass();
-        assertEquals(2, builder.getSource().getClasses().length);
+        assertEquals(2, builder.getSource().getClasses().size());
     }
 
     public void testSimpleClass() throws Exception {
@@ -48,9 +48,9 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals("Thingy", source.getClasses()[0].getName());
-        assertEquals("ThingyThing", source.getClasses()[1].getName());
-        assertEquals(source, source.getClasses()[0].getParentSource());
+        assertEquals("Thingy", source.getClasses().get(0).getName());
+        assertEquals("ThingyThing", source.getClasses().get(1).getName());
+        assertEquals(source, source.getClasses().get(0).getParentSource());
     }
 
     public void testInterface() throws Exception {
@@ -65,8 +65,8 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(false, source.getClasses()[0].isInterface());
-        assertEquals(true, source.getClasses()[1].isInterface());
+        assertEquals(false, source.getClasses().get(0).isInterface());
+        assertEquals(true, source.getClasses().get(1).isInterface());
     }
 
     public void testEnum() throws Exception {
@@ -81,8 +81,8 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(false, source.getClasses()[0].isEnum());
-        assertEquals(true, source.getClasses()[1].isEnum());
+        assertEquals(false, source.getClasses().get(0).isEnum());
+        assertEquals(true, source.getClasses().get(1).isEnum());
     }
 
     public void testAnnotationType() throws Exception {
@@ -93,7 +93,7 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
         
-        assertEquals(1, source.getClasses().length);
+        assertEquals(1, source.getClasses().size());
     }
 
     public void testClassExtends() throws Exception {
@@ -109,11 +109,11 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals("java.lang.Object", source.getClasses()[0].getSuperClass().getValue());
-        assertEquals("Another", source.getClasses()[1].getSuperClass().getValue());
+        assertEquals("java.lang.Object", source.getClasses().get(0).getSuperClass().getValue());
+        assertEquals("Another", source.getClasses().get(1).getSuperClass().getValue());
 
-        assertEquals(0, source.getClasses()[0].getImplements().length);
-        assertEquals(0, source.getClasses()[1].getImplements().length);
+        assertEquals(0, source.getClasses().get(0).getImplements().length);
+        assertEquals(0, source.getClasses().get(1).getImplements().length);
 
 // With qdox-2.0 it's not possible to inspect the source during parsing, so this has become an invalid test
 /* 
@@ -142,12 +142,12 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(0, source.getClasses()[0].getImplements().length);
-        assertEquals(1, source.getClasses()[1].getImplements().length);
-        assertEquals("Another", source.getClasses()[1].getImplements()[0].getValue());
+        assertEquals(0, source.getClasses().get(0).getImplements().length);
+        assertEquals(1, source.getClasses().get(1).getImplements().length);
+        assertEquals("Another", source.getClasses().get(1).getImplements()[0].getValue());
 
-        assertNull(source.getClasses()[0].getSuperClass());
-        assertNull(source.getClasses()[1].getSuperClass());
+        assertNull(source.getClasses().get(0).getSuperClass());
+        assertNull(source.getClasses().get(1).getSuperClass());
     }
 
     public void testInterfaceExtendsMultiple() throws Exception {
@@ -162,13 +162,13 @@ public class ModelBuilderTest extends TestCase {
         JavaSource source = builder.getSource();
 
         // sorted
-        Arrays.sort(source.getClasses()[0].getImplements());
-        assertEquals(3, source.getClasses()[0].getImplements().length);
-        assertEquals("Another", source.getClasses()[0].getImplements()[0].getValue());
-        assertEquals("BottleOpener", source.getClasses()[0].getImplements()[1].getValue());
-        assertEquals("java.io.Serializable", source.getClasses()[0].getImplements()[2].getValue());
+        Arrays.sort(source.getClasses().get(0).getImplements());
+        assertEquals(3, source.getClasses().get(0).getImplements().length);
+        assertEquals("Another", source.getClasses().get(0).getImplements()[0].getValue());
+        assertEquals("BottleOpener", source.getClasses().get(0).getImplements()[1].getValue());
+        assertEquals("java.io.Serializable", source.getClasses().get(0).getImplements()[2].getValue());
 
-        assertNull(source.getClasses()[0].getSuperClass());
+        assertNull(source.getClasses().get(0).getSuperClass());
     }
 
     public void testClassImplements() throws Exception {
@@ -183,13 +183,13 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(0, source.getClasses()[0].getImplements().length);
-        assertEquals(1, source.getClasses()[1].getImplements().length);
+        assertEquals(0, source.getClasses().get(0).getImplements().length);
+        assertEquals(1, source.getClasses().get(1).getImplements().length);
 
-        assertEquals("SomeInterface", source.getClasses()[1].getImplements()[0].getValue());
+        assertEquals("SomeInterface", source.getClasses().get(1).getImplements()[0].getValue());
 
-        assertEquals("java.lang.Object", source.getClasses()[0].getSuperClass().getValue());
-        assertEquals("java.lang.Object", source.getClasses()[1].getSuperClass().getValue());
+        assertEquals("java.lang.Object", source.getClasses().get(0).getSuperClass().getValue());
+        assertEquals("java.lang.Object", source.getClasses().get(1).getSuperClass().getValue());
     }
 
     public void testClassImplementsMultiple() throws Exception {
@@ -201,11 +201,11 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(2, source.getClasses()[0].getImplements().length);
+        assertEquals(2, source.getClasses().get(0).getImplements().length);
 
-        Arrays.sort(source.getClasses()[0].getImplements());
-        assertEquals("SomeInterface", source.getClasses()[0].getImplements()[0].getValue());
-        assertEquals("XX", source.getClasses()[0].getImplements()[1].getValue());
+        Arrays.sort(source.getClasses().get(0).getImplements());
+        assertEquals("SomeInterface", source.getClasses().get(0).getImplements()[0].getValue());
+        assertEquals("XX", source.getClasses().get(0).getImplements()[1].getValue());
     }
 
     public void testClassExtendsAndImplements() throws Exception {
@@ -218,13 +218,13 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(2, source.getClasses()[0].getImplements().length);
+        assertEquals(2, source.getClasses().get(0).getImplements().length);
 
-        Arrays.sort(source.getClasses()[0].getImplements());
-        assertEquals("SomeInterface", source.getClasses()[0].getImplements()[0].getValue());
-        assertEquals("XX", source.getClasses()[0].getImplements()[1].getValue());
+        Arrays.sort(source.getClasses().get(0).getImplements());
+        assertEquals("SomeInterface", source.getClasses().get(0).getImplements()[0].getValue());
+        assertEquals("XX", source.getClasses().get(0).getImplements()[1].getValue());
 
-        assertEquals("SubClass", source.getClasses()[0].getSuperClass().getValue());
+        assertEquals("SubClass", source.getClasses().get(0).getSuperClass().getValue());
     }
 
     public void testClassModifiers() throws Exception {
@@ -239,11 +239,11 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals(0, source.getClasses()[0].getModifiers().length);
-        assertEquals(2, source.getClasses()[1].getModifiers().length);
+        assertEquals(0, source.getClasses().get(0).getModifiers().length);
+        assertEquals(2, source.getClasses().get(1).getModifiers().length);
 
         // sorted
-        String[] modifiers = source.getClasses()[1].getModifiers();
+        String[] modifiers = source.getClasses().get(1).getModifiers();
         Arrays.sort(modifiers);
         assertEquals("final", modifiers[0]);
         assertEquals("public", modifiers[1]);
@@ -266,9 +266,9 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        assertEquals(1, source.getClasses()[0].getMethods().length);
-        assertEquals(3, source.getClasses()[1].getMethods().length);
-        assertEquals(2, source.getClasses()[2].getMethods().length);
+        assertEquals(1, source.getClasses().get(0).getMethods().length);
+        assertEquals(3, source.getClasses().get(1).getMethods().length);
+        assertEquals(2, source.getClasses().get(2).getMethods().length);
     }
 
     public void testInnerClass() throws Exception {
@@ -293,8 +293,8 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        assertEquals(1, source.getClasses().length);
-        JavaClass outerClass = source.getClasses()[0];
+        assertEquals(1, source.getClasses().size());
+        JavaClass outerClass = source.getClasses().get(0);
         assertEquals("xyz.Outer", outerClass.getFullyQualifiedName());
         assertEquals(1, outerClass.getMethods().length);
         assertEquals("bar", outerClass.getMethods()[0].getName());
@@ -314,7 +314,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        JavaMethod doSomething = source.getClasses()[0].getMethods()[0];
+        JavaMethod doSomething = source.getClasses().get(0).getMethods()[0];
         assertEquals("doSomething", doSomething.getName());
         assertEquals("void", doSomething.getReturns().getValue());
         JavaSource parentSource = doSomething.getReturns().getJavaClassParent().getParentSource();
@@ -334,7 +334,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        JavaMethod result = source.getClasses()[0].getMethods()[0];
+        JavaMethod result = source.getClasses().get(0).getMethods()[0];
         assertEquals(0, result.getReturns().getDimensions());
     }
 
@@ -348,7 +348,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        JavaMethod result = source.getClasses()[0].getMethods()[0];
+        JavaMethod result = source.getClasses().get(0).getMethods()[0];
         assertEquals(1, result.getReturns().getDimensions());
     }
 
@@ -362,7 +362,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        JavaMethod result = source.getClasses()[0].getMethods()[0];
+        JavaMethod result = source.getClasses().get(0).getMethods()[0];
         assertEquals(2, result.getReturns().getDimensions());
     }
 
@@ -386,7 +386,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        JavaMethod result = source.getClasses()[0].getMethods()[0];
+        JavaMethod result = source.getClasses().get(0).getMethods()[0];
         assertEquals(2, result.getParameters().length);
         assertEquals("count", result.getParameters()[0].getName());
         assertEquals("int", result.getParameters()[0].getType().getValue());
@@ -416,7 +416,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        JavaMethod result = source.getClasses()[0].getMethods()[0];
+        JavaMethod result = source.getClasses().get(0).getMethods()[0];
         assertEquals(1, result.getParameters()[0].getType().getDimensions());
         assertEquals(2, result.getParameters()[1].getType().getDimensions());
     }
@@ -432,7 +432,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        JavaMethod result = source.getClasses()[0].getMethods()[0];
+        JavaMethod result = source.getClasses().get(0).getMethods()[0];
         assertEquals(2, result.getExceptions().length);
         // sorted
         Arrays.sort(result.getExceptions());
@@ -452,7 +452,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        JavaMethod result = source.getClasses()[0].getMethods()[0];
+        JavaMethod result = source.getClasses().get(0).getMethods()[0];
         assertEquals(3, result.getModifiers().length);
         // sorted
         String[] modifiers = result.getModifiers();
@@ -473,7 +473,7 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        JavaField result = source.getClasses()[0].getFields()[0];
+        JavaField result = source.getClasses().get(0).getFields()[0];
         assertNotNull(result);
         assertEquals("count", result.getName());
         assertEquals("int", result.getType().getValue());
@@ -491,7 +491,7 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        JavaField result = source.getClasses()[0].getFields()[0];
+        JavaField result = source.getClasses().get(0).getFields()[0];
         assertNotNull(result);
         assertNotNull(result.getModifiers());
         Arrays.sort(result.getModifiers());
@@ -511,7 +511,7 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        JavaField result = source.getClasses()[0].getFields()[0];
+        JavaField result = source.getClasses().get(0).getFields()[0];
         assertEquals(0, result.getType().getDimensions());
 
     }
@@ -528,7 +528,7 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        JavaField result = source.getClasses()[0].getFields()[0];
+        JavaField result = source.getClasses().get(0).getFields()[0];
         assertEquals(1, result.getType().getDimensions());
 
     }
@@ -545,7 +545,7 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        JavaField result = source.getClasses()[0].getFields()[0];
+        JavaField result = source.getClasses().get(0).getFields()[0];
         assertEquals(2, result.getType().getDimensions());
     }
 
@@ -565,8 +565,8 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        JavaMethod result1 = source.getClasses()[0].getMethods()[0];
-        JavaMethod result2 = source.getClasses()[0].getMethods()[1];
+        JavaMethod result1 = source.getClasses().get(0).getMethods()[0];
+        JavaMethod result2 = source.getClasses().get(0).getMethods()[1];
 
         assertTrue(result1.isConstructor());
         assertNull(result1.getReturns());
@@ -580,7 +580,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         JavaSource source = builder.getSource();
-        assertEquals("Hello", source.getClasses()[0].getComment());
+        assertEquals("Hello", source.getClasses().get(0).getComment());
     }
 
     public void testJavaDocSpiradiclyOnManyClasses() throws Exception {
@@ -598,9 +598,9 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals("Hello", source.getClasses()[0].getComment());
-        assertNull(source.getClasses()[1].getComment());
-        assertEquals("World", source.getClasses()[2].getComment());
+        assertEquals("Hello", source.getClasses().get(0).getComment());
+        assertNull(source.getClasses().get(1).getComment());
+        assertEquals("World", source.getClasses().get(2).getComment());
     }
 
     public void testJavaDocOnMethod() throws Exception {
@@ -612,8 +612,8 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertNull(source.getClasses()[0].getComment());
-        assertEquals("Hello", source.getClasses()[0].getMethods()[0].getComment());
+        assertNull(source.getClasses().get(0).getComment());
+        assertEquals("Hello", source.getClasses().get(0).getMethods()[0].getComment());
     }
 
     public void testJavaDocOnField() throws Exception {
@@ -625,8 +625,8 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertNull(source.getClasses()[0].getComment());
-        assertEquals("Hello", source.getClasses()[0].getFields()[0].getComment());
+        assertNull(source.getClasses().get(0).getComment());
+        assertEquals("Hello", source.getClasses().get(0).getFields()[0].getComment());
     }
 
     public void testJavaDocOnMethodsAndFields() throws Exception {
@@ -650,12 +650,12 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals("Thing", source.getClasses()[0].getComment());
-        assertNull(source.getClasses()[0].getFields()[0].getComment());
-        assertEquals("Hello field", source.getClasses()[0].getFields()[1].getComment());
-        assertEquals("Hello", source.getClasses()[0].getMethods()[0].getComment());
-        assertNull(source.getClasses()[0].getMethods()[1].getComment());
-        assertEquals("World", source.getClasses()[0].getMethods()[2].getComment());
+        assertEquals("Thing", source.getClasses().get(0).getComment());
+        assertNull(source.getClasses().get(0).getFields()[0].getComment());
+        assertEquals("Hello field", source.getClasses().get(0).getFields()[1].getComment());
+        assertEquals("Hello", source.getClasses().get(0).getMethods()[0].getComment());
+        assertNull(source.getClasses().get(0).getMethods()[1].getComment());
+        assertEquals("World", source.getClasses().get(0).getMethods()[2].getComment());
     }
 
     public void testDocletTag() throws Exception {
@@ -667,10 +667,10 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals("Hello", source.getClasses()[0].getComment());
-        assertEquals(1, source.getClasses()[0].getTags().length);
-        assertEquals("cheese", source.getClasses()[0].getTags()[0].getName());
-        assertEquals("is good", source.getClasses()[0].getTags()[0].getValue());
+        assertEquals("Hello", source.getClasses().get(0).getComment());
+        assertEquals(1, source.getClasses().get(0).getTags().length);
+        assertEquals("cheese", source.getClasses().get(0).getTags()[0].getName());
+        assertEquals("is good", source.getClasses().get(0).getTags()[0].getValue());
     }
 
     public void testDocletTagWithNoComment() throws Exception {
@@ -682,10 +682,10 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals("", source.getClasses()[0].getComment());
-        assertEquals(1, source.getClasses()[0].getTags().length);
-        assertEquals("cheese", source.getClasses()[0].getTags()[0].getName());
-        assertEquals("is good", source.getClasses()[0].getTags()[0].getValue());
+        assertEquals("", source.getClasses().get(0).getComment());
+        assertEquals(1, source.getClasses().get(0).getTags().length);
+        assertEquals("cheese", source.getClasses().get(0).getTags()[0].getName());
+        assertEquals("is good", source.getClasses().get(0).getTags()[0].getValue());
     }
 
     public void testMultipleDocletTags() throws Exception {
@@ -699,14 +699,14 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals("Hello", source.getClasses()[0].getComment());
-        assertEquals(3, source.getClasses()[0].getTags().length);
-        assertEquals("cheese", source.getClasses()[0].getTags()[0].getName());
-        assertEquals("is good", source.getClasses()[0].getTags()[0].getValue());
-        assertEquals("food", source.getClasses()[0].getTags()[1].getName());
-        assertEquals("is great", source.getClasses()[0].getTags()[1].getValue());
-        assertEquals("chairs", source.getClasses()[0].getTags()[2].getName());
-        assertEquals("are boring", source.getClasses()[0].getTags()[2].getValue());
+        assertEquals("Hello", source.getClasses().get(0).getComment());
+        assertEquals(3, source.getClasses().get(0).getTags().length);
+        assertEquals("cheese", source.getClasses().get(0).getTags()[0].getName());
+        assertEquals("is good", source.getClasses().get(0).getTags()[0].getValue());
+        assertEquals("food", source.getClasses().get(0).getTags()[1].getName());
+        assertEquals("is great", source.getClasses().get(0).getTags()[1].getValue());
+        assertEquals("chairs", source.getClasses().get(0).getTags()[2].getName());
+        assertEquals("are boring", source.getClasses().get(0).getTags()[2].getValue());
     }
 
     public void testDocletTagsOnMethodsAndFields() throws Exception {
@@ -725,12 +725,12 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        assertEquals("cheese", source.getClasses()[0].getTags()[0].getName());
-        assertEquals("is good", source.getClasses()[0].getTags()[0].getValue());
-        assertEquals("food", source.getClasses()[0].getMethods()[0].getTags()[0].getName());
-        assertEquals("is great", source.getClasses()[0].getMethods()[0].getTags()[0].getValue());
-        assertEquals("chairs", source.getClasses()[0].getFields()[0].getTags()[0].getName());
-        assertEquals("are boring", source.getClasses()[0].getFields()[0].getTags()[0].getValue());
+        assertEquals("cheese", source.getClasses().get(0).getTags()[0].getName());
+        assertEquals("is good", source.getClasses().get(0).getTags()[0].getValue());
+        assertEquals("food", source.getClasses().get(0).getMethods()[0].getTags()[0].getName());
+        assertEquals("is great", source.getClasses().get(0).getMethods()[0].getTags()[0].getValue());
+        assertEquals("chairs", source.getClasses().get(0).getFields()[0].getTags()[0].getName());
+        assertEquals("are boring", source.getClasses().get(0).getFields()[0].getTags()[0].getValue());
     }
 
     public void testRetrieveJavaSource() throws Exception {
@@ -749,7 +749,7 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
         builder.endClass();
         JavaSource result = builder.getSource();
-        assertEquals(3, result.getClasses().length);
+        assertEquals(3, result.getClasses().size());
     }
 
     public void testJavaSourceNoPackage() throws Exception {
@@ -765,14 +765,14 @@ public class ModelBuilderTest extends TestCase {
 
     public void testJavaSourceNoImports() throws Exception {
         JavaSource result = builder.getSource();
-        assertEquals(0, result.getImports().length);
+        assertEquals(0, result.getImports().size());
     }
 
     public void testJavaSourceOneImport() throws Exception {
         builder.addImport("com.blah.Thing");
         JavaSource result = builder.getSource();
-        assertEquals(1, result.getImports().length);
-        assertEquals("com.blah.Thing", result.getImports()[0]);
+        assertEquals(1, result.getImports().size());
+        assertEquals("com.blah.Thing", result.getImports().get(0));
     }
 
     public void testJavaSourceMultipleImports() throws Exception {
@@ -780,10 +780,10 @@ public class ModelBuilderTest extends TestCase {
         builder.addImport("java.util.List");
         builder.addImport("org.apache.*");
         JavaSource result = builder.getSource();
-        assertEquals(3, result.getImports().length);
-        assertEquals("com.blah.Thing", result.getImports()[0]);
-        assertEquals("java.util.List", result.getImports()[1]);
-        assertEquals("org.apache.*", result.getImports()[2]);
+        assertEquals(3, result.getImports().size());
+        assertEquals("com.blah.Thing", result.getImports().get(0));
+        assertEquals("java.util.List", result.getImports().get(1));
+        assertEquals("org.apache.*", result.getImports().get(2));
     }
 
     public void testModelHashCodes() {

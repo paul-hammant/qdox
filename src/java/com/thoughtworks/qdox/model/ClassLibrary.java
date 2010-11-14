@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -246,20 +247,20 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         return result;
     }
     
-    public JavaClass[] getJavaClasses() {
-        return sourceContext.getClasses();
+    public List<JavaClass> getJavaClasses() {
+        return Arrays.asList( sourceContext.getClasses() );
     }
     
     public JavaPackage getJavaPackage( String name) {
         return sourceContext.getPackageByName( name );
     }
     
-    public JavaPackage[] getJavaPackages() {
-        return sourceContext.getPackages();
+    public List<JavaPackage> getJavaPackages() {
+        return Arrays.asList( sourceContext.getPackages() );
     }
     
-    public JavaSource[] getJavaSources() {
-        return sourceContext.getSources();
+    public List<JavaSource> getJavaSources() {
+        return Arrays.asList( sourceContext.getSources() );
     }
     
     public boolean hasClassReference( String name )

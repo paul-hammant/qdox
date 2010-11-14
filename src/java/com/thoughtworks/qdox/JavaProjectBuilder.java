@@ -153,11 +153,11 @@ public class JavaProjectBuilder
         return classLibraryBuilder.getClassLibrary().getJavaClass( name );
     }
     
-    public JavaSource[] getSources() {
+    public List<JavaSource> getSources() {
         return classLibraryBuilder.getClassLibrary().getJavaSources();
     }
 
-    public JavaClass[] getClasses()
+    public List<JavaClass> getClasses()
     {
         return classLibraryBuilder.getClassLibrary().getJavaClasses();
     }
@@ -167,7 +167,7 @@ public class JavaProjectBuilder
         return classLibraryBuilder.getClassLibrary().getJavaPackage( name );
     }
     
-    public JavaPackage[] getPackages()
+    public List<JavaPackage> getPackages()
     {
         return classLibraryBuilder.getClassLibrary().getJavaPackages();
     }
@@ -176,10 +176,10 @@ public class JavaProjectBuilder
     
     public JavaClass[] search( Searcher searcher )
     {
-        List results = new LinkedList();
-        JavaClass[] classArray = classLibraryBuilder.getClassLibrary().getJavaClasses();
-        for (int classIndex = 0;classIndex < classArray.length; classIndex++) {
-            JavaClass clazz = classArray[classIndex];
+        List<JavaClass> results = new LinkedList<JavaClass>();
+        List<JavaClass> classArray = classLibraryBuilder.getClassLibrary().getJavaClasses();
+        for (int classIndex = 0;classIndex < classArray.size(); classIndex++) {
+            JavaClass clazz = classArray.get(classIndex);
             if (searcher.eval(clazz)) {
                 results.add(clazz);
             }

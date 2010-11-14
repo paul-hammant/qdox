@@ -51,14 +51,14 @@ public class JavaProjectBuilderTest
     public void testParsingMultipleJavaFiles() {
         builder.addSource(new StringReader(createTestClassList()));
         builder.addSource(new StringReader(createTestClass()));
-        JavaSource[] sources = builder.getSources();
-        assertEquals(2, sources.length);
+        List<JavaSource> sources = builder.getSources();
+        assertEquals(2, sources.size());
 
-        JavaClass testClassList = sources[0].getClasses().get(0);
+        JavaClass testClassList = sources.get(0).getClasses().get(0);
         assertEquals("TestClassList", testClassList.getName());
         assertEquals("com.thoughtworks.util.TestClass", testClassList.getSuperClass().getValue());
 
-        JavaClass testClass = sources[1].getClasses().get(0);
+        JavaClass testClass = sources.get(1).getClasses().get(0);
         assertEquals("TestClass", testClass.getName());
 
         JavaClass testClassListByName = builder.getClassByName("com.thoughtworks.qdox.TestClassList");
@@ -91,10 +91,10 @@ public class JavaProjectBuilderTest
 
     public void testParseWithInnerClass() {
         builder.addSource(new StringReader(createOuter()));
-        JavaSource[] sources = builder.getSources();
-        assertEquals(1, sources.length);
+        List<JavaSource> sources = builder.getSources();
+        assertEquals(1, sources.size());
 
-        JavaClass outer = sources[0].getClasses().get(0);
+        JavaClass outer = sources.get(0).getClasses().get(0);
         assertEquals("Outer", outer.getName());
         assertEquals("foo.bar.Outer", outer.getFullyQualifiedName());
 
@@ -115,17 +115,17 @@ public class JavaProjectBuilderTest
 
     public void testGetClasses() {
         builder.addSource(new StringReader(createOuter()));
-        JavaClass[] classes = builder.getClasses();
-        assertEquals(2, classes.length);
+        List<JavaClass> classes = builder.getClasses();
+        assertEquals(2, classes.size());
     }
 
     public void QDOX2_2FIX___testGetPackagesShowsOnePackageAndTwoClasses() {
         builder.addSourceTree(new File("target/test-source"));
-        JavaPackage[] packages = builder.getPackages();
-        assertEquals(2, packages.length);
-        JavaPackage comBlahSubpackage = packages[0];
+        List<JavaPackage> packages = builder.getPackages();
+        assertEquals(2, packages.size());
+        JavaPackage comBlahSubpackage = packages.get(0);
         assertEquals("com.blah.subpackage", comBlahSubpackage.getName());
-        JavaPackage comBlah = packages[1];
+        JavaPackage comBlah = packages.get(1);
         assertEquals("com.blah", comBlah.getName());
         List<JavaClass> classes = comBlahSubpackage.getClasses();
         assertEquals(1, classes.size());
@@ -167,10 +167,10 @@ public class JavaProjectBuilderTest
     public void QDOX2_2FIX___testRecordFile() throws Exception {
         builder.addSource(new File("target/test-source/com/blah/Thing.java"));
 
-        JavaSource[] sources = builder.getSources();
-        assertEquals(1, sources.length);
+        List<JavaSource> sources = builder.getSources();
+        assertEquals(1, sources.size());
         assertEquals(new File("target/test-source/com/blah/Thing.java").toURL(),
-                sources[0].getURL());
+                sources.get(0).getURL());
     }
 
     public void testSearcher() throws Exception {
@@ -263,7 +263,7 @@ public class JavaProjectBuilderTest
                 + "class Bar {"
                 + "}";
         builder.addSource(new StringReader(in));
-        assertEquals(2, builder.getClasses().length);
+        assertEquals(2, builder.getClasses().size());
         assertNotNull(builder.getClassByName("oldfashioned.Ping"));
         assertNotNull(builder.getClassByName("oldfashioned.Bar"));
     }
@@ -369,7 +369,7 @@ public class JavaProjectBuilderTest
 
     public void testClassesCanBeAddedLater() throws Exception {
         testClassCanBeTestedForNonexistantClasses();
-        assertEquals(1, builder.getClasses().length);
+        assertEquals(1, builder.getClasses().size());
         JavaClass sausage = builder.getClassByName("food.Sausage");
 
         assertFalse(sausage.isA("global.Stuff"));
@@ -378,7 +378,7 @@ public class JavaProjectBuilderTest
                 + "class Meat extends global.Stuff {"
                 + "}";
         builder.addSource(new StringReader(in));
-        assertEquals(2, builder.getClasses().length);
+        assertEquals(2, builder.getClasses().size());
         assertTrue(sausage.isA("global.Stuff"));
     }
 
@@ -521,14 +521,14 @@ public class JavaProjectBuilderTest
     public void testSerializable() throws Exception {
         
         builder.addSource(new StringReader("package test; public class X{}"));
-        assertEquals("X", builder.getSources()[0].getClasses().get(0).getName());
+        assertEquals("X", builder.getSources().get(0).getClasses().get(0).getName());
         try {
             JavaProjectBuilder newBuilder = (JavaProjectBuilder) SerializationUtils.serializedCopy(builder);
 
             //
             fail("JavaProjectBuilder should not serializable, but its ClassLibraryBuilder");
             
-            assertEquals("X", newBuilder.getSources()[0].getClasses().get(0).getName());
+            assertEquals("X", newBuilder.getSources().get(0).getClasses().get(0).getName());
         }
         catch(RuntimeException ex) {
             if ( !(ex.getCause() instanceof NotSerializableException)) {
@@ -1043,7 +1043,7 @@ public class JavaProjectBuilderTest
                 " /** etc */\n" +
                 " c = 3; }";
         builder.addSource(new StringReader(sourceCode));
-        JavaClass javaClass = builder.getClasses()[0];
+        JavaClass javaClass = builder.getClasses().get(0);
         JavaField fieldA = javaClass.getFieldByName("a");
         assertEquals("some doc", fieldA.getComment());
         JavaField fieldB = javaClass.getFields()[1];
@@ -1074,7 +1074,7 @@ public class JavaProjectBuilderTest
                 "public class TestClassImpl {\r\n" + 
                 "}";
         builder.addSource(new StringReader(sourceCode));
-        JavaClass jClass = builder.getClasses()[0];
+        JavaClass jClass = builder.getClasses().get(0);
         assertEquals( Arrays.toString( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}), Arrays.toString(jClass.getTags()[0].getParameters()));
         //assertTrue( Arrays.equals( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}, jClass.getTags()[0].getParameters() ));
     }
@@ -1281,7 +1281,7 @@ public class JavaProjectBuilderTest
                 "   }\n" +
                 "}";
         builder.addSource( new StringReader( source ) );
-        JavaClass clazz = builder.getClasses()[0];
+        JavaClass clazz = builder.getClasses().get(0);
         assertEquals( 3, clazz.getMethods()[0].getLineNumber() );
         assertEquals( 9, clazz.getMethods()[1].getLineNumber() );
     }

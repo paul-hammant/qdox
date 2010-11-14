@@ -1,5 +1,8 @@
 package com.thoughtworks.qdox.library;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -78,9 +81,9 @@ public abstract class AbstractClassLibrary
      */
     protected abstract JavaClass resolveJavaClass( String name );
     
-    public JavaSource[] getJavaSources()
+    public List<JavaSource> getJavaSources()
     {
-        return context.getSources();
+        return Arrays.asList( context.getSources() );
     }
     
     /**
@@ -133,9 +136,9 @@ public abstract class AbstractClassLibrary
      * </code>
      * This example would return all created {@link JavaClass } objects, including those from the classloaders.
      */
-    public JavaClass[] getJavaClasses()
+    public List<JavaClass> getJavaClasses()
     {
-        return context.getClasses();
+        return Arrays.asList( context.getClasses());
     }
 
     /**
@@ -175,9 +178,9 @@ public abstract class AbstractClassLibrary
      * 
      * @return all JavaPackages of this ClassLibrary
      */
-    public JavaPackage[] getJavaPackages()
+    public List<JavaPackage> getJavaPackages()
     {
-        return context.getPackages();
+        return Arrays.asList(context.getPackages());
     }
     
     public JavaPackage getJavaPackage( String name ) {

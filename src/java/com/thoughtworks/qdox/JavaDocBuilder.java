@@ -148,7 +148,7 @@ public class JavaDocBuilder implements Serializable {
     }
 
     public JavaSource[] getSources() {
-        return oldClassLibrary.getJavaSources();
+        return oldClassLibrary.getJavaSources().toArray( new JavaSource[0] );
     }
 
     /**
@@ -176,7 +176,7 @@ public class JavaDocBuilder implements Serializable {
      * @since 1.9
      */
     public JavaPackage[] getPackages() {
-        return oldClassLibrary.getJavaPackages();
+        return oldClassLibrary.getJavaPackages().toArray( new JavaPackage[0] );
     }
 
     //@todo remove
@@ -232,10 +232,10 @@ public class JavaDocBuilder implements Serializable {
         });
     }
 
-    public List search(Searcher searcher) {
-        List results = new LinkedList();
-        for(int index = 0; index < oldClassLibrary.getJavaClasses().length; index++ ) {
-            JavaClass cls = oldClassLibrary.getJavaClasses()[index];
+    public List<JavaClass> search(Searcher searcher) {
+        List<JavaClass> results = new LinkedList<JavaClass>();
+        for(int index = 0; index < oldClassLibrary.getJavaClasses().size(); index++ ) {
+            JavaClass cls = oldClassLibrary.getJavaClasses().get(index);
             if (searcher.eval(cls)) {
                 results.add(cls);
             }

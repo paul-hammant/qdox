@@ -70,14 +70,14 @@ public class AbstractClassLibraryTest
      * Never null, empty by default
      */
     public void testGetJavaSources() throws Exception {
-        assertEquals( 0, nullClassLibrary.getJavaSources().length );
+        assertEquals( 0, nullClassLibrary.getJavaSources().size() );
     }
     
     /*
      * Never null, empty by default
      */
     public void testGetJavaClasses() throws Exception {
-        assertEquals( 0, nullClassLibrary.getJavaClasses().length );
+        assertEquals( 0, nullClassLibrary.getJavaClasses().size() );
     }
 
     public void testGetJavaClassByName() throws Exception {
@@ -115,7 +115,7 @@ public class AbstractClassLibraryTest
      * Never null, empty by default
      */
     public void testGetJavaPackages() throws Exception {
-        assertEquals( 0, nullClassLibrary.getJavaPackages().length );
+        assertEquals( 0, nullClassLibrary.getJavaPackages().size() );
     }
     
     public void testGetJavaPackageByName() throws Exception {

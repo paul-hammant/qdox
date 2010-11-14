@@ -7,6 +7,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -214,9 +218,9 @@ public class SourceLibrary
     /**
      * Get all classes, including those from parent SourceLibraries
      */
-    public JavaClass[] getJavaClasses()
+    public List<JavaClass> getJavaClasses()
     {
-        JavaClass[] result;
+        List<JavaClass> result = new ArrayList<JavaClass>();
         JavaClass[] unusedClasses = context.getClasses();
         JavaClass[] usedClasses = getJavaClasses( new ClassLibraryFilter()
         {
@@ -225,27 +229,17 @@ public class SourceLibrary
                 return (classLibrary instanceof SourceLibrary);
             }
         });
-        if ( usedClasses.length == 0 ) {
-            result = unusedClasses;
-        }
-        else if ( unusedClasses.length == 0 ) {
-            result = usedClasses;
-        }
-        else {
-            int totalClasses = usedClasses.length + unusedClasses.length;
-            result = new JavaClass[totalClasses]; 
-            System.arraycopy( usedClasses, 0, result, 0, usedClasses.length );
-            System.arraycopy( unusedClasses, 0, result, usedClasses.length, unusedClasses.length );
-        }
-        return result;
+        result.addAll(Arrays.asList( usedClasses ));
+        result.addAll(Arrays.asList( unusedClasses ));
+        return Collections.unmodifiableList( result );
     }
 
     /**
      * Get all packages, including those from parent SourceLibraries
      */
-    public JavaPackage[] getJavaPackages()
+    public List<JavaPackage> getJavaPackages()
     {
-        JavaPackage[] result;
+        List<JavaPackage> result = new ArrayList<JavaPackage>();
         JavaPackage[] unusedPackages = context.getPackages();
         JavaPackage[] usedPackages = getJavaPackages( new ClassLibraryFilter()
         {
@@ -254,27 +248,17 @@ public class SourceLibrary
                 return (classLibrary instanceof SourceLibrary);
             }
         });
-        if ( usedPackages.length == 0 ) {
-            result = unusedPackages;
-        }
-        else if ( unusedPackages.length == 0 ) {
-            result = usedPackages;
-        }
-        else {
-            int totalPackages = usedPackages.length + unusedPackages.length;
-            result = new JavaPackage[totalPackages]; 
-            System.arraycopy( usedPackages, 0, result, 0, usedPackages.length );
-            System.arraycopy( unusedPackages, 0, result, usedPackages.length, unusedPackages.length );
-        }
-        return result;
+        result.addAll( Arrays.asList( usedPackages ) );
+        result.addAll( Arrays.asList( unusedPackages ) );
+        return Collections.unmodifiableList( result );
     }
     
     /**
      * Get all sources, including those from parent SourceLibraries
      */
-    public JavaSource[] getJavaSources()
+    public List<JavaSource> getJavaSources()
     {
-        JavaSource[] result;
+        List<JavaSource> result = new ArrayList<JavaSource>();
         JavaSource[] unusedSources = context.getSources();
         JavaSource[] usedSources = getJavaSources( new ClassLibraryFilter()
         {
@@ -283,19 +267,9 @@ public class SourceLibrary
                 return (classLibrary instanceof SourceLibrary);
             }
         });
-        if ( usedSources.length == 0 ) {
-            result = unusedSources;
-        }
-        else if ( unusedSources.length == 0 ) {
-            result = usedSources;
-        }
-        else {
-            int totalSources = usedSources.length + unusedSources.length;
-            result = new JavaSource[totalSources]; 
-            System.arraycopy( usedSources, 0, result, 0, usedSources.length );
-            System.arraycopy( unusedSources, 0, result, usedSources.length, unusedSources.length );
-        }
-        return result;
+        result.addAll( Arrays.asList( usedSources ) );
+        result.addAll( Arrays.asList( unusedSources ) );
+        return Collections.unmodifiableList( result );
     }
     
     /**

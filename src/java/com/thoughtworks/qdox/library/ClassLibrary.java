@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.library;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
@@ -35,17 +36,17 @@ public interface ClassLibrary
      * Return all JavaClasses of the current library.
      * It's up to the library to decide if also collects JavaClasses from it's ancestors 
      * 
-     * @return all JavaClasses as array, never <code>null</code>
+     * @return all JavaClasses as a List, never <code>null</code>
      */
-    public JavaClass[] getJavaClasses();
+    public List<JavaClass> getJavaClasses();
     
     /**
      * Return all JavaSources of the current library.
      * It's up to the library to decide if also collects JavaSources from it's ancestors 
      * 
-     * @return all JavaSources as array, never <code>null</code>
+     * @return all JavaSources as a List, never <code>null</code>
      */
-    public JavaSource[] getJavaSources();
+    public List<JavaSource> getJavaSources();
     
     /**
      * Get the JavaPackage or null if it's not possible
@@ -59,7 +60,7 @@ public interface ClassLibrary
      * Return all JavaPackages of the current library.
      * It's up to the library to decide if also collects JavaPackages from it's ancestors 
      * 
-     * @return all JavaPackages as array, never <code>null</code>
+     * @return all JavaPackages as a List, never <code>null</code>
      */
-    public JavaPackage[] getJavaPackages();
+    public List<JavaPackage> getJavaPackages();
 }

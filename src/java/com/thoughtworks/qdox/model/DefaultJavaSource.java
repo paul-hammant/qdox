@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSource {
 
-    private static final Set PRIMITIVE_TYPES = new HashSet();
+    private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>();
 
     static {
         PRIMITIVE_TYPES.add("boolean");
@@ -33,11 +33,9 @@ public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSou
     private ModelWriterFactory modelWriterFactory;
     
     private JavaPackage packge;
-    private List imports = new LinkedList();
-    private String[] importsArray;
-    private List classes = new LinkedList();
-    private JavaClass[] classesArray;
-    private Map resolvedTypeCache = new HashMap();
+    private List<String> imports = new LinkedList<String>();
+    private List<JavaClass> classes = new LinkedList<JavaClass>();
+    private Map<String, String> resolvedTypeCache = new HashMap<String, String>();
     private URL url;
 
     public DefaultJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary) {
@@ -114,34 +112,24 @@ public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSou
 
     public void addImport(String imp) {
         imports.add(imp);
-        importsArray = null;
     }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaSource#getImports()
      */
     public String[] getImports() {
-        if (importsArray == null) {
-            importsArray = new String[imports.size()];
-            imports.toArray(importsArray);
-        }
-        return importsArray;
+        return imports.toArray( new String[0] );
     }
 
     public void addClass(JavaClass cls) {
         classes.add(cls);
-        classesArray = null;
     }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaSource#getClasses()
      */
     public JavaClass[] getClasses() {
-        if (classesArray == null) {
-            classesArray = new JavaClass[classes.size()];
-            classes.toArray(classesArray);
-        }
-        return classesArray;
+      return classes.toArray(new JavaClass[0]);
     }
 
     /* (non-Javadoc)
@@ -160,7 +148,7 @@ public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSou
      */
     public String resolveType(String typeName) {
         if (resolvedTypeCache.containsKey(typeName)) {
-            return (String) resolvedTypeCache.get(typeName);
+            return resolvedTypeCache.get(typeName);
         }
         String resolved = resolveTypeInternal(typeName);
         if (resolved != null) {
@@ -326,7 +314,7 @@ public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSou
     public JavaClass getNestedClassByName(String name) {
         JavaClass result = null;
         
-        for (ListIterator i = classes.listIterator(); i.hasNext(); ) {
+        for (ListIterator<JavaClass> i = classes.listIterator(); i.hasNext(); ) {
             JavaClass candidateClass = (JavaClass) i.next();
             
             if (candidateClass.getName().equals(name)) {

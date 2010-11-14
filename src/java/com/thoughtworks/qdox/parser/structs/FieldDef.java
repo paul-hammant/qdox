@@ -6,7 +6,7 @@ import java.util.Set;
 public class FieldDef extends LocatedDef {
     public String name = "";
     public TypeDef type;
-    public Set modifiers = new HashSet();
+    public Set<String> modifiers = new HashSet<String>();
     public int dimensions;
     public boolean isVarArgs;
     public String body = "";

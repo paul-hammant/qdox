@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.List;
+
 public interface JavaPackage extends JavaAnnotatedElement
 {
 
@@ -8,11 +10,11 @@ public interface JavaPackage extends JavaAnnotatedElement
      *
      * @return all the classes found for the package
      */
-    public JavaClass[] getClasses();
+    public List<JavaClass> getClasses();
 
     public JavaPackage getParentPackage();
 
-    public JavaPackage[] getSubPackages();
+    public List<JavaPackage> getSubPackages();
 
     public String getName();
 

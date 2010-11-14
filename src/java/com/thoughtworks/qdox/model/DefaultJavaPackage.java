@@ -61,10 +61,10 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaPackage#getClasses()
      */
-	public JavaClass[] getClasses() {
+	public List<JavaClass> getClasses() {
 	    //avoid infinitive  recursion
 	    if (this == context.getPackageByName( name )) {
-	        return classes.toArray(new JavaClass[classes.size()]);
+	        return classes;
 	    }
 	    else {
 	        return context.getPackageByName( name ).getClasses();
@@ -76,7 +76,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
         return context.getPackageByName( parentName );
     }
 
-    public JavaPackage[] getSubPackages() {
+    public List<JavaPackage> getSubPackages() {
         String expected = name + ".";
         JavaPackage[] jPackages = context.getPackages();
         List<JavaPackage> retList = new ArrayList<JavaPackage>();
@@ -86,7 +86,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
                 retList.add(context.getPackageByName( pName ));
             }
         }
-        return retList.toArray(new JavaPackage[retList.size()]);
+        return retList;
     }
 
     public boolean equals(Object o) {

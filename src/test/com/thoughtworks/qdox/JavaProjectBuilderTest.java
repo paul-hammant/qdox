@@ -127,20 +127,20 @@ public class JavaProjectBuilderTest
         assertEquals("com.blah.subpackage", comBlahSubpackage.getName());
         JavaPackage comBlah = packages[1];
         assertEquals("com.blah", comBlah.getName());
-        JavaClass[] classes = comBlahSubpackage.getClasses();
-        assertEquals(1, classes.length);
-        assertEquals("Cheese", classes[0].getName());
+        List<JavaClass> classes = comBlahSubpackage.getClasses();
+        assertEquals(1, classes.size());
+        assertEquals("Cheese", classes.get(0).getName());
         classes = comBlah.getClasses();
-        assertEquals(2, classes.length);
-        assertEquals("Another", classes[0].getName());
-        assertEquals("Thing", classes[1].getName());
+        assertEquals(2, classes.size());
+        assertEquals("Another", classes.get(0).getName());
+        assertEquals("Thing", classes.get(1).getName());
         assertEquals(comBlah, comBlahSubpackage.getParentPackage());
         assertNull(comBlah.getParentPackage());
-        JavaPackage[] comBlahSubpackages = comBlah.getSubPackages();
-        assertEquals(1, comBlahSubpackages.length);
-        assertEquals(comBlahSubpackage, comBlahSubpackages[0]);
-        JavaPackage[] comBlahSubpackageSubpackages = comBlahSubpackage.getSubPackages();
-        assertEquals(0, comBlahSubpackageSubpackages.length);
+        List<JavaPackage> comBlahSubpackages = comBlah.getSubPackages();
+        assertEquals(1, comBlahSubpackages.size());
+        assertEquals(comBlahSubpackage, comBlahSubpackages.get(0));
+        List<JavaPackage> comBlahSubpackageSubpackages = comBlahSubpackage.getSubPackages();
+        assertEquals(0, comBlahSubpackageSubpackages.size());
     }
 
     private String createOuter() {
@@ -1243,9 +1243,9 @@ public class JavaProjectBuilderTest
         JavaSource javaSource1 = builder.addSource(new StringReader(source1));
         JavaSource javaSource2 = builder.addSource(new StringReader(source2));
         JavaPackage jPackage = builder.getPackageByName("com.foo");
-        assertEquals( 2, jPackage.getClasses().length );
-        assertEquals( 2, javaSource1.getPackage().getClasses().length );
-        assertEquals( 2, javaSource2.getPackage().getClasses().length );
+        assertEquals( 2, jPackage.getClasses().size() );
+        assertEquals( 2, javaSource1.getPackage().getClasses().size() );
+        assertEquals( 2, javaSource2.getPackage().getClasses().size() );
         assertNotSame( javaSource1.getPackage(), javaSource2.getPackage() );
         assertEquals( 1, javaSource1.getPackage().getAnnotations().length );
         assertEquals( 0, javaSource2.getPackage().getAnnotations().length );

@@ -24,18 +24,18 @@ public class Annotation implements AnnotationValue, Serializable
      * This map contains the parsed AnnotationValue for each property and allows
      * access to the full parse tree, including typerefs and expressions.
      */
-    private final Map properties = new LinkedHashMap();
+    private final Map<String, AnnotationValue> properties = new LinkedHashMap<String, AnnotationValue>();
 
     /**
      * Annotation properties as Parameters
      */
-    private final Map namedParameters = new LinkedHashMap();
+    private final Map<String, Object> namedParameters = new LinkedHashMap<String, Object>();
 
     private AbstractBaseJavaEntity context;
 
     public Annotation(Type type,
             AbstractBaseJavaEntity context,
-            Map namedParameters,
+            Map<String, Object> namedParameters,
             int lineNumber)
 	{
         this.type = type;
@@ -43,10 +43,10 @@ public class Annotation implements AnnotationValue, Serializable
         this.lineNumber = lineNumber;
         
         if(properties != null) {
-            for(Iterator i = this.properties.entrySet().iterator(); i.hasNext(); ) {
-                Entry entry = (Entry) i.next();
-                String name = (String) entry.getKey();
-                AnnotationValue value = (AnnotationValue) entry.getValue();
+            for(Iterator<Entry<String, AnnotationValue>> i = this.properties.entrySet().iterator(); i.hasNext(); ) {
+                Entry<String, AnnotationValue> entry = i.next();
+                String name = entry.getKey();
+                AnnotationValue value = entry.getValue();
                 
                 setProperty(name, value);
             }
@@ -81,7 +81,7 @@ public class Annotation implements AnnotationValue, Serializable
     /**
      * @return a Map containing all the named-parameters
      */
-    public Map getNamedParameterMap() {
+    public Map<String, Object> getNamedParameterMap() {
     	return namedParameters;
     }
 
@@ -101,12 +101,12 @@ public class Annotation implements AnnotationValue, Serializable
         return this;
     }
     
-    public Map getPropertyMap() {
+    public Map<String, AnnotationValue> getPropertyMap() {
         return properties;
     }
     
     public AnnotationValue getProperty(String name) {
-        return (AnnotationValue) properties.get( name );
+        return properties.get( name );
     }
 
     public void setContext( AbstractBaseJavaEntity context ) {
@@ -119,7 +119,7 @@ public class Annotation implements AnnotationValue, Serializable
         result.append(type.getValue());
         result.append('(');
         if( !namedParameters.isEmpty() ) {
-            for(Iterator i = namedParameters.entrySet().iterator(); i.hasNext();) result.append( i.next() + ",");
+            for(Iterator<Entry<String, Object>> i = namedParameters.entrySet().iterator(); i.hasNext();) result.append( i.next() + ",");
             result.deleteCharAt( result.length()-1 );
         }
         result.append(')');

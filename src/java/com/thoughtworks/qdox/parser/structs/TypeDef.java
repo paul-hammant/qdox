@@ -6,7 +6,7 @@ public class TypeDef {
 
     public String name;
     public int dimensions;
-    public List actualArgumentTypes; 
+    public List<TypeDef> actualArgumentTypes; 
 
     public TypeDef(String name, int dimensions) {
         this.name = name;

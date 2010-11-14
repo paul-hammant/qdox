@@ -3,7 +3,6 @@ package com.thoughtworks.qdox.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,12 +21,9 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     private static Type ENUM;
     private static Type ANNOTATION = new Type("java.lang.annotation.Annotation");
 
-    private List methods = new LinkedList();
-    private JavaMethod[] methodsArray;
-    private List fields = new LinkedList();
-    private JavaField[] fieldsArray;
-    private List classes = new LinkedList();
-    private JavaClass[] classesArray;
+    private List<JavaMethod> methods = new LinkedList<JavaMethod>();
+    private List<JavaField> fields = new LinkedList<JavaField>();
+    private List<JavaClass> classes = new LinkedList<JavaClass>();
     private boolean interfce;
     private boolean isEnum;
     private boolean isAnnotation;
@@ -147,7 +143,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public void addMethod(JavaMethod meth) {
         methods.add(meth);
-        methodsArray = null;
     }
 
     public void setSuperClass(Type type) {
@@ -171,7 +166,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public void addField(JavaField javaField) {
         fields.add(javaField);
-        fieldsArray = null;
     }
     
     /**
@@ -257,12 +251,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public JavaMethod[] getMethods() {
-        if (methodsArray == null) {
-            methodsArray = new JavaMethod[methods.size()];
-            methods.toArray(methodsArray);
-        }
-
-        return methodsArray;
+        return methods.toArray( new JavaMethod[0] );
     }
 
     /**
@@ -270,8 +259,8 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      */
     public JavaMethod[] getMethods(boolean superclasses) {
         if (superclasses) {
-            Set signatures = new HashSet();
-            List methods = new ArrayList();
+            Set<String> signatures = new HashSet<String>();
+            List<JavaMethod> methods = new ArrayList<JavaMethod>();
 
             addMethodsFromSuperclassAndInterfaces(signatures, methods, this);
 
@@ -281,8 +270,8 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         }
     }
 
-    private void addMethodsFromSuperclassAndInterfaces(Set signatures,
-                                                       List methodList, JavaClass callingClazz) {
+    private void addMethodsFromSuperclassAndInterfaces(Set<String> signatures,
+                                                       List<JavaMethod> methodList, JavaClass callingClazz) {
         JavaMethod[] methods = callingClazz.getMethods();
 
         addNewMethods(signatures, methodList, methods);
@@ -305,7 +294,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         }
     }
 
-    private void addNewMethods(Set signatures, List methodList,
+    private void addNewMethods(Set<String> signatures, List<JavaMethod> methodList,
                                JavaMethod[] methods) {
         for (int i = 0; i < methods.length; i++) {
             JavaMethod method = methods[i];
@@ -402,7 +391,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      */
     public JavaMethod[] getMethodsBySignature(String name,
                                               Type[] parameterTypes, boolean superclasses, boolean varArg) {
-        List result = new ArrayList();
+        List<JavaMethod> result = new ArrayList<JavaMethod>();
 
         JavaMethod methodInThisClass = getMethod(name, parameterTypes, varArg);
 
@@ -435,16 +424,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
             }
         }
 
-        return (JavaMethod[]) result.toArray(new JavaMethod[result.size()]);
+        return result.toArray(new JavaMethod[result.size()]);
     }
 
     public JavaField[] getFields() {
-        if (fieldsArray == null) {
-            fieldsArray = new JavaField[fields.size()];
-            fields.toArray(fieldsArray);
-        }
-
-        return fieldsArray;
+        return fields.toArray( new JavaField[0] );
     }
 
     public JavaField getFieldByName(String name) {
@@ -462,7 +446,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     public void addClass(JavaClass cls) {
         cls.setParentClass( this );
         classes.add(cls);
-        classesArray = null;
     }
 
     /**
@@ -476,12 +459,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @since 1.3
      */
     public JavaClass[] getNestedClasses() {
-        if (classesArray == null) {
-            classesArray = new JavaClass[classes.size()];
-            classes.toArray(classesArray);
-        }
-
-        return classesArray;
+        return classes.toArray(new JavaClass[0]);
     }
 
     public JavaClass getNestedClassByName(String name) {
@@ -545,16 +523,16 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @since 1.3
      */
     public BeanProperty[] getBeanProperties(boolean superclasses) {
-        Map beanPropertyMap = getBeanPropertyMap(superclasses);
-        Collection beanPropertyCollection = beanPropertyMap.values();
+        Map<String, BeanProperty> beanPropertyMap = getBeanPropertyMap(superclasses);
+        Collection<BeanProperty> beanPropertyCollection = beanPropertyMap.values();
 
-        return (BeanProperty[]) beanPropertyCollection.toArray(new BeanProperty[beanPropertyCollection
+        return beanPropertyCollection.toArray(new BeanProperty[beanPropertyCollection
                 .size()]);
     }
 
-    private Map getBeanPropertyMap(boolean superclasses) {
+    private Map<String, BeanProperty> getBeanPropertyMap(boolean superclasses) {
         JavaMethod[] methods = getMethods(superclasses);
-        Map beanPropertyMap = new LinkedHashMap();
+        Map<String, BeanProperty> beanPropertyMap = new LinkedHashMap<String, BeanProperty>();
 
         // loop over the methods.
         for (int i = 0; i < methods.length; i++) {
@@ -580,7 +558,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return beanPropertyMap;
     }
 
-    private BeanProperty getOrCreateProperty(Map beanPropertyMap,
+    private BeanProperty getOrCreateProperty(Map<String, BeanProperty> beanPropertyMap,
                                              String propertyName) {
         BeanProperty result = (BeanProperty) beanPropertyMap.get(propertyName);
 
@@ -606,14 +584,14 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      */
     public BeanProperty getBeanProperty(String propertyName,
                                         boolean superclasses) {
-        return (BeanProperty) getBeanPropertyMap(superclasses).get(propertyName);
+        return getBeanPropertyMap(superclasses).get(propertyName);
     }
 
     /**
      * Gets the known derived classes. That is, subclasses or implementing classes.
      */
     public JavaClass[] getDerivedClasses() {
-        List result = new ArrayList();
+        List<JavaClass> result = new ArrayList<JavaClass>();
         JavaClass[] classes;
         if( source.getJavaClassLibrary() != null ) {
             classes = source.getJavaClassLibrary().getJavaClasses();
@@ -631,18 +609,18 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
             }
         }
 
-        return (JavaClass[]) result.toArray(new JavaClass[result.size()]);
+        return result.toArray(new JavaClass[result.size()]);
     }
 
     public DocletTag[] getTagsByName(String name, boolean superclasses) {
-        List result = new ArrayList();
+        List<DocletTag> result = new ArrayList<DocletTag>();
 
         addTagsRecursive(result, this, name, superclasses);
 
-        return (DocletTag[]) result.toArray(new DocletTag[result.size()]);
+        return result.toArray(new DocletTag[result.size()]);
     }
 
-    private void addTagsRecursive(List result, JavaClass javaClass,
+    private void addTagsRecursive(List<DocletTag> result, JavaClass javaClass,
                                   String name, boolean superclasses) {
         DocletTag[] tags = javaClass.getTagsByName(name);
 
@@ -667,7 +645,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         }
     }
 
-    private void addNewTags(List list, DocletTag[] tags) {
+    private void addNewTags(List<DocletTag> list, DocletTag[] tags) {
         for (int i = 0; i < tags.length; i++) {
             DocletTag superTag = tags[i];
 

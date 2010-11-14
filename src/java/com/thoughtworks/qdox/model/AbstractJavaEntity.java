@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements Comparable, JavaModel {
 
-    protected List modifiers = new ArrayList();
+    protected List<String> modifiers = new ArrayList<String>();
     private String comment;
     private DocletTag[] tags = new DocletTag[0];
     
@@ -17,7 +17,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
      * (public, private, protected, final, abstract, static)
      */
     public String[] getModifiers() {
-        return (String[]) modifiers.toArray(new String[modifiers.size()]);
+        return modifiers.toArray(new String[modifiers.size()]);
     }
 
     /* (non-Javadoc)
@@ -38,14 +38,14 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
      * @see com.thoughtworks.qdox.model.JavaModel#getTagsByName(java.lang.String)
      */
     public DocletTag[] getTagsByName(String name) {
-        List specifiedTags = new ArrayList();
+        List<DocletTag> specifiedTags = new ArrayList<DocletTag>();
         for (int i = 0; i < tags.length; i++) {
             DocletTag docletTag = tags[i];
             if (docletTag.getName().equals(name)) {
                 specifiedTags.add(docletTag);
             }
         }
-        return (DocletTag[]) specifiedTags.toArray(new DocletTag[specifiedTags.size()]);
+        return specifiedTags.toArray(new DocletTag[specifiedTags.size()]);
     }
 
     /* (non-Javadoc)
@@ -120,7 +120,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         this.comment = comment;
     }
 
-    public void setTags(List tagList) {
+    public void setTags(List<DocletTag> tagList) {
         this.tags = new DocletTag[tagList.size()];
         tagList.toArray(this.tags);
     }
@@ -185,7 +185,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
 
     protected void writeNonAccessibilityModifiers(IndentBuffer result) {
         // modifiers (anything else)
-        for (Iterator iter = modifiers.iterator(); iter.hasNext();) {
+        for (Iterator<String> iter = modifiers.iterator(); iter.hasNext();) {
             String modifier = (String) iter.next();
             if (!modifier.startsWith("p")) {
                 result.write(modifier);
@@ -195,7 +195,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     protected void writeAccessibilityModifier(IndentBuffer result) {
-        for (Iterator iter = modifiers.iterator(); iter.hasNext();) {
+        for (Iterator<String> iter = modifiers.iterator(); iter.hasNext();) {
             String modifier = (String) iter.next();
             if (modifier.startsWith("p")) {
                 result.write(modifier);
@@ -205,7 +205,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     protected void writeAllModifiers(IndentBuffer result) {
-        for (Iterator iter = modifiers.iterator(); iter.hasNext();) {
+        for (Iterator<String> iter = modifiers.iterator(); iter.hasNext();) {
             String modifier = (String) iter.next();
             result.write(modifier);
             result.write(' ');

@@ -74,10 +74,7 @@ public class DefaultModelWriter implements ModelWriter
         buffer.indent();
 
         // fields
-        
-        for (int index = 0; index < clazz.getFields().length; index++) {
-            JavaField javaField = clazz.getFields()[index];
-
+        for (JavaField javaField : clazz.getFields()) {
             buffer.newline();
             writeField(javaField);
         }

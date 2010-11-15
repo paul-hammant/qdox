@@ -100,8 +100,8 @@ public class JavaProjectBuilderTest
         assertEquals("Outer", outer.getName());
         assertEquals("foo.bar.Outer", outer.getFullyQualifiedName());
 
-        assertEquals(1, outer.getFields().length);
-        assertEquals("int", outer.getFields()[0].getType().getValue());
+        assertEquals(1, outer.getFields().size());
+        assertEquals("int", outer.getFields().get(0).getType().getValue());
 
         assertEquals(1, outer.getMethods().size());
         assertEquals("outerMethod", outer.getMethods().get(0).getName());
@@ -490,8 +490,8 @@ public class JavaProjectBuilderTest
         assertTrue(protectedMethod.isProtected());
         assertTrue(privateMethod.isPrivate());
 
-        JavaField[] fields = propertyClass.getFields();
-        assertEquals(3, fields.length);
+        List<JavaField> fields = propertyClass.getFields();
+        assertEquals(3, fields.size());
     }
 
     public void testSourceDefaultCtor() throws Exception {
@@ -770,13 +770,13 @@ public class JavaProjectBuilderTest
                 + "}";
         builder.addSource(new StringReader(sourceCode));
         JavaClass a = builder.getClassByName("A");
-        assertEquals(3, a.getFields().length);
-        assertEquals("i", a.getFields()[0].getName());
-        assertEquals("int", a.getFields()[0].getType().toString());
-        assertEquals("j", a.getFields()[1].getName());
-        assertEquals("int", a.getFields()[1].getType().toString());
-        assertEquals("k", a.getFields()[2].getName());
-        assertEquals("int[]", a.getFields()[2].getType().toString());
+        assertEquals(3, a.getFields().size());
+        assertEquals("i", a.getFields().get(0).getName());
+        assertEquals("int", a.getFields().get(0).getType().toString());
+        assertEquals("j", a.getFields().get(1).getName());
+        assertEquals("int", a.getFields().get(1).getType().toString());
+        assertEquals("k", a.getFields().get(2).getName());
+        assertEquals("int[]", a.getFields().get(2).getType().toString());
     }
 
     public void testJiraQdox40() {
@@ -979,7 +979,7 @@ public class JavaProjectBuilderTest
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        JavaField javaField = javaClass.getFields()[0];
+        JavaField javaField = javaClass.getFields().get(0);
         String expected = "" +
                 "new FlubberFactory<Y>(\"}\"){}.doCheese(spam/*c*/)\n" +
                 "    [9] /*comment*/ //more";
@@ -1028,7 +1028,7 @@ public class JavaProjectBuilderTest
         assertEquals("Class", PropertyClass.class.getName(), javaClass.getFullyQualifiedName());
         JavaField javaField = javaClass.getFieldByName("aField");
         assertNotNull("Field", javaField);
-        Set modifiers = new HashSet(javaField.getModifiers());
+        Set<String> modifiers = new HashSet<String>(javaField.getModifiers());
         assertEquals("Modifier count", 2, javaField.getModifiers().size());
         assertTrue("Static", modifiers.contains("static"));
         assertTrue("Public", modifiers.contains("public"));
@@ -1046,9 +1046,9 @@ public class JavaProjectBuilderTest
         JavaClass javaClass = builder.getClasses().get(0);
         JavaField fieldA = javaClass.getFieldByName("a");
         assertEquals("some doc", fieldA.getComment());
-        JavaField fieldB = javaClass.getFields()[1];
+        JavaField fieldB = javaClass.getFields().get(1);
         assertEquals("more doc", fieldB.getComment());
-        JavaField fieldC = javaClass.getFields()[2];
+        JavaField fieldC = javaClass.getFields().get(2);
         assertEquals("etc", fieldC.getComment());
     }
 

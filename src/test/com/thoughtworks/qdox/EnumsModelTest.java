@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox;
 
 import java.io.StringReader;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -49,11 +50,11 @@ public class EnumsModelTest extends TestCase {
         
         //---
         
-        JavaField fields1[] = enum1.getFields();
+        List<JavaField> fields1 = enum1.getFields();
 //      printFields( fields1 );
-        assertEquals(2, fields1.length);
+        assertEquals(2, fields1.size());
         
-        JavaField enum1a = fields1[0];
+        JavaField enum1a = fields1.get(0);
         assertNull( enum1a.getComment() );
         assertEquals( 1, enum1a.getModifiers().size() );
         assertEquals( "public", enum1a.getModifiers().get(0) );
@@ -63,11 +64,11 @@ public class EnumsModelTest extends TestCase {
         
         //---
 
-        JavaField fields2[] = enum2.getFields();
+        List<JavaField> fields2 = enum2.getFields();
 //      printFields( fields2 );
-        assertEquals(2, fields2.length);
+        assertEquals(2, fields2.size());
         
-        JavaField enum2d = fields2[1];
+        JavaField enum2d = fields2.get(1);
         assertNotNull( enum2d.getComment() );
         assertEquals( 0, enum2d.getModifiers().size() );
         assertEquals( 0, enum2d.getAnnotations().size() );
@@ -148,11 +149,11 @@ public class EnumsModelTest extends TestCase {
         
         //---
 
-        JavaField fields[] = cls.getFields();
+        List<JavaField> fields = cls.getFields();
 //      printFields( fields );
-        assertEquals(3, fields.length);		// includes c, d, and someField
+        assertEquals(3, fields.size());		// includes c, d, and someField
         
-        JavaField enum1c = fields[0];
+        JavaField enum1c = fields.get(0);
         assertNull( enum1c.getComment() );
         assertEquals( 0, enum1c.getModifiers().size() );
         assertEquals( 0, enum1c.getAnnotations().size() );
@@ -161,7 +162,7 @@ public class EnumsModelTest extends TestCase {
 
         //---
         
-        JavaField enum1d = fields[1];
+        JavaField enum1d = fields.get(1);
         assertNull( enum1d.getComment() );
         assertEquals( 0, enum1d.getModifiers().size() );
         assertEquals( "X$EnumWithConstructors", enum1d.getType().getFullyQualifiedName() );

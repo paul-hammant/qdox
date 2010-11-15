@@ -417,19 +417,16 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return result.toArray(new JavaMethod[result.size()]);
     }
 
-    public JavaField[] getFields() {
-        return fields.toArray( new JavaField[0] );
+    public List<JavaField> getFields() {
+        return fields;
     }
 
     public JavaField getFieldByName(String name) {
-        JavaField[] fields = getFields();
-
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(name)) {
-                return fields[i];
+        for ( JavaField field : getFields()) {
+            if (field.getName().equals(name)) {
+                return field;
             }
         }
-
         return null;
     }
 

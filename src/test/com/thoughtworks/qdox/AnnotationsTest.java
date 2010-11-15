@@ -255,7 +255,7 @@ public class AnnotationsTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaMethod method = builder.getClasses()[0].getMethods().get(0);
         AnnotationFieldRef suppressWarnings = (AnnotationFieldRef) method.getAnnotations().get(0).getProperty( "value" );
-        assertEquals( builder.getClasses()[0].getFields()[0], suppressWarnings.getField());
+        assertEquals( builder.getClasses()[0].getFields().get(0), suppressWarnings.getField());
     }
     
     public void testDoubleEscapedString() throws Exception {

@@ -57,7 +57,7 @@ public class FieldsTest extends TestCase
     			"}";
     	
     	builder.addSource(new StringReader(source));
-    	JavaField field = builder.getClasses()[0].getFields()[0];
+    	JavaField field = builder.getClasses()[0].getFields().get(0);
     	assertEquals("null", field.getInitializationExpression());
     }
 }

@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.Iterator;
+
 
 public class DefaultModelWriter implements ModelWriter
 {
@@ -159,14 +161,14 @@ public class DefaultModelWriter implements ModelWriter
         buffer.write( ')' );
         if ( isDeclaration )
         {
-            if ( method.getExceptions().length > 0 )
-            {
-                buffer.write( " throws " );
-                for ( int i = 0; i < method.getExceptions().length; i++ )
-                {
-                    if ( i > 0 )
-                        buffer.write( ", " );
-                    buffer.write( method.getExceptions()[i].getValue() );
+            if (method.getExceptions().size() > 0) {
+                buffer.write(" throws ");
+                Iterator<Type> excIter = method.getExceptions().iterator();
+                while (excIter.hasNext()) {
+                    buffer.write(excIter.next().getValue());
+                    if(excIter.hasNext()) {
+                        buffer.write(", ");
+                    }
                 }
             }
         }

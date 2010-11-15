@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.List;
+
 public class DefaultJavaMethodTest
     extends JavaMethodTest
 {
@@ -54,7 +56,7 @@ public class DefaultJavaMethodTest
         return new Type( fullname, dimensions );
     }
 
-    public void setExceptions( JavaMethod method, Type[] exceptions )
+    public void setExceptions( JavaMethod method, List<Type> exceptions )
     {
         method.setExceptions( exceptions );
     }

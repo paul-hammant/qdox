@@ -323,7 +323,7 @@ public class ModelBuilderTest extends TestCase {
         assertSame(source, parentSource);
         assertEquals(0, doSomething.getModifiers().size());
         assertEquals(0, doSomething.getParameters().length);
-        assertEquals(0, doSomething.getExceptions().length);
+        assertEquals(0, doSomething.getExceptions().size());
     }
 
     public void testMethodNoArray() throws Exception {
@@ -435,11 +435,11 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
         JavaMethod result = source.getClasses().get(0).getMethods().get(0);
-        assertEquals(2, result.getExceptions().length);
+        assertEquals(2, result.getExceptions().size());
         // sorted
-        Arrays.sort(result.getExceptions());
-        assertEquals("RuntimeException", result.getExceptions()[0].getValue());
-        assertEquals("java.io.IOException", result.getExceptions()[1].getValue());
+        Collections.sort( result.getExceptions() );
+        assertEquals("RuntimeException", result.getExceptions().get(0).getValue());
+        assertEquals("java.io.IOException", result.getExceptions().get(1).getValue());
     }
 
     public void testMethodModifiers() throws Exception {

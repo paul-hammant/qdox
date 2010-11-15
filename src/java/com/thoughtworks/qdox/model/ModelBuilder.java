@@ -214,10 +214,9 @@ public class ModelBuilder implements Builder {
         
         // exceptions
         {
-            Type[] exceptions = new Type[def.exceptions.size()];
-            int index = 0;
-            for (Iterator<String> iter = def.exceptions.iterator(); iter.hasNext();) {
-                exceptions[index++] = createType((String) iter.next(), 0);
+            List<Type> exceptions = new LinkedList<Type>();
+            for (String type : def.exceptions) {
+                exceptions.add(createType(type, 0));
             }
             currentMethod.setExceptions(exceptions);
         }

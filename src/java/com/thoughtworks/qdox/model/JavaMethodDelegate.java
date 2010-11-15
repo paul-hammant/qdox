@@ -91,7 +91,7 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.getDeclarationSignature( withModifiers );
     }
 
-    public Type[] getExceptions()
+    public List<Type> getExceptions()
     {
         return originalMethod.getExceptions();
     }
@@ -301,7 +301,7 @@ public class JavaMethodDelegate extends JavaMethod
         originalMethod.setConstructor( constructor );
     }
 
-    public void setExceptions( Type[] exceptions )
+    public void setExceptions( List<Type> exceptions )
     {
         originalMethod.setExceptions( exceptions );
     }

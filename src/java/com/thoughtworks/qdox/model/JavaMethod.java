@@ -2,6 +2,7 @@ package com.thoughtworks.qdox.model;
 
 import java.beans.Introspector;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
 	private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
     private Type returns = Type.VOID;
     private List<JavaParameter> parameters = new LinkedList<JavaParameter>();
-    private Type[] exceptions = Type.EMPTY_ARRAY;
+    private List<Type> exceptions = Collections.emptyList();
     private boolean constructor;
     private String sourceCode;
     private boolean varArgs;
@@ -64,7 +65,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         return null;
     }
 
-    public Type[] getExceptions() {
+    public List<Type> getExceptions() {
         return exceptions;
     }
 
@@ -122,11 +123,14 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         }
         result.write(')');
         if (isDeclaration) {
-            if (exceptions.length > 0) {
+            if (exceptions.size() > 0) {
                 result.write(" throws ");
-                for (int i = 0; i < exceptions.length; i++) {
-                    if (i > 0) result.write(", ");
-                    result.write(exceptions[i].getValue());
+                Iterator<Type> excIter = exceptions.iterator();
+                while (excIter.hasNext()) {
+                    result.write(excIter.next().getValue());
+                    if(excIter.hasNext()) {
+                        result.write(", ");
+                    }
                 }
             }
         }
@@ -181,7 +185,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         this.varArgs = javaParameter.isVarArgs();
     }
 
-    public void setExceptions(Type[] exceptions) {
+    public void setExceptions(List<Type> exceptions) {
         this.exceptions = exceptions;
     }
 
@@ -420,10 +424,16 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
 			result.append(typeValue);
 		}
 		result.append(")");
-		for(int i = 0; i < exceptions.length; i++) {
-			result.append(i==0 ? " throws " : ",");
-			result.append(exceptions[i].getValue());
-		}
+		if (exceptions.size() > 0) {
+            result.append(" throws ");
+            Iterator<Type> excIter = exceptions.iterator();
+            while (excIter.hasNext()) {
+                result.append(excIter.next().getValue());
+                if(excIter.hasNext()) {
+                    result.append(",");
+                }
+            }
+        }
 		return result.toString();
 	}
 

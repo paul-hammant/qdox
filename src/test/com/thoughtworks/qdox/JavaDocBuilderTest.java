@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -447,11 +449,11 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals(8, methods.size());
 
         JavaMethod ctor = propertyClass.getMethodBySignature("PropertyClass", null);
-        JavaMethod ctor2 = propertyClass.getMethodBySignature("PropertyClass", new Type[] {propertyClass.asType()});
+        JavaMethod ctor2 = propertyClass.getMethodBySignature("PropertyClass", Collections.singletonList(propertyClass.asType()));
         JavaMethod getFoo = propertyClass.getMethodBySignature("getFoo", null);
         JavaMethod isBar = propertyClass.getMethodBySignature("isBar", null);
         JavaMethod get = propertyClass.getMethodBySignature("get", null);
-        JavaMethod set = propertyClass.getMethodBySignature("set", new Type[]{new Type("int")});
+        JavaMethod set = propertyClass.getMethodBySignature("set", Collections.singletonList(new Type("int")));
 
         JavaMethod protectedMethod = propertyClass.getMethodBySignature("protectedMethod", null);
         JavaMethod privateMethod = propertyClass.getMethodBySignature("privateMethod", null);
@@ -610,7 +612,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaField iField = fooClass.getFieldByName("i");
         assertEquals(5, iField.getLineNumber());
         JavaMethod getIMethod = 
-            fooClass.getMethodBySignature("getI", Type.EMPTY_ARRAY);
+            fooClass.getMethodBySignature("getI", new ArrayList<Type>());
         assertEquals(6, getIMethod.getLineNumber());
     }
     

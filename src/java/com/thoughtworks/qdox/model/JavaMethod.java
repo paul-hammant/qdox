@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.beans.Introspector;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -219,7 +219,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
      * @return
      * @deprecated use overloaded method 
      */
-    public boolean signatureMatches(String name, Type[] parameterTypes) {
+    public boolean signatureMatches(String name, List<Type> parameterTypes) {
         return signatureMatches( name, parameterTypes, false );
     }
     
@@ -228,12 +228,21 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
      * @param parameterTypes parameter types or null if there are no parameters.
      * @return true if the signature and parameters match.
      */
-    public boolean signatureMatches(String name, Type[] parameterTypes, boolean varArg) {
+    public boolean signatureMatches(String name, List<Type> parameterTypes, boolean varArg) {
         if (!name.equals(this.name)) return false;
-        parameterTypes = (parameterTypes == null ? new Type[0] : parameterTypes);
-        if (parameterTypes.length != this.getParameters().length) return false;
+        
+        List<Type> parameterTypeList;
+        if( parameterTypes == null) {
+            parameterTypeList = Collections.emptyList();
+        }
+        else {
+            parameterTypeList = parameterTypes;
+        }
+        
+        if (parameterTypeList.size() != this.getParameters().length) return false;
+        
         for (int i = 0; i < parameters.size(); i++) {
-            if (!parameters.get(i).getType().equals(parameterTypes[i])) {
+            if (!parameters.get(i).getType().equals(parameterTypes.get(i))) {
                 return false;
             }
         }
@@ -321,10 +330,9 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
 
     public List<DocletTag> getTagsByName(String name, boolean inherited) {
         JavaClass clazz = getParentClass();
-        JavaParameter[] params = getParameters();
-        Type[] types = new Type[params.length];
-        for (int i = 0; i < types.length; i++) {
-            types[i] = params[i].getType();
+        List<Type> types = new LinkedList<Type>();
+        for (JavaParameter parameter : getParameters()) {
+            types.add(parameter.getType());
         }
         JavaMethod[] methods = clazz.getMethodsBySignature(getName(), types, true);
 

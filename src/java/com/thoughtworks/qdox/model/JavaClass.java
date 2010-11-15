@@ -312,7 +312,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param parameterTypes parameter types or null if there are no parameters.
      * @return the matching method or null if no match is found.
      */
-    public JavaMethod getMethodBySignature(String name, Type[] parameterTypes) {
+    public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes) {
         return getMethod( name, parameterTypes, false );
     }
 
@@ -324,7 +324,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param varArgs
      * @return
      */
-    public JavaMethod getMethod(String name, Type[] parameterTypes, boolean varArgs) {
+    public JavaMethod getMethod(String name, List<Type> parameterTypes, boolean varArgs) {
         for (JavaMethod method : getMethods()) {
             if (method.signatureMatches(name, parameterTypes, varArgs)) {
                 return method;
@@ -341,7 +341,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param superclasses
      * @return
      */
-    public JavaMethod getMethodBySignature(String name, Type[] parameterTypes,
+    public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes,
                                            boolean superclasses) {
         return getMethodBySignature( name, parameterTypes, superclasses, false );
     }
@@ -354,7 +354,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param varArg
      * @return
      */
-    public JavaMethod getMethodBySignature(String name, Type[] parameterTypes,
+    public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes,
                                            boolean superclasses, boolean varArg) {
         
         JavaMethod[] result = getMethodsBySignature(name, parameterTypes,
@@ -371,7 +371,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @return
      */
     public JavaMethod[] getMethodsBySignature(String name,
-                                              Type[] parameterTypes, boolean superclasses) {
+                                              List<Type> parameterTypes, boolean superclasses) {
         return getMethodsBySignature( name, parameterTypes, superclasses, false );
     }
 
@@ -384,7 +384,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @return
      */
     public JavaMethod[] getMethodsBySignature(String name,
-                                              Type[] parameterTypes, boolean superclasses, boolean varArg) {
+                                              List<Type> parameterTypes, boolean superclasses, boolean varArg) {
         List<JavaMethod> result = new ArrayList<JavaMethod>();
 
         JavaMethod methodInThisClass = getMethod(name, parameterTypes, varArg);

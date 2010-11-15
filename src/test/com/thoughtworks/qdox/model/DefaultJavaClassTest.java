@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 
@@ -127,9 +128,9 @@ public class DefaultJavaClassTest
         clazz.setEnum( isEnum );
     }
 
-    public void setImplementz( JavaClass clazz, Type[] implementz )
+    public void setImplementz( JavaClass clazz, List<Type> implementz )
     {
-        clazz.setImplementz( Arrays.asList( implementz ) );
+        clazz.setImplementz( implementz );
     }
 
     public void setInterface( JavaClass clazz, boolean isInterface )

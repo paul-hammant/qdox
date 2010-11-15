@@ -1,5 +1,8 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -29,7 +32,7 @@ public abstract class JavaClassTest extends TestCase {
     public abstract void setComment(JavaField field, String comment);
     public abstract void setComment(JavaMethod method, String comment);
     public abstract void setEnum(JavaClass clazz, boolean isEnum);
-    public abstract void setImplementz(JavaClass clazz, Type[] implementz);
+    public abstract void setImplementz(JavaClass clazz, List<Type> implementz);
     public abstract void setInterface(JavaClass clazz, boolean isInterface);
     public abstract void setModifiers(JavaClass clazz, String[] modifiers);
     public abstract void setModifiers(JavaField field, String[] modifiers);
@@ -472,14 +475,14 @@ public abstract class JavaClassTest extends TestCase {
         addParameter(method, newJavaParameter(newType("double"), "y") );
         addMethod(cls, method);
 
-        Type[] correctTypes = type(new String[]{"int", "double"});
+        List<Type> correctTypes = type(new String[]{"int", "double"});
         assertSame(
                 method,
                 cls.getMethodBySignature("doStuff", correctTypes)
         );
         assertEquals(
                 null,
-                cls.getMethodBySignature("doStuff", new Type[0])
+                cls.getMethodBySignature("doStuff", new ArrayList<Type>())
         );
         assertEquals(
                 null,
@@ -641,10 +644,10 @@ public abstract class JavaClassTest extends TestCase {
         assertEquals("mcFnord", properties.get(2).getName());        
     }
     
-    private Type[] type(String[] typeNames) {
-        Type[] result = new Type[typeNames.length];
+    private List<Type> type(String[] typeNames) {
+        List<Type> result = new LinkedList<Type>();
         for (int i = 0; i < typeNames.length; i++) {
-            result[i] = newType(typeNames[i]);
+            result.add(newType(typeNames[i]));
         }
         return result;
     }
@@ -659,13 +662,13 @@ public abstract class JavaClassTest extends TestCase {
         addMethod(cls, simpleMethod );
         addMethod(cls, varArgMethod );
         
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")} ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, false ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, true ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, false, false ) );
-        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, false, true ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, true, false ) );
-        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", new Type[] {newType("String")}, true, true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")) ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), false ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), false, false ) );
+        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), false, true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), true, false ) );
+        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), true, true ) );
     }
  
     public void testJavaLangObjectAsDefaultSuperClass() throws Exception {

@@ -351,12 +351,12 @@ public class JavaMethodDelegate extends JavaMethod
         originalMethod.setTypeParameters( typeParameters );
     }
 
-    public boolean signatureMatches( String name, Type[] parameterTypes, boolean varArg )
+    public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg )
     {
         return originalMethod.signatureMatches( name, parameterTypes, varArg );
     }
 
-    public boolean signatureMatches( String name, Type[] parameterTypes )
+    public boolean signatureMatches( String name, List<Type> parameterTypes )
     {
         return originalMethod.signatureMatches( name, parameterTypes );
     }

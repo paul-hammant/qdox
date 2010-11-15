@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import junit.framework.TestCase;
 
@@ -106,7 +108,7 @@ public class AnnotationsTest extends TestCase {
         assertNotNull(builder.getClassByName("BitTwiddle"));
         assertNotNull( builder.getClassByName("BitTwiddle").getAnnotations().get(0).getNamedParameter("value") );
         assertEquals( "Author", builder.getClassByName("BitTwiddle")
-        	.getMethodBySignature("doStuff", new Type[] {})
+        	.getMethodBySignature("doStuff", new ArrayList<Type>())
         		.getAnnotations().get(0).getType().getValue() );
     }
 

@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.Arrays;
+
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.library.ClassNameLibrary;
 
@@ -325,10 +327,10 @@ public abstract class JavaMethodTest extends TestCase {
             newType("double")
         };
 
-        assertTrue(mth.signatureMatches("thing", correctTypes));
-        assertFalse(mth.signatureMatches("xxx", correctTypes));
-        assertFalse(mth.signatureMatches("thing", wrongTypes1));
-        assertFalse(mth.signatureMatches("thing", wrongTypes2));
+        assertTrue(mth.signatureMatches("thing", Arrays.asList( correctTypes )));
+        assertFalse(mth.signatureMatches("xxx", Arrays.asList( correctTypes )));
+        assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes1 )));
+        assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes2 )));
     }
     
     public void testVarArgSignatureMatches() throws Exception {
@@ -353,11 +355,11 @@ public abstract class JavaMethodTest extends TestCase {
             newType("double")
         };
 
-        assertTrue(mth.signatureMatches("thing", correctTypes, true));
-        assertFalse(mth.signatureMatches("thing", correctTypes, false));
-        assertFalse(mth.signatureMatches("xxx", correctTypes, true));
-        assertFalse(mth.signatureMatches("thing", wrongTypes1, true));
-        assertFalse(mth.signatureMatches("thing", wrongTypes2, true));
+        assertTrue(mth.signatureMatches("thing", Arrays.asList( correctTypes ), true));
+        assertFalse(mth.signatureMatches("thing", Arrays.asList( correctTypes ), false));
+        assertFalse(mth.signatureMatches("xxx", Arrays.asList( correctTypes ), true));
+        assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes1 ), true));
+        assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes2 ), true));
     }
 
     public void testParentClass() throws Exception {

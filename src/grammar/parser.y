@@ -5,7 +5,6 @@ import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.model.annotation.*;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 %}
@@ -148,7 +147,7 @@ annotation:
     annotationParensOpt
     {
     	$$ = annotation;
-    	annotation = (Annotation)annotationStack.remove(annotationStack.size() - 1);
+    	annotation = annotationStack.remove(annotationStack.size() - 1);
     };
     
 annotationParensOpt:
@@ -167,12 +166,12 @@ valuePair:
 arrayInitializer:
     {
     	annoValueListStack.add(annoValueList);
-    	annoValueList = new ArrayList(); 
+    	annoValueList = new LinkedList(); 
     }
     BRACEOPEN valuesOpt BRACECLOSE
     {
     	$$ = new AnnotationValueList(annoValueList);
-    	annoValueList = (List)annoValueListStack.remove(annoValueListStack.size() - 1);
+    	annoValueList = annoValueListStack.remove(annoValueListStack.size() - 1);
     };
     
 valuesOpt:
@@ -307,10 +306,10 @@ type:
 classtype:
     typedeclspecifier LESSTHAN {
     		TypeDef td = new TypeDef($1,0);
-    		td.actualArgumentTypes = new ArrayList();
-    		$$ = (TypeDef) typeStack.push(td);
+    		td.actualArgumentTypes = new LinkedList();
+    		$$ = typeStack.push(td);
     	} typearglist { 
-    		$$ = (TypeDef) typeStack.pop();
+    		$$ = typeStack.pop();
     	} GREATERTHAN {
          $$ = $5;
     } |
@@ -327,8 +326,8 @@ typename:
     typename DOT IDENTIFIER { $$ = $1 + '.' + $3; }; 
 
 typearglist:
-    typearg { ((TypeDef) typeStack.peek()).actualArgumentTypes.add($1);}|
-    typearglist COMMA typearg { ((TypeDef) typeStack.peek()).actualArgumentTypes.add($3);};
+    typearg { (typeStack.peek()).actualArgumentTypes.add($1);}|
+    typearglist COMMA typearg { (typeStack.peek()).actualArgumentTypes.add($3);};
 
 typearg:
     type { $$ = $1;} |
@@ -338,7 +337,7 @@ typearg:
 
 opt_typeparams: | typeparams;
 
-typeparams: LESSTHAN { typeParams = new ArrayList(); } typeparamlist GREATERTHAN;
+typeparams: LESSTHAN { typeParams = new LinkedList(); } typeparamlist GREATERTHAN;
 
 typeparamlist:
     typeparam |
@@ -348,7 +347,7 @@ typeparam:
     IDENTIFIER { typeParams.add(new TypeVariableDef($1)); } |
     IDENTIFIER EXTENDS { 
       typeVariable = new TypeVariableDef($1);
-      typeVariable.bounds = new ArrayList();
+      typeVariable.bounds = new LinkedList();
     } typeboundlist {
       typeParams.add(typeVariable);
       typeVariable = null;
@@ -561,16 +560,16 @@ private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
-private List typeParams = new ArrayList(); //for both JavaClass and JavaMethod
-private List annotationStack = new ArrayList(); // Use ArrayList intead of Stack because it is unsynchronized 
+private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>(); //for both JavaClass and JavaMethod
+private List<Annotation> annotationStack = new LinkedList<Annotation>(); // Use LinkedList instead of Stack because it is unsynchronized 
 private Annotation annotation = null;
-private List annoValueListStack = new ArrayList(); // Use ArrayList intead of Stack because it is unsynchronized
-private List annoValueList = null;
+private List<List<AnnotationValue>> annoValueListStack = new LinkedList<List<AnnotationValue>>(); // Use LinkedList instead of Stack because it is unsynchronized
+private List<AnnotationValue> annoValueList = null;
 private FieldDef param = new FieldDef();
-private java.util.Set modifiers = new java.util.HashSet();
+private java.util.Set<String> modifiers = new java.util.HashSet<String>();
 private TypeDef fieldType;
 private TypeVariableDef typeVariable;
-private Stack typeStack = new Stack();
+private Stack<TypeDef> typeStack = new Stack<TypeDef>();
 private int line;
 private int column;
 private boolean debugLexer;

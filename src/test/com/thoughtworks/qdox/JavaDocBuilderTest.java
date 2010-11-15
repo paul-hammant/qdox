@@ -421,10 +421,10 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         JavaClass abstractList = builder.getClassByName("AbstractList");
         JavaClass arrayList = builder.getClassByName("ArrayList");
 
-        List derivedClassesOfCollection = Arrays.asList(collection.getDerivedClasses());
-        List derivedClassesOfList = Arrays.asList(list.getDerivedClasses());
-        List derivedClassesOfAbstractList = Arrays.asList(abstractList.getDerivedClasses());
-        List derivedClassesOfArrayList = Arrays.asList(arrayList.getDerivedClasses());
+        List<JavaClass> derivedClassesOfCollection = collection.getDerivedClasses();
+        List<JavaClass> derivedClassesOfList = list.getDerivedClasses();
+        List<JavaClass> derivedClassesOfAbstractList = abstractList.getDerivedClasses();
+        List<JavaClass> derivedClassesOfArrayList = arrayList.getDerivedClasses();
 
         assertEquals(3, derivedClassesOfCollection.size());
         assertEquals(2, derivedClassesOfList.size());

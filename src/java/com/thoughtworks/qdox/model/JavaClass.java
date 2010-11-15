@@ -2,6 +2,7 @@ package com.thoughtworks.qdox.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -577,26 +578,21 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     /**
      * Gets the known derived classes. That is, subclasses or implementing classes.
      */
-    public JavaClass[] getDerivedClasses() {
-        List<JavaClass> result = new ArrayList<JavaClass>();
-        List<JavaClass> classes;
+    public List<JavaClass> getDerivedClasses() {
+        List<JavaClass> result;
         if( source.getJavaClassLibrary() != null ) {
-            classes = source.getJavaClassLibrary().getJavaClasses();
-        }
-        else {
-            classes = new ArrayList<JavaClass>();
-        }
-        
-
-        for (int i = 0; i < classes.size(); i++) {
-            JavaClass clazz = classes.get(i);
-
-            if (clazz.isA(this) && !(clazz == this)) {
-                result.add(clazz);
+            result = new LinkedList<JavaClass>();
+            List<JavaClass> classes = source.getJavaClassLibrary().getJavaClasses();
+            for (JavaClass clazz : classes) {
+                if (clazz.isA(this) && !(clazz == this)) {
+                    result.add(clazz);
+                }
             }
         }
-
-        return result.toArray(new JavaClass[result.size()]);
+        else {
+            result = Collections.emptyList();
+        }
+        return result;
     }
 
     public DocletTag[] getTagsByName(String name, boolean superclasses) {

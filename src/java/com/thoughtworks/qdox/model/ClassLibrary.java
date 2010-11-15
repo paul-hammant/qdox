@@ -321,31 +321,27 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         sourceContext.add(source);
         sourceContext.add(source.getPackage());
         {
-            Set resultSet = new HashSet();
+            Set<JavaClass> resultSet = new HashSet<JavaClass>();
             addClassesRecursive(source, resultSet);
-            JavaClass[] javaClasses = (JavaClass[]) resultSet.toArray(new JavaClass[resultSet.size()]);
-            for (int classIndex = 0; classIndex < javaClasses.length; classIndex++) {
-                JavaClass cls = javaClasses[classIndex];
+            for (JavaClass cls :  resultSet) {
                 sourceContext.add(cls);
             }
         }
         return source;
     }
 
-    private void addClassesRecursive(JavaSource javaSource, Set resultSet) {
+    private void addClassesRecursive(JavaSource javaSource, Set<JavaClass> resultSet) {
         for (JavaClass javaClass : javaSource.getClasses()) {
             addClassesRecursive(javaClass, resultSet);
         }
     }
     
-    private void addClassesRecursive(JavaClass javaClass, Set set) {
+    private void addClassesRecursive(JavaClass javaClass, Set<JavaClass> set) {
         // Add the class...
         set.add(javaClass);
 
         // And recursively all of its inner classes
-        JavaClass[] innerClasses = javaClass.getNestedClasses();
-        for (int i = 0; i < innerClasses.length; i++) {
-            JavaClass innerClass = innerClasses[i];
+        for (JavaClass innerClass : javaClass.getNestedClasses()) {
             addClassesRecursive(innerClass, set);
         }
     }

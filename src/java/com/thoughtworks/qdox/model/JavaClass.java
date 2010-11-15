@@ -228,10 +228,10 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public String resolveType(String typeName) {
         // Maybe it's an inner class?
-        JavaClass[] innerClasses = getNestedClasses();
-        for (int i = 0; i < innerClasses.length; i++) {
-            if (innerClasses[i].getName().equals(typeName)) {
-                return innerClasses[i].getFullyQualifiedName();
+        List<JavaClass> innerClasses = getNestedClasses();
+        for (JavaClass innerClass : innerClasses) {
+            if (innerClass.getName().equals(typeName)) {
+                return innerClass.getFullyQualifiedName();
             }
         }
 
@@ -441,24 +441,21 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     /**
      * @deprecated Use {@link #getNestedClasses()} instead.
      */
-    public JavaClass[] getClasses() {
+    public List<JavaClass> getClasses() {
         return getNestedClasses();
     }
 
     /**
      * @since 1.3
      */
-    public JavaClass[] getNestedClasses() {
-        return classes.toArray(new JavaClass[0]);
+    public List<JavaClass> getNestedClasses() {
+        return classes;
     }
 
     public JavaClass getNestedClassByName(String name) {
-        JavaClass[] classes = getNestedClasses();
-        
         int separatorIndex = name.indexOf('.');
         String directInnerClassName = (separatorIndex > 0 ? name.substring(0, separatorIndex) : name); 
-        for (int i = 0; i < classes.length; i++) {
-        	JavaClass jClass = classes[i];
+        for (JavaClass jClass : getNestedClasses()) {
             if (jClass.getName().equals(directInnerClassName)) {
             	if(separatorIndex > 0) {
                     return jClass.getNestedClassByName(name.substring(separatorIndex+1));
@@ -471,20 +468,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return null;
     }
 
-    /**
-     * @deprecated old name for {@link #getNestedClasses()} 
-     */
-    public JavaClass[] getInnerClasses() {
-        return getNestedClasses();
-    }
-
-    /**
-     * @deprecated old name for {@link #getNestedClassByName(String)} 
-     */
-    public JavaClass getInnerClassByName(String name) {
-       return getNestedClassByName(name);
-    }
-    
     /**
      * @since 1.3
      */

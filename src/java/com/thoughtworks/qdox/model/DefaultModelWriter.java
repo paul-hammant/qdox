@@ -89,9 +89,7 @@ public class DefaultModelWriter implements ModelWriter
         }
 
         // inner-classes
-        for (int index = 0; index < clazz.getNestedClasses().length; index++) {
-            JavaClass javaClass = clazz.getNestedClasses()[index];
-
+        for (JavaClass javaClass : clazz.getNestedClasses()) {
             buffer.newline();
             writeClass(javaClass);
         }

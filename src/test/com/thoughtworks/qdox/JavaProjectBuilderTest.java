@@ -104,8 +104,8 @@ public class JavaProjectBuilderTest
         assertEquals(1, outer.getMethods().size());
         assertEquals("outerMethod", outer.getMethods().get(0).getName());
 
-        assertEquals(1, outer.getNestedClasses().length);
-        JavaClass inner = outer.getNestedClasses()[0];
+        assertEquals(1, outer.getNestedClasses().size());
+        JavaClass inner = outer.getNestedClasses().get(0);
         assertEquals("Inner", inner.getName());
         assertEquals("foo.bar.Outer$Inner", inner.getFullyQualifiedName());
 
@@ -651,7 +651,7 @@ public class JavaProjectBuilderTest
                 "";
         builder.addSource(new StringReader(source));
         JavaClass outer = builder.getClassByName("foo.Outer");
-        JavaClass inner = outer.getNestedClasses()[0];
+        JavaClass inner = outer.getNestedClasses().get(0);
         assertEquals("foo.Outer$Inner", inner.getFullyQualifiedName());
 
         JavaField field1 = outer.getFieldByName("field1");
@@ -787,7 +787,7 @@ public class JavaProjectBuilderTest
         builder.addSource(new StringReader(sourceCode));
         JavaClass clazz = builder.getClassByName("foo.bar.Outer");
 
-        assertEquals(1, clazz.getNestedClasses().length);
+        assertEquals(1, clazz.getNestedClasses().size());
     }
 
     public void testParseErrorLocationShouldBeAvailable() {

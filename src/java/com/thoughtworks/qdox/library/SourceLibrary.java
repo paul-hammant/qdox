@@ -7,9 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
@@ -179,8 +178,8 @@ public class SourceLibrary
         if (clazz != null) {
             context.add( clazz );
         }
-        for( int clazzIndex = 0; clazzIndex < clazz.getNestedClasses().length; clazzIndex++ ) {
-            registerJavaClass( clazz.getNestedClasses()[clazzIndex] );
+        for( JavaClass innerClazz : clazz.getNestedClasses()) {
+            registerJavaClass( innerClazz );
         }
     }
 
@@ -219,7 +218,7 @@ public class SourceLibrary
      */
     public List<JavaClass> getJavaClasses()
     {
-        List<JavaClass> result = new ArrayList<JavaClass>();
+        List<JavaClass> result = new LinkedList<JavaClass>();
         List<JavaClass> unusedClasses = context.getClasses();
         List<JavaClass> usedClasses = getJavaClasses( new ClassLibraryFilter()
         {
@@ -238,7 +237,7 @@ public class SourceLibrary
      */
     public List<JavaPackage> getJavaPackages()
     {
-        List<JavaPackage> result = new ArrayList<JavaPackage>();
+        List<JavaPackage> result = new LinkedList<JavaPackage>();
         List<JavaPackage> unusedPackages = context.getPackages();
         List<JavaPackage> usedPackages = getJavaPackages( new ClassLibraryFilter()
         {
@@ -257,7 +256,7 @@ public class SourceLibrary
      */
     public List<JavaSource> getJavaSources()
     {
-        List<JavaSource> result = new ArrayList<JavaSource>();
+        List<JavaSource> result = new LinkedList<JavaSource>();
         List<JavaSource> unusedSources = context.getSources();
         List<JavaSource> usedSources = getJavaSources( new ClassLibraryFilter()
         {

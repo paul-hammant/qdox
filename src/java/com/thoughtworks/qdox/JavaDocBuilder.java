@@ -192,9 +192,8 @@ public class JavaDocBuilder implements Serializable {
         set.add(javaClass);
 
         // And recursively all of its inner classes
-        JavaClass[] innerClasses = javaClass.getNestedClasses();
-        for (int i = 0; i < innerClasses.length; i++) {
-            JavaClass innerClass = innerClasses[i];
+        List<JavaClass> innerClasses = javaClass.getNestedClasses();
+        for (JavaClass innerClass : innerClasses) {
             addClassesRecursive(innerClass, set);
         }
     }

@@ -505,19 +505,18 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      *
      * @since 1.3
      */
-    public BeanProperty[] getBeanProperties() {
+    public List<BeanProperty> getBeanProperties() {
         return getBeanProperties(false);
     }
 
     /**
      * @since 1.3
      */
-    public BeanProperty[] getBeanProperties(boolean superclasses) {
+    public List<BeanProperty> getBeanProperties(boolean superclasses) {
         Map<String, BeanProperty> beanPropertyMap = getBeanPropertyMap(superclasses);
         Collection<BeanProperty> beanPropertyCollection = beanPropertyMap.values();
 
-        return beanPropertyCollection.toArray(new BeanProperty[beanPropertyCollection
-                .size()]);
+        return new LinkedList<BeanProperty>(beanPropertyCollection);
     }
 
     private Map<String, BeanProperty> getBeanPropertyMap(boolean superclasses) {

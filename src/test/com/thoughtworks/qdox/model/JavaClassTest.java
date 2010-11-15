@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.List;
+
 import junit.framework.TestCase;
 
 public abstract class JavaClassTest extends TestCase {
@@ -510,7 +512,7 @@ public abstract class JavaClassTest extends TestCase {
     }
 
     public void testGetBeanPropertiesReturnsEmptyForEmptyClass() throws Exception {
-        assertEquals(0, cls.getBeanProperties().length);
+        assertEquals(0, cls.getBeanProperties().size());
     }
 
     public void testGetBeanPropertiesFindsSimpleProperties() throws Exception {
@@ -521,8 +523,8 @@ public abstract class JavaClassTest extends TestCase {
         JavaMethod getFooMethod = newJavaMethod(newType("int"), "getFoo");
         addMethod(cls, getFooMethod);
         
-        assertEquals(1, cls.getBeanProperties().length);
-        BeanProperty fooProp = cls.getBeanProperties()[0];
+        assertEquals(1, cls.getBeanProperties().size());
+        BeanProperty fooProp = cls.getBeanProperties().get(0);
         assertEquals("foo", fooProp.getName());
         assertEquals(newType("int"), fooProp.getType());
         assertEquals(getFooMethod, fooProp.getAccessor());
@@ -632,11 +634,11 @@ public abstract class JavaClassTest extends TestCase {
         addMethod(cls, new JavaMethod(newType("int"), "getBar"));
         addMethod(cls, new JavaMethod(newType("String"), "getMcFnord"));
 
-        BeanProperty[] properties = cls.getBeanProperties();
-        assertEquals(3, properties.length);
-        assertEquals("foo", properties[0].getName());
-        assertEquals("bar", properties[1].getName());
-        assertEquals("mcFnord", properties[2].getName());        
+        List<BeanProperty> properties = cls.getBeanProperties();
+        assertEquals(3, properties.size());
+        assertEquals("foo", properties.get(0).getName());
+        assertEquals("bar", properties.get(1).getName());
+        assertEquals("mcFnord", properties.get(2).getName());        
     }
     
     private Type[] type(String[] typeNames) {

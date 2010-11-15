@@ -438,7 +438,7 @@ public class JavaProjectBuilderTest
 
     public void testPropertyClass() {
         JavaClass propertyClass = builder.getClassByName("com.thoughtworks.qdox.testdata.PropertyClass");
-        assertEquals(1, propertyClass.getBeanProperties().length);
+        assertEquals(1, propertyClass.getBeanProperties().size());
 
         // test ctor, methods and fields
         List<JavaMethod> methods = propertyClass.getMethods();

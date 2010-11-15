@@ -25,6 +25,6 @@ public class TestQDoxBug131 extends TestCase {
         builder.addSource(new StringReader(sourceCode));
         JavaClass aClass = builder.getClassByName("com.acme.qdox.QDoxBugClass");
         assertEquals("\n        System.out.println(\"This will contain the comment\");\n    ", 
-                aClass.getMethods()[0].getSourceCode());
+                aClass.getMethods().get(0).getSourceCode());
     }
 }

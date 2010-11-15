@@ -83,9 +83,7 @@ public class DefaultModelWriter implements ModelWriter
         }
 
         // methods
-        for (int index = 0; index < clazz.getMethods().length; index++) {
-            JavaMethod javaMethod = clazz.getMethods()[index];
-
+        for (JavaMethod javaMethod : clazz.getMethods()) {
             buffer.newline();
             writeMethod(javaMethod);
         }

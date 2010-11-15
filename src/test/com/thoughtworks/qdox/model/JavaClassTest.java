@@ -571,56 +571,56 @@ public abstract class JavaClassTest extends TestCase {
     public void testToStringVoid() {
     	setName(cls, "com.MyClass");
     	addMethod(cls, newJavaMethod(Type.VOID, "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods()[0];
+    	JavaMethod javaMethod = cls.getMethods().get(0);
     	assertEquals("void", javaMethod.getReturns().toString());
     }
 
     public void testToStringBoolean() {
     	setName(cls, "com.MyClass");
     	addMethod(cls, newJavaMethod(newType("boolean"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods()[0];
+    	JavaMethod javaMethod = cls.getMethods().get(0);
     	assertEquals("boolean", javaMethod.getReturns().toString());
     }
     
     public void testToStringInt() {
     	setName(cls, "com.MyClass");
     	addMethod(cls,  newJavaMethod(newType("int"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods()[0];
+    	JavaMethod javaMethod = cls.getMethods().get(0);
     	assertEquals("int", javaMethod.getReturns().toString());
     }
 
     public void testToStringLong() {
     	setName(cls, "com.MyClass");
     	addMethod(cls, newJavaMethod(newType("long"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods()[0];
+    	JavaMethod javaMethod = cls.getMethods().get(0);
     	assertEquals("long", javaMethod.getReturns().toString());
     }
 
     public void testToStringFloat() {
     	setName(cls, "com.MyClass");
     	addMethod(cls, newJavaMethod(newType("float"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods()[0];
+    	JavaMethod javaMethod = cls.getMethods().get(0);
     	assertEquals("float", javaMethod.getReturns().toString());
     }
 
     public void testToStringDouble() {
     	setName(cls, "com.MyClass");
     	addMethod(cls, newJavaMethod(newType("double"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods()[0];
+    	JavaMethod javaMethod = cls.getMethods().get(0);
     	assertEquals("double", javaMethod.getReturns().toString());
     }
     
     public void testToStringChar() {
     	setName(cls, "com.MyClass");
     	addMethod(cls, newJavaMethod(newType("char"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods()[0];
+    	JavaMethod javaMethod = cls.getMethods().get(0);
     	assertEquals("char", javaMethod.getReturns().toString());
     }
 
     public void testToStringByte() {
     	setName(cls, "com.MyClass");
     	addMethod(cls, newJavaMethod(newType("byte"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods()[0];
+    	JavaMethod javaMethod = cls.getMethods().get(0);
     	assertEquals("byte", javaMethod.getReturns().toString());
     }
 

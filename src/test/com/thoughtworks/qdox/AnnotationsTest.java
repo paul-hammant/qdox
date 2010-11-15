@@ -38,8 +38,8 @@ public class AnnotationsTest extends TestCase {
         builder.addSource(new StringReader(source));
         JavaClass fooClass = builder.getClassByName("X");
         assertEquals("X", fooClass.getName());
-        assertEquals(1, fooClass.getMethods().length);
-        assertEquals("snort", fooClass.getMethods()[0].getName());
+        assertEquals(1, fooClass.getMethods().size());
+        assertEquals("snort", fooClass.getMethods().get(0).getName());
     }
 
     public void testShouldIgnoreMethodParameterAnnotation() {
@@ -52,8 +52,8 @@ public class AnnotationsTest extends TestCase {
         builder.addSource(new StringReader(source));
         JavaClass fooClass = builder.getClassByName("X");
         assertEquals("X", fooClass.getName());
-        assertEquals(1, fooClass.getMethods().length);
-        assertEquals("setX", fooClass.getMethods()[0].getName());
+        assertEquals(1, fooClass.getMethods().size());
+        assertEquals("setX", fooClass.getMethods().get(0).getName());
     }
 
     public void testShouldIgnoreComplexClassAnnotations() {
@@ -194,7 +194,7 @@ public class AnnotationsTest extends TestCase {
 
     	builder.addSource(new StringReader(source));
     	JavaClass clazz = builder.getClassByName("Foo");
-    	JavaMethod mth = clazz.getMethods()[0];
+    	JavaMethod mth = clazz.getMethods().get(0);
     	assertEquals("Foo", clazz.getName());
     	assertEquals("X", mth.getAnnotations().get(0).getType().getJavaClass().getName());
     }
@@ -216,7 +216,7 @@ public class AnnotationsTest extends TestCase {
     			" public boolean isPostback() { return true;}\n" +
     			"}";
     	builder.addSource(new StringReader(source));
-    	assertEquals("java.lang.Override", builder.getClasses()[0].getMethods()[0].getAnnotations().get(0).getType().getValue());
+    	assertEquals("java.lang.Override", builder.getClasses()[0].getMethods().get(0).getAnnotations().get(0).getType().getValue());
     }
     
     public void testEnumsWithAnnotations() throws Exception {
@@ -237,7 +237,7 @@ public class AnnotationsTest extends TestCase {
         		"  static void get_tmp_dir( String targetfilename, @ParamInfo( direction = ParamInfo.Direction.OUT ) byte[] tmpDirOutput ) throws IOException {}\n" + 
         		"}";
         builder.addSource( new StringReader( source ) );
-        JavaMethod jMethod = builder.getClasses()[0].getMethods()[0];
+        JavaMethod jMethod = builder.getClasses()[0].getMethods().get(0);
         assertEquals( "NativeAccessible", jMethod.getAnnotations().get(0).getType().getValue() );
         Annotation annotation = jMethod.getParameters()[1].getAnnotations().get(0);
         assertEquals( "ParamInfo", annotation.getType().getValue() );
@@ -251,7 +251,7 @@ public class AnnotationsTest extends TestCase {
         		"  public void testNothing() { }\n " +
         		"}";
         builder.addSource( new StringReader( source ) );
-        JavaMethod method = builder.getClasses()[0].getMethods()[0];
+        JavaMethod method = builder.getClasses()[0].getMethods().get(0);
         AnnotationFieldRef suppressWarnings = (AnnotationFieldRef) method.getAnnotations().get(0).getProperty( "value" );
         assertEquals( builder.getClasses()[0].getFields()[0], suppressWarnings.getField());
     }

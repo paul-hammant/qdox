@@ -324,7 +324,7 @@ public class AnnotationsModelTest extends TestCase {
 
         builder.addSource(new StringReader(source));
         JavaClass clazz = builder.getClassByName("Foo");
-        JavaMethod mth = clazz.getMethods()[0];
+        JavaMethod mth = clazz.getMethods().get(0);
         assertEquals("Foo", clazz.getName());
     }
 

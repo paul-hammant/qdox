@@ -249,21 +249,21 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return type;
     }
 
-    public JavaMethod[] getMethods() {
-        return methods.toArray( new JavaMethod[0] );
+    public List<JavaMethod> getMethods() {
+        return methods;
     }
 
     /**
      * @since 1.3
      */
-    public JavaMethod[] getMethods(boolean superclasses) {
+    public List<JavaMethod> getMethods(boolean superclasses) {
         if (superclasses) {
             Set<String> signatures = new HashSet<String>();
-            List<JavaMethod> methods = new ArrayList<JavaMethod>();
+            List<JavaMethod> methods = new LinkedList<JavaMethod>();
 
             addMethodsFromSuperclassAndInterfaces(signatures, methods, this);
 
-            return (JavaMethod[]) methods.toArray(new JavaMethod[methods.size()]);
+            return methods;
         } else {
             return getMethods();
         }
@@ -271,7 +271,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     private void addMethodsFromSuperclassAndInterfaces(Set<String> signatures,
                                                        List<JavaMethod> methodList, JavaClass callingClazz) {
-        JavaMethod[] methods = callingClazz.getMethods();
+        List<JavaMethod> methods = callingClazz.getMethods();
 
         addNewMethods(signatures, methodList, methods);
 
@@ -292,10 +292,8 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     private void addNewMethods(Set<String> signatures, List<JavaMethod> methodList,
-                               JavaMethod[] methods) {
-        for (int i = 0; i < methods.length; i++) {
-            JavaMethod method = methods[i];
-
+                               List<JavaMethod> methods) {
+        for (JavaMethod method:methods) {
             if (!method.isPrivate()) {
                 String signature = method.getDeclarationSignature(false);
 
@@ -326,11 +324,9 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @return
      */
     public JavaMethod getMethod(String name, Type[] parameterTypes, boolean varArgs) {
-        JavaMethod[] methods = getMethods();
-
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i].signatureMatches(name, parameterTypes, varArgs)) {
-                return methods[i];
+        for (JavaMethod method : getMethods()) {
+            if (method.signatureMatches(name, parameterTypes, varArgs)) {
+                return method;
             }
         }
 
@@ -524,13 +520,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     private Map<String, BeanProperty> getBeanPropertyMap(boolean superclasses) {
-        JavaMethod[] methods = getMethods(superclasses);
+        List<JavaMethod> methods = getMethods(superclasses);
         Map<String, BeanProperty> beanPropertyMap = new LinkedHashMap<String, BeanProperty>();
 
         // loop over the methods.
-        for (int i = 0; i < methods.length; i++) {
-            JavaMethod method = methods[i];
-
+        for (JavaMethod method:methods) {
             if (method.isPropertyAccessor()) {
                 String propertyName = method.getPropertyName();
                 BeanProperty beanProperty = getOrCreateProperty(beanPropertyMap,

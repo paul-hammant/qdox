@@ -64,7 +64,7 @@ public class JSR14Test extends TestCase {
         String source = "interface Something { " + methodSource + " }";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        JavaMethod javaMethod = javaClass.getMethods()[0];
+        JavaMethod javaMethod = javaClass.getMethods().get(0);
         return javaMethod;
     }
     
@@ -291,7 +291,7 @@ public class JSR14Test extends TestCase {
     			"}";
     	
     	JavaSource javaSource = builder.addSource(new StringReader(source));
-    	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods()[0];
+    	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods().get(0);
     	assertEquals(1, javaMethod.getTypeParameters().length);
     	assertEquals("java.lang.StringBuffer", javaMethod.getTypeParameters()[0].getValue());
     	assertEquals("<T extends java.lang.StringBuffer>", javaMethod.getTypeParameters()[0].getGenericValue());
@@ -303,7 +303,7 @@ public class JSR14Test extends TestCase {
     			"public static <T, S extends T> void copy(List<T> dest, List<S> src){}\n" +
     			"}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
-    	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods()[0];
+    	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods().get(0);
     	assertEquals("T", javaMethod.getTypeParameters()[0].getName());
     	assertEquals("S", javaMethod.getTypeParameters()[1].getName());
     	assertEquals("T", javaMethod.getTypeParameters()[1].getValue());
@@ -331,7 +331,7 @@ public class JSR14Test extends TestCase {
     			"}\n";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	JavaMethod javaMethod = javaClass.getMethods()[0];
+    	JavaMethod javaMethod = javaClass.getMethods().get(0);
     	JavaParameter paramType = javaMethod.getParameters()[0];
     	Type returnType = javaMethod.getReturns();
     	assertEquals("myMethod(request)", javaMethod.getCallSignature());
@@ -352,7 +352,7 @@ public class JSR14Test extends TestCase {
     			"}\n";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	JavaMethod javaMethod = javaClass.getMethods()[0];
+    	JavaMethod javaMethod = javaClass.getMethods().get(0);
     	JavaParameter paramType = javaMethod.getParameters()[1];
     	assertEquals("myMethod(request, list)", javaMethod.getCallSignature());
     	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer,java.util.List) throws java.lang.Exception", javaMethod.toString());

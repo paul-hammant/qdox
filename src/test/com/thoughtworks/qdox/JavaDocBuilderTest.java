@@ -102,16 +102,16 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals(1, outer.getFields().length);
         assertEquals("int", outer.getFields()[0].getType().getValue());
 
-        assertEquals(1, outer.getMethods().length);
-        assertEquals("outerMethod", outer.getMethods()[0].getName());
+        assertEquals(1, outer.getMethods().size());
+        assertEquals("outerMethod", outer.getMethods().get(0).getName());
 
         assertEquals(1, outer.getNestedClasses().length);
         JavaClass inner = outer.getNestedClasses()[0];
         assertEquals("Inner", inner.getName());
         assertEquals("foo.bar.Outer$Inner", inner.getFullyQualifiedName());
 
-        assertEquals(1, inner.getMethods().length);
-        assertEquals("innerMethod", inner.getMethods()[0].getName());
+        assertEquals(1, inner.getMethods().size());
+        assertEquals("innerMethod", inner.getMethods().get(0).getName());
     }
 
     public void testGetClasses() {
@@ -249,10 +249,10 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         builder.addSource(new StringReader(in));
 
         JavaClass cls = builder.getClassByName("x.X");
-        assertEquals("com.thoughtworks.Spoon", cls.getMethods()[0].getReturns().getValue());
-        assertEquals("com.thoughtworks.Fork", cls.getMethods()[1].getReturns().getValue());
+        assertEquals("com.thoughtworks.Spoon", cls.getMethods().get(0).getReturns().getValue());
+        assertEquals("com.thoughtworks.Fork", cls.getMethods().get(1).getReturns().getValue());
         // unresolved
-        assertEquals("Cabbage", cls.getMethods()[2].getReturns().getValue());
+        assertEquals("Cabbage", cls.getMethods().get(2).getReturns().getValue());
 
     }
 
@@ -280,7 +280,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         builder.addSource(new StringReader(in));
 
         JavaClass cls = builder.getClassByName("x.X");
-        Type returnType = cls.getMethods()[0].getReturns();
+        Type returnType = cls.getMethods().get(0).getReturns();
         JavaClass returnClass = builder.getClassByName(returnType.getValue());
 
         assertEquals("java.util.ArrayList", returnClass.getFullyQualifiedName());
@@ -443,8 +443,8 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         assertEquals(1, propertyClass.getBeanProperties().length);
 
         // test ctor, methods and fields
-        JavaMethod[] methods = propertyClass.getMethods();
-        assertEquals(8, methods.length);
+        List<JavaMethod> methods = propertyClass.getMethods();
+        assertEquals(8, methods.size());
 
         JavaMethod ctor = propertyClass.getMethodBySignature("PropertyClass", null);
         JavaMethod ctor2 = propertyClass.getMethodBySignature("PropertyClass", new Type[] {propertyClass.asType()});
@@ -681,7 +681,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
 
         builder.addSource(new StringReader(source));
         JavaClass x = builder.getClassByName("x");
-        JavaMethod m = x.getMethods()[0];
+        JavaMethod m = x.getMethods().get(0);
         DocletTag foo = m.getTagByName("y");
         assertEquals("z", foo.getValue());
     }
@@ -874,7 +874,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 + "  public void aMethod() {}\n"
                 + "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
-        JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods()[0];
+        JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods().get(0);
         assertEquals("aMethod", javaMethod.getName());
     }
 
@@ -900,7 +900,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        JavaMethod javaMethod = javaClass.getMethods()[0];
+        JavaMethod javaMethod = javaClass.getMethods().get(0);
         String expected = "" +
                 "    System.out.println(\"hi\"); // comment\n" +
                 "    Foo<X> x = new Cheese().get()[4]; /*x*/";
@@ -917,7 +917,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        JavaMethod javaMethod = javaClass.getMethods()[0];
+        JavaMethod javaMethod = javaClass.getMethods().get(0);
         String expected = "" +
                 "    System.out.println(\"}}} \\\"\"); // }\n" +
                 "    Foo<X> x = new Cheese().get()[4]; /*}}*/ /etc\n";
@@ -937,7 +937,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        JavaMethod javaMethod = javaClass.getMethods()[0];
+        JavaMethod javaMethod = javaClass.getMethods().get(0);
         String expected = "" +
                 "    System.out.println(\"hi\"); // comment\n" +
                 "    Foo<X> x = new Cheese().get()[4]; /*x*/";
@@ -1035,7 +1035,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(sourceCode));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        JavaMethod javaMethod = javaClass.getMethods()[0];
+        JavaMethod javaMethod = javaClass.getMethods().get(0);
         assertEquals("\"test blah blah\"", javaMethod.getAnnotations().get(0).getNamedParameter("description").toString());
     }
     
@@ -1107,10 +1107,10 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        JavaMethod method1 = javaClass.getMethods()[0];
+        JavaMethod method1 = javaClass.getMethods().get(0);
         assertEquals( "A Javadoc sample.", method1.getComment());
         assertEquals( "The size.", method1.getTagByName( "return" ).getValue());
-        JavaMethod method2 = javaClass.getMethods()[1];
+        JavaMethod method2 = javaClass.getMethods().get(1);
         assertEquals( "The size.\n\nA Javadoc sample.", method2.getTagByName( "return" ).getValue());
     }
 
@@ -1235,7 +1235,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         		"}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.addSource( new StringReader( source ) ).getClasses().get(0);
-        JavaClass thing = clazz.getMethods()[0].getReturns().getJavaClass();
+        JavaClass thing = clazz.getMethods().get(0).getReturns().getJavaClass();
         assertEquals("com.blah.Thing", thing.getFullyQualifiedName());
         assertNotNull(thing.getSource());
     }
@@ -1255,8 +1255,8 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         		"}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClasses()[0];
-        assertEquals( 3, clazz.getMethods()[0].getLineNumber() );
-        assertEquals( 9, clazz.getMethods()[1].getLineNumber() );
+        assertEquals( 3, clazz.getMethods().get(0).getLineNumber() );
+        assertEquals( 9, clazz.getMethods().get(1).getLineNumber() );
     }
     
     // for QDOX-209

@@ -26,7 +26,6 @@ import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
 public class ModelBuilder implements Builder {
 
     private final DefaultJavaSource source;
-    private JavaClassParent currentParent;
     private JavaClass currentClass;
     private JavaMethod currentMethod;
     private List<Annotation> currentAnnoDefs;
@@ -37,7 +36,6 @@ public class ModelBuilder implements Builder {
     public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
         source = new DefaultJavaSource(classLibrary);
-        currentParent = source;
         currentAnnoDefs = new ArrayList<Annotation>();
     }
     
@@ -67,38 +65,38 @@ public class ModelBuilder implements Builder {
     }
 
     public void beginClass(ClassDef def) {
-        currentClass = new JavaClass(source);
-        currentClass.setLineNumber(def.lineNumber);
+        JavaClass newClass = new JavaClass(source);
+        newClass.setLineNumber(def.lineNumber);
 
         // basic details
-        currentClass.setName(def.name);
-        currentClass.setInterface(ClassDef.INTERFACE.equals(def.type));
-        currentClass.setEnum(ClassDef.ENUM.equals(def.type));
-        currentClass.setAnnotation(ClassDef.ANNOTATION_TYPE.equals(def.type));
+        newClass.setName(def.name);
+        newClass.setInterface(ClassDef.INTERFACE.equals(def.type));
+        newClass.setEnum(ClassDef.ENUM.equals(def.type));
+        newClass.setAnnotation(ClassDef.ANNOTATION_TYPE.equals(def.type));
 
         // superclass
-        if (currentClass.isInterface()) {
-            currentClass.setSuperClass(null);
-        } else if (!currentClass.isEnum()) {
-            currentClass.setSuperClass(def.extendz.size() > 0 ? createType((TypeDef) def.extendz.toArray()[0], 0) : null);
+        if (newClass.isInterface()) {
+            newClass.setSuperClass(null);
+        } else if (!newClass.isEnum()) {
+            newClass.setSuperClass(def.extendz.size() > 0 ? createType((TypeDef) def.extendz.toArray()[0], 0) : null);
         }
 
         // implements
         {
-            Set<TypeDef> implementSet = currentClass.isInterface() ? def.extendz : def.implementz;
+            Set<TypeDef> implementSet = newClass.isInterface() ? def.extendz : def.implementz;
             Iterator<TypeDef> implementIt = implementSet.iterator();
             List<Type> implementz = new LinkedList<Type>();
             while (implementIt.hasNext()) {
                 implementz.add(createType(implementIt.next(), 0));
             }
-            currentClass.setImplementz(implementz);
+            newClass.setImplementz(implementz);
         }
 
         // modifiers
         {
             String[] modifiers = new String[def.modifiers.size()];
             def.modifiers.toArray(modifiers);
-            currentClass.setModifiers(modifiers);
+            newClass.setModifiers(modifiers);
         }
         
         // typeParameters
@@ -108,11 +106,11 @@ public class ModelBuilder implements Builder {
                 TypeVariableDef typeVariableDef = (TypeVariableDef) iterator.next();
                 typeParams.add(createTypeVariable(typeVariableDef));
             }
-            currentClass.setTypeParameters(typeParams);
+            newClass.setTypeParameters(typeParams);
         }
 
         // javadoc
-        addJavaDoc(currentClass);
+        addJavaDoc(newClass);
 
 //        // ignore annotation types (for now)
 //        if (ClassDef.ANNOTATION_TYPE.equals(def.type)) {
@@ -121,19 +119,19 @@ public class ModelBuilder implements Builder {
 //        }
 
         // annotations
-        setAnnotations( currentClass );
-
-        currentParent.addClass(currentClass);
-        currentParent = currentClass;
+        setAnnotations( newClass );
+        
+        if(currentClass != null) {
+            currentClass.addClass( newClass );
+        }
+        else {
+            source.addClass( newClass );
+        }
+        currentClass = newClass;
     }
 
     public void endClass() {
-        currentParent = currentClass.getParent();
-        if (currentParent instanceof JavaClass) {
-            currentClass = (JavaClass) currentParent;
-        } else {
-            currentClass = null;
-        }
+        currentClass = currentClass.getParentClass();
     }
 
     public Type createType( String typeName, int dimensions ) {
@@ -160,7 +158,7 @@ public class ModelBuilder implements Builder {
     	if(typeDef == null) {
     		return null;
     	}
-    	return Type.createUnresolved(typeDef, dimensions, currentClass == null ? currentParent : currentClass);
+    	return Type.createUnresolved(typeDef, dimensions, currentClass == null ? source : currentClass);
     }
 
     private void addJavaDoc(AbstractJavaEntity entity) {
@@ -244,7 +242,7 @@ public class ModelBuilder implements Builder {
     	if(typeVariableDef == null) {
     		return null;
     	}
-    	return TypeVariable.createUnresolved(typeVariableDef, currentClass == null ? currentParent : currentClass);
+    	return TypeVariable.createUnresolved(typeVariableDef, currentClass == null ? source : currentClass);
 
 	}
 

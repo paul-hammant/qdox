@@ -1,30 +1,28 @@
 package com.thoughtworks.qdox.directorywalker;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DirectoryScanner {
+    
     private File file;
-    private Collection filters = new HashSet();
+    private Collection<Filter> filters = new HashSet<Filter>();
 
     public DirectoryScanner(File file) {
         this.file = file;
     }
 
-    public File[] scan() {
-        final List results = new ArrayList();
-        walk(new FileVisitor() {
+    public List<File> scan() {
+        final List<File> result = new LinkedList<File>();
+        walk( new FileVisitor() {
             public void visitFile(File file) {
-                results.add(file);
+                result.add(file);
             }
         }, this.file);
-        File[] resultsArray = new File[results.size()];
-        results.toArray(resultsArray);
-        return resultsArray;
+        return result;
     }
 
     private void walk(FileVisitor visitor, File current) {
@@ -34,8 +32,7 @@ public class DirectoryScanner {
                 walk(visitor, currentFiles[i]);
             }
         } else {
-            for (Iterator iterator = this.filters.iterator(); iterator.hasNext();) {
-                Filter filter = (Filter) iterator.next();
+            for (Filter filter : this.filters) {
                 if (!filter.filter(current)) {
                     return;
                 }

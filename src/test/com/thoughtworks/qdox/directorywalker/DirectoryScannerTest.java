@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.directorywalker;
 
 import java.io.File;
+import java.util.List;
 
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
@@ -38,11 +39,11 @@ public class DirectoryScannerTest extends MockObjectTestCase {
         MockFile rootDir = new MockFile("root", true);
         rootDir.children = new File[]{new MockFile("blah.txt"), new MockFile("foo.txt"), new MockFile("pig.java")};
         DirectoryScanner scanner = new DirectoryScanner(rootDir);
-        File[] files = scanner.scan();
-        assertEquals(3, files.length);
-        assertEquals("blah.txt", files[0].getName());
-        assertEquals("foo.txt", files[1].getName());
-        assertEquals("pig.java", files[2].getName());
+        List<File> files = scanner.scan();
+        assertEquals(3, files.size());
+        assertEquals("blah.txt", files.get(0).getName());
+        assertEquals("foo.txt", files.get(1).getName());
+        assertEquals("pig.java", files.get(2).getName());
     }
 
     public void testDirectoryWithSubdir() {
@@ -51,12 +52,12 @@ public class DirectoryScannerTest extends MockObjectTestCase {
         subDir.children = new File[]{new MockFile("child1.txt"), new MockFile("child2.txt")};
         rootDir.children = new File[]{subDir, new MockFile("foo.txt"), new MockFile("pig.java")};
         DirectoryScanner scanner = new DirectoryScanner(rootDir);
-        File[] files = scanner.scan();
-        assertEquals(4, files.length);
-        assertEquals("child1.txt", files[0].getName());
-        assertEquals("child2.txt", files[1].getName());
-        assertEquals("foo.txt", files[2].getName());
-        assertEquals("pig.java", files[3].getName());
+        List<File> files = scanner.scan();
+        assertEquals(4, files.size());
+        assertEquals("child1.txt", files.get(0).getName());
+        assertEquals("child2.txt", files.get(1).getName());
+        assertEquals("foo.txt", files.get(2).getName());
+        assertEquals("pig.java", files.get(3).getName());
     }
 
     public void testDirectoryWithSubdirWithSubdir() {
@@ -68,13 +69,13 @@ public class DirectoryScannerTest extends MockObjectTestCase {
         rootDir.children = new File[]{subDir1, new MockFile("foo.txt"), new MockFile("pig.java")};
 
         DirectoryScanner scanner = new DirectoryScanner(rootDir);
-        File[] files = scanner.scan();
-        assertEquals(5, files.length);
-        assertEquals("grandChild1.txt", files[0].getName());
-        assertEquals("child1.txt", files[1].getName());
-        assertEquals("child2.txt", files[2].getName());
-        assertEquals("foo.txt", files[3].getName());
-        assertEquals("pig.java", files[4].getName());
+        List<File> files = scanner.scan();
+        assertEquals(5, files.size());
+        assertEquals("grandChild1.txt", files.get(0).getName());
+        assertEquals("child1.txt", files.get(1).getName());
+        assertEquals("child2.txt", files.get(2).getName());
+        assertEquals("foo.txt", files.get(3).getName());
+        assertEquals("pig.java", files.get(4).getName());
     }
 
     public void testSuffixFilter() {
@@ -82,10 +83,10 @@ public class DirectoryScannerTest extends MockObjectTestCase {
         rootDir.children = new File[]{new MockFile("blah.txt"), new MockFile("foo.java"), new MockFile("pig.java")};
         DirectoryScanner scanner = new DirectoryScanner(rootDir);
         scanner.addFilter(new SuffixFilter(".java"));
-        File[] files = scanner.scan();
-        assertEquals(2, files.length);
-        assertEquals("foo.java", files[0].getName());
-        assertEquals("pig.java", files[1].getName());
+        List<File> files = scanner.scan();
+        assertEquals(2, files.size());
+        assertEquals("foo.java", files.get(0).getName());
+        assertEquals("pig.java", files.get(1).getName());
     }
 
     public void testFilterCallback() {
@@ -98,9 +99,9 @@ public class DirectoryScannerTest extends MockObjectTestCase {
             }
         };
         scanner.addFilter(mockFilter);
-        File[] files = scanner.scan();
-        assertEquals(1, files.length);
-        assertEquals("foo.java", files[0].getName());
+        List<File> files = scanner.scan();
+        assertEquals(1, files.size());
+        assertEquals("foo.java", files.get(0).getName());
     }
 
     public void testMultipleFilters() {
@@ -114,9 +115,9 @@ public class DirectoryScannerTest extends MockObjectTestCase {
                 return file.getName().startsWith("foo");
             }
         });
-        File[] files = scanner.scan();
-        assertEquals(1, files.length);
-        assertEquals("foo.java", files[0].getName());
+        List<File> files = scanner.scan();
+        assertEquals(1, files.size());
+        assertEquals("foo.java", files.get(0).getName());
     }
 
     public void testFileVisitor() {

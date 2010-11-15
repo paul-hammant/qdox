@@ -319,7 +319,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         return Introspector.decapitalize(getName().substring(start));
     }
 
-    public DocletTag[] getTagsByName(String name, boolean inherited) {
+    public List<DocletTag> getTagsByName(String name, boolean inherited) {
         JavaClass clazz = getParentClass();
         JavaParameter[] params = getParameters();
         Type[] types = new Type[params.length];
@@ -328,9 +328,8 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         }
         JavaMethod[] methods = clazz.getMethodsBySignature(getName(), types, true);
 
-        List<DocletTag> result = new ArrayList<DocletTag>();
-        for (int i = 0; i < methods.length; i++) {
-            JavaMethod method = methods[i];
+        List<DocletTag> result = new LinkedList<DocletTag>();
+        for (JavaMethod method : methods) {
             List<DocletTag> tags = method.getTagsByName(name);
             for (DocletTag tag : tags) {
                 if(!result.contains(tag)) {
@@ -338,7 +337,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
                 }
             }
         }
-        return result.toArray(new DocletTag[result.size()]);
+        return result;
     }
 
     public int compareTo(Object o) {

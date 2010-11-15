@@ -595,12 +595,12 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
         return result;
     }
 
-    public DocletTag[] getTagsByName(String name, boolean superclasses) {
+    public List<DocletTag> getTagsByName(String name, boolean superclasses) {
         List<DocletTag> result = new ArrayList<DocletTag>();
 
         addTagsRecursive(result, this, name, superclasses);
 
-        return result.toArray(new DocletTag[result.size()]);
+        return result;
     }
 
     private void addTagsRecursive(List<DocletTag> result, JavaClass javaClass,

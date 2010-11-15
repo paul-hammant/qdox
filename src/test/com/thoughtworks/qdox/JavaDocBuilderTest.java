@@ -706,16 +706,16 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         builder.addSource(new StringReader(Y));
 
         JavaClass y = builder.getClassByName("Y");
-        DocletTag[] c = y.getTagsByName("c", true);
-        assertEquals(2, c.length);
-        assertEquals("y", c[0].getValue());
-        assertEquals("x", c[1].getValue());
+        List<DocletTag> c = y.getTagsByName("c", true);
+        assertEquals(2, c.size());
+        assertEquals("y", c.get(0).getValue());
+        assertEquals("x", c.get(1).getValue());
 
         JavaMethod i = y.getMethodBySignature("i", null);
-        DocletTag[] m = i.getTagsByName("m", true);
-        assertEquals(2, m.length);
-        assertEquals("y", m[0].getValue());
-        assertEquals("x", m[1].getValue());
+        List<DocletTag> m = i.getTagsByName("m", true);
+        assertEquals(2, m.size());
+        assertEquals("y", m.get(0).getValue());
+        assertEquals("x", m.get(1).getValue());
 
         DocletTag s = i.getTagByName("s", true);
         assertEquals("f", s.getValue());

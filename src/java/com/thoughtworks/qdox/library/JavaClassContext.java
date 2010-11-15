@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox;
+package com.thoughtworks.qdox.library;
 
 import java.io.Serializable;
 import java.util.ArrayList;

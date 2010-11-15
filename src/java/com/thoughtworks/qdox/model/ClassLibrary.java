@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.thoughtworks.qdox.JavaClassContext;
 import com.thoughtworks.qdox.JavaDocBuilder.DefaultErrorHandler;
 import com.thoughtworks.qdox.JavaDocBuilder.ErrorHandler;
+import com.thoughtworks.qdox.library.JavaClassContext;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;

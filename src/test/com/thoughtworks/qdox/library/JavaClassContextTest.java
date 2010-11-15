@@ -1,7 +1,8 @@
-package com.thoughtworks.qdox;
+package com.thoughtworks.qdox.library;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.library.JavaClassContext;
 import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.JavaClass;

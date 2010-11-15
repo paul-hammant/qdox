@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.thoughtworks.qdox.JavaClassContext;
+import com.thoughtworks.qdox.library.JavaClassContext;
 
 /**
  * A representation of a package.

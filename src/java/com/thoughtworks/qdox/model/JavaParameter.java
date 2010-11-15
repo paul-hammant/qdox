@@ -9,8 +9,6 @@ package com.thoughtworks.qdox.model;
 public interface JavaParameter extends JavaAnnotatedElement
 {
 
-    public static final JavaParameter[] EMPTY_ARRAY = new JavaParameter[0];
-
     public String getName();
 
     public Type getType();

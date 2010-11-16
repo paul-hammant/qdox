@@ -2,12 +2,13 @@ package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AbstractBaseJavaEntity implements Serializable {
 
 	protected String name;
-	private Annotation[] annotations = new Annotation[0];
+	private List<Annotation> annotations = Collections.emptyList();
 	private int lineNumber = -1;
 	protected JavaClassParent parent;
 
@@ -24,14 +25,14 @@ public class AbstractBaseJavaEntity implements Serializable {
 	}
 
 	public List<Annotation> getAnnotations() {
-	    return Arrays.asList( annotations );
+	    return annotations;
 	}
 
 	public void setName(String name) {
 	    this.name = name;
 	}
 
-	public void setAnnotations(Annotation[] annotations) {
+	public void setAnnotations(List<Annotation> annotations) {
 	    this.annotations = annotations;
 	}
 

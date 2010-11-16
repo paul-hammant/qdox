@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -307,7 +308,7 @@ public class ModelBuilder implements Builder {
                 annotations[iter.previousIndex()] = annotation;
             }
 
-            entity.setAnnotations( annotations );
+            entity.setAnnotations( Arrays.asList( annotations ) );
             currentAnnoDefs.clear();
         }
     }

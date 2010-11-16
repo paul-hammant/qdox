@@ -286,7 +286,7 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.isVolatile();
     }
 
-    public void setAnnotations( Annotation[] annotations )
+    public void setAnnotations( List<Annotation> annotations )
     {
         originalMethod.setAnnotations( annotations );
     }

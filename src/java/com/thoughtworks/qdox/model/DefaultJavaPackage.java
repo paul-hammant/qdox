@@ -1,7 +1,6 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.JavaClassContext;
@@ -10,13 +9,12 @@ import com.thoughtworks.qdox.library.JavaClassContext;
  * A representation of a package.
  * @since 1.9
  */
-public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAnnotatedElement, JavaPackage {
+public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPackage {
 
     private JavaClassContext context;
 	private String name;
-    private List<Annotation> annotations = new ArrayList<Annotation>();
 	private int lineNumber = -1;
-	private List<JavaClass> classes = new ArrayList<JavaClass>();
+	private List<JavaClass> classes = new LinkedList<JavaClass>();
 
     public DefaultJavaPackage() {
 	}
@@ -31,14 +29,6 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<Annotation> getAnnotations() {
-		return annotations;
-	}
-
-	public void setAnnotations(Annotation[] annotations) {
-		this.annotations = Arrays.asList( annotations );
 	}
 
 	public int getLineNumber() {
@@ -79,9 +69,9 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaAn
     public List<JavaPackage> getSubPackages() {
         String expected = name + ".";
         List<JavaPackage> jPackages = context.getPackages();
-        List<JavaPackage> retList = new ArrayList<JavaPackage>();
-        for (int index = 0; index < jPackages.size();index++) {
-            String pName = jPackages.get(index).getName();
+        List<JavaPackage> retList = new LinkedList<JavaPackage>();
+        for (JavaPackage jPackage : jPackages) {
+            String pName = jPackage.getName();
             if (pName.startsWith(expected) && !(pName.substring(expected.length()).indexOf(".") > -1)) {
                 retList.add(context.getPackageByName( pName ));
             }

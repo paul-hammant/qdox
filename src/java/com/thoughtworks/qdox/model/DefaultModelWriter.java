@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
 
 public class DefaultModelWriter implements ModelWriter
@@ -19,9 +20,9 @@ public class DefaultModelWriter implements ModelWriter
         }
 
         // import statement
-        for (int i = 0; i < source.getImports().size(); i++) {
+        for (String imprt : source.getImports()) {
             buffer.write("import ");
-            buffer.write(source.getImports().get(i));
+            buffer.write(imprt);
             buffer.write(';');
             buffer.newline();
         }
@@ -30,9 +31,13 @@ public class DefaultModelWriter implements ModelWriter
         }
 
         // classes
-        for (int i = 0; i < source.getClasses().size(); i++) {
-            if (i > 0) buffer.newline();
-            writeClass( source.getClasses().get(i) );
+        ListIterator<JavaClass> iter = source.getClasses().listIterator();
+        while(iter.hasNext()) {
+            if (iter.hasPrevious()) { 
+                buffer.newline(); 
+            }
+            JavaClass clazz = iter.next();
+            writeClass( clazz );
         }
         return this;
     }

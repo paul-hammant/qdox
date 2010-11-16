@@ -1050,7 +1050,7 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
         		"}";
         builder.addSource(new StringReader(sourceCode));
         JavaClass jClass = builder.getClasses()[0];
-        assertEquals( Arrays.toString( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}), Arrays.toString(jClass.getTags().get(0).getParameters()));
+        assertEquals( Arrays.asList( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}), jClass.getTags().get(0).getParameters());
         //assertTrue( Arrays.equals( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}, jClass.getTags()[0].getParameters() ));
     }
     

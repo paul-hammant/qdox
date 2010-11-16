@@ -36,11 +36,11 @@ public abstract class AbstractDocletTagTest extends TestCase {
 
     public void testIndexedParameter() throws Exception {
         DocletTag tag = createDocletTag("x", "one two three four");
-        assertEquals("one", tag.getParameters()[0]);
-        assertEquals("two", tag.getParameters()[1]);
-        assertEquals("three", tag.getParameters()[2]);
-        assertEquals("four", tag.getParameters()[3]);
-        assertEquals(4, tag.getParameters().length);
+        assertEquals("one", tag.getParameters().get(0));
+        assertEquals("two", tag.getParameters().get(1));
+        assertEquals("three", tag.getParameters().get(2));
+        assertEquals("four", tag.getParameters().get(3));
+        assertEquals(4, tag.getParameters().size());
     }
 
     public void testNamedParameter() throws Exception {
@@ -87,9 +87,9 @@ public abstract class AbstractDocletTagTest extends TestCase {
 
     public void testJiraQdox28() {
         DocletTag tag = createDocletTag("key", "quote'ed");
-        assertEquals("quote", tag.getParameters()[0]);
-        assertEquals(2, tag.getParameters().length);
-        assertEquals("ed", tag.getParameters()[1]);
+        assertEquals("quote", tag.getParameters().get(0));
+        assertEquals(2, tag.getParameters().size());
+        assertEquals("ed", tag.getParameters().get(1));
     }
  
     public void testJiraQdox45() {

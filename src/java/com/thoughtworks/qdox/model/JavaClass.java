@@ -357,10 +357,10 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes,
                                            boolean superclasses, boolean varArg) {
         
-        JavaMethod[] result = getMethodsBySignature(name, parameterTypes,
+        List<JavaMethod> result = getMethodsBySignature(name, parameterTypes,
                 superclasses, varArg);
 
-        return (result.length > 0) ? result[0] : null;
+        return (result.size() > 0) ? result.get(0) : null;
     }
     
     /**
@@ -370,7 +370,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param superclasses
      * @return
      */
-    public JavaMethod[] getMethodsBySignature(String name,
+    public List<JavaMethod> getMethodsBySignature(String name,
                                               List<Type> parameterTypes, boolean superclasses) {
         return getMethodsBySignature( name, parameterTypes, superclasses, false );
     }
@@ -383,9 +383,9 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param varArg
      * @return
      */
-    public JavaMethod[] getMethodsBySignature(String name,
+    public List<JavaMethod> getMethodsBySignature(String name,
                                               List<Type> parameterTypes, boolean superclasses, boolean varArg) {
-        List<JavaMethod> result = new ArrayList<JavaMethod>();
+        List<JavaMethod> result = new LinkedList<JavaMethod>();
 
         JavaMethod methodInThisClass = getMethod(name, parameterTypes, varArg);
 
@@ -414,7 +414,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
             }
         }
 
-        return result.toArray(new JavaMethod[result.size()]);
+        return result;
     }
 
     public List<JavaField> getFields() {

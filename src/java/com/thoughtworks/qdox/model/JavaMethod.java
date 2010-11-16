@@ -338,7 +338,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         for (JavaParameter parameter : getParameters()) {
             types.add(parameter.getType());
         }
-        JavaMethod[] methods = clazz.getMethodsBySignature(getName(), types, true);
+        List<JavaMethod> methods = clazz.getMethodsBySignature(getName(), types, true);
 
         List<DocletTag> result = new LinkedList<DocletTag>();
         for (JavaMethod method : methods) {

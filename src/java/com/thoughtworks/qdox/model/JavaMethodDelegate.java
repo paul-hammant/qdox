@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,17 +34,17 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.getReturnType( resolve, this.callingClass );
     }
     
-    public Type[] getParameterTypes( boolean resolve )
+    public List<Type> getParameterTypes( boolean resolve )
     {
-        Type[] parameterTypes = originalMethod.getParameterTypes( resolve, callingClass );
-        for ( int paramIndex = 0; paramIndex < parameterTypes.length; paramIndex++ )
+        List<Type> result = new LinkedList<Type>();
+        for ( Type type : originalMethod.getParameterTypes( resolve, callingClass ) )
         {
-            parameterTypes[paramIndex] = parameterTypes[paramIndex].resolve( originalMethod.getParentClass(), callingClass  );
+            result.add(type.resolve( originalMethod.getParentClass(), callingClass  ));
         }
-        return parameterTypes;
+        return result;
     }
     
-    protected Type[] getParameterTypes( boolean resolve, JavaClass _callingClass )
+    protected List<Type> getParameterTypes( boolean resolve, JavaClass _callingClass )
     {
         //watch it!! use callingclass of constructor
         return originalMethod.getParameterTypes( resolve, this.callingClass );
@@ -131,7 +132,7 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.getParameters();
     }
     
-    public Type[] getParameterTypes()
+    public List<Type> getParameterTypes()
     {
         return originalMethod.getParameterTypes();
     }

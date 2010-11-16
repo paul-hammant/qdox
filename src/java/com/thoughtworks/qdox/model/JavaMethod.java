@@ -497,7 +497,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
      * @return the parameter types as array
      * @since 1.12
      */
-    public Type[] getParameterTypes() {
+    public List<Type> getParameterTypes() {
         return getParameterTypes( false );
     }
     
@@ -508,24 +508,23 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
      * @return the parameter types as array
      * @since 1.12
      */
-    public Type[] getParameterTypes( boolean resolve ) {
+    public List<Type> getParameterTypes( boolean resolve ) {
         return getParameterTypes( resolve, getParentClass() );
     }
 
     
-    protected Type[] getParameterTypes ( boolean resolve, JavaClass callingClass) {
-        Type[] result = new Type[this.getParameters().size()];
-
-        for (int paramIndex = 0; paramIndex < this.getParameters().size(); paramIndex++ )
+    protected List<Type> getParameterTypes ( boolean resolve, JavaClass callingClass) {
+        List<Type> result = new LinkedList<Type>();
+        for (JavaParameter parameter : this.getParameters())
         {
-            Type curType = this.getParameters().get(paramIndex).getType().resolve( this.getParentClass(), callingClass );
+            Type curType = parameter.getType().resolve( this.getParentClass(), callingClass );
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && this.getReturns() != null && !this.getReturns().getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
             {
-                result[paramIndex] = new Type( "java.lang.Object" );
+                result.add(new Type( "java.lang.Object" ));
             }
             else {
-                result[paramIndex] = curType;
+                result.add(curType);
             }
             
         }

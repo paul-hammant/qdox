@@ -345,7 +345,7 @@ public class GenericsTest extends TestCase {
         assertEquals( "java.util.List<Subject>", method.getReturnType( true ).getGenericValue() );
         method = clazz.getMethods( true ).get(2);
         assertEquals( "findById", method.getName() );
-        assertEquals( "java.lang.Long", method.getParameterTypes( true )[0].getGenericValue() );
+        assertEquals( "java.lang.Long", method.getParameterTypes( true ).get(0).getGenericValue() );
     }
     
     

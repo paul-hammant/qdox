@@ -406,7 +406,7 @@ public abstract class JavaMethodTest extends TestCase {
         addParameter( constructor,  newJavaParameter( newType("a.b.C"), "param" ) );
         setConstructor( constructor, true );
         addMethod(cls, constructor);
-        assertEquals("a.b.C", constructor.getParameterTypes()[0].toString());
+        assertEquals("a.b.C", constructor.getParameterTypes().get(0).toString());
     }
 
     private void assertNotEquals(Object o1, Object o2) {

@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +24,7 @@ public interface DocletTag extends Serializable {
     /**
      * @return an array of whitespace-separatedtag parameters
      */
-    String[] getParameters();
+    List<String> getParameters();
 
     /**
      * @param key name of a named-parameter
@@ -35,7 +36,7 @@ public interface DocletTag extends Serializable {
     /**
      * @return a Map containing all the named-parameters
      */
-    Map getNamedParameterMap();
+    Map<String, String> getNamedParameterMap();
     
     /**
      * @return the line-number where the tag occurred

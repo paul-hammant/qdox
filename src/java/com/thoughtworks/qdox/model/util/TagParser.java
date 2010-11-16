@@ -5,6 +5,7 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -87,9 +88,9 @@ public class TagParser {
      * Extract an array of parameters as name or name=value representation
      * @since 1.11  
      */
-    public static String[] parseParameters(String tagValue) {
+    public static List<String> parseParameters(String tagValue) {
         StreamTokenizer tokenizer = makeTokenizer(tagValue);
-        List<String> wordList = new ArrayList<String>();
+        List<String> wordList = new LinkedList<String>();
         try {
             while (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
                 StringBuffer param = new StringBuffer();
@@ -116,7 +117,7 @@ public class TagParser {
             e.printStackTrace();
             throw new RuntimeException("error tokenizing tag");
         }
-        return wordList.toArray(new String[0]);
+        return wordList;
     }
     
 }

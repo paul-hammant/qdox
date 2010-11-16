@@ -1,8 +1,9 @@
 package com.thoughtworks.qdox.model;
 
-import com.thoughtworks.qdox.model.util.TagParser;
-
+import java.util.List;
 import java.util.Map;
+
+import com.thoughtworks.qdox.model.util.TagParser;
 
 public class DefaultDocletTag implements DocletTag {
 
@@ -10,8 +11,8 @@ public class DefaultDocletTag implements DocletTag {
     private final String value;
     private final int lineNumber;
 
-    private String[] parameters;
-    private Map namedParameters;
+    private List<String> parameters;
+    private Map<String, String> namedParameters;
     private AbstractBaseJavaEntity context;
 
     public DefaultDocletTag(String name, String value, 
@@ -36,14 +37,14 @@ public class DefaultDocletTag implements DocletTag {
         return value;
     }
 
-    public String[] getParameters() {
+    public List<String> getParameters() {
         if (parameters == null) {
             parameters = TagParser.parseParameters(value);
         }
         return parameters;
     }
 
-    public Map getNamedParameterMap() {
+    public Map<String, String> getNamedParameterMap() {
         if (namedParameters == null) {
             namedParameters = TagParser.parseNamedParameters(value);
         }

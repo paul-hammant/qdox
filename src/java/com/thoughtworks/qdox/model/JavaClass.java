@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -575,38 +576,28 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public List<DocletTag> getTagsByName(String name, boolean superclasses) {
-        List<DocletTag> result = new LinkedList<DocletTag>();
-
-        addTagsRecursive(result, this, name, superclasses);
-
-        return result;
+        return getTagsRecursive(this, name, superclasses);
     }
 
-    private void addTagsRecursive(List<DocletTag> result, JavaClass javaClass,
-                                  String name, boolean superclasses) {
-        List<DocletTag> tags = javaClass.getTagsByName(name);
-        
-        for (DocletTag superTag : tags) {
-            if (!result.contains(superTag)) {
-                result.add(superTag);
-            }
-        }
-
+    private List<DocletTag> getTagsRecursive(JavaClass javaClass, String name, boolean superclasses) {
+        Set<DocletTag> result = new LinkedHashSet<DocletTag>();
+        result.addAll(javaClass.getTagsByName(name));
         if (superclasses) {
             JavaClass superclass = javaClass.getSuperJavaClass();
 
             // THIS IS A HACK AROUND A BUG THAT MUST BE SOLVED!!!
             // SOMETIMES A CLASS RETURNS ITSELF AS SUPER ?!?!?!?!?!
             if ((superclass != null) && (superclass != javaClass)) {
-                addTagsRecursive(result, superclass, name, superclasses);
+                result.addAll(getTagsRecursive(superclass, name, superclasses));
             }
 
             for (JavaClass implementz : javaClass.getImplementedInterfaces()) {
                 if (implementz != null) {
-                    addTagsRecursive(result, implementz, name, superclasses);
+                    result.addAll(getTagsRecursive(implementz, name, superclasses));
                 }
             }
         }
+        return new LinkedList<DocletTag>(result);
     }
 
     public int compareTo(Object o) {

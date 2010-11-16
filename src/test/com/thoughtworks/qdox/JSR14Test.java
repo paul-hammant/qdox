@@ -332,7 +332,7 @@ public class JSR14Test extends TestCase {
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaMethod javaMethod = javaClass.getMethods().get(0);
-    	JavaParameter paramType = javaMethod.getParameters()[0];
+    	JavaParameter paramType = javaMethod.getParameters().get(0);
     	Type returnType = javaMethod.getReturns();
     	assertEquals("myMethod(request)", javaMethod.getCallSignature());
     	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer) throws java.lang.Exception", javaMethod.toString());
@@ -353,7 +353,7 @@ public class JSR14Test extends TestCase {
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaMethod javaMethod = javaClass.getMethods().get(0);
-    	JavaParameter paramType = javaMethod.getParameters()[1];
+    	JavaParameter paramType = javaMethod.getParameters().get(1);
     	assertEquals("myMethod(request, list)", javaMethod.getCallSignature());
     	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer,java.util.List) throws java.lang.Exception", javaMethod.toString());
     	assertEquals("java.util.List", paramType.getResolvedValue());
@@ -397,6 +397,6 @@ public class JSR14Test extends TestCase {
     public void testGenericsAndArrays() throws Exception {
         JavaMethod method = buildMethod( "public Map<String[], Object[]> test(Map<String[], Object[]> input);" );
         assertEquals("Map<java.lang.String[],java.lang.Object[]>", method.getReturns().toGenericString());
-        assertEquals("Map<java.lang.String[],java.lang.Object[]>", method.getParameters()[0].getType().toGenericString());
+        assertEquals("Map<java.lang.String[],java.lang.Object[]>", method.getParameters().get(0).getType().toGenericString());
     }
 }

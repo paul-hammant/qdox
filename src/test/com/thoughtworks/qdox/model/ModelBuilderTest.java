@@ -322,7 +322,7 @@ public class ModelBuilderTest extends TestCase {
         JavaSource parentSource = doSomething.getReturns().getJavaClassParent().getParentSource();
         assertSame(source, parentSource);
         assertEquals(0, doSomething.getModifiers().size());
-        assertEquals(0, doSomething.getParameters().length);
+        assertEquals(0, doSomething.getParameters().size());
         assertEquals(0, doSomething.getExceptions().size());
     }
 
@@ -389,11 +389,11 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
         JavaMethod result = source.getClasses().get(0).getMethods().get(0);
-        assertEquals(2, result.getParameters().length);
-        assertEquals("count", result.getParameters()[0].getName());
-        assertEquals("int", result.getParameters()[0].getType().getValue());
-        assertEquals("name", result.getParameters()[1].getName());
-        assertEquals("String", result.getParameters()[1].getType().getValue());
+        assertEquals(2, result.getParameters().size());
+        assertEquals("count", result.getParameters().get(0).getName());
+        assertEquals("int", result.getParameters().get(0).getType().getValue());
+        assertEquals("name", result.getParameters().get(1).getName());
+        assertEquals("String", result.getParameters().get(1).getType().getValue());
     }
 
     public void testMethodParametersWithArrays() throws Exception {
@@ -419,8 +419,8 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
         JavaMethod result = source.getClasses().get(0).getMethods().get(0);
-        assertEquals(1, result.getParameters()[0].getType().getDimensions());
-        assertEquals(2, result.getParameters()[1].getType().getDimensions());
+        assertEquals(1, result.getParameters().get(0).getType().getDimensions());
+        assertEquals(2, result.getParameters().get(1).getType().getDimensions());
     }
 
     public void testMethodExceptions() throws Exception {

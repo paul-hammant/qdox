@@ -241,7 +241,7 @@ public class AnnotationsTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaMethod jMethod = builder.getClasses()[0].getMethods().get(0);
         assertEquals( "NativeAccessible", jMethod.getAnnotations().get(0).getType().getValue() );
-        Annotation annotation = jMethod.getParameters()[1].getAnnotations().get(0);
+        Annotation annotation = jMethod.getParameters().get(1).getAnnotations().get(0);
         assertEquals( "ParamInfo", annotation.getType().getValue() );
         assertEquals( "ParamInfo.Direction.OUT", annotation.getProperty( "direction" ).getParameterValue() );
     }

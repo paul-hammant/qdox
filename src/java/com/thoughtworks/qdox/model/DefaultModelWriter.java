@@ -67,12 +67,12 @@ public class DefaultModelWriter implements ModelWriter
         if (clazz.getImplements().size() > 0) {
             buffer.write(clazz.isInterface() ? " extends " : " implements ");
 
-            for (int i = 0; i < clazz.getImplements().size(); i++) {
-                if (i > 0) {
+            ListIterator<Type> iter = clazz.getImplements().listIterator();
+            while ( iter.hasNext()) {
+                if ( iter.hasPrevious() ) {
                     buffer.write(", ");
                 }
-
-                buffer.write(clazz.getImplements().get(i).getValue());
+                buffer.write(iter.next().getValue());
             }
         }
 
@@ -147,11 +147,13 @@ public class DefaultModelWriter implements ModelWriter
 
         buffer.write( method.getName() );
         buffer.write( '(' );
-        for ( int i = 0; i < method.getParameters().length; i++ )
+        ListIterator<JavaParameter> iter = method.getParameters().listIterator();
+        while( iter.hasNext() )
         {
-            JavaParameter parameter = method.getParameters()[i];
-            if ( i > 0 )
+            if ( iter.hasPrevious() ) {
                 buffer.write( ", " );
+            }
+            JavaParameter parameter = iter.next();
             if ( isDeclaration )
             {
                 buffer.write( parameter.getType().toString() );

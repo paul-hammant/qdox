@@ -126,7 +126,7 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.getParameterByName( name );
     }
 
-    public JavaParameter[] getParameters()
+    public List<JavaParameter> getParameters()
     {
         return originalMethod.getParameters();
     }

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class JavaMethod extends AbstractInheritableJavaEntity implements Member, JavaAnnotatedElement, JavaMember, JavaModel {
 
@@ -51,15 +52,14 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         return returns;
     }
 
-    public JavaParameter[] getParameters() {
-        return parameters.toArray( new JavaParameter[0]);
+    public List<JavaParameter> getParameters() {
+        return parameters;
     }
 
     public JavaParameter getParameterByName(String name) {
-        JavaParameter[] parameters = getParameters();
-        for (int i = 0; i < parameters.length; i++) {
-            if (parameters[i].getName().equals(name)) {
-                return parameters[i];
+        for (JavaParameter parameter : getParameters()) {
+            if (parameter.getName().equals(name)) {
+                return parameter;
             }
         }
         return null;
@@ -109,9 +109,10 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
 
         result.write(name);
         result.write('(');
-        for (int i = 0; i < getParameters().length; i++) {
-            JavaParameter parameter = parameters.get(i);
-            if (i > 0) result.write(", ");
+        ListIterator<JavaParameter> iter = getParameters().listIterator();
+        while (iter.hasNext()) {
+            if (iter.hasPrevious()) result.write(", ");
+            JavaParameter parameter = iter.next();
             if (isDeclaration) {
                 result.write(parameter.getType().toString());
                 if (parameter.isVarArgs()) {
@@ -205,11 +206,11 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
         if (m.getReturns() == null) return (getReturns() == null);
         if (!m.getReturns().equals(getReturns())) return false;
 
-        JavaParameter[] myParams = getParameters();
-        JavaParameter[] otherParams = m.getParameters();
-        if (otherParams.length != myParams.length) return false;
-        for (int i = 0; i < myParams.length; i++) {
-            if (!otherParams[i].equals(myParams[i])) return false;
+        List<JavaParameter> myParams = getParameters();
+        List<JavaParameter> otherParams = m.getParameters();
+        if (otherParams.size() != myParams.size()) return false;
+        for (int i = 0; i < myParams.size(); i++) {
+            if (!otherParams.get(i).equals(myParams.get(i))) return false;
         }
 
         return this.varArgs == m.isVarArgs();
@@ -243,7 +244,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
             parameterTypeList = parameterTypes;
         }
         
-        if (parameterTypeList.size() != this.getParameters().length) return false;
+        if (parameterTypeList.size() != this.getParameters().size()) return false;
         
         for (int i = 0; i < parameters.size(); i++) {
             if (!parameters.get(i).getType().equals(parameterTypes.get(i))) {
@@ -256,7 +257,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
     public int hashCode() {
         int hashCode = name.hashCode();
         if (returns != null) hashCode *= returns.hashCode();
-        hashCode *= getParameters().length;
+        hashCode *= getParameters().size();
         return hashCode;
     }
 
@@ -270,7 +271,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
      */
     public boolean isPropertyAccessor() {
         if (isStatic()) return false;
-        if (getParameters().length != 0) return false;
+        if (getParameters().size() != 0) return false;
         
         if (getName().startsWith("is")) {
             return (getName().length() > 2
@@ -290,7 +291,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
      */
     public boolean isPropertyMutator() {
         if (isStatic()) return false;
-        if (getParameters().length != 1) return false;
+        if (getParameters().size() != 1) return false;
         
         if (getName().startsWith("set")) {
             return (getName().length() > 3
@@ -310,7 +311,7 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
             return getReturns();
         }
         if (isPropertyMutator()) {
-            return getParameters()[0].getType();
+            return getParameters().get(0).getType();
         } 
         return null;
     }
@@ -416,11 +417,11 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
 		    result.append(getName());
 		}
 		result.append("(");
-		for(int paramIndex=0;paramIndex<getParameters().length;paramIndex++) {
+		for(int paramIndex=0;paramIndex<getParameters().size();paramIndex++) {
 			if(paramIndex>0) {
 				result.append(",");
 			}
-			String typeValue = getParameters()[paramIndex].getType().getResolvedValue(getTypeParameters());
+			String typeValue = getParameters().get(paramIndex).getType().getResolvedValue(getTypeParameters());
 			result.append(typeValue);
 		}
 		result.append(")");
@@ -513,11 +514,11 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
 
     
     protected Type[] getParameterTypes ( boolean resolve, JavaClass callingClass) {
-        Type[] result = new Type[this.getParameters().length];
+        Type[] result = new Type[this.getParameters().size()];
 
-        for (int paramIndex = 0; paramIndex < this.getParameters().length; paramIndex++ )
+        for (int paramIndex = 0; paramIndex < this.getParameters().size(); paramIndex++ )
         {
-            Type curType = this.getParameters()[paramIndex].getType().resolve( this.getParentClass(), callingClass );
+            Type curType = this.getParameters().get(paramIndex).getType().resolve( this.getParentClass(), callingClass );
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && this.getReturns() != null && !this.getReturns().getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
             {

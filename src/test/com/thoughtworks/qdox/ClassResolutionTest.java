@@ -35,7 +35,7 @@ public class ClassResolutionTest extends TestCase {
         // find the parameter
         JavaClass class2 = builder.getClassByName("package2.Class2");
         JavaMethod method = class2.getMethods().get(0);
-        JavaParameter parameter = method.getParameters()[0];
+        JavaParameter parameter = method.getParameters().get(0);
         Type type = parameter.getType();
 
         // verify
@@ -90,7 +90,7 @@ public class ClassResolutionTest extends TestCase {
     	"}";
     	builder.addSource(new StringReader(source));
     	JavaMethod method = builder.getClassByName("some.pack.Test").getMethods().get(0);
-    	JavaParameter parameter = method.getParameters()[0];
+    	JavaParameter parameter = method.getParameters().get(0);
     	assertEquals("some.pack.Test$Inner$Inner2", parameter.getType().getJavaClass().getFullyQualifiedName());
     }
 }

@@ -1,21 +1,23 @@
 package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
 public class Type implements Comparable, Serializable {
 
-    public static final Type[] EMPTY_ARRAY = new Type[0];
     public static final Type VOID = new Type("void");
 
     private String name;
     private JavaClassParent context;
     private String fullName;
     private int dimensions;
-    private Type[] actualArgumentTypes;
+    private List<Type> actualArgumentTypes;
 
     public Type(String fullName, String name, int dimensions, JavaClassParent context) {
         this.fullName = fullName;
@@ -29,9 +31,9 @@ public class Type implements Comparable, Serializable {
         this.name = typeDef.name;
         this.dimensions = typeDef.dimensions + dimensions; //in some cases dimensions can be spread. Collect them here
         if(typeDef.actualArgumentTypes != null && !typeDef.actualArgumentTypes.isEmpty()) {
-        	actualArgumentTypes = new Type[typeDef.actualArgumentTypes.size()];
-        	for(int index = 0; index < typeDef.actualArgumentTypes.size(); index++) {
-        		actualArgumentTypes[index] = createUnresolved((TypeDef) typeDef.actualArgumentTypes.get(index), context);
+        	actualArgumentTypes = new LinkedList<Type>();
+        	for(TypeDef actualArgType : typeDef.actualArgumentTypes) {
+        		actualArgumentTypes.add(createUnresolved(actualArgType, context));
         	}
         }
         this.context = context;
@@ -137,11 +139,12 @@ public class Type implements Comparable, Serializable {
      */
     public String getGenericValue() {
     	StringBuffer result = new StringBuffer(getValue());
-    	if(actualArgumentTypes != null && actualArgumentTypes.length > 0) {
+    	if(actualArgumentTypes != null && actualArgumentTypes.size() > 0) {
     		result.append("<");
-    		for(int index = 0;index < actualArgumentTypes.length; index++) {
-    			result.append(actualArgumentTypes[index].getGenericValue());
-    			if(index + 1 != actualArgumentTypes.length) {
+    		Iterator<Type> iter = actualArgumentTypes.iterator();
+    		while(iter.hasNext()) {
+    			result.append(iter.next().getGenericValue());
+    			if(iter.hasNext()) {
     				result.append(",");
     			}
     		}
@@ -153,10 +156,10 @@ public class Type implements Comparable, Serializable {
     
     protected String getGenericValue(TypeVariable[] typeVariableList) {
     	StringBuffer result = new StringBuffer(getResolvedValue(typeVariableList));
-    	if(actualArgumentTypes != null && actualArgumentTypes.length > 0) {
-    		for(int index = 0;index < actualArgumentTypes.length; index++) {
-    			result.append(actualArgumentTypes[index].getResolvedGenericValue(typeVariableList));
-    			if(index + 1 != actualArgumentTypes.length) {
+    	if(actualArgumentTypes != null && actualArgumentTypes.size() > 0) {
+    		for(int index = 0;index < actualArgumentTypes.size(); index++) {
+    			result.append(actualArgumentTypes.get(index).getResolvedGenericValue(typeVariableList));   			
+    			if(index + 1 != actualArgumentTypes.size()) {
     				result.append(",");
     			}
     		}
@@ -230,7 +233,7 @@ public class Type implements Comparable, Serializable {
      * 
      * @return the actualTypeArguments or null
      */
-    public Type[] getActualTypeArguments()
+    public List<Type> getActualTypeArguments()
     {
         return actualArgumentTypes;
     }
@@ -356,10 +359,10 @@ public class Type implements Comparable, Serializable {
      * @since 1.12
      */
     protected int getTypeVariableIndex( JavaClass superClass ) {
-        List<TypeVariable> typeVariables = superClass.getTypeParameters();
-        for(int typeIndex=0;typeIndex<typeVariables.size(); typeIndex++) {
-            if(typeVariables.get(typeIndex).getFullyQualifiedName().equals( getFullyQualifiedName())) {
-                return typeIndex;
+        ListIterator<TypeVariable> iter = superClass.getTypeParameters().listIterator();
+        while(iter.hasNext()) {
+            if(iter.next().getFullyQualifiedName().equals( getFullyQualifiedName())) {
+                return iter.previousIndex();
             }
         }
         return -1;
@@ -391,7 +394,7 @@ public class Type implements Comparable, Serializable {
         {
             String fqn = parentClass.getFullyQualifiedName();
             if ( subclass.getSuperClass() != null && fqn.equals( subclass.getSuperClass().getFullyQualifiedName() ) ) {
-                result = subclass.getSuperClass().getActualTypeArguments()[typeIndex];    
+                result = subclass.getSuperClass().getActualTypeArguments().get(typeIndex);    
             }
             else if ( subclass.getImplementedInterfaces() != null )
             {
@@ -399,7 +402,7 @@ public class Type implements Comparable, Serializable {
                 {
                     if ( fqn.equals( subclass.getImplements().get(i).getFullyQualifiedName() ) ) 
                     {
-                        result = subclass.getImplements().get(i).getActualTypeArguments()[typeIndex].resolve( subclass.getImplementedInterfaces().get(i) );
+                        result = subclass.getImplements().get(i).getActualTypeArguments().get(typeIndex).resolve( subclass.getImplementedInterfaces().get(i) );
                         break;
                     }
                 }
@@ -410,10 +413,10 @@ public class Type implements Comparable, Serializable {
         if ( this.actualArgumentTypes != null ) {
             result = new Type( this.fullName, this.name, this.dimensions, this.context );
             
-            result.actualArgumentTypes = new Type[this.actualArgumentTypes.length];
-            for (int i = 0; i < this.getActualTypeArguments().length; i++ )
+            result.actualArgumentTypes = new LinkedList<Type>();
+            for (Type actualArgType : getActualTypeArguments())
             {
-                result.actualArgumentTypes[i] = this.actualArgumentTypes[i].resolve( parentClass, subclass );
+                result.actualArgumentTypes.add(actualArgType.resolve( parentClass, subclass ));
             }
         }
         return result;

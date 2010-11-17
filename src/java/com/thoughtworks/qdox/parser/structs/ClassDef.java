@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.parser.structs;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +14,7 @@ public class ClassDef extends LocatedDef {
     
     public String name = "";
     public Set<String> modifiers = new HashSet<String>();
-    public List<TypeVariableDef> typeParams = new ArrayList<TypeVariableDef>();
+    public List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>();
     public Set<TypeDef> extendz = new HashSet<TypeDef>();
     public Set<TypeDef> implementz = new HashSet<TypeDef>();
     public String type = CLASS;

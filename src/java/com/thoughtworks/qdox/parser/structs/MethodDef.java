@@ -1,8 +1,8 @@
 package com.thoughtworks.qdox.parser.structs;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,7 +11,7 @@ public class MethodDef extends LocatedDef {
     public List<TypeVariableDef> typeParams;
     public TypeDef returnType;
     public Set<String> modifiers = new HashSet<String>();
-    public List<TypeVariableDef> params = new ArrayList<TypeVariableDef>();
+    public List<TypeVariableDef> params = new LinkedList<TypeVariableDef>();
     public Set<String> exceptions = new LinkedHashSet<String>();
     public boolean constructor = false;
     public int dimensions;

@@ -202,7 +202,7 @@ public class JavaMethodDelegate extends JavaMethod
         return originalMethod.getTagsByName( name );
     }
 
-    public TypeVariable[] getTypeParameters()
+    public List<TypeVariable> getTypeParameters()
     {
         return originalMethod.getTypeParameters();
     }
@@ -342,12 +342,12 @@ public class JavaMethodDelegate extends JavaMethod
         originalMethod.setSourceCode( sourceCode );
     }
 
-    public void setTags( List tagList )
+    public void setTags( List<DocletTag> tagList )
     {
         originalMethod.setTags( tagList );
     }
 
-    public void setTypeParameters( TypeVariable[] typeParameters )
+    public void setTypeParameters( List<TypeVariable> typeParameters )
     {
         originalMethod.setTypeParameters( typeParameters );
     }

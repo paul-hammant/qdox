@@ -292,9 +292,9 @@ public class JSR14Test extends TestCase {
     	
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods().get(0);
-    	assertEquals(1, javaMethod.getTypeParameters().length);
-    	assertEquals("java.lang.StringBuffer", javaMethod.getTypeParameters()[0].getValue());
-    	assertEquals("<T extends java.lang.StringBuffer>", javaMethod.getTypeParameters()[0].getGenericValue());
+    	assertEquals(1, javaMethod.getTypeParameters().size());
+    	assertEquals("java.lang.StringBuffer", javaMethod.getTypeParameters().get(0).getValue());
+    	assertEquals("<T extends java.lang.StringBuffer>", javaMethod.getTypeParameters().get(0).getGenericValue());
     	
     }
     
@@ -304,9 +304,9 @@ public class JSR14Test extends TestCase {
     			"}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods().get(0);
-    	assertEquals("T", javaMethod.getTypeParameters()[0].getName());
-    	assertEquals("S", javaMethod.getTypeParameters()[1].getName());
-    	assertEquals("T", javaMethod.getTypeParameters()[1].getValue());
+    	assertEquals("T", javaMethod.getTypeParameters().get(0).getName());
+    	assertEquals("S", javaMethod.getTypeParameters().get(1).getName());
+    	assertEquals("T", javaMethod.getTypeParameters().get(1).getValue());
 	}
     
     public void testComplexTypeVariableMultipleBounds() throws Exception {

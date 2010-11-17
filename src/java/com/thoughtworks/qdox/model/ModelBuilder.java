@@ -204,11 +204,9 @@ public class ModelBuilder implements Builder {
 
         // typeParameters
         if (def.typeParams != null) {
-        	TypeVariable[] typeParams = new TypeVariable[def.typeParams.size()];
-        	int index = 0;
-        	for(Iterator<TypeVariableDef> iterator = def.typeParams.iterator(); iterator.hasNext();) {
-        		TypeVariableDef typeVariableDef = (TypeVariableDef) iterator.next();
-        		typeParams[index++] = createTypeVariable(typeVariableDef);
+        	List<TypeVariable> typeParams = new LinkedList<TypeVariable>();
+        	for(TypeVariableDef typeVariableDef : def.typeParams) {
+        		typeParams.add(createTypeVariable(typeVariableDef));
         	}
             currentMethod.setTypeParameters(typeParams);
         }

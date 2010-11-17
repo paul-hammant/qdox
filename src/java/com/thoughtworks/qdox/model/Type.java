@@ -154,7 +154,7 @@ public class Type implements Comparable, Serializable {
         return result.toString();
     }
     
-    protected String getGenericValue(TypeVariable[] typeVariableList) {
+    protected String getGenericValue(List<TypeVariable> typeVariableList) {
     	StringBuffer result = new StringBuffer(getResolvedValue(typeVariableList));
     	if(actualArgumentTypes != null && actualArgumentTypes.size() > 0) {
     		for(int index = 0;index < actualArgumentTypes.size(); index++) {
@@ -167,22 +167,22 @@ public class Type implements Comparable, Serializable {
         return result.toString();
     }
     
-    protected String getResolvedValue(TypeVariable[] typeParameters) {
+    protected String getResolvedValue(List<TypeVariable> typeParameters) {
     	String result = getValue();
-    	for(int typeIndex=0;typeIndex<typeParameters.length; typeIndex++) {
-			if(typeParameters[typeIndex].getName().equals(getValue())) {
-				result = typeParameters[typeIndex].getValue();
+    	for(TypeVariable typeParameter : typeParameters) {
+			if(typeParameter.getName().equals(getValue())) {
+				result = typeParameter.getValue();
 				break;
 			}
 		}
     	return result;
     }
     
-    protected String getResolvedGenericValue(TypeVariable[] typeParameters) {
+    protected String getResolvedGenericValue(List<TypeVariable> typeParameters) {
     	String result = getGenericValue(typeParameters);
-    	for(int typeIndex=0;typeIndex<typeParameters.length; typeIndex++) {
-			if(typeParameters[typeIndex].getName().equals(getValue())) {
-				result = typeParameters[typeIndex].getGenericValue();
+    	for(TypeVariable typeParameter : typeParameters) {
+			if(typeParameter.getName().equals(getValue())) {
+				result = typeParameter.getGenericValue();
 				break;
 			}
 		}

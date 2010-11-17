@@ -9,7 +9,7 @@ import java.util.ListIterator;
 
 public class JavaMethod extends AbstractInheritableJavaEntity implements Member, JavaAnnotatedElement, JavaMember, JavaModel {
 
-	private TypeVariable[] typeParameters = TypeVariable.EMPTY_ARRAY; 
+	private List<TypeVariable> typeParameters = Collections.emptyList(); 
     private Type returns = Type.VOID;
     private List<JavaParameter> parameters = new LinkedList<JavaParameter>();
     private List<Type> exceptions = Collections.emptyList();
@@ -370,11 +370,11 @@ public class JavaMethod extends AbstractInheritableJavaEntity implements Member,
     	this.sourceCode = sourceCode;
     }
 
-	public void setTypeParameters(TypeVariable[] typeParameters) {
+	public void setTypeParameters(List<TypeVariable> typeParameters) {
 		this.typeParameters = typeParameters;
 	}
 	
-	public TypeVariable[] getTypeParameters() {
+	public List<TypeVariable> getTypeParameters() {
 		return typeParameters;
 	}
 	

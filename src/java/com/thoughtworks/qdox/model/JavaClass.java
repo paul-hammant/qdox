@@ -260,28 +260,20 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      */
     public List<JavaMethod> getMethods(boolean superclasses) {
         if (superclasses) {
-            Set<String> signatures = new HashSet<String>();
-            List<JavaMethod> methods = new LinkedList<JavaMethod>();
-
-            addMethodsFromSuperclassAndInterfaces(signatures, methods, this);
-
-            return methods;
+            return new LinkedList<JavaMethod>(getMethodsFromSuperclassAndInterfaces(this).values());
         } else {
             return getMethods();
         }
     }
 
-    private void addMethodsFromSuperclassAndInterfaces(Set<String> signatures,
-                                                       List<JavaMethod> methodList, JavaClass callingClazz) {
+    private Map<String, JavaMethod> getMethodsFromSuperclassAndInterfaces(JavaClass callingClazz) {
 
+        Map<String, JavaMethod> result = new LinkedHashMap<String, JavaMethod>();
+        
         for (JavaMethod method : callingClazz.getMethods()) {
             if (!method.isPrivate()) {
                 String signature = method.getDeclarationSignature(false);
-
-                if (!signatures.contains(signature)) {
-                    methodList.add( new JavaMethodDelegate( this, method ) );
-                    signatures.add(signature);
-                }
+                result.put( signature, new JavaMethodDelegate( this, method ) );
             }
         }
 
@@ -289,16 +281,25 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
         // TODO workaround for a bug in getSuperJavaClass
         if ((superclass != null) && (superclass != callingClazz)) {
-            callingClazz.addMethodsFromSuperclassAndInterfaces(signatures, methodList,
-                    superclass);
+            Map<String, JavaMethod> superClassMethods = callingClazz.getMethodsFromSuperclassAndInterfaces(superclass);
+            for(Map.Entry<String, JavaMethod> methodEntry : superClassMethods.entrySet()) {
+                if (!result.containsKey(methodEntry.getKey())) {
+                    result.put( methodEntry.getKey(), new JavaMethodDelegate( superclass, methodEntry.getValue() ) );
+                }
+            }
+
         }
 
         for (JavaClass clazz : callingClazz.getImplementedInterfaces()) {
-            if (clazz!= null) {
-                callingClazz.addMethodsFromSuperclassAndInterfaces(signatures, methodList,
-                        clazz);
+            Map<String, JavaMethod> interfaceMethods = callingClazz.getMethodsFromSuperclassAndInterfaces(clazz);
+            for(Map.Entry<String, JavaMethod> methodEntry : interfaceMethods.entrySet()) {
+                if (!result.containsKey(methodEntry.getKey())) {
+                    result.put( methodEntry.getKey(), new JavaMethodDelegate( clazz, methodEntry.getValue() ) );
+                }
             }
+            
         }
+        return result;
     }
 
     /**

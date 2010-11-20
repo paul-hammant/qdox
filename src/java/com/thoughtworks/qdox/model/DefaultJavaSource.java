@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -250,16 +249,18 @@ public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSou
     }
     
     private String resolveImportedType( String importSpec, String typeName, boolean fullMatch ) {
-        List<String> imports = getImports();
         String resolvedName = null;
         String dotSuffix = "." + importSpec;
             
-        for (int i = 0; i < imports.size() && resolvedName == null; i++) {
-            if (imports.get(i).equals(importSpec) || (!fullMatch && imports.get(i).endsWith(dotSuffix))) {
-                String candidateName = imports.get(i).substring( 0, imports.get(i).length() - importSpec.length()) + typeName;
+        for (String imprt : getImports()) {
+            if (imprt.equals(importSpec) || (!fullMatch && imprt.endsWith(dotSuffix))) {
+                String candidateName = imprt.substring( 0, imprt.length() - importSpec.length()) + typeName;
                 resolvedName = resolveFullyQualifiedType( candidateName );
                 if(resolvedName == null && !"*".equals(importSpec)) {
                 	resolvedName = candidateName;
+                }
+                if(resolvedName != null) {
+                    break;
                 }
             } 
         }
@@ -314,9 +315,7 @@ public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSou
     public JavaClass getNestedClassByName(String name) {
         JavaClass result = null;
         
-        for (ListIterator<JavaClass> i = classes.listIterator(); i.hasNext(); ) {
-            JavaClass candidateClass = (JavaClass) i.next();
-            
+        for (JavaClass candidateClass : classes) {
             if (candidateClass.getName().equals(name)) {
                 result = candidateClass;
                 break;

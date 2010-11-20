@@ -27,7 +27,7 @@ import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
 public class ModelBuilder implements Builder {
 
     private final DefaultJavaSource source;
-    private JavaClass currentClass;
+    private LinkedList<JavaClass> classStack = new LinkedList<JavaClass>();
     private JavaMethod currentMethod;
     private List<Annotation> currentAnnoDefs;
     private String lastComment;
@@ -120,18 +120,18 @@ public class ModelBuilder implements Builder {
         // annotations
         setAnnotations( newClass );
         
-        if(currentClass != null) {
-            currentClass.addClass( newClass );
-            newClass.setParentClass( currentClass );
+        if(!classStack.isEmpty()) {
+            classStack.getFirst().addClass( newClass );
+            newClass.setParentClass( classStack.getFirst() );
         }
         else {
             source.addClass( newClass );
         }
-        currentClass = newClass;
+        classStack.addFirst( newClass );
     }
 
     public void endClass() {
-        currentClass = currentClass.getParentClass();
+        classStack.removeFirst();
     }
 
     public Type createType( String typeName, int dimensions ) {
@@ -158,7 +158,7 @@ public class ModelBuilder implements Builder {
     	if(typeDef == null) {
     		return null;
     	}
-    	return Type.createUnresolved(typeDef, dimensions, currentClass == null ? source : currentClass);
+    	return Type.createUnresolved(typeDef, dimensions, classStack.isEmpty() ? source : classStack.getFirst());
     }
 
     private void addJavaDoc(AbstractJavaEntity entity) {
@@ -193,7 +193,7 @@ public class ModelBuilder implements Builder {
     }
     
     public void endMethod(MethodDef def) {
-        currentMethod.setParentClass(currentClass);
+        currentMethod.setParentClass(classStack.getFirst());
         currentMethod.setLineNumber(def.lineNumber);
 
         // basic details
@@ -229,15 +229,15 @@ public class ModelBuilder implements Builder {
         // javadoc
         addJavaDoc(currentMethod);
 
-        currentClass.addMethod(currentMethod);
-        currentMethod.setParentClass(currentClass);
+        classStack.getFirst().addMethod(currentMethod);
+        currentMethod.setParentClass(classStack.getFirst());
     }
 
     public TypeVariable createTypeVariable(TypeVariableDef typeVariableDef) {
     	if(typeVariableDef == null) {
     		return null;
     	}
-    	return TypeVariable.createUnresolved(typeVariableDef, currentClass == null ? source : currentClass);
+    	return TypeVariable.createUnresolved(typeVariableDef, classStack.isEmpty() ? source : classStack.getFirst());
 
 	}
 
@@ -250,7 +250,7 @@ public class ModelBuilder implements Builder {
 
 	public void addField(FieldDef def) {
         DefaultJavaField currentField = new DefaultJavaField();
-        currentField.setParentClass(currentClass);
+        currentField.setParentClass(classStack.getFirst());
         currentField.setLineNumber(def.lineNumber);
 
         currentField.setName(def.name);
@@ -270,7 +270,7 @@ public class ModelBuilder implements Builder {
         // annotations
         setAnnotations( currentField );
 
-        currentClass.addField(currentField);
+        classStack.getFirst().addField(currentField);
     }
 	
 	public void addParameter(FieldDef fieldDef) {
@@ -294,14 +294,14 @@ public class ModelBuilder implements Builder {
                 }
             };
 
-            Annotation[] annotations = new Annotation[currentAnnoDefs.size()];
+            List<Annotation> annotations = new LinkedList<Annotation>();
             for( ListIterator<Annotation> iter = currentAnnoDefs.listIterator(); iter.hasNext(); ) {
                 Annotation annotation = iter.next();
                 annotation.accept(visitor);
-                annotations[iter.previousIndex()] = annotation;
+                annotations.add( annotation);
             }
 
-            entity.setAnnotations( Arrays.asList( annotations ) );
+            entity.setAnnotations( annotations );
             currentAnnoDefs.clear();
         }
     }

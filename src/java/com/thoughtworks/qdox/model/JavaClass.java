@@ -427,7 +427,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
     }
 
     public void addClass(JavaClass cls) {
-        cls.setParentClass( this );
         classes.add(cls);
     }
 

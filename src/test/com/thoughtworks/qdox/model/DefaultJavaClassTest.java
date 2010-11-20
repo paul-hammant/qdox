@@ -75,6 +75,7 @@ public class DefaultJavaClassTest
     public void addClass( JavaClass clazz, JavaClass innerClazz )
     {
         clazz.addClass( innerClazz );
+        innerClazz.setParentClass( clazz );
     }
 
     public void addClass( JavaPackage pckg, JavaClass clazz )

@@ -124,6 +124,7 @@ public class ModelBuilder implements Builder {
         
         if(currentClass != null) {
             currentClass.addClass( newClass );
+            newClass.setParentClass( currentClass );
         }
         else {
             source.addClass( newClass );

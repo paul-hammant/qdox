@@ -1,7 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +35,7 @@ public class ModelBuilder implements Builder {
     public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
         source = new DefaultJavaSource(classLibrary);
-        currentAnnoDefs = new ArrayList<Annotation>();
+        currentAnnoDefs = new LinkedList<Annotation>();
     }
     
     public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
@@ -167,7 +165,7 @@ public class ModelBuilder implements Builder {
         entity.setComment(lastComment);
         
         Iterator<TagDef> tagDefIterator = lastTagSet.iterator();
-        List<DocletTag> tagList = new ArrayList<DocletTag>();
+        List<DocletTag> tagList = new LinkedList<DocletTag>();
         while (tagDefIterator.hasNext()) {
             TagDef tagDef = tagDefIterator.next();
             tagList.add( 

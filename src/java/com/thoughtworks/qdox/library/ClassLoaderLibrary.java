@@ -64,9 +64,7 @@ public class ClassLoaderLibrary
         defaultClassLoadersAdded = true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     protected JavaClass resolveJavaClass( String name )
     {
         JavaClass result = null;
@@ -105,11 +103,11 @@ public class ClassLoaderLibrary
         }
     }
     
+    @Override
     protected boolean containsClassReference( String name )
     {
         boolean result = false;
-        Iterator<ClassLoader> iter = classLoaders.iterator();
-        while (!result && iter.hasNext() )
+        for(Iterator<ClassLoader> iter = classLoaders.iterator();!result && iter.hasNext(); )
         {
             ClassLoader classLoader = (ClassLoader) iter.next();
             try

@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.library;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
@@ -93,7 +93,7 @@ public abstract class AbstractClassLibrary
      * @return
      */
     protected final List<JavaSource> getJavaSources( ClassLibraryFilter filter) {
-        List<JavaSource> result = new ArrayList<JavaSource>(); 
+        List<JavaSource> result = new LinkedList<JavaSource>(); 
         if(filter.accept(this)) {
             result.addAll( context.getSources() );
         }
@@ -104,10 +104,10 @@ public abstract class AbstractClassLibrary
     }
     
     /**
-     * Get all the sources of the current {@link AbstractClassLibrary}.
+     * Get all the classes of the current {@link AbstractClassLibrary}.
      * Subclasses can overwrite this method by including the following code
      * <code> 
-     * public JavaClass[] getClasses()
+     * public List<JavaClass> getClasses()
      * {
      *   return getJavaClasses( new ClassLibraryFilter()
      *   {
@@ -119,6 +119,8 @@ public abstract class AbstractClassLibrary
      * }
      * </code>
      * This example would return all created {@link JavaClass } objects, including those from the classloaders.
+     * 
+     * @return all JavaClasses of this ClassLibrary
      */
     public List<JavaClass> getJavaClasses()
     {
@@ -132,7 +134,7 @@ public abstract class AbstractClassLibrary
      * @return
      */
     protected final List<JavaClass> getJavaClasses( ClassLibraryFilter filter) {
-        List<JavaClass> result = new ArrayList<JavaClass>(); 
+        List<JavaClass> result = new LinkedList<JavaClass>(); 
         if(filter.accept(this)) {
             result.addAll( context.getClasses() );
         }
@@ -143,6 +145,21 @@ public abstract class AbstractClassLibrary
     }
     
     /**
+     * Get all packages of the current {@link AbstractClassLibrary}.
+     * Subclasses can overwrite this method by including the following code
+     * <code> 
+     * public List<JavaPackage> getJavaPackages()
+     * {
+     *   return getJavaPackages( new ClassLibraryFilter()
+     *   {
+     *      public boolean accept( AbstractClassLibrary classLibrary )
+     *      {
+     *          return true;
+     *      }
+     *   });
+     * }
+     * </code>
+     * This example would return all created {@link JavaPackage } objects, including those from the classloaders.
      * 
      * @return all JavaPackages of this ClassLibrary
      */
@@ -160,7 +177,7 @@ public abstract class AbstractClassLibrary
     }
     
     protected final List<JavaPackage> getJavaPackages( ClassLibraryFilter filter) {
-        List<JavaPackage> result = new ArrayList<JavaPackage>(); 
+        List<JavaPackage> result = new LinkedList<JavaPackage>(); 
         if( filter.accept( this ) ) {
             result.addAll( context.getPackages() );
         }
@@ -229,6 +246,11 @@ public abstract class AbstractClassLibrary
      */
     interface ClassLibraryFilter
     {
+        /**
+         * 
+         * @param classLibrary
+         * @return
+         */
         boolean accept( AbstractClassLibrary classLibrary );
     }
 }

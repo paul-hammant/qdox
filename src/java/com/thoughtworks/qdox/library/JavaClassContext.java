@@ -1,10 +1,10 @@
 package com.thoughtworks.qdox.library;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,7 +58,7 @@ public class JavaClassContext implements Serializable {
 	 * @return an array of JavaClasses, never <code>null</code>
 	 */
 	public List<JavaClass> getClasses() {
-		return Collections.unmodifiableList( new ArrayList<JavaClass>(classMap.values()) );
+		return Collections.unmodifiableList( new LinkedList<JavaClass>(classMap.values()) );
 	}
 	
 	/**
@@ -123,7 +123,7 @@ public class JavaClassContext implements Serializable {
      */
     public List<JavaPackage> getPackages()
     {
-        return Collections.unmodifiableList( new ArrayList<JavaPackage>(packageMap.values()) );
+        return Collections.unmodifiableList( new LinkedList<JavaPackage>(packageMap.values()) );
         
     }
 
@@ -144,6 +144,6 @@ public class JavaClassContext implements Serializable {
      */
     public List<JavaSource> getSources()
     {
-        return Collections.unmodifiableList( new ArrayList<JavaSource>(sourceSet) );
+        return Collections.unmodifiableList( new LinkedList<JavaSource>(sourceSet) );
     }
 }

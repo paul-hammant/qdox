@@ -154,9 +154,7 @@ public class SourceLibrary
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     protected JavaClass resolveJavaClass( String name )
     {
         // abstractLibrary only calls this when it can't find the source itself.
@@ -216,6 +214,7 @@ public class SourceLibrary
     /**
      * Get all classes, including those from parent SourceLibraries
      */
+    @Override
     public List<JavaClass> getJavaClasses()
     {
         List<JavaClass> result = new LinkedList<JavaClass>();
@@ -235,6 +234,7 @@ public class SourceLibrary
     /**
      * Get all packages, including those from parent SourceLibraries
      */
+    @Override
     public List<JavaPackage> getJavaPackages()
     {
         List<JavaPackage> result = new LinkedList<JavaPackage>();
@@ -254,6 +254,7 @@ public class SourceLibrary
     /**
      * Get all sources, including those from parent SourceLibraries
      */
+    @Override
     public List<JavaSource> getJavaSources()
     {
         List<JavaSource> result = new LinkedList<JavaSource>();
@@ -269,10 +270,8 @@ public class SourceLibrary
         result.addAll( unusedSources );
         return Collections.unmodifiableList( result );
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
+    @Override
     protected boolean containsClassReference( String name )
     {
         return context.getClassByName( name ) != null;

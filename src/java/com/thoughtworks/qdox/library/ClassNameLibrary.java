@@ -19,9 +19,7 @@ public class ClassNameLibrary
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     protected JavaClass resolveJavaClass( String name )
     {
         ModelBuilder unknownBuilder = getModelBuilder();
@@ -34,6 +32,7 @@ public class ClassNameLibrary
         return result;
     }
     
+    @Override
     protected boolean containsClassReference( String name )
     {
         return false;

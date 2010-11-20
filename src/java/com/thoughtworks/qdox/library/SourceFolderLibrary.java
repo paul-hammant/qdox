@@ -36,9 +36,7 @@ public class SourceFolderLibrary
         this.sourceFolders.add( sourceFolder );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     protected JavaClass resolveJavaClass( String className )
     {
         JavaClass result = null;
@@ -62,9 +60,11 @@ public class SourceFolderLibrary
     }
     
     /**
-     * Loops over the sourceFolder
+     * Loops over the sourceFolder to find a classReference.
+     * It will try to map the className to a file.
      * 
      */
+    @Override
     protected boolean containsClassReference( String className )
     {
         boolean result = false;
@@ -74,23 +74,7 @@ public class SourceFolderLibrary
             String mainClassName = className.split( "\\$" )[0];
             File classFile = new File( sourceFolder, mainClassName.replace( '.', File.separatorChar ) + ".java" );
             
-            //@todo check if source contains the classname
-            //@todo if not, check all files in this packages and check if it's there.
-//            try
-//            {
-//                JavaSource source = addSource( classFile );
-//            }
-//            catch ( ParseException e )
-//            {
-//                //ignore 
-//            }
-//            catch ( IOException e )
-//            {
-//            }
             result = ( classFile.exists() && classFile.isFile() );
-//            if( !result ) {
-//                
-//            }
         }
         return result;
     }

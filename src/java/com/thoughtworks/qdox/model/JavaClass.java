@@ -1,9 +1,6 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -41,7 +38,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 	
 	private JavaSource source;
 
-    public JavaClass() {
+    protected JavaClass() {
     }
     
     public JavaClass(String name) {
@@ -229,13 +226,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public String resolveType(String typeName) {
         // Maybe it's an inner class?
-        List<JavaClass> innerClasses = getNestedClasses();
-        for (JavaClass innerClass : innerClasses) {
+        for (JavaClass innerClass : getNestedClasses()) {
             if (innerClass.getName().equals(typeName)) {
                 return innerClass.getFullyQualifiedName();
             }
         }
-
         return getParent().resolveType(typeName);
     }
 
@@ -553,18 +548,11 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * Gets the known derived classes. That is, subclasses or implementing classes.
      */
     public List<JavaClass> getDerivedClasses() {
-        List<JavaClass> result;
-        if( source.getJavaClassLibrary() != null ) {
-            result = new LinkedList<JavaClass>();
-            List<JavaClass> classes = source.getJavaClassLibrary().getJavaClasses();
-            for (JavaClass clazz : classes) {
-                if (clazz.isA(this) && !(clazz == this)) {
-                    result.add(clazz);
-                }
+        List<JavaClass> result = new LinkedList<JavaClass>();
+        for (JavaClass clazz : source.getJavaClassLibrary().getJavaClasses()) {
+            if (clazz.isA(this) && !(clazz == this)) {
+                result.add(clazz);
             }
-        }
-        else {
-            result = Collections.emptyList();
         }
         return result;
     }
@@ -616,12 +604,6 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
 
     public ClassLibrary getJavaClassLibrary()
     {
-        //JavaClass should always have a source...
-        if(source != null) {
-            return source.getJavaClassLibrary();
-        }
-        else {
-            return null;
-        }
+        return source.getJavaClassLibrary();
     }
 }

@@ -2,7 +2,7 @@ package com.thoughtworks.qdox.library;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +34,7 @@ import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
 public class ClassLoaderLibrary
     extends AbstractClassLibrary
 {
-    private transient List<ClassLoader> classLoaders = new ArrayList<ClassLoader>();
+    private transient List<ClassLoader> classLoaders = new LinkedList<ClassLoader>();
 
     private boolean defaultClassLoadersAdded = false;
 
@@ -68,8 +68,7 @@ public class ClassLoaderLibrary
     protected JavaClass resolveJavaClass( String name )
     {
         JavaClass result = null;
-        Iterator<ClassLoader> iter = classLoaders.iterator();
-        while ( iter.hasNext() )
+        for (Iterator<ClassLoader> iter = classLoaders.iterator(); iter.hasNext(); )
         {
             ClassLoader classLoader = (ClassLoader) iter.next();
             try
@@ -95,7 +94,7 @@ public class ClassLoaderLibrary
         throws IOException, ClassNotFoundException
     {
         in.defaultReadObject();
-        classLoaders = new ArrayList<ClassLoader>();
+        classLoaders = new LinkedList<ClassLoader>();
         if ( defaultClassLoadersAdded )
         {
             defaultClassLoadersAdded = false;

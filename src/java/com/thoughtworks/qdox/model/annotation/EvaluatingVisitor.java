@@ -1,9 +1,8 @@
 package com.thoughtworks.qdox.model.annotation;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -31,13 +30,13 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public List getListValue( Annotation annotation, String property ) {
+    public List<?> getListValue( Annotation annotation, String property ) {
         Object value = getValue( annotation, property );
-        List list = null;
+        List<?> list = null;
 
         if( value != null ) {
             if( value instanceof List ) {
-                list = (List) value;
+                list = (List<?>) value;
             }
             else {
                 list = Collections.singletonList( value );
@@ -53,8 +52,8 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
      * Specification, 
      * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section 5.6.1<a>
      */
-    protected static Class resultType( Object left, Object right ) {
-        Class type = void.class;
+    protected static Class<?> resultType( Object left, Object right ) {
+        Class<?> type = void.class;
 
         if( left instanceof String || right instanceof String ) {
             type = String.class;
@@ -84,8 +83,8 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
      * Specification, 
      * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section 5.6.1<a>
      */
-    protected static Class numericResultType( Object left, Object right ) {
-        Class type = void.class;
+    protected static Class<?> numericResultType( Object left, Object right ) {
+        Class<?> type = void.class;
 
         if( left instanceof Number && right instanceof Number ) {
             if( left instanceof Long || right instanceof Long ) {
@@ -106,8 +105,8 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
      * Specification, 
      * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170952">section 5.6.2<a>
      */
-    protected static Class unaryNumericResultType( Object value ) {
-        Class type = void.class;
+    protected static Class<?> unaryNumericResultType( Object value ) {
+        Class<?> type = void.class;
 
         if( value instanceof Byte || value instanceof Short || value instanceof Character || value instanceof Integer ) {
             type = Integer.class;
@@ -119,8 +118,8 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return type;
     }
 
-    protected static Class unaryResultType( Object value ) {
-        Class type = unaryNumericResultType( value );
+    protected static Class<?> unaryResultType( Object value ) {
+        Class<?> type = unaryNumericResultType( value );
 
         if( type == void.class ) {
             if( value instanceof Float ) {
@@ -141,7 +140,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationAdd( AnnotationAdd op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         Object result;
 
         if( type == String.class ) {
@@ -173,7 +172,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationDivide( AnnotationDivide op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         Object result;
 
         if( type == Double.class ) {
@@ -215,7 +214,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationGreaterThan( AnnotationGreaterThan op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         boolean result;
 
         if( type == Double.class ) {
@@ -240,7 +239,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationLessThan( AnnotationLessThan op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         boolean result;
 
         if( type == Double.class ) {
@@ -265,7 +264,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationMultiply( AnnotationMultiply op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         Object result;
 
         if( type == Double.class ) {
@@ -294,7 +293,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationSubtract( AnnotationSubtract op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         Object result;
 
         if( type == Double.class ) {
@@ -322,10 +321,9 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     }
 
     public Object visitAnnotationValueList( AnnotationValueList valueList ) {
-        List list = new ArrayList();
+        List<Object> list = new LinkedList<Object>();
 
-        for( ListIterator i = valueList.getValueList().listIterator(); i.hasNext(); ) {
-            AnnotationValue value = (AnnotationValue) i.next();
+        for( AnnotationValue value : valueList.getValueList()) {
             Object v = value.accept( this );
             list.add( v );
         }
@@ -336,7 +334,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationAnd( AnnotationAnd and ) {
         Object left = and.getLeft().accept( this );
         Object right = and.getRight().accept( this );
-        Class type = numericResultType( left, right );
+        Class<?> type = numericResultType( left, right );
         Object result;
 
         if( type == Long.class ) {
@@ -355,7 +353,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationGreaterEquals( AnnotationGreaterEquals greaterEquals ) {
         Object left = greaterEquals.getLeft().accept( this );
         Object right = greaterEquals.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         boolean result;
 
         if( type == Double.class ) {
@@ -380,7 +378,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationLessEquals( AnnotationLessEquals lessEquals ) {
         Object left = lessEquals.getLeft().accept( this );
         Object right = lessEquals.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         boolean result;
 
         if( type == Double.class ) {
@@ -448,7 +446,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
 
     public Object visitAnnotationMinusSign( AnnotationMinusSign sign ) {
         Object value = sign.getValue().accept( this );
-        Class type = unaryResultType( value );
+        Class<?> type = unaryResultType( value );
         Object result;
 
         if( type == Integer.class ) {
@@ -491,7 +489,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationOr( AnnotationOr or ) {
         Object left = or.getLeft().accept( this );
         Object right = or.getRight().accept( this );
-        Class type = numericResultType( left, right );
+        Class<?> type = numericResultType( left, right );
         Object result;
 
         if( type == Long.class ) {
@@ -524,7 +522,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationRemainder( AnnotationRemainder remainder ) {
         Object left = remainder.getLeft().accept( this );
         Object right = remainder.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         Object result;
 
         if( type == Double.class ) {
@@ -549,7 +547,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationShiftLeft( AnnotationShiftLeft shiftLeft ) {
         Object left = shiftLeft.getLeft().accept( this );
         Object right = shiftLeft.getRight().accept( this );
-        Class type = numericResultType( left, right );
+        Class<?> type = numericResultType( left, right );
         Object result;
 
         if( type == Long.class ) {
@@ -568,7 +566,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationShiftRight( AnnotationShiftRight shiftRight ) {
         Object left = shiftRight.getLeft().accept( this );
         Object right = shiftRight.getRight().accept( this );
-        Class type = numericResultType( left, right );
+        Class<?> type = numericResultType( left, right );
         Object result;
 
         if( type == Long.class ) {
@@ -587,7 +585,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationUnsignedShiftRight( AnnotationUnsignedShiftRight shiftRight ) {
         Object left = shiftRight.getLeft().accept( this );
         Object right = shiftRight.getRight().accept( this );
-        Class type = numericResultType( left, right );
+        Class<?> type = numericResultType( left, right );
         Object result;
 
         if( type == Long.class ) {
@@ -606,7 +604,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationEquals( AnnotationEquals annotationEquals ) {
         Object left = annotationEquals.getLeft().accept( this );
         Object right = annotationEquals.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         boolean result;
 
         if( type == Double.class ) {
@@ -631,7 +629,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationExclusiveOr( AnnotationExclusiveOr annotationExclusiveOr ) {
         Object left = annotationExclusiveOr.getLeft().accept( this );
         Object right = annotationExclusiveOr.getRight().accept( this );
-        Class type = numericResultType( left, right );
+        Class<?> type = numericResultType( left, right );
         Object result;
 
         if( type == Long.class ) {
@@ -650,7 +648,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
     public Object visitAnnotationNotEquals( AnnotationNotEquals annotationNotEquals ) {
         Object left = annotationNotEquals.getLeft().accept( this );
         Object right = annotationNotEquals.getRight().accept( this );
-        Class type = resultType( left, right );
+        Class<?> type = resultType( left, right );
         boolean result;
 
         if( type == Double.class ) {

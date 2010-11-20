@@ -202,31 +202,29 @@
          </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.3</version>
-        <configuration>
-          <tasks>
-            <echo>OS Arch = ${os.arch}</echo>
-            <exec executable="${qdox.byaccj.executable}" dir="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl" failonerror="true">
-              <arg value="-v" />
-              <arg value="-Jnorun" />
-              <arg value="-Jnoconstruct" />
-              <arg value="-Jclass=Parser" />
-              <arg value="-Jsemantic=Value" />
-              <arg value="-Jpackage=com.thoughtworks.qdox.parser.impl" />
-              <arg value="${basedir}/src/grammar/parser.y" />
-            </exec>
-            <move tofile="${project.build.directory}/yacc-states.txt" file="${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl/y" failonerror="false" />
-          </tasks>
-          <sourceRoot>${project.build.directory}/generated-sources/parser</sourceRoot>
-        </configuration>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.2</version>
         <executions>
           <execution>
-            <id>generate-sources</id>
+            <id>byaccj</id>
             <phase>generate-sources</phase>
             <goals>
-              <goal>run</goal>
+              <goal>exec</goal>
             </goals>
+            <configuration>
+              <executable>${qdox.byaccj.executable}</executable>
+              <arguments>
+                <argument>-v</argument>
+                <argument>-Jnorun</argument>
+                <argument>-Jnoconstruct</argument>
+                <argument>-Jclass=Parser</argument>
+                <argument>-Jsemantic=Value</argument>
+                <argument>-Jpackage=com.thoughtworks.qdox.parser.impl</argument>
+                <argument>${basedir}/src/grammar/parser.y</argument>
+              </arguments>
+              <workingDirectory>${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl</workingDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>

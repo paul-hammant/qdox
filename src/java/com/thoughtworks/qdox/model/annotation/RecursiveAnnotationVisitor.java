@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.annotation;
 
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.thoughtworks.qdox.model.Annotation;
@@ -8,11 +7,9 @@ import com.thoughtworks.qdox.model.Annotation;
 public class RecursiveAnnotationVisitor implements AnnotationVisitor {
 
     public Object visitAnnotation( Annotation annotation ) {
-        for( Iterator i = annotation.getPropertyMap().values().iterator(); i.hasNext(); ) {
-            AnnotationValue value = (AnnotationValue) i.next();
+        for( AnnotationValue value : annotation.getPropertyMap().values()) {
             value.accept( this );
         }
-
         return null;
     }
 
@@ -77,8 +74,7 @@ public class RecursiveAnnotationVisitor implements AnnotationVisitor {
     }
 
     public Object visitAnnotationValueList( AnnotationValueList valueList ) {
-        for( ListIterator i = valueList.getValueList().listIterator(); i.hasNext(); ) {
-            AnnotationValue value = (AnnotationValue) i.next();
+        for( AnnotationValue value : valueList.getValueList() ) {
             value.accept( this );
         }
 

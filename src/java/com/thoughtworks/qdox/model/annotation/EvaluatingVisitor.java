@@ -43,7 +43,6 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
                 list = Collections.singletonList( value );
             }
         }
-
         return list;
     }
 

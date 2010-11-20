@@ -1,13 +1,8 @@
 package com.thoughtworks.qdox.model.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.StringTokenizer;
 
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
-import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaField;
@@ -15,7 +10,6 @@ import com.thoughtworks.qdox.model.Type;
 
 public class AnnotationFieldRef implements AnnotationValue {
 
-    String[] myArray = new String[]{"unchecked"};
     private final int[] parts;
 
     private final String name;

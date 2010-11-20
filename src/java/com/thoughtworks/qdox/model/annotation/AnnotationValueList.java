@@ -1,18 +1,18 @@
 package com.thoughtworks.qdox.model.annotation;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 public class AnnotationValueList implements AnnotationValue {
 
-    private final List valueList;
+    private final List<AnnotationValue> valueList;
 
-    public AnnotationValueList( List valueList ) {
+    public AnnotationValueList( List<AnnotationValue> valueList ) {
         this.valueList = valueList;
     }
 
-    public List getValueList() {
+    public List<AnnotationValue> getValueList() {
         return valueList;
     }
 
@@ -21,15 +21,12 @@ public class AnnotationValueList implements AnnotationValue {
 
         buf.append( "{" );
 
-        int pos = buf.length();
-
-        for( ListIterator i = valueList.listIterator(); i.hasNext(); ) {
+        for( ListIterator<AnnotationValue> i = valueList.listIterator(); i.hasNext(); ) {
             buf.append( i.next().toString() );
-            buf.append( ", " );
-        }
-
-        if( buf.length() > pos ) {
-            buf.setLength( buf.length() - 2 );
+            
+            if(i.hasNext()) {
+                buf.append( ", " );
+            }
         }
 
         buf.append( "}" );
@@ -42,11 +39,10 @@ public class AnnotationValueList implements AnnotationValue {
     }
 
     public Object getParameterValue() {
-        List list = new ArrayList();
+        List<Object> list = new LinkedList<Object>();
 
-        for( ListIterator i = valueList.listIterator(); i.hasNext(); ) {
-            AnnotationValue value = (AnnotationValue) i.next();
-            list.add( value.getParameterValue() );
+        for( ListIterator<AnnotationValue> i = valueList.listIterator(); i.hasNext(); ) {
+            list.add( i.next().getParameterValue() );
         }
 
         return list;

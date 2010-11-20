@@ -8,13 +8,10 @@ import java.io.ObjectInputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.thoughtworks.qdox.JavaDocBuilder.DefaultErrorHandler;
 import com.thoughtworks.qdox.JavaDocBuilder.ErrorHandler;
@@ -56,8 +53,8 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     private ModelBuilderFactory modelBuilderFactory;
     
     private boolean defaultClassLoadersAdded = false;
-    private transient List classLoaders = new ArrayList();
-    private List sourceFolders = new ArrayList(); //<File>
+    private transient List<ClassLoader> classLoaders = new LinkedList<ClassLoader>();
+    private List<File> sourceFolders = new LinkedList<File>();
 
     private String encoding = System.getProperty("file.encoding");
     private boolean debugLexer;
@@ -105,8 +102,7 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     
     public File getSourceFile( String className )
     {
-        for(Iterator iterator = sourceFolders.iterator(); iterator.hasNext();) {
-            File sourceFolder = (File) iterator.next();
+        for(File sourceFolder : sourceFolders) {
             String mainClassName = className.split( "\\$" )[0];
             File classFile = new File(sourceFolder, mainClassName.replace( '.', File.separatorChar ) + ".java");
             if ( classFile.exists() && classFile.isFile() ) {
@@ -116,10 +112,9 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         return null;
     }
 
-    public Class getClass(String className) {
-        Class result = null;
-        for (Iterator iterator = classLoaders.iterator(); iterator.hasNext();) {
-            ClassLoader classLoader = (ClassLoader) iterator.next();
+    public Class<?> getClass(String className) {
+        Class<?> result = null;
+        for (ClassLoader classLoader : classLoaders) {
             if (classLoader == null) {
                 continue;
             }
@@ -155,7 +150,7 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        classLoaders = new ArrayList();
+        classLoaders = new LinkedList<ClassLoader>();
         if (defaultClassLoadersAdded) {
             defaultClassLoadersAdded = false;
             addDefaultLoader();
@@ -213,7 +208,7 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     
     private JavaClass createBinaryClass(String name) {
         // First see if the class exists at all.
-        Class clazz = getClass(name);
+        Class<?> clazz = getClass(name);
         if (clazz == null) {
             return null;
         } else {

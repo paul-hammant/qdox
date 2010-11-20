@@ -139,12 +139,12 @@ public class DefaultJavaClassTest
         clazz.setInterface( isInterface );
     }
 
-    public void setModifiers( JavaClass clazz, String[] modifiers )
+    public void setModifiers( JavaClass clazz, List<String> modifiers )
     {
         clazz.setModifiers( modifiers );
     }
 
-    public void setModifiers( JavaField field, String[] modifiers )
+    public void setModifiers( JavaField field, List<String> modifiers )
     {
         ((DefaultJavaField) field).setModifiers( modifiers );
     }

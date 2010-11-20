@@ -76,7 +76,7 @@ public class DefaultJavaMethodTest
         method.setName( name );
     }
 
-    public void setModifiers( JavaMethod method, String[] modifiers )
+    public void setModifiers( JavaMethod method, List<String> modifiers )
     {
         method.setModifiers( modifiers );
     }

@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,8 +35,8 @@ public abstract class JavaClassTest extends TestCase {
     public abstract void setEnum(JavaClass clazz, boolean isEnum);
     public abstract void setImplementz(JavaClass clazz, List<Type> implementz);
     public abstract void setInterface(JavaClass clazz, boolean isInterface);
-    public abstract void setModifiers(JavaClass clazz, String[] modifiers);
-    public abstract void setModifiers(JavaField field, String[] modifiers);
+    public abstract void setModifiers(JavaClass clazz, List<String> modifiers);
+    public abstract void setModifiers(JavaField field, List<String> modifiers);
     public abstract void setName(JavaClass clazz, String name);
     public abstract void setName(JavaField field, String name);
     public abstract void setName(JavaMethod method, String name);
@@ -163,7 +164,7 @@ public abstract class JavaClassTest extends TestCase {
 
     public void testGetCodeBlockModifers() throws Exception {
         setName(cls, "MyClass");
-        setModifiers(cls, new String[]{"public", "final"});
+        setModifiers(cls, Arrays.asList(new String[]{"public", "final"}));
         String expected = ""
                 + "public final class MyClass {\n"
                 + "\n"
@@ -173,14 +174,14 @@ public abstract class JavaClassTest extends TestCase {
 
     public void testGetCodeBlockModifersProtectionAlwaysFirst() throws Exception {
         setName(cls, "MyClass");
-        setModifiers(cls, new String[]{"final", "public"});
+        setModifiers(cls, Arrays.asList(new String[]{"final", "public"}));
         String expected = ""
                 + "public final class MyClass {\n"
                 + "\n"
                 + "}\n";
         assertEquals(expected, cls.getCodeBlock());
 
-        setModifiers(cls, new String[]{"abstract", "protected"});
+        setModifiers(cls, Arrays.asList(new String[]{"abstract", "protected"}));
         expected = ""
                 + "protected abstract class MyClass {\n"
                 + "\n"
@@ -252,7 +253,7 @@ public abstract class JavaClassTest extends TestCase {
             JavaField fld = newJavaField(null);
             setName(fld, "thing");
             setType(fld, newType("String"));
-            setModifiers(fld, new String[]{"public"});
+            setModifiers(fld, Arrays.asList(new String[]{"public"}));
             addField(cls, fld);
         }
 
@@ -375,7 +376,7 @@ public abstract class JavaClassTest extends TestCase {
         setName(cls, "MyClass");
         assertTrue(!cls.isPublic());
 
-        setModifiers(cls, new String[]{"public"});
+        setModifiers(cls, Arrays.asList(new String[]{"public"}));
         assertTrue(cls.isPublic());
     }
 

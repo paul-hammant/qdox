@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -109,8 +108,8 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         }
     }
 
-    public void setModifiers(String[] modifiers) {
-        this.modifiers = Arrays.asList(modifiers);
+    public void setModifiers(List<String> modifiers) {
+        this.modifiers = modifiers;
     }
 
     public void setComment(String comment) {

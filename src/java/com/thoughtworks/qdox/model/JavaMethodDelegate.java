@@ -312,7 +312,7 @@ public class JavaMethodDelegate extends JavaMethod
         originalMethod.setLineNumber( lineNumber );
     }
 
-    public void setModifiers( String[] modifiers )
+    public void setModifiers( List<String> modifiers )
     {
         originalMethod.setModifiers( modifiers );
     }

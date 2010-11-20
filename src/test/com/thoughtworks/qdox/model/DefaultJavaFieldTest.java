@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.List;
+
 public class DefaultJavaFieldTest
     extends JavaFieldTest
 {
@@ -53,7 +55,7 @@ public class DefaultJavaFieldTest
         ((DefaultJavaField) fld).setInitializationExpression( expression );
     }
 
-    public void setModifiers( JavaField fld, String[] modifiers )
+    public void setModifiers( JavaField fld, List<String> modifiers )
     {
         ((DefaultJavaField) fld).setModifiers( modifiers );
     }

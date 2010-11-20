@@ -33,7 +33,7 @@ public abstract class JavaMethodTest extends TestCase {
     public abstract void setComment(JavaMethod method, String comment);
     public abstract void setConstructor(JavaMethod method, boolean isConstructor);
     public abstract void setName(JavaMethod method, String name);
-    public abstract void setModifiers(JavaMethod method, String[] modifiers);
+    public abstract void setModifiers(JavaMethod method, List<String> modifiers);
     public abstract void setReturns(JavaMethod method, Type type);
     public abstract void setSourceCode(JavaMethod method, String code);
     
@@ -69,7 +69,7 @@ public abstract class JavaMethodTest extends TestCase {
 
     private void createSignatureTestMethod() {
         setName(mth, "blah");
-        setModifiers(mth, new String[]{"protected", "final"});
+        setModifiers(mth, Arrays.asList(new String[]{"protected", "final"}));
         setReturns(mth, newType("void"));
         setExceptions(mth, Arrays.asList( new Type[] {
             newType("FishException"),
@@ -118,7 +118,7 @@ public abstract class JavaMethodTest extends TestCase {
     public void testGetCodeBlockModifiersWithAccessLevelFirst() throws Exception {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
-        setModifiers(mth, new String[]{"synchronized", "public", "final"});
+        setModifiers(mth, Arrays.asList(new String[]{"synchronized", "public", "final"}));
         assertEquals("public synchronized final void blah();\n", mth.getCodeBlock());
     }
 
@@ -145,7 +145,7 @@ public abstract class JavaMethodTest extends TestCase {
 
     public void testGetCodeBlockConstructor() throws Exception {
         setName(mth, "Blah");
-        setModifiers(mth, new String[]{"public"});
+        setModifiers(mth, Arrays.asList(new String[]{"public"}));
         setConstructor(mth, true);
         assertEquals("public Blah();\n", mth.getCodeBlock());
     }
@@ -381,7 +381,7 @@ public abstract class JavaMethodTest extends TestCase {
     	JavaClass cls = newJavaClass("java.lang.Object");
     	JavaMethod mthd = newJavaMethod(newType("boolean"),"equals");
     	addMethod(cls, mthd);
-    	setModifiers(mthd, new String[]{"public"});
+    	setModifiers(mthd, Arrays.asList(new String[]{"public"}));
     	addParameter(mthd, newJavaParameter(newType("java.lang.Object"), null));
     	assertEquals("public boolean java.lang.Object.equals(java.lang.Object)", mthd.toString());
     }

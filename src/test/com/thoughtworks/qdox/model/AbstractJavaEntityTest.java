@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testGetTagsByNameMethod() throws Exception {
         AbstractJavaEntity entity = newAbstractJavaEntity();
-        List tags = new LinkedList();
+        List<DocletTag> tags = new LinkedList<DocletTag>();
         tags.add(new DefaultDocletTag("monkey", "is good"));
         tags.add(new DefaultDocletTag("monkey", "is funny"));
         tags.add(new DefaultDocletTag("horse", "not so much"));
@@ -42,7 +43,7 @@ public class AbstractJavaEntityTest extends TestCase {
     public void testGetSingleTagByName() throws Exception {
 
         AbstractJavaEntity entity = newAbstractJavaEntity();
-        List tags = new LinkedList();
+        List<DocletTag> tags = new LinkedList<DocletTag>();
         tags.add(new DefaultDocletTag("monkey", "is good"));
         tags.add(new DefaultDocletTag("monkey", "is funny"));
         tags.add(new DefaultDocletTag("horse", "not so much"));
@@ -113,7 +114,7 @@ public class AbstractJavaEntityTest extends TestCase {
         AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
         entity.setComment("Hello");
-        List tags = new LinkedList();
+        List<DocletTag> tags = new LinkedList<DocletTag>();
         tags.add(new DefaultDocletTag("monkey", "is in the tree"));
         entity.setTags(tags);
 
@@ -137,7 +138,7 @@ public class AbstractJavaEntityTest extends TestCase {
         AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
         entity.setComment("Hello");
-        List tags = new LinkedList();
+        List<DocletTag> tags = new LinkedList<DocletTag>();
         tags.add(new DefaultDocletTag("monkey", "is in the tree"));
         tags.add(new DefaultDocletTag("see", "the doctor"));
         entity.setTags(tags);
@@ -162,7 +163,7 @@ public class AbstractJavaEntityTest extends TestCase {
         // setup
         AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
-        List tags = new LinkedList();
+        List<DocletTag> tags = new LinkedList<DocletTag>();
         tags.add(new DefaultDocletTag("monkey", "is in the tree"));
         entity.setTags(tags);
 
@@ -183,7 +184,7 @@ public class AbstractJavaEntityTest extends TestCase {
         // setup
         AbstractJavaEntity entity = newAbstractJavaEntity();
         IndentBuffer buffer = new IndentBuffer();
-        List tags = new LinkedList();
+        List<DocletTag> tags = new LinkedList<DocletTag>();
         tags.add(new DefaultDocletTag("monkey", ""));
         entity.setTags(tags);
 
@@ -202,26 +203,26 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testPublicModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
-        entity.setModifiers(new String[]{"public"});
+        entity.setModifiers(Arrays.asList(new String[]{"public"}));
         assertTrue(entity.isPublic());
     }
 
     public void testPrivateModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
-        entity.setModifiers(new String[]{"private"});
+        entity.setModifiers(Arrays.asList(new String[]{"private"}));
         assertTrue(entity.isPrivate());
     }
 
     public void testAbstractModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
-        entity.setModifiers(new String[]{"public", "abstract"});
+        entity.setModifiers(Arrays.asList(new String[]{"public", "abstract"}));
         assertTrue(entity.isAbstract());
         assertTrue(!entity.isPrivate());
     }
 
     public void testProtectedModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
-        entity.setModifiers(new String[]{"protected", "abstract", "synchronized", "transient"});
+        entity.setModifiers(Arrays.asList(new String[]{"protected", "abstract", "synchronized", "transient"}));
         assertTrue(entity.isProtected());
         assertTrue(entity.isSynchronized());
         assertTrue(entity.isTransient());
@@ -229,14 +230,14 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testStaticModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
-        entity.setModifiers(new String[]{"public", "static", "final"});
+        entity.setModifiers(Arrays.asList(new String[]{"public", "static", "final"}));
         assertTrue(entity.isStatic());
         assertTrue(entity.isFinal());
     }
 
     public void testQDOX30() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
-        entity.setModifiers(new String[]{"native", "volatile", "strictfp"});
+        entity.setModifiers(Arrays.asList(new String[]{"native", "volatile", "strictfp"}));
         assertTrue(entity.isNative());
         assertTrue(entity.isVolatile());
         assertTrue(entity.isStrictfp());

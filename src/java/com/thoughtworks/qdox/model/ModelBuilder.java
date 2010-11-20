@@ -95,9 +95,7 @@ public class ModelBuilder implements Builder {
 
         // modifiers
         {
-            String[] modifiers = new String[def.modifiers.size()];
-            def.modifiers.toArray(modifiers);
-            newClass.setModifiers(modifiers);
+            newClass.setModifiers(new LinkedList<String>(def.modifiers));
         }
         
         // typeParameters
@@ -223,9 +221,7 @@ public class ModelBuilder implements Builder {
 
         // modifiers
         {
-            String[] modifiers = new String[def.modifiers.size()];
-            def.modifiers.toArray(modifiers);
-            currentMethod.setModifiers(modifiers);
+            currentMethod.setModifiers(new LinkedList<String>( def.modifiers ));
         }
         
         currentMethod.setSourceCode(def.body);
@@ -262,9 +258,7 @@ public class ModelBuilder implements Builder {
 
         // modifiers
         {
-            String[] modifiers = new String[def.modifiers.size()];
-            def.modifiers.toArray(modifiers);
-            currentField.setModifiers(modifiers);
+            currentField.setModifiers(new LinkedList<String>(def.modifiers));
         }
 	
         // code body

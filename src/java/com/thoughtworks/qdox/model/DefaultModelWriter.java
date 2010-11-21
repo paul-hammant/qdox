@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 
 
@@ -46,8 +47,8 @@ public class DefaultModelWriter implements ModelWriter
     {
         commentHeader( clazz );
         
-        writeAccessibilityModifier(clazz);
-        writeNonAccessibilityModifiers(clazz);
+        writeAccessibilityModifier(clazz.getModifiers());
+        writeNonAccessibilityModifiers(clazz.getModifiers());
 
         buffer.write(clazz.isEnum() ? "enum " : 
             clazz.isInterface() ? "interface " : 
@@ -108,7 +109,7 @@ public class DefaultModelWriter implements ModelWriter
     public ModelWriter writeField(JavaField field) {
         commentHeader( field );
         
-        writeAllModifiers(field);
+        writeAllModifiers(field.getModifiers());
         buffer.write(field.getType().toString());
         buffer.write(' ');
         buffer.write(field.getName());
@@ -132,8 +133,8 @@ public class DefaultModelWriter implements ModelWriter
     {
         if ( withModifiers )
         {
-            writeAccessibilityModifier( method );
-            writeNonAccessibilityModifiers( method );
+            writeAccessibilityModifier( method.getModifiers() );
+            writeNonAccessibilityModifiers( method.getModifiers() );
         }
 
         if ( !method.isConstructor() )
@@ -197,9 +198,8 @@ public class DefaultModelWriter implements ModelWriter
         }
     }
     
-    private void writeNonAccessibilityModifiers(JavaMember member) {
-        // modifiers (anything else)
-        for ( String modifier: member.getModifiers() ) {
+    private void writeNonAccessibilityModifiers(List<String> modifiers) {
+        for ( String modifier: modifiers ) {
             if (!modifier.startsWith("p")) {
                 buffer.write(modifier);
                 buffer.write(' ');
@@ -207,8 +207,8 @@ public class DefaultModelWriter implements ModelWriter
         }
     }
 
-    private void writeAccessibilityModifier(JavaMember member) {
-        for ( String modifier: member.getModifiers() ) {
+    private void writeAccessibilityModifier(List<String> modifiers) {
+        for ( String modifier: modifiers ) {
             if (modifier.startsWith("p")) {
                 buffer.write(modifier);
                 buffer.write(' ');
@@ -216,8 +216,8 @@ public class DefaultModelWriter implements ModelWriter
         }
     }
 
-    private void writeAllModifiers(JavaMember member) {
-        for ( String modifier: member.getModifiers() ) {
+    private void writeAllModifiers(List<String> modifiers) {
+        for ( String modifier: modifiers ) {
             buffer.write(modifier);
             buffer.write(' ');
         }

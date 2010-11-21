@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 
-public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElement, JavaMember
+public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElement
 {
 
     /**
@@ -197,4 +197,20 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     public int compareTo( Object o );
 
     public ClassLibrary getJavaClassLibrary();
+
+    public String getName();
+    
+    public List<String> getModifiers();
+    
+    public boolean isPublic();
+    
+    public boolean isProtected();
+    
+    public boolean isPrivate();
+    
+    public boolean isFinal();
+    
+    public boolean isStatic();
+    
+    public boolean isAbstract();
 }

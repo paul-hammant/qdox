@@ -38,7 +38,8 @@ public class JavaClassContext implements Serializable {
 	 * @param name the fully qualified name of the class
 	 * @return the stored {@link JavaClass}, otherwise <code>null</code>
 	 */
-	public JavaClass getClassByName(String name) {
+	public JavaClass getClassByName(String name) 
+	{
 		return classMap.get( name );
 	}
 	
@@ -48,7 +49,8 @@ public class JavaClassContext implements Serializable {
 	 * @param name the fully qualified name of the class
 	 * @return the removed {@link JavaClass}, otherwise <code>null</code> 
 	 */
-	public JavaClass removeClassByName(String name) {
+	public JavaClass removeClassByName(String name) 
+	{
 	    return classMap.remove( name );
 	}
 	
@@ -68,11 +70,6 @@ public class JavaClassContext implements Serializable {
 	 */
 	public void add(JavaClass javaClass) {
 	    classMap.put(javaClass.getFullyQualifiedName(), javaClass);
-		
-		DefaultJavaPackage jPackage = (DefaultJavaPackage) getPackageByName( javaClass.getPackageName() );
-		if(jPackage != null) {
-		    jPackage.addClass( javaClass );
-		}
 	}
 	
 	/**
@@ -105,14 +102,7 @@ public class JavaClassContext implements Serializable {
     public void add( JavaPackage jPackage )
     {
         if(jPackage != null) {
-            String packageName = jPackage.getName();
-            DefaultJavaPackage javaPackage = (DefaultJavaPackage) getPackageByName( packageName );
-            if ( javaPackage == null ) {
-                javaPackage = new DefaultJavaPackage( packageName );
-                javaPackage.setContext( this );
-                packageMap.put( packageName, javaPackage );
-            }
-            ((DefaultJavaPackage) jPackage).setContext( this );
+            packageMap.put( jPackage.getName(), jPackage );
         }
     }
 

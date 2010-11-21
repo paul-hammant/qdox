@@ -3,15 +3,13 @@ package com.thoughtworks.qdox.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.thoughtworks.qdox.library.JavaClassContext;
-
 /**
  * A representation of a package.
  * @since 1.9
  */
 public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPackage {
 
-    private JavaClassContext context;
+    private com.thoughtworks.qdox.library.ClassLibrary classLibrary;
 	private String name;
 	private int lineNumber = -1;
 	private List<JavaClass> classes = new LinkedList<JavaClass>();
@@ -39,9 +37,9 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 		this.lineNumber = lineNumber;
 	}
 	
-	public void setContext( JavaClassContext context )
+	public void setClassLibrary( com.thoughtworks.qdox.library.ClassLibrary classLibrary )
     {
-        this.context = context;
+        this.classLibrary = classLibrary;
     }
 
 	public void addClass(JavaClass clazz) {
@@ -53,27 +51,27 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
      */
 	public List<JavaClass> getClasses() {
 	    //avoid infinitive  recursion
-	    if (this == context.getPackageByName( name )) {
+	    if (this == classLibrary.getJavaPackage( name )) {
 	        return classes;
 	    }
 	    else {
-	        return context.getPackageByName( name ).getClasses();
+	        return classLibrary.getJavaPackage( name ).getClasses();
 	    }
 	}
 
     public JavaPackage getParentPackage() {
         String parentName = name.substring(0,name.lastIndexOf("."));
-        return context.getPackageByName( parentName );
+        return classLibrary.getJavaPackage( parentName );
     }
 
     public List<JavaPackage> getSubPackages() {
         String expected = name + ".";
-        List<JavaPackage> jPackages = context.getPackages();
+        List<JavaPackage> jPackages = classLibrary.getJavaPackages();
         List<JavaPackage> retList = new LinkedList<JavaPackage>();
         for (JavaPackage jPackage : jPackages) {
             String pName = jPackage.getName();
             if (pName.startsWith(expected) && !(pName.substring(expected.length()).indexOf(".") > -1)) {
-                retList.add(context.getPackageByName( pName ));
+                retList.add(classLibrary.getJavaPackage( pName ));
             }
         }
         return retList;

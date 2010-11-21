@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -61,8 +62,17 @@ public abstract class AbstractClassLibrary
             if ( result != null )  
             {
                 context.add( result );
-                context.add( result.getPackage() );
-                context.add( result.getSource() ); 
+                context.add( result.getSource() );
+                
+                JavaPackage contextPackage = context.getPackageByName( result.getPackageName() ); 
+                if( contextPackage == null ) {
+                    DefaultJavaPackage newContextPackage = new DefaultJavaPackage( result.getPackageName() );
+                    newContextPackage.setClassLibrary( this );
+                    context.add( newContextPackage );    
+
+                    contextPackage  = newContextPackage;
+                }
+                contextPackage.getClasses().addAll( result.getNestedClasses() );
             }
         }
         if ( result == null && parentClassLibrary != null )

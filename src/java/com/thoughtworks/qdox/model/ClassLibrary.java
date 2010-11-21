@@ -191,7 +191,17 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
                 for(int index = 0; index < source.getClasses().size(); index++) {
                     sourceContext.add( source.getClasses().get(index));
                 }
-                sourceContext.add( source.getPackage() );
+                
+                JavaPackage contextPackage = sourceContext.getPackageByName( source.getPackageName() ); 
+                if( contextPackage == null ) {
+                    DefaultJavaPackage newContextPackage = new DefaultJavaPackage( source.getPackageName() );
+                    newContextPackage.setClassLibrary( this );
+                    sourceContext.add( newContextPackage );    
+
+                    contextPackage  = newContextPackage;
+                }
+                contextPackage.getClasses().addAll( source.getClasses() );
+
                 return source.getNestedClassByName( name );
             }
             catch ( FileNotFoundException e )
@@ -314,7 +324,16 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
         }
         JavaSource source = builder.getSource();
         sourceContext.add(source);
-        sourceContext.add(source.getPackage());
+        JavaPackage contextPackage = sourceContext.getPackageByName( source.getPackageName() ); 
+        if( contextPackage == null ) {
+            DefaultJavaPackage newContextPackage = new DefaultJavaPackage( source.getPackageName() );
+            newContextPackage.setClassLibrary( this );
+            sourceContext.add( newContextPackage );    
+
+            contextPackage  = newContextPackage;
+        }
+        contextPackage.getClasses().addAll( source.getClasses() );
+        
         {
             Set<JavaClass> resultSet = new HashSet<JavaClass>();
             addClassesRecursive(source, resultSet);

@@ -25,7 +25,7 @@ import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
 public class ModelBuilder implements Builder {
 
     private final DefaultJavaSource source;
-    private LinkedList<JavaClass> classStack = new LinkedList<JavaClass>();
+    private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
     private JavaMethod currentMethod;
     private List<Annotation> currentAnnoDefs;
     private String lastComment;
@@ -65,7 +65,7 @@ public class ModelBuilder implements Builder {
     }
 
     public void beginClass(ClassDef def) {
-        JavaClass newClass = new JavaClass(source);
+        DefaultJavaClass newClass = new DefaultJavaClass(source);
         newClass.setLineNumber(def.lineNumber);
 
         // basic details

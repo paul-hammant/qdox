@@ -14,7 +14,7 @@ public class DefaultJavaFieldTest
     public JavaField newJavaField()
     {
         JavaSource source = new DefaultJavaSource( null );
-        JavaClass javaClass = new JavaClass( source );
+        JavaClass javaClass = new DefaultJavaClass( source );
         DefaultJavaField result = new DefaultJavaField();
         result.setParentClass( javaClass );
         return result;
@@ -27,7 +27,7 @@ public class DefaultJavaFieldTest
 
     public JavaClass newJavaClass( String fullname )
     {
-        return new JavaClass(fullname);
+        return new DefaultJavaClass(fullname);
     }
 
     public JavaPackage newJavaPackage( String name )
@@ -73,14 +73,14 @@ public class DefaultJavaFieldTest
 
     public void addField( JavaClass clazz, JavaField fld )
     {
-        clazz.addField( fld );
+        ((DefaultJavaClass) clazz).addField( fld );
         ((DefaultJavaField) fld).setParentClass( clazz );
     }
 
     public void addClass( JavaPackage pckg, JavaClass clazz )
     {
         ((DefaultJavaPackage) pckg).addClass( clazz );
-        clazz.setJavaPackage( pckg );
+        ((DefaultJavaClass) clazz).setJavaPackage( pckg );
     }
 
 }

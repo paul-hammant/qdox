@@ -16,17 +16,17 @@ public class DefaultJavaSourceTest extends JavaSourceTest
 
     public JavaClass newJavaClass()
     {
-        return new JavaClass();
+        return new DefaultJavaClass();
     }
 
     public void setName( JavaClass clazz, String name )
     {
-        clazz.setName( name );
+        ((DefaultJavaClass) clazz).setName( name );
     }
 
     public void addClass( JavaSource source, JavaClass clazz )
     {
-        clazz.setSource( source );
+        ((DefaultJavaClass) clazz).setSource( source );
         source.addClass( clazz );
     }
 

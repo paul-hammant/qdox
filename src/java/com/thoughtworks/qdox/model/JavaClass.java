@@ -1,206 +1,56 @@
 package com.thoughtworks.qdox.model;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 
-/**
- * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
- * @author Aslak Helles&oslash;y
- */
-public class JavaClass extends AbstractInheritableJavaEntity implements JavaClassParent, JavaAnnotatedElement, JavaMember {
-
-    private static Type OBJECT;
-    private static Type ENUM;
-    private static Type ANNOTATION = new Type("java.lang.annotation.Annotation");
-
-    private List<JavaMethod> methods = new LinkedList<JavaMethod>();
-    private List<JavaField> fields = new LinkedList<JavaField>();
-    private List<JavaClass> classes = new LinkedList<JavaClass>();
-    private boolean interfce;
-    private boolean isEnum;
-    private boolean isAnnotation;
-
-    // Don't access this directly. Use asType() to get my Type
-    private Type type;
-    private Type superClass;
-    private List<Type> implementz = new LinkedList<Type>();
-    private List<TypeVariable> typeParameters = new LinkedList<TypeVariable>(); 
-    
-    //sourceless class can use this property
-	private JavaPackage javaPackage;
-	
-	private JavaSource source;
-
-    protected JavaClass() {
-    }
-    
-    public JavaClass(String name) {
-        setName(name);
-    }
-
-    public JavaClass( JavaSource source )
-    {
-        this.source = source;
-    }
+public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElement, JavaMember
+{
 
     /**
      * is interface?  (otherwise enum or class)
      */
-    public boolean isInterface() {
-        return interfce;
-    }
+    public boolean isInterface();
 
     /**
      * is enum?  (otherwise class or interface)
      */
-    public boolean isEnum() {
-        return isEnum;
-    }
-    
+    public boolean isEnum();
+
     /**
      * (don't know if this is required)
      * 
      * @return
      * @since 2.0 
      */
-    public boolean isAnnotation()
-    {
-        return isAnnotation;
-    }
+    public boolean isAnnotation();
 
-    public Type getSuperClass() {
-        if(OBJECT == null) {
-            if(source.getJavaClassLibrary() != null) {
-                OBJECT = source.getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
-                ENUM = source.getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
-            }
-        }
-        
-        boolean iAmJavaLangObject = OBJECT.equals(asType());
+    public Type getSuperClass();
 
-        if (isEnum) {
-            return ENUM;
-        } else if (!interfce && !isAnnotation && (superClass == null) && !iAmJavaLangObject) {
-            return OBJECT;
-        }
-
-        return superClass;
-    }
-    
     /**
      * Shorthand for getSuperClass().getJavaClass() with null checking.
      */
-    public JavaClass getSuperJavaClass() {
-        if (getSuperClass() != null) {
-            return getSuperClass().getJavaClass();
-        } else {
-            return null;
-        }
-    }
+    public JavaClass getSuperJavaClass();
 
-    public List<Type> getImplements() {
-        return implementz;
-    }
+    public List<Type> getImplements();
 
     /**
      * @since 1.3
      */
-    public List<JavaClass> getImplementedInterfaces() {
-        List<JavaClass> result = new LinkedList<JavaClass>();
+    public List<JavaClass> getImplementedInterfaces();
 
-        for (Type type : getImplements()) {
-            result.add(type.getJavaClass());
-        }
+    public String getCodeBlock();
 
-        return result;
-    }
+    public List<TypeVariable> getTypeParameters();
 
-    public String getCodeBlock()
-    {
-        return getSource().getModelWriter().writeClass( this ).toString();
-    }
-    
-    public void setInterface(boolean interfce) {
-        this.interfce = interfce;
-    }
+    public JavaSource getParentSource();
 
-    public void setEnum(boolean isEnum) {
-        this.isEnum = isEnum;
-    }
+    public JavaSource getSource();
 
-    public void setAnnotation(boolean isAnnotation) {
-        this.isAnnotation = isAnnotation;
-    }
+    public JavaPackage getPackage();
 
-    public void addMethod(JavaMethod meth) {
-        methods.add(meth);
-    }
-
-    public void setSuperClass(Type type) {
-        if (isEnum) throw new IllegalArgumentException("enums cannot extend other classes");
-        superClass = type;
-    }
-
-    public void setImplementz(List<Type> implementz) {
-        this.implementz = implementz;
-    }
-    
-    public List<TypeVariable> getTypeParameters()
-    {
-        return typeParameters;
-    }
-    
-    public void setTypeParameters( List<TypeVariable> typeParameters )
-    {
-        this.typeParameters = typeParameters;
-    }
-
-    public void addField(JavaField javaField) {
-        fields.add(javaField);
-    }
-    
-    /**
-     * Only used when constructing the model by hand / without source 
-     * 
-     * @param javaPackage
-     */
-    public void setJavaPackage(JavaPackage javaPackage) {
-    	this.javaPackage = javaPackage;
-    }
-
-    public void setSource( JavaSource source )
-    {
-        this.source = source;
-    }
-    
-    public JavaSource getParentSource() {
-        return (getParentClass() != null ? getParentClass().getParentSource() : source);
-    }
-    
-    public JavaSource getSource()
-    {
-        return getParentSource();
-    }
-
-    public JavaPackage getPackage() {
-        return getParentSource() != null ? getParentSource().getPackage() : javaPackage;
-    }
-    
-    public JavaClassParent getParent()
-    {
-        JavaClassParent result = getParentClass();
-        if (result == null) {
-            result = getParentSource();
-        }
-        return result;
-    }
+    public JavaClassParent getParent();
 
     /**
      * If this class has a package, the packagename will be returned.
@@ -208,94 +58,27 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * 
      * @return
      */
-    public String getPackageName() {
-        JavaPackage javaPackage = getPackage();
-        return (javaPackage != null && javaPackage.getName() != null) ? javaPackage.getName() : "";
-    }
+    public String getPackageName();
 
-    public String getFullyQualifiedName() {
-        return (getParentClass() != null ? (getParentClass().getClassNamePrefix()) : getPackage() != null ? (getPackage().getName()+".") : "") + getName();
-    }
+    public String getFullyQualifiedName();
 
     /**
      * @since 1.3
      */
-    public boolean isInner() {
-        return getParentClass() != null;
-    }
+    public boolean isInner();
 
-    public String resolveType(String typeName) {
-        // Maybe it's an inner class?
-        for (JavaClass innerClass : getNestedClasses()) {
-            if (innerClass.getName().equals(typeName)) {
-                return innerClass.getFullyQualifiedName();
-            }
-        }
-        return getParent().resolveType(typeName);
-    }
+    public String resolveType( String typeName );
 
-    public String getClassNamePrefix() {
-        return getFullyQualifiedName() + "$";
-    }
+    public String getClassNamePrefix();
 
-    public Type asType() {
-        if (type == null) {
-            type = new Type(getFullyQualifiedName(), 0, this);
-        }
+    public Type asType();
 
-        return type;
-    }
-
-    public List<JavaMethod> getMethods() {
-        return methods;
-    }
+    public List<JavaMethod> getMethods();
 
     /**
      * @since 1.3
      */
-    public List<JavaMethod> getMethods(boolean superclasses) {
-        if (superclasses) {
-            return new LinkedList<JavaMethod>(getMethodsFromSuperclassAndInterfaces(this, this).values());
-        } else {
-            return getMethods();
-        }
-    }
-    
-    private static Map<String, JavaMethod> getMethodsFromSuperclassAndInterfaces(JavaClass rootClass, JavaClass callingClazz) {
-
-        Map<String, JavaMethod> result = new LinkedHashMap<String, JavaMethod>();
-        
-        for (JavaMethod method : callingClazz.getMethods()) {
-            if (!method.isPrivate()) {
-                String signature = method.getDeclarationSignature(false);
-                result.put( signature, new JavaMethodDelegate( rootClass, method ) );
-            }
-        }
-
-        JavaClass superclass = callingClazz.getSuperJavaClass();
-
-        // TODO workaround for a bug in getSuperJavaClass
-        if ((superclass != null) && (superclass != callingClazz)) {
-            Map<String, JavaMethod> superClassMethods = getMethodsFromSuperclassAndInterfaces(callingClazz, superclass);
-            for(Map.Entry<String, JavaMethod> methodEntry : superClassMethods.entrySet()) {
-                if (!result.containsKey(methodEntry.getKey())) {
-                    result.put( methodEntry.getKey(), new JavaMethodDelegate( superclass, methodEntry.getValue() ) );
-                }
-            }
-
-        }
-
-        for (JavaClass clazz : callingClazz.getImplementedInterfaces()) {
-            Map<String, JavaMethod> interfaceMethods = getMethodsFromSuperclassAndInterfaces(callingClazz, clazz);
-            for(Map.Entry<String, JavaMethod> methodEntry : interfaceMethods.entrySet()) {
-                if (!result.containsKey(methodEntry.getKey())) {
-                    result.put( methodEntry.getKey(), new JavaMethodDelegate( clazz, methodEntry.getValue() ) );
-                }
-            }
-            
-        }
-        return result;
-    }
+    public List<JavaMethod> getMethods( boolean superclasses );
 
     /**
      * 
@@ -303,9 +86,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param parameterTypes parameter types or null if there are no parameters.
      * @return the matching method or null if no match is found.
      */
-    public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes) {
-        return getMethod( name, parameterTypes, false );
-    }
+    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes );
 
     /**
      * This should be the signature for getMethodBySignature
@@ -315,16 +96,8 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param varArgs
      * @return
      */
-    public JavaMethod getMethod(String name, List<Type> parameterTypes, boolean varArgs) {
-        for (JavaMethod method : getMethods()) {
-            if (method.signatureMatches(name, parameterTypes, varArgs)) {
-                return method;
-            }
-        }
+    public JavaMethod getMethod( String name, List<Type> parameterTypes, boolean varArgs );
 
-        return null;
-    }
-    
     /**
      * 
      * @param name
@@ -332,39 +105,7 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param superclasses
      * @return
      */
-    public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes,
-                                           boolean superclasses) {
-        return getMethodBySignature( name, parameterTypes, superclasses, false );
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param parameterTypes
-     * @param superclasses
-     * @param varArg
-     * @return
-     */
-    public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes,
-                                           boolean superclasses, boolean varArg) {
-        
-        List<JavaMethod> result = getMethodsBySignature(name, parameterTypes,
-                superclasses, varArg);
-
-        return (result.size() > 0) ? result.get(0) : null;
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param parameterTypes
-     * @param superclasses
-     * @return
-     */
-    public List<JavaMethod> getMethodsBySignature(String name,
-                                              List<Type> parameterTypes, boolean superclasses) {
-        return getMethodsBySignature( name, parameterTypes, superclasses, false );
-    }
+    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses );
 
     /**
      * 
@@ -374,236 +115,86 @@ public class JavaClass extends AbstractInheritableJavaEntity implements JavaClas
      * @param varArg
      * @return
      */
-    public List<JavaMethod> getMethodsBySignature(String name,
-                                              List<Type> parameterTypes, boolean superclasses, boolean varArg) {
-        List<JavaMethod> result = new LinkedList<JavaMethod>();
+    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses, boolean varArg );
 
-        JavaMethod methodInThisClass = getMethod(name, parameterTypes, varArg);
+    /**
+     * 
+     * @param name
+     * @param parameterTypes
+     * @param superclasses
+     * @return
+     */
+    public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses );
 
-        if (methodInThisClass != null) {
-            result.add(methodInThisClass);
-        }
+    /**
+     * 
+     * @param name
+     * @param parameterTypes
+     * @param superclasses
+     * @param varArg
+     * @return
+     */
+    public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses,
+                                                   boolean varArg );
 
-        if (superclasses) {
-            JavaClass superclass = getSuperJavaClass();
+    public List<JavaField> getFields();
 
-            if (superclass != null) {
-                JavaMethod method = superclass.getMethodBySignature(name,
-                        parameterTypes, true, varArg );
-
-                // todo: ideally we should check on package privacy too. oh well.
-                if ((method != null) && !method.isPrivate()) {
-                    result.add( new JavaMethodDelegate( this, method ) );
-                }
-            }
-
-            for (JavaClass clazz : getImplementedInterfaces()) {
-                JavaMethod method = clazz.getMethodBySignature(name, parameterTypes, true, varArg );
-                if (method != null) {
-                    result.add( new JavaMethodDelegate( this, method ) );
-                }
-            }
-        }
-
-        return result;
-    }
-
-    public List<JavaField> getFields() {
-        return fields;
-    }
-
-    public JavaField getFieldByName(String name) {
-        for ( JavaField field : getFields()) {
-            if (field.getName().equals(name)) {
-                return field;
-            }
-        }
-        return null;
-    }
-
-    public void addClass(JavaClass cls) {
-        classes.add(cls);
-    }
+    public JavaField getFieldByName( String name );
 
     /**
      * @deprecated Use {@link #getNestedClasses()} instead.
      */
-    public List<JavaClass> getClasses() {
-        return getNestedClasses();
-    }
+    public List<JavaClass> getClasses();
 
     /**
      * @since 1.3
      */
-    public List<JavaClass> getNestedClasses() {
-        return classes;
-    }
+    public List<JavaClass> getNestedClasses();
 
-    public JavaClass getNestedClassByName(String name) {
-        int separatorIndex = name.indexOf('.');
-        String directInnerClassName = (separatorIndex > 0 ? name.substring(0, separatorIndex) : name); 
-        for (JavaClass jClass : getNestedClasses()) {
-            if (jClass.getName().equals(directInnerClassName)) {
-            	if(separatorIndex > 0) {
-                    return jClass.getNestedClassByName(name.substring(separatorIndex+1));
-            	}
-            	else {
-                    return jClass;
-            	}
-            }
-        }
-        return null;
-    }
+    public JavaClass getNestedClassByName( String name );
 
     /**
      * @since 1.3
      */
-    public boolean isA(String fullClassName) {
-        Type type = new Type(fullClassName, 0, this);
-        return asType().isA(type);
-    }
+    public boolean isA( String fullClassName );
 
     /**
      * @since 1.3
      */
-    public boolean isA(JavaClass javaClass) {
-        return asType().isA(javaClass.asType());
-    }
+    public boolean isA( JavaClass javaClass );
 
     /**
      * Gets bean properties without looking in superclasses or interfaces.
      *
      * @since 1.3
      */
-    public List<BeanProperty> getBeanProperties() {
-        return getBeanProperties(false);
-    }
+    public List<BeanProperty> getBeanProperties();
 
     /**
      * @since 1.3
      */
-    public List<BeanProperty> getBeanProperties(boolean superclasses) {
-        Map<String, BeanProperty> beanPropertyMap = getBeanPropertyMap(superclasses);
-        Collection<BeanProperty> beanPropertyCollection = beanPropertyMap.values();
-
-        return new LinkedList<BeanProperty>(beanPropertyCollection);
-    }
-
-    private Map<String, BeanProperty> getBeanPropertyMap(boolean superclasses) {
-        List<JavaMethod> methods = getMethods(superclasses);
-        Map<String, BeanProperty> beanPropertyMap = new LinkedHashMap<String, BeanProperty>();
-
-        // loop over the methods.
-        for (JavaMethod method:methods) {
-            if (method.isPropertyAccessor()) {
-                String propertyName = method.getPropertyName();
-                BeanProperty beanProperty = getOrCreateProperty(beanPropertyMap,
-                        propertyName);
-
-                beanProperty.setAccessor(method);
-                beanProperty.setType(method.getPropertyType());
-            } else if (method.isPropertyMutator()) {
-                String propertyName = method.getPropertyName();
-                BeanProperty beanProperty = getOrCreateProperty(beanPropertyMap,
-                        propertyName);
-
-                beanProperty.setMutator(method);
-                beanProperty.setType(method.getPropertyType());
-            }
-        }
-
-        return beanPropertyMap;
-    }
-
-    private BeanProperty getOrCreateProperty(Map<String, BeanProperty> beanPropertyMap,
-                                             String propertyName) {
-        BeanProperty result = (BeanProperty) beanPropertyMap.get(propertyName);
-
-        if (result == null) {
-            result = new BeanProperty(propertyName);
-            beanPropertyMap.put(propertyName, result);
-        }
-
-        return result;
-    }
+    public List<BeanProperty> getBeanProperties( boolean superclasses );
 
     /**
      * Gets bean property without looking in superclasses or interfaces.
      *
      * @since 1.3
      */
-    public BeanProperty getBeanProperty(String propertyName) {
-        return getBeanProperty(propertyName, false);
-    }
+    public BeanProperty getBeanProperty( String propertyName );
 
     /**
      * @since 1.3
      */
-    public BeanProperty getBeanProperty(String propertyName,
-                                        boolean superclasses) {
-        return getBeanPropertyMap(superclasses).get(propertyName);
-    }
+    public BeanProperty getBeanProperty( String propertyName, boolean superclasses );
 
     /**
      * Gets the known derived classes. That is, subclasses or implementing classes.
      */
-    public List<JavaClass> getDerivedClasses() {
-        List<JavaClass> result = new LinkedList<JavaClass>();
-        for (JavaClass clazz : source.getJavaClassLibrary().getJavaClasses()) {
-            if (clazz.isA(this) && !(clazz == this)) {
-                result.add(clazz);
-            }
-        }
-        return result;
-    }
+    public List<JavaClass> getDerivedClasses();
 
-    public List<DocletTag> getTagsByName(String name, boolean superclasses) {
-        return getTagsRecursive(this, name, superclasses);
-    }
+    public List<DocletTag> getTagsByName( String name, boolean superclasses );
 
-    private List<DocletTag> getTagsRecursive(JavaClass javaClass, String name, boolean superclasses) {
-        Set<DocletTag> result = new LinkedHashSet<DocletTag>();
-        result.addAll(javaClass.getTagsByName(name));
-        if (superclasses) {
-            JavaClass superclass = javaClass.getSuperJavaClass();
+    public int compareTo( Object o );
 
-            // THIS IS A HACK AROUND A BUG THAT MUST BE SOLVED!!!
-            // SOMETIMES A CLASS RETURNS ITSELF AS SUPER ?!?!?!?!?!
-            if ((superclass != null) && (superclass != javaClass)) {
-                result.addAll(getTagsRecursive(superclass, name, superclasses));
-            }
-
-            for (JavaClass implementz : javaClass.getImplementedInterfaces()) {
-                if (implementz != null) {
-                    result.addAll(getTagsRecursive(implementz, name, superclasses));
-                }
-            }
-        }
-        return new LinkedList<DocletTag>(result);
-    }
-
-    public int compareTo(Object o) {
-        return getFullyQualifiedName().compareTo(((JavaClass) o).getFullyQualifiedName());
-    }
-
-    /**
-     * @see http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Class.html#toString()
-     */
-    public String toString() {
-    	StringBuffer sb = new StringBuffer();
-    	if(asType().isPrimitive() || (Type.VOID.equals(asType()))) {
-    		sb.append(asType().getValue());
-    	}
-    	else {
-        	sb.append(isInterface() ? "interface" : "class");
-        	sb.append(" ");
-        	sb.append(getFullyQualifiedName());
-    	}
-    	return sb.toString();
-    }
-
-    public ClassLibrary getJavaClassLibrary()
-    {
-        return source.getJavaClassLibrary();
-    }
+    public ClassLibrary getJavaClassLibrary();
 }

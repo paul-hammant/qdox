@@ -2,7 +2,7 @@ package com.thoughtworks.qdox.library;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.library.JavaClassContext;
+import com.thoughtworks.qdox.model.DefaultJavaClass;
 import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -25,7 +25,7 @@ public class JavaClassContextTest
     {
         assertNull( context.getClassByName( null ) );
         assertNull( "a new context should be empty, not even contain java.lang.Object", context.getClassByName( "java.lang.Object" ) );
-        JavaClass clazz = new JavaClass( "com.foo.Bar" );
+        JavaClass clazz = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz );
         //check case sensitive
         assertNull( context.getClassByName( "com.foo.bar" ) ); 
@@ -36,7 +36,7 @@ public class JavaClassContextTest
     {
         assertNull( context.removeClassByName( null ));
         assertNull( context.removeClassByName( "com.foo.Bar" ) );
-        JavaClass clazz = new JavaClass( "com.foo.Bar" );
+        JavaClass clazz = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz );
         //check case sensitive
         assertNull( context.getClassByName( "com.foo.bar" ) ); 
@@ -48,11 +48,11 @@ public class JavaClassContextTest
         assertNotNull( context.getClasses() );
         assertEquals( 0, context.getClasses().size() );
 
-        JavaClass clazz = new JavaClass( "com.foo.Bar" );
+        JavaClass clazz = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz );
         assertEquals( 1, context.getClasses().size() );
         //weird case, add same class 
-        JavaClass clazz_copy = new JavaClass( "com.foo.Bar" );
+        JavaClass clazz_copy = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz_copy );
         assertEquals( 1, context.getClasses().size() );
         
@@ -64,7 +64,7 @@ public class JavaClassContextTest
 
     public void testAddJavaClass() throws Exception
     {
-        JavaClass clazz = new JavaClass( "com.foo.Bar" );
+        JavaClass clazz = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz );
         //check case sensitive
         assertNull( context.getClassByName( "com.foo.bar" ) ); 
@@ -150,8 +150,8 @@ public class JavaClassContextTest
     }
     
     public void testAdd() throws Exception {
-        context.add(new JavaClass("com.blah.Ping"));
-        context.add(new JavaClass("com.moo.Poo"));
+        context.add(new DefaultJavaClass("com.blah.Ping"));
+        context.add(new DefaultJavaClass("com.moo.Poo"));
         assertTrue(context.getClassByName("com.blah.Ping") != null );
         assertTrue(context.getClassByName("com.moo.Poo") != null);
         assertTrue(context.getClassByName("com.not.You") == null);

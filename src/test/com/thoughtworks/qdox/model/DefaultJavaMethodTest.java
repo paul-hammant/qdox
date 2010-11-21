@@ -13,12 +13,12 @@ public class DefaultJavaMethodTest
 
     public JavaClass newJavaClass()
     {
-        return new JavaClass();
+        return new DefaultJavaClass();
     }
 
     public JavaClass newJavaClass( String fullname )
     {
-        return new JavaClass( fullname );
+        return new DefaultJavaClass( fullname );
     }
 
     public JavaMethod newJavaMethod()
@@ -88,13 +88,13 @@ public class DefaultJavaMethodTest
 
     public void addClass( JavaSource source, JavaClass clazz )
     {
-        clazz.setSource( source );
+        ((DefaultJavaClass) clazz).setSource( source );
         source.addClass( clazz );
     }
 
     public void addMethod( JavaClass clazz, JavaMethod method )
     {
-        clazz.addMethod( method );
+        ((DefaultJavaClass) clazz).addMethod( method );
         method.setParentClass( clazz );
     }
 

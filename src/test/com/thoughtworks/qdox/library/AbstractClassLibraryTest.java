@@ -4,6 +4,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.model.DefaultJavaClass;
 import com.thoughtworks.qdox.model.JavaClass;
 
 public class AbstractClassLibraryTest
@@ -33,7 +34,7 @@ public class AbstractClassLibraryTest
         {
             protected JavaClass resolveJavaClass( String name )
             {
-                return new JavaClass(name);
+                return new DefaultJavaClass(name);
             }
             
             protected boolean containsClassReference( String name )
@@ -46,7 +47,7 @@ public class AbstractClassLibraryTest
         {
             protected JavaClass resolveJavaClass( String name )
             {
-                return new JavaClass(name);
+                return new DefaultJavaClass(name);
             }
             
             protected boolean containsClassReference( String name )

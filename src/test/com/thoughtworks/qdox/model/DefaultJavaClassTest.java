@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
@@ -16,12 +15,12 @@ public class DefaultJavaClassTest
 
     public JavaClass newJavaClass()
     {
-        return new JavaClass();
+        return new DefaultJavaClass();
     }
 
     public JavaClass newJavaClass( String name )
     {
-        return new JavaClass( name );
+        return new DefaultJavaClass( name );
     }
 
     public JavaField newJavaField(JavaClass parentClass)
@@ -74,31 +73,31 @@ public class DefaultJavaClassTest
     // Add-methods
     public void addClass( JavaClass clazz, JavaClass innerClazz )
     {
-        clazz.addClass( innerClazz );
-        innerClazz.setParentClass( clazz );
+        ((DefaultJavaClass) clazz).addClass( innerClazz );
+        ((DefaultJavaClass) innerClazz).setParentClass( clazz );
     }
 
     public void addClass( JavaPackage pckg, JavaClass clazz )
     {
         ((DefaultJavaPackage) pckg).addClass( clazz );
-        clazz.setJavaPackage( pckg );
+        ((DefaultJavaClass) clazz).setJavaPackage( pckg );
     }
 
     public void addClass( JavaSource source, JavaClass clazz )
     {
-        clazz.setSource( source );
+        ((DefaultJavaClass) clazz).setSource( source );
         source.addClass( clazz );
     }
 
     public void addField( JavaClass clazz, JavaField field )
     {
-        clazz.addField( field );
+        ((DefaultJavaClass)clazz).addField( field );
         ((DefaultJavaField) field).setParentClass( clazz );
     }
 
     public void addMethod( JavaClass clazz, JavaMethod method )
     {
-        clazz.addMethod( method );
+        ((DefaultJavaClass)clazz).addMethod( method );
         method.setParentClass( clazz );
     }
 
@@ -111,7 +110,7 @@ public class DefaultJavaClassTest
     // Set-methods
     public void setComment( JavaClass clazz, String comment )
     {
-        clazz.setComment( comment );
+        ((DefaultJavaClass) clazz).setComment( comment );
     }
 
     public void setComment( JavaField field, String comment )
@@ -126,22 +125,22 @@ public class DefaultJavaClassTest
 
     public void setEnum( JavaClass clazz, boolean isEnum )
     {
-        clazz.setEnum( isEnum );
+        ((DefaultJavaClass) clazz).setEnum( isEnum );
     }
 
     public void setImplementz( JavaClass clazz, List<Type> implementz )
     {
-        clazz.setImplementz( implementz );
+        ((DefaultJavaClass) clazz).setImplementz( implementz );
     }
 
     public void setInterface( JavaClass clazz, boolean isInterface )
     {
-        clazz.setInterface( isInterface );
+        ((DefaultJavaClass) clazz).setInterface( isInterface );
     }
 
     public void setModifiers( JavaClass clazz, List<String> modifiers )
     {
-        clazz.setModifiers( modifiers );
+        ((DefaultJavaClass) clazz).setModifiers( modifiers );
     }
 
     public void setModifiers( JavaField field, List<String> modifiers )
@@ -151,7 +150,7 @@ public class DefaultJavaClassTest
 
     public void setName( JavaClass clazz, String name )
     {
-        clazz.setName( name );
+        ((DefaultJavaClass) clazz).setName( name );
     }
 
     public void setName( JavaField field, String name )
@@ -176,7 +175,7 @@ public class DefaultJavaClassTest
 
     public void setSuperClass( JavaClass clazz, Type type )
     {
-        clazz.setSuperClass( type );
+        ((DefaultJavaClass) clazz).setSuperClass( type );
     }
 
     public void setType( JavaField field, Type type )

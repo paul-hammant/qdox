@@ -9,9 +9,7 @@ public class ClassLibraryTest extends TestCase {
     }
 
     public JavaClass getClassByName(String name) {
-        JavaClass clazz = new JavaClass();
-        clazz.setName("MyClass");
-        return clazz;
+        return new DefaultJavaClass("MyClass");
     }
 
     public JavaClass[] getClasses() {

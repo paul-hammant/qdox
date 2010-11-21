@@ -26,7 +26,7 @@ public abstract class TypeTest extends TestCase {
         addImport(src, "foo.*");
         Type type = Type.createUnresolved("Bar", 0, src);
         assertEquals(false, type.isResolved());
-        classLib.getContext().add( new JavaClass("foo.Bar"));
+        classLib.getContext().add( new DefaultJavaClass("foo.Bar"));
         assertEquals(true, type.isResolved());
         assertEquals("foo.Bar", type.getValue());
     }

@@ -634,9 +634,9 @@ public abstract class JavaClassTest extends TestCase {
      * @codehaus.jira QDOX-59
      */
     public void testBeanPropertiesAreReturnedInOrderDeclared() {
-        addMethod(cls, new JavaMethod(newType("int"), "getFoo"));
-        addMethod(cls, new JavaMethod(newType("int"), "getBar"));
-        addMethod(cls, new JavaMethod(newType("String"), "getMcFnord"));
+        addMethod(cls, new DefaultJavaMethod(newType("int"), "getFoo"));
+        addMethod(cls, new DefaultJavaMethod(newType("int"), "getBar"));
+        addMethod(cls, new DefaultJavaMethod(newType("String"), "getMcFnord"));
 
         List<BeanProperty> properties = cls.getBeanProperties();
         assertEquals(3, properties.size());

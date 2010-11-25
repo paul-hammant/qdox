@@ -4,8 +4,8 @@ import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.AbstractInheritableJavaEntity;
+import com.thoughtworks.qdox.model.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaMethod;
 
 public class TraversalTest extends TestCase {
 
@@ -21,7 +21,7 @@ public class TraversalTest extends TestCase {
     }
 
     public void testParentClassTraversal() throws Exception {
-        JavaClass javaClass = builder.getClassByName(JavaMethod.class.getName());
+        JavaClass javaClass = builder.getClassByName(DefaultJavaMethod.class.getName());
         JavaClass parentClass = javaClass.getSuperJavaClass();
         assertNotNull("Parent class not found", parentClass);
         assertEquals("Parent class traversal has returned the wrong parent",

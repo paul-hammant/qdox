@@ -10,16 +10,17 @@ import java.util.List;
  * @author Robert Scholte
  * @since 1.12
  */
-public class JavaMethodDelegate extends JavaMethod
+public class JavaMethodDelegate extends DefaultJavaMethod
 {
 
     private JavaClass callingClass;
-    private JavaMethod originalMethod;
+    //@todo refactor to JavaMethod
+    private DefaultJavaMethod originalMethod;
     
     public JavaMethodDelegate( JavaClass callingClass, JavaMethod originalMethod )
     {
         this.callingClass = callingClass;
-        this.originalMethod = originalMethod;
+        this.originalMethod = (DefaultJavaMethod) originalMethod;
     }
     
     public Type getReturnType( boolean resolve )

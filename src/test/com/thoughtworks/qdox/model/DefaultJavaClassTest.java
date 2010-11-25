@@ -32,17 +32,17 @@ public class DefaultJavaClassTest
 
     public JavaMethod newJavaMethod()
     {
-        return new JavaMethod();
+        return new DefaultJavaMethod();
     }
 
     public JavaMethod newJavaMethod( String name )
     {
-        return new JavaMethod( name );
+        return new DefaultJavaMethod( name );
     }
 
     public JavaMethod newJavaMethod( Type returns, String name )
     {
-        return new JavaMethod( returns, name );
+        return new DefaultJavaMethod( returns, name );
     }
 
     public JavaPackage newJavaPackage( String name )
@@ -98,12 +98,12 @@ public class DefaultJavaClassTest
     public void addMethod( JavaClass clazz, JavaMethod method )
     {
         ((DefaultJavaClass)clazz).addMethod( method );
-        method.setParentClass( clazz );
+        ((DefaultJavaMethod) method).setParentClass( clazz );
     }
 
     public void addParameter( JavaMethod method, JavaParameter parameter )
     {
-        method.addParameter( parameter );
+        ((DefaultJavaMethod) method).addParameter( parameter );
         ((DefaultJavaParameter) parameter).setParentMethod( method );
     }
 
@@ -120,7 +120,7 @@ public class DefaultJavaClassTest
 
     public void setComment( JavaMethod method, String comment )
     {
-        method.setComment( comment );
+        ((DefaultJavaMethod) method).setComment( comment );
     }
 
     public void setEnum( JavaClass clazz, boolean isEnum )
@@ -160,7 +160,7 @@ public class DefaultJavaClassTest
 
     public void setName( JavaMethod method, String name )
     {
-        method.setName( name );
+        ((DefaultJavaMethod) method).setName( name );
     }
 
     public void setPackage( JavaSource source, JavaPackage pckg )
@@ -168,9 +168,9 @@ public class DefaultJavaClassTest
         ((DefaultJavaSource) source).setPackage( pckg );
     }
 
-    public void setReturns( JavaMethod clazz, Type returns )
+    public void setReturns( JavaMethod method, Type returns )
     {
-        clazz.setReturns( returns );
+        ((DefaultJavaMethod) method).setReturns( returns );
     }
 
     public void setSuperClass( JavaClass clazz, Type type )

@@ -26,7 +26,7 @@ public class ModelBuilder implements Builder {
 
     private final DefaultJavaSource source;
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
-    private JavaMethod currentMethod;
+    private DefaultJavaMethod currentMethod;
     private List<Annotation> currentAnnoDefs;
     private String lastComment;
     private List<TagDef> lastTagSet;
@@ -187,7 +187,7 @@ public class ModelBuilder implements Builder {
     }
     
     public void beginMethod() {
-    	currentMethod = new JavaMethod();
+    	currentMethod = new DefaultJavaMethod();
     	setAnnotations(currentMethod);
     }
     

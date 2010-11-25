@@ -23,12 +23,12 @@ public class DefaultJavaMethodTest
 
     public JavaMethod newJavaMethod()
     {
-        return new JavaMethod();
+        return new DefaultJavaMethod();
     }
 
     public JavaMethod newJavaMethod( Type returns, String name )
     {
-        return new JavaMethod( returns, name );
+        return new DefaultJavaMethod( returns, name );
     }
 
     public JavaParameter newJavaParameter( Type type, String name )
@@ -58,32 +58,32 @@ public class DefaultJavaMethodTest
 
     public void setExceptions( JavaMethod method, List<Type> exceptions )
     {
-        method.setExceptions( exceptions );
+        ((DefaultJavaMethod) method).setExceptions( exceptions );
     }
 
     public void setComment( JavaMethod method, String comment )
     {
-        method.setComment( comment );
+        ((DefaultJavaMethod) method).setComment( comment );
     }
 
     public void setConstructor( JavaMethod method, boolean isConstructor )
     {
-        method.setConstructor( isConstructor );
+        ((DefaultJavaMethod) method).setConstructor( isConstructor );
     }
 
     public void setName( JavaMethod method, String name )
     {
-        method.setName( name );
+        ((DefaultJavaMethod) method).setName( name );
     }
 
     public void setModifiers( JavaMethod method, List<String> modifiers )
     {
-        method.setModifiers( modifiers );
+        ((DefaultJavaMethod) method).setModifiers( modifiers );
     }
 
     public void setReturns( JavaMethod method, Type type )
     {
-        method.setReturns( type );
+        ((DefaultJavaMethod) method).setReturns( type );
     }
 
     public void addClass( JavaSource source, JavaClass clazz )
@@ -95,17 +95,17 @@ public class DefaultJavaMethodTest
     public void addMethod( JavaClass clazz, JavaMethod method )
     {
         ((DefaultJavaClass) clazz).addMethod( method );
-        method.setParentClass( clazz );
+        ((DefaultJavaMethod) method).setParentClass( clazz );
     }
 
     public void addParameter( JavaMethod method, JavaParameter parameter )
     {
-        method.addParameter( parameter );
+        ((DefaultJavaMethod) method).addParameter( parameter );
         ((DefaultJavaParameter) parameter).setParentMethod( method );
     }
 
     public void setSourceCode( JavaMethod method, String code )
     {
-        method.setSourceCode( code );
+        ((DefaultJavaMethod) method).setSourceCode( code );
     }
 }

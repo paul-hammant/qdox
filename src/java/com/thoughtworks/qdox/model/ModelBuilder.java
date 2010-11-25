@@ -84,10 +84,9 @@ public class ModelBuilder implements Builder {
         // implements
         {
             Set<TypeDef> implementSet = newClass.isInterface() ? def.extendz : def.implementz;
-            Iterator<TypeDef> implementIt = implementSet.iterator();
             List<Type> implementz = new LinkedList<Type>();
-            while (implementIt.hasNext()) {
-                implementz.add(createType(implementIt.next(), 0));
+            for(TypeDef implementType:implementSet) {
+                implementz.add(createType(implementType, 0));
             }
             newClass.setImplementz(implementz);
         }
@@ -161,13 +160,12 @@ public class ModelBuilder implements Builder {
     }
 
     private void addJavaDoc(AbstractJavaEntity entity) {
-        if (lastComment == null) return;
-
+        if (lastComment == null) {
+            return;
+        } 
         entity.setComment(lastComment);
-        
-        Iterator<TagDef> tagDefIterator = lastTagSet.iterator();
         List<DocletTag> tagList = new LinkedList<DocletTag>();
-        while (tagDefIterator.hasNext()) {
+        for (Iterator<TagDef> tagDefIterator = lastTagSet.iterator(); tagDefIterator.hasNext();) {
             TagDef tagDef = tagDefIterator.next();
             tagList.add( 
                 docletTagFactory.createDocletTag(

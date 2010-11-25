@@ -354,22 +354,6 @@ public class Type implements Comparable, Serializable {
 
     /**
      * 
-     * @param superClass
-     * @return
-     * @since 1.12
-     */
-    protected int getTypeVariableIndex( JavaClass superClass ) {
-        ListIterator<TypeVariable> iter = superClass.getTypeParameters().listIterator();
-        while(iter.hasNext()) {
-            if(iter.next().getFullyQualifiedName().equals( getFullyQualifiedName())) {
-                return iter.previousIndex();
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * 
      * @param parentClass
      * @return
      * @since 1.12
@@ -389,7 +373,15 @@ public class Type implements Comparable, Serializable {
     protected Type resolve( JavaClass parentClass, JavaClass subclass )
     {
         Type result = this;
-        int typeIndex = getTypeVariableIndex( parentClass );
+
+        int typeIndex = -1;
+        for(ListIterator<TypeVariable> iter = parentClass.getTypeParameters().listIterator();iter.hasNext();) {
+            if(iter.next().getFullyQualifiedName().equals( getFullyQualifiedName())) {
+                typeIndex = iter.previousIndex();
+                break;
+            }
+        }
+
         if ( typeIndex >= 0 )
         {
             String fqn = parentClass.getFullyQualifiedName();

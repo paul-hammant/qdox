@@ -355,17 +355,6 @@ public class Type implements Comparable, Serializable {
     /**
      * 
      * @param parentClass
-     * @return
-     * @since 1.12
-     */
-    protected Type resolve( JavaClass parentClass )
-    {
-        return resolve( parentClass, parentClass );
-    }
-
-    /**
-     * 
-     * @param parentClass
      * @param subclass
      * @return
      * @since 1.12
@@ -394,7 +383,8 @@ public class Type implements Comparable, Serializable {
                 {
                     if ( fqn.equals( subclass.getImplements().get(i).getFullyQualifiedName() ) ) 
                     {
-                        result = subclass.getImplements().get(i).getActualTypeArguments().get(typeIndex).resolve( subclass.getImplementedInterfaces().get(i) );
+                        JavaClass argument = subclass.getImplementedInterfaces().get(i);
+                        result = subclass.getImplements().get(i).getActualTypeArguments().get(typeIndex).resolve(argument,argument);
                         break;
                     }
                 }

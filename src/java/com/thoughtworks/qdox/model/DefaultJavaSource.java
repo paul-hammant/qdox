@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DefaultJavaSource implements Serializable, JavaClassParent, JavaSource {
+public class DefaultJavaSource implements Serializable, JavaSource {
 
     private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>();
 

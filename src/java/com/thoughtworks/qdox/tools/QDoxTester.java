@@ -40,9 +40,9 @@ public class QDoxTester {
 
     public void checkZipOrJarFile(File file) throws IOException {
         ZipFile zipFile = new ZipFile(file);
-        Enumeration entries = zipFile.entries();
+        Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
-            ZipEntry zipEntry = (ZipEntry) entries.nextElement();
+            ZipEntry zipEntry = entries.nextElement();
             InputStream inputStream = zipFile.getInputStream(zipEntry);
             try {
                 verify(file.getName() + "!" + zipEntry.getName(), inputStream);

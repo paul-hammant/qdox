@@ -141,8 +141,7 @@ public class Type implements Comparable, Serializable {
     	StringBuffer result = new StringBuffer(getValue());
     	if(actualArgumentTypes != null && actualArgumentTypes.size() > 0) {
     		result.append("<");
-    		Iterator<Type> iter = actualArgumentTypes.iterator();
-    		while(iter.hasNext()) {
+    		for(Iterator<Type> iter = actualArgumentTypes.iterator();iter.hasNext();) {
     			result.append(iter.next().getGenericValue());
     			if(iter.hasNext()) {
     				result.append(",");

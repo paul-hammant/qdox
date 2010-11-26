@@ -117,9 +117,7 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
 
         result.write(name);
         result.write('(');
-        ListIterator<JavaParameter> iter = getParameters().listIterator();
-        while (iter.hasNext()) {
-            if (iter.hasPrevious()) result.write(", ");
+        for (ListIterator<JavaParameter> iter = getParameters().listIterator(); iter.hasNext();) {
             JavaParameter parameter = iter.next();
             if (isDeclaration) {
                 result.write(parameter.getType().toString());
@@ -129,13 +127,16 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
                 result.write(' ');
             }
             result.write(parameter.getName());
+            if (iter.hasNext()) 
+            {
+                result.write(", ");
+            }
         }
         result.write(')');
         if (isDeclaration) {
             if (exceptions.size() > 0) {
                 result.write(" throws ");
-                Iterator<Type> excIter = exceptions.iterator();
-                while (excIter.hasNext()) {
+                for(Iterator<Type> excIter = exceptions.iterator();excIter.hasNext();) {
                     result.write(excIter.next().getValue());
                     if(excIter.hasNext()) {
                         result.write(", ");
@@ -432,8 +433,7 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
 		result.append(")");
 		if (exceptions.size() > 0) {
             result.append(" throws ");
-            Iterator<Type> excIter = exceptions.iterator();
-            while (excIter.hasNext()) {
+            for (Iterator<Type> excIter = exceptions.iterator();excIter.hasNext();) {
                 result.append(excIter.next().getValue());
                 if(excIter.hasNext()) {
                     result.append(",");

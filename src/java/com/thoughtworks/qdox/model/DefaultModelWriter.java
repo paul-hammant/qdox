@@ -32,13 +32,12 @@ public class DefaultModelWriter implements ModelWriter
         }
 
         // classes
-        ListIterator<JavaClass> iter = source.getClasses().listIterator();
-        while(iter.hasNext()) {
-            if (iter.hasPrevious()) { 
-                buffer.newline(); 
-            }
+        for(ListIterator<JavaClass> iter = source.getClasses().listIterator();iter.hasNext();) {
             JavaClass clazz = iter.next();
             writeClass( clazz );
+            if (iter.hasNext()) { 
+                buffer.newline(); 
+            }
         }
         return this;
     }
@@ -67,13 +66,12 @@ public class DefaultModelWriter implements ModelWriter
         // implements
         if (clazz.getImplements().size() > 0) {
             buffer.write(clazz.isInterface() ? " extends " : " implements ");
-
-            ListIterator<Type> iter = clazz.getImplements().listIterator();
-            while ( iter.hasNext()) {
-                if ( iter.hasPrevious() ) {
+            
+            for (ListIterator<Type> iter = clazz.getImplements().listIterator(); iter.hasNext();) {
+                buffer.write(iter.next().getValue());
+                if ( iter.hasNext() ) {
                     buffer.write(", ");
                 }
-                buffer.write(iter.next().getValue());
             }
         }
 
@@ -148,12 +146,8 @@ public class DefaultModelWriter implements ModelWriter
 
         buffer.write( method.getName() );
         buffer.write( '(' );
-        ListIterator<JavaParameter> iter = method.getParameters().listIterator();
-        while( iter.hasNext() )
+        for(ListIterator<JavaParameter> iter = method.getParameters().listIterator(); iter.hasNext();)
         {
-            if ( iter.hasPrevious() ) {
-                buffer.write( ", " );
-            }
             JavaParameter parameter = iter.next();
             if ( isDeclaration )
             {
@@ -165,14 +159,17 @@ public class DefaultModelWriter implements ModelWriter
                 buffer.write( ' ' );
             }
             buffer.write( parameter.getName() );
+            if ( iter.hasNext() ) {
+                buffer.write( ", " );
+            }
+
         }
         buffer.write( ')' );
         if ( isDeclaration )
         {
             if (method.getExceptions().size() > 0) {
                 buffer.write(" throws ");
-                Iterator<Type> excIter = method.getExceptions().iterator();
-                while (excIter.hasNext()) {
+                for (Iterator<Type> excIter = method.getExceptions().iterator();excIter.hasNext();) {
                     buffer.write(excIter.next().getValue());
                     if(excIter.hasNext()) {
                         buffer.write(", ");

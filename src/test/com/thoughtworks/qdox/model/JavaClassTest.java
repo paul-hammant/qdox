@@ -680,7 +680,7 @@ public abstract class JavaClassTest extends TestCase {
     public void testGetSource() {
         JavaSource source = newJavaSource();
         JavaClass clazz = newJavaClass();
-        source.addClass(clazz);
+        ((DefaultJavaSource) source).addClass(clazz);
         ((DefaultJavaClass) clazz).setSource( source );
         JavaField field = newJavaField(clazz);
         ((DefaultJavaClass) clazz).addField(field);

@@ -13,8 +13,6 @@ public interface JavaClassParent {
 
     public JavaSource getParentSource();
 
-    public void addClass(JavaClass cls);
-    
     public JavaClass getNestedClassByName(String name);
     
     public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary(); 

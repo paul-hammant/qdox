@@ -89,7 +89,7 @@ public class DefaultJavaMethodTest
     public void addClass( JavaSource source, JavaClass clazz )
     {
         ((DefaultJavaClass) clazz).setSource( source );
-        source.addClass( clazz );
+        ((DefaultJavaSource) source).addClass( clazz );
     }
 
     public void addMethod( JavaClass clazz, JavaMethod method )

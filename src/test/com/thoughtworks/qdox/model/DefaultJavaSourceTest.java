@@ -27,7 +27,7 @@ public class DefaultJavaSourceTest extends JavaSourceTest
     public void addClass( JavaSource source, JavaClass clazz )
     {
         ((DefaultJavaClass) clazz).setSource( source );
-        source.addClass( clazz );
+        ((DefaultJavaSource) source).addClass( clazz );
     }
 
     public JavaPackage newJavaPackage( String name )

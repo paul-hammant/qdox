@@ -31,7 +31,7 @@ public class JavaMethodDelegate extends DefaultJavaMethod
     protected Type getReturnType( boolean resolve, JavaClass _callingClass )
     {
         //watch it!! use callingclass of constructor
-        return originalMethod.getReturnType( resolve, this.callingClass );
+        return getReturnType( resolve );
     }
     
     public List<Type> getParameterTypes( boolean resolve )
@@ -132,11 +132,6 @@ public class JavaMethodDelegate extends DefaultJavaMethod
         return originalMethod.getParameters();
     }
     
-    public List<Type> getParameterTypes()
-    {
-        return originalMethod.getParameterTypes();
-    }
-
     public JavaClassParent getParent()
     {
         return originalMethod.getParent();
@@ -160,11 +155,6 @@ public class JavaMethodDelegate extends DefaultJavaMethod
     public Type getReturns()
     {
         return originalMethod.getReturns();
-    }
-
-    public Type getReturnType()
-    {
-        return getReturnType( false );
     }
 
     public JavaSource getSource()

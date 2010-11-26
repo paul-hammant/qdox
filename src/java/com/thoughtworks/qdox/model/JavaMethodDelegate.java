@@ -25,8 +25,7 @@ public class JavaMethodDelegate extends DefaultJavaMethod
     
     public Type getReturnType( boolean resolve )
     {
-        Type returnType = originalMethod.getReturnType( resolve, callingClass );
-        return returnType.resolve( originalMethod.getParentClass(), callingClass );
+        return originalMethod.getReturnType( resolve, callingClass );
     }
 
     protected Type getReturnType( boolean resolve, JavaClass _callingClass )

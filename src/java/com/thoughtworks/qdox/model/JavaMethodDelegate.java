@@ -10,7 +10,7 @@ import java.util.List;
  * @author Robert Scholte
  * @since 1.12
  */
-public class JavaMethodDelegate extends DefaultJavaMethod
+public class JavaMethodDelegate implements JavaMethod
 {
 
     private JavaClass callingClass;
@@ -281,5 +281,15 @@ public class JavaMethodDelegate extends DefaultJavaMethod
     public String toString()
     {
         return originalMethod.toString();
+    }
+
+    public Type getReturnType()
+    {
+        return getReturnType( false );
+    }
+
+    public List<Type> getParameterTypes()
+    {
+        return getParameterTypes( false );
     }
 }

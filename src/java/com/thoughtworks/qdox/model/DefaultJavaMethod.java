@@ -463,29 +463,29 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
      */
     public Type getReturnType( boolean resolve )
     {
-        return getReturnType( resolve, getParentClass() );
+        return returns;
     }
     
-    /**
-     * 
-     * @param resolve
-     * @param callingClass
-     * @return
-     * @since 1.12
-     */
-    protected Type getReturnType ( boolean resolve, JavaClass callingClass) {
-        Type result = null;
-        if (this.getReturns() != null) {
-            result =  this.getReturns().resolve( this.getParentClass(), callingClass );
-            
-            //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
-            if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
-            {
-                result = new Type( "java.lang.Object" );
-            }
-        }
-        return result;
-    }
+//    /**
+//     * 
+//     * @param resolve
+//     * @param callingClass
+//     * @return
+//     * @since 1.12
+//     */
+//    protected Type getReturnType ( boolean resolve, JavaClass callingClass) {
+//        Type result = null;
+//        if (this.getReturns() != null) {
+//            result =  this.getReturns().resolve( this.getParentClass(), callingClass );
+//            
+//            //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
+//            if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
+//            {
+//                result = new Type( "java.lang.Object" );
+//            }
+//        }
+//        return result;
+//    }
     
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getParameterTypes()

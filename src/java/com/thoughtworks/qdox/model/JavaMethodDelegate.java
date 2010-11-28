@@ -25,15 +25,21 @@ public class JavaMethodDelegate extends DefaultJavaMethod
     
     public Type getReturnType( boolean resolve )
     {
-        return originalMethod.getReturnType( resolve, callingClass );
+        Type result = originalMethod.getReturnType( resolve );
+        
+        if (result != null) {
+            result =  result.resolve( originalMethod.getParentClass(), callingClass );
+            
+            //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
+            if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
+            {
+                result = new Type( "java.lang.Object" );
+            }
+        }
+        
+        return result;
     }
 
-    protected Type getReturnType( boolean resolve, JavaClass _callingClass )
-    {
-        //watch it!! use callingclass of constructor
-        return getReturnType( resolve );
-    }
-    
     public List<Type> getParameterTypes( boolean resolve )
     {
         List<Type> result = new LinkedList<Type>();

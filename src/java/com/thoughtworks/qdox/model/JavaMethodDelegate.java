@@ -14,13 +14,12 @@ public class JavaMethodDelegate extends DefaultJavaMethod
 {
 
     private JavaClass callingClass;
-    //@todo refactor to JavaMethod
-    private DefaultJavaMethod originalMethod;
+    private JavaMethod originalMethod;
     
     public JavaMethodDelegate( JavaClass callingClass, JavaMethod originalMethod )
     {
         this.callingClass = callingClass;
-        this.originalMethod = (DefaultJavaMethod) originalMethod;
+        this.originalMethod = originalMethod;
     }
     
     public Type getReturnType( boolean resolve )
@@ -59,18 +58,6 @@ public class JavaMethodDelegate extends DefaultJavaMethod
         return result;
     }
     
-    //Delegating methods
-    
-    public void addParameter( JavaParameter javaParameter )
-    {
-        originalMethod.addParameter( javaParameter );
-    }
-
-    public int compareTo( Object o )
-    {
-        return originalMethod.compareTo( o );
-    }
-
     public boolean equals( Object obj )
     {
         return originalMethod.equals( obj );
@@ -141,11 +128,6 @@ public class JavaMethodDelegate extends DefaultJavaMethod
         return originalMethod.getParameters();
     }
     
-    public JavaClassParent getParent()
-    {
-        return originalMethod.getParent();
-    }
-
     public JavaClass getParentClass()
     {
         return originalMethod.getParentClass();
@@ -284,71 +266,6 @@ public class JavaMethodDelegate extends DefaultJavaMethod
     public boolean isVolatile()
     {
         return originalMethod.isVolatile();
-    }
-
-    public void setAnnotations( List<Annotation> annotations )
-    {
-        originalMethod.setAnnotations( annotations );
-    }
-
-    public void setComment( String comment )
-    {
-        originalMethod.setComment( comment );
-    }
-
-    public void setConstructor( boolean constructor )
-    {
-        originalMethod.setConstructor( constructor );
-    }
-
-    public void setExceptions( List<Type> exceptions )
-    {
-        originalMethod.setExceptions( exceptions );
-    }
-
-    public void setLineNumber( int lineNumber )
-    {
-        originalMethod.setLineNumber( lineNumber );
-    }
-
-    public void setModifiers( List<String> modifiers )
-    {
-        originalMethod.setModifiers( modifiers );
-    }
-
-    public void setName( String name )
-    {
-        originalMethod.setName( name );
-    }
-
-    public void setParent( JavaClassParent parent )
-    {
-        originalMethod.setParent( parent );
-    }
-
-    public void setParentClass( JavaClass parentClass )
-    {
-        originalMethod.setParentClass( parentClass );
-    }
-
-    public void setReturns( Type returns )
-    {
-        originalMethod.setReturns( returns );
-    }
-
-    public void setSourceCode( String sourceCode )
-    {
-        originalMethod.setSourceCode( sourceCode );
-    }
-
-    public void setTags( List<DocletTag> tagList )
-    {
-        originalMethod.setTags( tagList );
-    }
-
-    public void setTypeParameters( List<TypeVariable> typeParameters )
-    {
-        originalMethod.setTypeParameters( typeParameters );
     }
 
     public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg )

@@ -1,10 +1,15 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 
+/**
+ * Modeled equivalent of {@link Class}, providing the most important methods.
+ * Where the original Class is using an Array, this model is using a List.
+ * 
+ * @author Robert Scholte
+ */
 public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElement
 {
 

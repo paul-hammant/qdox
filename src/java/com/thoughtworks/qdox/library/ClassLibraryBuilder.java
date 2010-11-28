@@ -12,7 +12,7 @@ import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
  * This builder helps to construct a library. 
- * All kinds of sourcetypes are supported and it´s up to the implementation how to bind these types.
+ * All kinds of sourcetypes are supported and it's up to the implementation how to bind these types.
  * For instance: The {@link SortedClassLibraryBuilder} bundles all classloaders, all sourcefolders and all sources.
  * The {@link OrderedClassLibraryBuilder} on the other hand keeps track of the order in which sourcetypes are added.  
  * 

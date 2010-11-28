@@ -90,7 +90,7 @@ public class JavaProjectBuilder
     }
 
     /**
-     * Sets the encoding when using Files or URL´s to parse.
+     * Sets the encoding when using Files or URL's to parse.
      * 
      * @param encoding
      * @return

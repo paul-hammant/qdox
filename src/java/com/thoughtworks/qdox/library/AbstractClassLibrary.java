@@ -216,7 +216,7 @@ public abstract class AbstractClassLibrary
     }
     
     /**
-     * This method is used to detect if there´s a match with this classname.
+     * This method is used to detect if there's a match with this classname.
      * The name could be constructed based on imports and inner class paths.
      * 
      * @param name the fully qualifed name of the class

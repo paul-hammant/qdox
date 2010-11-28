@@ -43,17 +43,20 @@ public class JavaMethodDelegate extends DefaultJavaMethod
     public List<Type> getParameterTypes( boolean resolve )
     {
         List<Type> result = new LinkedList<Type>();
-        for ( Type type : originalMethod.getParameterTypes( resolve, callingClass ) )
+        for (Type type: originalMethod.getParameterTypes( resolve ) )
         {
-            result.add(type.resolve( originalMethod.getParentClass(), callingClass  ));
+            Type curType = type.resolve( originalMethod.getParentClass(), callingClass );
+            //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
+            if ( !resolve && !type.getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
+            {
+                result.add(new Type( "java.lang.Object" ));
+            }
+            else {
+                result.add(curType);
+            }
+            
         }
         return result;
-    }
-    
-    protected List<Type> getParameterTypes( boolean resolve, JavaClass _callingClass )
-    {
-        //watch it!! use callingclass of constructor
-        return originalMethod.getParameterTypes( resolve, this.callingClass );
     }
     
     //Delegating methods

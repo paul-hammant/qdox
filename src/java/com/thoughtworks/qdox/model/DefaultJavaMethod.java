@@ -498,24 +498,9 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
      * @see com.thoughtworks.qdox.model.JavaMethod#getParameterTypes(boolean)
      */
     public List<Type> getParameterTypes( boolean resolve ) {
-        return getParameterTypes( resolve, getParentClass() );
-    }
-
-    
-    protected List<Type> getParameterTypes ( boolean resolve, JavaClass callingClass) {
         List<Type> result = new LinkedList<Type>();
-        for (JavaParameter parameter : this.getParameters())
-        {
-            Type curType = parameter.getType().resolve( this.getParentClass(), callingClass );
-            //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
-            if ( !resolve && this.getReturns() != null && !this.getReturns().getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
-            {
-                result.add(new Type( "java.lang.Object" ));
-            }
-            else {
-                result.add(curType);
-            }
-            
+        for (JavaParameter parameter : this.getParameters()) {
+            result.add( parameter.getType() );
         }
         return result;
     }

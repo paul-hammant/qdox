@@ -434,11 +434,7 @@ public class JavaProjectBuilderTest
 
     public void testSourcePropertyClass() throws IOException {
         builder.addSource(new File("src/test/com/thoughtworks/qdox/testdata/PropertyClass.java"));
-        // Handy way to assert that behaviour for source and binary classes is the same.
-        testPropertyClass();
-    }
 
-    public void testPropertyClass() {
         JavaClass propertyClass = builder.getClassByName("com.thoughtworks.qdox.testdata.PropertyClass");
         assertEquals(1, propertyClass.getBeanProperties().size());
 

@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.thoughtworks.qdox.io.DefaultModelWriter;
 import com.thoughtworks.qdox.io.ModelWriter;
 import com.thoughtworks.qdox.io.ModelWriterFactory;
 

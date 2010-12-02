@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.io;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,8 +23,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.thoughtworks.qdox.io.IndentBuffer;
-import com.thoughtworks.qdox.io.ModelWriter;
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaModel;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.Type;
 
 
 public class DefaultModelWriter implements ModelWriter

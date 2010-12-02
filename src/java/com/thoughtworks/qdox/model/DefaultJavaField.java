@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.io.IndentBuffer;
+
 public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
 
     private Type type;

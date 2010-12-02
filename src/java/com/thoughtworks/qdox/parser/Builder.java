@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.parser;
 
+import com.thoughtworks.qdox.io.ModelWriterFactory;
 import com.thoughtworks.qdox.model.Annotation;
-import com.thoughtworks.qdox.model.ModelWriterFactory;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;

@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.thoughtworks.qdox.io.IndentBuffer;
+import com.thoughtworks.qdox.io.ModelWriter;
+
 
 public class DefaultModelWriter implements ModelWriter
 {

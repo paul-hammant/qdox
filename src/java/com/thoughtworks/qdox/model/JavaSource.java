@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
+import com.thoughtworks.qdox.io.ModelWriter;
+
 public interface JavaSource extends JavaClassParent
 {
 

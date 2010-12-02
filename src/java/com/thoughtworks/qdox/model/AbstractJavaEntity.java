@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.qdox.io.IndentBuffer;
+
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements Comparable, JavaModel {
 
     protected List<String> modifiers = new LinkedList<String>();

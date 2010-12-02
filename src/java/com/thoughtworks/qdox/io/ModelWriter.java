@@ -1,4 +1,9 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.io;
+
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaSource;
 
 public interface ModelWriter
 {

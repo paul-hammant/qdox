@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.io.IndentBuffer;
+
 import junit.framework.TestCase;
 
 public class IndentBufferTest extends TestCase {

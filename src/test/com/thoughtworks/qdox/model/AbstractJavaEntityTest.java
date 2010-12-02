@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.qdox.io.IndentBuffer;
+
 import junit.framework.TestCase;
 
 public class AbstractJavaEntityTest extends TestCase {

@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.thoughtworks.qdox.io.IndentBuffer;
+
 public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements JavaMethod {
 
 	private List<TypeVariable> typeParameters = Collections.emptyList(); 

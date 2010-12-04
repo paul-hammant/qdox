@@ -75,6 +75,15 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     public boolean isInterface() {
         return interfce;
     }
+    
+	public boolean isPrimitive() {
+		String name = getName();
+		return "void".equals(name) || "boolean".equals(name)
+				|| "byte".equals(name) || "char".equals(name)
+				|| "short".equals(name) || "int".equals(name)
+				|| "long".equals(name) || "float".equals(name)
+				|| "double".equals(name);
+	}
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#isEnum()
@@ -650,8 +659,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public String toString() {
     	StringBuffer sb = new StringBuffer();
-    	if(asType().isPrimitive() || (Type.VOID.equals(asType()))) {
-    		sb.append(asType().getValue());
+    	if(isPrimitive()) {
+    		sb.append(getName());
     	}
     	else {
         	sb.append(isInterface() ? "interface" : "class");

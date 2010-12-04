@@ -237,4 +237,6 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     public boolean isStatic();
     
     public boolean isAbstract();
+    
+    public boolean isPrimitive();
 }

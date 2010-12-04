@@ -499,7 +499,32 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      * @since 1.3
      */
     public boolean isA(JavaClass javaClass) {
-        return asType().isA(javaClass.asType());
+    	if (this == javaClass) 
+    	{
+    		return true;
+    	}
+    	else if (this.equals(javaClass)) 
+    	{
+            return true;
+        } 
+    	else if (javaClass != null) 
+    	{
+            // ask our interfaces
+            for (JavaClass implementz : getImplementedInterfaces()) 
+            {
+                if (implementz.isA(javaClass)) 
+                {
+                    return true;
+                }
+            }
+            // ask our superclass
+            JavaClass superClass = getSuperJavaClass();
+            if (superClass != null) 
+            {
+            	return superClass.isA(javaClass);
+            }
+        }
+    	return false;
     }
 
     /* (non-Javadoc)

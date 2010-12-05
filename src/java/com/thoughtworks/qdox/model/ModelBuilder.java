@@ -19,10 +19,8 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 
 import com.thoughtworks.qdox.io.ModelWriterFactory;
@@ -54,8 +52,8 @@ public class ModelBuilder implements Builder {
 
     public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
-        source = new DefaultJavaSource(classLibrary);
-        currentAnnoDefs = new LinkedList<Annotation>();
+        this.source = new DefaultJavaSource(classLibrary);
+        this.currentAnnoDefs = new LinkedList<Annotation>();
     }
     
     public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
@@ -119,8 +117,7 @@ public class ModelBuilder implements Builder {
         // typeParameters
         if (def.typeParams != null) {
             List<TypeVariable> typeParams = new LinkedList<TypeVariable>();
-            for(Iterator<TypeVariableDef> iterator = def.typeParams.iterator(); iterator.hasNext();) {
-                TypeVariableDef typeVariableDef = (TypeVariableDef) iterator.next();
+            for(TypeVariableDef typeVariableDef : def.typeParams) {
                 typeParams.add(createTypeVariable(typeVariableDef));
             }
             newClass.setTypeParameters(typeParams);
@@ -185,8 +182,7 @@ public class ModelBuilder implements Builder {
         } 
         entity.setComment(lastComment);
         List<DocletTag> tagList = new LinkedList<DocletTag>();
-        for (Iterator<TagDef> tagDefIterator = lastTagSet.iterator(); tagDefIterator.hasNext();) {
-            TagDef tagDef = tagDefIterator.next();
+        for (TagDef tagDef : lastTagSet) {
             tagList.add( 
                 docletTagFactory.createDocletTag(
                     tagDef.name, tagDef.text, 
@@ -312,12 +308,10 @@ public class ModelBuilder implements Builder {
             };
 
             List<Annotation> annotations = new LinkedList<Annotation>();
-            for( ListIterator<Annotation> iter = currentAnnoDefs.listIterator(); iter.hasNext(); ) {
-                Annotation annotation = iter.next();
+            for( Annotation annotation :  currentAnnoDefs) {
                 annotation.accept(visitor);
                 annotations.add( annotation);
             }
-
             entity.setAnnotations( annotations );
             currentAnnoDefs.clear();
         }

@@ -501,7 +501,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public boolean isA(String fullClassName) {
         Type type = new Type(fullClassName, 0, this);
-        return asType().isA(type);
+        return isA(type.getJavaClass());
     }
 
     /**

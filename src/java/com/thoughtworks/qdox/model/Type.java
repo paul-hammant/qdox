@@ -92,14 +92,6 @@ public class Type implements Comparable, Serializable {
     }
 
     /**
-     * 
-     * @deprecated instead use getFullyQualifiedName()
-     */
-    public String getFullQualifiedName() {
-        return getFullyQualifiedName();
-    }
-
-    /**
      * Returns the FQN of an Object or the handler of a Type
      * If the name of the can't be resolved based on the imports and the classes on the classpath the name will be returned
      * InnerClasses will use the $ sign

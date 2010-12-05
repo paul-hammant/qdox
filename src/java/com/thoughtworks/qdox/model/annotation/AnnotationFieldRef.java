@@ -81,10 +81,6 @@ public class AnnotationFieldRef implements AnnotationValue {
         return getName();
     }
 
-    public AbstractBaseJavaEntity getContext() {
-        return this.context;
-    }
-
     public void setContext( AbstractBaseJavaEntity context ) {
         this.context = context;
     }

@@ -19,12 +19,16 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.io.File;
 import java.net.URL;
 import java.util.List;
 
 import com.thoughtworks.qdox.io.ModelWriter;
 
+/**
+ * The root of every JavaModel, even for those based on binary classes.
+ * 
+ * @author Robert Scholte
+ */
 public interface JavaSource extends JavaClassParent
 {
 
@@ -41,33 +45,57 @@ public interface JavaSource extends JavaClassParent
     public URL getURL();
 
     /**
-     * @deprecated use getURL
+     * The package of this source or <code>null</code>
+     * 
+     * @return the package
      */
-    public File getFile();
-
     public JavaPackage getPackage();
 
     /**
      * Retrieve all the import
      * 
-     * @return the imports, never null
+     * @return the imports, never <code>null</code>
      */
     public List<String> getImports();
 
+    /**
+     * A List with all direct classes of this source, never <code>null</code>
+     * 
+     * @return
+     */
     public List<JavaClass> getClasses();
 
+    /**
+     * Complete code representation of this source
+     * 
+     * @return
+     */
     public String getCodeBlock();
 
     public String resolveType( String typeName );
 
+    /**
+     * If there's a package, return the packageName, followed by a dot, otherwise an empty String
+     * 
+     * @return
+     */
     public String getClassNamePrefix();
 
-    public JavaSource getParentSource();
-
+    /**
+     * Try to get the JavaClass child based on its name relative to the package.
+     * This doesn't try to resolve it by recursion.
+     * 
+     * @return the resolved JavaClass or <code>null</code>
+     */
     public JavaClass getNestedClassByName( String name );
 
     public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary();
 
+    /**
+     * Returns the name of the package or an empty String  if there's no package
+     * 
+     * @return
+     */
     public String getPackageName();
 
 }

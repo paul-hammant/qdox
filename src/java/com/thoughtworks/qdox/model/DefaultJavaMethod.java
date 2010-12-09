@@ -136,7 +136,7 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
             }
         }
 
-        result.write(name);
+        result.write(getName());
         result.write('(');
         for (ListIterator<JavaParameter> iter = getParameters().listIterator(); iter.hasNext();) {
             JavaParameter parameter = iter.next();
@@ -260,7 +260,7 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
      * @see com.thoughtworks.qdox.model.JavaMethod#signatureMatches(java.lang.String, java.util.List, boolean)
      */
     public boolean signatureMatches(String name, List<Type> parameterTypes, boolean varArg) {
-        if (!name.equals(this.name)) return false;
+        if (!name.equals(this.getName())) return false;
         
         List<Type> parameterTypeList;
         if( parameterTypes == null) {
@@ -281,7 +281,7 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
     }
 
     public int hashCode() {
-        int hashCode = name.hashCode();
+        int hashCode = getName().hashCode();
         if (returns != null) hashCode *= returns.hashCode();
         hashCode *= getParameters().size();
         return hashCode;

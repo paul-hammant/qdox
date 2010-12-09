@@ -20,16 +20,14 @@ package com.thoughtworks.qdox.model;
  */
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class AbstractBaseJavaEntity implements Serializable {
 
-	protected String name;
+	private String name;
 	private List<Annotation> annotations = Collections.emptyList();
 	private int lineNumber = -1;
-	protected JavaClassParent parent;
 
 	public AbstractBaseJavaEntity() {
 		super();
@@ -59,24 +57,6 @@ public class AbstractBaseJavaEntity implements Serializable {
 	    this.lineNumber = lineNumber;
 	}
 
-	/**
-	 *  
-	 * @return
-	 * @deprecated
-	 */
-	public JavaClassParent getParent() { 
-	    return parent; 
-	}
-
-	/**
-	 * 
-	 * @param parent
-	 * @deprecated
-	 */
-	public void setParent(JavaClassParent parent) { 
-	    this.parent = parent;
-	}
-	
 	/**
 	 * Not every entity has a parentClass, but AnnotationFieldRef requires access to it.
 	 * When used with JavaClass, don't confuse this with getSuperClass()

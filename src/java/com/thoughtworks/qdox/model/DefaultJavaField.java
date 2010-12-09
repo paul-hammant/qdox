@@ -74,7 +74,7 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
         }
         result.write(type.toString());
         result.write(' ');
-        result.write(name);
+        result.write(getName());
         return result.toString();
     }
 

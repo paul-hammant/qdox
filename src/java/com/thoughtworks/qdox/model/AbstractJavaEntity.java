@@ -19,15 +19,14 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.io.IndentBuffer;
 
-public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements Comparable, JavaModel {
+public abstract class AbstractJavaEntity<T extends AbstractJavaEntity> extends AbstractBaseJavaEntity implements Comparable<T>, JavaModel {
 
-    protected List<String> modifiers = new LinkedList<String>();
+    private List<String> modifiers = new LinkedList<String>();
     private String comment;
     private List<DocletTag> tags = new LinkedList<DocletTag>();
     
@@ -201,8 +200,8 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
 
     protected void writeNonAccessibilityModifiers(IndentBuffer result) {
         // modifiers (anything else)
-        for (Iterator<String> iter = modifiers.iterator(); iter.hasNext();) {
-            String modifier = (String) iter.next();
+        for (String modifier : modifiers) {
+        	// check for public, protected and private
             if (!modifier.startsWith("p")) {
                 result.write(modifier);
                 result.write(' ');
@@ -211,8 +210,8 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     protected void writeAccessibilityModifier(IndentBuffer result) {
-        for (Iterator<String> iter = modifiers.iterator(); iter.hasNext();) {
-            String modifier = (String) iter.next();
+        for (String modifier : modifiers) {
+        	// check for public, protected and private
             if (modifier.startsWith("p")) {
                 result.write(modifier);
                 result.write(' ');
@@ -221,8 +220,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     protected void writeAllModifiers(IndentBuffer result) {
-        for (Iterator<String> iter = modifiers.iterator(); iter.hasNext();) {
-            String modifier = (String) iter.next();
+        for (String modifier  : modifiers) {
             result.write(modifier);
             result.write(' ');
         }

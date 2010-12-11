@@ -38,6 +38,10 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
         setName(name);
     }
     
+    public JavaClass getDeclaringClass() {
+    	return getParentClass();
+    }
+    
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaField#getType()
      */

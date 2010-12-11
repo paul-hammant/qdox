@@ -102,6 +102,10 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.getComment();
     }
 
+    public JavaClass getDeclaringClass() {
+    	return originalMethod.getDeclaringClass();
+    }
+    
     public String getDeclarationSignature( boolean withModifiers )
     {
         return originalMethod.getDeclarationSignature( withModifiers );

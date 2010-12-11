@@ -43,6 +43,12 @@ public interface JavaMember
      */
     public List<String> getModifiers();
     
+    /**
+     * Equivalent of {@link Member#getDeclaringClass()}
+     * 
+     * @return
+     */
+    public JavaClass getDeclaringClass();    
     
     /**
      * Equivalent of {@link Member#getName()}

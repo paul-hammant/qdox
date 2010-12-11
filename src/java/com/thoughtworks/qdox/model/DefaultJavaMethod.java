@@ -187,6 +187,10 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
         writeBody(result, withModifiers, isDeclaration, false);
         return result.toString();
     }
+    
+    public JavaClass getDeclaringClass() {
+    	return getParentClass();
+    }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getDeclarationSignature(boolean)

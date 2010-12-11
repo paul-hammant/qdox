@@ -125,8 +125,20 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
      */
     protected void writeBody(IndentBuffer result, boolean withModifiers, boolean isDeclaration, boolean isPrettyPrint) {
         if (withModifiers) {
-            writeAccessibilityModifier(result);
-            writeNonAccessibilityModifiers(result);
+            for (String modifier : getModifiers()) {
+            	// check for public, protected and private
+                if (modifier.startsWith("p")) {
+                    result.write(modifier);
+                    result.write(' ');
+                }
+            }
+            for (String modifier : getModifiers()) {
+            	// check for public, protected and private
+                if (!modifier.startsWith("p")) {
+                    result.write(modifier);
+                    result.write(' ');
+                }
+            }
         }
 
         if (!constructor) {

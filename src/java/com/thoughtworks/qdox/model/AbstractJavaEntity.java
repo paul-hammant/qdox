@@ -198,34 +198,6 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         return modifiers.contains(modifier);
     }
 
-    protected void writeNonAccessibilityModifiers(IndentBuffer result) {
-        // modifiers (anything else)
-        for (String modifier : modifiers) {
-        	// check for public, protected and private
-            if (!modifier.startsWith("p")) {
-                result.write(modifier);
-                result.write(' ');
-            }
-        }
-    }
-
-    protected void writeAccessibilityModifier(IndentBuffer result) {
-        for (String modifier : modifiers) {
-        	// check for public, protected and private
-            if (modifier.startsWith("p")) {
-                result.write(modifier);
-                result.write(' ');
-            }
-        }
-    }
-
-    protected void writeAllModifiers(IndentBuffer result) {
-        for (String modifier  : modifiers) {
-            result.write(modifier);
-            result.write(' ');
-        }
-    }
-    
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaModel#getSource()
      */

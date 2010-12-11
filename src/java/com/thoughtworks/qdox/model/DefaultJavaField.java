@@ -19,8 +19,6 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import com.thoughtworks.qdox.io.IndentBuffer;
-
 public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
 
     private Type type;
@@ -72,13 +70,16 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
      * @see com.thoughtworks.qdox.model.JavaField#getDeclarationSignature(boolean)
      */
     public String getDeclarationSignature(boolean withModifiers) {
-        IndentBuffer result = new IndentBuffer();
+        StringBuffer result = new StringBuffer();
         if (withModifiers) {
-            writeAllModifiers(result);
+            for (String modifier  : getModifiers()) {
+                result.append(modifier);
+                result.append(' ');
+            }
         }
-        result.write(type.toString());
-        result.write(' ');
-        result.write(getName());
+        result.append(type.toString());
+        result.append(' ');
+        result.append(getName());
         return result.toString();
     }
 
@@ -127,7 +128,7 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
     		result.append("volatile ");
     	}
     	result.append(getType().getValue() + " ");
-    	result.append(getParentClass().getFullyQualifiedName() + "." +getName());
+    	result.append(getDeclaringClass().getFullyQualifiedName() + "." +getName());
     	return result.toString();
     }
 }

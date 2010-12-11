@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.thoughtworks.qdox.io.IndentBuffer;
 
-public abstract class AbstractJavaEntity<T extends AbstractJavaEntity> extends AbstractBaseJavaEntity implements Comparable<T>, JavaModel {
+public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements Comparable, JavaModel {
 
     private List<String> modifiers = new LinkedList<String>();
     private String comment;

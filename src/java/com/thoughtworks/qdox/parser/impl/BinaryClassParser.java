@@ -27,7 +27,7 @@ import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.builder.ModelBuilder;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;

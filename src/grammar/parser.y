@@ -18,6 +18,7 @@
  * under the License.
  */
 
+import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.parser.*;
 import com.thoughtworks.qdox.parser.structs.*;
 import com.thoughtworks.qdox.model.*;

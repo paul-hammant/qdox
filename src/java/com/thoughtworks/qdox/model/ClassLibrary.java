@@ -34,6 +34,8 @@ import java.util.Set;
 
 import com.thoughtworks.qdox.JavaDocBuilder.DefaultErrorHandler;
 import com.thoughtworks.qdox.JavaDocBuilder.ErrorHandler;
+import com.thoughtworks.qdox.builder.ModelBuilder;
+import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.library.JavaClassContext;
 import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.ParseException;

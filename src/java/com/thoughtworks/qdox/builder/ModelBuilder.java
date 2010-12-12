@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.builder;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,10 +24,23 @@ import java.util.List;
 import java.util.Set;
 
 import com.thoughtworks.qdox.io.ModelWriterFactory;
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
+import com.thoughtworks.qdox.model.AbstractJavaEntity;
+import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.DefaultJavaClass;
+import com.thoughtworks.qdox.model.DefaultJavaField;
+import com.thoughtworks.qdox.model.DefaultJavaMethod;
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
+import com.thoughtworks.qdox.model.DefaultJavaParameter;
+import com.thoughtworks.qdox.model.DefaultJavaSource;
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.TypeVariable;
 import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
 import com.thoughtworks.qdox.model.annotation.AnnotationVisitor;
 import com.thoughtworks.qdox.model.annotation.RecursiveAnnotationVisitor;
-import com.thoughtworks.qdox.parser.Builder;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;

@@ -19,9 +19,9 @@ package com.thoughtworks.qdox.library;
  * under the License.
  */
 
+import com.thoughtworks.qdox.builder.ModelBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.ModelBuilder;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 
 /**

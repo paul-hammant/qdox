@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.builder;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

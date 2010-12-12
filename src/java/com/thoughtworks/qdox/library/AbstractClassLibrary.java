@@ -23,13 +23,13 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.qdox.builder.ModelBuilder;
+import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
 import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.ModelBuilder;
-import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
  * A ClassLibrary can be compared with a java classloader. 

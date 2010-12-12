@@ -25,8 +25,8 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 
+import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.ModelBuilderFactory;
 
 /**
  * This library resolves JavaClasses in the order in which class sources are added.

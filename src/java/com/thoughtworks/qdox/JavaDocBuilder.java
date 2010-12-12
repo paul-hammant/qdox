@@ -35,6 +35,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.thoughtworks.qdox.builder.ModelBuilder;
+import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.FileVisitor;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
@@ -44,8 +46,6 @@ import com.thoughtworks.qdox.model.DocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.ModelBuilder;
-import com.thoughtworks.qdox.model.ModelBuilderFactory;
 import com.thoughtworks.qdox.parser.ParseException;
 
 /**

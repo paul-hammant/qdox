@@ -6,6 +6,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.builder.ModelBuilder;
 import com.thoughtworks.qdox.library.ClassNameLibrary;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;

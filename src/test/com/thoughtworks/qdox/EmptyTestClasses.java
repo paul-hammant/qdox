@@ -1,6 +1,6 @@
 package com.thoughtworks.qdox;
 
-public class TestClasses {
+public class EmptyTestClasses {
 
 }
 class Spoon {}

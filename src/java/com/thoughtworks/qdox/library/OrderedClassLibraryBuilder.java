@@ -47,9 +47,25 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     
     private ModelBuilderFactory modelBuilderFactory;
     
+    /**
+     * Default constructor which sets the root classLibrary to ClassNameLibrary.
+     * This way every class will be resolved, even if it's not on the classpath.
+     * 
+     */
     public OrderedClassLibraryBuilder()
     {
-        classLibrary = new ClassNameLibrary();
+        this.classLibrary = new ClassNameLibrary();
+    }
+
+    /**
+     * Constructor for which you can set the root ClassLibrary
+     * If you set this to null, all classes should be available on the classpath.
+     * 
+     * @param classLibrary
+     */
+    public OrderedClassLibraryBuilder(AbstractClassLibrary rootClassLibrary)
+    {
+        this.classLibrary = classLibrary;
     }
 
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader )

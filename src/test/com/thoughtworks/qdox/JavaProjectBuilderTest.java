@@ -225,23 +225,33 @@ public class JavaProjectBuilderTest
     }
 
     public void testAddMoreClassLoaders() throws Exception {
-
+    	builder = new JavaProjectBuilder(new OrderedClassLibraryBuilder(null));
         builder.addClassLoader(new ClassLoader() {
-            public Class loadClass(String name) {
-                return name.equals("com.thoughtworks.Spoon") ? this.getClass() : null;
+            public Class loadClass(String name) throws ClassNotFoundException {
+            	if("com.thoughtworks.qdox.Spoon".equals(name))  {
+                    return Spoon.class; //Located inside com.thoughtworks.qdox.TestClasses.java
+            	}
+            	else {
+            		throw new ClassNotFoundException(name);
+            	}
             }
         });
 
         builder.addClassLoader(new ClassLoader() {
-            public Class loadClass(String name) {
-                return name.equals("com.thoughtworks.Fork") ? this.getClass() : null;
+            public Class loadClass(String name) throws ClassNotFoundException {
+            	if("com.thoughtworks.qdox.Fork".equals(name))  {
+                    return Fork.class;  //Located inside com.thoughtworks.qdox.TestClasses.java
+            	}
+            	else {
+            		throw new ClassNotFoundException(name);
+            	}
             }
         });
 
         String in = ""
                 + "package x;"
                 + "import java.util.*;"
-                + "import com.thoughtworks.*;"
+                + "import com.thoughtworks.qdox.*;"
                 + "class X {"
                 + " Spoon a();"
                 + " Fork b();"
@@ -249,9 +259,11 @@ public class JavaProjectBuilderTest
                 + "}";
         builder.addSource(new StringReader(in));
 
+        // be sure no default classloaders have been added
+        assertNull(builder.getClassByName(Knife.class.getName()));
         JavaClass cls = builder.getClassByName("x.X");
-        assertEquals("com.thoughtworks.Spoon", cls.getMethods().get(0).getReturns().getValue());
-        assertEquals("com.thoughtworks.Fork", cls.getMethods().get(1).getReturns().getValue());
+        assertEquals("com.thoughtworks.qdox.Spoon", cls.getMethods().get(0).getReturns().getValue());
+        assertEquals("com.thoughtworks.qdox.Fork", cls.getMethods().get(1).getReturns().getValue());
         // unresolved
         assertEquals("Cabbage", cls.getMethods().get(2).getReturns().getValue());
 
@@ -1101,7 +1113,7 @@ public class JavaProjectBuilderTest
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        assertEquals(javaClass.getSuperClass().getValue(), "javax.faces.component.UIOutput");
+        assertEquals("javax.faces.component.UIOutput", javaClass.getSuperClass().getValue());
     }
     
     //for QDox-154
@@ -1304,5 +1316,4 @@ public class JavaProjectBuilderTest
         // This one does not work
         assertEquals("\"test\"", string);
     }
-
 }

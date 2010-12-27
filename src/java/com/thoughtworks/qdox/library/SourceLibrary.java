@@ -124,7 +124,16 @@ public class SourceLibrary
     public JavaSource addSource( File file )
         throws ParseException, IOException
     {
-        return addSource( new FileInputStream( file ) );
+    	JavaSource result = parse( new FileInputStream( file ) );
+    	if(context.getPackageByName(result.getPackageName()) == null) {
+    		File packageFile = new File(file.getParentFile(), "package-info.java");
+    		if(packageFile.exists() && packageFile.isFile()) {
+        		JavaSource packageSource = parse(new FileInputStream(packageFile));
+        		context.add(packageSource.getPackage());
+    		}
+    	}
+    	registerJavaSource(result);
+    	return result;
     }
 
     protected JavaSource parse( Reader reader )
@@ -179,17 +188,19 @@ public class SourceLibrary
     {
         // abstractLibrary only calls this when it can't find the source itself.
         // it will take over the reference
-        return (JavaClass) context.removeClassByName( name );
+        return context.removeClassByName( name );
     }
     
     @Override
     protected JavaPackage resolveJavaPackage(String name) {
-    	return new DefaultJavaPackage(name);
+    	return context.removePackageByName( name );
     }
     
     private void registerJavaSource(JavaSource source) {
         context.add( source );
-        context.add( source.getPackage() );
+        if(context.getPackageByName(source.getPackageName()) == null) {
+            context.add( source.getPackage() );
+        }
 
         for( JavaClass clazz : source.getClasses()) {
             registerJavaClass( clazz );

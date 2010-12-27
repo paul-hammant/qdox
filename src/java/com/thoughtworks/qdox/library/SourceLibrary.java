@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.builder.ModelBuilder;
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -179,6 +180,11 @@ public class SourceLibrary
         // abstractLibrary only calls this when it can't find the source itself.
         // it will take over the reference
         return (JavaClass) context.removeClassByName( name );
+    }
+    
+    @Override
+    protected JavaPackage resolveJavaPackage(String name) {
+    	return new DefaultJavaPackage(name);
     }
     
     private void registerJavaSource(JavaSource source) {

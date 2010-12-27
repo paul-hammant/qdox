@@ -20,7 +20,9 @@ package com.thoughtworks.qdox.library;
  */
 
 import com.thoughtworks.qdox.builder.ModelBuilder;
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 
@@ -49,6 +51,11 @@ public class ClassNameLibrary
         JavaSource unknownSource = unknownBuilder.getSource();
         JavaClass result = unknownSource.getClasses().get( 0 );
         return result;
+    }
+    
+    @Override
+    protected JavaPackage resolveJavaPackage(String name) {
+    	return new DefaultJavaPackage(name);
     }
     
     @Override

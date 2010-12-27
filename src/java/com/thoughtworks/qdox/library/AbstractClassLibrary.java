@@ -199,13 +199,21 @@ public abstract class AbstractClassLibrary
     
     public JavaPackage getJavaPackage( String name ) {
         JavaPackage result = context.getPackageByName( name );
+        if (result == null) {
+        	result = resolveJavaPackage( name );
+        	if (result != null) {
+        		context.add(result);
+        	}
+        }
         if(result == null  && parentClassLibrary != null ) {
             result = parentClassLibrary.getJavaPackage( name );
         }
         return result;
     }
     
-    protected final List<JavaPackage> getJavaPackages( ClassLibraryFilter filter) {
+    protected abstract JavaPackage resolveJavaPackage(String name);
+
+	protected final List<JavaPackage> getJavaPackages( ClassLibraryFilter filter) {
         List<JavaPackage> result = new LinkedList<JavaPackage>(); 
         if( filter.accept( this ) ) {
             result.addAll( context.getPackages() );

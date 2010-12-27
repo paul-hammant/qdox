@@ -11,6 +11,7 @@ import java.io.Reader;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.parser.ParseException;
 
 public class SourceLibraryTest
@@ -28,7 +29,9 @@ public class SourceLibraryTest
             {
                 return null;
             }
-            
+            protected JavaPackage resolveJavaPackage(String name) {
+            	return null;
+            }
             protected boolean containsClassReference( String name )
             {
                 return false;

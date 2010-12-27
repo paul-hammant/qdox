@@ -2,7 +2,9 @@ package com.thoughtworks.qdox.library;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 
 public class ClassLoaderLibraryTest
     extends TestCase
@@ -19,7 +21,9 @@ public class ClassLoaderLibraryTest
             {
                 return null;
             }
-            
+            protected JavaPackage resolveJavaPackage(String name) {
+            	return null;
+            }
             protected boolean containsClassReference( String name )
             {
                 return false;

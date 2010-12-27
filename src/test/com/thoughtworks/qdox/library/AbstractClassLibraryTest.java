@@ -5,7 +5,9 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.DefaultJavaClass;
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 
 public class AbstractClassLibraryTest
     extends TestCase
@@ -17,7 +19,9 @@ public class AbstractClassLibraryTest
         {
             return null;
         }
-        
+        protected JavaPackage resolveJavaPackage(String name) {
+        	return null;
+        }
         protected boolean containsClassReference( String name )
         {
             return false;
@@ -36,7 +40,9 @@ public class AbstractClassLibraryTest
             {
                 return new DefaultJavaClass(name);
             }
-            
+            protected JavaPackage resolveJavaPackage(String name) {
+            	return new DefaultJavaPackage(name);
+            }
             protected boolean containsClassReference( String name )
             {
                 throw new RuntimeException();
@@ -49,7 +55,9 @@ public class AbstractClassLibraryTest
             {
                 return new DefaultJavaClass(name);
             }
-            
+            protected JavaPackage resolveJavaPackage(String name) {
+            	return new DefaultJavaPackage(name);
+            }
             protected boolean containsClassReference( String name )
             {
                 throw new RuntimeException();
@@ -61,7 +69,9 @@ public class AbstractClassLibraryTest
             {
                 return null;
             }
-            
+            protected JavaPackage resolveJavaPackage(String name) {
+            	return null;
+            }
             protected boolean containsClassReference( String name )
             {
                 throw new RuntimeException();

@@ -26,7 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.thoughtworks.qdox.builder.ModelBuilder;
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
 
 /**
@@ -107,6 +109,16 @@ public class ClassLoaderLibrary
             }
         }
         return result;
+    }
+    
+    @Override
+    protected JavaPackage resolveJavaPackage(String name) {
+    	JavaPackage result = null;
+    	Package pckg = Package.getPackage(name);
+    	if(pckg != null) {
+    		result = new DefaultJavaPackage(name);
+    	}
+    	return result;
     }
 
     private void readObject( ObjectInputStream in )

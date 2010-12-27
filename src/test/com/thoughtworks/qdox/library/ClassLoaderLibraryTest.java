@@ -2,10 +2,6 @@ package com.thoughtworks.qdox.library;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.model.DefaultJavaPackage;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaPackage;
-
 public class ClassLoaderLibraryTest
     extends TestCase
 {
@@ -15,20 +11,7 @@ public class ClassLoaderLibraryTest
     protected void setUp()
         throws Exception
     {
-        classLoaderLibrary = new ClassLoaderLibrary(new AbstractClassLibrary()
-        {
-            protected JavaClass resolveJavaClass( String name )
-            {
-                return null;
-            }
-            protected JavaPackage resolveJavaPackage(String name) {
-            	return null;
-            }
-            protected boolean containsClassReference( String name )
-            {
-                return false;
-            }
-        });
+        classLoaderLibrary = new ClassLoaderLibrary(null);
     }
     
     public void testNoClassLoaders() throws Exception {

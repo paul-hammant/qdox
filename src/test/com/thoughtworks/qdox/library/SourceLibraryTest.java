@@ -1,5 +1,9 @@
 package com.thoughtworks.qdox.library;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -10,8 +14,6 @@ import java.io.Reader;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.parser.ParseException;
 
 public class SourceLibraryTest
@@ -22,21 +24,7 @@ public class SourceLibraryTest
     protected void setUp()
         throws Exception
     {
-        sourceLibrary = new SourceLibrary( new AbstractClassLibrary()
-        {
-            
-            protected JavaClass resolveJavaClass( String name )
-            {
-                return null;
-            }
-            protected JavaPackage resolveJavaPackage(String name) {
-            	return null;
-            }
-            protected boolean containsClassReference( String name )
-            {
-                return false;
-            }
-        });
+        sourceLibrary = new SourceLibrary( null );
     }
     
     protected void tearDown()

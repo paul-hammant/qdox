@@ -65,7 +65,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
      */
     public OrderedClassLibraryBuilder(AbstractClassLibrary rootClassLibrary)
     {
-        this.classLibrary = classLibrary;
+        this.classLibrary = rootClassLibrary;
     }
 
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader )

@@ -22,12 +22,6 @@ public class AnnotationsModelTest extends TestCase {
 
     private JavaDocBuilder builder;
 
-    private EvaluatingVisitor evaluatingVisitor = new EvaluatingVisitor() {
-        protected Object getFieldReferenceValue( JavaField javaField ) {
-            throw new UnsupportedOperationException();
-        }
-    };
-
     protected void setUp() throws Exception {
         super.setUp();
         builder = new JavaDocBuilder();
@@ -209,96 +203,8 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "value", "java.util.Set", ref.getType().getValue() );
     }
 
-    protected void assertAnnotationValue( Object expected ) {
-        JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
-        assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
-
-        AnnotationValue value = annotation.getProperty( "value" );
-        Object v = value.accept( evaluatingVisitor );
-        assertEquals( "Value", expected, v );
-    }
-
-    protected void assertAnnotationExpression( String expression, Object expected ) {
-        String source = "@Annotation(\n" + expression + "\n) class Foo {}";
-        builder.addSource( new StringReader( source ) );
-        assertAnnotationValue( expected );
-    }
-
-    public void testPrecedence() {
-        assertAnnotationExpression( "2 + 2 * 5", new Integer( 12 ) );
-        assertAnnotationExpression( "2 * 5 + 2", new Integer( 12 ) );
-    }
-
-    public void testLogicalExpression() {
-        assertAnnotationExpression( "true && false", Boolean.FALSE );
-        assertAnnotationExpression( "true || false", Boolean.TRUE );
-        assertAnnotationExpression( "!true", Boolean.FALSE );
-    }
-
-    public void testBitExpression() {
-        assertAnnotationExpression( "1 & 3", new Integer( 1 & 3 ) );
-        assertAnnotationExpression( "1 | 3", new Integer( 1 | 3 ) );
-        assertAnnotationExpression( "1 ^ 3", new Integer( 1 ^ 3 ) );
-        assertAnnotationExpression( "~1", new Integer( ~1 ) );
-    }
-
-    public void testSignExpression() {
-        assertAnnotationExpression( "+1", new Integer( 1 ) );
-        assertAnnotationExpression( "-1", new Integer( -1 ) );
-        assertAnnotationExpression( "--1", new Integer( 1 ) );
-    }
-
-    public void testAddSubMultDivExpression() {
-        assertAnnotationExpression( "8 / 3", new Integer( 8 / 3 ) );
-        assertAnnotationExpression( "8 * 3", new Integer( 8 * 3 ) );
-        assertAnnotationExpression( "8 + 3", new Integer( 8 + 3 ) );
-        assertAnnotationExpression( "8 - 3", new Integer( 8 - 3 ) );
-        assertAnnotationExpression( "8 % 3", new Integer( 8 % 3 ) );
-        assertAnnotationExpression( "\"a\" + \"b\"", "a" + "b" );
-    }
-
-    public void testShiftExpression() {
-        assertAnnotationExpression( "8 << 2", new Integer( 8 << 2 ) );
-        assertAnnotationExpression( "8 >> 2", new Integer( 8 >> 2 ) );
-        assertAnnotationExpression( "-1 >> 2", new Integer( -1 >> 2 ) );
-        assertAnnotationExpression( "-1 >>> 2", new Integer( -1 >>> 2 ) );
-    }
-
-    public void testLiteral() {
-        assertAnnotationExpression( "1", new Integer( 1 ) );
-        assertAnnotationExpression( "1l", new Long( 1 ) );
-        assertAnnotationExpression( "1.0", new Float( 1 ) );
-        assertAnnotationExpression( "1.0d", new Double( 1 ) );
-    }
-
-    public void testParenExpression() {
-        assertAnnotationExpression( "2 + (2 * 5)", new Integer( 12 ) );
-        assertAnnotationExpression( "(2 + 2) * 5", new Integer( 20 ) );
-    }
-
-    public void testCompareExpression() {
-        assertAnnotationExpression( "1 < 2", Boolean.TRUE );
-        assertAnnotationExpression( "1 > 2", Boolean.FALSE );
-        assertAnnotationExpression( "1 <= 2", Boolean.TRUE );
-        assertAnnotationExpression( "1 >= 2", Boolean.FALSE );
-        assertAnnotationExpression( "1 == 2", Boolean.FALSE );
-        assertAnnotationExpression( "1 != 2", Boolean.TRUE );
-    }
-
-    public void testQueryExpression() {
-        assertAnnotationExpression( "1 < 2 ? 0 : 3", new Integer( 0 ) );
-        assertAnnotationExpression( "1 > 2 ? 0 : 3", new Integer( 3 ) );
-    }
-
-    public void testCastExpression() {
-        assertAnnotationExpression( "(short)1", new Short( (short) 1 ) );
-        assertAnnotationExpression( "(long)(short)1", new Long( 1 ) );
-        assertAnnotationExpression( "(int)((short)1 + (long)3)", new Integer( 4 ) );
-    }
     
+
     //from Qdox-98
     public void testPackageWithAnnotation() throws Exception {
     	String source = "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n" +

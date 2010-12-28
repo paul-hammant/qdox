@@ -2,7 +2,6 @@ package com.thoughtworks.qdox;
 
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import junit.framework.TestCase;
 

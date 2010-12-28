@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.annotation.AnnotationAdd;
@@ -16,7 +15,6 @@ import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
 import com.thoughtworks.qdox.model.annotation.AnnotationTypeRef;
 import com.thoughtworks.qdox.model.annotation.AnnotationValue;
 import com.thoughtworks.qdox.model.annotation.AnnotationValueList;
-import com.thoughtworks.qdox.model.annotation.EvaluatingVisitor;
 
 public class AnnotationsModelTest extends TestCase {
 
@@ -126,7 +124,7 @@ public class AnnotationsModelTest extends TestCase {
         AnnotationValueList list = (AnnotationValueList) annotation.getProperty( "value" );
         assertEquals( "Inner Annotations", 2, list.getValueList().size() );
 
-        for( ListIterator i = list.getValueList().listIterator(); i.hasNext(); ) {
+        for( ListIterator<AnnotationValue> i = list.getValueList().listIterator(); i.hasNext(); ) {
             Annotation inner = (Annotation) i.next();
             assertEquals( "Inner " + i.previousIndex(), "Inner", inner.getType().getValue() );
         }
@@ -230,8 +228,10 @@ public class AnnotationsModelTest extends TestCase {
 
         builder.addSource(new StringReader(source));
         JavaClass clazz = builder.getClassByName("Foo");
-        JavaMethod mth = clazz.getMethods().get(0);
         assertEquals("Foo", clazz.getName());
+        JavaMethod mth = clazz.getMethods().get(0);
+        Annotation paramAnn = mth.getParameterByName("blah").getAnnotations().get(0);
+        assertEquals("@Y(value=1)", paramAnn.toString());
     }
 
 }

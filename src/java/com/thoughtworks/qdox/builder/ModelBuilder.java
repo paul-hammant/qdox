@@ -77,6 +77,7 @@ public class ModelBuilder implements Builder {
         DefaultJavaPackage jPackage = new DefaultJavaPackage(packageDef.name);
         jPackage.setClassLibrary( source.getJavaClassLibrary());
         jPackage.setLineNumber(packageDef.lineNumber);
+        addJavaDoc(jPackage);
     	setAnnotations(jPackage);
         source.setPackage(jPackage);
     }
@@ -214,6 +215,9 @@ public class ModelBuilder implements Builder {
     
     public void beginMethod() {
     	currentMethod = new DefaultJavaMethod();
+        // javadoc
+        addJavaDoc(currentMethod);
+
     	setAnnotations(currentMethod);
     }
     
@@ -250,9 +254,6 @@ public class ModelBuilder implements Builder {
         }
         
         currentMethod.setSourceCode(def.body);
-
-        // javadoc
-        addJavaDoc(currentMethod);
 
         classStack.getFirst().addMethod(currentMethod);
         currentMethod.setParentClass(classStack.getFirst());
@@ -301,6 +302,7 @@ public class ModelBuilder implements Builder {
 	public void addParameter(FieldDef fieldDef) {
 	    DefaultJavaParameter jParam = new DefaultJavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name, fieldDef.isVarArgs);
         jParam.setParentMethod( currentMethod );
+        addJavaDoc( jParam );
         setAnnotations( jParam );
         currentMethod.addParameter( jParam );
 	}

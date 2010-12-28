@@ -19,12 +19,6 @@ package com.thoughtworks.qdox.tools;
  * under the License.
  */
 
-import com.thoughtworks.qdox.JavaDocBuilder;
-import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
-import com.thoughtworks.qdox.directorywalker.FileVisitor;
-import com.thoughtworks.qdox.directorywalker.SuffixFilter;
-import com.thoughtworks.qdox.parser.ParseException;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +29,12 @@ import java.io.PrintStream;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import com.thoughtworks.qdox.JavaProjectBuilder;
+import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
+import com.thoughtworks.qdox.directorywalker.FileVisitor;
+import com.thoughtworks.qdox.directorywalker.SuffixFilter;
+import com.thoughtworks.qdox.parser.ParseException;
 
 /**
  * Tool for testing that QDox can parse Java source code.
@@ -96,8 +96,8 @@ public class QDoxTester {
 
     private void verify(String id, InputStream inputStream) {
         try {
-            JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
-            javaDocBuilder.addSource(new BufferedReader(new InputStreamReader(inputStream)));
+            JavaProjectBuilder builder = new JavaProjectBuilder();
+            builder.addSource(new BufferedReader(new InputStreamReader(inputStream)));
             reporter.success(id);
         } catch (ParseException parseException) {
             reporter.parseFailure(id, parseException.getLine(), parseException.getColumn(), parseException.getMessage());

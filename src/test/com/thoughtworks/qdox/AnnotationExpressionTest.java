@@ -20,7 +20,7 @@ import com.thoughtworks.qdox.model.annotation.EvaluatingVisitor;
 @RunWith(Parameterized.class)
 public class AnnotationExpressionTest {
 
-	private JavaDocBuilder builder;
+	private JavaProjectBuilder builder;
 	
 	private String expression;
 	private Object parsedResult;
@@ -32,7 +32,7 @@ public class AnnotationExpressionTest {
 
 	@Before
 	public void setUp() throws Exception {
-        builder = new JavaDocBuilder();
+        builder = new JavaProjectBuilder();
         builder.setDebugLexer( true );
         builder.setDebugParser( true );
     }

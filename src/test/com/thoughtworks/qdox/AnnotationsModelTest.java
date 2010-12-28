@@ -20,11 +20,11 @@ import com.thoughtworks.qdox.model.annotation.EvaluatingVisitor;
 
 public class AnnotationsModelTest extends TestCase {
 
-    private JavaDocBuilder builder;
+    private JavaProjectBuilder builder;
 
     protected void setUp() throws Exception {
         super.setUp();
-        builder = new JavaDocBuilder();
+        builder = new JavaProjectBuilder();
         builder.setDebugLexer( true );
         builder.setDebugParser( true );
     }
@@ -211,7 +211,7 @@ public class AnnotationsModelTest extends TestCase {
     			"package org.oasis_open.docs.wsn.br_2;\n" +
     			"public class Foo {}";
     	builder.addSource(new StringReader(source));
-    	JavaPackage jPackage = builder.getClasses()[0].getPackage();
+    	JavaPackage jPackage = builder.getClasses().get(0).getPackage();
     	assertEquals("org.oasis_open.docs.wsn.br_2", jPackage.getName());
     	assertEquals("javax.xml.bind.annotation.XmlSchema", jPackage.getAnnotations().get(0).getType().getValue());
     	assertEquals(2, jPackage.getLineNumber());

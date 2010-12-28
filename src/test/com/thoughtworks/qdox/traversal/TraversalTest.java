@@ -2,21 +2,21 @@ package com.thoughtworks.qdox.traversal;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.AbstractInheritableJavaEntity;
 import com.thoughtworks.qdox.model.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.JavaClass;
 
 public class TraversalTest extends TestCase {
 
-    private JavaDocBuilder builder;
+    private JavaProjectBuilder builder;
 
     public TraversalTest(String name) {
         super(name);
     }
 
     protected void setUp() throws Exception {
-        builder = new JavaDocBuilder();
+        builder = new JavaProjectBuilder();
         //by default current classloader is already added, so QDox-classes can be found
     }
 

@@ -25,7 +25,6 @@ import java.util.Set;
 
 import com.thoughtworks.qdox.io.ModelWriterFactory;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
-import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.DefaultJavaClass;
 import com.thoughtworks.qdox.model.DefaultJavaField;
@@ -189,7 +188,7 @@ public class ModelBuilder implements Builder {
     	return Type.createUnresolved(typeDef, dimensions, classStack.isEmpty() ? source : classStack.getFirst());
     }
 
-    private void addJavaDoc(AbstractJavaEntity entity) {
+    private void addJavaDoc(AbstractBaseJavaEntity entity) {
         if (lastComment == null) {
             return;
         } 

@@ -21,6 +21,7 @@ package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class AbstractBaseJavaEntity implements Serializable {
@@ -28,6 +29,8 @@ public class AbstractBaseJavaEntity implements Serializable {
 	private String name;
 	private List<Annotation> annotations = Collections.emptyList();
 	private int lineNumber = -1;
+	protected String comment;
+	protected List<DocletTag> tags = new LinkedList<DocletTag>();
 
 	public AbstractBaseJavaEntity() {
 		super();
@@ -64,5 +67,54 @@ public class AbstractBaseJavaEntity implements Serializable {
 	 * @return the surrounding class
 	 */
 	public JavaClass getParentClass() { return null; }
+
+	public String getComment() {
+	    return comment;
+	}
+
+	public void setComment(String comment) {
+	    this.comment = comment;
+	}
+
+	public List<DocletTag> getTags() {
+	    return tags;
+	}
+
+	public List<DocletTag> getTagsByName(String name) {
+	    List<DocletTag> specifiedTags = new LinkedList<DocletTag>();
+	    for ( DocletTag docletTag : tags ) {
+	        if (docletTag.getName().equals(name)) {
+	            specifiedTags.add(docletTag);
+	        }
+	    }
+	    return specifiedTags;
+	}
+
+	public DocletTag getTagByName(String name) {
+	    for (DocletTag docletTag : tags) {
+	        if (docletTag.getName().equals(name)) {
+	            return docletTag;
+	        }
+	    }
+	    return null;
+	}
+
+	/**
+	 * Convenience method for <code>getTagByName(String).getNamedParameter(String)</code>
+	 * that also checks for null tag.
+	 * @since 1.3
+	 */
+	public String getNamedParameter(String tagName, String parameterName) {
+	    DocletTag tag = getTagByName(tagName);
+	    if(tag != null) {
+	        return tag.getNamedParameter(parameterName);
+	    } else {
+	        return null;
+	    }
+	}
+
+	public void setTags(List<DocletTag> tagList) {
+	    this.tags = tagList;
+	}
 
 }

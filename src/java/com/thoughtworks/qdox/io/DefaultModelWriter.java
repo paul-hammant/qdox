@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -248,7 +249,7 @@ public class DefaultModelWriter implements ModelWriter
         }
     }
     
-    private void commentHeader(JavaModel entity) {
+    private void commentHeader(JavaAnnotatedElement entity) {
         if (entity.getComment() == null && (entity.getTags().size() == 0)) {
             return;
         } else {

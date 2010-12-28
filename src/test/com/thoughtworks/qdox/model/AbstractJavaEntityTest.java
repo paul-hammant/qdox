@@ -30,7 +30,7 @@ public class AbstractJavaEntityTest extends TestCase {
     }
 
     public void testGetTagsByNameMethod() throws Exception {
-        AbstractJavaEntity entity = newAbstractJavaEntity();
+        AbstractBaseJavaEntity entity = newAbstractJavaEntity();
         List<DocletTag> tags = new LinkedList<DocletTag>();
         tags.add(new DefaultDocletTag("monkey", "is good"));
         tags.add(new DefaultDocletTag("monkey", "is funny"));
@@ -44,7 +44,7 @@ public class AbstractJavaEntityTest extends TestCase {
 
     public void testGetSingleTagByName() throws Exception {
 
-        AbstractJavaEntity entity = newAbstractJavaEntity();
+        AbstractBaseJavaEntity entity = newAbstractJavaEntity();
         List<DocletTag> tags = new LinkedList<DocletTag>();
         tags.add(new DefaultDocletTag("monkey", "is good"));
         tags.add(new DefaultDocletTag("monkey", "is funny"));
@@ -246,7 +246,7 @@ public class AbstractJavaEntityTest extends TestCase {
     }
 
     public void testGetTagsReturnsEmptyArrayInsteadOfNull() throws Exception {
-        JavaModel entity = newAbstractJavaEntity();
+    	AbstractJavaEntity entity = newAbstractJavaEntity();
         assertEquals(0, entity.getTags().size());
     }
 }

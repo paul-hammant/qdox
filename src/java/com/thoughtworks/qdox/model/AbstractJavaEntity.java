@@ -27,9 +27,6 @@ import com.thoughtworks.qdox.io.IndentBuffer;
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements Comparable, JavaModel {
 
     private List<String> modifiers = new LinkedList<String>();
-    private String comment;
-    private List<DocletTag> tags = new LinkedList<DocletTag>();
-    
     private JavaClass parentClass;
     /**
      * Return list of modifiers as Strings.
@@ -39,76 +36,23 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         return modifiers;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaModel#getComment()
-     */
-    public String getComment() {
-        return comment;
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaModel#getTags()
-     */
-    public List<DocletTag> getTags() {
-        return tags;
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaModel#getTagsByName(java.lang.String)
-     */
-    public List<DocletTag> getTagsByName(String name) {
-        List<DocletTag> specifiedTags = new LinkedList<DocletTag>();
-        for ( DocletTag docletTag : tags ) {
-            if (docletTag.getName().equals(name)) {
-                specifiedTags.add(docletTag);
-            }
-        }
-        return specifiedTags;
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaModel#getTagByName(java.lang.String)
-     */
-    public DocletTag getTagByName(String name) {
-        for (DocletTag docletTag : tags) {
-            if (docletTag.getName().equals(name)) {
-                return docletTag;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Convenience method for <code>getTagByName(String).getNamedParameter(String)</code>
-     * that also checks for null tag.
-     * @since 1.3
-     */
-    public String getNamedParameter(String tagName, String parameterName) {
-        DocletTag tag = getTagByName(tagName);
-        if(tag != null) {
-            return tag.getNamedParameter(parameterName);
-        } else {
-            return null;
-        }
-    }
-
     void commentHeader(IndentBuffer buffer) {
-        if (comment == null && tags.isEmpty()) {
+        if (getComment() == null && tags.isEmpty()) {
             return;
         } else {
             buffer.write("/**");
             buffer.newline();
 
-            if (comment != null && comment.length() > 0) {
+            if (getComment() != null && getComment().length() > 0) {
                 buffer.write(" * ");
                 
-                buffer.write(comment.replaceAll("\n", "\n * "));
+                buffer.write(getComment().replaceAll("\n", "\n * "));
                 
                 buffer.newline();
             }
 
             if (!tags.isEmpty()) {
-                if (comment != null && comment.length() > 0) {
+                if (getComment() != null && getComment().length() > 0) {
                     buffer.write(" *");
                     buffer.newline();
                 }
@@ -130,14 +74,6 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
 
     public void setModifiers(List<String> modifiers) {
         this.modifiers = modifiers;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public void setTags(List<DocletTag> tagList) {
-        this.tags = tagList;
     }
 
     //helper methods for querying the modifiers

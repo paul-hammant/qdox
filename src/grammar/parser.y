@@ -55,7 +55,8 @@ import java.util.Stack;
 %token <ival> VERTLINE2 AMPERSAND2 VERTLINE CIRCUMFLEX AMPERSAND EQUALS2 NOTEQUALS
 %token <ival> LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS LESSTHAN2 GREATERTHAN2 GREATERTHAN3
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
-%type <sval> name primitiveType
+%type <sval> name
+%type <sval> PrimitiveType NumericType IntegralType FloatingPointType
 %type <annoval> value expression literal annotation arrayInitializer
 %type <annoval> conditionalExpression conditionalOrExpression conditionalAndExpression inclusiveOrExpression exclusiveOrExpression andExpression
 %type <annoval> equalityExpression relationalExpression shiftExpression additiveExpression multiplicativeExpression
@@ -274,14 +275,14 @@ unaryExpressionNotPlusMinus:
 	primary;
     	
 primary:
-    PARENOPEN primitiveType PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2, 0), $4); } |
-	PARENOPEN primitiveType dims PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2, $3), $5); } |
+    PARENOPEN PrimitiveType PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2, 0), $4); } |
+	PARENOPEN PrimitiveType dims PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2, $3), $5); } |
     PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, $3), $5); } |
 	PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, 0), $4); } |
     PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
     literal { $$ = $1; } |
-    primitiveType dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
-    primitiveType DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
+    PrimitiveType dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
+    PrimitiveType DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
     name DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
     name dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
     name { $$ = new AnnotationFieldRef($1); };
@@ -303,13 +304,22 @@ literal:
     CHAR_LITERAL { String s = lexer.getCodeBody(); $$ = new AnnotationConstant(toChar(s), s); } |
     STRING_LITERAL { String s = lexer.getCodeBody(); $$ = new AnnotationConstant(toString(s), s); };
         
-primitiveType:
-    BOOLEAN { $$ = "boolean"; } |
+PrimitiveType:
+	NumericType |
+    BOOLEAN { $$ = "boolean"; };
+
+NumericType:
+	IntegralType |
+	FloatingPointType;
+	
+IntegralType:
     BYTE { $$ = "byte"; } |
     SHORT { $$ = "short"; } |
     INT { $$ = "int"; } |
     LONG { $$ = "long"; } |
-    CHAR { $$ = "char"; } |
+    CHAR { $$ = "char"; };
+
+FloatingPointType:
     FLOAT { $$ = "float"; } |
     DOUBLE { $$ = "double"; };
         

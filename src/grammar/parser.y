@@ -57,6 +57,7 @@ import java.util.Stack;
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
 %type <sval> name
 %type <sval> PrimitiveType NumericType IntegralType FloatingPointType
+%type <type> Wildcard WildcardBoundsOpt
 %type <annoval> value expression literal annotation arrayInitializer
 %type <annoval> conditionalExpression conditionalOrExpression conditionalAndExpression inclusiveOrExpression exclusiveOrExpression andExpression
 %type <annoval> equalityExpression relationalExpression shiftExpression additiveExpression multiplicativeExpression
@@ -204,62 +205,62 @@ values:
 	values COMMA value { annoValueList.add($3); };
     
 value:
-    expression { $$ = $1; } |
-    annotation { $$ = $1; } |
-    arrayInitializer { $$ = $1; };
+    expression |
+    annotation |
+    arrayInitializer ;
 
 expression:
-	conditionalExpression { $$ = $1; };
+	conditionalExpression ;
 	
 conditionalExpression:
-	conditionalOrExpression { $$ = $1; } |
+	conditionalOrExpression |
 	conditionalOrExpression QUERY expression COLON expression { $$ = new AnnotationQuery($1, $3, $5); };
 
 conditionalOrExpression:
-    conditionalAndExpression { $$ = $1; } |
+    conditionalAndExpression |
 	conditionalOrExpression VERTLINE2 conditionalAndExpression { $$ = new AnnotationLogicalOr($1, $3); };
 
 conditionalAndExpression:
-    inclusiveOrExpression { $$ = $1; } |
+    inclusiveOrExpression |
 	conditionalAndExpression AMPERSAND2 inclusiveOrExpression { $$ = new AnnotationLogicalAnd($1, $3); };
 
 inclusiveOrExpression:
-    exclusiveOrExpression { $$ = $1; } |
+    exclusiveOrExpression |
     inclusiveOrExpression VERTLINE exclusiveOrExpression { $$ = new AnnotationOr($1, $3); };
 
 exclusiveOrExpression:
-	andExpression { $$ = $1; } |
+	andExpression |
 	exclusiveOrExpression CIRCUMFLEX andExpression { $$ = new AnnotationExclusiveOr($1, $3); };
 
 andExpression:
-    equalityExpression { $$ = $1; } |
+    equalityExpression |
     andExpression AMPERSAND equalityExpression { $$ = new AnnotationAnd($1, $3); };
 
 equalityExpression:
-    relationalExpression { $$ = $1; } |
+    relationalExpression |
     equalityExpression EQUALS2 relationalExpression { $$ = new AnnotationEquals($1, $3); } |
     equalityExpression NOTEQUALS relationalExpression { $$ = new AnnotationNotEquals($1, $3); };
 
 relationalExpression:
-	shiftExpression { $$ = $1; } |
+	shiftExpression |
 	relationalExpression LESSEQUALS shiftExpression { $$ = new AnnotationLessEquals($1, $3); } |
 	relationalExpression GREATEREQUALS shiftExpression { $$ = new AnnotationGreaterEquals($1, $3); } |
 	relationalExpression LESSTHAN shiftExpression { $$ = new AnnotationLessThan($1, $3); } |
 	relationalExpression GREATERTHAN shiftExpression { $$ = new AnnotationGreaterThan($1, $3); };
 	
 shiftExpression:
-	additiveExpression { $$ = $1; } |
+	additiveExpression |
 	shiftExpression LESSTHAN2 additiveExpression { $$ = new AnnotationShiftLeft($1, $3); } |
 	shiftExpression GREATERTHAN3 additiveExpression { $$ = new AnnotationUnsignedShiftRight($1, $3); } |
 	shiftExpression GREATERTHAN2 additiveExpression { $$ = new AnnotationShiftRight($1, $3); };
 
 additiveExpression:
-	multiplicativeExpression { $$ = $1; } |
+	multiplicativeExpression |
 	additiveExpression PLUS multiplicativeExpression { $$ = new AnnotationAdd($1, $3); } |
 	additiveExpression MINUS multiplicativeExpression { $$ = new AnnotationSubtract($1, $3); };
 
 multiplicativeExpression:
-    unaryExpression { $$ = $1; } |
+    unaryExpression |
 	multiplicativeExpression STAR unaryExpression { $$ = new AnnotationMultiply($1, $3); } |
 	multiplicativeExpression SLASH unaryExpression { $$ = new AnnotationDivide($1, $3); } |
 	multiplicativeExpression PERCENT unaryExpression { $$ = new AnnotationRemainder($1, $3); };
@@ -267,7 +268,7 @@ multiplicativeExpression:
 unaryExpression:
     PLUS unaryExpression { $$ = new AnnotationPlusSign($2); } |
     MINUS unaryExpression { $$ = new AnnotationMinusSign($2); } |
-	unaryExpressionNotPlusMinus { $$ = $1; };
+	unaryExpressionNotPlusMinus;
 
 unaryExpressionNotPlusMinus:
 	TILDE unaryExpression { $$ = new AnnotationNot($2); } |
@@ -280,7 +281,7 @@ primary:
     PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, $3), $5); } |
 	PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, 0), $4); } |
     PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
-    literal { $$ = $1; } |
+    literal |
     PrimitiveType dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
     PrimitiveType DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
     name DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
@@ -292,7 +293,7 @@ dims:
     dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };
 	
 name:
-    IDENTIFIER { $$ = $1; } |
+    IDENTIFIER |
     name DOT IDENTIFIER { $$ = $1 + "." + $3; };    
     
 literal:
@@ -348,11 +349,11 @@ classtype:
     };
 
 typedeclspecifier:
-    typename { $$ = $1; } |
+    typename |
     classtype DOT IDENTIFIER { $$ = $1.name + '.' + $3; };
 
 typename: 
-    IDENTIFIER { $$ = $1; } |
+    IDENTIFIER |
     typename DOT IDENTIFIER { $$ = $1 + '.' + $3; }; 
 
 typearglist:
@@ -360,10 +361,16 @@ typearglist:
     typearglist COMMA typearg { (typeStack.peek()).actualArgumentTypes.add($3);};
 
 typearg:
-    type { $$ = $1;} |
-    QUERY  { $$ = new WildcardTypeDef();} |
-    QUERY EXTENDS type { $$ = new WildcardTypeDef($3, "extends");} |
-    QUERY SUPER type { $$ = new WildcardTypeDef($3, "super");};
+    type |
+    Wildcard;
+
+Wildcard:
+	QUERY { $$ = new WildcardTypeDef();} |
+	QUERY WildcardBoundsOpt { $$ = $2;};
+	
+WildcardBoundsOpt:
+    EXTENDS type { $$ = new WildcardTypeDef($2, "extends");} |
+    SUPER type   { $$ = new WildcardTypeDef($2, "super");} ;
 
 opt_typeparams: | typeparams;
 

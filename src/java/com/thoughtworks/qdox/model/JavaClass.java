@@ -95,6 +95,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
 
     public String getClassNamePrefix();
 
+    @Deprecated
     public Type asType();
 
     public List<JavaMethod> getMethods();

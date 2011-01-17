@@ -30,6 +30,7 @@ import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.parser.structs.ClassDef;
 
 /**
  * A ClassLibrary can be compared with a java classloader. 
@@ -100,6 +101,21 @@ public abstract class AbstractClassLibrary
         {
             result = parentClassLibrary.getJavaClass( name );
         }
+        if (result == null && createStub) {
+            result = createStub(name);
+        }
+        return result;
+    }
+
+    private JavaClass createStub( String name )
+    {
+        ModelBuilder unknownBuilder = getModelBuilder();
+        ClassDef classDef = new ClassDef();
+        classDef.name = name;
+        unknownBuilder.beginClass( classDef );
+        unknownBuilder.endClass();
+        JavaSource unknownSource = unknownBuilder.getSource();
+        JavaClass result = unknownSource.getClasses().get( 0 );
         return result;
     }
 

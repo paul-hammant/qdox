@@ -179,6 +179,10 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     }
 
     public JavaClass getJavaClass(String name) {
+        return getJavaClass( name, false );
+    }
+    
+    public JavaClass getJavaClass(String name, boolean createStub) {
         JavaClass result = sourceContext.getClassByName( name );
         if (result == null) {
             result = context.getClassByName( name );

@@ -71,8 +71,10 @@ public abstract class AbstractClassLibrary
      * @param name
      * @return
      */
-    public final JavaClass getJavaClass( String name )
-    {
+    public final JavaClass getJavaClass( String name ) {
+       return getJavaClass( name, false ); 
+    }
+    public final JavaClass getJavaClass( String name, boolean createStub ) {
         JavaClass result = context.getClassByName( name );
         if ( result == null )
         {

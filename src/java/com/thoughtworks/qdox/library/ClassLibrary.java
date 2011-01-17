@@ -51,6 +51,9 @@ public interface ClassLibrary
      */
     public JavaClass getJavaClass( String name );
 
+    public JavaClass getJavaClass( String name, boolean createStub );
+
+    
     /**
      * Return all JavaClasses of the current library.
      * It's up to the library to decide if also collects JavaClasses from it's ancestors 

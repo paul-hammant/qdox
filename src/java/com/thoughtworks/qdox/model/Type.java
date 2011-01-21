@@ -299,7 +299,7 @@ public class Type implements Comparable, Serializable {
         	result = javaClassParent.getNestedClassByName(getFullyQualifiedName());
 	        if(result == null) {
 	            if(javaClassParent.getJavaClassLibrary() != null) {
-	                result = javaClassParent.getJavaClassLibrary().getJavaClass( getFullyQualifiedName() );
+	                result = javaClassParent.getJavaClassLibrary().getJavaClass( getFullyQualifiedName(), true );
 	            }
 	        }
         }

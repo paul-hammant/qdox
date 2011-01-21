@@ -126,11 +126,26 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      * Shorthand for getSuperClass().getJavaClass() with null checking.
      */
     public JavaClass getSuperJavaClass() {
-        if (getSuperClass() != null) {
-            return getSuperClass().getJavaClass();
-        } else {
-            return null;
+        JavaClass result = null;
+        if(OBJECT == null) {
+            if(source.getJavaClassLibrary() != null) {
+                OBJECT = source.getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
+                ENUM = source.getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
+            }
         }
+        
+        boolean iAmJavaLangObject = OBJECT.equals(asType());
+        if (isEnum) {
+            result = ENUM.getJavaClass();
+        } else if (!interfce && !isAnnotation && (superClass == null) && !iAmJavaLangObject) {
+            result = OBJECT.getJavaClass();
+        }
+        else if(superClass != null) {
+            result = superClass.getJavaClass();
+        } else {
+            result = null;
+        }
+        return result;
     }
 
     /* (non-Javadoc)

@@ -500,8 +500,25 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      * @see com.thoughtworks.qdox.model.JavaClass#isA(java.lang.String)
      */
     public boolean isA(String fullClassName) {
-        Type type = new Type(fullClassName, 0, this);
-        return isA(type.getJavaClass());
+        if(fullClassName == null) {
+            return false;
+        }
+        if(fullClassName.equals(getFullyQualifiedName())) {
+            return true;
+        }
+        for (JavaClass implementz : getImplementedInterfaces()) 
+        {
+            if (implementz.isA(fullClassName)) 
+            {
+                return true;
+            }
+        }
+        JavaClass superClass = getSuperJavaClass();
+        if (superClass != null) 
+        {
+            return superClass.isA(fullClassName);
+        }
+        return false;
     }
 
     /**

@@ -77,6 +77,8 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
         classLoaderLibrary.addClassLoader( classLoader );
         classLoaderLibrary.setModelBuilderFactory( modelBuilderFactory );
+        classLoaderLibrary.setDebugLexer( debugLexer );
+        classLoaderLibrary.setDebugParser( debugParser );
         return this;
     }
 

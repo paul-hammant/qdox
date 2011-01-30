@@ -98,6 +98,7 @@ public class SortedClassLibraryBuilder
 
     public ClassLibraryBuilder setDebugLexer( boolean debugLexer )
     {
+        classLoaderLibrary.setDebugLexer( debugLexer );
         sourceFolderLibrary.setDebugLexer( debugLexer );
         sourceLibrary.setDebugLexer( debugLexer );
         return this;
@@ -105,6 +106,7 @@ public class SortedClassLibraryBuilder
 
     public ClassLibraryBuilder setDebugParser( boolean debugParser )
     {
+        classLoaderLibrary.setDebugParser( debugParser );
         sourceFolderLibrary.setDebugParser( debugParser );
         sourceLibrary.setDebugParser( debugParser );
         return this;

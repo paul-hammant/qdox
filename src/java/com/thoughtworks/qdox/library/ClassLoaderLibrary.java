@@ -20,16 +20,20 @@ package com.thoughtworks.qdox.library;
  */
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.builder.ModelBuilder;
 import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.parser.Lexer;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
+import com.thoughtworks.qdox.parser.impl.JFlexLexer;
+import com.thoughtworks.qdox.parser.impl.Parser;
 
 /**
  * <strong>Important!! Be sure to add a classloader with the bootstrap classes.</strong>
@@ -59,6 +63,10 @@ public class ClassLoaderLibrary
 
     private boolean defaultClassLoadersAdded = false;
 
+    private boolean debugLexer;
+
+    private boolean debugParser;
+    
     public ClassLoaderLibrary( AbstractClassLibrary parent )
     {
         super( parent );
@@ -92,20 +100,40 @@ public class ClassLoaderLibrary
         for (Iterator<ClassLoader> iter = classLoaders.iterator(); iter.hasNext(); )
         {
             ClassLoader classLoader = (ClassLoader) iter.next();
-            try
-            {
-                Class<?> clazz = classLoader.loadClass( name );
-                ModelBuilder builder = getModelBuilder();
-                BinaryClassParser parser = new BinaryClassParser( clazz, builder );
-                if ( parser.parse() )
-                {
-                    //this works, classloaders parse the FQN (including nested classes) directly
-                    result = builder.getSource().getClasses().get( 0 );
-                }
-                break;
+            String resource = name;
+            if(name.indexOf( '$' ) > 0) {
+                resource = resource.split( "$" )[0];
             }
-            catch ( ClassNotFoundException e )
-            {
+            resource = resource.replace( '.', '/' )+".java";
+            InputStream sourceStream = classLoader.getResourceAsStream( resource );
+            if(sourceStream != null) {
+                ModelBuilder builder = getModelBuilder();
+                Lexer lexer = new JFlexLexer( sourceStream );
+                Parser parser = new Parser( lexer, builder );
+                parser.setDebugLexer( debugLexer );
+                parser.setDebugParser( debugParser );
+                if( parser.parse() ) {
+                    //@todo to get class by name
+                    result = builder.getSource().getClasses().get(0);
+                    break;
+                }
+            }
+            if( result == null ) {
+                try
+                {
+                    Class<?> clazz = classLoader.loadClass( name );
+                    ModelBuilder builder = getModelBuilder();
+                    BinaryClassParser parser = new BinaryClassParser( clazz, builder );
+                    if ( parser.parse() )
+                    {
+                        //this works, classloaders parse the FQN (including nested classes) directly
+                        result = builder.getSource().getClasses().get( 0 );
+                        break;
+                    }
+                }
+                catch ( ClassNotFoundException e )
+                {
+                }
             }
         }
         return result;
@@ -150,5 +178,25 @@ public class ClassLoaderLibrary
             }
         }
         return result;
+    }
+    
+    /**
+     * Use the Lexer in debug mode
+     * 
+     * @param debugLexer 
+     */
+    public void setDebugLexer( boolean debugLexer )
+    {
+        this.debugLexer = debugLexer;
+    }
+    
+    /**
+     * Use the Parser in debug mode
+     * 
+     * @param debugParser
+     */
+    public void setDebugParser( boolean debugParser )
+    {
+        this.debugParser = debugParser;
     }
 }

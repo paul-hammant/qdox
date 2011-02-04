@@ -20,24 +20,17 @@ package com.thoughtworks.qdox.model;
  */
 
 import java.beans.Introspector;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 import com.thoughtworks.qdox.io.IndentBuffer;
 
-public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements JavaMethod {
+public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod {
 
-	private List<TypeVariable> typeParameters = Collections.emptyList(); 
-    private Type returns = Type.VOID;
-    private List<JavaParameter> parameters = new LinkedList<JavaParameter>();
-    private List<Type> exceptions = Collections.emptyList();
+	private Type returns = Type.VOID;
     private boolean constructor;
     private String sourceCode;
-    private boolean varArgs;
-
     /**
      * The default constructor
      */
@@ -72,44 +65,10 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
     }
 
     /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getParameters()
-     */
-    public List<JavaParameter> getParameters() {
-        return parameters;
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getParameterByName(java.lang.String)
-     */
-    public JavaParameter getParameterByName(String name) {
-        for (JavaParameter parameter : getParameters()) {
-            if (parameter.getName().equals(name)) {
-                return parameter;
-            }
-        }
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getExceptions()
-     */
-    public List<Type> getExceptions() {
-        return exceptions;
-    }
-
-    /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#isConstructor()
      */
     public boolean isConstructor() {
         return constructor;
-    }
-    
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#isVarArgs()
-     */
-    public boolean isVarArgs()
-    {
-        return varArgs;
     }
     
     /* (non-Javadoc)
@@ -118,6 +77,27 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
     public String getCodeBlock()
     {
         return getSource().getModelWriter().writeMethod( this ).toString();
+    }
+
+    /**
+     * @since 1.3
+     */
+    private String getSignature( boolean withModifiers, boolean isDeclaration )
+    {
+        IndentBuffer result = new IndentBuffer();
+        writeBody(result, withModifiers, isDeclaration, false);
+        return result.toString();
+    }
+
+
+    public String getDeclarationSignature( boolean withModifiers )
+    {
+        return getSignature(withModifiers, true);
+    }
+
+    public String getCallSignature()
+    {
+        return getSignature(false, false);
     }
 
     /**
@@ -192,48 +172,12 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
     }
 
     /**
-     * @since 1.3
-     */
-    private String getSignature(boolean withModifiers, boolean isDeclaration) {
-        IndentBuffer result = new IndentBuffer();
-        writeBody(result, withModifiers, isDeclaration, false);
-        return result.toString();
-    }
-    
-    public JavaClass getDeclaringClass() {
-    	return getParentClass();
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getDeclarationSignature(boolean)
-     */
-    public String getDeclarationSignature(boolean withModifiers) {
-        return getSignature(withModifiers, true);
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getCallSignature()
-     */
-    public String getCallSignature() {
-        return getSignature(false, false);
-    }
-
-    /**
      * Define the return type of this method
      * 
      * @param returns the return type
      */
     public void setReturns(Type returns) {
         this.returns = returns;
-    }
-
-    public void addParameter(JavaParameter javaParameter) {
-        parameters.add( javaParameter );
-        this.varArgs = javaParameter.isVarArgs();
-    }
-
-    public void setExceptions(List<Type> exceptions) {
-        this.exceptions = exceptions;
     }
 
     public void setConstructor(boolean constructor) {
@@ -265,49 +209,11 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
         return this.varArgs == m.isVarArgs();
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#signatureMatches(java.lang.String, java.util.List)
-     */
-    public boolean signatureMatches(String name, List<Type> parameterTypes) {
-        return signatureMatches( name, parameterTypes, false );
-    }
-    
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#signatureMatches(java.lang.String, java.util.List, boolean)
-     */
-    public boolean signatureMatches(String name, List<Type> parameterTypes, boolean varArg) {
-        if (!name.equals(this.getName())) return false;
-        
-        List<Type> parameterTypeList;
-        if( parameterTypes == null) {
-            parameterTypeList = Collections.emptyList();
-        }
-        else {
-            parameterTypeList = parameterTypes;
-        }
-        
-        if (parameterTypeList.size() != this.getParameters().size()) return false;
-        
-        for (int i = 0; i < parameters.size(); i++) {
-            if (!parameters.get(i).getType().equals(parameterTypes.get(i))) {
-                return false;
-            }
-        }
-        return (this.varArgs == varArg);
-    }
-
     public int hashCode() {
         int hashCode = getName().hashCode();
         if (returns != null) hashCode *= returns.hashCode();
         hashCode *= getParameters().size();
         return hashCode;
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#isPublic()
-     */
-    public boolean isPublic() {
-        return super.isPublic() || (getParentClass() != null ? getParentClass().isInterface() : false);
     }
 
     /* (non-Javadoc)
@@ -372,29 +278,6 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
         return Introspector.decapitalize(getName().substring(start));
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getTagsByName(java.lang.String, boolean)
-     */
-    public List<DocletTag> getTagsByName(String name, boolean inherited) {
-        JavaClass clazz = getParentClass();
-        List<Type> types = new LinkedList<Type>();
-        for (JavaParameter parameter : getParameters()) {
-            types.add(parameter.getType());
-        }
-        List<JavaMethod> methods = clazz.getMethodsBySignature(getName(), types, true);
-
-        List<DocletTag> result = new LinkedList<DocletTag>();
-        for (JavaMethod method : methods) {
-            List<DocletTag> tags = method.getTagsByName(name);
-            for (DocletTag tag : tags) {
-                if(!result.contains(tag)) {
-                    result.add(tag);
-                }
-            }
-        }
-        return result;
-    }
-
     public int compareTo(Object o) {
         return getDeclarationSignature(false).compareTo(((JavaMethod)o).getDeclarationSignature(false));
     }
@@ -410,17 +293,6 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
     	this.sourceCode = sourceCode;
     }
 
-	public void setTypeParameters(List<TypeVariable> typeParameters) {
-		this.typeParameters = typeParameters;
-	}
-	
-	/* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getTypeParameters()
-     */
-	public List<TypeVariable> getTypeParameters() {
-		return typeParameters;
-	}
-	
 	public String toString() {
 		StringBuffer result = new StringBuffer();
 		if(isPrivate()) {
@@ -501,44 +373,5 @@ public class DefaultJavaMethod extends AbstractInheritableJavaEntity implements 
     public Type getReturnType( boolean resolve )
     {
         return returns;
-    }
-    
-//    /**
-//     * 
-//     * @param resolve
-//     * @param callingClass
-//     * @return
-//     * @since 1.12
-//     */
-//    protected Type getReturnType ( boolean resolve, JavaClass callingClass) {
-//        Type result = null;
-//        if (this.getReturns() != null) {
-//            result =  this.getReturns().resolve( this.getParentClass(), callingClass );
-//            
-//            //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
-//            if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
-//            {
-//                result = new Type( "java.lang.Object" );
-//            }
-//        }
-//        return result;
-//    }
-    
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getParameterTypes()
-     */
-    public List<Type> getParameterTypes() {
-        return getParameterTypes( false );
-    }
-    
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getParameterTypes(boolean)
-     */
-    public List<Type> getParameterTypes( boolean resolve ) {
-        List<Type> result = new LinkedList<Type>();
-        for (JavaParameter parameter : this.getParameters()) {
-            result.add( parameter.getType() );
-        }
-        return result;
     }
 }

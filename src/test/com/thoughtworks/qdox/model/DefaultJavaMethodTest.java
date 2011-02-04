@@ -58,12 +58,12 @@ public class DefaultJavaMethodTest
 
     public void setExceptions( JavaMethod method, List<Type> exceptions )
     {
-        ((DefaultJavaMethod) method).setExceptions( exceptions );
+        ((AbstractBaseMethod) method).setExceptions( exceptions );
     }
 
     public void setComment( JavaMethod method, String comment )
     {
-        ((DefaultJavaMethod) method).setComment( comment );
+        ((AbstractBaseMethod) method).setComment( comment );
     }
 
     public void setConstructor( JavaMethod method, boolean isConstructor )
@@ -73,12 +73,12 @@ public class DefaultJavaMethodTest
 
     public void setName( JavaMethod method, String name )
     {
-        ((DefaultJavaMethod) method).setName( name );
+        ((AbstractBaseMethod) method).setName( name );
     }
 
     public void setModifiers( JavaMethod method, List<String> modifiers )
     {
-        ((DefaultJavaMethod) method).setModifiers( modifiers );
+        ((AbstractBaseMethod) method).setModifiers( modifiers );
     }
 
     public void setReturns( JavaMethod method, Type type )
@@ -95,12 +95,12 @@ public class DefaultJavaMethodTest
     public void addMethod( JavaClass clazz, JavaMethod method )
     {
         ((DefaultJavaClass) clazz).addMethod( method );
-        ((DefaultJavaMethod) method).setParentClass( clazz );
+        ((AbstractBaseMethod) method).setParentClass( clazz );
     }
 
     public void addParameter( JavaMethod method, JavaParameter parameter )
     {
-        ((DefaultJavaMethod) method).addParameter( parameter );
+        ((AbstractBaseMethod) method).addParameter( parameter );
         ((DefaultJavaParameter) parameter).setParentMethod( method );
     }
 

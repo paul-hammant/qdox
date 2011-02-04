@@ -98,12 +98,12 @@ public class DefaultJavaClassTest
     public void addMethod( JavaClass clazz, JavaMethod method )
     {
         ((DefaultJavaClass)clazz).addMethod( method );
-        ((DefaultJavaMethod) method).setParentClass( clazz );
+        ((AbstractBaseMethod) method).setParentClass( clazz );
     }
 
     public void addParameter( JavaMethod method, JavaParameter parameter )
     {
-        ((DefaultJavaMethod) method).addParameter( parameter );
+        ((AbstractBaseMethod) method).addParameter( parameter );
         ((DefaultJavaParameter) parameter).setParentMethod( method );
     }
 
@@ -120,7 +120,7 @@ public class DefaultJavaClassTest
 
     public void setComment( JavaMethod method, String comment )
     {
-        ((DefaultJavaMethod) method).setComment( comment );
+        ((AbstractBaseMethod) method).setComment( comment );
     }
 
     public void setEnum( JavaClass clazz, boolean isEnum )
@@ -160,7 +160,7 @@ public class DefaultJavaClassTest
 
     public void setName( JavaMethod method, String name )
     {
-        ((DefaultJavaMethod) method).setName( name );
+        ((AbstractBaseMethod) method).setName( name );
     }
 
     public void setPackage( JavaSource source, JavaPackage pckg )

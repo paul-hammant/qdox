@@ -25,7 +25,7 @@ public class DefaultJavaParameterTest extends JavaParameterTest
 
     public void addParameter( JavaMethod method, JavaParameter parameter )
     {
-        ((DefaultJavaMethod) method).addParameter( parameter );
+        ((AbstractBaseMethod) method).addParameter( parameter );
         ((DefaultJavaParameter) parameter).setParentMethod( method );
     }
 

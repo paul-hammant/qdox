@@ -21,7 +21,7 @@ package com.thoughtworks.qdox.model;
 
 import java.util.List;
 
-public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel
+public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel, JavaGenericDeclaration
 {
 
     /**

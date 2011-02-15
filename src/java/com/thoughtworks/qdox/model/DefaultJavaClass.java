@@ -55,8 +55,6 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     //sourceless class can use this property
 	private JavaPackage javaPackage;
 	
-	private JavaSource source;
-
     protected DefaultJavaClass() {
     }
     
@@ -66,7 +64,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
 
     public DefaultJavaClass( JavaSource source )
     {
-        this.source = source;
+        setSource(source);
     }
 
     /* (non-Javadoc)
@@ -105,9 +103,9 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public Type getSuperClass() {
         if(OBJECT == null) {
-            if(source.getJavaClassLibrary() != null) {
-                OBJECT = source.getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
-                ENUM = source.getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
+            if(getSource().getJavaClassLibrary() != null) {
+                OBJECT = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
+                ENUM = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
             }
         }
         
@@ -128,9 +126,9 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     public JavaClass getSuperJavaClass() {
         JavaClass result = null;
         if(OBJECT == null) {
-            if(source.getJavaClassLibrary() != null) {
-                OBJECT = source.getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
-                ENUM = source.getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
+            if(getSource().getJavaClassLibrary() != null) {
+                OBJECT = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
+                ENUM = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
             }
         }
         
@@ -173,7 +171,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public String getCodeBlock()
     {
-        return getSource().getModelWriter().writeClass( this ).toString();
+        return getModelWriter().writeClass( this ).toString();
     }
     
     public void setInterface(boolean interfce) {
@@ -227,16 +225,11 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     	this.javaPackage = javaPackage;
     }
 
-    public void setSource( JavaSource source )
-    {
-        this.source = source;
-    }
-    
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getParentSource()
      */
     public JavaSource getParentSource() {
-        return (getParentClass() != null ? getParentClass().getParentSource() : source);
+        return (getParentClass() != null ? getParentClass().getParentSource() : super.getSource());
     }
     
     /* (non-Javadoc)
@@ -643,7 +636,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public List<JavaClass> getDerivedClasses() {
         List<JavaClass> result = new LinkedList<JavaClass>();
-        for (JavaClass clazz : source.getJavaClassLibrary().getJavaClasses()) {
+        for (JavaClass clazz : getSource().getJavaClassLibrary().getJavaClasses()) {
             if (clazz.isA(this) && !(clazz == this)) {
                 result.add(clazz);
             }
@@ -707,6 +700,6 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public ClassLibrary getJavaClassLibrary()
     {
-        return source.getJavaClassLibrary();
+        return getSource().getJavaClassLibrary();
     }
 }

@@ -38,6 +38,10 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Seri
         this.varArgs = varArgs;
     }
 
+    public String getCodeBlock() {
+    	return getModelWriter().writeParameter(this).toString();
+    }
+    
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaParameter#getName()
      */

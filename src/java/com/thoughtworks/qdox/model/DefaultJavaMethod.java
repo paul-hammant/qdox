@@ -76,7 +76,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
      */
     public String getCodeBlock()
     {
-        return getSource().getModelWriter().writeMethod( this ).toString();
+        return getModelWriter().writeMethod( this ).toString();
     }
 
     /**

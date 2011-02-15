@@ -52,7 +52,7 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
      */
     public String getCodeBlock()
     {
-        return getSource().getModelWriter().writeField( this ).toString();
+        return getModelWriter().writeField( this ).toString();
     }
 
     public void setType(Type type) {

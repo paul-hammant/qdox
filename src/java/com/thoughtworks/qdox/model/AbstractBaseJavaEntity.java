@@ -24,20 +24,15 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AbstractBaseJavaEntity implements Serializable {
+public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implements Serializable {
 
 	private String name;
 	private List<Annotation> annotations = Collections.emptyList();
-	private int lineNumber = -1;
 	protected String comment;
 	protected List<DocletTag> tags = new LinkedList<DocletTag>();
 
 	public AbstractBaseJavaEntity() {
 		super();
-	}
-
-	public int getLineNumber() {
-		return lineNumber;
 	}
 
 	public String getName() {
@@ -54,10 +49,6 @@ public class AbstractBaseJavaEntity implements Serializable {
 
 	public void setAnnotations(List<Annotation> annotations) {
 	    this.annotations = annotations;
-	}
-
-	public void setLineNumber(int lineNumber) {
-	    this.lineNumber = lineNumber;
 	}
 
 	/**

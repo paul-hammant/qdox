@@ -23,12 +23,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaModel;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
@@ -41,13 +42,7 @@ public class DefaultModelWriter implements ModelWriter
     public ModelWriter writeSource( JavaSource source )
     {
         // package statement
-        if (source.getPackage() != null) {
-            buffer.write("package ");
-            buffer.write(source.getPackageName());
-            buffer.write(';');
-            buffer.newline();
-            buffer.newline();
-        }
+    	writePackage(source.getPackage());
 
         // import statement
         for (String imprt : source.getImports()) {
@@ -67,6 +62,18 @@ public class DefaultModelWriter implements ModelWriter
             if (iter.hasNext()) { 
                 buffer.newline(); 
             }
+        }
+        return this;
+    }
+    
+    public ModelWriter writePackage(JavaPackage pckg) {
+        if (pckg != null) {
+        	commentHeader(pckg);
+            buffer.write("package ");
+            buffer.write(pckg.getName());
+            buffer.write(';');
+            buffer.newline();
+            buffer.newline();
         }
         return this;
     }
@@ -249,10 +256,18 @@ public class DefaultModelWriter implements ModelWriter
         }
     }
     
+    public ModelWriter writeParameter(JavaParameter parameter) {
+    	commentHeader(parameter);
+    	buffer.write( parameter.getType().toString() );
+        if ( parameter.isVarArgs() )
+        {
+            buffer.write( "..." );
+        }
+    	return this;
+    }
+    
     private void commentHeader(JavaAnnotatedElement entity) {
-        if (entity.getComment() == null && (entity.getTags().size() == 0)) {
-            return;
-        } else {
+        if (entity.getComment() != null || (entity.getTags().size() > 0)) {
             buffer.write("/**");
             buffer.newline();
 
@@ -282,6 +297,12 @@ public class DefaultModelWriter implements ModelWriter
 
             buffer.write(" */");
             buffer.newline();
+        }
+        if(entity.getAnnotations() != null) {
+        	for(Annotation annotation : entity.getAnnotations()) {
+        		buffer.write(annotation.toString());
+        		buffer.newline();
+        	}
         }
     }
     public String toString()

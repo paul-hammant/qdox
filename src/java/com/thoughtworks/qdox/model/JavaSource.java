@@ -33,13 +33,6 @@ public interface JavaSource extends JavaClassParent
 {
 
     /**
-     * 
-     * @return
-     * @since 2.0
-     */
-    public ModelWriter getModelWriter();
-
-    /**
      * @since 1.4
      */
     public URL getURL();

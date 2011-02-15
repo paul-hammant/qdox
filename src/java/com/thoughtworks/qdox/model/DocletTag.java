@@ -66,6 +66,6 @@ public interface DocletTag extends Serializable {
      * @return the language element to which this tag applies
      * @since 1.4
      */
-    AbstractBaseJavaEntity getContext();
+    AbstractJavaModel getContext();
 
 }

@@ -32,10 +32,10 @@ public class DefaultDocletTag implements DocletTag {
 
     private List<String> parameters;
     private Map<String, String> namedParameters;
-    private AbstractBaseJavaEntity context;
+    private AbstractJavaModel context;
 
     public DefaultDocletTag(String name, String value, 
-                            AbstractBaseJavaEntity context, 
+                            AbstractJavaModel context, 
                             int lineNumber) 
     {
         this.name = name;
@@ -74,7 +74,7 @@ public class DefaultDocletTag implements DocletTag {
         return (String) getNamedParameterMap().get(key);
     }
 
-    public final AbstractBaseJavaEntity getContext() {
+    public final AbstractJavaModel getContext() {
         return context;
     }
 

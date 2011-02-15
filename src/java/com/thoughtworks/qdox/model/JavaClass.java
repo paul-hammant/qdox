@@ -70,8 +70,6 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
 
     public JavaSource getParentSource();
 
-    public JavaSource getSource();
-
     public JavaPackage getPackage();
 
     public JavaClassParent getParent();

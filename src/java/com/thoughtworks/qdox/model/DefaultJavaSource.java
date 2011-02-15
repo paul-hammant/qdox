@@ -51,7 +51,6 @@ public class DefaultJavaSource implements Serializable, JavaSource {
     }
 
     private final com.thoughtworks.qdox.library.ClassLibrary classLibrary;
-    
     private ModelWriterFactory modelWriterFactory;
     
     private JavaPackage packge;
@@ -64,31 +63,6 @@ public class DefaultJavaSource implements Serializable, JavaSource {
         this.classLibrary = classLibrary;
     }
 
-    /**
-     * 
-     * @param modelWriterFactory
-     * @since 2.0
-     */
-    public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
-    {
-        this.modelWriterFactory = modelWriterFactory;
-    }
-    
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getModelWriter()
-     */
-    public ModelWriter getModelWriter()
-    {
-        ModelWriter result; 
-        if (modelWriterFactory != null) {
-            result = modelWriterFactory.newInstance();
-        }
-        else {
-            result = new DefaultModelWriter();
-        }
-        return result;
-    }
-    
     /**
      * @since 1.4
      */
@@ -362,6 +336,31 @@ public class DefaultJavaSource implements Serializable, JavaSource {
     public String getPackageName()
     {
         return (packge == null ? "" : packge.getName());
+    }
+    
+    /**
+     * 
+     * @param modelWriterFactory
+     * @since 2.0
+     */
+    public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
+    {
+        this.modelWriterFactory = modelWriterFactory;
+    }
+    
+    /* (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaSource#getModelWriter()
+     */
+    public ModelWriter getModelWriter()
+    {
+        ModelWriter result; 
+        if (modelWriterFactory != null) {
+            result = modelWriterFactory.newInstance();
+        }
+        else {
+            result = new DefaultModelWriter();
+        }
+        return result;
     }
 
 }

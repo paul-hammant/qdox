@@ -30,7 +30,6 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 
     private com.thoughtworks.qdox.library.ClassLibrary classLibrary;
 	private String name;
-	private int lineNumber = -1;
 	private List<JavaClass> classes = new LinkedList<JavaClass>();
 
     public DefaultJavaPackage() {
@@ -48,12 +47,8 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 		this.name = name;
 	}
 
-	public int getLineNumber() {
-		return lineNumber;
-	}
-
-	public void setLineNumber(int lineNumber) {
-		this.lineNumber = lineNumber;
+	public String getCodeBlock() {
+		return getModelWriter().writePackage(this).toString();
 	}
 	
 	public void setClassLibrary( com.thoughtworks.qdox.library.ClassLibrary classLibrary )

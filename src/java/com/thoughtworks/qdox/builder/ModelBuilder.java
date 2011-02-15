@@ -61,6 +61,7 @@ public class ModelBuilder implements Builder {
     private String lastComment;
     private List<TagDef> lastTagSet;
     private DocletTagFactory docletTagFactory;
+    private ModelWriterFactory modelWriterFactory;
 
     public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
@@ -70,13 +71,15 @@ public class ModelBuilder implements Builder {
     
     public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
     {
-        this.source.setModelWriterFactory( modelWriterFactory );
+        this.modelWriterFactory = modelWriterFactory;
+        source.setModelWriterFactory(modelWriterFactory);
     }
 
     public void addPackage(PackageDef packageDef) {
         DefaultJavaPackage jPackage = new DefaultJavaPackage(packageDef.name);
         jPackage.setClassLibrary( source.getJavaClassLibrary());
         jPackage.setLineNumber(packageDef.lineNumber);
+        jPackage.setModelWriterFactory(modelWriterFactory);
         addJavaDoc(jPackage);
     	setAnnotations(jPackage);
         source.setPackage(jPackage);
@@ -98,6 +101,7 @@ public class ModelBuilder implements Builder {
     public void beginClass(ClassDef def) {
         DefaultJavaClass newClass = new DefaultJavaClass(source);
         newClass.setLineNumber(def.lineNumber);
+        newClass.setModelWriterFactory(modelWriterFactory);
 
         // basic details
         newClass.setName(def.name);
@@ -151,6 +155,7 @@ public class ModelBuilder implements Builder {
         if(!classStack.isEmpty()) {
             classStack.getFirst().addClass( newClass );
             newClass.setParentClass( classStack.getFirst() );
+            
         }
         else {
             source.addClass( newClass );
@@ -224,6 +229,7 @@ public class ModelBuilder implements Builder {
     public void endMethod(MethodDef def) {
         currentMethod.setParentClass(classStack.getFirst());
         currentMethod.setLineNumber(def.lineNumber);
+        currentMethod.setModelWriterFactory(modelWriterFactory);
 
         // basic details
         currentMethod.setName(def.name);
@@ -278,6 +284,7 @@ public class ModelBuilder implements Builder {
         DefaultJavaField currentField = new DefaultJavaField();
         currentField.setParentClass(classStack.getFirst());
         currentField.setLineNumber(def.lineNumber);
+        currentField.setModelWriterFactory(modelWriterFactory);
 
         currentField.setName(def.name);
         currentField.setType(createType(def.type, def.dimensions));
@@ -302,6 +309,7 @@ public class ModelBuilder implements Builder {
 	public void addParameter(FieldDef fieldDef) {
 	    DefaultJavaParameter jParam = new DefaultJavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name, fieldDef.isVarArgs);
         jParam.setParentMethod( currentMethod );
+        jParam.setModelWriterFactory(modelWriterFactory);
         addJavaDoc( jParam );
         setAnnotations( jParam );
         currentMethod.addParameter( jParam );

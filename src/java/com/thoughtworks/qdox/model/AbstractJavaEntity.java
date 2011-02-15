@@ -134,13 +134,6 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         return modifiers.contains(modifier);
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaModel#getSource()
-     */
-    public JavaSource getSource() { 
-        return parentClass.getParentSource(); 
-    }
-
     public void setParentClass( JavaClass parentClass )
     {
         this.parentClass = parentClass;

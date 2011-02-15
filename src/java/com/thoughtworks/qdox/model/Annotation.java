@@ -50,10 +50,10 @@ public class Annotation implements AnnotationValue, Serializable
      */
     private final Map<String, Object> namedParameters = new LinkedHashMap<String, Object>();
 
-    private AbstractBaseJavaEntity context;
+    private AbstractJavaModel context;
 
     public Annotation(Type type,
-            AbstractBaseJavaEntity context,
+            AbstractJavaModel context,
             Map<String, Object> namedParameters,
             int lineNumber)
 	{
@@ -104,7 +104,7 @@ public class Annotation implements AnnotationValue, Serializable
     	return namedParameters;
     }
 
-    public final AbstractBaseJavaEntity getContext() {
+    public final AbstractJavaModel getContext() {
         return context;
     }
 
@@ -128,7 +128,7 @@ public class Annotation implements AnnotationValue, Serializable
         return properties.get( name );
     }
 
-    public void setContext( AbstractBaseJavaEntity context ) {
+    public void setContext( AbstractJavaModel context ) {
         this.context = context;
     }
 

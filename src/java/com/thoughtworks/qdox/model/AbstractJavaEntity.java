@@ -37,42 +37,6 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         return modifiers;
     }
 
-    void commentHeader(IndentBuffer buffer) {
-        if (getComment() == null && tags.isEmpty()) {
-            return;
-        } else {
-            buffer.write("/**");
-            buffer.newline();
-
-            if (getComment() != null && getComment().length() > 0) {
-                buffer.write(" * ");
-                
-                buffer.write(getComment().replaceAll("\n", "\n * "));
-                
-                buffer.newline();
-            }
-
-            if (!tags.isEmpty()) {
-                if (getComment() != null && getComment().length() > 0) {
-                    buffer.write(" *");
-                    buffer.newline();
-                }
-                for (DocletTag docletTag : tags) {
-                    buffer.write(" * @");
-                    buffer.write(docletTag.getName());
-                    if (docletTag.getValue().length() > 0) {
-                        buffer.write(' ');
-                        buffer.write(docletTag.getValue());
-                    }
-                    buffer.newline();
-                }
-            }
-
-            buffer.write(" */");
-            buffer.newline();
-        }
-    }
-
     public void setModifiers(List<String> modifiers) {
         this.modifiers = modifiers;
     }

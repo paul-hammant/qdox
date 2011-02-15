@@ -266,7 +266,7 @@ public class DefaultModelWriter implements ModelWriter
     	return this;
     }
     
-    private void commentHeader(JavaAnnotatedElement entity) {
+    protected void commentHeader(JavaAnnotatedElement entity) {
         if (entity.getComment() != null || (entity.getTags().size() > 0)) {
             buffer.write("/**");
             buffer.newline();

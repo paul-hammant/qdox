@@ -1276,7 +1276,7 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        mth.exceptions.add("IOException");
+        mth.exceptions.add(new TypeDef("IOException"));
         builder.addExpectedAddMethodValues(mth);
 
         // execute
@@ -1311,8 +1311,8 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        mth.exceptions.add("IOException");
-        mth.exceptions.add("MyException");
+        mth.exceptions.add(new TypeDef("IOException"));
+        mth.exceptions.add(new TypeDef("MyException"));
         builder.addExpectedAddMethodValues(mth);
 
         // execute
@@ -1349,9 +1349,9 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        mth.exceptions.add("IOException");
-        mth.exceptions.add("MyException");
-        mth.exceptions.add("AnotherException");
+        mth.exceptions.add(new TypeDef("IOException"));
+        mth.exceptions.add(new TypeDef("MyException"));
+        mth.exceptions.add(new TypeDef("AnotherException"));
         builder.addExpectedAddMethodValues(mth);
 
         // execute
@@ -1388,7 +1388,7 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        mth.exceptions.add("java.io.IOException");
+        mth.exceptions.add(new TypeDef("java.io.IOException"));
         builder.addExpectedAddMethodValues(mth);
 
         // execute
@@ -1431,8 +1431,8 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        mth.exceptions.add("java.io.IOException");
-        mth.exceptions.add("java.lang.RuntimeException");
+        mth.exceptions.add(new TypeDef("java.io.IOException"));
+        mth.exceptions.add(new TypeDef("java.lang.RuntimeException"));
         builder.addExpectedAddMethodValues(mth);
 
         // execute
@@ -1580,7 +1580,7 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
-        mth.exceptions.add("SomeException");
+        mth.exceptions.add(new TypeDef("SomeException"));
 
         builder.addExpectedAddMethodValues(mth);
 
@@ -1619,8 +1619,8 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
-        mth.exceptions.add("SomeException");
-        mth.exceptions.add("java.io.IOException");
+        mth.exceptions.add(new TypeDef("SomeException"));
+        mth.exceptions.add(new TypeDef("java.io.IOException"));
 
         builder.addExpectedAddMethodValues(mth);
 

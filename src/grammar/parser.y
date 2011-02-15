@@ -561,8 +561,8 @@ methoddef: PARENOPEN opt_params PARENCLOSE;
 opt_exceptions: | THROWS exceptionlist;
 
 exceptionlist: 
-    fullidentifier { mth.exceptions.add($1); } | 
-    exceptionlist COMMA fullidentifier { mth.exceptions.add($3); };
+    classtype { mth.exceptions.add($1); } | 
+    exceptionlist COMMA classtype { mth.exceptions.add($3); };
 
 opt_params: | paramlist;
 

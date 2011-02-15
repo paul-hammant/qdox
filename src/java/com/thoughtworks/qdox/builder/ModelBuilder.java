@@ -248,7 +248,7 @@ public class ModelBuilder implements Builder {
         // exceptions
         {
             List<Type> exceptions = new LinkedList<Type>();
-            for (String type : def.exceptions) {
+            for (TypeDef type : def.exceptions) {
                 exceptions.add(createType(type, 0));
             }
             currentMethod.setExceptions(exceptions);

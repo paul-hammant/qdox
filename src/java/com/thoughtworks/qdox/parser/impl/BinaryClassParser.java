@@ -157,7 +157,7 @@ public class BinaryClassParser
         }
         for (int j = 0; j < exceptions.length; j++) {
             Class<?> exception = exceptions[j];
-            methodDef.exceptions.add(exception.getName());
+            methodDef.exceptions.add(getTypeDef(exception));
         }
         binaryBuilder.addMethod(methodDef);
         for (int j = 0; j < parameterTypes.length; j++) {

@@ -428,8 +428,8 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
 
-        mth.exceptions.add("RuntimeException");
-        mth.exceptions.add("java.io.IOException");
+        mth.exceptions.add(new TypeDef("RuntimeException"));
+        mth.exceptions.add(new TypeDef("java.io.IOException"));
 
         builder.addMethod(mth);
         builder.endClass();

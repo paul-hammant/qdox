@@ -31,7 +31,7 @@ public class MethodDef extends LocatedDef {
     public TypeDef returnType;
     public Set<String> modifiers = new HashSet<String>();
     public List<TypeVariableDef> params = new LinkedList<TypeVariableDef>();
-    public Set<String> exceptions = new LinkedHashSet<String>();
+    public Set<TypeDef> exceptions = new LinkedHashSet<TypeDef>();
     public boolean constructor = false;
     public int dimensions;
     public String body;

@@ -28,6 +28,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
 
     private List<String> modifiers = new LinkedList<String>();
     private JavaClass parentClass;
+	private String name;
     /**
      * Return list of modifiers as Strings.
      * (public, private, protected, final, abstract, static)
@@ -143,4 +144,12 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     {
         return parentClass;
     }
+
+	public String getName() {
+	    return name;
+	}
+
+	public void setName(String name) {
+	    this.name = name;
+	}
 }

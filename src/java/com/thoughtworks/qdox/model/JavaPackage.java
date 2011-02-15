@@ -21,7 +21,7 @@ package com.thoughtworks.qdox.model;
 
 import java.util.List;
 
-public interface JavaPackage extends JavaAnnotatedElement
+public interface JavaPackage extends JavaModel, JavaAnnotatedElement
 {
 
     /**
@@ -36,7 +36,5 @@ public interface JavaPackage extends JavaAnnotatedElement
     public List<JavaPackage> getSubPackages();
 
     public String getName();
-
-    public int getLineNumber();
 
 }

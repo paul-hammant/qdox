@@ -42,6 +42,10 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Seri
     	return getModelWriter().writeParameter(this).toString();
     }
     
+	public void setName(String name) {
+	    this.name = name;
+	}
+
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaParameter#getName()
      */
@@ -118,6 +122,4 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Seri
 	public String getResolvedGenericValue() {
 		return type.getResolvedGenericValue(getParentMethod().getTypeParameters());
 	}
-	
-
 }

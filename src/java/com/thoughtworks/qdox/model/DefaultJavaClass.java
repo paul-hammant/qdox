@@ -35,9 +35,12 @@ import com.thoughtworks.qdox.library.ClassLibrary;
  */
 public class DefaultJavaClass extends AbstractInheritableJavaEntity implements JavaClass {
 
-    private static Type OBJECT;
-    private static Type ENUM;
+    private static Type OBJECT_TYPE;
+    private static Type ENUM_TYPE;
     private static Type ANNOTATION = new Type("java.lang.annotation.Annotation");
+    
+    private static JavaClass OBJECT_JAVACLASS;
+    private static JavaClass ENUM_JAVACLASS;
 
     private List<JavaMethod> methods = new LinkedList<JavaMethod>();
     private List<JavaField> fields = new LinkedList<JavaField>();
@@ -102,19 +105,19 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      * @see com.thoughtworks.qdox.model.JavaClass#getSuperClass()
      */
     public Type getSuperClass() {
-        if(OBJECT == null) {
+        if(OBJECT_TYPE == null) {
             if(getSource().getJavaClassLibrary() != null) {
-                OBJECT = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
-                ENUM = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
+                OBJECT_TYPE = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
+                ENUM_TYPE = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
             }
         }
         
-        boolean iAmJavaLangObject = OBJECT.equals(asType());
+        boolean iAmJavaLangObject = OBJECT_TYPE.equals(asType());
 
         if (isEnum) {
-            return ENUM;
+            return ENUM_TYPE;
         } else if (!interfce && !isAnnotation && (superClass == null) && !iAmJavaLangObject) {
-            return OBJECT;
+            return OBJECT_TYPE;
         }
 
         return superClass;
@@ -125,18 +128,19 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public JavaClass getSuperJavaClass() {
         JavaClass result = null;
-        if(OBJECT == null) {
+        if(OBJECT_JAVACLASS == null) {
             if(getSource().getJavaClassLibrary() != null) {
-                OBJECT = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
-                ENUM = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
+                OBJECT_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" );
+                ENUM_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" );
             }
         }
         
-        boolean iAmJavaLangObject = OBJECT.equals(asType());
+        boolean iAmJavaLangObject = OBJECT_JAVACLASS.equals(this);
+        
         if (isEnum) {
-            result = ENUM.getJavaClass();
+            result = ENUM_JAVACLASS;
         } else if (!interfce && !isAnnotation && (superClass == null) && !iAmJavaLangObject) {
-            result = OBJECT.getJavaClass();
+            result = OBJECT_JAVACLASS;
         }
         else if(superClass != null) {
             result = superClass.getJavaClass();
@@ -693,6 +697,23 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         	sb.append(getFullyQualifiedName());
     	}
     	return sb.toString();
+    }
+
+    //ideally this shouldn't be required, but we must as long as Types can be created without classLibrary
+    @Override
+    public boolean equals(Object obj) {
+    	if(obj == null) {
+    		return false;
+    	}
+    	if(this == obj) {
+    		return true;
+    	}
+    	if(!(obj instanceof JavaClass)) {
+    		return false;
+    	}
+    	JavaClass clazz = (JavaClass) obj;
+    	return this.getFullyQualifiedName().equals(clazz.getFullyQualifiedName());
+    	
     }
 
     /* (non-Javadoc)

@@ -19,35 +19,40 @@ package com.thoughtworks.qdox.parser.structs;
  * under the License.
  */
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
 
 public class AnnoDef extends LocatedDef
 {
-    public String name = "";
-    public Map args = new HashMap();
-    public AnnoDef tempAnno = null;	// holds an annotation to construct nested values
+    public TypeDef typeDef;
+    public final Map<String, AnnotationValue> args = new LinkedHashMap<String, AnnotationValue>();
 
     public boolean equals(Object obj) {
         AnnoDef annoDef = (AnnoDef) obj;
-        return annoDef.name.equals(name) && annoDef.args.equals(args);
+        return annoDef.typeDef.equals(typeDef) && annoDef.args.equals(args);
     }
 
     public int hashCode() {
-        return name.hashCode() + args.hashCode();
+        return typeDef.hashCode() + args.hashCode();
     }
 
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append('@');
-        result.append(name);
-        result.append('(');
+        result.append(typeDef.name);
         if( !args.isEmpty() ) {
-            for(Iterator i = args.entrySet().iterator(); i.hasNext();) result.append( i.next() + ",");
-            result.deleteCharAt( result.length()-1 );
+        	result.append('(');
+            for(Iterator<Map.Entry<String, AnnotationValue>> i = args.entrySet().iterator(); i.hasNext();) {
+            	result.append( i.next());
+            	if(i.hasNext()) {
+            		result.append(',');
+            	}
+            } 
+            result.append(')');
         }
-        result.append(')');
         return result.toString();
     }
 }

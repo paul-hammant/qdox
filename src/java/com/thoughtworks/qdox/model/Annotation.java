@@ -25,8 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.thoughtworks.qdox.model.annotation.AnnotationValue;
-import com.thoughtworks.qdox.model.annotation.AnnotationVisitor;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 /**
  * 

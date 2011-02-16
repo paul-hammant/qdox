@@ -9,12 +9,12 @@ import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
-import com.thoughtworks.qdox.model.annotation.AnnotationAdd;
-import com.thoughtworks.qdox.model.annotation.AnnotationConstant;
-import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
-import com.thoughtworks.qdox.model.annotation.AnnotationTypeRef;
-import com.thoughtworks.qdox.model.annotation.AnnotationValue;
-import com.thoughtworks.qdox.model.annotation.AnnotationValueList;
+import com.thoughtworks.qdox.parser.expression.AnnotationAdd;
+import com.thoughtworks.qdox.parser.expression.AnnotationConstant;
+import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
+import com.thoughtworks.qdox.parser.expression.AnnotationTypeRef;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationValueList;
 
 public class AnnotationsModelTest extends TestCase {
 

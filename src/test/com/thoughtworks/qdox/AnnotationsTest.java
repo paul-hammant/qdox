@@ -9,7 +9,7 @@ import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
+import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
 
 public class AnnotationsTest extends TestCase {
 

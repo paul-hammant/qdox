@@ -14,8 +14,8 @@ import org.junit.runners.Parameterized.Parameters;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.annotation.AnnotationValue;
-import com.thoughtworks.qdox.model.annotation.EvaluatingVisitor;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.EvaluatingVisitor;
 
 @RunWith(Parameterized.class)
 public class AnnotationExpressionTest {

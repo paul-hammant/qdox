@@ -20,9 +20,9 @@
 
 import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.parser.*;
+import com.thoughtworks.qdox.parser.expression.*;
 import com.thoughtworks.qdox.parser.structs.*;
-import com.thoughtworks.qdox.model.*;
-import com.thoughtworks.qdox.model.annotation.*;
+import com.thoughtworks.qdox.model.Annotation; //@todo remove
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;

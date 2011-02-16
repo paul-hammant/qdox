@@ -100,7 +100,11 @@ public class AnnotationExpressionTest {
 			    // testCastExpression
 			    {"(short)1", new Short( (short) 1 )},
 			    {"(long)(short)1", new Long( 1 )},
-			    {"(int)((short)1 + (long)3)", new Integer( 4 )}
+			    {"(int)((short)1 + (long)3)", new Integer( 4 )},
+			    
+			    //test Array-valued single-element annotation
+			    { "{\"Children\", \"Unscrupulous dentists\"}", Arrays.asList(new String[]{"Children", "Unscrupulous dentists"})}
+
 		});
 	}
 

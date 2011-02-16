@@ -22,6 +22,7 @@ package com.thoughtworks.qdox.io;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.DocletTag;
@@ -33,6 +34,7 @@ import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
 
 
 public class DefaultModelWriter implements ModelWriter
@@ -256,6 +258,29 @@ public class DefaultModelWriter implements ModelWriter
         }
     }
     
+    public ModelWriter writeAnnotation(Annotation annotation) {
+    	buffer.write('@');
+    	buffer.write(annotation.getType().getFullyQualifiedName());
+    	if(!annotation.getPropertyMap().isEmpty()) {
+    		buffer.indent();
+        	buffer.write('(');
+        	Iterator<Map.Entry<String, AnnotationValue>> iterator = annotation.getPropertyMap().entrySet().iterator();
+        	while(iterator.hasNext()) {
+        		Map.Entry<String, AnnotationValue> entry = iterator.next();
+        		buffer.write(entry.getKey());
+        		buffer.write('=');
+        		buffer.write(entry.getValue().toString());
+        		if(iterator.hasNext()) {
+        			buffer.write(',');
+        			buffer.newline();
+        		}
+        	}
+        	buffer.write(')');
+        	buffer.deindent();
+    	}
+    	return this;
+    }
+    
     public ModelWriter writeParameter(JavaParameter parameter) {
     	commentHeader(parameter);
     	buffer.write( parameter.getType().toString() );
@@ -300,8 +325,7 @@ public class DefaultModelWriter implements ModelWriter
         }
         if(entity.getAnnotations() != null) {
         	for(Annotation annotation : entity.getAnnotations()) {
-        		buffer.write(annotation.toString());
-        		buffer.newline();
+        		writeAnnotation(annotation);
         	}
         }
     }

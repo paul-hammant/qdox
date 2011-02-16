@@ -173,11 +173,6 @@ public class ModelBuilder implements Builder {
         return createType(new TypeDef(typeName), dimensions);
     }
     
-    public Type createType(TypeDef typeDef) {
-    	return createType(typeDef, 0);
-    }
-    
-    
     /**
      * this one is specific for those cases where dimensions can be part of both the type and identifier
      * i.e. private String[] matrix[]; //field
@@ -271,13 +266,6 @@ public class ModelBuilder implements Builder {
     	}
     	return TypeVariable.createUnresolved(typeVariableDef, classStack.isEmpty() ? source : classStack.getFirst());
 
-	}
-
-	public TypeVariable createTypeVariable(String name, List<TypeDef> typeParams) {
-    	if( name == null || name.equals( "" ) )
-            return null;
-    	
-        return createTypeVariable(new TypeVariableDef(name, typeParams));
 	}
 
 	public void addField(FieldDef def) {

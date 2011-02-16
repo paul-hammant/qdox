@@ -58,6 +58,4 @@ public interface Builder {
      * @deprecated
      */
     Type createType(String name, int dimensions);
-    
-    Type createType(TypeDef name);
 }

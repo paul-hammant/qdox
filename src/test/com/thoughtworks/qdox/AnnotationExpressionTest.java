@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.parser.expression.AnnotationValue;
@@ -118,7 +118,7 @@ public class AnnotationExpressionTest {
     protected void assertAnnotationValue( Object expected ) {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
+        JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 

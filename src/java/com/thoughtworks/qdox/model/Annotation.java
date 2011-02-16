@@ -32,7 +32,7 @@ import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
  * 
  * @author Eric Redmond
  */
-public class Annotation implements AnnotationValue, Serializable
+public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
 {
     private final Type type;
     private final int lineNumber;
@@ -81,9 +81,9 @@ public class Annotation implements AnnotationValue, Serializable
         namedParameters.put( name, value.getParameterValue() );
     }
 
-    /**
-     * @return the annotation type
-     */
+    /* (non-Javadoc)
+	 * @see com.thoughtworks.qdox.model.JavaAnnotation#getType()
+	 */
     public Type getType() {
     	return type;
     }
@@ -120,10 +120,16 @@ public class Annotation implements AnnotationValue, Serializable
         return this;
     }
     
+    /* (non-Javadoc)
+	 * @see com.thoughtworks.qdox.model.JavaAnnotation#getPropertyMap()
+	 */
     public Map<String, AnnotationValue> getPropertyMap() {
         return properties;
     }
     
+    /* (non-Javadoc)
+	 * @see com.thoughtworks.qdox.model.JavaAnnotation#getProperty(java.lang.String)
+	 */
     public AnnotationValue getProperty(String name) {
         return properties.get( name );
     }

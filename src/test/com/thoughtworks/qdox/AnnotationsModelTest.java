@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
@@ -27,11 +28,11 @@ public class AnnotationsModelTest extends TestCase {
         builder.setDebugParser( true );
     }
 
-    protected Annotation checkClassAnnotation( String source ) {
+    protected JavaAnnotation checkClassAnnotation( String source ) {
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
+        JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
 
         return annotation;
@@ -92,7 +93,7 @@ public class AnnotationsModelTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
+        JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 5, annotation.getPropertyMap().size() );
 
@@ -117,7 +118,7 @@ public class AnnotationsModelTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
+        JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -125,7 +126,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Inner Annotations", 2, list.getValueList().size() );
 
         for( ListIterator<AnnotationValue> i = list.getValueList().listIterator(); i.hasNext(); ) {
-            Annotation inner = (Annotation) i.next();
+            JavaAnnotation inner = (JavaAnnotation) i.next();
             assertEquals( "Inner " + i.previousIndex(), "Inner", inner.getType().getValue() );
         }
     }
@@ -135,7 +136,7 @@ public class AnnotationsModelTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
+        JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -149,7 +150,7 @@ public class AnnotationsModelTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
+        JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -163,7 +164,7 @@ public class AnnotationsModelTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
+        JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -178,7 +179,7 @@ public class AnnotationsModelTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
+        JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -192,7 +193,7 @@ public class AnnotationsModelTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
-        Annotation annotation = clazz.getAnnotations().get(0);
+        JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -230,7 +231,7 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName("Foo");
         assertEquals("Foo", clazz.getName());
         JavaMethod mth = clazz.getMethods().get(0);
-        Annotation paramAnn = mth.getParameterByName("blah").getAnnotations().get(0);
+        JavaAnnotation paramAnn = mth.getParameterByName("blah").getAnnotations().get(0);
         assertEquals("@Y(value=1)", paramAnn.toString());
     }
 

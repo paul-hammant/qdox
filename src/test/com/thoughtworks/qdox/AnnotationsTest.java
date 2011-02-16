@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.Type;
@@ -240,7 +240,7 @@ public class AnnotationsTest extends TestCase {
         builder.addSource( new StringReader( source ) );
         JavaMethod jMethod = builder.getClasses()[0].getMethods().get(0);
         assertEquals( "NativeAccessible", jMethod.getAnnotations().get(0).getType().getValue() );
-        Annotation annotation = jMethod.getParameters().get(1).getAnnotations().get(0);
+        JavaAnnotation annotation = jMethod.getParameters().get(1).getAnnotations().get(0);
         assertEquals( "ParamInfo", annotation.getType().getValue() );
         assertEquals( "ParamInfo.Direction.OUT", annotation.getProperty( "direction" ).getParameterValue() );
     }

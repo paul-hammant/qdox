@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 
@@ -38,7 +39,7 @@ import com.thoughtworks.qdox.model.JavaField;
  */
 public abstract class EvaluatingVisitor implements AnnotationVisitor {
 
-    public Object getValue( Annotation annotation, String property ) {
+    public Object getValue( JavaAnnotation annotation, String property ) {
         Object result = null;
         AnnotationValue value = annotation.getProperty( property );
 
@@ -49,7 +50,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public List<?> getListValue( Annotation annotation, String property ) {
+    public List<?> getListValue( JavaAnnotation annotation, String property ) {
         Object value = getValue( annotation, property );
         List<?> list = null;
 

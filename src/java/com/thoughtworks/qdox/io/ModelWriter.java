@@ -19,7 +19,7 @@ package com.thoughtworks.qdox.io;
  * under the License.
  */
 
-import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -37,7 +37,7 @@ public interface ModelWriter
     
     public ModelWriter writeField( JavaField field );
     
-    public ModelWriter writeAnnotation( Annotation annotation );
+    public ModelWriter writeAnnotation( JavaAnnotation annotation );
 
     public ModelWriter writeMethod( JavaMethod method );
 

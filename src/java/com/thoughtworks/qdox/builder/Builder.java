@@ -27,7 +27,6 @@ import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
-import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 public interface Builder {
 
@@ -42,7 +41,6 @@ public interface Builder {
     void addJavaDocTag(TagDef def);
 
     void beginClass(ClassDef def);
-
     void endClass();
 
     void beginMethod();

@@ -77,7 +77,7 @@ import java.util.Stack;
 file: | file { line = lexer.getLine(); } filepart;
 
 // And a filepart is a package/import statement, javadoc comment, or class declaration.
-filepart: annotation { builder.addAnnotation((Annotation) $1); } | package | import | javadoc | class | enum | SEMI;
+filepart: annotation | package | import | javadoc | class | enum | SEMI;
 
 // Package statement
 package: PACKAGE fullidentifier SEMI { builder.addPackage(new PackageDef($2, line)); };
@@ -151,7 +151,7 @@ modifier:
 
 modifiers:
     modifiers modifier { modifiers.add($2); } |
-    modifiers annotation { builder.addAnnotation((Annotation) $2); } |
+    modifiers annotation |
     modifiers javadoc |
     ;
 
@@ -163,18 +163,20 @@ modifiers:
 annotation:
     AT name 
     { 
-    	annotationStack.add(annotation);
-    	annotation = new Annotation(builder.createType($2, 0), lexer.getLine()); 
+    	annotationStack.addFirst(new Annotation(builder.createType($2, 0), lexer.getLine()));
     }
     annotationParensOpt
     {
+    	Annotation annotation = annotationStack.removeFirst();
+    	if(annotationStack.isEmpty()) {
+	    	builder.addAnnotation(annotation);
+    	}
     	$$ = annotation;
-    	annotation = annotationStack.remove(annotationStack.size() - 1);
     };
     
 annotationParensOpt:
 	|
-	PARENOPEN value PARENCLOSE { annotation.setProperty("value", $2); } |
+	PARENOPEN value PARENCLOSE { annotationStack.getFirst().setProperty("value", $2); } |
 	PARENOPEN valuePairs PARENCLOSE |
 	PARENOPEN PARENCLOSE;
     
@@ -183,7 +185,7 @@ valuePairs:
     valuePairs COMMA valuePair;
     
 valuePair:
-    IDENTIFIER EQUALS value { annotation.setProperty($1, $3); };
+    IDENTIFIER EQUALS value { annotationStack.getFirst().setProperty($1, $3); };
     
 arrayInitializer:
     {
@@ -584,11 +586,11 @@ varargs:
     /* empty */ { $$ = false; } |
     DOTDOTDOT   { $$ = true; } ;
 
-opt_annotations: | opt_annotations annotation { builder.addAnnotation((Annotation) $2); };
+opt_annotations: | opt_annotations annotation;
 
 opt_parammodifiers: |
     opt_parammodifiers modifier { param.modifiers.add($2); } |
-    opt_parammodifiers annotation { builder.addAnnotation((Annotation) $2); };
+    opt_parammodifiers annotation;
 
 %%
 
@@ -598,8 +600,7 @@ private StringBuffer textBuffer = new StringBuffer();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
 private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>(); //for both JavaClass and JavaMethod
-private List<Annotation> annotationStack = new LinkedList<Annotation>(); // Use LinkedList instead of Stack because it is unsynchronized 
-private Annotation annotation = null;
+private LinkedList<Annotation> annotationStack = new LinkedList<Annotation>(); // Use LinkedList instead of Stack because it is unsynchronized 
 private List<List<AnnotationValue>> annoValueListStack = new LinkedList<List<AnnotationValue>>(); // Use LinkedList instead of Stack because it is unsynchronized
 private List<AnnotationValue> annoValueList = null;
 private FieldDef param = new FieldDef();

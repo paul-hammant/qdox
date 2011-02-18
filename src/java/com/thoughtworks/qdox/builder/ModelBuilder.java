@@ -221,6 +221,11 @@ public class ModelBuilder implements Builder {
     
     public void beginMethod() {
     	currentMethod = new DefaultJavaMethod();
+    	currentMethod.setParentClass(classStack.getFirst());
+        classStack.getFirst().addMethod(currentMethod);
+
+        currentMethod.setModelWriterFactory(modelWriterFactory);
+    	
         // javadoc
         addJavaDoc(currentMethod);
 
@@ -228,9 +233,7 @@ public class ModelBuilder implements Builder {
     }
     
     public void endMethod(MethodDef def) {
-        currentMethod.setParentClass(classStack.getFirst());
         currentMethod.setLineNumber(def.lineNumber);
-        currentMethod.setModelWriterFactory(modelWriterFactory);
 
         // basic details
         currentMethod.setName(def.name);
@@ -261,9 +264,6 @@ public class ModelBuilder implements Builder {
         }
         
         currentMethod.setSourceCode(def.body);
-
-        classStack.getFirst().addMethod(currentMethod);
-        currentMethod.setParentClass(classStack.getFirst());
     }
 
     public TypeVariable createTypeVariable(TypeVariableDef typeVariableDef) {
@@ -311,54 +311,15 @@ public class ModelBuilder implements Builder {
 
     private void setAnnotations( final AbstractBaseJavaEntity entity ) {
         if( !currentAnnoDefs.isEmpty() ) {
-            AnnotationVisitor visitor = new RecursiveAnnotationVisitor() {
-                public Object visitAnnotation( Annotation annotation ) {
-                    annotation.setContext( entity );
-                    return super.visitAnnotation( annotation );
-                }
-                
-                public Object visitAnnotationFieldRef( AnnotationFieldRef fieldRef ) {
-                    fieldRef.setContext( entity );
-                    return super.visitAnnotationFieldRef( fieldRef );
-                }
-            };
+        	AnnotationTransformer transformer = new AnnotationTransformer(entity);
 
             List<Annotation> annotations = new LinkedList<Annotation>();
             for( AnnoDef annoDef :  currentAnnoDefs) {
-            	Annotation annotation = createAnnotation(annoDef);
-            	visitor.visitAnnotation(annotation);
-                annotations.add( annotation);
+                annotations.add( transformer.transform( annoDef ) );
             }
             entity.setAnnotations( annotations );
             currentAnnoDefs.clear();
         }
-    }
-    
-    private Annotation createAnnotation(AnnoDef annoDef) {
-    	Annotation annotation = new Annotation(createType(annoDef.typeDef, 0), annoDef.lineNumber);
-    	for(Map.Entry<String, AnnotationValue> annoVal : annoDef.args.entrySet()) {
-    		annotation.setProperty(annoVal.getKey(), createAnnotation(annoVal.getValue()));
-    	}
-    	return annotation;
-    }
-    
-    private AnnotationValue createAnnotation(AnnotationValue oldValue) {
-		AnnotationValue newValue;
-		if(oldValue instanceof AnnoDef) {
-			newValue = createAnnotation((AnnoDef) oldValue);
-		}
-		else if(oldValue instanceof AnnotationValueList) {
-			AnnotationValueList annoValList = (AnnotationValueList) oldValue;
-			List<AnnotationValue> parsedList = new LinkedList<AnnotationValue>();
-			for(AnnotationValue val : annoValList.getValueList()) {
-				parsedList.add(createAnnotation(val));
-			}
-			newValue = new AnnotationValueList(parsedList);
-		}
-		else {
-			newValue = oldValue;
-		}
-    	return newValue;
     }
 
     // Don't resolve until we need it... class hasn't been defined yet.

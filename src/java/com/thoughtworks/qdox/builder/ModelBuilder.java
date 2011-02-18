@@ -21,7 +21,9 @@ package com.thoughtworks.qdox.builder;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import com.thoughtworks.qdox.io.ModelWriterFactory;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
@@ -34,12 +36,16 @@ import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.TypeVariable;
 import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationValueList;
 import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 import com.thoughtworks.qdox.parser.expression.RecursiveAnnotationVisitor;
+import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -57,7 +63,7 @@ public class ModelBuilder implements Builder {
     private final DefaultJavaSource source;
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
     private DefaultJavaMethod currentMethod;
-    private List<Annotation> currentAnnoDefs;
+    private List<AnnoDef> currentAnnoDefs;
     private String lastComment;
     private List<TagDef> lastTagSet;
     private DocletTagFactory docletTagFactory;
@@ -66,7 +72,7 @@ public class ModelBuilder implements Builder {
     public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
         this.source = new DefaultJavaSource(classLibrary);
-        this.currentAnnoDefs = new LinkedList<Annotation>();
+        this.currentAnnoDefs = new LinkedList<AnnoDef>();
     }
     
     public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
@@ -318,17 +324,45 @@ public class ModelBuilder implements Builder {
             };
 
             List<Annotation> annotations = new LinkedList<Annotation>();
-            for( Annotation annotation :  currentAnnoDefs) {
-                annotation.accept(visitor);
+            for( AnnoDef annoDef :  currentAnnoDefs) {
+            	Annotation annotation = createAnnotation(annoDef);
+            	visitor.visitAnnotation(annotation);
                 annotations.add( annotation);
             }
             entity.setAnnotations( annotations );
             currentAnnoDefs.clear();
         }
     }
+    
+    private Annotation createAnnotation(AnnoDef annoDef) {
+    	Annotation annotation = new Annotation(createType(annoDef.typeDef, 0), annoDef.lineNumber);
+    	for(Map.Entry<String, AnnotationValue> annoVal : annoDef.args.entrySet()) {
+    		annotation.setProperty(annoVal.getKey(), createAnnotation(annoVal.getValue()));
+    	}
+    	return annotation;
+    }
+    
+    private AnnotationValue createAnnotation(AnnotationValue oldValue) {
+		AnnotationValue newValue;
+		if(oldValue instanceof AnnoDef) {
+			newValue = createAnnotation((AnnoDef) oldValue);
+		}
+		else if(oldValue instanceof AnnotationValueList) {
+			AnnotationValueList annoValList = (AnnotationValueList) oldValue;
+			List<AnnotationValue> parsedList = new LinkedList<AnnotationValue>();
+			for(AnnotationValue val : annoValList.getValueList()) {
+				parsedList.add(createAnnotation(val));
+			}
+			newValue = new AnnotationValueList(parsedList);
+		}
+		else {
+			newValue = oldValue;
+		}
+    	return newValue;
+    }
 
     // Don't resolve until we need it... class hasn't been defined yet.
-    public void addAnnotation( Annotation annotation ) {
+    public void addAnnotation( AnnoDef annotation ) {
         currentAnnoDefs.add( annotation );
     }
 

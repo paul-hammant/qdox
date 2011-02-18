@@ -163,11 +163,14 @@ modifiers:
 annotation:
     AT name 
     { 
-    	annotationStack.addFirst(new Annotation(builder.createType($2, 0), lexer.getLine()));
+    	AnnoDef annotation = new AnnoDef();
+    	annotation.typeDef = new TypeDef($2);
+    	annotation.lineNumber = lexer.getLine();
+    	annotationStack.addFirst(annotation);
     }
     annotationParensOpt
     {
-    	Annotation annotation = annotationStack.removeFirst();
+    	AnnoDef annotation = annotationStack.removeFirst();
     	if(annotationStack.isEmpty()) {
 	    	builder.addAnnotation(annotation);
     	}
@@ -176,7 +179,7 @@ annotation:
     
 annotationParensOpt:
 	|
-	PARENOPEN value PARENCLOSE { annotationStack.getFirst().setProperty("value", $2); } |
+	PARENOPEN value PARENCLOSE { annotationStack.getFirst().args.put("value", $2); } |
 	PARENOPEN valuePairs PARENCLOSE |
 	PARENOPEN PARENCLOSE;
     
@@ -185,7 +188,7 @@ valuePairs:
     valuePairs COMMA valuePair;
     
 valuePair:
-    IDENTIFIER EQUALS value { annotationStack.getFirst().setProperty($1, $3); };
+    IDENTIFIER EQUALS value { annotationStack.getFirst().args.put($1, $3); };
     
 arrayInitializer:
     {
@@ -600,7 +603,7 @@ private StringBuffer textBuffer = new StringBuffer();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
 private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>(); //for both JavaClass and JavaMethod
-private LinkedList<Annotation> annotationStack = new LinkedList<Annotation>(); // Use LinkedList instead of Stack because it is unsynchronized 
+private LinkedList<AnnoDef> annotationStack = new LinkedList<AnnoDef>(); // Use LinkedList instead of Stack because it is unsynchronized 
 private List<List<AnnotationValue>> annoValueListStack = new LinkedList<List<AnnotationValue>>(); // Use LinkedList instead of Stack because it is unsynchronized
 private List<AnnotationValue> annoValueList = null;
 private FieldDef param = new FieldDef();

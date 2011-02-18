@@ -5,8 +5,8 @@ import org.jmock.expectation.ExpectationList;
 
 import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.io.ModelWriterFactory;
-import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -137,7 +137,7 @@ class MockBuilder implements Builder {
         myAddFieldParameter0Values.addActual(arg0);
     }
 
-    public void addAnnotation( Annotation annotation ) {
+    public void addAnnotation( AnnoDef annotation ) {
         // Empty
     }
     

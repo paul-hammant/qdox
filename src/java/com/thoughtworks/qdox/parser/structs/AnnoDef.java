@@ -24,8 +24,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
-public class AnnoDef extends LocatedDef
+public class AnnoDef extends LocatedDef implements AnnotationValue
 {
     public TypeDef typeDef;
     public final Map<String, AnnotationValue> args = new LinkedHashMap<String, AnnotationValue>();
@@ -54,5 +55,19 @@ public class AnnoDef extends LocatedDef
             result.append(')');
         }
         return result.toString();
+    }
+    
+    public AnnoDef getValue() {
+    	return this;
+    }
+    
+    //@todo remove, refactoring helper
+    public Object accept(AnnotationVisitor visitor) {
+    	return null;
+    }
+    
+    //@todo remove, refactoring helper
+    public Object getParameterValue() {
+    	return this;
     }
 }

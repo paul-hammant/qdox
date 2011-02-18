@@ -20,8 +20,8 @@ package com.thoughtworks.qdox.builder;
  */
 
 import com.thoughtworks.qdox.io.ModelWriterFactory;
-import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -50,7 +50,7 @@ public interface Builder {
     
     void addField(FieldDef def);
 
-    void addAnnotation(Annotation annotation);
+    void addAnnotation(AnnoDef annotation);
     
     /**
      * @deprecated

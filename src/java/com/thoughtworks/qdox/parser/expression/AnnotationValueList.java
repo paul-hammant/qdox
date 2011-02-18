@@ -57,7 +57,7 @@ public class AnnotationValueList implements AnnotationValue {
         return visitor.visitAnnotationValueList( this );
     }
 
-    public Object getParameterValue() {
+    public List<Object> getParameterValue() {
         List<Object> list = new LinkedList<Object>();
 
         for( ListIterator<AnnotationValue> i = valueList.listIterator(); i.hasNext(); ) {

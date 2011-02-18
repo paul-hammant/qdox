@@ -116,7 +116,7 @@ public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
         return visitor.visitAnnotation( this );
     }
 
-    public Object getParameterValue() {
+    public Annotation getParameterValue() {
         return this;
     }
     

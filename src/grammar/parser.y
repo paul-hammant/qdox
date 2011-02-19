@@ -63,7 +63,7 @@ import java.util.Stack;
 %type <annoval> equalityExpression relationalExpression shiftExpression additiveExpression multiplicativeExpression
 %type <annoval> unaryExpression unaryExpressionNotPlusMinus primary
 %type <ival> dims
-%type <sval> fullidentifier modifier typedeclspecifier typename memberend
+%type <sval> fullidentifier typedeclspecifier typename memberend
 %type <ival> dimensions
 %type <bval> varargs
 %type <type> type arrayidentifier classtype typearg
@@ -137,20 +137,20 @@ dimensions:
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
 modifier:
-    PUBLIC          { $$ = "public"; } |
-    PROTECTED       { $$ = "protected"; } |
-    PRIVATE         { $$ = "private"; } |
-    STATIC          { $$ = "static"; } |
-    FINAL           { $$ = "final"; } |
-    ABSTRACT        { $$ = "abstract"; } |
-    NATIVE          { $$ = "native"; } |
-    SYNCHRONIZED    { $$ = "synchronized"; } |
-    VOLATILE        { $$ = "volatile"; } |
-    TRANSIENT       { $$ = "transient"; } |
-    STRICTFP        { $$ = "strictfp"; } ;
+    PUBLIC          { modifiers.add("public"); } |
+    PROTECTED       { modifiers.add("protected"); } |
+    PRIVATE         { modifiers.add("private"); } |
+    STATIC          { modifiers.add("static"); } |
+    FINAL           { modifiers.add("final"); } |
+    ABSTRACT        { modifiers.add("abstract"); } |
+    NATIVE          { modifiers.add("native"); } |
+    SYNCHRONIZED    { modifiers.add("synchronized"); } |
+    VOLATILE        { modifiers.add("volatile"); } |
+    TRANSIENT       { modifiers.add("transient"); } |
+    STRICTFP        { modifiers.add("strictfp"); } ;
 
 modifiers:
-    modifiers modifier { modifiers.add($2); } |
+    modifiers modifier |
     modifiers annotation |
     modifiers javadoc |
     ;
@@ -514,25 +514,25 @@ extrafields: |
 method:
     modifiers typeparams type IDENTIFIER {
         builder.beginMethod();
-        mth.typeParams = typeParams;
-    } methoddef dimensions opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
+        mth.typeParams = typeParams;
         mth.returnType = $3;
-        mth.dimensions = $7;
         mth.name = $4;
+    } methoddef dimensions opt_exceptions memberend {
+        mth.dimensions = $7;
         mth.body = $9;
         builder.endMethod(mth);
         mth = new MethodDef(); 
     } |
     modifiers type IDENTIFIER {
-      builder.beginMethod();
-    } methoddef dimensions opt_exceptions memberend {
+        builder.beginMethod();
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear();
         mth.returnType = $2;
-        mth.dimensions = $6;
         mth.name = $3;
+    } methoddef dimensions opt_exceptions memberend {
+        mth.dimensions = $6;
         mth.body = $8;
         builder.endMethod(mth);
         mth = new MethodDef();
@@ -541,10 +541,10 @@ method:
 constructor:
     modifiers IDENTIFIER {
         builder.beginMethod();
-    } methoddef opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $2;
+    } methoddef opt_exceptions memberend {
         mth.body = $6;
         builder.endMethod(mth);
         mth = new MethodDef(); 
@@ -552,10 +552,10 @@ constructor:
     modifiers typeparams IDENTIFIER {
         builder.beginMethod();
         mth.typeParams = typeParams;
-    } methoddef opt_exceptions memberend {
         mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $3;
+    } methoddef opt_exceptions memberend {
         mth.body = $7;
         builder.endMethod(mth);
         mth = new MethodDef(); 
@@ -581,6 +581,7 @@ param:
         param.type = $2;
         param.dimensions = $4.dimensions;
         param.isVarArgs = $3;
+        param.modifiers.addAll(modifiers); modifiers.clear();
         builder.addParameter(param);
         param = new FieldDef();
     };
@@ -592,7 +593,7 @@ varargs:
 opt_annotations: | opt_annotations annotation;
 
 opt_parammodifiers: |
-    opt_parammodifiers modifier { param.modifiers.add($2); } |
+    opt_parammodifiers modifier |
     opt_parammodifiers annotation;
 
 %%

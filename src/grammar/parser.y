@@ -137,6 +137,7 @@ dimensions:
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
 modifier:
+	annotation |
     PUBLIC          { modifiers.add("public"); } |
     PROTECTED       { modifiers.add("protected"); } |
     PRIVATE         { modifiers.add("private"); } |
@@ -151,7 +152,6 @@ modifier:
 
 modifiers:
     modifiers modifier |
-    modifiers annotation |
     modifiers javadoc |
     ;
 
@@ -593,8 +593,7 @@ varargs:
 opt_annotations: | opt_annotations annotation;
 
 opt_parammodifiers: |
-    opt_parammodifiers modifier |
-    opt_parammodifiers annotation;
+    opt_parammodifiers modifier;
 
 %%
 

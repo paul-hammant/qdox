@@ -469,7 +469,6 @@ implementslist:
 members: | members { line = lexer.getLine(); } member;
 
 member:
-    javadoc | 
     fields | 
     method |
     constructor |
@@ -514,7 +513,7 @@ extrafields: |
 method:
     modifiers typeparams type IDENTIFIER {
         builder.beginMethod();
-        mth.lineNumber = line;
+        mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.typeParams = typeParams;
         mth.returnType = $3;
@@ -527,7 +526,7 @@ method:
     } |
     modifiers type IDENTIFIER {
         builder.beginMethod();
-        mth.lineNumber = line;
+        mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear();
         mth.returnType = $2;
         mth.name = $3;
@@ -541,7 +540,7 @@ method:
 constructor:
     modifiers IDENTIFIER {
         builder.beginMethod();
-        mth.lineNumber = line;
+        mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $2;
     } methoddef opt_exceptions memberend {
@@ -551,8 +550,8 @@ constructor:
     } |
     modifiers typeparams IDENTIFIER {
         builder.beginMethod();
+        mth.lineNumber = lexer.getLine();
         mth.typeParams = typeParams;
-        mth.lineNumber = line;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $3;
     } methoddef opt_exceptions memberend {

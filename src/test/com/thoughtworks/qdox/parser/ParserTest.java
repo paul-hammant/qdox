@@ -167,6 +167,104 @@ public class ParserTest extends TestCase {
         builder.verify();
 
     }
+    
+    public void testImportStaticWithOneWord() throws Exception {
+
+        // setup values
+        setupLex(Parser.IMPORT);
+        setupLex(Parser.STATIC);
+        setupLex(Parser.IDENTIFIER, "mypackage");
+        setupLex(Parser.SEMI);
+        setupLex(0);
+
+        // expectations
+        builder.addExpectedAddImportValues("static mypackage");
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+
+    }
+
+    public void testImportStaticWithMultipleWords() throws Exception {
+
+        // setup values
+        setupLex(Parser.IMPORT);
+        setupLex(Parser.STATIC);
+        setupLex(Parser.IDENTIFIER, "com");
+        setupLex(Parser.DOT);
+        setupLex(Parser.IDENTIFIER, "blah");
+        setupLex(Parser.DOT);
+        setupLex(Parser.IDENTIFIER, "Thingy");
+        setupLex(Parser.DOT);
+        setupLex(Parser.IDENTIFIER, "x");
+        setupLex(Parser.SEMI);
+        setupLex(0);
+
+        // expectations
+        builder.addExpectedAddImportValues("static com.blah.Thingy.x");
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+
+    }
+
+    public void testImportStaticWithOneWordAndStar() throws Exception {
+
+        // setup values
+        setupLex(Parser.IMPORT);
+        setupLex(Parser.STATIC);
+        setupLex(Parser.IDENTIFIER, "MyClass");
+        setupLex(Parser.DOT);
+        setupLex(Parser.STAR);
+        setupLex(Parser.SEMI);
+        setupLex(0);
+
+        // expectations
+        builder.addExpectedAddImportValues("static MyClass.*");
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+
+    }
+
+    public void testImportStaticWithMultipleWordsAndStar() throws Exception {
+
+        // setup values
+        setupLex(Parser.IMPORT);
+        setupLex(Parser.STATIC);
+        setupLex(Parser.IDENTIFIER, "com");
+        setupLex(Parser.DOT);
+        setupLex(Parser.IDENTIFIER, "blah");
+        setupLex(Parser.DOT);
+        setupLex(Parser.IDENTIFIER, "Thingy");
+        setupLex(Parser.DOT);
+        setupLex(Parser.STAR);
+        setupLex(Parser.SEMI);
+        setupLex(0);
+
+        // expectations
+        builder.addExpectedAddImportValues("static com.blah.Thingy.*");
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        builder.verify();
+
+    }
 
     public void testOneLineJavaDoc() throws Exception {
 

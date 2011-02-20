@@ -250,6 +250,10 @@ public class DefaultJavaSource implements Serializable, JavaSource {
         String dotSuffix = "." + importSpec;
             
         for (String imprt : getImports()) {
+            //static imports can refer to inner classes
+            if(imprt.startsWith( "static " ) ) {
+                imprt = imprt.substring( 7 );
+            }
             if (imprt.equals(importSpec) || (!fullMatch && imprt.endsWith(dotSuffix))) {
                 String candidateName = imprt.substring( 0, imprt.length() - importSpec.length()) + typeName;
                 resolvedName = resolveFullyQualifiedType( candidateName );

@@ -84,7 +84,7 @@ package: PACKAGE fullidentifier SEMI { builder.addPackage(new PackageDef($2, lin
 
 // Import statement
 import: IMPORT fullidentifier SEMI { builder.addImport($2); } |
-		IMPORT STATIC fullidentifier SEMI { builder.addImport($3); };
+		IMPORT STATIC fullidentifier SEMI { builder.addImport("static " + $3); };
 
 
 // ----- JAVADOC

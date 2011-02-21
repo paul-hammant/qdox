@@ -62,6 +62,7 @@ import java.util.Stack;
 %type <annoval> conditionalExpression conditionalOrExpression conditionalAndExpression inclusiveOrExpression exclusiveOrExpression andExpression
 %type <annoval> equalityExpression relationalExpression shiftExpression additiveExpression multiplicativeExpression
 %type <annoval> unaryExpression unaryExpressionNotPlusMinus primary
+%type <annoval> PostfixExpression CastExpression
 %type <ival> dims Dims_opt
 %type <sval> fullidentifier typedeclspecifier typename memberend
 %type <ival> dimensions
@@ -275,17 +276,20 @@ unaryExpression:
     MINUS unaryExpression { $$ = new AnnotationMinusSign($2); } |
 	unaryExpressionNotPlusMinus;
 
-unaryExpressionNotPlusMinus:
-	TILDE unaryExpression { $$ = new AnnotationNot($2); } |
-	EXCLAMATION unaryExpression { $$ = new AnnotationLogicalNot($2); } |
-	primary;
+unaryExpressionNotPlusMinus: PostfixExpression 
+                           | TILDE unaryExpression { $$ = new AnnotationNot($2); } 
+                           | EXCLAMATION unaryExpression { $$ = new AnnotationLogicalNot($2); } 
+                           | CastExpression;
+	
+CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2.name, $3), $5); } 
+              | PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, 0), $4); }
+              | PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, $3), $5); };
+
+PostfixExpression: primary;
     	
 primary:
-	PARENOPEN PrimitiveType Dims_opt PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2.name, $3), $5); } |
-    PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, $3), $5); } |
-	PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, 0), $4); } |
-    PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
     literal |
+    PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
     PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1.name, 0)); } |
     name DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
     name dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |

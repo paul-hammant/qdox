@@ -62,7 +62,7 @@ import java.util.Stack;
 %type <annoval> conditionalExpression conditionalOrExpression conditionalAndExpression inclusiveOrExpression exclusiveOrExpression andExpression
 %type <annoval> equalityExpression relationalExpression shiftExpression additiveExpression multiplicativeExpression
 %type <annoval> unaryExpression unaryExpressionNotPlusMinus primary
-%type <ival> dims
+%type <ival> dims Dims_opt
 %type <sval> fullidentifier typedeclspecifier typename memberend
 %type <ival> dimensions
 %type <bval> varargs
@@ -281,18 +281,18 @@ unaryExpressionNotPlusMinus:
 	primary;
     	
 primary:
-    PARENOPEN PrimitiveType PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2.name, 0), $4); } |
-	PARENOPEN PrimitiveType dims PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2.name, $3), $5); } |
+	PARENOPEN PrimitiveType Dims_opt PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2.name, $3), $5); } |
     PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, $3), $5); } |
 	PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, 0), $4); } |
     PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
     literal |
-    PrimitiveType dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1.name, 0)); } |
-    PrimitiveType DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1.name, 0)); } |
+    PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1.name, 0)); } |
     name DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
     name dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
     name { $$ = new AnnotationFieldRef($1); };
 	
+Dims_opt:  { $$ = 0; }
+		| dims;	
 dims:
     SQUAREOPEN SQUARECLOSE { $$ = 1; } |
     dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };

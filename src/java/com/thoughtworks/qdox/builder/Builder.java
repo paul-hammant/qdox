@@ -20,7 +20,6 @@ package com.thoughtworks.qdox.builder;
  */
 
 import com.thoughtworks.qdox.io.ModelWriterFactory;
-import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -51,9 +50,4 @@ public interface Builder {
     void addField(FieldDef def);
 
     void addAnnotation(AnnoDef annotation);
-    
-    /**
-     * @deprecated
-     */
-    Type createType(String name, int dimensions);
 }

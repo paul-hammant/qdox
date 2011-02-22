@@ -21,9 +21,7 @@ package com.thoughtworks.qdox.builder;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import com.thoughtworks.qdox.io.ModelWriterFactory;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
@@ -36,15 +34,9 @@ import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;
-import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.TypeVariable;
-import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
-import com.thoughtworks.qdox.parser.expression.AnnotationValue;
-import com.thoughtworks.qdox.parser.expression.AnnotationValueList;
-import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
-import com.thoughtworks.qdox.parser.expression.RecursiveAnnotationVisitor;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -173,12 +165,6 @@ public class ModelBuilder implements Builder {
         classStack.removeFirst();
     }
 
-    public Type createType( String typeName, int dimensions ) {
-        if( typeName == null || typeName.equals( "" ) )
-            return null;
-        return createType(new TypeDef(typeName), dimensions);
-    }
-    
     /**
      * this one is specific for those cases where dimensions can be part of both the type and identifier
      * i.e. private String[] matrix[]; //field
@@ -188,7 +174,7 @@ public class ModelBuilder implements Builder {
      * @param dimensions
      * @return the Type
      */
-    public Type createType(TypeDef typeDef, int dimensions) {
+    private Type createType(TypeDef typeDef, int dimensions) {
     	if(typeDef == null) {
     		return null;
     	}
@@ -266,7 +252,7 @@ public class ModelBuilder implements Builder {
         currentMethod.setSourceCode(def.body);
     }
 
-    public TypeVariable createTypeVariable(TypeVariableDef typeVariableDef) {
+    private TypeVariable createTypeVariable(TypeVariableDef typeVariableDef) {
     	if(typeVariableDef == null) {
     		return null;
     	}

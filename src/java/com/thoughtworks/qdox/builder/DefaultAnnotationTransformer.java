@@ -74,38 +74,15 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.structs.AnnoDef)
 	 */
 	public Annotation transform(AnnoDef annoDef) {
-		return  createAnnotation(annoDef);
-	}
-
-    private Annotation createAnnotation(AnnoDef annoDef) {
     	Annotation annotation = new Annotation(createType(annoDef.typeDef, 0), annoDef.lineNumber);
     	for(Map.Entry<String, ElemValueDef> annoVal : annoDef.args.entrySet()) {
-    		annotation.setProperty(annoVal.getKey(), createAnnotation(annoVal.getValue()));
+    		annotation.setProperty(annoVal.getKey(), annoVal.getValue().transform(this));
     	}
     	annotation.setContext(parent);
     	return annotation;
-    }
-    
-    private AnnotationValue createAnnotation(ElemValueDef oldValue) {
-		AnnotationValue newValue;
-		if(oldValue instanceof AnnoDef) {
-			newValue = createAnnotation((AnnoDef) oldValue);
-		}
-		else if(oldValue instanceof ElemValueListDef) {
-			ElemValueListDef annoValList = (ElemValueListDef) oldValue;
-			List<AnnotationValue> parsedList = new LinkedList<AnnotationValue>();
-			for(ElemValueDef val : annoValList.valueList) {
-				parsedList.add(createAnnotation(val));
-			}
-			newValue = new AnnotationValueList(parsedList);
-		}
-		else {
-			newValue = oldValue.transform(this);
-		}
-    	return newValue;
-    }
+	}
 
-    public Type createType(TypeDef typeDef, int dimensions) {
+    private Type createType(TypeDef typeDef, int dimensions) {
     	if(typeDef == null) {
     		return null;
     	}
@@ -115,7 +92,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
     public AnnotationValue transform(ElemValueListDef elemValueListDef) {
     	List<AnnotationValue> parsedList = new LinkedList<AnnotationValue>();
 		for(ElemValueDef val : elemValueListDef.valueList) {
-			parsedList.add(createAnnotation(val));
+			parsedList.add(val.transform(this));
 		}
 		return new AnnotationValueList(parsedList);
     }

@@ -22,7 +22,6 @@ import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.parser.*;
 import com.thoughtworks.qdox.parser.expression.*;
 import com.thoughtworks.qdox.parser.structs.*;
-import com.thoughtworks.qdox.model.Annotation; //@todo remove
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -198,7 +197,7 @@ arrayInitializer:
     }
     BRACEOPEN valuesOpt BRACECLOSE
     {
-    	$$ = new AnnotationValueList(annoValueList);
+    	$$ = new ElemValueListDef(annoValueList);
     	annoValueList = annoValueListStack.remove(annoValueListStack.size() - 1);
     };
     
@@ -271,28 +270,27 @@ multiplicativeExpression:
 	multiplicativeExpression SLASH unaryExpression { $$ = new AnnotationDivide($1, $3); } |
 	multiplicativeExpression PERCENT unaryExpression { $$ = new AnnotationRemainder($1, $3); };
 	
-unaryExpression:
-    PLUS unaryExpression { $$ = new AnnotationPlusSign($2); } |
-    MINUS unaryExpression { $$ = new AnnotationMinusSign($2); } |
-	unaryExpressionNotPlusMinus;
+unaryExpression: unaryExpressionNotPlusMinus 
+               | PLUS unaryExpression { $$ = new AnnotationPlusSign($2); } 
+               | MINUS unaryExpression { $$ = new AnnotationMinusSign($2); };
 
 unaryExpressionNotPlusMinus: PostfixExpression 
                            | TILDE unaryExpression { $$ = new AnnotationNot($2); } 
                            | EXCLAMATION unaryExpression { $$ = new AnnotationLogicalNot($2); } 
                            | CastExpression;
 	
-CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE unaryExpression { $$ = new AnnotationCast(builder.createType($2.name, $3), $5); } 
-              | PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, 0), $4); }
-              | PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(builder.createType($2, $3), $5); };
+CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE unaryExpression { $$ = new AnnotationCast(new TypeDef($2.name, $3), $5); } 
+              | PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
+              | PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
 
 PostfixExpression: primary;
     	
 primary:
     literal |
     PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
-    PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1.name, 0)); } |
-    name DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
-    name dims DOT CLASS { $$ = new AnnotationTypeRef(builder.createType($1, 0)); } |
+    PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1.name, $2)); } |
+    name DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
+    name dims DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, $2)); } |
     name { $$ = new AnnotationFieldRef($1); };
 	
 Dims_opt:  { $$ = 0; }
@@ -607,8 +605,8 @@ private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
 private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>(); //for both JavaClass and JavaMethod
 private LinkedList<AnnoDef> annotationStack = new LinkedList<AnnoDef>(); // Use LinkedList instead of Stack because it is unsynchronized 
-private List<List<AnnotationValue>> annoValueListStack = new LinkedList<List<AnnotationValue>>(); // Use LinkedList instead of Stack because it is unsynchronized
-private List<AnnotationValue> annoValueList = null;
+private List<List<ElemValueDef>> annoValueListStack = new LinkedList<List<ElemValueDef>>(); // Use LinkedList instead of Stack because it is unsynchronized
+private List<ElemValueDef> annoValueList = null;
 private FieldDef param = new FieldDef();
 private java.util.Set<String> modifiers = new java.util.HashSet<String>();
 private TypeDef fieldType;
@@ -679,7 +677,7 @@ private class Value {
     int ival;
 	boolean bval;
     TypeDef type;
-    AnnotationValue annoval;
+    ElemValueDef annoval;
 }
 
 

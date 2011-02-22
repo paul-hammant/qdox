@@ -601,6 +601,28 @@ public class LexerTest extends TestCase {
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
     }
+    
+    public void testAnnotationElementValueArrayInitializer() throws Exception {
+    	String in = "@Endorsers({\"Children\", \"Unscrupulous dentists\"})\n" +
+    			"public class Lollipop { }";
+    	
+    	Lexer lexer = new JFlexLexer(new StringReader(in));
+        assertLex(Parser.AT, "@", lexer);
+        assertLex(Parser.IDENTIFIER, "Endorsers", lexer);
+        assertLex(Parser.PARENOPEN, "(", lexer);
+        assertLex(Parser.BRACEOPEN, "{", lexer);
+        assertLex(Parser.STRING_LITERAL, "\"", lexer);
+        assertLex(Parser.COMMA, ",", lexer);
+        assertLex(Parser.STRING_LITERAL, "\"", lexer);
+        assertLex(Parser.BRACECLOSE, "}", lexer);
+        assertLex(Parser.PARENCLOSE, ")", lexer);
+        assertLex(Parser.PUBLIC, "public", lexer);
+        assertLex(Parser.CLASS, "class", lexer);
+        assertLex(Parser.IDENTIFIER, "Lollipop", lexer);
+        assertLex(Parser.BRACEOPEN, "{", lexer);
+        assertLex(Parser.BRACECLOSE, "}", lexer);
+        assertLex(0, lexer);
+    }
 
     public void testEnumConstructor() throws Exception {
         String in = "enum Foo { a(\"hello\"); int someField; }";

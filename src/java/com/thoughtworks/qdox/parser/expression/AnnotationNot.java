@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.parser.expression;
 
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,7 +27,11 @@ public class AnnotationNot extends AnnotationUnaryOperator {
         super( value );
     }
 
-    public String toString() {
+    public AnnotationNot(ElemValueDef value) {
+    	super(value);
+	}
+
+	public String toString() {
         return "~" + getValue().toString();
     }
 
@@ -35,5 +41,9 @@ public class AnnotationNot extends AnnotationUnaryOperator {
 
     public Object getParameterValue() {
         return "~" + getValue().toString();
+    }
+    
+    public <U> U transform(AnnotationTransformer<U> transformer) {
+    	return transformer.transform(this);
     }
 }

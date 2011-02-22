@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.parser.expression;
 
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,15 +21,20 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-public class AnnotationParenExpression implements AnnotationValue {
+public class AnnotationParenExpression implements AnnotationValue, ElemValueDef {
 
     private AnnotationValue value;
+	public ElemValueDef elemValueDef;
 
     public AnnotationParenExpression( AnnotationValue value ) {
         this.value = value;
     }
 
-    public AnnotationValue getValue() {
+    public AnnotationParenExpression(ElemValueDef value) {
+    	this.elemValueDef = value;
+	}
+
+	public AnnotationValue getValue() {
         return value;
     }
 
@@ -41,6 +48,10 @@ public class AnnotationParenExpression implements AnnotationValue {
 
     public Object getParameterValue() {
         return "(" + value.getParameterValue() + ")";
+    }
+    
+    public <U> U transform(AnnotationTransformer<U> transformer) {
+    	return transformer.transform(this);
     }
 
 }

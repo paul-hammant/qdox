@@ -1,6 +1,8 @@
 package com.thoughtworks.qdox.parser.expression;
 
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,18 +23,27 @@ import com.thoughtworks.qdox.model.Type;
  * under the License.
  */
 
-public class AnnotationCast implements AnnotationValue {
+public class AnnotationCast implements AnnotationValue, ElemValueDef {
 
     private final Type type;
-
     private final AnnotationValue value;
+    
+    public TypeDef typeDef;
+    public ElemValueDef elemDef;
 
     public AnnotationCast( Type type, AnnotationValue value ) {
         this.type = type;
         this.value = value;
     }
 
-    public Type getType() {
+    public AnnotationCast(TypeDef type, ElemValueDef value) {
+    	this.type = null; 
+    	this.value = null;
+    	this.typeDef = type;
+    	this.elemDef = value;
+	}
+	
+	public Type getType() {
         return this.type;
     }
 
@@ -50,6 +61,10 @@ public class AnnotationCast implements AnnotationValue {
 
     public String toString() {
         return "(" + type.getValue() + ") " + value.toString();
+    }
+    
+    public <U> U transform(AnnotationTransformer<U> transformer) {
+    	return transformer.transform(this);
     }
 
 }

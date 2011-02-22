@@ -21,13 +21,14 @@ package com.thoughtworks.qdox.parser.expression;
 
 import java.util.StringTokenizer;
 
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.Type;
 
-public class AnnotationFieldRef implements AnnotationValue {
+public class AnnotationFieldRef implements AnnotationValue, ElemValueDef {
 
     private final int[] parts;
 
@@ -156,5 +157,9 @@ public class AnnotationFieldRef implements AnnotationValue {
         }
 
         return field;
+    }
+
+    public <U> U transform(AnnotationTransformer<U> transformer) {
+    	return transformer.transform(this);
     }
 }

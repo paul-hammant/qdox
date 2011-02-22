@@ -19,16 +19,23 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-public abstract class AnnotationUnaryOperator implements AnnotationValue {
+public abstract class AnnotationUnaryOperator implements AnnotationValue,
+		ElemValueDef {
 
-    private AnnotationValue value;
+	private AnnotationValue value;
 
-    public AnnotationUnaryOperator( AnnotationValue value ) {
-        this.value = value;
-    }
+	public ElemValueDef elemValueDef;
 
-    public AnnotationValue getValue() {
-        return value;
-    }
+	public AnnotationUnaryOperator(AnnotationValue value) {
+		this.value = value;
+	}
+
+	public AnnotationUnaryOperator(ElemValueDef elemValueDef) {
+		this.elemValueDef = elemValueDef;
+	}
+
+	public AnnotationValue getValue() {
+		return value;
+	}
 
 }

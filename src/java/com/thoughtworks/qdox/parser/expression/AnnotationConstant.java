@@ -21,7 +21,9 @@ package com.thoughtworks.qdox.parser.expression;
 
 import java.io.Serializable;
 
-public class AnnotationConstant implements AnnotationValue, Serializable {
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
+
+public class AnnotationConstant implements AnnotationValue, ElemValueDef, Serializable {
 
     private final Object value;
 
@@ -52,4 +54,7 @@ public class AnnotationConstant implements AnnotationValue, Serializable {
         return image;
     }
 
+    public <U> U transform(AnnotationTransformer<U> transformer) {
+    	return transformer.transform(this);
+    }
 }

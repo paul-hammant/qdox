@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.parser.expression;
 
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,6 +22,10 @@ package com.thoughtworks.qdox.parser.expression;
  */
 
 public class AnnotationAdd extends AnnotationBinaryOperator {
+	
+	public AnnotationAdd(ElemValueDef lhs, ElemValueDef rhs) {
+		super(lhs, rhs);
+	}
 
     public AnnotationAdd( AnnotationValue left, AnnotationValue right ) {
         super( left, right );
@@ -35,6 +41,10 @@ public class AnnotationAdd extends AnnotationBinaryOperator {
 
     public Object getParameterValue() {
         return getLeft().getParameterValue() + " + " + getRight().getParameterValue();
+    }
+    
+    public <U> U transform(AnnotationTransformer<U> transformer) {
+    	return transformer.transform(this);
     }
 
 }

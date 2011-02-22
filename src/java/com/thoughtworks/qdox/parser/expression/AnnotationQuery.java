@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.parser.expression;
 
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,7 +21,7 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-public class AnnotationQuery implements AnnotationValue {
+public class AnnotationQuery implements AnnotationValue, ElemValueDef {
 
     private final AnnotationValue condition;
 
@@ -27,13 +29,25 @@ public class AnnotationQuery implements AnnotationValue {
 
     private final AnnotationValue falseExpression;
 
+	public ElemValueDef cond;
+	public ElemValueDef trueExpr;
+	public ElemValueDef falseExpr;
+
     public AnnotationQuery( AnnotationValue condition, AnnotationValue trueExpression, AnnotationValue falseExpression ) {
         this.condition = condition;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
     }
 
-    public Object accept( AnnotationVisitor visitor ) {
+    public AnnotationQuery(ElemValueDef cond, ElemValueDef trueExpr,
+			ElemValueDef falseExpr) {
+    	condition = trueExpression = falseExpression = null;
+    	this.cond = cond;
+    	this.trueExpr = trueExpr;
+    	this.falseExpr = falseExpr;
+	}
+
+	public Object accept( AnnotationVisitor visitor ) {
         return visitor.visitAnnotationQuery( this );
     }
 
@@ -56,5 +70,9 @@ public class AnnotationQuery implements AnnotationValue {
 
     public String toString() {
         return condition.toString() + " ? " + trueExpression.toString() + " : " + falseExpression.toString();
+    }
+    
+    public <U> U transform(AnnotationTransformer<U> transformer) {
+    	return transformer.transform(this);
     }
 }

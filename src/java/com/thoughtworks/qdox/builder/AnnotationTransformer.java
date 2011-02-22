@@ -1,95 +1,120 @@
 package com.thoughtworks.qdox.builder;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
-import com.thoughtworks.qdox.model.Annotation;
-import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.parser.expression.AnnotationAdd;
+import com.thoughtworks.qdox.parser.expression.AnnotationAnd;
+import com.thoughtworks.qdox.parser.expression.AnnotationCast;
+import com.thoughtworks.qdox.parser.expression.AnnotationConstant;
+import com.thoughtworks.qdox.parser.expression.AnnotationDivide;
+import com.thoughtworks.qdox.parser.expression.AnnotationEquals;
+import com.thoughtworks.qdox.parser.expression.AnnotationExclusiveOr;
 import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
-import com.thoughtworks.qdox.parser.expression.AnnotationValue;
-import com.thoughtworks.qdox.parser.expression.AnnotationValueList;
-import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
-import com.thoughtworks.qdox.parser.expression.RecursiveAnnotationVisitor;
+import com.thoughtworks.qdox.parser.expression.AnnotationGreaterEquals;
+import com.thoughtworks.qdox.parser.expression.AnnotationGreaterThan;
+import com.thoughtworks.qdox.parser.expression.AnnotationLessEquals;
+import com.thoughtworks.qdox.parser.expression.AnnotationLessThan;
+import com.thoughtworks.qdox.parser.expression.AnnotationLogicalAnd;
+import com.thoughtworks.qdox.parser.expression.AnnotationLogicalNot;
+import com.thoughtworks.qdox.parser.expression.AnnotationLogicalOr;
+import com.thoughtworks.qdox.parser.expression.AnnotationMinusSign;
+import com.thoughtworks.qdox.parser.expression.AnnotationMultiply;
+import com.thoughtworks.qdox.parser.expression.AnnotationNot;
+import com.thoughtworks.qdox.parser.expression.AnnotationNotEquals;
+import com.thoughtworks.qdox.parser.expression.AnnotationOr;
+import com.thoughtworks.qdox.parser.expression.AnnotationParenExpression;
+import com.thoughtworks.qdox.parser.expression.AnnotationPlusSign;
+import com.thoughtworks.qdox.parser.expression.AnnotationQuery;
+import com.thoughtworks.qdox.parser.expression.AnnotationRemainder;
+import com.thoughtworks.qdox.parser.expression.AnnotationShiftLeft;
+import com.thoughtworks.qdox.parser.expression.AnnotationShiftRight;
+import com.thoughtworks.qdox.parser.expression.AnnotationSubtract;
+import com.thoughtworks.qdox.parser.expression.AnnotationTypeRef;
+import com.thoughtworks.qdox.parser.expression.AnnotationUnsignedShiftRight;
+import com.thoughtworks.qdox.parser.expression.ElemValueListDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
-import com.thoughtworks.qdox.parser.structs.TypeDef;
 
-public class AnnotationTransformer extends RecursiveAnnotationVisitor implements AnnotationVisitor {
+public interface AnnotationTransformer<U> {
 
-	private AbstractBaseJavaEntity parent;
-	
-	public AnnotationTransformer(AbstractBaseJavaEntity parent) {
-		this.parent = parent;
-	}
+	public abstract U transform(AnnoDef annoDef);
 
-	public Annotation transform(AnnoDef annoDef) {
-		Annotation result = createAnnotation(annoDef);
-		visitAnnotation(result);
-		return result;
-	}
+	public abstract U transform(AnnotationAdd annotationAdd);
 
-    private Annotation createAnnotation(AnnoDef annoDef) {
-    	Annotation annotation = new Annotation(createType(annoDef.typeDef, 0), annoDef.lineNumber);
-    	for(Map.Entry<String, AnnotationValue> annoVal : annoDef.args.entrySet()) {
-    		annotation.setProperty(annoVal.getKey(), createAnnotation(annoVal.getValue()));
-    	}
-    	return annotation;
-    }
-    
-    private AnnotationValue createAnnotation(AnnotationValue oldValue) {
-		AnnotationValue newValue;
-		if(oldValue instanceof AnnoDef) {
-			newValue = createAnnotation((AnnoDef) oldValue);
-		}
-		else if(oldValue instanceof AnnotationValueList) {
-			AnnotationValueList annoValList = (AnnotationValueList) oldValue;
-			List<AnnotationValue> parsedList = new LinkedList<AnnotationValue>();
-			for(AnnotationValue val : annoValList.getValueList()) {
-				parsedList.add(createAnnotation(val));
-			}
-			newValue = new AnnotationValueList(parsedList);
-		}
-		else {
-			newValue = oldValue;
-		}
-    	return newValue;
-    }
+	public abstract U transform(AnnotationAnd annotationAnd);
 
-    public Type createType(TypeDef typeDef, int dimensions) {
-    	if(typeDef == null) {
-    		return null;
-    	}
-    	return Type.createUnresolved(typeDef, dimensions, parent.getParentClass() != null ? parent.getParentClass() : parent.getSource());
-    }
+	public abstract U transform(AnnotationDivide annotationDivide);
 
-    public Object visitAnnotation( Annotation annotation ) {
-        annotation.setContext( parent );
-        return super.visitAnnotation( annotation );
-    }
-    
-    public Object visitAnnotationFieldRef( AnnotationFieldRef fieldRef ) {
-        fieldRef.setContext( parent );
-        return super.visitAnnotationFieldRef( fieldRef );
-    }
+	public abstract U transform(AnnotationEquals annotationEquals);
+
+	public abstract U transform(
+			AnnotationExclusiveOr annotationExclusiveOr);
+
+	public abstract U transform(
+			AnnotationGreaterEquals annotationGreaterEquals);
+
+	public abstract U transform(
+			AnnotationGreaterThan annotationGreaterThan);
+
+	public abstract U transform(
+			AnnotationLessEquals annotationLessEquals);
+
+	public abstract U transform(
+			AnnotationLessThan annotationLessThan);
+
+	public abstract U transform(
+			AnnotationLogicalAnd annotationLogicalAnd);
+
+	public abstract U transform(
+			AnnotationLogicalOr annotationLogicalOr);
+
+	public abstract U transform(
+			AnnotationMultiply annotationMultiply);
+
+	public abstract U transform(
+			AnnotationNotEquals annotationNotEquals);
+
+	public abstract U transform(AnnotationOr annotationOr);
+
+	public abstract U transform(
+			AnnotationRemainder annotationRemainder);
+
+	public abstract U transform(
+			AnnotationShiftLeft annotationShiftLeft);
+
+	public abstract U transform(
+			AnnotationShiftRight annotationShiftRight);
+
+	public abstract U transform(
+			AnnotationSubtract annotationSubtract);
+
+	public abstract U transform(
+			AnnotationUnsignedShiftRight annotationUnsignedShiftRight);
+
+	public abstract U transform(AnnotationCast annotationCast);
+
+	public abstract U transform(
+			AnnotationConstant annotationConstant);
+
+	public abstract U transform(
+			AnnotationFieldRef annotationFieldRef);
+
+	public abstract U transform(
+			AnnotationLogicalNot annotationLogicalNot);
+
+	public abstract U transform(
+			AnnotationMinusSign annotationMinusSign);
+
+	public abstract U transform(AnnotationNot annotationNot);
+
+	public abstract U transform(
+			AnnotationParenExpression annotationParenExpression);
+
+	public abstract U transform(
+			AnnotationPlusSign annotationPlusSign);
+
+	public abstract U transform(AnnotationQuery annotationQuery);
+
+	public abstract U transform(
+			AnnotationTypeRef annotationTypeRef);
+
+	public abstract U transform(ElemValueListDef elemValueListDef);
 
 }

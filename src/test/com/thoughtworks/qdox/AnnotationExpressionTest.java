@@ -43,6 +43,8 @@ public class AnnotationExpressionTest {
 				// testPrecedence
 				{"2 + 2 * 5", new Integer( 12 )},
 				{"2 * 5 + 2", new Integer( 12 )},
+				{"2+2*5", new Integer( 12 )},
+				{"2*5+2", new Integer( 12 )},
 
 			    // testLogicalExpression
 				{"true && false", Boolean.FALSE},

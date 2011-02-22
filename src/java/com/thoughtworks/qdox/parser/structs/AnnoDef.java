@@ -23,13 +23,15 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
 import com.thoughtworks.qdox.parser.expression.AnnotationValue;
 import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
+import com.thoughtworks.qdox.parser.expression.ElemValueDef;
 
-public class AnnoDef extends LocatedDef implements AnnotationValue
+public class AnnoDef extends LocatedDef implements ElemValueDef
 {
     public TypeDef typeDef;
-    public final Map<String, AnnotationValue> args = new LinkedHashMap<String, AnnotationValue>();
+    public final Map<String, ElemValueDef> args = new LinkedHashMap<String, ElemValueDef>();
 
     public boolean equals(Object obj) {
         AnnoDef annoDef = (AnnoDef) obj;
@@ -46,7 +48,7 @@ public class AnnoDef extends LocatedDef implements AnnotationValue
         result.append(typeDef.name);
         if( !args.isEmpty() ) {
         	result.append('(');
-            for(Iterator<Map.Entry<String, AnnotationValue>> i = args.entrySet().iterator(); i.hasNext();) {
+            for(Iterator<Map.Entry<String, ElemValueDef>> i = args.entrySet().iterator(); i.hasNext();) {
             	result.append( i.next());
             	if(i.hasNext()) {
             		result.append(',');
@@ -59,6 +61,10 @@ public class AnnoDef extends LocatedDef implements AnnotationValue
     
     public AnnoDef getValue() {
     	return this;
+    }
+    
+    public Object transform(AnnotationTransformer transformer) {
+    	return transformer.transform(this);
     }
     
     //@todo remove, refactoring helper

@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.parser.expression;
 
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,7 +27,11 @@ public class AnnotationLogicalOr extends AnnotationBinaryOperator {
         super( left, right );
     }
 
-    public String toString() {
+    public AnnotationLogicalOr(ElemValueDef lhs, ElemValueDef rhs) {
+    	super(lhs, rhs);
+	}
+
+	public String toString() {
         return getLeft().toString() + " || " + getRight().toString();
     }
 
@@ -37,4 +43,7 @@ public class AnnotationLogicalOr extends AnnotationBinaryOperator {
         return getLeft().getParameterValue() + " || " + getRight().getParameterValue();
     }
 
+    public <U> U transform(AnnotationTransformer<U> transformer) {
+    	return transformer.transform(this);
+    }
 }

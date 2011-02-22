@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.parser.expression;
 
+import com.thoughtworks.qdox.builder.AnnotationTransformer;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,19 +23,27 @@ package com.thoughtworks.qdox.parser.expression;
 
 public class AnnotationPlusSign extends AnnotationUnaryOperator {
 
-    public AnnotationPlusSign( AnnotationValue value ) {
-        super( value );
-    }
+	public AnnotationPlusSign(AnnotationValue value) {
+		super(value);
+	}
 
-    public String toString() {
-        return "+" + getValue().toString();
-    }
+	public AnnotationPlusSign(ElemValueDef value) {
+		super(value);
+	}
 
-    public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationPlusSign( this );
-    }
+	public String toString() {
+		return "+" + getValue().toString();
+	}
 
-    public Object getParameterValue() {
-        return "+" + getValue().toString();
-    }
+	public Object accept(AnnotationVisitor visitor) {
+		return visitor.visitAnnotationPlusSign(this);
+	}
+
+	public Object getParameterValue() {
+		return "+" + getValue().toString();
+	}
+
+	public <U> U transform(AnnotationTransformer<U> transformer) {
+		return transformer.transform(this);
+	}
 }

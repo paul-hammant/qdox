@@ -19,13 +19,19 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-public abstract class AnnotationBinaryOperator implements AnnotationValue {
+public abstract class AnnotationBinaryOperator implements AnnotationValue, ElemValueDef {
+	
+	public ElemValueDef lhs, rhs;
 
     private AnnotationValue left;
-
     private AnnotationValue right;
+    
+    public AnnotationBinaryOperator(ElemValueDef lhs, ElemValueDef rhs) {
+		this.lhs = lhs;
+		this.rhs = rhs;
+	}
 
-    public AnnotationBinaryOperator( AnnotationValue left, AnnotationValue right ) {
+	public AnnotationBinaryOperator( AnnotationValue left, AnnotationValue right ) {
         this.left = left;
         this.right = right;
     }

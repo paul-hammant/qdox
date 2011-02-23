@@ -77,10 +77,18 @@ import java.util.Stack;
 file: | file { line = lexer.getLine(); } filepart;
 
 // And a filepart is a package/import statement, javadoc comment, or class declaration.
-filepart: annotation | package | ImportDeclaration | javadoc | class | enum | SEMI;
+filepart: annotation | package | ImportDeclaration | javadoc | TypeDeclaration;
+
+// 7.3 Compilation Units
+
+////TypeDeclarations: TypeDeclaration
+////                | TypeDeclarations TypeDeclaration;
+
 
 // Package statement
 package: PACKAGE fullidentifier SEMI { builder.addPackage(new PackageDef($2, line)); };
+
+
 
 ////ImportDeclarations: ImportDeclaration
 ////				  | ImportDeclarations ImportDeclaration;
@@ -102,6 +110,16 @@ SingleStaticImportDeclaration: IMPORT STATIC fullidentifier SEMI { builder.addIm
 
 // 7.5.4 Static-Import-on-Demand Declaration             
 StaticImportOnDemandDeclaration: IMPORT STATIC fullidentifier DOT STAR SEMI { builder.addImport( "static " + $3 + ".*" ); };
+
+// 7.6 Top Level Type Declarations
+TypeDeclaration: ClassDeclaration
+               | InterfaceDeclaration
+               | SEMI;
+
+//// for migration               
+ClassDeclaration: class;
+InterfaceDeclaration: enum;               
+
 
 // ----- JAVADOC
 

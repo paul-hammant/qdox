@@ -122,8 +122,6 @@ ClassDeclaration: NormalClassDeclaration
                 
 //// for migration               
 NormalClassDeclaration: class;
-EnumDeclaration: enum;
-
 
 // ----- JAVADOC
 
@@ -440,21 +438,25 @@ typeboundlist:
 
 // ----- ENUM
 
-enum: enum_definition BRACEOPEN enum_body BRACECLOSE {
-  builder.endClass();
-  fieldType = null;
-  modifiers.clear();
-};
+// 8.9 Enums
+EnumDeclaration: ClassModifiers_opt ENUM IDENTIFIER Interfaces_opt 
+               { cls.lineNumber = line;
+                 cls.modifiers.addAll(modifiers);
+                 cls.name = $3;
+                 cls.type = ClassDef.ENUM;
+                 builder.beginClass(cls);
+                 cls = new ClassDef();
+                 fieldType = new TypeDef($3, 0);
+               } EnumBody;
 
-enum_definition: modifiers ENUM IDENTIFIER opt_implements {
-    cls.lineNumber = line;
-    cls.modifiers.addAll(modifiers);
-    cls.name = $3;
-    cls.type = ClassDef.ENUM;
-    builder.beginClass(cls);
-    cls = new ClassDef();
-    fieldType = new TypeDef($3, 0);
-};
+EnumBody: BRACEOPEN enum_body BRACECLOSE 
+        { builder.endClass();
+          fieldType = null;
+          modifiers.clear();
+        };
+
+ClassModifiers_opt: modifiers;
+Interfaces_opt: opt_implements;
 
 enum_body: enum_values | enum_values SEMI members;
 
@@ -513,7 +515,7 @@ member:
     constructor |
     static_block |
     class |
-    enum |
+    EnumDeclaration |
     SEMI;
 
 memberend:

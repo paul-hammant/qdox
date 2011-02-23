@@ -69,7 +69,7 @@ import java.util.Stack;
 %type <type> type arrayidentifier classtype typearg
 
 %%
-
+// Source: Java Language Specification - Third Edition
 
 // ----- TOP LEVEL
 
@@ -77,15 +77,31 @@ import java.util.Stack;
 file: | file { line = lexer.getLine(); } filepart;
 
 // And a filepart is a package/import statement, javadoc comment, or class declaration.
-filepart: annotation | package | import | javadoc | class | enum | SEMI;
+filepart: annotation | package | ImportDeclaration | javadoc | class | enum | SEMI;
 
 // Package statement
 package: PACKAGE fullidentifier SEMI { builder.addPackage(new PackageDef($2, line)); };
 
-// Import statement
-import: IMPORT fullidentifier SEMI { builder.addImport($2); } |
-		IMPORT STATIC fullidentifier SEMI { builder.addImport("static " + $3); };
+////ImportDeclarations: ImportDeclaration
+////				  | ImportDeclarations ImportDeclaration;
 
+// 7.5 Import Declarations
+ImportDeclaration: SingleTypeImportDeclaration
+                 | TypeImportOnDemandDeclaration
+                 | SingleStaticImportDeclaration
+                 | StaticImportOnDemandDeclaration;
+
+// 7.5.1 Single-Type-Import Declaration
+SingleTypeImportDeclaration: IMPORT fullidentifier SEMI { builder.addImport( $2 ); };
+
+// 7.5.2 Type-Import-on-Demand Declaration
+TypeImportOnDemandDeclaration: IMPORT fullidentifier DOT STAR SEMI { builder.addImport( $2 + ".*" ); };
+
+// 7.5.3 Single Static Import Declaration
+SingleStaticImportDeclaration: IMPORT STATIC fullidentifier SEMI { builder.addImport( "static " + $3); };
+
+// 7.5.4 Static-Import-on-Demand Declaration             
+StaticImportOnDemandDeclaration: IMPORT STATIC fullidentifier DOT STAR SEMI { builder.addImport( "static " + $3 + ".*" ); };
 
 // ----- JAVADOC
 
@@ -118,11 +134,10 @@ javadoctag:
 
 // ----- COMMON TOKENS
 
-// A fullidentifier is "a", "a.b", "a.b.c", "a.b.*", etc...
+// A fullidentifier is "a", "a.b", "a.b.c", etc...
 fullidentifier: 
     IDENTIFIER { $$ = $1; } |
-    fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; } |
-    fullidentifier DOT STAR { $$ = $1 + ".*"; };
+    fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; };
 
 arrayidentifier: 
     IDENTIFIER dimensions {

@@ -89,7 +89,6 @@ filepart: annotation | package | ImportDeclaration | javadoc | TypeDeclaration;
 package: PACKAGE fullidentifier SEMI { builder.addPackage(new PackageDef($2, line)); };
 
 
-
 ////ImportDeclarations: ImportDeclaration
 ////				  | ImportDeclarations ImportDeclaration;
 
@@ -113,12 +112,17 @@ StaticImportOnDemandDeclaration: IMPORT STATIC fullidentifier DOT STAR SEMI { bu
 
 // 7.6 Top Level Type Declarations
 TypeDeclaration: ClassDeclaration
-               | InterfaceDeclaration
+/*               | InterfaceDeclaration */
                | SEMI;
 
+
+//8.1 Class Declaration
+ClassDeclaration: NormalClassDeclaration	
+                | EnumDeclaration;
+                
 //// for migration               
-ClassDeclaration: class;
-InterfaceDeclaration: enum;               
+NormalClassDeclaration: class;
+EnumDeclaration: enum;
 
 
 // ----- JAVADOC

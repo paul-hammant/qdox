@@ -56,7 +56,8 @@ import java.util.Stack;
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
 %type <sval> name
 %type <type> PrimitiveType NumericType IntegralType FloatingPointType
-%type <type> Wildcard WildcardBoundsOpt
+%type <type> InterfaceType
+%type <type> Wildcard
 %type <annoval> value expression literal annotation arrayInitializer
 %type <annoval> conditionalExpression conditionalOrExpression conditionalAndExpression inclusiveOrExpression exclusiveOrExpression andExpression
 %type <annoval> equalityExpression relationalExpression shiftExpression additiveExpression multiplicativeExpression
@@ -406,13 +407,11 @@ typearg:
     type |
     Wildcard;
 
-Wildcard:
-	QUERY { $$ = new WildcardTypeDef();} |
-	QUERY WildcardBoundsOpt { $$ = $2;};
-	
-WildcardBoundsOpt:
-    EXTENDS type { $$ = new WildcardTypeDef($2, "extends");} |
-    SUPER type   { $$ = new WildcardTypeDef($2, "super");} ;
+// 4.5.1 Type Arguments and Wildcards
+
+Wildcard: QUERY              { $$ = new WildcardTypeDef(); } 
+        | QUERY EXTENDS type { $$ = new WildcardTypeDef($3, "extends" ); }
+        | QUERY SUPER type   { $$ = new WildcardTypeDef($3, "super" ); } ;
 
 opt_typeparams: | typeparams;
 
@@ -456,7 +455,6 @@ EnumBody: BRACEOPEN enum_body BRACECLOSE
         };
 
 ClassModifiers_opt: modifiers;
-Interfaces_opt: opt_implements;
 
 enum_body: enum_values | enum_values SEMI members;
 
@@ -481,7 +479,7 @@ class:
     };
 
 classdefinition: 
-    modifiers classorinterface IDENTIFIER opt_typeparams opt_extends opt_implements {
+    modifiers classorinterface IDENTIFIER opt_typeparams opt_extends Interfaces_opt  {
         cls.lineNumber = line;
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
         cls.name = $3;
@@ -501,11 +499,16 @@ extendslist:
     classtype { cls.extendz.add($1); } |
     extendslist COMMA classtype { cls.extendz.add($3); };
 
-opt_implements: | IMPLEMENTS implementslist;
+// 8.1.5 Superinterfaces
+Interfaces_opt:
+              | Interfaces;
+              
+Interfaces:	IMPLEMENTS InterfaceTypeList;
 
-implementslist: 
-    classtype { cls.implementz.add($1); } | 
-    implementslist COMMA classtype { cls.implementz.add($3); };
+InterfaceTypeList: InterfaceType { cls.implementz.add($1); }
+                 | InterfaceTypeList COMMA InterfaceType { cls.implementz.add($3); };
+
+InterfaceType: classtype;
 
 members: | members { line = lexer.getLine(); } member;
 

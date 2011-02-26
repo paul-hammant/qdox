@@ -97,6 +97,13 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     public Type asType();
 
     public List<JavaMethod> getMethods();
+    
+    /**
+     * 
+     * @return the list of constrcutors
+     * @since 2.0
+     */
+    public List<JavaConstructor> getConstructors();
 
     /**
      * @since 1.3

@@ -26,6 +26,9 @@ class MockBuilder implements Builder {
     private ExpectationCounter myBeginClassCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder BeginClassCalls");
     private ExpectationList myBeginClassParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.beginClass() : com.thoughtworks.qdox.parser.structs.ClassDef def");
     private ExpectationCounter myEndClassCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder EndClassCalls");
+    private ExpectationCounter myBeginConstructorCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder BeginConstructorCalls");
+    private ExpectationCounter myEndConstructorCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder EndConstructorCalls");
+    private ExpectationList myEndConstructorParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.endConstructor() : com.thoughtworks.qdox.parser.structs.MethodDef def");
     private ExpectationCounter myBeginMethodCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder BeginMethodCalls");
     private ExpectationCounter myEndMethodCalls = new ExpectationCounter("com.thoughtworks.qdox.parser.Builder EndMethodCalls");
     private ExpectationList myEndMethodParameter0Values = new ExpectationList("com.thoughtworks.qdox.parser.Builder.endMethod() : com.thoughtworks.qdox.parser.structs.MethodDef def");
@@ -107,6 +110,11 @@ class MockBuilder implements Builder {
     public void endClass() {
         myEndClassCalls.inc();
     }
+    
+    public void beginConstructor()
+    {
+        myBeginConstructorCalls.inc();
+    }
 
     public void beginMethod() {
         myBeginMethodCalls.inc();
@@ -117,6 +125,12 @@ class MockBuilder implements Builder {
 
     public void addExpectedAddMethodValues(MethodDef arg0) {
         myEndMethodParameter0Values.addExpected(arg0);
+    }
+    
+    public void endConstructor( MethodDef def )
+    {
+        myEndConstructorCalls.inc();
+        myEndConstructorParameter0Values.addActual(def);
     }
 
     public void endMethod(MethodDef arg0) {

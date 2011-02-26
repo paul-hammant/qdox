@@ -27,6 +27,7 @@ import com.thoughtworks.qdox.io.ModelWriterFactory;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.DefaultJavaClass;
+import com.thoughtworks.qdox.model.DefaultJavaConstructor;
 import com.thoughtworks.qdox.model.DefaultJavaField;
 import com.thoughtworks.qdox.model.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.DefaultJavaPackage;
@@ -54,6 +55,7 @@ public class ModelBuilder implements Builder {
 
     private final DefaultJavaSource source;
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
+    private DefaultJavaConstructor currentConstructor;
     private DefaultJavaMethod currentMethod;
     private List<AnnoDef> currentAnnoDefs;
     private String lastComment;
@@ -198,6 +200,58 @@ public class ModelBuilder implements Builder {
         entity.setTags(tagList);
         
         lastComment = null;
+    }
+    
+    public void addConstructor(MethodDef def) {
+        beginConstructor();
+        endConstructor(def);
+    }
+    
+    
+
+    public void beginConstructor()
+    {
+        currentConstructor = new DefaultJavaConstructor();
+        currentConstructor.setParentClass( classStack.getFirst() );
+        classStack.getFirst().addConstructor( currentConstructor );
+        
+        currentConstructor.setModelWriterFactory( modelWriterFactory );
+        
+        addJavaDoc( currentConstructor );
+        setAnnotations( currentConstructor );
+    }
+
+    public void endConstructor( MethodDef def )
+    {
+        currentConstructor.setLineNumber(def.lineNumber);
+
+        // basic details
+        currentConstructor.setName(def.name);
+
+        // typeParameters
+        if (def.typeParams != null) {
+            List<TypeVariable> typeParams = new LinkedList<TypeVariable>();
+            for(TypeVariableDef typeVariableDef : def.typeParams) {
+                typeParams.add(createTypeVariable(typeVariableDef));
+            }
+            currentConstructor.setTypeParameters(typeParams);
+        }
+        
+        // exceptions
+        {
+            List<Type> exceptions = new LinkedList<Type>();
+            for (TypeDef type : def.exceptions) {
+                exceptions.add(createType(type, 0));
+            }
+            currentConstructor.setExceptions(exceptions);
+        }
+
+        // modifiers
+        {
+            currentConstructor.setModifiers(new LinkedList<String>( def.modifiers ));
+        }
+        
+        currentConstructor.setSourceCode(def.body);
     }
 
     public void addMethod(MethodDef def) {

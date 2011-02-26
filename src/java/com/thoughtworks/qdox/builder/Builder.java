@@ -42,6 +42,9 @@ public interface Builder {
     void beginClass(ClassDef def);
     void endClass();
 
+    void beginConstructor();
+    void endConstructor(MethodDef def);
+
     void beginMethod();
     void endMethod(MethodDef def);
 

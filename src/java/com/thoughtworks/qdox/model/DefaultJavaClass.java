@@ -42,6 +42,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     private static JavaClass OBJECT_JAVACLASS;
     private static JavaClass ENUM_JAVACLASS;
 
+    private List<JavaConstructor> constructors = new LinkedList<JavaConstructor>();
     private List<JavaMethod> methods = new LinkedList<JavaMethod>();
     private List<JavaField> fields = new LinkedList<JavaField>();
     private List<JavaClass> classes = new LinkedList<JavaClass>();
@@ -190,6 +191,11 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         this.isAnnotation = isAnnotation;
     }
 
+    public void addConstructor( JavaConstructor constructor )
+    {
+        constructors.add( constructor );
+    }
+
     public void addMethod(JavaMethod meth) {
         methods.add(meth);
     }
@@ -316,6 +322,11 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         return type;
     }
 
+    public List<JavaConstructor> getConstructors()
+    {
+        return constructors;
+    }
+    
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethods()
      */
@@ -723,4 +734,5 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     {
         return getSource().getJavaClassLibrary();
     }
+
 }

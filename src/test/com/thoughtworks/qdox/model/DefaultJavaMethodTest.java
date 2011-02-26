@@ -106,6 +106,6 @@ public class DefaultJavaMethodTest
 
     public void setSourceCode( JavaMethod method, String code )
     {
-        ((DefaultJavaMethod) method).setSourceCode( code );
+        ((AbstractBaseMethod) method).setSourceCode( code );
     }
 }

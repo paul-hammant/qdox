@@ -21,6 +21,7 @@ package com.thoughtworks.qdox.io;
 
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
@@ -42,5 +43,7 @@ public interface ModelWriter
     public ModelWriter writeMethod( JavaMethod method );
 
     public ModelWriter writeParameter( JavaParameter parameter );
+
+    public ModelWriter writeConstructor( JavaConstructor defaultJavaConstructor );
 
 }

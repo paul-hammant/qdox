@@ -28,6 +28,7 @@ import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
@@ -155,6 +156,40 @@ public class DefaultModelWriter implements ModelWriter
         }
         buffer.write(';');
         buffer.newline();
+        return this;
+    }
+    
+    public ModelWriter writeConstructor( JavaConstructor constructor )
+    {
+        commentHeader( constructor );
+        writeAllModifiers( constructor.getModifiers() );
+        
+        buffer.write( constructor.getName() );
+        buffer.write( '(' );
+        for(ListIterator<JavaParameter> iter = constructor.getParameters().listIterator(); iter.hasNext();) {
+            writeParameter( iter.next() );
+            if(iter.hasNext()) {
+                buffer.write( ", " );
+            }
+        }
+        buffer.write( ')' );
+        
+        if (constructor.getExceptions().size() > 0) {
+            buffer.write(" throws ");
+            for (Iterator<Type> excIter = constructor.getExceptions().iterator();excIter.hasNext();) {
+                buffer.write(excIter.next().getValue());
+                if(excIter.hasNext()) {
+                    buffer.write(", ");
+                }
+            }
+        }
+        
+        buffer.write( " {" );
+        buffer.newline();
+        buffer.write( constructor.getSourceCode() );
+        buffer.write( "}" );
+        buffer.newline();
+        
         return this;
     }
     

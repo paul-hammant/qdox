@@ -30,7 +30,6 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
 
 	private Type returns = Type.VOID;
     private boolean constructor;
-    private String sourceCode;
     /**
      * The default constructor
      */
@@ -282,18 +281,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         return getDeclarationSignature(false).compareTo(((JavaMethod)o).getDeclarationSignature(false));
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getSourceCode()
-     */
-    public String getSourceCode(){
-    	return sourceCode;
-    }
-
-    public void setSourceCode(String sourceCode){
-    	this.sourceCode = sourceCode;
-    }
-
-	public String toString() {
+    public String toString() {
 		StringBuffer result = new StringBuffer();
 		if(isPrivate()) {
 			result.append("private ");

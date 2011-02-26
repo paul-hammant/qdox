@@ -18,6 +18,7 @@ public abstract class AbstractBaseMethod
     private List<JavaParameter> parameters = new LinkedList<JavaParameter>();
     protected List<Type> exceptions = Collections.emptyList();
     protected boolean varArgs;
+    protected String sourceCode;
 
     public List<JavaParameter> getParameters()
     {
@@ -135,6 +136,16 @@ public abstract class AbstractBaseMethod
             result.add( parameter.getType() );
         }
         return result;
+    }
+
+    public String getSourceCode()
+    {
+    	return sourceCode;
+    }
+
+    public void setSourceCode( String sourceCode )
+    {
+    	this.sourceCode = sourceCode;
     }
 
 }

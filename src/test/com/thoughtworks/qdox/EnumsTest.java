@@ -9,10 +9,10 @@ import com.thoughtworks.qdox.model.JavaClass;
 public class EnumsTest extends TestCase {
 
     public void testAddEmptyEnumsToModel() {
-
         String source = ""
                 + "public enum Enum1 {}\n"
-                + "enum Enum2 {;}\n";
+                + "enum Enum2 {;}\n"; 
+                //+ "private enum Enum3 {,}"; @todo
 
         JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
         javaDocBuilder.addSource(new StringReader(source));

@@ -89,12 +89,6 @@ public class DefaultJavaClassTest
         ((DefaultJavaSource) source).addClass( clazz );
     }
 
-    public void addField( JavaClass clazz, JavaField field )
-    {
-        ((DefaultJavaClass)clazz).addField( field );
-        ((DefaultJavaField) field).setParentClass( clazz );
-    }
-
     public void addMethod( JavaClass clazz, JavaMethod method )
     {
         ((DefaultJavaClass)clazz).addMethod( method );
@@ -181,6 +175,20 @@ public class DefaultJavaClassTest
     public void setType( JavaField field, Type type )
     {
         ((DefaultJavaField) field).setType( type );
+    }
+    
+    @Override
+    public void setFields( DefaultJavaClass clazz, List<JavaField> fields )
+    {
+        for(JavaField field : fields) {
+            clazz.addField( field );
+        }
+    }
+    
+    @Override
+    public void setSource( DefaultJavaClass clazz, JavaSource source )
+    {
+        clazz.setSource( source );
     }
 
 }

@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.mockito.Mockito.*;
+
 import junit.framework.TestCase;
 
 public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
@@ -24,14 +26,14 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     //setters
     public abstract void setComment(C clazz, String comment);
     public abstract void setEnum(C clazz, boolean isEnum);
+    public abstract void setFields(C clazz, List<JavaField> fields);
     public abstract void setImplementz(C clazz, List<Type> implementz);
     public abstract void setInterface(C clazz, boolean isInterface);
     public abstract void setModifiers(C clazz, List<String> modifiers);
     public abstract void setName(C clazz, String name);
     public abstract void setSuperClass(C clazz, Type type);
+    public abstract void setSource( C clazz, JavaSource source );
     
-    
-    public abstract JavaField newJavaField(JavaClass jClass);
     public abstract JavaMethod newJavaMethod();
     public abstract JavaMethod newJavaMethod(String name);
     public abstract JavaMethod newJavaMethod(Type returns, String name);
@@ -54,7 +56,6 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     public abstract void addClass(JavaPackage pckg, JavaClass clazz);
     public abstract void addClass(JavaSource source, JavaClass clazz);
     public abstract void addMethod(JavaClass clazz, JavaMethod method);
-    public abstract void addField(JavaClass clazz, JavaField field);
     public abstract void addParameter(JavaMethod method, JavaParameter parameter);
 
     protected void setUp() throws Exception {
@@ -247,20 +248,24 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
 
     public void testGetCodeBlockClassWithTwoFields() throws Exception {
         setName(cls, "MyClass");
+        List<JavaField> fields = new ArrayList<JavaField>();
         {
-            JavaField fld = newJavaField(null);
-            setName(fld, "count");
-            setType(fld, newType("int"));
-            addField(cls, fld);
+            JavaField fld = mock( JavaField.class );
+            when(fld.getName()).thenReturn( "count" );
+            when(fld.getType()).thenReturn( newType("int") );
+            when(fld.getDeclaringClass()).thenReturn( cls );
+            fields.add( fld );
         }
 
         {
-            JavaField fld = newJavaField(null);
-            setName(fld, "thing");
-            setType(fld, newType("String"));
-            setModifiers(fld, Arrays.asList(new String[]{"public"}));
-            addField(cls, fld);
+            JavaField fld = mock( JavaField.class );
+            when(fld.getName()).thenReturn( "thing" );
+            when(fld.getType()).thenReturn( newType("String") );
+            when(fld.getModifiers()).thenReturn( Collections.singletonList( "public" ) );
+            when(fld.getDeclaringClass()).thenReturn( cls );
+            fields.add( fld );
         }
+        setFields( cls, fields );
 
         String expected = ""
                 + "class MyClass {\n"
@@ -351,11 +356,14 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         setComment(mth, "Hello Method");
         addMethod(cls, mth);
 
-        JavaField fld = newJavaField(null);
-        setType(fld, newType("String"));
-        setName(fld, "thing");
-        setComment(fld, "Hello Field");
-        addField(cls, fld);
+        
+        JavaField fld = mock(JavaField.class);
+        when(fld.getType()).thenReturn( newType("String") );
+        when(fld.getName()).thenReturn( "thing" );
+        when(fld.getComment()).thenReturn( "Hello Field" );
+        when(fld.getDeclaringClass()).thenReturn( cls );
+        
+        setFields( cls, Collections.singletonList( fld ) );
 
         String expected = ""
                 + "/**\n"
@@ -464,10 +472,11 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     }
 
     public void testCanGetFieldByName() throws Exception {
-        JavaField fredField = newJavaField(null);
-        setName(fredField, "fred");
-        setType(fredField, newType("int"));
-        addField(cls, fredField);
+        JavaField fredField = mock(JavaField.class);
+        when(fredField.getName()).thenReturn( "fred" );
+        when(fredField.getType()).thenReturn( newType("int") );
+        when(fredField.getDeclaringClass()).thenReturn( cls );
+        setFields( cls, Collections.singletonList( fredField ) );
 
         assertEquals(fredField, cls.getFieldByName("fred"));
         assertEquals(null, cls.getFieldByName("barney"));
@@ -682,14 +691,4 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         assertEquals( "java.lang.Object", clazz.getSuperClass().getJavaClass().getFullyQualifiedName() );
     }
     
-    public void testGetSource() {
-        JavaSource source = newJavaSource();
-        JavaClass clazz = newJavaClass();
-        ((DefaultJavaSource) source).addClass(clazz);
-        ((DefaultJavaClass) clazz).setSource( source );
-        JavaField field = newJavaField(clazz);
-        ((DefaultJavaField) field).setSource(source);
-        ((DefaultJavaClass) clazz).addField(field);
-        assertEquals(source, field.getSource());
-    }
 }

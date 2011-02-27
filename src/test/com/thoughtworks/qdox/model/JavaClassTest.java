@@ -29,30 +29,23 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     public abstract void setFields(C clazz, List<JavaField> fields);
     public abstract void setImplementz(C clazz, List<Type> implementz);
     public abstract void setInterface(C clazz, boolean isInterface);
+    public abstract void setMethods(C clazz, List<JavaMethod> method);
     public abstract void setModifiers(C clazz, List<String> modifiers);
     public abstract void setName(C clazz, String name);
     public abstract void setSuperClass(C clazz, Type type);
     public abstract void setSource( C clazz, JavaSource source );
     
-    public abstract JavaMethod newJavaMethod();
-    public abstract JavaMethod newJavaMethod(String name);
-    public abstract JavaMethod newJavaMethod(Type returns, String name);
     public abstract JavaPackage newJavaPackage(String name);
     public abstract JavaParameter newJavaParameter(Type type, String name);
     public abstract JavaParameter newJavaParameter(Type type, String name, boolean varArgs);
     public abstract JavaSource newJavaSource();
     public abstract Type newType(String fullname);
     
-    public abstract void setComment(JavaMethod method, String comment);
-    public abstract void setName(JavaMethod method, String name);
     public abstract void setPackage(JavaSource source, JavaPackage pckg);
-    public abstract void setReturns(JavaMethod clazz, Type returns);
     
     public abstract void addClass(JavaClass clazz, JavaClass innerClazz);
     public abstract void addClass(JavaPackage pckg, JavaClass clazz);
     public abstract void addClass(JavaSource source, JavaClass clazz);
-    public abstract void addMethod(JavaClass clazz, JavaMethod method);
-    public abstract void addParameter(JavaMethod method, JavaParameter parameter);
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -193,10 +186,11 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
 
     public void testGetCodeBlockClassWithOneMethod() throws Exception {
         setName(cls, "MyClass");
-        JavaMethod mth = newJavaMethod();
-        setName(mth, "doStuff");
-        setReturns(mth, newType("void"));
-        addMethod(cls, mth);
+        JavaMethod mth = mock(JavaMethod.class);
+        when(mth.getName()).thenReturn( "doStuff" );
+        when(mth.getReturns()).thenReturn( newType("void") );
+        
+        setMethods(cls, Collections.singletonList( mth ));
         String expected = ""
                 + "class MyClass {\n"
                 + "\n"
@@ -208,26 +202,28 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
 
     public void testGetCodeBlockClassWithThreeMethods() throws Exception {
         setName(cls, "MyClass");
+        List<JavaMethod> methods = new ArrayList<JavaMethod>();
         {
-            JavaMethod mth = newJavaMethod();
-            setName(mth, "doStuff");
-            setReturns(mth, newType("void"));
-            addMethod(cls, mth);
+            JavaMethod mth = mock(JavaMethod.class);
+            when(mth.getName()).thenReturn( "doStuff" );
+            when(mth.getReturns()).thenReturn( newType("void") );
+            methods.add(mth);
         }
 
         {
-            JavaMethod mth = newJavaMethod();
-            setName(mth, "somethingElse");
-            setReturns(mth, newType("Goose"));
-            addMethod(cls, mth);
+            JavaMethod mth = mock(JavaMethod.class);
+            when(mth.getName()).thenReturn( "somethingElse" );
+            when(mth.getReturns()).thenReturn( newType("Goose") );
+            methods.add(mth);
         }
 
         {
-            JavaMethod mth = newJavaMethod();
-            setName(mth, "eat");
-            setReturns(mth, newType("void"));
-            addMethod(cls, mth);
+            JavaMethod mth = mock(JavaMethod.class);
+            when(mth.getName()).thenReturn( "eat" );
+            when(mth.getReturns()).thenReturn( newType("void") );
+            methods.add(mth);
         }
+        setMethods( cls, methods );
 
         String expected = ""
                 + "class MyClass {\n"
@@ -346,19 +342,17 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         setName(cls, "MyClass");
         setComment(cls, "Hello World");
 
-        JavaMethod mth = newJavaMethod();
-        setReturns(mth, newType("String"));
-        setName(mth, "thingy");
-        setComment(mth, "Hello Method");
-        addMethod(cls, mth);
-
+        JavaMethod mth = mock(JavaMethod.class);
+        when(mth.getName()).thenReturn( "thingy" );
+        when(mth.getReturns()).thenReturn( newType("String") );
+        when(mth.getComment()).thenReturn( "Hello Method" );
+        setMethods( cls, Collections.singletonList( mth ) );
         
         JavaField fld = mock(JavaField.class);
         when(fld.getType()).thenReturn( newType("String") );
         when(fld.getName()).thenReturn( "thing" );
         when(fld.getComment()).thenReturn( "Hello Field" );
         when(fld.getDeclaringClass()).thenReturn( cls );
-        
         setFields( cls, Collections.singletonList( fld ) );
 
         String expected = ""
@@ -479,17 +473,18 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     }
 
     public void testCanGetMethodBySignature() {
-        JavaMethod method = newJavaMethod();
-        setReturns(method, newType("void"));
-        setName(method, "doStuff");
-        addParameter(method, newJavaParameter(newType("int"), "x") );
-        addParameter(method, newJavaParameter(newType("double"), "y") );
-        addMethod(cls, method);
+        final String methodName = "doStuff";
+        final List<Type> parameterTypes = type(new String[]{"int", "double"});
+        JavaMethod method = mock(JavaMethod.class);
+        when(method.getName()).thenReturn(methodName);
+        //both signatureMatches-methods are allowed
+        when(method.signatureMatches( "doStuff", parameterTypes )).thenReturn( true );
+        when(method.signatureMatches( "doStuff", parameterTypes, false )).thenReturn( true );
+        setMethods(cls, Collections.singletonList( method ));
 
-        List<Type> correctTypes = type(new String[]{"int", "double"});
         assertSame(
                 method,
-                cls.getMethodBySignature("doStuff", correctTypes)
+                cls.getMethodBySignature("doStuff", parameterTypes)
         );
         assertEquals(
                 null,
@@ -497,7 +492,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         );
         assertEquals(
                 null,
-                cls.getMethodBySignature("sitIdlyBy", correctTypes)
+                cls.getMethodBySignature("sitIdlyBy", parameterTypes)
         );
     }
 
@@ -530,12 +525,24 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     }
 
     public void testGetBeanPropertiesFindsSimpleProperties() throws Exception {
-        JavaMethod setFooMethod = newJavaMethod("setFoo");
-        addParameter(setFooMethod, newJavaParameter(newType("int"), "foo"));
-        addMethod(cls, setFooMethod);
+        List<JavaMethod> methods = new ArrayList<JavaMethod>();
+        JavaMethod setFooMethod = mock(JavaMethod.class);
+        when(setFooMethod.getName()).thenReturn( "setFoo" );
+        when(setFooMethod.getParameters()).thenReturn( Collections.singletonList( newJavaParameter(newType("int"), "foo") ) );
+        when(setFooMethod.isPropertyMutator()).thenReturn( true );
+        when(setFooMethod.getPropertyName()).thenReturn( "foo" );
+        when(setFooMethod.getPropertyType()).thenReturn( newType("int") );
+        methods.add(setFooMethod);
 
-        JavaMethod getFooMethod = newJavaMethod(newType("int"), "getFoo");
-        addMethod(cls, getFooMethod);
+        JavaMethod getFooMethod = mock(JavaMethod.class);
+        when(getFooMethod.getName()).thenReturn( "getFoo" );
+        when(getFooMethod.getReturns()).thenReturn( newType("int") );
+        when(getFooMethod.isPropertyAccessor()).thenReturn( true );
+        when(getFooMethod.getPropertyName()).thenReturn( "foo" );
+        when(getFooMethod.getPropertyType()).thenReturn( newType("int") );
+        methods.add( getFooMethod );
+        
+        setMethods( cls, methods );
         
         assertEquals(1, cls.getBeanProperties().size());
         BeanProperty fooProp = cls.getBeanProperties().get(0);
@@ -584,69 +591,34 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     	assertEquals("interface com.MyClass", cls.toString());
     }
     
-    public void testToStringVoid() {
-    	setName(cls, "com.MyClass");
-    	addMethod(cls, newJavaMethod(Type.VOID, "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods().get(0);
-    	assertEquals("void", javaMethod.getReturns().toString());
-    }
-
-    public void testToStringBoolean() {
-    	setName(cls, "com.MyClass");
-    	addMethod(cls, newJavaMethod(newType("boolean"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods().get(0);
-    	assertEquals("boolean", javaMethod.getReturns().toString());
-    }
     
-    public void testToStringInt() {
-    	setName(cls, "com.MyClass");
-    	addMethod(cls,  newJavaMethod(newType("int"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods().get(0);
-    	assertEquals("int", javaMethod.getReturns().toString());
-    }
-
-    public void testToStringLong() {
-    	setName(cls, "com.MyClass");
-    	addMethod(cls, newJavaMethod(newType("long"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods().get(0);
-    	assertEquals("long", javaMethod.getReturns().toString());
-    }
-
-    public void testToStringFloat() {
-    	setName(cls, "com.MyClass");
-    	addMethod(cls, newJavaMethod(newType("float"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods().get(0);
-    	assertEquals("float", javaMethod.getReturns().toString());
-    }
-
-    public void testToStringDouble() {
-    	setName(cls, "com.MyClass");
-    	addMethod(cls, newJavaMethod(newType("double"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods().get(0);
-    	assertEquals("double", javaMethod.getReturns().toString());
-    }
-    
-    public void testToStringChar() {
-    	setName(cls, "com.MyClass");
-    	addMethod(cls, newJavaMethod(newType("char"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods().get(0);
-    	assertEquals("char", javaMethod.getReturns().toString());
-    }
-
-    public void testToStringByte() {
-    	setName(cls, "com.MyClass");
-    	addMethod(cls, newJavaMethod(newType("byte"), "doSomething"));
-    	JavaMethod javaMethod = cls.getMethods().get(0);
-    	assertEquals("byte", javaMethod.getReturns().toString());
-    }
 
     /**
      * @codehaus.jira QDOX-59
      */
     public void testBeanPropertiesAreReturnedInOrderDeclared() {
-        addMethod(cls, new DefaultJavaMethod(newType("int"), "getFoo"));
-        addMethod(cls, new DefaultJavaMethod(newType("int"), "getBar"));
-        addMethod(cls, new DefaultJavaMethod(newType("String"), "getMcFnord"));
+        List<JavaMethod> methods = new ArrayList<JavaMethod>();
+        JavaMethod getFooMethod = mock(JavaMethod.class);
+        when(getFooMethod.getName()).thenReturn( "getFoo" );
+        when(getFooMethod.getReturns()).thenReturn( newType("int") );
+        when(getFooMethod.getPropertyName()).thenReturn( "foo" );
+        when(getFooMethod.isPropertyAccessor()).thenReturn( true );
+        methods.add( getFooMethod );
+
+        JavaMethod getBarMethod = mock(JavaMethod.class);
+        when(getBarMethod.getName()).thenReturn( "getBar" );
+        when(getBarMethod.getReturns()).thenReturn( newType("int") );
+        when(getBarMethod.getPropertyName()).thenReturn( "bar" );
+        when(getBarMethod.isPropertyAccessor()).thenReturn( true );
+        methods.add( getBarMethod );
+        
+        JavaMethod getMcFNordMethod = mock(JavaMethod.class);
+        when(getMcFNordMethod.getName()).thenReturn( "getMcFnord" );
+        when(getMcFNordMethod.getReturnType()).thenReturn( newType("String") );
+        when(getMcFNordMethod.getPropertyName()).thenReturn( "mcFnord" );
+        when(getMcFNordMethod.isPropertyAccessor()).thenReturn( true );
+        methods.add( getMcFNordMethod );
+        setMethods( cls, methods );
 
         List<BeanProperty> properties = cls.getBeanProperties();
         assertEquals(3, properties.size());
@@ -665,21 +637,27 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     
     // QDOX-201
     public void testGetVarArgMethodSignature() {
-        JavaMethod simpleMethod = newJavaMethod( "doSomething" );
-        addParameter(simpleMethod,  newJavaParameter( newType("String"), "param", false ) );
-        JavaMethod varArgMethod = newJavaMethod( "doSomething" );
-        addParameter( varArgMethod, newJavaParameter( newType("String"), "param", true ) );
+        List<JavaMethod> methods = new ArrayList<JavaMethod>();
+        JavaMethod simpleMethod = mock(JavaMethod.class);
         
-        addMethod(cls, simpleMethod );
-        addMethod(cls, varArgMethod );
+        //both signatureMatches-methods are allowed
+        when(simpleMethod.signatureMatches( "doSomething", Collections.singletonList( newType("String") ) )).thenReturn( true );
+        when(simpleMethod.signatureMatches( "doSomething", Collections.singletonList( newType("String") ), false )).thenReturn( true );
+        methods.add( simpleMethod );
         
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")) ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), false ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), true ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), false, false ) );
-        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), false, true ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), true, false ) );
-        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList(newType("String")), true, true ) );
+        JavaMethod varArgMethod = mock(JavaMethod.class);
+        when(varArgMethod.signatureMatches( "doSomething", Collections.singletonList( newType("String") ), true )).thenReturn( true );
+        methods.add( varArgMethod );
+        
+        setMethods( cls, methods );
+        
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( newType("String") ) ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( newType("String") ), false ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( newType("String") ), true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( newType("String") ), false, false ) );
+        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( newType("String") ), false, true ) );
+        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( newType("String") ), true, false ) );
+        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( newType("String") ), true, true ) );
     }
  
     public void testJavaLangObjectAsDefaultSuperClass() throws Exception {

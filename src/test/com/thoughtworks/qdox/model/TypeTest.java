@@ -86,6 +86,38 @@ public abstract class TypeTest extends TestCase {
         assertEquals("Outer.Inner", builder.getClassByName( "Outer" ).getFieldByName( "ia" ).getType().toGenericString());
     }
     
+    public void testToStringVoid() {
+        assertEquals("void", Type.VOID.toString());
+    }
+
+    public void testToStringBoolean() {
+        assertEquals("boolean", newType("boolean").toString());
+    }
+    
+    public void testToStringInt() {
+        assertEquals("int", newType("int").toString());
+    }
+
+    public void testToStringLong() {
+        assertEquals("long", newType("long").toString());
+    }
+
+    public void testToStringFloat() {
+        assertEquals("float", newType("float").toString());
+    }
+
+    public void testToStringDouble() {
+        assertEquals("double", newType("double").toString());
+    }
+    
+    public void testToStringChar() {
+        assertEquals("char", newType("char").toString());
+    }
+
+    public void testToStringByte() {
+        assertEquals("byte", newType("byte").toString());
+    }
+    
     private void assertNotEquals(Object o1, Object o2) {
         assertTrue(o2.toString() + " should not equal " + o1.toString(),
                 !o2.equals(o1));

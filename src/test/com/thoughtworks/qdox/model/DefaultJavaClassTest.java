@@ -23,21 +23,6 @@ public class DefaultJavaClassTest
         return new DefaultJavaClass( name );
     }
 
-    public JavaMethod newJavaMethod()
-    {
-        return new DefaultJavaMethod();
-    }
-
-    public JavaMethod newJavaMethod( String name )
-    {
-        return new DefaultJavaMethod( name );
-    }
-
-    public JavaMethod newJavaMethod( Type returns, String name )
-    {
-        return new DefaultJavaMethod( returns, name );
-    }
-
     public JavaPackage newJavaPackage( String name )
     {
         return new DefaultJavaPackage( name );
@@ -82,27 +67,10 @@ public class DefaultJavaClassTest
         ((DefaultJavaSource) source).addClass( clazz );
     }
 
-    public void addMethod( JavaClass clazz, JavaMethod method )
-    {
-        ((DefaultJavaClass)clazz).addMethod( method );
-        ((AbstractBaseMethod) method).setParentClass( clazz );
-    }
-
-    public void addParameter( JavaMethod method, JavaParameter parameter )
-    {
-        ((AbstractBaseMethod) method).addParameter( parameter );
-        ((DefaultJavaParameter) parameter).setParentMethod( method );
-    }
-
     // Set-methods
     public void setComment( DefaultJavaClass clazz, String comment )
     {
         clazz.setComment( comment );
-    }
-
-    public void setComment( JavaMethod method, String comment )
-    {
-        ((AbstractBaseMethod) method).setComment( comment );
     }
 
     public void setEnum( DefaultJavaClass clazz, boolean isEnum )
@@ -130,19 +98,9 @@ public class DefaultJavaClassTest
         clazz.setName( name );
     }
 
-    public void setName( JavaMethod method, String name )
-    {
-        ((AbstractBaseMethod) method).setName( name );
-    }
-
     public void setPackage( JavaSource source, JavaPackage pckg )
     {
         ((DefaultJavaSource) source).setPackage( pckg );
-    }
-
-    public void setReturns( JavaMethod method, Type returns )
-    {
-        ((DefaultJavaMethod) method).setReturns( returns );
     }
 
     public void setSuperClass( DefaultJavaClass clazz, Type type )
@@ -162,6 +120,14 @@ public class DefaultJavaClassTest
     public void setSource( DefaultJavaClass clazz, JavaSource source )
     {
         clazz.setSource( source );
+    }
+    
+    @Override
+    public void setMethods( DefaultJavaClass clazz, List<JavaMethod> methods )
+    {
+        for(JavaMethod method : methods) {
+            clazz.addMethod( method );
+        }
     }
 
 }

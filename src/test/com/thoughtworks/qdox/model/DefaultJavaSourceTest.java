@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 
-public class DefaultJavaSourceTest extends JavaSourceTest
+public class DefaultJavaSourceTest extends JavaSourceTest<DefaultJavaSource>
 {
 
     public DefaultJavaSourceTest( String s )
@@ -9,7 +9,7 @@ public class DefaultJavaSourceTest extends JavaSourceTest
         super( s );
     }
 
-    public JavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary)
+    public DefaultJavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary)
     {
         return new DefaultJavaSource(classLibrary);
     }
@@ -35,9 +35,9 @@ public class DefaultJavaSourceTest extends JavaSourceTest
         return new DefaultJavaPackage(name);
     }
 
-    public void setPackage( JavaSource source, JavaPackage pckg )
+    public void setPackage( DefaultJavaSource source, JavaPackage pckg )
     {
-        ((DefaultJavaSource) source).setPackage( pckg );
+        source.setPackage( pckg );
     }
 
     public void addImport( JavaSource source, String imp )

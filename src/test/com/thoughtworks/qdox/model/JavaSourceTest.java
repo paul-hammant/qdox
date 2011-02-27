@@ -4,19 +4,24 @@ import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 
 import junit.framework.TestCase;
 
-public abstract class JavaSourceTest extends TestCase {
+public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
 
-    private JavaSource source;
+    private S source;
 
     public JavaSourceTest(String s) {
         super(s);
     }
+
+    //constructors
+    public abstract S newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary);
     
-    public abstract JavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary);
+    
+    //setters
+    public abstract void setPackage(S source, JavaPackage pckg);
+
     public abstract JavaClass newJavaClass();
     public abstract JavaPackage newJavaPackage(String name);
-    
-    public abstract void setPackage(JavaSource source, JavaPackage pckg);
+
     public abstract void setName(JavaClass clazz, String name);
     
     public abstract void addClass(JavaSource source, JavaClass clazz);

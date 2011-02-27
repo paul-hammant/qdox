@@ -1,8 +1,15 @@
 package com.thoughtworks.qdox.model;
 
-import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import junit.framework.TestCase;
+
+import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 
 public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
 
@@ -17,15 +24,11 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     
     
     //setters
+    public abstract void setClasses(S source, List<JavaClass> classes);
+    public abstract void setImports(S source, List<String> imports);
     public abstract void setPackage(S source, JavaPackage pckg);
 
-    public abstract JavaClass newJavaClass();
     public abstract JavaPackage newJavaPackage(String name);
-
-    public abstract void setName(JavaClass clazz, String name);
-    
-    public abstract void addClass(JavaSource source, JavaClass clazz);
-    public abstract void addImport(JavaSource source, String imp);
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -33,9 +36,9 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
 
     public void testToStringOneClass() throws Exception {
-        JavaClass cls = newJavaClass();
-        setName(cls, "MyClass");
-        addClass(source, cls);
+        JavaClass cls = mock(JavaClass.class);
+        when(cls.getName()).thenReturn( "MyClass" );
+        setClasses( source, Collections.singletonList( cls ) );
         String expected = ""
                 + "class MyClass {\n"
                 + "\n"
@@ -44,15 +47,18 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
 
     public void testToStringMultipleClass() throws Exception {
-        JavaClass cls1 = newJavaClass();
-        setName(cls1, "MyClass1");
-        addClass(source, cls1);
-        JavaClass cls2 = newJavaClass();
-        setName(cls2, "MyClass2");
-        addClass(source, cls2);
-        JavaClass cls3 = newJavaClass();
-        setName(cls3, "MyClass3");
-        addClass(source, cls3);
+        List<JavaClass> classes = new ArrayList<JavaClass>();
+        JavaClass cls1 = mock(JavaClass.class);
+        when(cls1.getName()).thenReturn( "MyClass1" );
+        classes.add( cls1 );
+        JavaClass cls2 = mock(JavaClass.class);
+        when(cls2.getName()).thenReturn( "MyClass2" );
+        classes.add( cls2 );
+        JavaClass cls3 = mock(JavaClass.class);
+        when(cls3.getName()).thenReturn( "MyClass3" );
+        classes.add( cls3 );
+        
+        setClasses( source, classes );
 
         String expected = ""
                 + "class MyClass1 {\n"
@@ -70,9 +76,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
 
     public void testToStringPackage() throws Exception {
-        JavaClass cls = newJavaClass();
-        setName(cls, "MyClass");
-        addClass(source, cls);
+        JavaClass cls = mock(JavaClass.class);
+        when(cls.getName()).thenReturn("MyClass");
+        
+        setClasses(source, Collections.singletonList( cls ));
         setPackage(source, newJavaPackage("com.thing"));
         String expected = ""
                 + "package com.thing;\n"
@@ -84,10 +91,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
 
     public void testToStringImport() throws Exception {
-        JavaClass cls = newJavaClass();
-        setName(cls, "MyClass");
-        addClass(source, cls);
-        addImport(source, "java.util.*");
+        JavaClass cls = mock(JavaClass.class);
+        when(cls.getName()).thenReturn("MyClass");
+        setClasses(source, Collections.singletonList( cls ));
+        setImports(source, Collections.singletonList("java.util.*"));
         String expected = ""
                 + "import java.util.*;\n"
                 + "\n"
@@ -98,12 +105,14 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
 
     public void testToStringMultipleImports() throws Exception {
-        JavaClass cls = newJavaClass();
-        setName(cls, "MyClass");
-        addClass(source, cls);
-        addImport(source, "java.util.*");
-        addImport(source, "com.blah.Thing");
-        addImport(source, "xxx");
+        JavaClass cls = mock(JavaClass.class);
+        when(cls.getName()).thenReturn("MyClass");
+        setClasses(source, Collections.singletonList( cls ));
+        List<String> imports = new ArrayList<String>();
+        imports.add("java.util.*");
+        imports.add("com.blah.Thing");
+        imports.add("xxx");
+        setImports( source, imports );
         String expected = ""
                 + "import java.util.*;\n"
                 + "import com.blah.Thing;\n"
@@ -116,10 +125,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
 
     public void testToStringImportAndPackage() throws Exception {
-        JavaClass cls = newJavaClass();
-        setName(cls, "MyClass");
-        addClass(source, cls);
-        addImport(source, "java.util.*");
+        JavaClass cls = mock(JavaClass.class);
+        when(cls.getName()).thenReturn("MyClass");
+        setClasses(source, Collections.singletonList( cls ));
+        setImports(source, Collections.singletonList( "java.util.*" ));
         setPackage(source, newJavaPackage("com.moo"));
         String expected = ""
                 + "package com.moo;\n"
@@ -139,8 +148,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
        }
     
     public void testResolveJavaPrimitive() throws Exception {
-        addImport(source, "bogus.int");
-        addImport(source, "bogus.double");
+        List<String> imports = new ArrayList<String>();
+        imports.add("bogus.int");
+        imports.add("bogus.double");
+        setImports( source, imports );
         String[] primitives = new String[]{
             "boolean", "byte", "char", "double",
             "float", "int", "long", "short", "void"
@@ -160,15 +171,17 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
     
     public void testResolveFullyQualifiedImport() throws Exception {
-        addImport(source, "foo.Bar");
+        setImports(source, Collections.singletonList("foo.Bar"));
         source.getJavaClassLibrary().getJavaClass("foo.Bar");
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveChooseFirstMatchingImport() throws Exception {
-        addImport(source, "bogus.package.MyType");
-        addImport(source, "com.thoughtworks.qdox.model.Type");
-        addImport(source, "another.package.Type");
+        List<String> imports = new ArrayList<String>();
+        imports.add("bogus.package.MyType");
+        imports.add("com.thoughtworks.qdox.model.Type");
+        imports.add("another.package.Type");
+        setImports( source, imports );
         source.getJavaClassLibrary().getJavaClass("bogus.package.MyType");
         source.getJavaClassLibrary().getJavaClass("com.thoughtworks.qdox.model.Type");
         source.getJavaClassLibrary().getJavaClass("another.package.Type");
@@ -189,8 +202,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
 
     public void testResolveFullyQualifiedTrumpsWildCard() throws Exception {
-        addImport(source, "bar.Bar");
-        addImport(source, "foo.Bar");
+        List<String> imports = new ArrayList<String>();
+        imports.add("bar.Bar");
+        imports.add("foo.Bar");
+        setImports( source, imports );
         source.getJavaClassLibrary().getJavaClass("foo.*");
         source.getJavaClassLibrary().getJavaClass("bar.Bar");
         assertEquals("bar.Bar", source.resolveType("Bar"));
@@ -198,7 +213,7 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
 
     public void testResolveWildcard() throws Exception {
         source.getJavaClassLibrary().getJavaClass("foo.Bar");
-        addImport(source, "foo.*");
+        setImports(source, Collections.singletonList("foo.*"));
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
@@ -208,8 +223,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
 
     public void testResolveSamePackageTrumpsWildcard() throws Exception {
-        addImport(source, "com.thoughtworks.qdox.model.Type");
-        addImport(source, "foo.*");
+        List<String> imports = new ArrayList<String>();
+        imports.add("com.thoughtworks.qdox.model.Type");
+        imports.add("foo.*");
+        setImports( source, imports );
         source.getJavaClassLibrary().getJavaClass("com.thoughtworks.qdox.model.Type");
         source.getJavaClassLibrary().getJavaClass("foo.Type");
         assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
@@ -223,7 +240,7 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
 
     public void testResolvePartiallySpecifiedInnerClass() throws Exception {
         setPackage(source, newJavaPackage("foo"));
-        addImport(source, "java.util.*");
+        setImports(source, Collections.singletonList("java.util.*"));
         source.getJavaClassLibrary().getJavaClass("foo.Bar$Fnord");
         assertEquals("foo.Bar$Fnord", source.resolveType("Bar.Fnord"));
         assertEquals("java.util.Map$Entry", source.resolveType("Map.Entry"));

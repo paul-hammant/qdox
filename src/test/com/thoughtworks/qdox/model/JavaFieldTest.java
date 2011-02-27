@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import static org.mockito.Mockito.*;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,16 +23,11 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
     public abstract void setModifiers(F fld, List<String> modifiers);
     public abstract void setName(F fld, String name);
     public abstract void setType(F fld, Type type);
+    public abstract void setDeclaringClass(F fld, JavaClass cls);
     
     public abstract Type newType(String fullname);
     public abstract Type newType(String fullname, int dimensions);
-    public abstract JavaClass newJavaClass(String fullname);
-    public abstract JavaPackage newJavaPackage(String name);
     
-    
-    public abstract void addField(JavaClass clazz, JavaField fld);
-    public abstract void addClass(JavaPackage pckg, JavaClass clazz);
-
     public void testGetCodeBlock() throws Exception {
         F fld = newJavaField();
         setName(fld, "count");
@@ -109,20 +106,20 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
     }
     
     public void testToStringThreadMIN_PRIORITY() throws Exception {
-    	JavaClass cls = newJavaClass("java.lang.Thread");
+    	JavaClass cls = mock(JavaClass.class);
+    	when(cls.getFullyQualifiedName()).thenReturn( "java.lang.Thread" );
     	F fld = newJavaField(newType("int"), "MIN_PRIORITY");
     	setModifiers(fld, Arrays.asList(new String[] {"final", "static", "public"}));
-    	addField(cls, fld);
+    	setDeclaringClass( fld, cls );
     	assertEquals("public static final int java.lang.Thread.MIN_PRIORITY", fld.toString());
     }
     
     public void testToStringFieldDescriptorFd() throws Exception {
-    	JavaPackage pckg =  newJavaPackage("java.io");
-    	JavaClass cls = newJavaClass("FileDescriptor");
-    	addClass(pckg, cls);
+    	JavaClass cls = mock(JavaClass.class);
+    	when(cls.getFullyQualifiedName()).thenReturn("java.io.FileDescriptor");
     	F fld =  newJavaField(newType("int"), "fd");
     	setModifiers(fld, Arrays.asList(new String[]{"private"}));
-    	addField(cls, fld);
+    	setDeclaringClass( fld, cls );
     	assertEquals("private int java.io.FileDescriptor.fd", fld.toString());
     }
 }

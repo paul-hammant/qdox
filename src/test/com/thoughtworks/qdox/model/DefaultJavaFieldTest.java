@@ -3,7 +3,7 @@ package com.thoughtworks.qdox.model;
 import java.util.List;
 
 public class DefaultJavaFieldTest
-    extends JavaFieldTest
+    extends JavaFieldTest<DefaultJavaField>
 {
 
     public DefaultJavaFieldTest( String s )
@@ -11,7 +11,7 @@ public class DefaultJavaFieldTest
         super( s );
     }
 
-    public JavaField newJavaField()
+    public DefaultJavaField newJavaField()
     {
         JavaSource source = new DefaultJavaSource( null );
         JavaClass javaClass = new DefaultJavaClass( source );
@@ -20,7 +20,7 @@ public class DefaultJavaFieldTest
         return result;
     }
 
-    public JavaField newJavaField( Type type, String name )
+    public DefaultJavaField newJavaField( Type type, String name )
     {
         return new DefaultJavaField(type, name);
     }
@@ -45,29 +45,29 @@ public class DefaultJavaFieldTest
         return new Type( fullname, dimensions );
     }
 
-    public void setComment( JavaField fld, String comment )
+    public void setComment( DefaultJavaField fld, String comment )
     {
-        ((DefaultJavaField) fld).setComment( comment );
+        fld.setComment( comment );
     }
 
-    public void setInitializationExpression( JavaField fld, String expression )
+    public void setInitializationExpression( DefaultJavaField fld, String expression )
     {
-        ((DefaultJavaField) fld).setInitializationExpression( expression );
+        fld.setInitializationExpression( expression );
     }
 
-    public void setModifiers( JavaField fld, List<String> modifiers )
+    public void setModifiers( DefaultJavaField fld, List<String> modifiers )
     {
-        ((DefaultJavaField) fld).setModifiers( modifiers );
+        fld.setModifiers( modifiers );
     }
 
-    public void setName( JavaField fld, String name )
+    public void setName( DefaultJavaField fld, String name )
     {
-        ((DefaultJavaField) fld).setName( name );
+        fld.setName( name );
     }
 
-    public void setType( JavaField fld, Type type )
+    public void setType( DefaultJavaField fld, Type type )
     {
-        ((DefaultJavaField) fld).setType( type );
+        fld.setType( type );
     }
 
 

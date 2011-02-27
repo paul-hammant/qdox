@@ -43,14 +43,10 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     public abstract JavaSource newJavaSource();
     public abstract Type newType(String fullname);
     
-    public abstract void setComment(JavaField field, String comment);
     public abstract void setComment(JavaMethod method, String comment);
-    public abstract void setModifiers(JavaField field, List<String> modifiers);
-    public abstract void setName(JavaField field, String name);
     public abstract void setName(JavaMethod method, String name);
     public abstract void setPackage(JavaSource source, JavaPackage pckg);
     public abstract void setReturns(JavaMethod clazz, Type returns);
-    public abstract void setType(JavaField field, Type type);
     
     public abstract void addClass(JavaClass clazz, JavaClass innerClazz);
     public abstract void addClass(JavaPackage pckg, JavaClass clazz);

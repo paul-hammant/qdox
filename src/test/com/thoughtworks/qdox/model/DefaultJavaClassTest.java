@@ -23,13 +23,6 @@ public class DefaultJavaClassTest
         return new DefaultJavaClass( name );
     }
 
-    public JavaField newJavaField(JavaClass parentClass)
-    {
-        DefaultJavaField result = new DefaultJavaField();
-        result.setParentClass( parentClass );
-        return result;
-    }
-
     public JavaMethod newJavaMethod()
     {
         return new DefaultJavaMethod();
@@ -107,11 +100,6 @@ public class DefaultJavaClassTest
         clazz.setComment( comment );
     }
 
-    public void setComment( JavaField field, String comment )
-    {
-        ((DefaultJavaField) field).setComment( comment );
-    }
-
     public void setComment( JavaMethod method, String comment )
     {
         ((AbstractBaseMethod) method).setComment( comment );
@@ -137,19 +125,9 @@ public class DefaultJavaClassTest
         clazz.setModifiers( modifiers );
     }
 
-    public void setModifiers( JavaField field, List<String> modifiers )
-    {
-        ((DefaultJavaField) field).setModifiers( modifiers );
-    }
-
     public void setName( DefaultJavaClass clazz, String name )
     {
         clazz.setName( name );
-    }
-
-    public void setName( JavaField field, String name )
-    {
-        ((DefaultJavaField) field).setName( name );
     }
 
     public void setName( JavaMethod method, String name )
@@ -172,11 +150,6 @@ public class DefaultJavaClassTest
         clazz.setSuperClass( type );
     }
 
-    public void setType( JavaField field, Type type )
-    {
-        ((DefaultJavaField) field).setType( type );
-    }
-    
     @Override
     public void setFields( DefaultJavaClass clazz, List<JavaField> fields )
     {

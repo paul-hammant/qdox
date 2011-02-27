@@ -8,17 +8,29 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-public abstract class JavaClassTest extends TestCase {
+public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
 
-    private JavaClass cls;
+    private C cls;
     private JavaSource src;
 
     public JavaClassTest(String s) {
         super(s);
     }
     
-    public abstract JavaClass newJavaClass();
-    public abstract JavaClass newJavaClass(String name);
+    //contructors
+    public abstract C newJavaClass();
+    public abstract C newJavaClass(String name);
+    
+    //setters
+    public abstract void setComment(C clazz, String comment);
+    public abstract void setEnum(C clazz, boolean isEnum);
+    public abstract void setImplementz(C clazz, List<Type> implementz);
+    public abstract void setInterface(C clazz, boolean isInterface);
+    public abstract void setModifiers(C clazz, List<String> modifiers);
+    public abstract void setName(C clazz, String name);
+    public abstract void setSuperClass(C clazz, Type type);
+    
+    
     public abstract JavaField newJavaField(JavaClass jClass);
     public abstract JavaMethod newJavaMethod();
     public abstract JavaMethod newJavaMethod(String name);
@@ -29,20 +41,13 @@ public abstract class JavaClassTest extends TestCase {
     public abstract JavaSource newJavaSource();
     public abstract Type newType(String fullname);
     
-    public abstract void setComment(JavaClass clazz, String comment);
     public abstract void setComment(JavaField field, String comment);
     public abstract void setComment(JavaMethod method, String comment);
-    public abstract void setEnum(JavaClass clazz, boolean isEnum);
-    public abstract void setImplementz(JavaClass clazz, List<Type> implementz);
-    public abstract void setInterface(JavaClass clazz, boolean isInterface);
-    public abstract void setModifiers(JavaClass clazz, List<String> modifiers);
     public abstract void setModifiers(JavaField field, List<String> modifiers);
-    public abstract void setName(JavaClass clazz, String name);
     public abstract void setName(JavaField field, String name);
     public abstract void setName(JavaMethod method, String name);
     public abstract void setPackage(JavaSource source, JavaPackage pckg);
     public abstract void setReturns(JavaMethod clazz, Type returns);
-    public abstract void setSuperClass(JavaClass clazz, Type type);
     public abstract void setType(JavaField field, Type type);
     
     public abstract void addClass(JavaClass clazz, JavaClass innerClazz);
@@ -270,7 +275,7 @@ public abstract class JavaClassTest extends TestCase {
 
     public void testGetCodeBlockClassWithInnerClass() throws Exception {
         setName(cls, "Outer");
-        JavaClass innerClass = newJavaClass();
+        C innerClass = newJavaClass();
         setName(innerClass, "Inner");
         addClass(cls, innerClass);
 
@@ -287,7 +292,7 @@ public abstract class JavaClassTest extends TestCase {
 
     public void testGetCodeBlockClassWithInnerEnum() throws Exception {
         setName(cls, "Outer");
-        JavaClass innerEnum = newJavaClass();
+        C innerEnum = newJavaClass();
         setEnum(innerEnum, true);
         setName(innerEnum, "Inner");
         addClass(cls, innerEnum);
@@ -306,7 +311,7 @@ public abstract class JavaClassTest extends TestCase {
     public void testGetCodeBlockEnumWithInnerClass() throws Exception {
         setName(cls, "Outer");
         setEnum(cls, true);
-        JavaClass innerClass = newJavaClass();
+        C innerClass = newJavaClass();
         setName(innerClass, "Inner");
         addClass(cls, innerClass);
 
@@ -403,11 +408,11 @@ public abstract class JavaClassTest extends TestCase {
     public void testInnerClass() throws Exception {
         setPackage(src, newJavaPackage("foo.bar"));
 
-        JavaClass outer = newJavaClass();
+        C outer = newJavaClass();
         setName(outer, "Outer");
         addClass(src, outer);
 
-        JavaClass inner = newJavaClass();
+        C inner = newJavaClass();
         setName(inner, "Inner");
         addClass(outer, inner);
 
@@ -492,7 +497,7 @@ public abstract class JavaClassTest extends TestCase {
     }
 
     public void testCanGetInnerClassByName() throws Exception {
-        JavaClass innerClass = newJavaClass();
+        C innerClass = newJavaClass();
         setName(innerClass, "Inner");
         addClass(cls, innerClass);
 
@@ -508,7 +513,7 @@ public abstract class JavaClassTest extends TestCase {
     public void testResolveTypeInnerClass() throws Exception {
         setPackage(src, newJavaPackage("p"));
         setName(cls, "X");
-        JavaClass innerClass = newJavaClass();
+        C innerClass = newJavaClass();
         setName(innerClass, "DogFood");
         addClass(cls, innerClass);
         assertEquals("p.X$DogFood", cls.resolveType("DogFood"));
@@ -562,7 +567,7 @@ public abstract class JavaClassTest extends TestCase {
     	JavaPackage jPackage = newJavaPackage("com.thoughtworks.qdox.model");
     	JavaClass jOuterClass = newJavaClass("OuterClass");
     	addClass(jPackage, jOuterClass);
-    	JavaClass jInnerInterface = newJavaClass("InnerInterface");
+    	C jInnerInterface = newJavaClass("InnerInterface");
     	setInterface(jInnerInterface, true);
     	addClass(jOuterClass, jInnerInterface);
     	assertEquals("interface com.thoughtworks.qdox.model.OuterClass$InnerInterface", jInnerInterface.toString());

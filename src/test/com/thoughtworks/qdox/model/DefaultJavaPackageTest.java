@@ -1,9 +1,9 @@
 package com.thoughtworks.qdox.model;
 
-public class DefaultJavaPackageTest extends JavaPackageTest
+public class DefaultJavaPackageTest extends JavaPackageTest<DefaultJavaPackage>
 {
 
-    public JavaPackage newJavaPackage( String name )
+    public DefaultJavaPackage newJavaPackage( String name )
     {
         return new DefaultJavaPackage( name );
     }

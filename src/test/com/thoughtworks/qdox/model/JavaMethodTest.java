@@ -9,33 +9,37 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.library.ClassNameLibrary;
 
-public abstract class JavaMethodTest extends TestCase {
+public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
 
-    private JavaMethod mth;
+    private M mth;
     private JavaSource source;
     private JavaClass clazz;
 
     public JavaMethodTest(String s) {
         super(s);
     }
+
+    //constructors
+    public abstract M newJavaMethod();
+    public abstract M newJavaMethod(Type returns, String name);
+
+    //setters
+    public abstract void setExceptions(M method, List<Type> exceptions);
+    public abstract void setComment(M method, String comment);
+    public abstract void setConstructor(M method, boolean isConstructor);
+    public abstract void setName(M method, String name);
+    public abstract void setModifiers(M method, List<String> modifiers);
+    public abstract void setReturns(M method, Type type);
+    public abstract void setSourceCode(M method, String code);
     
     public abstract JavaClass newJavaClass();
     public abstract JavaClass newJavaClass(String fullname);
-    public abstract JavaMethod newJavaMethod();
-    public abstract JavaMethod newJavaMethod(Type returns, String name);
     public abstract JavaParameter newJavaParameter(Type type, String name);
     public abstract JavaParameter newJavaParameter(Type type, String name, boolean varArgs);
     public abstract JavaSource newJavaSource(ClassLibrary classLibrary );
     public abstract Type newType(String fullname);
     public abstract Type newType(String fullname, int dimensions);
     
-    public abstract void setExceptions(JavaMethod method, List<Type> exceptions);
-    public abstract void setComment(JavaMethod method, String comment);
-    public abstract void setConstructor(JavaMethod method, boolean isConstructor);
-    public abstract void setName(JavaMethod method, String name);
-    public abstract void setModifiers(JavaMethod method, List<String> modifiers);
-    public abstract void setReturns(JavaMethod method, Type type);
-    public abstract void setSourceCode(JavaMethod method, String code);
     
     public abstract void addClass(JavaSource source, JavaClass clazz);
     public abstract void addMethod(JavaClass clazz, JavaMethod method);
@@ -199,27 +203,27 @@ public abstract class JavaMethodTest extends TestCase {
         setName(mth, "thing");
         setReturns(mth, newType("void"));
 
-        JavaMethod m2 = newJavaMethod();
+        M m2 = newJavaMethod();
         setName(m2, "thing");
         setReturns(m2, newType("void"));
 
-        JavaMethod m3 = newJavaMethod();
+        M m3 = newJavaMethod();
         setName(m3, "thingy");
         setReturns(m3, newType("void"));
 
-        JavaMethod m4 = newJavaMethod();
+        M m4 = newJavaMethod();
         setName(m4, "thing");
         setReturns(m4, newType("int"));
 
-        JavaMethod c1 = newJavaMethod();
+        M c1 = newJavaMethod();
         setName(c1, "thing");
         setConstructor(c1, true);
         
-        JavaMethod c2 = newJavaMethod();
+        M c2 = newJavaMethod();
         setName(c2, "Thong");
         setConstructor(c2, true);
         
-        JavaMethod c3 = newJavaMethod();
+        M c3 = newJavaMethod();
         setName(c3, "Thong");
         setConstructor(c3, true);
         
@@ -240,27 +244,27 @@ public abstract class JavaMethodTest extends TestCase {
         addParameter(mth, newJavaParameter(newType("X", 3), ""));
         setReturns(mth, newType("void"));
 
-        JavaMethod m2 = newJavaMethod();
+        M m2 = newJavaMethod();
         setName(m2, "thing");
         addParameter(m2, newJavaParameter(newType("int", 1), "blah"));
         addParameter(m2, newJavaParameter(newType("java.lang.String", 2), "anotherName"));
         addParameter(m2, newJavaParameter(newType("X", 3), "blah"));
         setReturns(m2, newType("void"));
 
-        JavaMethod m3 = newJavaMethod();
+        M m3 = newJavaMethod();
         setName(m3, "thing");
         addParameter(m3, newJavaParameter(newType("int", 1), "blah"));
         addParameter(m3, newJavaParameter(newType("java.lang.String", 2), "thing"));
         setReturns(m3, newType("void"));
 
-        JavaMethod m4 = newJavaMethod();
+        M m4 = newJavaMethod();
         setName(m4, "thing");
         addParameter(m4, newJavaParameter(newType("int", 1), "blah"));
         addParameter(m4, newJavaParameter(newType("java.lang.String", 2), "thing"));
         addParameter(m4, newJavaParameter(newType("TTTTTTTT", 3), "blah")); //name
         setReturns(m4, newType("void"));
 
-        JavaMethod m5 = newJavaMethod();
+        M m5 = newJavaMethod();
         setName(m5, "thing");
         addParameter(m5, newJavaParameter(newType("int", 1), "blah"));
         addParameter(m5, newJavaParameter(newType("java.lang.String", 2), "thing"));
@@ -281,24 +285,24 @@ public abstract class JavaMethodTest extends TestCase {
         addParameter(mth, newJavaParameter(newType("X", 3), ""));
         setReturns(mth, newType("void"));
 
-        JavaMethod m2 = newJavaMethod();
+        M m2 = newJavaMethod();
         setName(m2, "thing");
         addParameter(m2, newJavaParameter(newType("int", 1), "blah"));
         addParameter(m2, newJavaParameter(newType("java.lang.String", 2), "anotherName"));
         addParameter(m2, newJavaParameter(newType("X", 3), "blah"));
         setReturns(m2, newType("void"));
 
-        JavaMethod m3 = newJavaMethod();
+        M m3 = newJavaMethod();
         setName(m3, "thing");
         addParameter(m3, newJavaParameter(newType("int", 1), "blah"));
         addParameter(m3, newJavaParameter(newType("java.lang.String", 2), "thing"));
         setReturns(m3, newType("void"));
 
-        JavaMethod c1 = newJavaMethod();
+        M c1 = newJavaMethod();
         setName(c1, "Thong");
         setConstructor(c1, true);
         
-        JavaMethod c2 = newJavaMethod();
+        M c2 = newJavaMethod();
         setName(c2, "Thong");
         setConstructor(c2, true);
         
@@ -379,7 +383,7 @@ public abstract class JavaMethodTest extends TestCase {
 
     public void testToString() throws Exception {
     	JavaClass cls = newJavaClass("java.lang.Object");
-    	JavaMethod mthd = newJavaMethod(newType("boolean"),"equals");
+    	M mthd = newJavaMethod(newType("boolean"),"equals");
     	addMethod(cls, mthd);
     	setModifiers(mthd, Arrays.asList(new String[]{"public"}));
     	addParameter(mthd, newJavaParameter(newType("java.lang.Object"), null));
@@ -388,21 +392,21 @@ public abstract class JavaMethodTest extends TestCase {
     
     public void testConstructorToString() throws Exception {
         JavaClass cls = newJavaClass("a.b.Executor");
-        JavaMethod constructor = newJavaMethod(null,"Executor");
+        M constructor = newJavaMethod(null,"Executor");
         setConstructor( constructor, true );
         addMethod(cls, constructor);
         assertEquals("a.b.Executor()", constructor.toString());
     }
 
     public void testConstructorReturnType() throws Exception {
-        JavaMethod constructor = newJavaMethod(null,"Executor");
+        M constructor = newJavaMethod(null,"Executor");
         setConstructor( constructor, true );
         assertEquals(null, constructor.getReturnType());
     }
 
     public void testConstructorParameterTypes() throws Exception {
         JavaClass cls = newJavaClass("a.b.Executor");
-        JavaMethod constructor = newJavaMethod(null,"Executor");
+        M constructor = newJavaMethod(null,"Executor");
         addParameter( constructor,  newJavaParameter( newType("a.b.C"), "param" ) );
         setConstructor( constructor, true );
         addMethod(cls, constructor);

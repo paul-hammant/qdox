@@ -3,7 +3,7 @@ package com.thoughtworks.qdox.model;
 import java.util.List;
 
 public class DefaultJavaMethodTest
-    extends JavaMethodTest
+    extends JavaMethodTest<DefaultJavaMethod>
 {
 
     public DefaultJavaMethodTest( String s )
@@ -21,12 +21,12 @@ public class DefaultJavaMethodTest
         return new DefaultJavaClass( fullname );
     }
 
-    public JavaMethod newJavaMethod()
+    public DefaultJavaMethod newJavaMethod()
     {
         return new DefaultJavaMethod();
     }
 
-    public JavaMethod newJavaMethod( Type returns, String name )
+    public DefaultJavaMethod newJavaMethod( Type returns, String name )
     {
         return new DefaultJavaMethod( returns, name );
     }
@@ -56,34 +56,34 @@ public class DefaultJavaMethodTest
         return new Type( fullname, dimensions );
     }
 
-    public void setExceptions( JavaMethod method, List<Type> exceptions )
+    public void setExceptions( DefaultJavaMethod method, List<Type> exceptions )
     {
-        ((AbstractBaseMethod) method).setExceptions( exceptions );
+        method.setExceptions( exceptions );
     }
 
-    public void setComment( JavaMethod method, String comment )
+    public void setComment( DefaultJavaMethod method, String comment )
     {
-        ((AbstractBaseMethod) method).setComment( comment );
+        method.setComment( comment );
     }
 
-    public void setConstructor( JavaMethod method, boolean isConstructor )
+    public void setConstructor( DefaultJavaMethod method, boolean isConstructor )
     {
-        ((DefaultJavaMethod) method).setConstructor( isConstructor );
+        method.setConstructor( isConstructor );
     }
 
-    public void setName( JavaMethod method, String name )
+    public void setName( DefaultJavaMethod method, String name )
     {
-        ((AbstractBaseMethod) method).setName( name );
+        method.setName( name );
     }
 
-    public void setModifiers( JavaMethod method, List<String> modifiers )
+    public void setModifiers( DefaultJavaMethod method, List<String> modifiers )
     {
-        ((AbstractBaseMethod) method).setModifiers( modifiers );
+        method.setModifiers( modifiers );
     }
 
-    public void setReturns( JavaMethod method, Type type )
+    public void setReturns( DefaultJavaMethod method, Type type )
     {
-        ((DefaultJavaMethod) method).setReturns( type );
+        method.setReturns( type );
     }
 
     public void addClass( JavaSource source, JavaClass clazz )
@@ -104,8 +104,8 @@ public class DefaultJavaMethodTest
         ((DefaultJavaParameter) parameter).setParentMethod( method );
     }
 
-    public void setSourceCode( JavaMethod method, String code )
+    public void setSourceCode( DefaultJavaMethod method, String code )
     {
-        ((AbstractBaseMethod) method).setSourceCode( code );
+        method.setSourceCode( code );
     }
 }

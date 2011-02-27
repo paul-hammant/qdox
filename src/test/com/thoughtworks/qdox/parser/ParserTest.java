@@ -1560,7 +1560,7 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
-        builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddConstructorValues(mth);
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -1597,7 +1597,7 @@ public class ParserTest extends TestCase {
         p1.name = "count";
         p1.type = new TypeDef("int");
 
-        builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddConstructorValues(mth);
         builder.addExpectedAddParameterValues( p1 );
 
         // execute
@@ -1645,7 +1645,7 @@ public class ParserTest extends TestCase {
         p2.name = "thingy";
         p2.type = new TypeDef("java.lang.String");
 
-        builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddConstructorValues(mth);
         builder.addExpectedAddParameterValues( p1 );
         builder.addExpectedAddParameterValues( p2 );
         
@@ -1680,7 +1680,7 @@ public class ParserTest extends TestCase {
         mth.constructor = true;
         mth.exceptions.add(new TypeDef("SomeException"));
 
-        builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddConstructorValues(mth);
 
         // execute
         Parser parser = new Parser(lexer, builder);
@@ -1720,7 +1720,7 @@ public class ParserTest extends TestCase {
         mth.exceptions.add(new TypeDef("SomeException"));
         mth.exceptions.add(new TypeDef("java.io.IOException"));
 
-        builder.addExpectedAddMethodValues(mth);
+        builder.addExpectedAddConstructorValues(mth);
 
         // execute
         Parser parser = new Parser(lexer, builder);

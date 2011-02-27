@@ -583,24 +583,24 @@ method:
 
 constructor:
     modifiers IDENTIFIER {
-        builder.beginMethod();
+        builder.beginConstructor();
         mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $2;
     } methoddef opt_exceptions memberend {
         mth.body = $6;
-        builder.endMethod(mth);
+        builder.endConstructor(mth);
         mth = new MethodDef(); 
     } |
     modifiers typeparams IDENTIFIER {
-        builder.beginMethod();
+        builder.beginConstructor();
         mth.lineNumber = lexer.getLine();
         mth.typeParams = typeParams;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $3;
     } methoddef opt_exceptions memberend {
         mth.body = $7;
-        builder.endMethod(mth);
+        builder.endConstructor(mth);
         mth = new MethodDef(); 
     };
 

@@ -126,7 +126,11 @@ class MockBuilder implements Builder {
     public void addExpectedAddMethodValues(MethodDef arg0) {
         myEndMethodParameter0Values.addExpected(arg0);
     }
-    
+
+    public void addExpectedAddConstructorValues(MethodDef arg0) {
+        myEndConstructorParameter0Values.addExpected(arg0);
+    }
+
     public void endConstructor( MethodDef def )
     {
         myEndConstructorCalls.inc();

@@ -211,22 +211,32 @@ public class ModelBuilder implements Builder {
 
     public void beginConstructor()
     {
-        currentConstructor = new DefaultJavaConstructor();
-        currentConstructor.setParentClass( classStack.getFirst() );
-        classStack.getFirst().addConstructor( currentConstructor );
-        
-        currentConstructor.setModelWriterFactory( modelWriterFactory );
-        
-        addJavaDoc( currentConstructor );
-        setAnnotations( currentConstructor );
+//        currentConstructor = new DefaultJavaConstructor();
+        currentMethod = new DefaultJavaMethod();
+        currentMethod.setConstructor( true );
+
+//        currentConstructor.setParentClass( classStack.getFirst() );
+        currentMethod.setParentClass( classStack.getFirst() );
+//        classStack.getFirst().addConstructor( currentConstructor );
+        classStack.getFirst().addMethod( currentMethod );
+//        
+//        currentConstructor.setModelWriterFactory( modelWriterFactory );
+        currentMethod.setModelWriterFactory( modelWriterFactory );
+//        
+//        addJavaDoc( currentConstructor );
+        addJavaDoc( currentMethod );
+//        setAnnotations( currentConstructor );
+        setAnnotations( currentMethod );
     }
 
     public void endConstructor( MethodDef def )
     {
-        currentConstructor.setLineNumber(def.lineNumber);
+//        currentConstructor.setLineNumber(def.lineNumber);
+        currentMethod.setLineNumber( def.lineNumber );
 
         // basic details
-        currentConstructor.setName(def.name);
+//        currentConstructor.setName(def.name);
+        currentMethod.setName( def.name );
 
         // typeParameters
         if (def.typeParams != null) {
@@ -234,7 +244,8 @@ public class ModelBuilder implements Builder {
             for(TypeVariableDef typeVariableDef : def.typeParams) {
                 typeParams.add(createTypeVariable(typeVariableDef));
             }
-            currentConstructor.setTypeParameters(typeParams);
+//            currentConstructor.setTypeParameters(typeParams);
+            currentMethod.setTypeParameters( typeParams );
         }
         
         // exceptions
@@ -243,15 +254,16 @@ public class ModelBuilder implements Builder {
             for (TypeDef type : def.exceptions) {
                 exceptions.add(createType(type, 0));
             }
-            currentConstructor.setExceptions(exceptions);
+//            currentConstructor.setExceptions(exceptions);
+            currentMethod.setExceptions( exceptions );
         }
 
         // modifiers
-        {
-            currentConstructor.setModifiers(new LinkedList<String>( def.modifiers ));
-        }
+//        currentConstructor.setModifiers(new LinkedList<String>( def.modifiers ));
+        currentMethod.setModifiers(new LinkedList<String>(def.modifiers) );
         
-        currentConstructor.setSourceCode(def.body);
+//        currentConstructor.setSourceCode(def.body);
+        currentMethod.setSourceCode( def.body );
     }
 
     public void addMethod(MethodDef def) {

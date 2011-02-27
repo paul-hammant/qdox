@@ -1,6 +1,6 @@
 package com.thoughtworks.qdox.model;
 
-public class DefaultJavaParameterTest extends JavaParameterTest
+public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParameter>
 {
 
     public DefaultJavaParameterTest( String s )
@@ -13,7 +13,7 @@ public class DefaultJavaParameterTest extends JavaParameterTest
         return new Type(typeName);
     }
 
-    public JavaParameter newJavaParameter( Type type, String name )
+    public DefaultJavaParameter newJavaParameter( Type type, String name )
     {
         return new DefaultJavaParameter(type, name);
     }
@@ -23,10 +23,10 @@ public class DefaultJavaParameterTest extends JavaParameterTest
         return new DefaultJavaMethod();
     }
 
-    public void addParameter( JavaMethod method, JavaParameter parameter )
+    @Override
+    public void setMethod( DefaultJavaParameter parameter, JavaMethod method )
     {
+        parameter.setParentMethod( method );
         ((AbstractBaseMethod) method).addParameter( parameter );
-        ((DefaultJavaParameter) parameter).setParentMethod( method );
     }
-
 }

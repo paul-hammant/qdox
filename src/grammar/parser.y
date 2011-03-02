@@ -59,7 +59,7 @@ import java.util.Stack;
 %type <type> InterfaceType
 %type <type> Wildcard
 %type <annoval> value expression literal annotation arrayInitializer
-%type <annoval> conditionalExpression conditionalOrExpression conditionalAndExpression inclusiveOrExpression exclusiveOrExpression andExpression
+%type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
 %type <annoval> unaryExpression unaryExpressionNotPlusMinus primary
 %type <annoval> PostfixExpression CastExpression
@@ -251,31 +251,29 @@ value:
     arrayInitializer ;
 
 expression:
-	conditionalExpression ;
-	
-conditionalExpression:
-	conditionalOrExpression |
-	conditionalOrExpression QUERY expression COLON expression { $$ = new AnnotationQuery($1, $3, $5); };
+	ConditionalExpression ;
 
-conditionalOrExpression:
-    conditionalAndExpression |
-	conditionalOrExpression VERTLINE2 conditionalAndExpression { $$ = new AnnotationLogicalOr($1, $3); };
+//15.25 Conditional Operator ? :	
+ConditionalExpression: ConditionalOrExpression 
+                     | ConditionalOrExpression QUERY expression COLON expression { $$ = new AnnotationQuery($1, $3, $5); };
 
-conditionalAndExpression:
-    inclusiveOrExpression |
-	conditionalAndExpression AMPERSAND2 inclusiveOrExpression { $$ = new AnnotationLogicalAnd($1, $3); };
+//15.24 Conditional-Or Operator ||
+ConditionalOrExpression: ConditionalAndExpression 
+                       | ConditionalOrExpression VERTLINE2 ConditionalAndExpression { $$ = new AnnotationLogicalOr($1, $3); };
 
-inclusiveOrExpression:
-    exclusiveOrExpression |
-    inclusiveOrExpression VERTLINE exclusiveOrExpression { $$ = new AnnotationOr($1, $3); };
+// 15.23 Conditional-And Operator &&
+ConditionalAndExpression: InclusiveOrExpression 
+                        | ConditionalAndExpression AMPERSAND2 InclusiveOrExpression { $$ = new AnnotationLogicalAnd($1, $3); };
 
-exclusiveOrExpression:
-	andExpression |
-	exclusiveOrExpression CIRCUMFLEX andExpression { $$ = new AnnotationExclusiveOr($1, $3); };
+//15.22 Bitwise and Logical Operators
+InclusiveOrExpression: ExclusiveOrExpression 
+                     | InclusiveOrExpression VERTLINE ExclusiveOrExpression { $$ = new AnnotationOr($1, $3); };
 
-andExpression:
-    EqualityExpression |
-    andExpression AMPERSAND EqualityExpression { $$ = new AnnotationAnd($1, $3); };
+ExclusiveOrExpression: AndExpression 
+                     | ExclusiveOrExpression CIRCUMFLEX AndExpression { $$ = new AnnotationExclusiveOr($1, $3); };
+
+AndExpression: EqualityExpression 
+             | AndExpression AMPERSAND EqualityExpression { $$ = new AnnotationAnd($1, $3); };
 
 // 15.21 Equality Operators
 EqualityExpression: RelationalExpression 

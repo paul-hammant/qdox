@@ -60,7 +60,7 @@ import java.util.Stack;
 %type <type> Wildcard
 %type <annoval> value expression literal annotation arrayInitializer
 %type <annoval> conditionalExpression conditionalOrExpression conditionalAndExpression inclusiveOrExpression exclusiveOrExpression andExpression
-%type <annoval> equalityExpression relationalExpression shiftExpression additiveExpression multiplicativeExpression
+%type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
 %type <annoval> unaryExpression unaryExpressionNotPlusMinus primary
 %type <annoval> PostfixExpression CastExpression
 %type <ival> dims Dims_opt
@@ -274,37 +274,37 @@ exclusiveOrExpression:
 	exclusiveOrExpression CIRCUMFLEX andExpression { $$ = new AnnotationExclusiveOr($1, $3); };
 
 andExpression:
-    equalityExpression |
-    andExpression AMPERSAND equalityExpression { $$ = new AnnotationAnd($1, $3); };
+    EqualityExpression |
+    andExpression AMPERSAND EqualityExpression { $$ = new AnnotationAnd($1, $3); };
 
-equalityExpression:
-    relationalExpression |
-    equalityExpression EQUALS2 relationalExpression { $$ = new AnnotationEquals($1, $3); } |
-    equalityExpression NOTEQUALS relationalExpression { $$ = new AnnotationNotEquals($1, $3); };
+// 15.21 Equality Operators
+EqualityExpression: RelationalExpression 
+                  | EqualityExpression EQUALS2 RelationalExpression { $$ = new AnnotationEquals($1, $3); } 
+                  | EqualityExpression NOTEQUALS RelationalExpression { $$ = new AnnotationNotEquals($1, $3); };
 
-relationalExpression:
-	shiftExpression |
-	relationalExpression LESSEQUALS shiftExpression { $$ = new AnnotationLessEquals($1, $3); } |
-	relationalExpression GREATEREQUALS shiftExpression { $$ = new AnnotationGreaterEquals($1, $3); } |
-	relationalExpression LESSTHAN shiftExpression { $$ = new AnnotationLessThan($1, $3); } |
-	relationalExpression GREATERTHAN shiftExpression { $$ = new AnnotationGreaterThan($1, $3); };
-	
-shiftExpression:
-	additiveExpression |
-	shiftExpression LESSTHAN2 additiveExpression { $$ = new AnnotationShiftLeft($1, $3); } |
-	shiftExpression GREATERTHAN3 additiveExpression { $$ = new AnnotationUnsignedShiftRight($1, $3); } |
-	shiftExpression GREATERTHAN2 additiveExpression { $$ = new AnnotationShiftRight($1, $3); };
+// 15.20 Relational Operators
+RelationalExpression: ShiftExpression 
+                    | RelationalExpression LESSEQUALS ShiftExpression { $$ = new AnnotationLessEquals($1, $3); } 
+                    | RelationalExpression GREATEREQUALS ShiftExpression { $$ = new AnnotationGreaterEquals($1, $3); } 
+                    | RelationalExpression LESSTHAN ShiftExpression { $$ = new AnnotationLessThan($1, $3); } 
+                    | RelationalExpression GREATERTHAN ShiftExpression { $$ = new AnnotationGreaterThan($1, $3); };
 
-additiveExpression:
-	multiplicativeExpression |
-	additiveExpression PLUS multiplicativeExpression { $$ = new AnnotationAdd($1, $3); } |
-	additiveExpression MINUS multiplicativeExpression { $$ = new AnnotationSubtract($1, $3); };
+// 15.19 Shift Operators
+ShiftExpression: AdditiveExpression 
+               | ShiftExpression LESSTHAN2 AdditiveExpression    { $$ = new AnnotationShiftLeft($1, $3); }
+               | ShiftExpression GREATERTHAN3 AdditiveExpression { $$ = new AnnotationUnsignedShiftRight($1, $3); } 
+               | ShiftExpression GREATERTHAN2 AdditiveExpression { $$ = new AnnotationShiftRight($1, $3); };
 
-multiplicativeExpression:
-    unaryExpression |
-	multiplicativeExpression STAR unaryExpression { $$ = new AnnotationMultiply($1, $3); } |
-	multiplicativeExpression SLASH unaryExpression { $$ = new AnnotationDivide($1, $3); } |
-	multiplicativeExpression PERCENT unaryExpression { $$ = new AnnotationRemainder($1, $3); };
+// 15.18 Additive Operators
+AdditiveExpression:	MultiplicativeExpression 
+                  |	AdditiveExpression PLUS MultiplicativeExpression  { $$ = new AnnotationAdd($1, $3); } 
+                  |	AdditiveExpression MINUS MultiplicativeExpression { $$ = new AnnotationSubtract($1, $3); };
+
+// 15.17 Multiplicative Operators
+MultiplicativeExpression: unaryExpression 
+                        | MultiplicativeExpression STAR unaryExpression    { $$ = new AnnotationMultiply($1, $3); } 
+                        | MultiplicativeExpression SLASH unaryExpression   { $$ = new AnnotationDivide($1, $3); } 
+                        | MultiplicativeExpression PERCENT unaryExpression { $$ = new AnnotationRemainder($1, $3); };
 	
 unaryExpression: unaryExpressionNotPlusMinus 
                | PLUS unaryExpression { $$ = new AnnotationPlusSign($2); } 
@@ -314,10 +314,11 @@ unaryExpressionNotPlusMinus: PostfixExpression
                            | TILDE unaryExpression { $$ = new AnnotationNot($2); } 
                            | EXCLAMATION unaryExpression { $$ = new AnnotationLogicalNot($2); } 
                            | CastExpression;
-	
+
+// 15.16 Cast Expressions	
 CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE unaryExpression { $$ = new AnnotationCast(new TypeDef($2.name, $3), $5); } 
-              | PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
-              | PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
+              | PARENOPEN name PARENCLOSE unaryExpressionNotPlusMinus       { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
+              | PARENOPEN name dims PARENCLOSE unaryExpressionNotPlusMinus  { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
 
 PostfixExpression: primary;
     	

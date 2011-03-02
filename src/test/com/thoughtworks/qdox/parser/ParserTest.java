@@ -1,9 +1,11 @@
 package com.thoughtworks.qdox.parser;
 
+import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -16,7 +18,7 @@ import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 public class ParserTest extends TestCase {
 
     private MockLexer lexer;
-    private MockBuilder builder;
+    private Builder builder;
 
     public ParserTest(String s) {
         super(s);
@@ -25,7 +27,14 @@ public class ParserTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         lexer = new MockLexer();
-        builder = new MockBuilder();
+        builder = mock(Builder.class);
+    }
+    
+    @Override
+    protected void tearDown()
+        throws Exception
+    {
+        verifyNoMoreInteractions( builder );
     }
 
     public void testPackageWithOneWord() throws Exception {
@@ -36,16 +45,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddPackageValues(new PackageDef("mypackage"));
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addPackage( new PackageDef("mypackage") );
     }
 
     public void testPackageWithMultipleWords() throws Exception {
@@ -62,16 +67,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddPackageValues(new PackageDef("com.blah.thingy.x"));
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addPackage( new PackageDef("com.blah.thingy.x") );
     }
 
     public void testImportWithOneWord() throws Exception {
@@ -82,16 +83,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddImportValues("mypackage");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addImport( "mypackage" );
     }
 
     public void testImportWithMultipleWords() throws Exception {
@@ -108,16 +105,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddImportValues("com.blah.thingy.x");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addImport( "com.blah.thingy.x" );
     }
 
     public void testImportWithOneWordAndStar() throws Exception {
@@ -130,16 +123,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddImportValues("mypackage.*");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addImport( "mypackage.*" );
     }
 
     public void testImportWithMultipleWordsAndStar() throws Exception {
@@ -156,16 +145,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddImportValues("com.blah.thingy.*");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addImport( "com.blah.thingy.*" );
     }
     
     public void testImportStaticWithOneWord() throws Exception {
@@ -177,16 +162,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddImportValues("static mypackage");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addImport( "static mypackage" );
     }
 
     public void testImportStaticWithMultipleWords() throws Exception {
@@ -204,16 +185,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddImportValues("static com.blah.Thingy.x");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addImport( "static com.blah.Thingy.x" );
     }
 
     public void testImportStaticWithOneWordAndStar() throws Exception {
@@ -227,16 +204,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddImportValues("static MyClass.*");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addImport( "static MyClass.*" );
     }
 
     public void testImportStaticWithMultipleWordsAndStar() throws Exception {
@@ -254,16 +227,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.SEMI);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddImportValues("static com.blah.Thingy.*");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify( builder ).addImport( "static com.blah.Thingy.*" );
     }
 
     public void testOneLineJavaDoc() throws Exception {
@@ -274,16 +243,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddJavaDocValues("This is great!");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addJavaDoc( "This is great!" );
     }
 
     public void testOneJavaDocTag() throws Exception {
@@ -295,16 +260,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddJavaDocTagValues(new TagDef("This", "is great!"));
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addJavaDoc( "" );
+        verify(builder).addJavaDocTag( new TagDef("This", "is great!") );
     }
 
     public void testOneJavaDocTagWithNoValue() throws Exception {
@@ -315,16 +277,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddJavaDocTagValues(new TagDef("eatme", ""));
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addJavaDoc( "" );
+        verify(builder).addJavaDocTag( new TagDef("eatme", "") );
     }
 
     public void testOneMultiLineJavaDocTag() throws Exception {
@@ -336,19 +295,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddJavaDocValues("");
-        builder.addExpectedAddJavaDocTagValues(
-            new TagDef("This", "is great! Mmmkay.")
-        );
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addJavaDoc( "" );
+        verify(builder).addJavaDocTag( new TagDef("This", "is great! Mmmkay.") );
     }
 
     public void testMultipleJavaDocTags() throws Exception {
@@ -362,18 +315,14 @@ public class ParserTest extends TestCase {
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddJavaDocValues("");
-        builder.addExpectedAddJavaDocTagValues(new TagDef("This", "is great!"));
-        builder.addExpectedAddJavaDocTagValues(new TagDef("mock", "generate"));
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).addJavaDoc( "" );
+        verify(builder).addJavaDocTag( new TagDef("This", "is great!") );
+        verify(builder).addJavaDocTag( new TagDef("mock", "generate") );
     }
 
     public void testJavaDocTextAndMultipleJavaDocTags() throws Exception {
@@ -388,17 +337,14 @@ public class ParserTest extends TestCase {
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddJavaDocValues("Welcome! Here is my class.");
-        builder.addExpectedAddJavaDocTagValues(new TagDef("This", "is great!"));
-        builder.addExpectedAddJavaDocTagValues(new TagDef("mock", "generate"));
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
+        verify(builder).addJavaDoc( "Welcome! Here is my class." );
+        verify(builder).addJavaDocTag( new TagDef("This", "is great!") );
+        verify(builder).addJavaDocTag( new TagDef("mock", "generate") );
 
     }
 
@@ -409,37 +355,12 @@ public class ParserTest extends TestCase {
         setupLex(Parser.JAVADOCEND);
         setupLex(0);
 
-        // expectations
-        builder.addExpectedAddJavaDocValues("");
-        builder.setExpectedAddJavaDocTagCalls(0);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
         // verify
-        builder.verify();
-
-    }
-
-    public void testJavaDocOnlyContainsNewLines() throws Exception {
-
-        // setup values
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCEND);
-        setupLex(0);
-
-        // expectations
-        builder.addExpectedAddJavaDocValues("");
-        builder.setExpectedAddJavaDocTagCalls(0);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
-        // verify
-        builder.verify();
-
+        verify(builder).addJavaDoc( "" );
     }
 
     public void testEmptyVanillaClass() throws Exception {
@@ -451,18 +372,17 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
-        builder.addExpectedBeginClassValues(cls);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
-        // verify
-        builder.verify();
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
 
+        // verify
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyVanillaInterface() throws Exception {
@@ -474,19 +394,18 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        ClassDef cls = new ClassDef();
-        cls.name = "MyInterface";
-        cls.type = ClassDef.INTERFACE;
-        builder.addExpectedBeginClassValues(cls);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
-        // verify
-        builder.verify();
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyInterface";
+        cls.type = ClassDef.INTERFACE;
 
+        // verify
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyVanillaEnum() throws Exception {
@@ -498,19 +417,18 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        ClassDef cls = new ClassDef();
-        cls.name = "MyEnum";
-        cls.type = ClassDef.ENUM;
-        builder.addExpectedBeginClassValues(cls);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
-        // verify
-        builder.verify();
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyEnum";
+        cls.type = ClassDef.ENUM;
 
+        // verify
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyClassExtendsAnotherClass() throws Exception {
@@ -528,19 +446,18 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        ClassDef cls = new ClassDef();
-        cls.name = "MySubClass";
-        cls.extendz.add(new TypeDef("com.blah.MyBaseClass"));
-        builder.addExpectedBeginClassValues(cls);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
-        // verify
-        builder.verify();
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MySubClass";
+        cls.extendz.add(new TypeDef("com.blah.MyBaseClass"));
 
+        // verify
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyInterfaceExtendsMultipleInterfaces() throws Exception {
@@ -560,21 +477,20 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyInterface";
         cls.type = ClassDef.INTERFACE;
         cls.extendz.add(new TypeDef("com.blah.AnotherInterface"));
         cls.extendz.add(new TypeDef("Serializable"));
-        builder.addExpectedBeginClassValues(cls);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyClassImplementsOneInterface() throws Exception {
@@ -592,19 +508,18 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
-        cls.implementz.add(new TypeDef("com.blah.AnInterface"));
-        builder.addExpectedBeginClassValues(cls);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
-        // verify
-        builder.verify();
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        cls.implementz.add(new TypeDef("com.blah.AnInterface"));
 
+        // verify
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyClassImplementsMultipleInterfaces() throws Exception {
@@ -630,21 +545,20 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyClass";
         cls.implementz.add(new TypeDef("com.blah.AnInterface"));
         cls.implementz.add(new TypeDef("java.io.Serializable"));
         cls.implementz.add(new TypeDef("Eatable"));
-        builder.addExpectedBeginClassValues(cls);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyClassExtendsOneClassAndImplementsOneInterface() throws Exception {
@@ -666,20 +580,19 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyClass";
         cls.extendz.add(new TypeDef("mypackage.BaseClass"));
         cls.implementz.add(new TypeDef("com.blah.AnInterface"));
-        builder.addExpectedBeginClassValues(cls);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyClassExtendsOneClassAndImplementsMultipleInterface() throws Exception {
@@ -709,6 +622,10 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyClass";
@@ -716,15 +633,10 @@ public class ParserTest extends TestCase {
         cls.implementz.add(new TypeDef("com.blah.AnInterface"));
         cls.implementz.add(new TypeDef("java.io.Serializable"));
         cls.implementz.add(new TypeDef("Eatable"));
-        builder.addExpectedBeginClassValues(cls);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyClassWithPublicFinalModifiers() throws Exception {
@@ -738,20 +650,19 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyClass";
         cls.modifiers.add("public");
         cls.modifiers.add("final");
-        builder.addExpectedBeginClassValues(cls);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testEmptyClassWithAllModifiers() throws Exception {
@@ -768,6 +679,10 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
         ClassDef cls = new ClassDef();
         cls.name = "MyClass";
@@ -776,15 +691,10 @@ public class ParserTest extends TestCase {
         cls.modifiers.add("private");
         cls.modifiers.add("final");
         cls.modifiers.add("abstract");
-        builder.addExpectedBeginClassValues(cls);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testMultipleClassesInSingleFile() throws Exception {
@@ -809,31 +719,30 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
         ClassDef cls1 = new ClassDef();
         cls1.name = "Class1";
         cls1.type = ClassDef.CLASS;
-        builder.addExpectedBeginClassValues(cls1);
 
         ClassDef cls2 = new ClassDef();
         cls2.name = "Class2";
         cls2.type = ClassDef.CLASS;
         cls2.modifiers.add("public");
         cls2.extendz.add(new TypeDef("SubClass"));
-        builder.addExpectedBeginClassValues(cls2);
 
         ClassDef cls3 = new ClassDef();
         cls3.name = "Intf1";
         cls3.type = ClassDef.INTERFACE;
-        builder.addExpectedBeginClassValues(cls3);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
-
+        verify(builder).beginClass( cls1 );
+        verify(builder).beginClass( cls2 );
+        verify(builder).beginClass( cls3 );
+        verify(builder, times(3)).endClass();
     }
 
     public void testSemiColonBetweenClass() throws Exception {
@@ -850,27 +759,25 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACEOPEN);
         setupLex(Parser.BRACECLOSE);
         setupLex(Parser.SEMI); // ;
-
         setupLex(0);
-
-        // expectations
-        ClassDef cls1 = new ClassDef();
-        cls1.name = "Class1";
-        cls1.type = ClassDef.CLASS;
-        builder.addExpectedBeginClassValues(cls1);
-
-        ClassDef cls2 = new ClassDef();
-        cls2.name = "Class2";
-        cls2.type = ClassDef.CLASS;
-        builder.addExpectedBeginClassValues(cls2);
 
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
-        // verify
-        builder.verify();
+        // expectations
+        ClassDef cls1 = new ClassDef();
+        cls1.name = "Class1";
+        cls1.type = ClassDef.CLASS;
 
+        ClassDef cls2 = new ClassDef();
+        cls2.name = "Class2";
+        cls2.type = ClassDef.CLASS;
+
+        // verify
+        verify(builder).beginClass( cls1 );
+        verify(builder).beginClass( cls2 );
+        verify(builder, times(2)).endClass();
     }
 
     public void testJavaDocAppearingAllOverThePlace() throws Exception {
@@ -940,28 +847,31 @@ public class ParserTest extends TestCase {
 
         setupLex(0);
 
-        // expectations
-        ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
-        cls.modifiers.add("public");
-        builder.addExpectedBeginClassValues(cls);
-        builder.addExpectedAddJavaDocValues("javadoc1");
-        builder.addExpectedAddJavaDocValues("javadoc2");
-        builder.addExpectedAddJavaDocValues("javadoc3");
-        builder.addExpectedAddJavaDocValues("javadoc4");
-        builder.addExpectedAddJavaDocValues("javadoc5");
-        builder.addExpectedAddJavaDocValues("javadoc6");
-        builder.addExpectedAddJavaDocValues("javadoc7");
-        builder.addExpectedAddJavaDocValues("javadoc8");
-        builder.addExpectedAddJavaDocValues("javadoc9");
-        builder.addExpectedAddJavaDocValues("javadoc10");
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        cls.modifiers.add("public");
+        
         // verify
-        builder.verify();
+        verify(builder).addJavaDoc("javadoc1");
+        verify(builder).addJavaDoc("javadoc2");
+        verify(builder).addPackage( new PackageDef( "mypackage" ) );
+        verify(builder).addJavaDoc("javadoc3");
+        verify(builder).addJavaDoc("javadoc4");
+        verify(builder).addImport( "anotherpackage.Something" );
+        verify(builder).addJavaDoc("javadoc5");
+        verify(builder).addJavaDoc("javadoc6");
+        verify(builder).addImport("elsewhere.*");
+        verify(builder).addJavaDoc("javadoc7");
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
+        verify(builder).addJavaDoc("javadoc8");
+        verify(builder).addJavaDoc("javadoc9");
+        verify(builder).addJavaDoc("javadoc10");
 
     }
 
@@ -981,18 +891,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        builder.addExpectedAddMethodValues(mth);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        MethodDef mth = new MethodDef();
+        mth.name = "doSomething";
+        mth.returnType = new TypeDef("void");
+
         // verify
-        builder.verify();
+        verify(builder).beginClass(cls);
+        verify(builder).beginMethod();
+        verify(builder).endMethod(mth);
+        verify(builder).endClass();
     }
 
     public void testSimpleVoidMethodWithNoCode() throws Exception {
@@ -1011,18 +925,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        builder.addExpectedAddMethodValues(mth);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        MethodDef mth = new MethodDef();
+        mth.name = "doSomething";
+        mth.returnType = new TypeDef("void");
+        
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testSimpleMethodReturningSomething() throws Exception {
@@ -1041,18 +959,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("Something");
-        builder.addExpectedAddMethodValues(mth);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        MethodDef mth = new MethodDef();
+        mth.name = "doSomething";
+        mth.returnType = new TypeDef("Something");
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testSimpleMethodReturningSomethingFullyQualified() throws Exception {
@@ -1075,18 +997,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("com.blah.Something");
-        builder.addExpectedAddMethodValues(mth);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        MethodDef mth = new MethodDef();
+        mth.name = "doSomething";
+        mth.returnType = new TypeDef("com.blah.Something");
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testSimpleMethodWithAllModifiers() throws Exception {
@@ -1118,7 +1044,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("com.blah.Something");
@@ -1131,14 +1063,12 @@ public class ParserTest extends TestCase {
         mth.modifiers.add("native");
         mth.modifiers.add("synchronized");
         mth.modifiers.add("volatile");
-        builder.addExpectedAddMethodValues(mth);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodWithOneArg() throws Exception {
@@ -1159,23 +1089,26 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
         p1.name = "numberOfTimes";
         p1.type = new TypeDef("int");
-        
-        builder.addExpectedAddMethodValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).addParameter( p1 );
+        verify(builder).endClass();
     }
 
     public void testMethodWithOneFullyQualifiedArg() throws Exception {
@@ -1200,7 +1133,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1208,15 +1147,12 @@ public class ParserTest extends TestCase {
         p1.name = "numberOfTimes";
         p1.type = new TypeDef("java.lang.String");
 
-        builder.addExpectedAddMethodValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).addParameter( p1 );
+        verify(builder).endClass();
     }
 
     public void testMethodWithTwoArgs() throws Exception {
@@ -1240,7 +1176,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1250,16 +1192,14 @@ public class ParserTest extends TestCase {
         FieldDef p2 = new FieldDef();
         p2.name = "name";
         p2.type = new TypeDef("String");
-        builder.addExpectedAddMethodValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
-        builder.addExpectedAddParameterValues( p2 );
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p2 );
+        verify(builder).endClass();
     }
 
     public void testMethodWithThreeArgs() throws Exception {
@@ -1286,7 +1226,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1299,17 +1245,15 @@ public class ParserTest extends TestCase {
         FieldDef p3 = new FieldDef();
         p3.name = "x";
         p3.type = new TypeDef("boolean");
-        builder.addExpectedAddMethodValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
-        builder.addExpectedAddParameterValues( p2 );
-        builder.addExpectedAddParameterValues( p3 );
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p2 );
+        verify(builder).addParameter( p3 );
+        verify(builder).endClass();
     }
 
     public void testMethodWithOneArgThatHasModifier() throws Exception {
@@ -1332,7 +1276,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1341,15 +1291,13 @@ public class ParserTest extends TestCase {
         p1.type = new TypeDef("int");
         p1.modifiers.add("final");
         p1.modifiers.add("volatile");
-        builder.addExpectedAddMethodValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
         
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).addParameter( p1 );
+        verify(builder).endClass();
     }
 
     public void testMethodThrowingOneException() throws Exception {
@@ -1370,19 +1318,23 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.exceptions.add(new TypeDef("IOException"));
-        builder.addExpectedAddMethodValues(mth);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        MethodDef mth = new MethodDef();
+        mth.name = "doSomething";
+        mth.returnType = new TypeDef("void");
+        mth.exceptions.add(new TypeDef("IOException"));
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodThrowingTwoExceptions() throws Exception {
@@ -1405,20 +1357,24 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         mth.exceptions.add(new TypeDef("IOException"));
         mth.exceptions.add(new TypeDef("MyException"));
-        builder.addExpectedAddMethodValues(mth);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodThrowingThreeExceptions() throws Exception {
@@ -1443,21 +1399,25 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         mth.exceptions.add(new TypeDef("IOException"));
         mth.exceptions.add(new TypeDef("MyException"));
         mth.exceptions.add(new TypeDef("AnotherException"));
-        builder.addExpectedAddMethodValues(mth);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodThrowingOneFullyQualifiedException() throws Exception {
@@ -1482,19 +1442,23 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.exceptions.add(new TypeDef("java.io.IOException"));
-        builder.addExpectedAddMethodValues(mth);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        MethodDef mth = new MethodDef();
+        mth.name = "doSomething";
+        mth.returnType = new TypeDef("void");
+        mth.exceptions.add(new TypeDef("java.io.IOException"));
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodThrowingTwoFullyQualifiedException() throws Exception {
@@ -1525,20 +1489,24 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         mth.exceptions.add(new TypeDef("java.io.IOException"));
         mth.exceptions.add(new TypeDef("java.lang.RuntimeException"));
-        builder.addExpectedAddMethodValues(mth);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
 
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testDefaultConstructor() throws Exception {
@@ -1556,18 +1524,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        MethodDef mth = new MethodDef();
-        mth.name = "MyClass";
-        mth.constructor = true;
-        builder.addExpectedAddConstructorValues(mth);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        MethodDef mth = new MethodDef();
+        mth.name = "MyClass";
+        mth.constructor = true;
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginConstructor();
+        verify(builder).endConstructor( mth );
+        verify(builder).endClass();
     }
 
     public void testPublicConstructorWithParam() throws Exception {
@@ -1588,7 +1560,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
@@ -1597,15 +1575,12 @@ public class ParserTest extends TestCase {
         p1.name = "count";
         p1.type = new TypeDef("int");
 
-        builder.addExpectedAddConstructorValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginConstructor();
+        verify(builder).addParameter( p1 );
+        verify(builder).endConstructor( mth );
+        verify(builder).endClass();
     }
 
     public void testConstructorWithMultipleParams() throws Exception {
@@ -1633,7 +1608,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
@@ -1645,16 +1626,13 @@ public class ParserTest extends TestCase {
         p2.name = "thingy";
         p2.type = new TypeDef("java.lang.String");
 
-        builder.addExpectedAddConstructorValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
-        builder.addExpectedAddParameterValues( p2 );
-        
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginConstructor();
+        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p2 );
+        verify(builder).endConstructor( mth );
+        verify(builder).endClass();
     }
 
     public void testConstructorWithException() throws Exception {
@@ -1674,20 +1652,23 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
         mth.exceptions.add(new TypeDef("SomeException"));
 
-        builder.addExpectedAddConstructorValues(mth);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginConstructor();
+        verify(builder).endConstructor( mth );
+        verify(builder).endClass();
     }
 
     public void testConstructorWithMultipleException() throws Exception {
@@ -1713,21 +1694,24 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
         mth.exceptions.add(new TypeDef("SomeException"));
         mth.exceptions.add(new TypeDef("java.io.IOException"));
 
-        builder.addExpectedAddConstructorValues(mth);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginConstructor();
+        verify(builder).endConstructor( mth );
+        verify(builder).endClass();
     }
 
     public void testField() throws Exception {
@@ -1744,19 +1728,21 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-
-        builder.addExpectedAddFieldValues(fld);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        FieldDef fld = new FieldDef();
+        fld.name = "count";
+        fld.type = new TypeDef("int");
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testFieldFullyQualified() throws Exception {
@@ -1777,19 +1763,21 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("java.lang.String");
-
-        builder.addExpectedAddFieldValues(fld);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        FieldDef fld = new FieldDef();
+        fld.name = "count";
+        fld.type = new TypeDef("java.lang.String");
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testFieldWithModifiers() throws Exception {
@@ -1813,7 +1801,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
@@ -1825,14 +1819,10 @@ public class ParserTest extends TestCase {
         fld.modifiers.add("transient");
         fld.modifiers.add("strictfp");
 
-        builder.addExpectedAddFieldValues(fld);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testFieldWithMultipleDefinitionsOnOneLine() throws Exception {
@@ -1851,22 +1841,25 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        FieldDef fld1 = new FieldDef();
-        fld1.name = "thing";
-        fld1.type = new TypeDef("String");
-        builder.addExpectedAddFieldValues(fld1);
-        FieldDef fld2 = new FieldDef();
-        fld2.name = "another";
-        fld2.type = new TypeDef("String");
-        builder.addExpectedAddFieldValues(fld2);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        FieldDef fld1 = new FieldDef();
+        fld1.name = "thing";
+        fld1.type = new TypeDef("String");
+        FieldDef fld2 = new FieldDef();
+        fld2.name = "another";
+        fld2.type = new TypeDef("String");
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld1 );
+        verify(builder).addField( fld2 );
+        verify(builder).endClass();
     }
 
     public void testFieldWithSimpleGenericType() throws Exception {
@@ -1887,22 +1880,23 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        FieldDef fld = new FieldDef();
-        fld.name = "l";
-        fld.type = new TypeDef("List");
-        fld.type.actualArgumentTypes = new ArrayList();
-        fld.type.actualArgumentTypes.add(new TypeDef("String"));
-        
-
-        builder.addExpectedAddFieldValues(fld);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        FieldDef fld = new FieldDef();
+        fld.name = "l";
+        fld.type = new TypeDef("List");
+        fld.type.actualArgumentTypes = new ArrayList<TypeDef>();
+        fld.type.actualArgumentTypes.add(new TypeDef("String"));
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testFieldWithWildcardGenericType() throws Exception {
@@ -1925,21 +1919,23 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-        FieldDef fld = new FieldDef();
-        fld.name = "l";
-        fld.type = new TypeDef("List");
-        fld.type.actualArgumentTypes = new ArrayList();
-        fld.type.actualArgumentTypes.add(new WildcardTypeDef(new TypeDef("A"), "extends"));
-        
-        builder.addExpectedAddFieldValues(fld);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        FieldDef fld = new FieldDef();
+        fld.name = "l";
+        fld.type = new TypeDef("List");
+        fld.type.actualArgumentTypes = new ArrayList<TypeDef>();
+        fld.type.actualArgumentTypes.add(new WildcardTypeDef(new TypeDef("A"), "extends"));
+        
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testStaticBlock() throws Exception {
@@ -1962,18 +1958,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expect no the method, and it shouldn't be static.
-        MethodDef method = new MethodDef();
-        method.name = "doStuff";
-        method.returnType = new TypeDef("void");
-        builder.addExpectedAddMethodValues(method);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expect no the method, and it shouldn't be static.
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        MethodDef method = new MethodDef();
+        method.name = "doStuff";
+        method.returnType = new TypeDef("void");
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod(method);
+        verify(builder).endClass();
     }
 
     public void testInnerClass() throws Exception {
@@ -1997,24 +1997,24 @@ public class ParserTest extends TestCase {
 
         setupLex(0);
 
-        // expectations
-        builder.setExpectedBeginClassCalls(3);
-        ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
-        builder.addExpectedBeginClassValues(cls);
-        ClassDef cls2 = new ClassDef();
-        cls2.name = "InnerCls";
-        builder.addExpectedBeginClassValues(cls2);
-        ClassDef cls3 = new ClassDef();
-        cls3.name = "AnotherClass";
-        builder.addExpectedBeginClassValues(cls3);
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+        ClassDef cls2 = new ClassDef();
+        cls2.name = "InnerCls";
+        ClassDef cls3 = new ClassDef();
+        cls3.name = "AnotherClass";
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginClass( cls2 );
+        verify(builder).beginClass( cls3 );
+        verify(builder, times(3)).endClass();
+
     }
 
     public void testRogueSemiColon() throws Exception {
@@ -2029,14 +2029,17 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
-        // expectations
-
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
 
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "MyClass";
+
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).endClass();
     }
 
     public void testFieldNotArray() throws Exception {
@@ -2053,20 +2056,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
         fld.dimensions = 0;
 
-        builder.addExpectedAddFieldValues(fld);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testFieldArrayOnType() throws Exception {
@@ -2085,20 +2090,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
         fld.dimensions = 1;
 
-        builder.addExpectedAddFieldValues(fld);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testField2dArrayOnType() throws Exception {
@@ -2119,20 +2126,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
         fld.dimensions = 2;
 
-        builder.addExpectedAddFieldValues(fld);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testFieldArrayOnName() throws Exception {
@@ -2151,20 +2160,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
         fld.dimensions = 1;
 
-        builder.addExpectedAddFieldValues(fld);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testField3dArrayOnTypeAndName() throws Exception {
@@ -2186,20 +2197,22 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
         fld.dimensions = 3;
 
-        builder.addExpectedAddFieldValues(fld);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     public void testFieldArrayThenAnotherNonArray() throws Exception {
@@ -2222,26 +2235,27 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
         fld.dimensions = 1;
-
         FieldDef fld2 = new FieldDef();
         fld2.name = "count2";
         fld2.type = new TypeDef("int");
         fld2.dimensions = 0;
 
-        builder.addExpectedAddFieldValues(fld);
-        builder.addExpectedAddFieldValues(fld2);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).addField( fld );
+        verify(builder).addField( fld2 );
+        verify(builder).endClass();
     }
 
     public void testMethodNoArray() throws Exception {
@@ -2260,20 +2274,23 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
         mth.dimensions = 0;
 
-        builder.addExpectedAddMethodValues(mth);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodArray() throws Exception {
@@ -2294,20 +2311,23 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
 
-        builder.addExpectedAddMethodValues(mth);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodWithArrayDefinedAtEnd() throws Exception {
@@ -2333,20 +2353,23 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
 
-        builder.addExpectedAddMethodValues(mth);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodReturningArrayWithParamNoArray() throws Exception {
@@ -2371,7 +2394,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
@@ -2381,15 +2410,12 @@ public class ParserTest extends TestCase {
         p1.type = new TypeDef("int");
         p1.dimensions = 0;
 
-        builder.addExpectedAddMethodValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).addParameter( p1 );
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodReturningNoArrayWithParamArray() throws Exception {
@@ -2414,7 +2440,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
@@ -2424,15 +2456,12 @@ public class ParserTest extends TestCase {
         p1.type = new TypeDef("int");
         p1.dimensions = 1;
 
-        builder.addExpectedAddMethodValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).addParameter( p1 );
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodReturningArrayWithParam2dArray() throws Exception {
@@ -2461,7 +2490,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
@@ -2471,15 +2506,12 @@ public class ParserTest extends TestCase {
         p1.type = new TypeDef("int");
         p1.dimensions = 2;
 
-        builder.addExpectedAddMethodValues(mth);
-        builder.addExpectedAddParameterValues( p1 );
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).addParameter( p1 );
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testMethodWithVarArgsParameter() throws Exception {
@@ -2503,7 +2535,13 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACECLOSE);
         setupLex(0);
 
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
         // expectations
+        ClassDef cls = new ClassDef();
+        cls.name = "x";
         MethodDef mth = new MethodDef();
         mth.name = "doStuff";
         mth.returnType = new TypeDef("void");
@@ -2513,15 +2551,12 @@ public class ParserTest extends TestCase {
         p1.dimensions = 0;
         p1.isVarArgs = true;
 
-        builder.addExpectedAddMethodValues(mth);
-        builder.addExpectedAddParameterValues(p1);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+        verify(builder).beginMethod();
+        verify(builder).addParameter( p1 );
+        verify(builder).endMethod( mth );
+        verify(builder).endClass();
     }
 
     public void testEnumWithConstructors() throws Exception {
@@ -2543,9 +2578,29 @@ public class ParserTest extends TestCase {
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
-
+        
+        // expectations
+        ClassDef cls = new ClassDef();
+        cls.type = ClassDef.ENUM;
+        cls.name = "x";
+//        MethodDef mth = new MethodDef();
+//        mth.name = "a";
+        FieldDef fld0 = new FieldDef();
+        fld0.type = new TypeDef( "x" ); //bug @todo fixme
+        fld0.name = "a";
+        fld0.body = "";
+        FieldDef fld = new FieldDef();
+        fld.type = new TypeDef("int");
+        fld.name = "someField";
+        fld.body = "";
+        
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+//        verify(mockBuilder).beginConstructor();
+//        verify(mockBuilder).endConstructor(mth);
+        verify(builder).addField( fld0 );
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
     
     public void testEnumEndingWithExtraComma() throws Exception {
@@ -2562,9 +2617,24 @@ public class ParserTest extends TestCase {
         // execute
         Parser parser = new Parser(lexer, builder);
         parser.parse();
+        
+     // expectations
+        ClassDef cls = new ClassDef();
+        cls.type = ClassDef.ENUM;
+        cls.name = "x";
+//        MethodDef mth = new MethodDef();
+//        mth.name = "a";
+        FieldDef fld = new FieldDef();
+        fld.type = new TypeDef( "x" ); //bug @todo fixme
+        fld.name = "a";
+        fld.body = "";
 
         // verify
-        builder.verify();
+        verify(builder).beginClass( cls );
+//      verify(mockBuilder).beginConstructor();
+//      verify(mockBuilder).endConstructor(mth);
+        verify(builder).addField( fld );
+        verify(builder).endClass();
     }
 
     private void setupLex(int token, String value) {

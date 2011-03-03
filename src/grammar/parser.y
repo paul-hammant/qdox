@@ -475,11 +475,6 @@ enum_constructor:
 // ----- CLASS
 
 class: 
-    classdefinition BRACEOPEN members BRACECLOSE {
-        builder.endClass(); 
-    };
-
-classdefinition: 
     modifiers classorinterface IDENTIFIER opt_typeparams opt_extends Interfaces_opt  {
         cls.lineNumber = line;
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
@@ -487,7 +482,22 @@ classdefinition:
         cls.typeParams = typeParams;
         builder.beginClass(cls); 
         cls = new ClassDef(); 
-    };
+    }
+    ClassBody;
+
+// 8.1.6 Class Body and Member Declarations
+ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE {
+           builder.endClass(); 
+         };    
+
+ClassBodyDeclarations_opt:
+                         | ClassBodyDeclarations;
+                         
+ClassBodyDeclarations: ClassBodyDeclaration
+                     | ClassBodyDeclarations ClassBodyDeclaration;
+
+ClassBodyDeclaration: { line = lexer.getLine(); } member;
+                         
 
 classorinterface: 
     CLASS { cls.type = ClassDef.CLASS; } | 

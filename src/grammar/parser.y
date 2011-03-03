@@ -486,18 +486,35 @@ class:
     ClassBody;
 
 // 8.1.6 Class Body and Member Declarations
-ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE {
-           builder.endClass(); 
-         };    
+ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE 
+           {
+             builder.endClass(); 
+           };    
 
+// this is slighly different so we can get the correct linenumber
 ClassBodyDeclarations_opt:
-                         | ClassBodyDeclarations;
-                         
-ClassBodyDeclarations: ClassBodyDeclaration
-                     | ClassBodyDeclarations ClassBodyDeclaration;
+                         | ClassBodyDeclarations_opt
+                           { 
+                             line = lexer.getLine(); 
+                           }
+                           ClassBodyDeclaration;
 
-ClassBodyDeclaration: { line = lexer.getLine(); } member;
-                         
+ClassBodyDeclaration: ClassMemberDeclaration
+/*                    | InstanceInitializer */
+                    | StaticInitializer
+                    | ConstructorDeclaration;
+
+ConstructorDeclaration: constructor;
+StaticInitializer: static_block;
+
+ClassMemberDeclaration:	FieldDeclaration
+                      | MethodDeclaration
+                      | ClassDeclaration
+/*                      | InterfaceDeclaration*/
+                      |	SEMI;
+
+FieldDeclaration: fields;
+MethodDeclaration: method;
 
 classorinterface: 
     CLASS { cls.type = ClassDef.CLASS; } | 
@@ -545,7 +562,7 @@ static_block:
 
 // ----- FIELD
 
-fields:
+fields: 
     modifiers type arrayidentifier {
         fieldType = $2;
         makeField($3, lexer.getCodeBody());

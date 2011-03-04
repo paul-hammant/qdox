@@ -457,7 +457,7 @@ EnumBody: BRACEOPEN enum_body BRACECLOSE
 
 ClassModifiers_opt: modifiers;
 
-enum_body: enum_values | enum_values SEMI members;
+enum_body: enum_values | enum_values SEMI ClassBodyDeclarations_opt;
 
 enum_values: | enum_value | enum_value COMMA enum_values;
 
@@ -537,17 +537,6 @@ InterfaceTypeList: InterfaceType { cls.implementz.add($1); }
                  | InterfaceTypeList COMMA InterfaceType { cls.implementz.add($3); };
 
 InterfaceType: classtype;
-
-members: | members { line = lexer.getLine(); } member;
-
-member:
-    fields | 
-    method |
-    constructor |
-    static_block |
-    class |
-    EnumDeclaration |
-    SEMI;
 
 memberend:
     SEMI {

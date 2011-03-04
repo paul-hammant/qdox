@@ -419,22 +419,39 @@ opt_typeparams: | typeparams;
 typeparams: LESSTHAN { typeParams = new LinkedList(); } typeparamlist GREATERTHAN;
 
 typeparamlist:
-    typeparam |
-    typeparamlist COMMA typeparam;
+    TypeParameter |
+    typeparamlist COMMA TypeParameter;
 
-typeparam: 
-    IDENTIFIER { typeParams.add(new TypeVariableDef($1)); } |
-    IDENTIFIER EXTENDS { 
-      typeVariable = new TypeVariableDef($1);
-      typeVariable.bounds = new LinkedList();
-    } typeboundlist {
-      typeParams.add(typeVariable);
-      typeVariable = null;
-    };
+// 4.4 Type Variables
+TypeParameter: IDENTIFIER 
+               { 
+                 typeVariable = new TypeVariableDef($1);
+                 typeVariable.bounds = new LinkedList();
+               }
+               TypeBound_opt
+               {
+                 typeParams.add(typeVariable);
+                 typeVariable = null;
+               }
+               ;
 
-typeboundlist:
-    type { typeVariable.bounds.add($1); } | 
-    typeboundlist AMPERSAND type { typeVariable.bounds.add($3); };
+TypeBound_opt:
+             | TypeBound;
+
+TypeBound: EXTENDS type
+		   {
+		     typeVariable.bounds = new LinkedList();
+		     typeVariable.bounds.add($2); 
+		   }
+		   AdditionalBoundList_opt;
+		   
+AdditionalBoundList_opt:
+                       | AdditionalBoundList_opt AdditionalBound;		   
+
+AdditionalBound: AMPERSAND type
+                 { 
+                   typeVariable.bounds.add($2); 
+                 };
 
 // ----- ENUM
 

@@ -601,7 +601,7 @@ method:
         mth.typeParams = typeParams;
         mth.returnType = $3;
         mth.name = $4;
-    } methoddef dimensions opt_exceptions memberend {
+    } methoddef dimensions Throws_opt memberend {
         mth.dimensions = $7;
         mth.body = $9;
         builder.endMethod(mth);
@@ -613,7 +613,7 @@ method:
         mth.modifiers.addAll(modifiers); modifiers.clear();
         mth.returnType = $2;
         mth.name = $3;
-    } methoddef dimensions opt_exceptions memberend {
+    } methoddef dimensions Throws_opt memberend {
         mth.dimensions = $6;
         mth.body = $8;
         builder.endMethod(mth);
@@ -626,7 +626,7 @@ constructor:
         mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $2;
-    } methoddef opt_exceptions memberend {
+    } methoddef Throws_opt memberend {
         mth.body = $6;
         builder.endConstructor(mth);
         mth = new MethodDef(); 
@@ -637,7 +637,7 @@ constructor:
         mth.typeParams = typeParams;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $3;
-    } methoddef opt_exceptions memberend {
+    } methoddef Throws_opt memberend {
         mth.body = $7;
         builder.endConstructor(mth);
         mth = new MethodDef(); 
@@ -645,11 +645,18 @@ constructor:
 
 methoddef: PARENOPEN opt_params PARENCLOSE;
 
-opt_exceptions: | THROWS exceptionlist;
+// 8.4.6 Method Throws
+Throws_opt:
+          | THROWS ExceptionTypeList;
 
-exceptionlist: 
-    classtype { mth.exceptions.add($1); } | 
-    exceptionlist COMMA classtype { mth.exceptions.add($3); };
+ExceptionTypeList: classtype /*ExceptionType*/
+                   { 
+                     mth.exceptions.add($1); 
+                   }
+                 | ExceptionTypeList COMMA classtype /*ExceptionType*/
+                   {
+                     mth.exceptions.add($3);
+                   };
 
 opt_params: | paramlist;
 

@@ -414,13 +414,18 @@ Wildcard: QUERY              { $$ = new WildcardTypeDef(); }
         | QUERY EXTENDS type { $$ = new WildcardTypeDef($3, "extends" ); }
         | QUERY SUPER type   { $$ = new WildcardTypeDef($3, "super" ); } ;
 
-opt_typeparams: | typeparams;
+// 8.1.2 Generic Classes and Type Parameters
+TypeParameters_opt: 
+                  | TypeParameters;
 
-typeparams: LESSTHAN { typeParams = new LinkedList(); } typeparamlist GREATERTHAN;
+TypeParameters: LESSTHAN 
+                { 
+                  typeParams = new LinkedList(); 
+                } 
+                TypeParameterList GREATERTHAN;
 
-typeparamlist:
-    TypeParameter |
-    typeparamlist COMMA TypeParameter;
+TypeParameterList: TypeParameter 
+                 | TypeParameterList COMMA TypeParameter;
 
 // 4.4 Type Variables
 TypeParameter: IDENTIFIER 
@@ -492,7 +497,7 @@ enum_constructor:
 // ----- CLASS
 
 class: 
-    modifiers classorinterface IDENTIFIER opt_typeparams opt_extends Interfaces_opt  {
+    modifiers classorinterface IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
         cls.lineNumber = line;
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
         cls.name = $3;
@@ -589,7 +594,7 @@ extrafields: |
 // ----- METHOD
 
 method:
-    modifiers typeparams type IDENTIFIER {
+    modifiers TypeParameters type IDENTIFIER {
         builder.beginMethod();
         mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
@@ -626,7 +631,7 @@ constructor:
         builder.endConstructor(mth);
         mth = new MethodDef(); 
     } |
-    modifiers typeparams IDENTIFIER {
+    modifiers TypeParameters IDENTIFIER {
         builder.beginConstructor();
         mth.lineNumber = lexer.getLine();
         mth.typeParams = typeParams;

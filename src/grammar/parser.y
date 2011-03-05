@@ -65,7 +65,6 @@ import java.util.Stack;
 %type <annoval> PostfixExpression CastExpression
 %type <ival> dims Dims_opt
 %type <sval> fullidentifier typedeclspecifier typename memberend
-%type <ival> dimensions
 %type <bval> varargs
 %type <type> type arrayidentifier classtype typearg
 
@@ -161,14 +160,8 @@ fullidentifier:
     fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; };
 
 arrayidentifier: 
-    IDENTIFIER dimensions {
+    IDENTIFIER Dims_opt {
         $$ = new TypeDef($1,$2);
-    };
-
-dimensions:
-    /* empty */ { $$ = 0; }
-	|   dimensions SQUAREOPEN SQUARECLOSE {
-        $$ = $1 + 1; 
     };
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
@@ -372,7 +365,7 @@ FloatingPointType:
 // ----- TYPES
 
 type:
-    classtype dimensions {
+    classtype Dims_opt {
     	TypeDef td = $1;
     	td.dimensions = $2;
         $$ = td;
@@ -601,7 +594,7 @@ method:
         mth.typeParams = typeParams;
         mth.returnType = $3;
         mth.name = $4;
-    } methoddef dimensions Throws_opt memberend {
+    } methoddef Dims_opt Throws_opt memberend {
         mth.dimensions = $7;
         mth.body = $9;
         builder.endMethod(mth);
@@ -613,7 +606,7 @@ method:
         mth.modifiers.addAll(modifiers); modifiers.clear();
         mth.returnType = $2;
         mth.name = $3;
-    } methoddef dimensions Throws_opt memberend {
+    } methoddef Dims_opt Throws_opt memberend {
         mth.dimensions = $6;
         mth.body = $8;
         builder.endMethod(mth);

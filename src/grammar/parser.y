@@ -563,7 +563,7 @@ fields:
         fieldType = $2;
         makeField($3, lexer.getCodeBody());
     }
-    extrafields memberend {
+    extrafields SEMI {
         modifiers.clear();
     };
   

@@ -553,14 +553,6 @@ InterfaceTypeList: InterfaceType { cls.implementz.add($1); }
 
 InterfaceType: classtype;
 
-memberend:
-    SEMI {
-      $$ = "";
-    }
-    | CODEBLOCK {
-	  $$ = lexer.getCodeBody();
-    };
-
 static_block:
     modifiers CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
 
@@ -594,7 +586,7 @@ method:
         mth.typeParams = typeParams;
         mth.returnType = $3;
         mth.name = $4;
-    } methoddef Dims_opt Throws_opt memberend {
+    } methoddef Dims_opt Throws_opt memberend /* =MethodBody */ {
         mth.dimensions = $7;
         mth.body = $9;
         builder.endMethod(mth);
@@ -606,7 +598,7 @@ method:
         mth.modifiers.addAll(modifiers); modifiers.clear();
         mth.returnType = $2;
         mth.name = $3;
-    } methoddef Dims_opt Throws_opt memberend {
+    } methoddef Dims_opt Throws_opt memberend /* =MethodBody */ {
         mth.dimensions = $6;
         mth.body = $8;
         builder.endMethod(mth);
@@ -619,7 +611,7 @@ constructor:
         mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $2;
-    } methoddef Throws_opt memberend {
+    } methoddef Throws_opt memberend /* =MethodBody */ {
         mth.body = $6;
         builder.endConstructor(mth);
         mth = new MethodDef(); 
@@ -630,11 +622,22 @@ constructor:
         mth.typeParams = typeParams;
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
         mth.constructor = true; mth.name = $3;
-    } methoddef Throws_opt memberend {
+    } methoddef Throws_opt memberend /* =MethodBody */ {
         mth.body = $7;
         builder.endConstructor(mth);
         mth = new MethodDef(); 
     };
+
+// 8.4.7 Method Body
+
+memberend: CODEBLOCK 
+           {
+	         $$ = lexer.getCodeBody();
+           } 
+         | SEMI 
+           {
+             $$ = "";
+           };
 
 methoddef: PARENOPEN opt_params PARENCLOSE;
 
@@ -646,7 +649,7 @@ ExceptionTypeList: classtype /*ExceptionType*/
                    { 
                      mth.exceptions.add($1); 
                    }
-                 | ExceptionTypeList COMMA classtype /*ExceptionType*/
+                 | ExceptionTypeList COMMA classtype /* =ExceptionType */
                    {
                      mth.exceptions.add($3);
                    };

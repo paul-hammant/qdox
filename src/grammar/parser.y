@@ -71,53 +71,70 @@ import java.util.Stack;
 %%
 // Source: Java Language Specification - Third Edition
 
-// ----- TOP LEVEL
-
-// A file consists of 0-n fileparts...
-file: | file { line = lexer.getLine(); } filepart;
-
-// And a filepart is a package/import statement, javadoc comment, or class declaration.
-filepart: PackageDeclaration | ImportDeclaration |  TypeDeclaration;
-
 // 7.3 Compilation Units
-
-////TypeDeclarations: TypeDeclaration
-////                | TypeDeclarations TypeDeclaration;
+CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_opt;
 
 // 7.4 Package Declarations
-////PackageDeclaration_opt:
-////                      | PackageDeclaration;
+PackageDeclaration_opt:
+                      | PackageDeclaration_opt PackageDeclaration;
 
 PackageDeclaration: package
                   | javadoc
                   | annotation;
                       
-package: PACKAGE fullidentifier SEMI { builder.addPackage(new PackageDef($2, line)); };
-                      
-
-////ImportDeclarations: ImportDeclaration
-////				  | ImportDeclarations ImportDeclaration;
+package: PACKAGE 
+         { 
+           line = lexer.getLine(); 
+         } 
+         fullidentifier SEMI 
+         { 
+           builder.addPackage(new PackageDef($3, line)); 
+         };
 
 // 7.5 Import Declarations
-ImportDeclaration: SingleTypeImportDeclaration
+ImportDeclarations_opt: 
+				      | ImportDeclarations_opt ImportDeclaration;
+
+ImportDeclaration:  javadoc /*tmp*/ | 
+                 SingleTypeImportDeclaration
                  | TypeImportOnDemandDeclaration
                  | SingleStaticImportDeclaration
                  | StaticImportOnDemandDeclaration;
 
 // 7.5.1 Single-Type-Import Declaration
-SingleTypeImportDeclaration: IMPORT fullidentifier SEMI { builder.addImport( $2 ); };
+SingleTypeImportDeclaration: IMPORT fullidentifier /* =TypeName */ SEMI 
+                             { 
+                               builder.addImport( $2 ); 
+                             };
 
 // 7.5.2 Type-Import-on-Demand Declaration
-TypeImportOnDemandDeclaration: IMPORT fullidentifier DOT STAR SEMI { builder.addImport( $2 + ".*" ); };
+TypeImportOnDemandDeclaration: IMPORT fullidentifier /* =PackageOrTypeName */ DOT STAR SEMI 
+                               { 
+                                 builder.addImport( $2 + ".*" ); 
+                               };
 
 // 7.5.3 Single Static Import Declaration
-SingleStaticImportDeclaration: IMPORT STATIC fullidentifier SEMI { builder.addImport( "static " + $3); };
+SingleStaticImportDeclaration: IMPORT STATIC fullidentifier /* =TypeName . Identifier */ SEMI 
+                               { 
+                                 builder.addImport( "static " + $3);
+                               };
 
 // 7.5.4 Static-Import-on-Demand Declaration             
-StaticImportOnDemandDeclaration: IMPORT STATIC fullidentifier DOT STAR SEMI { builder.addImport( "static " + $3 + ".*" ); };
+StaticImportOnDemandDeclaration: IMPORT STATIC fullidentifier /* =TypeName */ DOT STAR SEMI 
+                                 { 
+                                   builder.addImport( "static " + $3 + ".*" ); 
+                                 };
 
 // 7.6 Top Level Type Declarations
-TypeDeclaration: ClassDeclaration
+TypeDeclarations_opt: 
+                    | TypeDeclarations_opt 
+                      { 
+                        line = lexer.getLine(); 
+                      } 
+                      TypeDeclaration;
+
+TypeDeclaration: javadoc /*tmp*/ | 
+                 ClassDeclaration
 /*               | InterfaceDeclaration */
                | SEMI;
 

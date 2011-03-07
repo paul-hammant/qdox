@@ -77,17 +77,23 @@ import java.util.Stack;
 file: | file { line = lexer.getLine(); } filepart;
 
 // And a filepart is a package/import statement, javadoc comment, or class declaration.
-filepart: annotation | package | ImportDeclaration | javadoc | TypeDeclaration;
+filepart: PackageDeclaration | ImportDeclaration |  TypeDeclaration;
 
 // 7.3 Compilation Units
 
 ////TypeDeclarations: TypeDeclaration
 ////                | TypeDeclarations TypeDeclaration;
 
+// 7.4 Package Declarations
+////PackageDeclaration_opt:
+////                      | PackageDeclaration;
 
-// Package statement
+PackageDeclaration: package
+                  | javadoc
+                  | annotation;
+                      
 package: PACKAGE fullidentifier SEMI { builder.addPackage(new PackageDef($2, line)); };
-
+                      
 
 ////ImportDeclarations: ImportDeclaration
 ////				  | ImportDeclarations ImportDeclaration;
@@ -141,7 +147,7 @@ javadoctokens: | javadoctokens javadoctoken;
 javadoctoken: 
     JAVADOCLINE {
         appendToBuffer($1);
-    } 
+    };
 
 javadoctags: | javadoctags javadoctag;
 

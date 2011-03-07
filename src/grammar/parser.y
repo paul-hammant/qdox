@@ -143,9 +143,6 @@ TypeDeclaration: javadoc /*tmp*/ |
 ClassDeclaration: NormalClassDeclaration	
                 | EnumDeclaration;
                 
-//// for migration               
-NormalClassDeclaration: class;
-
 // ----- JAVADOC
 
 javadoclist: 
@@ -512,7 +509,9 @@ enum_constructor:
 
 // ----- CLASS
 
-class: 
+// 8.1 Class Declaration
+
+NormalClassDeclaration: 
     modifiers classorinterface IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
         cls.lineNumber = line;
         cls.modifiers.addAll(modifiers); modifiers.clear(); 

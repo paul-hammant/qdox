@@ -65,7 +65,6 @@ import java.util.Stack;
 %type <annoval> PostfixExpression CastExpression
 %type <ival> dims Dims_opt
 %type <sval> fullidentifier typedeclspecifier typename memberend
-%type <bval> varargs
 %type <type> type arrayidentifier classtype typearg
 
 %%
@@ -661,7 +660,7 @@ memberend: CODEBLOCK
              $$ = "";
            };
 
-methoddef: PARENOPEN opt_params PARENCLOSE;
+methoddef: PARENOPEN FormalParameterList_opt PARENCLOSE;
 
 // 8.4.6 Method Throws
 Throws_opt:
@@ -675,32 +674,43 @@ ExceptionTypeList: classtype /*ExceptionType*/
                    {
                      mth.exceptions.add($3);
                    };
+// 8.4.1 Formal Parameters
+FormalParameterList_opt:
+                       | FormalParameterList;
+                       
+FormalParameterList: LastFormalParameter
+                   | FormalParameters COMMA LastFormalParameter;
 
-opt_params: | paramlist;
+FormalParameters: FormalParameter
+                | FormalParameters COMMA FormalParameter;
+                
+FormalParameter:  VariableModifiers_opt type /* =Type */ arrayidentifier /* =VariableDeclaratorId */
+                  {
+                    param.name = $3.name;
+                    param.type = $2;
+                    param.dimensions = $3.dimensions;
+                    param.isVarArgs = false;
+                    param.modifiers.addAll(modifiers); modifiers.clear();
+                    builder.addParameter(param);
+                    param = new FieldDef();
+                  };
 
-paramlist: 
-    param | 
-    paramlist COMMA param;
-
-param: 
-    opt_parammodifiers type varargs arrayidentifier {
-        param.name = $4.name;
-        param.type = $2;
-        param.dimensions = $4.dimensions;
-        param.isVarArgs = $3;
-        param.modifiers.addAll(modifiers); modifiers.clear();
-        builder.addParameter(param);
-        param = new FieldDef();
-    };
-
-varargs:
-    /* empty */ { $$ = false; } |
-    DOTDOTDOT   { $$ = true; } ;
+LastFormalParameter: VariableModifiers_opt type /* =Type */ DOTDOTDOT arrayidentifier  /* =VariableDeclaratorId */
+                     {
+                       param.name = $4.name; 
+                       param.type = $2;
+                       param.dimensions = $4.dimensions;
+                       param.isVarArgs = true;
+                       param.modifiers.addAll(modifiers); modifiers.clear();
+                       builder.addParameter(param);
+                       param = new FieldDef();
+                     };
+                   | FormalParameter;
 
 opt_annotations: | opt_annotations annotation;
 
-opt_parammodifiers: |
-    opt_parammodifiers modifier;
+VariableModifiers_opt: 
+                     | VariableModifiers_opt modifier;
 
 %%
 

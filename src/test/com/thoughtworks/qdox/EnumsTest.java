@@ -11,14 +11,15 @@ public class EnumsTest extends TestCase {
     public void testAddEmptyEnumsToModel() {
         String source = ""
                 + "public enum Enum1 {}\n"
-                + "enum Enum2 {;}\n"; 
-                //+ "private enum Enum3 {,}"; @todo
+                + "enum Enum2 {;}\n"
+                + "private enum Enum3 {,}";
 
         JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         assertTrue(javaDocBuilder.getClassByName("Enum1").isEnum());
         assertTrue(javaDocBuilder.getClassByName("Enum2").isEnum());
+        assertTrue(javaDocBuilder.getClassByName("Enum3").isEnum());
     }
 
     public void testAddSimpleEnumsToModel() {

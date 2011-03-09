@@ -144,10 +144,6 @@ ClassDeclaration: NormalClassDeclaration
                 
 // ----- JAVADOC
 
-javadoclist: 
-    javadoc |
-    javadoclist javadoc;
-
 javadoc: JAVADOCSTART javadocdescription javadoctags JAVADOCEND;
 
 javadocdescription: 
@@ -483,29 +479,38 @@ EnumDeclaration: ClassModifiers_opt ENUM IDENTIFIER Interfaces_opt
                  fieldType = new TypeDef($3, 0);
                } EnumBody;
 
-EnumBody: BRACEOPEN enum_body BRACECLOSE 
-        { builder.endClass();
-          fieldType = null;
-          modifiers.clear();
-        };
 
 ClassModifiers_opt: modifiers;
 
-enum_body: enum_values | enum_values SEMI ClassBodyDeclarations_opt;
+/* Specs say: EnumConstants_opt ,_opt EnumBodyDeclarations_opt
+   The optional COMMA causes trouble for the parser
+   For that reason the options of EnumConstants_opt, which will accept all cases 
+*/
+EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
+          { builder.endClass();
+            fieldType = null;
+            modifiers.clear();
+          };
 
-enum_values: | enum_value | enum_value COMMA enum_values;
+EnumConstants_opt:
+                 | EnumConstants_opt COMMA
+                 | EnumConstants_opt EnumConstant;
+                 
+EnumConstant: opt_annotations IDENTIFIER Arguments_opt ClassBody_opt
+              { 
+                makeField(new TypeDef($2, 0), ""); 
+              };
 
-enum_value:
-    javadoclist opt_annotations enum_constructor |
-    opt_annotations enum_constructor;
+         
+Arguments_opt:
+             | PARENBLOCK /* =Arguments */;
 
-enum_constructor:
-    IDENTIFIER { makeField(new TypeDef($1, 0), ""); } |
-    IDENTIFIER CODEBLOCK  { makeField(new TypeDef($1, 0), ""); } |
-    IDENTIFIER PARENBLOCK { makeField(new TypeDef($1, 0), ""); } |
-    IDENTIFIER PARENBLOCK CODEBLOCK { makeField(new TypeDef($1, 0), ""); };
+ClassBody_opt:
+             | CODEBLOCK /* =ClassBody */;
 
-
+EnumBodyDeclarations_opt:
+                        | SEMI ClassBodyDeclarations_opt;
+          
 // ----- CLASS
 
 // 8.1 Class Declaration
@@ -519,13 +524,13 @@ NormalClassDeclaration:
         builder.beginClass(cls); 
         cls = new ClassDef(); 
     }
-    ClassBody;
+    ClassBody
+    {
+      builder.endClass(); 
+    };    
 
 // 8.1.6 Class Body and Member Declarations
-ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE 
-           {
-             builder.endClass(); 
-           };    
+ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE; 
 
 // this is slighly different so we can get the correct linenumber
 ClassBodyDeclarations_opt:
@@ -707,7 +712,9 @@ LastFormalParameter: VariableModifiers_opt type /* =Type */ DOTDOTDOT arrayident
                      };
                    | FormalParameter;
 
-opt_annotations: | opt_annotations annotation;
+opt_annotations: 
+               | opt_annotations annotation;
+               | opt_annotations javadoc;
 
 VariableModifiers_opt: 
                      | VariableModifiers_opt modifier;

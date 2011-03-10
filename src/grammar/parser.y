@@ -65,7 +65,7 @@ import java.util.Stack;
 %type <annoval> PostfixExpression CastExpression
 %type <ival> dims Dims_opt
 %type <sval> fullidentifier typedeclspecifier typename memberend
-%type <type> type arrayidentifier classtype typearg
+%type <type> type VariableDeclaratorId classtype typearg
 
 %%
 // Source: Java Language Specification - Third Edition
@@ -173,11 +173,6 @@ javadoctag:
 fullidentifier: 
     IDENTIFIER { $$ = $1; } |
     fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; };
-
-arrayidentifier: 
-    IDENTIFIER Dims_opt {
-        $$ = new TypeDef($1,$2);
-    };
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
 modifier:
@@ -585,7 +580,7 @@ static_block:
 // ----- FIELD
 
 fields: 
-    modifiers type arrayidentifier {
+    modifiers type VariableDeclaratorId {
         fieldType = $2;
         makeField($3, lexer.getCodeBody());
     }
@@ -594,13 +589,18 @@ fields:
     };
   
 extrafields: | 
-    extrafields COMMA { line = lexer.getLine(); } arrayidentifier {
+    extrafields COMMA { line = lexer.getLine(); } VariableDeclaratorId {
         makeField($4, lexer.getCodeBody());
     } | 
-    extrafields COMMA javadoc { line = lexer.getLine(); } arrayidentifier {
+    extrafields COMMA javadoc { line = lexer.getLine(); } VariableDeclaratorId {
         makeField($5, lexer.getCodeBody());
     };
 
+// 8.3 Field Declarations...
+VariableDeclaratorId: IDENTIFIER Dims_opt 
+                      {
+                        $$ = new TypeDef($1,$2);
+                      };
 
 // ----- METHOD
 
@@ -689,7 +689,7 @@ FormalParameterList: LastFormalParameter
 FormalParameters: FormalParameter
                 | FormalParameters COMMA FormalParameter;
                 
-FormalParameter:  VariableModifiers_opt type /* =Type */ arrayidentifier /* =VariableDeclaratorId */
+FormalParameter:  VariableModifiers_opt type /* =Type */ VariableDeclaratorId
                   {
                     param.name = $3.name;
                     param.type = $2;
@@ -700,7 +700,7 @@ FormalParameter:  VariableModifiers_opt type /* =Type */ arrayidentifier /* =Var
                     param = new FieldDef();
                   };
 
-LastFormalParameter: VariableModifiers_opt type /* =Type */ DOTDOTDOT arrayidentifier  /* =VariableDeclaratorId */
+LastFormalParameter: VariableModifiers_opt type /* =Type */ DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
                      {
                        param.name = $4.name; 
                        param.type = $2;

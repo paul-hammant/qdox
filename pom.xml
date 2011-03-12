@@ -220,6 +220,7 @@
           <outputDirectory>${project.build.directory}/generated-sources/parser</outputDirectory>
           <lexDefinitions>
             <lexFile>${basedir}/src/grammar/lexer.flex</lexFile>
+            <lexFile>${basedir}/src/grammar/commentlexer.flex</lexFile>
           </lexDefinitions>
           <skeleton>${basedir}/src/grammar/skeleton.inner</skeleton>
         </configuration>
@@ -230,7 +231,7 @@
         <version>1.2</version>
         <executions>
           <execution>
-            <id>byaccj</id>
+            <id>javasourceparser</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>exec</goal>
@@ -242,9 +243,29 @@
                 <argument>-Jnorun</argument>
                 <argument>-Jnoconstruct</argument>
                 <argument>-Jclass=Parser</argument>
+                <!-- <argument>-Jimplements=CommentHandler</argument> -->
                 <argument>-Jsemantic=Value</argument>
                 <argument>-Jpackage=com.thoughtworks.qdox.parser.impl</argument>
                 <argument>${basedir}/src/grammar/parser.y</argument>
+              </arguments>
+              <workingDirectory>${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl</workingDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>javacommentparser</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>${qdox.byaccj.executable}</executable>
+              <arguments>
+                <argument>-v</argument>
+                <argument>-Jnorun</argument>
+                <argument>-Jnoconstruct</argument>
+                <argument>-Jclass=DefaultJavaCommentParser</argument>
+                <argument>-Jpackage=com.thoughtworks.qdox.parser.impl</argument>
+                <argument>${basedir}/src/grammar/commentparser.y</argument>
               </arguments>
               <workingDirectory>${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl</workingDirectory>
             </configuration>

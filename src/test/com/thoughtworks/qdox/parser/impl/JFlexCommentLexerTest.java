@@ -1,11 +1,10 @@
 package com.thoughtworks.qdox.parser.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class JFlexCommentLexerTest
@@ -129,7 +128,7 @@ public class JFlexCommentLexerTest
         lexAssert(0);
     }
 
-    @Ignore
+    @Test
     public void testDeepJavadocTag() throws Exception {
         String in = "  /** *  *** * @m x \n" +
                 "*/";

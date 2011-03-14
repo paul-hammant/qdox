@@ -83,7 +83,7 @@ import com.thoughtworks.qdox.parser.*;
 Eol                     = \r|\n|\r\n
 JavadocEnd              = "*"+ "/"
 
-%state JAVADOC JAVADOCLINE JAVADOCTAG MULTILINECOMMENT SINGLELINECOMMENT
+%state JAVADOC JAVADOCCONTENT JAVADOCLINE JAVADOCTAG MULTILINECOMMENT SINGLELINECOMMENT
 
 %%
 
@@ -97,6 +97,7 @@ JavadocEnd              = "*"+ "/"
          }
   "/*" [*]+ {
            pushState( JAVADOC );
+           pushState( JAVADOCCONTENT );
            return DefaultJavaCommentParser.JAVADOCSTART;
          }
   "/*"   { 
@@ -106,14 +107,6 @@ JavadocEnd              = "*"+ "/"
 }
 
 <JAVADOC> {
-    "@"               { 
-                        yypushback(1); 
-                        pushState(JAVADOCTAG); 
-                      }
-    [^ \t\r*@]		  { 
-                        yypushback(1); 
-                        pushState(JAVADOCLINE); 
-                      }
     "*"+ [ \t]* / "@" { 
                         pushState(JAVADOCTAG); 
                       }
@@ -125,6 +118,19 @@ JavadocEnd              = "*"+ "/"
                         return DefaultJavaCommentParser.JAVADOCEND;
                       }
 }
+<JAVADOCCONTENT,JAVADOC> {
+    [^ \t\r@]		  { 
+                        yypushback(1); 
+                        popState();
+                        pushState(JAVADOCLINE); 
+                      }
+    [ \t\r]* "@"      { 
+                        yypushback(1);
+                        popState(); 
+                        pushState(JAVADOCTAG); 
+                      }
+}
+
 <JAVADOCLINE> {
   ~{Eol}                           { 
                                      popState(); 

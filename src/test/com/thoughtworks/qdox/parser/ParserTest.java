@@ -1,9 +1,18 @@
 package com.thoughtworks.qdox.parser;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import junit.framework.TestCase;
+
+import org.mockito.stubbing.answers.ReturnsElementsOf;
 
 import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.parser.impl.Parser;
@@ -16,8 +25,11 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
 public class ParserTest extends TestCase {
-
-    private MockLexer lexer;
+    
+    private Collection<Integer> lexValues = new LinkedList<Integer>();
+    private Collection<String> textValues = new LinkedList<String>();
+    
+    private Lexer lexer;
     private Builder builder;
 
     public ParserTest(String s) {
@@ -25,9 +37,10 @@ public class ParserTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        super.setUp();
-        lexer = new MockLexer();
         builder = mock(Builder.class);
+        lexer = mock(Lexer.class);
+        lexValues.clear();
+        textValues.clear();
     }
     
     @Override
@@ -2638,12 +2651,19 @@ public class ParserTest extends TestCase {
     }
 
     private void setupLex(int token, String value) {
-        lexer.setupLex(token);
-        lexer.setupText(value);
+        lexValues.add( token );
+        textValues.add( value );
     }
 
-    private void setupLex(int token) {
-        setupLex(token, null);
+    private void setupLex( int token ) throws Exception
+    {
+        setupLex( token, null );
+        if ( token == 0 )
+        {
+            when( lexer.lex() ).thenAnswer( new ReturnsElementsOf( lexValues ) );
+            when( lexer.text() ).thenAnswer( new ReturnsElementsOf( textValues ) );
+            when( lexer.getLine() ).thenReturn( -1 );
+        }
     }
 
 }

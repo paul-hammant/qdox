@@ -95,7 +95,7 @@ JavadocEnd              = "*"+ "/"
   "/**/" { 
            codeBody.append( "/**/" ); 
          }
-  "/**"  {
+  "/*" [*]+ {
            pushState( JAVADOC );
            return DefaultJavaCommentParser.JAVADOCSTART;
          }

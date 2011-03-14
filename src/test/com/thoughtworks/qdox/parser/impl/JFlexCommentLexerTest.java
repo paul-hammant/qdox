@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.io.StringReader;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class JFlexCommentLexerTest
@@ -73,6 +74,7 @@ public class JFlexCommentLexerTest
         lexAssert( 0 );
     }
     
+    @Test
     public void testDocletTags() throws Exception {
         String in = ""
                 + "/**\n"
@@ -101,6 +103,7 @@ public class JFlexCommentLexerTest
         lexAssert(0);
     }
     
+    @Test
     public void testOneLinerDocComment() throws Exception {
         String in = "/** @hello world */";
         lexer = new DefaultJavaCommentLexer(new StringReader(in));
@@ -109,10 +112,11 @@ public class JFlexCommentLexerTest
         lexAssert(DefaultJavaCommentParser.JAVADOCTAG, "@hello");
         lexAssert(DefaultJavaCommentParser.JAVADOCLINE, "world");
 
-        lexAssert(DefaultJavaCommentParser.JAVADOCEND);
+        lexAssert(DefaultJavaCommentParser.JAVADOCEND, "*/");
         lexAssert(0);
     }
     
+    @Test
     public void testCompressedDocComment() throws Exception {
         String in = "/**@foo bar*/";
         lexer = new DefaultJavaCommentLexer(new StringReader(in));
@@ -121,10 +125,11 @@ public class JFlexCommentLexerTest
         lexAssert(DefaultJavaCommentParser.JAVADOCTAG, "@foo");
         lexAssert(DefaultJavaCommentParser.JAVADOCLINE, "bar");
         
-        lexAssert(DefaultJavaCommentParser.JAVADOCEND);
+        lexAssert(DefaultJavaCommentParser.JAVADOCEND, "*/");
         lexAssert(0);
     }
 
+    @Ignore
     public void testDeepJavadocTag() throws Exception {
         String in = "  /** *  *** * @m x \n" +
                 "*/";
@@ -137,6 +142,7 @@ public class JFlexCommentLexerTest
         lexAssert(0); 
     }
 
+    @Test
     public void testDocCommentContainingAtSymbols() throws Exception {
         String in = ""
             + "/**\n"
@@ -158,6 +164,7 @@ public class JFlexCommentLexerTest
         lexAssert(0);
     }
 
+    @Test
     public void testDocCommentContainingStars() throws Exception {
         String in = ""
                 + "/**\n"
@@ -177,6 +184,7 @@ public class JFlexCommentLexerTest
         lexAssert(0);
     }
     
+    @Test
     public void testExtraStarsAreIgnoredAtStartAndEnd() throws Exception {
         String in = ""
                 + "/*****\n"
@@ -190,16 +198,18 @@ public class JFlexCommentLexerTest
         lexAssert(0);
     }
     
+    @Test
     public void testExtraStarsCompressed() throws Exception {
         String in = ""
                 + "/***blah***/";
         lexer = new DefaultJavaCommentLexer(new StringReader(in));
         lexAssert(DefaultJavaCommentParser.JAVADOCSTART, "/***");
         lexAssert(DefaultJavaCommentParser.JAVADOCLINE, "blah");
-        lexAssert(DefaultJavaCommentParser.JAVADOCEND, "**/");
+        lexAssert(DefaultJavaCommentParser.JAVADOCEND, "***/");
         lexAssert(0);
     }
     
+    @Test
     public void testIgnoreStarPrefix() throws Exception {
         String in = ""
             + "/**\n"
@@ -224,6 +234,7 @@ public class JFlexCommentLexerTest
     }
     
     // QDOX-200
+    @Test
     public void testCompactJavaDocTag() throws Exception {
         String in = "/** @foo*/";
         lexer = new DefaultJavaCommentLexer(new StringReader(in));

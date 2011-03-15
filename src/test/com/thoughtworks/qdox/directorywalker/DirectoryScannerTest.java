@@ -1,137 +1,197 @@
 package com.thoughtworks.qdox.directorywalker;
 
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 import java.io.File;
 import java.util.List;
 
-import org.jmock.Mock;
-import org.jmock.MockObjectTestCase;
+import org.junit.Test;
 
-public class DirectoryScannerTest extends MockObjectTestCase {
+public class DirectoryScannerTest
+{
 
-    class MockFile extends File {
-        boolean isDirectory;
-        File[] children;
+    private File newMockFile( String name )
+    {
+        return newMockFile( name, false );
+    }
 
-        public MockFile(String pathname) {
-            super(pathname);
-            this.isDirectory = false;
+    private File newMockFile( String name, boolean isDirectory )
+    {
+        File result = mock( File.class );
+        when( result.getName() ).thenReturn( name );
+        when( result.isDirectory() ).thenReturn( isDirectory );
+        return result;
+    }
+
+    @Test
+    public void testSingleDirectory()
+    {
+        File rootDir = newMockFile( "root", true );
+        {
+            File blahTxt = newMockFile( "blah.txt" );
+            File fooTxt = newMockFile( "foo.txt" );
+            File pigJava = newMockFile( "pig.java" );
+
+            when( rootDir.listFiles() ).thenReturn( new File[] { blahTxt, fooTxt, pigJava } );
         }
 
-        public MockFile(String pathname, boolean isDirectory) {
-            super(pathname);
-            this.isDirectory = isDirectory;
+        DirectoryScanner scanner = new DirectoryScanner( rootDir );
+        List<File> files = scanner.scan();
+        assertEquals( 3, files.size() );
+        assertEquals( "blah.txt", files.get( 0 ).getName() );
+        assertEquals( "foo.txt", files.get( 1 ).getName() );
+        assertEquals( "pig.java", files.get( 2 ).getName() );
+    }
+
+    @Test
+    public void testDirectoryWithSubdir()
+    {
+        File rootDir = newMockFile( "root", true );
+        {
+            File subDir = newMockFile( "subdir", true );
+            {
+                File child1Txt = newMockFile( "child1.txt" );
+                File child2Txt = newMockFile( "child2.txt" );
+
+                when( subDir.listFiles() ).thenReturn( new File[] { child1Txt, child2Txt } );
+            }
+            File fooTxt = newMockFile( "foo.txt" );
+            File pigJava = newMockFile( "pig.java" );
+
+            when( rootDir.listFiles() ).thenReturn( new File[] { subDir, fooTxt, pigJava } );
         }
 
-        public boolean isDirectory() {
-            return this.isDirectory;
+        DirectoryScanner scanner = new DirectoryScanner( rootDir );
+        List<File> files = scanner.scan();
+        assertEquals( 4, files.size() );
+        assertEquals( "child1.txt", files.get( 0 ).getName() );
+        assertEquals( "child2.txt", files.get( 1 ).getName() );
+        assertEquals( "foo.txt", files.get( 2 ).getName() );
+        assertEquals( "pig.java", files.get( 3 ).getName() );
+    }
+
+    @Test
+    public void testDirectoryWithSubdirWithSubdir()
+    {
+        File rootDir = newMockFile( "root", true );
+        {
+            File subDir1 = newMockFile( "subdir", true );
+            {
+                File subDir2 = newMockFile( "subdir2", true );
+                {
+                    File grandChild1Txt = newMockFile( "grandChild1.txt" );
+
+                    when( subDir2.listFiles() ).thenReturn( new File[] { grandChild1Txt } );
+                }
+                File child1Txt = newMockFile( "child1.txt" );
+                File child2Txt = newMockFile( "child2.txt" );
+
+                when( subDir1.listFiles() ).thenReturn( new File[] { subDir2, child1Txt, child2Txt } );
+
+            }
+            File fooTxt = newMockFile( "foo.txt" );
+            File pigJava = newMockFile( "pig.java" );
+
+            when( rootDir.listFiles() ).thenReturn( new File[] { subDir1, fooTxt, pigJava } );
         }
 
-        public File[] listFiles() {
-            return children;
+        DirectoryScanner scanner = new DirectoryScanner( rootDir );
+        List<File> files = scanner.scan();
+        assertEquals( 5, files.size() );
+        assertEquals( "grandChild1.txt", files.get( 0 ).getName() );
+        assertEquals( "child1.txt", files.get( 1 ).getName() );
+        assertEquals( "child2.txt", files.get( 2 ).getName() );
+        assertEquals( "foo.txt", files.get( 3 ).getName() );
+        assertEquals( "pig.java", files.get( 4 ).getName() );
+    }
+
+    @Test
+    public void testSuffixFilter()
+    {
+        File rootDir = newMockFile( "root", true );
+        {
+            File blahTxt = newMockFile( "blah.txt" );
+            File fooJava = newMockFile( "foo.java" );
+            File pigJava = newMockFile( "pig.java" );
+
+            when( rootDir.listFiles() ).thenReturn( new File[] { blahTxt, fooJava, pigJava } );
         }
-    }
-
-    public DirectoryScannerTest(String s) {
-        super(s);
-    }
-
-    public void testSingleDirectory() {
-        MockFile rootDir = new MockFile("root", true);
-        rootDir.children = new File[]{new MockFile("blah.txt"), new MockFile("foo.txt"), new MockFile("pig.java")};
-        DirectoryScanner scanner = new DirectoryScanner(rootDir);
+        DirectoryScanner scanner = new DirectoryScanner( rootDir );
+        scanner.addFilter( new SuffixFilter( ".java" ) );
         List<File> files = scanner.scan();
-        assertEquals(3, files.size());
-        assertEquals("blah.txt", files.get(0).getName());
-        assertEquals("foo.txt", files.get(1).getName());
-        assertEquals("pig.java", files.get(2).getName());
+        assertEquals( 2, files.size() );
+        assertEquals( "foo.java", files.get( 0 ).getName() );
+        assertEquals( "pig.java", files.get( 1 ).getName() );
     }
 
-    public void testDirectoryWithSubdir() {
-        MockFile rootDir = new MockFile("root", true);
-        MockFile subDir = new MockFile("subdir", true);
-        subDir.children = new File[]{new MockFile("child1.txt"), new MockFile("child2.txt")};
-        rootDir.children = new File[]{subDir, new MockFile("foo.txt"), new MockFile("pig.java")};
-        DirectoryScanner scanner = new DirectoryScanner(rootDir);
-        List<File> files = scanner.scan();
-        assertEquals(4, files.size());
-        assertEquals("child1.txt", files.get(0).getName());
-        assertEquals("child2.txt", files.get(1).getName());
-        assertEquals("foo.txt", files.get(2).getName());
-        assertEquals("pig.java", files.get(3).getName());
-    }
+    @Test
+    public void testFilterCallback()
+    {
+        File rootDir = newMockFile( "root", true );
+        {
+            File blahTxt = newMockFile( "blah.txt" );
+            File fooJava = newMockFile( "foo.java" );
+            File pigJava = newMockFile( "pig.java" );
 
-    public void testDirectoryWithSubdirWithSubdir() {
-        MockFile rootDir = new MockFile("root", true);
-        MockFile subDir1 = new MockFile("subdir", true);
-        MockFile subDir2 = new MockFile("subdir2", true);
-        subDir2.children = new File[]{new MockFile("grandChild1.txt")};
-        subDir1.children = new File[]{subDir2, new MockFile("child1.txt"), new MockFile("child2.txt")};
-        rootDir.children = new File[]{subDir1, new MockFile("foo.txt"), new MockFile("pig.java")};
-
-        DirectoryScanner scanner = new DirectoryScanner(rootDir);
-        List<File> files = scanner.scan();
-        assertEquals(5, files.size());
-        assertEquals("grandChild1.txt", files.get(0).getName());
-        assertEquals("child1.txt", files.get(1).getName());
-        assertEquals("child2.txt", files.get(2).getName());
-        assertEquals("foo.txt", files.get(3).getName());
-        assertEquals("pig.java", files.get(4).getName());
-    }
-
-    public void testSuffixFilter() {
-        MockFile rootDir = new MockFile("root", true);
-        rootDir.children = new File[]{new MockFile("blah.txt"), new MockFile("foo.java"), new MockFile("pig.java")};
-        DirectoryScanner scanner = new DirectoryScanner(rootDir);
-        scanner.addFilter(new SuffixFilter(".java"));
-        List<File> files = scanner.scan();
-        assertEquals(2, files.size());
-        assertEquals("foo.java", files.get(0).getName());
-        assertEquals("pig.java", files.get(1).getName());
-    }
-
-    public void testFilterCallback() {
-        MockFile rootDir = new MockFile("root", true);
-        rootDir.children = new File[]{new MockFile("blah.txt"), new MockFile("foo.java"), new MockFile("pig.java")};
-        DirectoryScanner scanner = new DirectoryScanner(rootDir);
-        Filter mockFilter = new Filter() {
-            public boolean filter(File file) {
-                return file.getName().equals("foo.java");
+            when( rootDir.listFiles() ).thenReturn( new File[] { blahTxt, fooJava, pigJava } );
+        }
+        DirectoryScanner scanner = new DirectoryScanner( rootDir );
+        Filter mockFilter = new Filter()
+        {
+            public boolean filter( File file )
+            {
+                return file.getName().equals( "foo.java" );
             }
         };
-        scanner.addFilter(mockFilter);
+        scanner.addFilter( mockFilter );
         List<File> files = scanner.scan();
-        assertEquals(1, files.size());
-        assertEquals("foo.java", files.get(0).getName());
+        assertEquals( 1, files.size() );
+        assertEquals( "foo.java", files.get( 0 ).getName() );
     }
 
-    public void testMultipleFilters() {
-        MockFile rootDir = new MockFile("root", true);
-        rootDir.children = new File[]{new MockFile("blah.txt"), new MockFile("foo.java"),
-                                      new MockFile("pig.java"), new MockFile("foo.txt")};
-        DirectoryScanner scanner = new DirectoryScanner(rootDir);
-        scanner.addFilter(new SuffixFilter(".java"));
-        scanner.addFilter(new Filter() {
-            public boolean filter(File file) {
-                return file.getName().startsWith("foo");
+    @Test
+    public void testMultipleFilters()
+    {
+        File rootDir = newMockFile( "root", true );
+        {
+            File blahTxt = newMockFile( "blah.txt" );
+            File fooJava = newMockFile( "foo.java" );
+            File pigJava = newMockFile( "pig.java" );
+            File fooTxt = newMockFile( "foo.txt" );
+
+            when( rootDir.listFiles() ).thenReturn( new File[] { blahTxt, fooJava, pigJava, fooTxt } );
+        }
+        DirectoryScanner scanner = new DirectoryScanner( rootDir );
+        scanner.addFilter( new SuffixFilter( ".java" ) );
+        scanner.addFilter( new Filter()
+        {
+            public boolean filter( File file )
+            {
+                return file.getName().startsWith( "foo" );
             }
-        });
+        } );
         List<File> files = scanner.scan();
-        assertEquals(1, files.size());
-        assertEquals("foo.java", files.get(0).getName());
+        assertEquals( 1, files.size() );
+        assertEquals( "foo.java", files.get( 0 ).getName() );
     }
 
-    public void testFileVisitor() {
-        MockFile rootDir = new MockFile("root", true);
-        rootDir.children = new File[]{new MockFile("blah.txt"), new MockFile("foo.txt"), new MockFile("pig.java")};
-        DirectoryScanner scanner = new DirectoryScanner(rootDir);
-        Mock mockFileVisitor = new Mock(FileVisitor.class);
-        mockFileVisitor.expects(once()).method("visitFile").with(same(rootDir.children[0]));
-        mockFileVisitor.expects(once()).method("visitFile").with(same(rootDir.children[1]));
-        mockFileVisitor.expects(once()).method("visitFile").with(same(rootDir.children[2]));
+    @Test
+    public void testFileVisitor()
+    {
+        File rootDir = newMockFile( "root", true );
 
-        scanner.scan((FileVisitor) mockFileVisitor.proxy());
+        File blahTxt = newMockFile( "blah.txt" );
+        File fooJava = newMockFile( "foo.java" );
+        File pigJava = newMockFile( "pig.java" );
 
-        mockFileVisitor.verify();
+        when( rootDir.listFiles() ).thenReturn( new File[] { blahTxt, fooJava, pigJava } );
 
+        DirectoryScanner scanner = new DirectoryScanner( rootDir );
+        FileVisitor visitor = mock( FileVisitor.class );
+        scanner.scan( visitor );
+
+        org.mockito.Mockito.verify( visitor ).visitFile( blahTxt );
+        org.mockito.Mockito.verify( visitor ).visitFile( fooJava );
+        org.mockito.Mockito.verify( visitor ).visitFile( pigJava );
     }
 }

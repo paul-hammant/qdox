@@ -1,5 +1,6 @@
-
 package com.thoughtworks.qdox;
+
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jmock.Mock;
-import org.jmock.MockObjectTestCase;
+import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.BeanProperty;
@@ -34,7 +34,7 @@ import com.thoughtworks.qdox.testdata.PropertyClass;
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  */
-public class JavaDocBuilderTest extends MockObjectTestCase {
+public class JavaDocBuilderTest extends TestCase {
 
     private JavaDocBuilder builder;
 
@@ -993,16 +993,14 @@ public class JavaDocBuilderTest extends MockObjectTestCase {
     public void testContinuesProcessingAfterBadFileIfCustomHandlerPermits() throws Exception {
         createFile("target/test-source/com/blah/Bad.java", "com.blah", "@%! BAD {}}}}");
 
-        Mock mockErrorHandler = mock(JavaDocBuilder.ErrorHandler.class);
-        // Expectation
-        mockErrorHandler.expects(once())
-                .method("handle")
-                .with(isA(ParseException.class));
-
-        builder.setErrorHandler((JavaDocBuilder.ErrorHandler) mockErrorHandler.proxy());
+        JavaDocBuilder.ErrorHandler mockErrorHandler = mock(JavaDocBuilder.ErrorHandler.class);
+        
+        builder.setErrorHandler(mockErrorHandler);
         builder.addSourceTree(new File("target/test-source"));
 
         assertNotNull(builder.getClassByName("com.blah.Thing"));
+        
+        verify(mockErrorHandler).handle( any(ParseException.class) );
     }
 
     public void testBinaryClassFieldModifiers() {

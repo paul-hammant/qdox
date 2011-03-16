@@ -7,7 +7,7 @@ import java.io.StringReader;
 
 import org.junit.Test;
 
-public class JFlexCommentLexerTest
+public class DefaultJavaCommentLexerTest
 {
     private DefaultJavaCommentLexer lexer;
     

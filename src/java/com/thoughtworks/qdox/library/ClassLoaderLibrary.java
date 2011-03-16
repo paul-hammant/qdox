@@ -30,7 +30,7 @@ import com.thoughtworks.qdox.builder.ModelBuilder;
 import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
-import com.thoughtworks.qdox.parser.Lexer;
+import com.thoughtworks.qdox.parser.JavaLexer;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
@@ -108,7 +108,7 @@ public class ClassLoaderLibrary
             InputStream sourceStream = classLoader.getResourceAsStream( resource );
             if(sourceStream != null) {
                 ModelBuilder builder = getModelBuilder();
-                Lexer lexer = new JFlexLexer( sourceStream );
+                JavaLexer lexer = new JFlexLexer( sourceStream );
                 Parser parser = new Parser( lexer, builder );
                 parser.setDebugLexer( debugLexer );
                 parser.setDebugParser( debugParser );

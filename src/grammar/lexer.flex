@@ -20,12 +20,14 @@ package com.thoughtworks.qdox.parser.impl;
  */
 
 import com.thoughtworks.qdox.parser.*;
+import java.util.*;
+
 %%
 
 // class and lexer definitions
 %class JFlexLexer
 %public
-%implements Lexer
+%implements JavaLexer
 %byaccj
 %unicode
 %line
@@ -33,6 +35,7 @@ import com.thoughtworks.qdox.parser.*;
 
 %{
 	private java.io.Writer writer;
+	private List<CommentHandler> commentHandlers = new ArrayList<CommentHandler>();
 
     private int classDepth = 0;
     private int parenDepth = 0;
@@ -108,6 +111,10 @@ import com.thoughtworks.qdox.parser.*;
         String s = codeBody.toString();
         codeBody = new StringBuffer(8192);
         return s;
+    }
+    
+    public void addCommentHandler(CommentHandler handler) {
+      this.commentHandlers.add(handler);
     }
     
     public JFlexLexer( java.io.Reader reader, java.io.Writer writer ) {
@@ -236,9 +243,9 @@ JavadocEnd  = "*"+ "/"
     }
 
     "/**" ~"*/" {
-        pushState(JAVADOC);
-        yypushStream(new java.io.StringReader(text().substring(2))); 
-        return Parser.JAVADOCSTART;
+      for( CommentHandler handler: commentHandlers ) {
+        handler.onComment( text(), getLine(), getColumn() );
+      }
     }
 
     "=" {WhiteSpace}* { 
@@ -290,26 +297,6 @@ JavadocEnd  = "*"+ "/"
             }
           }
 }
-<JAVADOC> {
-    "@"               { yypushback(1); pushState(JAVADOCTAG); }
-    [^ \t\r*@]		  { yypushback(1); pushState(JAVADOCLINE); }
-    "*"+ [ \t]* / "@" { pushState(JAVADOCTAG); }
-    "*"+ [ \t]?       { pushState(JAVADOCLINE); }
-    {JavadocEnd}      { popState(); yypopStream(); return Parser.JAVADOCEND; }
-}
-<JAVADOCLINE> {
-  ~{Eol}                           { popState(); return Parser.JAVADOCLINE; }
-  .* [^ \t*] / [ \t]* {JavadocEnd} { popState(); return Parser.JAVADOCLINE;}
-  {JavadocEnd}                     { popState(); popState(); yypopStream(); return Parser.JAVADOCEND; }
-}
-
-<JAVADOCTAG> {
-  "@" [^ \t\n\r]+ / {JavadocEnd} { popState(); return Parser.JAVADOCTAG;  }
-  "@" [^ \t\n\r]+                { return Parser.JAVADOCTAG; }
-  [ \t]+                         { popState();pushState(JAVADOCLINE);}
-  {Eol}                          { popState();return Parser.JAVADOCLINE;}
-}
-
 <CODEBLOCK> {
      "{"  { 
             if(codeblockDepth++ > 0 ) {

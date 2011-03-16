@@ -243,7 +243,7 @@
                 <argument>-Jnorun</argument>
                 <argument>-Jnoconstruct</argument>
                 <argument>-Jclass=Parser</argument>
-                <!-- <argument>-Jimplements=CommentHandler</argument> -->
+                <argument>-Jimplements=CommentHandler</argument>
                 <argument>-Jsemantic=Value</argument>
                 <argument>-Jpackage=com.thoughtworks.qdox.parser.impl</argument>
                 <argument>${basedir}/src/grammar/parser.y</argument>

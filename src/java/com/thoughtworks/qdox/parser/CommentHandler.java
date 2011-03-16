@@ -30,5 +30,5 @@ package com.thoughtworks.qdox.parser;
  */
 public interface CommentHandler
 {
-  public void onComment(String comment);
+  public void onComment(String comment, int line, int column);
 }

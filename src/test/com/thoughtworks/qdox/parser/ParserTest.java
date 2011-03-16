@@ -29,7 +29,7 @@ public class ParserTest extends TestCase {
     private Collection<Integer> lexValues = new LinkedList<Integer>();
     private Collection<String> textValues = new LinkedList<String>();
     
-    private Lexer lexer;
+    private JavaLexer lexer;
     private Builder builder;
 
     public ParserTest(String s) {
@@ -38,7 +38,7 @@ public class ParserTest extends TestCase {
 
     protected void setUp() throws Exception {
         builder = mock(Builder.class);
-        lexer = mock(Lexer.class);
+        lexer = mock(JavaLexer.class);
         lexValues.clear();
         textValues.clear();
     }
@@ -246,134 +246,6 @@ public class ParserTest extends TestCase {
 
         // verify
         verify( builder ).addImport( "static com.blah.Thingy.*" );
-    }
-
-    public void testOneLineJavaDoc() throws Exception {
-
-        // setup values
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "This is great!");
-        setupLex(Parser.JAVADOCEND);
-        setupLex(0);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
-        // verify
-        verify(builder).addJavaDoc( "This is great!" );
-    }
-
-    public void testOneJavaDocTag() throws Exception {
-
-        // setup values
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTAG, "@This");
-        setupLex(Parser.JAVADOCLINE, "is great!");
-        setupLex(Parser.JAVADOCEND);
-        setupLex(0);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
-        // verify
-        verify(builder).addJavaDoc( "" );
-        verify(builder).addJavaDocTag( new TagDef("This", "is great!") );
-    }
-
-    public void testOneJavaDocTagWithNoValue() throws Exception {
-
-        // setup values
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTAG, "@eatme");
-        setupLex(Parser.JAVADOCEND);
-        setupLex(0);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
-        // verify
-        verify(builder).addJavaDoc( "" );
-        verify(builder).addJavaDocTag( new TagDef("eatme", "") );
-    }
-
-    public void testOneMultiLineJavaDocTag() throws Exception {
-
-        // setup values
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTAG, "@This");
-        setupLex(Parser.JAVADOCLINE, "is great! Mmmkay.");
-        setupLex(Parser.JAVADOCEND);
-        setupLex(0);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
-        // verify
-        verify(builder).addJavaDoc( "" );
-        verify(builder).addJavaDocTag( new TagDef("This", "is great! Mmmkay.") );
-    }
-
-    public void testMultipleJavaDocTags() throws Exception {
-
-        // setup values
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCTAG, "@This");
-        setupLex(Parser.JAVADOCLINE, "is great!");
-        setupLex(Parser.JAVADOCTAG, "@mock");
-        setupLex(Parser.JAVADOCLINE, "generate");
-        setupLex(Parser.JAVADOCEND);
-        setupLex(0);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
-        // verify
-        verify(builder).addJavaDoc( "" );
-        verify(builder).addJavaDocTag( new TagDef("This", "is great!") );
-        verify(builder).addJavaDocTag( new TagDef("mock", "generate") );
-    }
-
-    public void testJavaDocTextAndMultipleJavaDocTags() throws Exception {
-
-        // setup values
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "Welcome! Here is my class.");
-        setupLex(Parser.JAVADOCTAG, "@This");
-        setupLex(Parser.JAVADOCLINE, "is great!");
-        setupLex(Parser.JAVADOCTAG, "@mock");
-        setupLex(Parser.JAVADOCLINE, "generate");
-        setupLex(Parser.JAVADOCEND);
-        setupLex(0);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
-        // verify
-        verify(builder).addJavaDoc( "Welcome! Here is my class." );
-        verify(builder).addJavaDocTag( new TagDef("This", "is great!") );
-        verify(builder).addJavaDocTag( new TagDef("mock", "generate") );
-
-    }
-
-    public void testJavaDocEmpty() throws Exception {
-
-        // setup values
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCEND);
-        setupLex(0);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
-        // verify
-        verify(builder).addJavaDoc( "" );
     }
 
     public void testEmptyVanillaClass() throws Exception {
@@ -793,100 +665,101 @@ public class ParserTest extends TestCase {
         verify(builder, times(2)).endClass();
     }
 
-    public void testJavaDocAppearingAllOverThePlace() throws Exception {
-
-        // setup values
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc1");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc2");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(Parser.PACKAGE);
-        setupLex(Parser.IDENTIFIER, "mypackage");
-        setupLex(Parser.SEMI);
-
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc3");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc4");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(Parser.IMPORT);
-        setupLex(Parser.IDENTIFIER, "anotherpackage");
-        setupLex(Parser.DOT);
-        setupLex(Parser.IDENTIFIER, "Something");
-        setupLex(Parser.SEMI);
-
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc5");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc6");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(Parser.IMPORT);
-        setupLex(Parser.IDENTIFIER, "elsewhere");
-        setupLex(Parser.DOT);
-        setupLex(Parser.STAR);
-        setupLex(Parser.SEMI);
-
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc7");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc8");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(Parser.PUBLIC);
-        setupLex(Parser.CLASS);
-        setupLex(Parser.IDENTIFIER, "MyClass");
-        setupLex(Parser.BRACEOPEN);
-        setupLex(Parser.BRACECLOSE);
-
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc9");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(Parser.JAVADOCSTART);
-        setupLex(Parser.JAVADOCLINE, "javadoc10");
-        setupLex(Parser.JAVADOCEND);
-
-        setupLex(0);
-
-        // execute
-        Parser parser = new Parser(lexer, builder);
-        parser.parse();
-
-        // expectations
-        ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
-        cls.modifiers.add("public");
-        
-        // verify
-        verify(builder).addJavaDoc("javadoc1");
-        verify(builder).addJavaDoc("javadoc2");
-        verify(builder).addPackage( new PackageDef( "mypackage" ) );
-        verify(builder).addJavaDoc("javadoc3");
-        verify(builder).addJavaDoc("javadoc4");
-        verify(builder).addImport( "anotherpackage.Something" );
-        verify(builder).addJavaDoc("javadoc5");
-        verify(builder).addJavaDoc("javadoc6");
-        verify(builder).addImport("elsewhere.*");
-        verify(builder).addJavaDoc("javadoc7");
-        verify(builder).beginClass( cls );
-        verify(builder).endClass();
-        verify(builder).addJavaDoc("javadoc8");
-        verify(builder).addJavaDoc("javadoc9");
-        verify(builder).addJavaDoc("javadoc10");
-
-    }
+/*can't be tested like this anymore*/    
+//    public void testJavaDocAppearingAllOverThePlace() throws Exception {
+//
+//        // setup values
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc1");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc2");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(Parser.PACKAGE);
+//        setupLex(Parser.IDENTIFIER, "mypackage");
+//        setupLex(Parser.SEMI);
+//
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc3");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc4");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(Parser.IMPORT);
+//        setupLex(Parser.IDENTIFIER, "anotherpackage");
+//        setupLex(Parser.DOT);
+//        setupLex(Parser.IDENTIFIER, "Something");
+//        setupLex(Parser.SEMI);
+//
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc5");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc6");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(Parser.IMPORT);
+//        setupLex(Parser.IDENTIFIER, "elsewhere");
+//        setupLex(Parser.DOT);
+//        setupLex(Parser.STAR);
+//        setupLex(Parser.SEMI);
+//
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc7");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc8");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(Parser.PUBLIC);
+//        setupLex(Parser.CLASS);
+//        setupLex(Parser.IDENTIFIER, "MyClass");
+//        setupLex(Parser.BRACEOPEN);
+//        setupLex(Parser.BRACECLOSE);
+//
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc9");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(Parser.JAVADOCSTART);
+//        setupLex(Parser.JAVADOCLINE, "javadoc10");
+//        setupLex(Parser.JAVADOCEND);
+//
+//        setupLex(0);
+//
+//        // execute
+//        Parser parser = new Parser(lexer, builder);
+//        parser.parse();
+//
+//        // expectations
+//        ClassDef cls = new ClassDef();
+//        cls.name = "MyClass";
+//        cls.modifiers.add("public");
+//        
+//        // verify
+//        verify(builder).addJavaDoc("javadoc1");
+//        verify(builder).addJavaDoc("javadoc2");
+//        verify(builder).addPackage( new PackageDef( "mypackage" ) );
+//        verify(builder).addJavaDoc("javadoc3");
+//        verify(builder).addJavaDoc("javadoc4");
+//        verify(builder).addImport( "anotherpackage.Something" );
+//        verify(builder).addJavaDoc("javadoc5");
+//        verify(builder).addJavaDoc("javadoc6");
+//        verify(builder).addImport("elsewhere.*");
+//        verify(builder).addJavaDoc("javadoc7");
+//        verify(builder).beginClass( cls );
+//        verify(builder).endClass();
+//        verify(builder).addJavaDoc("javadoc8");
+//        verify(builder).addJavaDoc("javadoc9");
+//        verify(builder).addJavaDoc("javadoc10");
+//
+//    }
 
     public void testSimpleVoidMethod() throws Exception {
 

@@ -41,6 +41,9 @@ javadocdescription: javadoctokens
                       builder.addJavaDoc(buffer()); 
                     };
 
+javadoctokens_opt:
+                 | javadoctokens;
+                 
 javadoctokens: javadoctoken
              | javadoctokens javadoctoken;
 
@@ -59,7 +62,7 @@ javadoctag: JAVADOCTAG
             { 
               line = lexer.getLine(); 
             } 
-            javadoctokens 
+            javadoctokens_opt 
             {
               builder.addJavaDocTag(new TagDef($1.substring(1), buffer(), line)); 
             };

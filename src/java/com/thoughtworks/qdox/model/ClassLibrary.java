@@ -37,7 +37,7 @@ import com.thoughtworks.qdox.JavaDocBuilder.ErrorHandler;
 import com.thoughtworks.qdox.builder.ModelBuilder;
 import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.library.JavaClassContext;
-import com.thoughtworks.qdox.parser.Lexer;
+import com.thoughtworks.qdox.parser.JavaLexer;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
@@ -328,7 +328,7 @@ public class ClassLibrary implements Serializable, com.thoughtworks.qdox.library
     
     public JavaSource addSource(Reader reader, String sourceInfo) {
         ModelBuilder builder = modelBuilderFactory.newInstance();
-        Lexer lexer = new JFlexLexer(reader);
+        JavaLexer lexer = new JFlexLexer(reader);
         Parser parser = new Parser(lexer, builder);
         parser.setDebugLexer(debugLexer);
         parser.setDebugParser(debugParser);

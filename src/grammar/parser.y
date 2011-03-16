@@ -38,12 +38,11 @@ import java.util.Stack;
 %token TILDE AMPERSAND VERTLINE CIRCUMFLEX
 %token VOID
 %token QUERY COLON AT
-%token JAVADOCSTART JAVADOCEND JAVADOCEOL
 %token CODEBLOCK PARENBLOCK
 %token BYTE SHORT INT LONG CHAR FLOAT DOUBLE BOOLEAN
 
 // strongly typed tokens/types
-%token <sval> IDENTIFIER JAVADOCTAG JAVADOCLINE
+%token <sval> IDENTIFIER
 %token <sval> BOOLEAN_LITERAL
 %token <sval> INTEGER_LITERAL
 %token <sval> LONG_LITERAL
@@ -78,7 +77,6 @@ PackageDeclaration_opt:
                       | PackageDeclaration_opt PackageDeclaration;
 
 PackageDeclaration: package
-                  | javadoc
                   | annotation;
                       
 package: PACKAGE 
@@ -94,8 +92,7 @@ package: PACKAGE
 ImportDeclarations_opt: 
 				      | ImportDeclarations_opt ImportDeclaration;
 
-ImportDeclaration:  javadoc /*tmp*/ | 
-                 SingleTypeImportDeclaration
+ImportDeclaration: SingleTypeImportDeclaration
                  | TypeImportOnDemandDeclaration
                  | SingleStaticImportDeclaration
                  | StaticImportOnDemandDeclaration;
@@ -132,8 +129,7 @@ TypeDeclarations_opt:
                       } 
                       TypeDeclaration;
 
-TypeDeclaration: javadoc /*tmp*/ | 
-                 ClassDeclaration
+TypeDeclaration: ClassDeclaration
 /*               | InterfaceDeclaration */
                | SEMI;
 
@@ -142,31 +138,6 @@ TypeDeclaration: javadoc /*tmp*/ |
 ClassDeclaration: NormalClassDeclaration	
                 | EnumDeclaration;
                 
-// ----- JAVADOC
-
-javadoc: JAVADOCSTART javadocdescription javadoctags JAVADOCEND;
-
-javadocdescription: 
-    javadoctokens { 
-        builder.addJavaDoc(buffer()); 
-    };
-
-javadoctokens: | javadoctokens javadoctoken;
-
-javadoctoken: 
-    JAVADOCLINE {
-        appendToBuffer($1);
-    };
-
-javadoctags: | javadoctags javadoctag;
-
-javadoctag: 
-    JAVADOCTAG { line = lexer.getLine(); } 
-    javadoctokens {
-        builder.addJavaDocTag(new TagDef($1.substring(1), buffer(), line)); 
-    };
-
-
 // ----- COMMON TOKENS
 
 // A fullidentifier is "a", "a.b", "a.b.c", etc...
@@ -191,7 +162,6 @@ modifier:
 
 modifiers:
     modifiers modifier |
-    modifiers javadoc |
     ;
 
 
@@ -591,10 +561,7 @@ fields:
 extrafields: | 
     extrafields COMMA { line = lexer.getLine(); } VariableDeclaratorId {
         makeField($4, lexer.getCodeBody());
-    } | 
-    extrafields COMMA javadoc { line = lexer.getLine(); } VariableDeclaratorId {
-        makeField($5, lexer.getCodeBody());
-    };
+    }; 
 
 // 8.3 Field Declarations...
 VariableDeclaratorId: IDENTIFIER Dims_opt 
@@ -714,14 +681,13 @@ LastFormalParameter: VariableModifiers_opt type /* =Type */ DOTDOTDOT VariableDe
 
 opt_annotations: 
                | opt_annotations annotation;
-               | opt_annotations javadoc;
 
 VariableModifiers_opt: 
                      | VariableModifiers_opt modifier;
 
 %%
 
-private Lexer lexer;
+private JavaLexer lexer;
 private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
 private ClassDef cls = new ClassDef();
@@ -755,7 +721,9 @@ private String buffer() {
     return result;
 }
 
-public Parser(Lexer lexer, Builder builder) {
+public Parser( JavaLexer lexer, Builder builder ) 
+{
+    lexer.addCommentHandler( this );
     this.lexer = lexer;
     this.builder = builder;
 }
@@ -813,6 +781,16 @@ private void makeField(TypeDef field, String body) {
     fd.dimensions = field.dimensions;
     fd.body = body;
     builder.addField(fd);
+}
+
+public void onComment( String comment, int line, int column ) {
+  DefaultJavaCommentLexer commentLexer  = new DefaultJavaCommentLexer( new java.io.StringReader( comment ) );
+  commentLexer.setLineOffset( line );
+  commentLexer.setColumnOffset( column );
+  DefaultJavaCommentParser commentParser = new DefaultJavaCommentParser( commentLexer, builder);
+  commentParser.setDebugLexer( this.debugLexer );
+  commentParser.setDebugParser( this.yydebug );
+  commentParser.parse();
 }
 
 private String convertString(String str) {

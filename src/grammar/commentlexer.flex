@@ -32,6 +32,8 @@ import com.thoughtworks.qdox.parser.*;
 %column
 
 %{
+    private int lineOffset = 1;
+    private int columnOffset =1;
 
     private int stateDepth = 0;
     private int[] stateStack = new int[10];
@@ -48,11 +50,19 @@ import com.thoughtworks.qdox.parser.*;
     }
     
     public int getLine() {
-        return yyline + 1;
+        return yyline + lineOffset;
+    }
+    
+    public void setLineOffset(int lineOffset) {
+      this.lineOffset = lineOffset;
     }
 
     public int getColumn() {
-        return yycolumn + 1;
+        return yycolumn + columnOffset;
+    }
+    
+    public void setColumnOffset(int columnOffset) {
+      this.columnOffset = columnOffset;
     }
     
     public String getCodeBody(){
@@ -117,14 +127,22 @@ JavadocEnd              = "*"+ "/"
                         popState(); 
                         return DefaultJavaCommentParser.JAVADOCEND;
                       }
+    "@"               { 
+                        yypushback(1);
+                        pushState(JAVADOCTAG); 
+                      }
+    [^ \t\r]		  { 
+                        yypushback(1); 
+                        pushState(JAVADOCLINE); 
+                      }
 }
-<JAVADOCCONTENT,JAVADOC> {
+<JAVADOCCONTENT> {
     [^ \t\r@]		  { 
                         yypushback(1); 
                         popState();
                         pushState(JAVADOCLINE); 
                       }
-    [ \t\r]* "@"      { 
+    "@"      { 
                         yypushback(1);
                         popState(); 
                         pushState(JAVADOCTAG); 

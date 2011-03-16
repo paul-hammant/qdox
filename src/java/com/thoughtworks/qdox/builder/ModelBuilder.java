@@ -59,7 +59,7 @@ public class ModelBuilder implements Builder {
     private DefaultJavaMethod currentMethod;
     private List<AnnoDef> currentAnnoDefs;
     private String lastComment;
-    private List<TagDef> lastTagSet;
+    private List<TagDef> lastTagSet = new LinkedList<TagDef>();
     private DocletTagFactory docletTagFactory;
     private ModelWriterFactory modelWriterFactory;
 
@@ -91,7 +91,6 @@ public class ModelBuilder implements Builder {
 
     public void addJavaDoc(String text) {
         lastComment = text;
-        lastTagSet = new LinkedList<TagDef>();
     }
 
     public void addJavaDocTag(TagDef tagDef) {
@@ -184,9 +183,6 @@ public class ModelBuilder implements Builder {
     }
 
     private void addJavaDoc(AbstractBaseJavaEntity entity) {
-        if (lastComment == null) {
-            return;
-        } 
         entity.setComment(lastComment);
         List<DocletTag> tagList = new LinkedList<DocletTag>();
         for (TagDef tagDef : lastTagSet) {
@@ -199,6 +195,7 @@ public class ModelBuilder implements Builder {
         }
         entity.setTags(tagList);
         
+        lastTagSet.clear();
         lastComment = null;
     }
     

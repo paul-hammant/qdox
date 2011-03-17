@@ -105,8 +105,10 @@ public class AnnotationExpressionTest {
 			    {"(int)((short)1 + (long)3)", new Integer( 4 )},
 			    
 			    //test Array-valued single-element annotation
-			    { "{\"Children\", \"Unscrupulous dentists\"}", Arrays.asList(new String[]{"Children", "Unscrupulous dentists"})}
+			    { "{\"Children\", \"Unscrupulous dentists\"}", Arrays.asList(new String[]{"Children", "Unscrupulous dentists"})},
 
+			    //test Array-valued annotation ending with a comma
+			    { "{\"deprecated\", }", Arrays.asList(new String[]{"deprecated"})}
 		});
 	}
 

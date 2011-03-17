@@ -209,7 +209,11 @@ ElementValuePair: IDENTIFIER EQUALS ElementValue
                   {
                     annotationStack.getFirst().args.put($1, $3);
                   };
-    
+
+/* Specs say: { ElementValues_opt COMMA_opt }
+   The optional COMMA causes trouble for the parser
+   For that reason the adjusted options of ElementValues_opt, which will accept all cases
+*/    
 ElementValueArrayInitializer: {
                                 annoValueListStack.add(annoValueList);
                                 annoValueList = new LinkedList();
@@ -221,16 +225,11 @@ ElementValueArrayInitializer: {
                               };
     
 ElementValues_opt:
-                 | ElementValues;    
-    
-ElementValues: ElementValue 
-               { 
-                 annoValueList.add($1); 
-               } 
-             | ElementValues COMMA ElementValue 
-               { 
-                 annoValueList.add($3); 
-               };
+                 | ElementValues_opt ElementValue
+                   { 
+                     annoValueList.add($2); 
+                   } 
+                 | ElementValues_opt COMMA;    
     
 ElementValue: expression 
             | Annotation 
@@ -460,9 +459,9 @@ EnumDeclaration: ClassModifiers_opt ENUM IDENTIFIER Interfaces_opt
 
 ClassModifiers_opt: modifiers;
 
-/* Specs say: EnumConstants_opt ,_opt EnumBodyDeclarations_opt
+/* Specs say: { EnumConstants_opt ,_opt EnumBodyDeclarations_opt }
    The optional COMMA causes trouble for the parser
-   For that reason the options of EnumConstants_opt, which will accept all cases 
+   For that reason the adjusted options of EnumConstants_opt, which will accept all cases 
 */
 EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
           { builder.endClass();

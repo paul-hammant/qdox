@@ -57,7 +57,7 @@ import java.util.Stack;
 %type <type> PrimitiveType NumericType IntegralType FloatingPointType
 %type <type> InterfaceType
 %type <type> Wildcard
-%type <annoval> value expression literal annotation arrayInitializer
+%type <annoval> expression literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus primary
@@ -77,7 +77,7 @@ PackageDeclaration_opt:
                       | PackageDeclaration_opt PackageDeclaration;
 
 PackageDeclaration: package
-                  | annotation;
+                  | Annotation;
                       
 package: PACKAGE 
          { 
@@ -147,7 +147,7 @@ fullidentifier:
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
 modifier:
-	annotation |
+	Annotation |
     PUBLIC          { modifiers.add("public"); } |
     PROTECTED       { modifiers.add("protected"); } |
     PRIVATE         { modifiers.add("private"); } |
@@ -169,59 +169,72 @@ modifiers:
 // ANNOTATIONS
 //--------------------------------------------------------------------------------
 
-annotation:
-    AT name 
-    { 
-    	AnnoDef annotation = new AnnoDef();
-    	annotation.typeDef = new TypeDef($2);
-    	annotation.lineNumber = lexer.getLine();
-    	annotationStack.addFirst(annotation);
-    }
-    annotationParensOpt
-    {
-    	AnnoDef annotation = annotationStack.removeFirst();
-    	if(annotationStack.isEmpty()) {
-	    	builder.addAnnotation(annotation);
-    	}
-    	$$ = annotation;
-    };
+// 9.7 Annotations
+
+Annotations_opt: 
+               | Annotations_opt Annotation;
+
+Annotation /* = NormalAnnotation*/: AT typename /* =TypeName */ 
+                                    {
+                                      AnnoDef annotation = new AnnoDef();
+                                      annotation.typeDef = new TypeDef($2);
+                                      annotation.lineNumber = lexer.getLine();
+                                      annotationStack.addFirst(annotation);
+                                    }
+                                    annotationParensOpt
+                                    {
+                                      AnnoDef annotation = annotationStack.removeFirst();
+                                      if(annotationStack.isEmpty()) 
+                                      {
+                                        builder.addAnnotation(annotation);
+                                      }
+                                      $$ = annotation;
+                                    };
     
 annotationParensOpt:
-	|
-	PARENOPEN value PARENCLOSE { annotationStack.getFirst().args.put("value", $2); } |
-	PARENOPEN valuePairs PARENCLOSE |
-	PARENOPEN PARENCLOSE;
+	               | PARENOPEN ElementValue PARENCLOSE 
+	                 { 
+	                   annotationStack.getFirst().args.put("value", $2);
+                     }
+	               | PARENOPEN ElementValuePairs_opt PARENCLOSE;
+  
+ElementValuePairs_opt:
+                     | ElementValuePairs;   
+
     
-valuePairs:
-    valuePair |
-    valuePairs COMMA valuePair;
+ElementValuePairs: ElementValuePair 
+                 | ElementValuePairs COMMA ElementValuePair;
     
-valuePair:
-    IDENTIFIER EQUALS value { annotationStack.getFirst().args.put($1, $3); };
+ElementValuePair: IDENTIFIER EQUALS ElementValue 
+                  {
+                    annotationStack.getFirst().args.put($1, $3);
+                  };
     
-arrayInitializer:
-    {
-    	annoValueListStack.add(annoValueList);
-    	annoValueList = new LinkedList(); 
-    }
-    BRACEOPEN valuesOpt BRACECLOSE
-    {
-    	$$ = new ElemValueListDef(annoValueList);
-    	annoValueList = annoValueListStack.remove(annoValueListStack.size() - 1);
-    };
+ElementValueArrayInitializer: {
+                                annoValueListStack.add(annoValueList);
+                                annoValueList = new LinkedList();
+                              }
+                              BRACEOPEN ElementValues_opt BRACECLOSE
+                              { 
+                                $$ = new ElemValueListDef(annoValueList);
+                                annoValueList = annoValueListStack.remove(annoValueListStack.size() - 1);
+                              };
     
-valuesOpt:
-    |
-    values;    
+ElementValues_opt:
+                 | ElementValues;    
     
-values:
-	value { annoValueList.add($1); } |
-	values COMMA value { annoValueList.add($3); };
+ElementValues: ElementValue 
+               { 
+                 annoValueList.add($1); 
+               } 
+             | ElementValues COMMA ElementValue 
+               { 
+                 annoValueList.add($3); 
+               };
     
-value:
-    expression |
-    annotation |
-    arrayInitializer ;
+ElementValue: expression 
+            | Annotation 
+            | ElementValueArrayInitializer ;
 
 expression:
 	ConditionalExpression ;
@@ -461,7 +474,7 @@ EnumConstants_opt:
                  | EnumConstants_opt COMMA
                  | EnumConstants_opt EnumConstant;
                  
-EnumConstant: opt_annotations IDENTIFIER Arguments_opt ClassBody_opt
+EnumConstant: Annotations_opt IDENTIFIER Arguments_opt ClassBody_opt
               { 
                 makeField(new TypeDef($2, 0), ""); 
               };
@@ -678,9 +691,6 @@ LastFormalParameter: VariableModifiers_opt type /* =Type */ DOTDOTDOT VariableDe
                        param = new FieldDef();
                      };
                    | FormalParameter;
-
-opt_annotations: 
-               | opt_annotations annotation;
 
 VariableModifiers_opt: 
                      | VariableModifiers_opt modifier;

@@ -53,7 +53,6 @@ import java.util.Stack;
 %token <ival> VERTLINE2 AMPERSAND2 VERTLINE CIRCUMFLEX AMPERSAND EQUALS2 NOTEQUALS
 %token <ival> LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS LESSTHAN2 GREATERTHAN2 GREATERTHAN3
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
-%type <sval> name
 %type <type> PrimitiveType NumericType IntegralType FloatingPointType
 %type <type> InterfaceType
 %type <type> Wildcard
@@ -302,8 +301,8 @@ UnaryExpressionNotPlusMinus: PostfixExpression
 
 // 15.16 Cast Expressions	
 CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression { $$ = new AnnotationCast(new TypeDef($2.name, $3), $5); } 
-              | PARENOPEN name PARENCLOSE UnaryExpressionNotPlusMinus       { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
-              | PARENOPEN name dims PARENCLOSE UnaryExpressionNotPlusMinus  { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
+              | PARENOPEN typename PARENCLOSE UnaryExpressionNotPlusMinus       { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
+              | PARENOPEN typename dims PARENCLOSE UnaryExpressionNotPlusMinus  { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
 
 PostfixExpression: primary;
     	
@@ -311,9 +310,9 @@ primary:
     literal |
     PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
     PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1.name, $2)); } |
-    name DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
-    name dims DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, $2)); } |
-    name { $$ = new AnnotationFieldRef($1); };
+    typename DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
+    typename dims DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, $2)); } |
+    typename { $$ = new AnnotationFieldRef($1); };
 	
 Dims_opt:  { $$ = 0; }
 		| dims;	
@@ -321,10 +320,6 @@ dims:
     SQUAREOPEN SQUARECLOSE { $$ = 1; } |
     dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };
 	
-name:
-    IDENTIFIER |
-    name DOT IDENTIFIER { $$ = $1 + "." + $3; };    
-    
 literal:
     DOUBLE_LITERAL { $$ = new AnnotationConstant(toDouble($1), $1); } |
     FLOAT_LITERAL { $$ = new AnnotationConstant(toFloat($1), $1); } |

@@ -145,23 +145,21 @@ fullidentifier:
     fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; };
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
-modifier:
-	Annotation |
-    PUBLIC          { modifiers.add("public"); } |
-    PROTECTED       { modifiers.add("protected"); } |
-    PRIVATE         { modifiers.add("private"); } |
-    STATIC          { modifiers.add("static"); } |
-    FINAL           { modifiers.add("final"); } |
-    ABSTRACT        { modifiers.add("abstract"); } |
-    NATIVE          { modifiers.add("native"); } |
-    SYNCHRONIZED    { modifiers.add("synchronized"); } |
-    VOLATILE        { modifiers.add("volatile"); } |
-    TRANSIENT       { modifiers.add("transient"); } |
-    STRICTFP        { modifiers.add("strictfp"); } ;
+AnyModifiers_opt:
+                | AnyModifiers_opt AnyModifier;
 
-modifiers:
-    modifiers modifier |
-    ;
+AnyModifier: Annotation 
+           | PUBLIC          { modifiers.add("public"); }
+           | PROTECTED       { modifiers.add("protected"); } 
+           | PRIVATE         { modifiers.add("private"); }
+           | STATIC          { modifiers.add("static"); }
+           | FINAL           { modifiers.add("final"); }
+           | ABSTRACT        { modifiers.add("abstract"); }
+           | NATIVE          { modifiers.add("native"); }
+           | SYNCHRONIZED    { modifiers.add("synchronized"); }
+           | VOLATILE        { modifiers.add("volatile"); }
+           | TRANSIENT       { modifiers.add("transient"); }
+           | STRICTFP        { modifiers.add("strictfp"); } ;
 
 
 //--------------------------------------------------------------------------------
@@ -441,7 +439,7 @@ AdditionalBound: AMPERSAND type
 // ----- ENUM
 
 // 8.9 Enums
-EnumDeclaration: ClassModifiers_opt ENUM IDENTIFIER Interfaces_opt 
+EnumDeclaration: AnyModifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Interfaces_opt 
                { cls.lineNumber = line;
                  cls.modifiers.addAll(modifiers);
                  cls.name = $3;
@@ -450,9 +448,6 @@ EnumDeclaration: ClassModifiers_opt ENUM IDENTIFIER Interfaces_opt
                  cls = new ClassDef();
                  fieldType = new TypeDef($3, 0);
                } EnumBody;
-
-
-ClassModifiers_opt: modifiers;
 
 /* Specs say: { EnumConstants_opt ,_opt EnumBodyDeclarations_opt }
    The optional COMMA causes trouble for the parser
@@ -488,7 +483,7 @@ EnumBodyDeclarations_opt:
 // 8.1 Class Declaration
 
 NormalClassDeclaration: 
-    modifiers classorinterface IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
+    AnyModifiers_opt classorinterface IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
         cls.lineNumber = line;
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
         cls.name = $3;
@@ -526,9 +521,6 @@ ClassMemberDeclaration:	FieldDeclaration
 /*                      | InterfaceDeclaration*/
                       |	SEMI;
 
-FieldDeclaration: fields;
-MethodDeclaration: method;
-
 classorinterface: 
     CLASS { cls.type = ClassDef.CLASS; } | 
     INTERFACE { cls.type = ClassDef.INTERFACE; } |
@@ -552,12 +544,12 @@ InterfaceTypeList: InterfaceType { cls.implementz.add($1); }
 InterfaceType: classtype;
 
 static_block:
-    modifiers CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
+    AnyModifiers_opt CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
 
 // ----- FIELD
 
-fields: 
-    modifiers type VariableDeclaratorId {
+FieldDeclaration: 
+    AnyModifiers_opt type VariableDeclaratorId {
         fieldType = $2;
         makeField($3, lexer.getCodeBody());
     }
@@ -578,8 +570,8 @@ VariableDeclaratorId: IDENTIFIER Dims_opt
 
 // ----- METHOD
 
-method:
-    modifiers TypeParameters type IDENTIFIER {
+MethodDeclaration:
+    AnyModifiers_opt TypeParameters type IDENTIFIER {
         builder.beginMethod();
         mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
@@ -592,7 +584,7 @@ method:
         builder.endMethod(mth);
         mth = new MethodDef(); 
     } |
-    modifiers type IDENTIFIER {
+    AnyModifiers_opt type IDENTIFIER {
         builder.beginMethod();
         mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear();
@@ -606,7 +598,7 @@ method:
     };
 
 constructor:
-    modifiers IDENTIFIER {
+    AnyModifiers_opt IDENTIFIER {
         builder.beginConstructor();
         mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
@@ -616,7 +608,7 @@ constructor:
         builder.endConstructor(mth);
         mth = new MethodDef(); 
     } |
-    modifiers TypeParameters IDENTIFIER {
+    AnyModifiers_opt TypeParameters IDENTIFIER {
         builder.beginConstructor();
         mth.lineNumber = lexer.getLine();
         mth.typeParams = typeParams;
@@ -663,7 +655,7 @@ FormalParameterList: LastFormalParameter
 FormalParameters: FormalParameter
                 | FormalParameters COMMA FormalParameter;
                 
-FormalParameter:  VariableModifiers_opt type /* =Type */ VariableDeclaratorId
+FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ type /* =Type */ VariableDeclaratorId
                   {
                     param.name = $3.name;
                     param.type = $2;
@@ -674,7 +666,7 @@ FormalParameter:  VariableModifiers_opt type /* =Type */ VariableDeclaratorId
                     param = new FieldDef();
                   };
 
-LastFormalParameter: VariableModifiers_opt type /* =Type */ DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
+LastFormalParameter: AnyModifiers_opt /* =VariableModifiers_opt */ type /* =Type */ DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
                      {
                        param.name = $4.name; 
                        param.type = $2;
@@ -685,10 +677,6 @@ LastFormalParameter: VariableModifiers_opt type /* =Type */ DOTDOTDOT VariableDe
                        param = new FieldDef();
                      };
                    | FormalParameter;
-
-VariableModifiers_opt: 
-                     | VariableModifiers_opt modifier;
-
 %%
 
 private JavaLexer lexer;

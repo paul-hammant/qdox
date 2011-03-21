@@ -63,7 +63,7 @@ import java.util.Stack;
 %type <annoval> PostfixExpression CastExpression
 %type <ival> dims Dims_opt
 %type <sval> fullidentifier typedeclspecifier typename memberend
-%type <type> type VariableDeclaratorId classtype typearg
+%type <type> Type ReferenceType VariableDeclaratorId classtype typearg
 
 %%
 // Source: Java Language Specification - Third Edition
@@ -349,12 +349,15 @@ FloatingPointType:
 
 // ----- TYPES
 
-type:
-    classtype Dims_opt {
-    	TypeDef td = $1;
-    	td.dimensions = $2;
-        $$ = td;
-    };
+Type: PrimitiveType
+    | ReferenceType;
+
+ReferenceType: classtype Dims_opt 
+               {
+                 TypeDef td = $1;
+    	         td.dimensions = $2;
+                 $$ = td;
+               };
 
 classtype:
     typedeclspecifier LESSTHAN {
@@ -383,14 +386,22 @@ typearglist:
     typearglist COMMA typearg { (typeStack.peek()).actualArgumentTypes.add($3);};
 
 typearg:
-    type |
+    ReferenceType |
     Wildcard;
 
 // 4.5.1 Type Arguments and Wildcards
-
-Wildcard: QUERY              { $$ = new WildcardTypeDef(); } 
-        | QUERY EXTENDS type { $$ = new WildcardTypeDef($3, "extends" ); }
-        | QUERY SUPER type   { $$ = new WildcardTypeDef($3, "super" ); } ;
+Wildcard: QUERY              
+          { 
+            $$ = new WildcardTypeDef(); 
+          } 
+        | QUERY EXTENDS ReferenceType 
+          { 
+            $$ = new WildcardTypeDef($3, "extends" ); 
+          }
+        | QUERY SUPER ReferenceType
+          { 
+            $$ = new WildcardTypeDef($3, "super" ); 
+          };
 
 // 8.1.2 Generic Classes and Type Parameters
 TypeParameters_opt: 
@@ -421,7 +432,7 @@ TypeParameter: IDENTIFIER
 TypeBound_opt:
              | TypeBound;
 
-TypeBound: EXTENDS type
+TypeBound: EXTENDS ReferenceType /* =ClassOrInterfaceType */
 		   {
 		     typeVariable.bounds = new LinkedList();
 		     typeVariable.bounds.add($2); 
@@ -431,7 +442,7 @@ TypeBound: EXTENDS type
 AdditionalBoundList_opt:
                        | AdditionalBoundList_opt AdditionalBound;		   
 
-AdditionalBound: AMPERSAND type
+AdditionalBound: AMPERSAND ReferenceType /* =InterfaceType */
                  { 
                    typeVariable.bounds.add($2); 
                  };
@@ -440,14 +451,16 @@ AdditionalBound: AMPERSAND type
 
 // 8.9 Enums
 EnumDeclaration: AnyModifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Interfaces_opt 
-               { cls.lineNumber = line;
-                 cls.modifiers.addAll(modifiers);
-                 cls.name = $3;
-                 cls.type = ClassDef.ENUM;
-                 builder.beginClass(cls);
-                 cls = new ClassDef();
-                 fieldType = new TypeDef($3, 0);
-               } EnumBody;
+                 { 
+                   cls.lineNumber = line;
+                   cls.modifiers.addAll(modifiers);
+                   cls.name = $3;
+                   cls.type = ClassDef.ENUM;
+                   builder.beginClass(cls);
+                   cls = new ClassDef();
+                   fieldType = new TypeDef($3, 0);
+                 } 
+                 EnumBody;
 
 /* Specs say: { EnumConstants_opt ,_opt EnumBodyDeclarations_opt }
    The optional COMMA causes trouble for the parser
@@ -549,7 +562,7 @@ static_block:
 // ----- FIELD
 
 FieldDeclaration: 
-    AnyModifiers_opt type VariableDeclaratorId {
+    AnyModifiers_opt Type VariableDeclaratorId {
         fieldType = $2;
         makeField($3, lexer.getCodeBody());
     }
@@ -571,7 +584,7 @@ VariableDeclaratorId: IDENTIFIER Dims_opt
 // ----- METHOD
 
 MethodDeclaration:
-    AnyModifiers_opt TypeParameters type IDENTIFIER {
+    AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER {
         builder.beginMethod();
         mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear(); 
@@ -584,7 +597,7 @@ MethodDeclaration:
         builder.endMethod(mth);
         mth = new MethodDef(); 
     } |
-    AnyModifiers_opt type IDENTIFIER {
+    AnyModifiers_opt Type /* =ResultType */ IDENTIFIER {
         builder.beginMethod();
         mth.lineNumber = lexer.getLine();
         mth.modifiers.addAll(modifiers); modifiers.clear();
@@ -655,7 +668,7 @@ FormalParameterList: LastFormalParameter
 FormalParameters: FormalParameter
                 | FormalParameters COMMA FormalParameter;
                 
-FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ type /* =Type */ VariableDeclaratorId
+FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ Type VariableDeclaratorId
                   {
                     param.name = $3.name;
                     param.type = $2;
@@ -666,7 +679,7 @@ FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ type /* =Type */
                     param = new FieldDef();
                   };
 
-LastFormalParameter: AnyModifiers_opt /* =VariableModifiers_opt */ type /* =Type */ DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
+LastFormalParameter: AnyModifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
                      {
                        param.name = $4.name; 
                        param.type = $2;

@@ -63,7 +63,7 @@ import java.util.Stack;
 %type <annoval> PostfixExpression CastExpression
 %type <ival> dims Dims_opt
 %type <sval> fullidentifier typedeclspecifier typename memberend
-%type <type> Type ReferenceType VariableDeclaratorId classtype typearg
+%type <type> Type ReferenceType VariableDeclaratorId classtype ActualTypeArgument
 
 %%
 // Source: Java Language Specification - Third Edition
@@ -359,19 +359,24 @@ ReferenceType: classtype Dims_opt
                  $$ = td;
                };
 
-classtype:
-    typedeclspecifier LESSTHAN {
-    		TypeDef td = new TypeDef($1,0);
-    		td.actualArgumentTypes = new LinkedList();
-    		$$ = typeStack.push(td);
-    	} typearglist { 
-    		$$ = typeStack.pop();
-    	} GREATERTHAN {
-         $$ = $5;
-    } |
-    typedeclspecifier {
-        $$ = new TypeDef($1,0); 
-    };
+classtype: typedeclspecifier LESSTHAN 
+           {
+    		 TypeDef td = new TypeDef($1,0);
+    		 td.actualArgumentTypes = new LinkedList();
+    		 $$ = typeStack.push(td);
+    	   } 
+    	   ActualTypeArgumentList 
+    	   { 
+    		 $$ = typeStack.pop();
+    	   }
+    	   GREATERTHAN 
+    	   {
+             $$ = $5;
+           } 
+         | typedeclspecifier 
+           {
+             $$ = new TypeDef($1,0); 
+           };
 
 typedeclspecifier:
     typename |
@@ -381,13 +386,17 @@ typename:
     IDENTIFIER |
     typename DOT IDENTIFIER { $$ = $1 + '.' + $3; }; 
 
-typearglist:
-    typearg { (typeStack.peek()).actualArgumentTypes.add($1);}|
-    typearglist COMMA typearg { (typeStack.peek()).actualArgumentTypes.add($3);};
+ActualTypeArgumentList: ActualTypeArgument 
+                        { 
+                          (typeStack.peek()).actualArgumentTypes.add($1);
+                        }
+                      | ActualTypeArgumentList COMMA ActualTypeArgument 
+                        { 
+                          (typeStack.peek()).actualArgumentTypes.add($3);
+                        };
 
-typearg:
-    ReferenceType |
-    Wildcard;
+ActualTypeArgument: ReferenceType 
+                  | Wildcard;
 
 // 4.5.1 Type Arguments and Wildcards
 Wildcard: QUERY              

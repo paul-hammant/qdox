@@ -56,7 +56,7 @@ import java.util.Stack;
 %type <type> PrimitiveType NumericType IntegralType FloatingPointType
 %type <type> InterfaceType
 %type <type> Wildcard
-%type <annoval> expression literal Annotation ElementValue ElementValueArrayInitializer
+%type <annoval> expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus primary
@@ -303,9 +303,24 @@ CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression { $$
               | PARENOPEN typename dims PARENCLOSE UnaryExpressionNotPlusMinus  { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
 
 PostfixExpression: primary;
-    	
+
+//Primary: PrimaryNoNewArray
+//       | ArrayCreationExpression;
+       
+//PrimaryNoNewArray: Literal
+//                 | Type DOT CLASS
+//                 | VOID DOT CLASS
+//                 | THIS
+//        ClassName.this
+//        ( Expression )
+//        ClassInstanceCreationExpression
+//        FieldAccess
+//        MethodInvocation
+//        ArrayAccess
+       
+
 primary:
-    literal |
+    Literal |
     PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
     PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1.name, $2)); } |
     typename DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
@@ -318,14 +333,36 @@ dims:
     SQUAREOPEN SQUARECLOSE { $$ = 1; } |
     dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };
 	
-literal:
-    DOUBLE_LITERAL { $$ = new AnnotationConstant(toDouble($1), $1); } |
-    FLOAT_LITERAL { $$ = new AnnotationConstant(toFloat($1), $1); } |
-    LONG_LITERAL { $$ = new AnnotationConstant(toLong($1), $1); } |
-    INTEGER_LITERAL { $$ = new AnnotationConstant(toInteger($1), $1); } |
-    BOOLEAN_LITERAL { $$ = new AnnotationConstant(toBoolean($1), $1); } |
-    CHAR_LITERAL { String s = lexer.getCodeBody(); $$ = new AnnotationConstant(toChar(s), s); } |
-    STRING_LITERAL { String s = lexer.getCodeBody(); $$ = new AnnotationConstant(toString(s), s); };
+Literal: INTEGER_LITERAL
+         { 
+           $$ = new AnnotationConstant(toInteger($1), $1); 
+         } 
+       | LONG_LITERAL 
+         { 
+           $$ = new AnnotationConstant(toLong($1), $1); 
+         } 
+       | FLOAT_LITERAL 
+         { 
+           $$ = new AnnotationConstant(toFloat($1), $1); 
+         } 
+       | DOUBLE_LITERAL 
+         { 
+           $$ = new AnnotationConstant(toDouble($1), $1);
+         } 
+       | BOOLEAN_LITERAL 
+         { 
+           $$ = new AnnotationConstant(toBoolean($1), $1);
+         } 
+       | CHAR_LITERAL 
+         {
+           String s = lexer.getCodeBody(); 
+           $$ = new AnnotationConstant(toChar(s), s); 
+         } 
+       | STRING_LITERAL 
+         { 
+           String s = lexer.getCodeBody(); 
+           $$ = new AnnotationConstant(toString(s), s); 
+         };
         
 PrimitiveType:
 	NumericType |
@@ -590,34 +627,39 @@ VariableDeclaratorId: IDENTIFIER Dims_opt
                         $$ = new TypeDef($1,$2);
                       };
 
-// ----- METHOD
+// 8.4 Method Declarations
+MethodDeclaration: MethodHeader memberend /* =MethodBody*/ 
+                   {
+                     mth.body = $2;
+                     builder.endMethod(mth);
+                     mth = new MethodDef();
+                   };
 
-MethodDeclaration:
-    AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER {
-        builder.beginMethod();
-        mth.lineNumber = lexer.getLine();
-        mth.modifiers.addAll(modifiers); modifiers.clear(); 
-        mth.typeParams = typeParams;
-        mth.returnType = $3;
-        mth.name = $4;
-    } methoddef Dims_opt Throws_opt memberend /* =MethodBody */ {
-        mth.dimensions = $7;
-        mth.body = $9;
-        builder.endMethod(mth);
-        mth = new MethodDef(); 
-    } |
-    AnyModifiers_opt Type /* =ResultType */ IDENTIFIER {
-        builder.beginMethod();
-        mth.lineNumber = lexer.getLine();
-        mth.modifiers.addAll(modifiers); modifiers.clear();
-        mth.returnType = $2;
-        mth.name = $3;
-    } methoddef Dims_opt Throws_opt memberend /* =MethodBody */ {
-        mth.dimensions = $6;
-        mth.body = $8;
-        builder.endMethod(mth);
-        mth = new MethodDef();
-    };
+MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER 
+              {
+                builder.beginMethod();
+                mth.lineNumber = lexer.getLine();
+                mth.modifiers.addAll(modifiers); modifiers.clear();
+                mth.typeParams = typeParams;
+                mth.returnType = $3;
+                mth.name = $4;
+              } 
+              methoddef Dims_opt Throws_opt
+              {
+                mth.dimensions = $7;
+              } 
+            | AnyModifiers_opt Type /* =ResultType */ IDENTIFIER 
+              {
+                builder.beginMethod();
+                mth.lineNumber = lexer.getLine();
+                mth.modifiers.addAll(modifiers); modifiers.clear();
+                mth.returnType = $2;
+                mth.name = $3;
+              } 
+              methoddef Dims_opt Throws_opt 
+              {
+                mth.dimensions = $6;
+              };
 
 constructor:
     AnyModifiers_opt IDENTIFIER {

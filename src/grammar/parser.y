@@ -62,7 +62,7 @@ import java.util.Stack;
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus primary
 %type <annoval> PostfixExpression CastExpression
 %type <ival> dims Dims_opt
-%type <sval> fullidentifier typedeclspecifier typename memberend
+%type <sval> AnyName typedeclspecifier memberend
 %type <type> Type ReferenceType VariableDeclaratorId classtype ActualTypeArgument
 
 %%
@@ -82,7 +82,7 @@ package: PACKAGE
          { 
            line = lexer.getLine(); 
          } 
-         fullidentifier SEMI 
+         AnyName /* =PackageName */SEMI 
          { 
            builder.addPackage(new PackageDef($3, line)); 
          };
@@ -97,25 +97,25 @@ ImportDeclaration: SingleTypeImportDeclaration
                  | StaticImportOnDemandDeclaration;
 
 // 7.5.1 Single-Type-Import Declaration
-SingleTypeImportDeclaration: IMPORT fullidentifier /* =TypeName */ SEMI 
+SingleTypeImportDeclaration: IMPORT AnyName /* =TypeName */ SEMI 
                              { 
                                builder.addImport( $2 ); 
                              };
 
 // 7.5.2 Type-Import-on-Demand Declaration
-TypeImportOnDemandDeclaration: IMPORT fullidentifier /* =PackageOrTypeName */ DOT STAR SEMI 
+TypeImportOnDemandDeclaration: IMPORT AnyName /* =PackageOrTypeName */ DOT STAR SEMI 
                                { 
                                  builder.addImport( $2 + ".*" ); 
                                };
 
 // 7.5.3 Single Static Import Declaration
-SingleStaticImportDeclaration: IMPORT STATIC fullidentifier /* =TypeName . Identifier */ SEMI 
+SingleStaticImportDeclaration: IMPORT STATIC AnyName /* =TypeName . Identifier */ SEMI 
                                { 
                                  builder.addImport( "static " + $3);
                                };
 
 // 7.5.4 Static-Import-on-Demand Declaration             
-StaticImportOnDemandDeclaration: IMPORT STATIC fullidentifier /* =TypeName */ DOT STAR SEMI 
+StaticImportOnDemandDeclaration: IMPORT STATIC AnyName /* =TypeName */ DOT STAR SEMI 
                                  { 
                                    builder.addImport( "static " + $3 + ".*" ); 
                                  };
@@ -139,10 +139,10 @@ ClassDeclaration: NormalClassDeclaration
                 
 // ----- COMMON TOKENS
 
-// A fullidentifier is "a", "a.b", "a.b.c", etc...
-fullidentifier: 
-    IDENTIFIER { $$ = $1; } |
-    fullidentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; };
+// 6.5 Determining the Meaning of a Name
+// PackageName | TypeName | ExpressionName | MethodName | PackageOrTypeName | AmbiguousName 
+AnyName: IDENTIFIER { $$ = $1; } 
+       | AnyName DOT IDENTIFIER { $$ = $1 + '.' + $3; };
 
 // Modifiers to methods, fields, classes, interfaces, parameters, etc...
 AnyModifiers_opt:
@@ -171,7 +171,7 @@ AnyModifier: Annotation
 Annotations_opt: 
                | Annotations_opt Annotation;
 
-Annotation /* = NormalAnnotation*/: AT typename /* =TypeName */ 
+Annotation /* = NormalAnnotation*/: AT AnyName /* =TypeName */ 
                                     {
                                       AnnoDef annotation = new AnnoDef();
                                       annotation.typeDef = new TypeDef($2);
@@ -299,8 +299,8 @@ UnaryExpressionNotPlusMinus: PostfixExpression
 
 // 15.16 Cast Expressions	
 CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression { $$ = new AnnotationCast(new TypeDef($2.name, $3), $5); } 
-              | PARENOPEN typename PARENCLOSE UnaryExpressionNotPlusMinus       { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
-              | PARENOPEN typename dims PARENCLOSE UnaryExpressionNotPlusMinus  { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
+              | PARENOPEN AnyName PARENCLOSE UnaryExpressionNotPlusMinus       { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
+              | PARENOPEN AnyName dims PARENCLOSE UnaryExpressionNotPlusMinus  { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
 
 PostfixExpression: primary;
 
@@ -323,9 +323,9 @@ primary:
     Literal |
     PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
     PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1.name, $2)); } |
-    typename DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
-    typename dims DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, $2)); } |
-    typename { $$ = new AnnotationFieldRef($1); };
+    AnyName DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
+    AnyName dims DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, $2)); } |
+    AnyName { $$ = new AnnotationFieldRef($1); };
 	
 Dims_opt:  { $$ = 0; }
 		| dims;	
@@ -416,12 +416,8 @@ classtype: typedeclspecifier LESSTHAN
            };
 
 typedeclspecifier:
-    typename |
+    AnyName |
     classtype DOT IDENTIFIER { $$ = $1.name + '.' + $3; };
-
-typename: 
-    IDENTIFIER |
-    typename DOT IDENTIFIER { $$ = $1 + '.' + $3; }; 
 
 ActualTypeArgumentList: ActualTypeArgument 
                         { 

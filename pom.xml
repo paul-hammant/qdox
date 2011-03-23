@@ -159,13 +159,6 @@
         <version>1.0-beta-2</version>
       </extension>
     </extensions>
-    <sourceDirectory>${basedir}/src/java</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
-    <testResources>
-      <testResource>
-        <directory>${basedir}/src/test-resources</directory>
-      </testResource>
-    </testResources>
 
     <pluginManagement>
       <plugins>
@@ -231,6 +224,25 @@
         <version>1.2</version>
         <executions>
           <execution>
+            <id>javacommentparser</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>${qdox.byaccj.executable}</executable>
+              <arguments>
+                <argument>-v</argument>
+                <argument>-Jnorun</argument>
+                <argument>-Jnoconstruct</argument>
+                <argument>-Jclass=DefaultJavaCommentParser</argument>
+                <argument>-Jpackage=com.thoughtworks.qdox.parser.impl</argument>
+                <argument>${basedir}/src/grammar/commentparser.y</argument>
+              </arguments>
+              <workingDirectory>${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl</workingDirectory>
+            </configuration>
+          </execution>
+          <execution>
             <id>javasourceparser</id>
             <phase>generate-sources</phase>
             <goals>
@@ -247,25 +259,6 @@
                 <argument>-Jsemantic=Value</argument>
                 <argument>-Jpackage=com.thoughtworks.qdox.parser.impl</argument>
                 <argument>${basedir}/src/grammar/parser.y</argument>
-              </arguments>
-              <workingDirectory>${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl</workingDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>javacommentparser</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>${qdox.byaccj.executable}</executable>
-              <arguments>
-                <argument>-v</argument>
-                <argument>-Jnorun</argument>
-                <argument>-Jnoconstruct</argument>
-                <argument>-Jclass=DefaultJavaCommentParser</argument>
-                <argument>-Jpackage=com.thoughtworks.qdox.parser.impl</argument>
-                <argument>${basedir}/src/grammar/commentparser.y</argument>
               </arguments>
               <workingDirectory>${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl</workingDirectory>
             </configuration>
@@ -331,15 +324,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <links>
-            <link>http://java.sun.com/j2se/1.5/docs/api</link>
-          </links>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -609,7 +593,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.4</version>
+        <version>2.7</version>
         <configuration>
           <packagenames>com.thoughtworks.qdox.*</packagenames>
           <use>true</use>

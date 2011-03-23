@@ -446,7 +446,7 @@ public class JavaDocBuilderTest extends TestCase {
     }
 
     public void testSourcePropertyClass() throws IOException {
-        builder.addSource(new File("src/test/com/thoughtworks/qdox/testdata/PropertyClass.java"));
+        builder.addSource(new File("src/test/java/com/thoughtworks/qdox/testdata/PropertyClass.java"));
 
         JavaClass propertyClass = builder.getClassByName("com.thoughtworks.qdox.testdata.PropertyClass");
         assertEquals(1, propertyClass.getBeanProperties().size());
@@ -504,7 +504,7 @@ public class JavaDocBuilderTest extends TestCase {
     }
 
     public void testSourceDefaultCtor() throws Exception {
-        builder.addSource(new File("src/test/com/thoughtworks/qdox/testdata/DefaultCtor.java"));
+        builder.addSource(new File("src/test/java/com/thoughtworks/qdox/testdata/DefaultCtor.java"));
         JavaClass javaClass = builder.getClassByName("com.thoughtworks.qdox.testdata.DefaultCtor");
 
         JavaMethod ctor = javaClass.getMethodBySignature("DefaultCtor", null);

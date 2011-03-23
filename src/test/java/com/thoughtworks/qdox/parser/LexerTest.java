@@ -155,7 +155,7 @@ public class LexerTest extends TestCase {
     }
 
     public void testUnicodeInFile() throws Exception {
-        Lexer lexer = new JFlexLexer(new FileReader("src/test/com/thoughtworks/qdox/testdata/Unicode.java"));
+        Lexer lexer = new JFlexLexer(new FileReader("src/test/java/com/thoughtworks/qdox/testdata/Unicode.java"));
         assertLex(Parser.PACKAGE, lexer);
         assertLex(Parser.IDENTIFIER, lexer);
         assertLex(Parser.DOT, lexer);

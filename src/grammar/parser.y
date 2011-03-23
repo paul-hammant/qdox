@@ -56,17 +56,19 @@ import java.util.Stack;
 %type <type> PrimitiveType NumericType IntegralType FloatingPointType
 %type <type> InterfaceType
 %type <type> Wildcard
-%type <annoval> expression Literal Annotation ElementValue ElementValueArrayInitializer
+%type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus primary
-%type <annoval> PostfixExpression CastExpression
+%type <annoval> PostfixExpression CastExpression AssignmentExpression
 %type <ival> dims Dims_opt
 %type <sval> AnyName typedeclspecifier memberend
 %type <type> Type ReferenceType VariableDeclaratorId classtype ActualTypeArgument
 
 %%
 // Source: Java Language Specification - Third Edition
+
+// 7 Packages
 
 // 7.3 Compilation Units
 CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_opt;
@@ -132,19 +134,220 @@ TypeDeclaration: ClassDeclaration
 /*               | InterfaceDeclaration */
                | SEMI;
 
+// 3 Lexical Structure
 
-//8.1 Class Declaration
-ClassDeclaration: NormalClassDeclaration	
-                | EnumDeclaration;
-                
-// ----- COMMON TOKENS
+// 3.10 Literals
+// NOTE: LONG_LITERAL and DOUBLE_LITERAL are not part of 
+Literal: INTEGER_LITERAL
+         { 
+           $$ = new AnnotationConstant(toInteger($1), $1); 
+         } 
+       | LONG_LITERAL 
+         { 
+           $$ = new AnnotationConstant(toLong($1), $1); 
+         } 
+       | FLOAT_LITERAL 
+         { 
+           $$ = new AnnotationConstant(toFloat($1), $1); 
+         } 
+       | DOUBLE_LITERAL 
+         { 
+           $$ = new AnnotationConstant(toDouble($1), $1);
+         } 
+       | BOOLEAN_LITERAL 
+         { 
+           $$ = new AnnotationConstant(toBoolean($1), $1);
+         } 
+       | CHAR_LITERAL 
+         {
+           String s = lexer.getCodeBody(); 
+           $$ = new AnnotationConstant(toChar(s), s); 
+         } 
+       | STRING_LITERAL 
+         { 
+           String s = lexer.getCodeBody(); 
+           $$ = new AnnotationConstant(toString(s), s); 
+         };
+
+// 4 Types, Values, and Variables
+
+// 4.1 The Kinds of Types and Values
+Type: PrimitiveType
+    | ReferenceType;
+    
+// 4.2 Primitive Types and Values        
+PrimitiveType: NumericType
+             | BOOLEAN 
+               { 
+                 $$ = new TypeDef("boolean"); 
+               };
+
+NumericType: IntegralType
+           | FloatingPointType;
+	
+IntegralType: BYTE 
+              { 
+                $$ = new TypeDef("byte"); 
+              } 
+            | SHORT 
+              { 
+                $$ = new TypeDef("short"); 
+              } 
+            | INT 
+              { 
+                $$ = new TypeDef("int"); 
+              } 
+            | LONG 
+              { 
+                $$ = new TypeDef("long"); 
+              } 
+            | CHAR 
+              { 
+                $$ = new TypeDef("char");
+              };
+
+FloatingPointType: FLOAT 
+                   {
+                     $$ = new TypeDef("float");
+                   }
+                 | DOUBLE 
+                   { 
+                     $$ = new TypeDef("double");
+                   };
+                   
+// 4.3 Reference Types and Values
+ReferenceType: classtype Dims_opt 
+               {
+                 TypeDef td = $1;
+    	         td.dimensions = $2;
+                 $$ = td;
+               };
+// 4.4 Type Variables
+TypeParameter: IDENTIFIER 
+               { 
+                 typeVariable = new TypeVariableDef($1);
+                 typeVariable.bounds = new LinkedList();
+               }
+               TypeBound_opt
+               {
+                 typeParams.add(typeVariable);
+                 typeVariable = null;
+               }
+               ;
+
+TypeBound_opt:
+             | TypeBound;
+
+TypeBound: EXTENDS ReferenceType /* =ClassOrInterfaceType */
+		   {
+		     typeVariable.bounds = new LinkedList();
+		     typeVariable.bounds.add($2); 
+		   }
+		   AdditionalBoundList_opt;
+		   
+AdditionalBoundList_opt:
+                       | AdditionalBoundList_opt AdditionalBound;		   
+
+AdditionalBound: AMPERSAND ReferenceType /* =InterfaceType */
+                 { 
+                   typeVariable.bounds.add($2); 
+                 };
+
+
+// 4.5.1 Type Arguments and Wildcards
+Wildcard: QUERY              
+          { 
+            $$ = new WildcardTypeDef(); 
+          } 
+        | QUERY EXTENDS ReferenceType 
+          { 
+            $$ = new WildcardTypeDef($3, "extends" ); 
+          }
+        | QUERY SUPER ReferenceType
+          { 
+            $$ = new WildcardTypeDef($3, "super" ); 
+          };
 
 // 6.5 Determining the Meaning of a Name
 // PackageName | TypeName | ExpressionName | MethodName | PackageOrTypeName | AmbiguousName 
 AnyName: IDENTIFIER { $$ = $1; } 
        | AnyName DOT IDENTIFIER { $$ = $1 + '.' + $3; };
 
-// Modifiers to methods, fields, classes, interfaces, parameters, etc...
+
+// 15.8 Primary Expressions
+//Primary: PrimaryNoNewArray
+//       | ArrayCreationExpression;
+       
+//PrimaryNoNewArray: Literal
+//                 | Type DOT CLASS
+//                 | VOID DOT CLASS
+//                 | THIS
+//        ClassName.this
+//        ( Expression )
+//        ClassInstanceCreationExpression
+//        FieldAccess
+//        MethodInvocation
+//        ArrayAccess
+       
+primary:
+    Literal |
+    PARENOPEN Expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
+    PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1.name, $2)); } |
+    AnyName DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
+    AnyName dims DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, $2)); } |
+    AnyName { $$ = new AnnotationFieldRef($1); };
+	
+Dims_opt:  { $$ = 0; }
+		| dims;	
+dims:
+    SQUAREOPEN SQUARECLOSE { $$ = 1; } |
+    dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };
+
+classtype: typedeclspecifier LESSTHAN 
+           {
+    		 TypeDef td = new TypeDef($1,0);
+    		 td.actualArgumentTypes = new LinkedList();
+    		 $$ = typeStack.push(td);
+    	   } 
+    	   ActualTypeArgumentList 
+    	   { 
+    		 $$ = typeStack.pop();
+    	   }
+    	   GREATERTHAN 
+    	   {
+             $$ = $5;
+           } 
+         | typedeclspecifier 
+           {
+             $$ = new TypeDef($1,0); 
+           };
+
+typedeclspecifier:
+    AnyName |
+    classtype DOT IDENTIFIER { $$ = $1.name + '.' + $3; };
+
+ActualTypeArgumentList: ActualTypeArgument 
+                        { 
+                          (typeStack.peek()).actualArgumentTypes.add($1);
+                        }
+                      | ActualTypeArgumentList COMMA ActualTypeArgument 
+                        { 
+                          (typeStack.peek()).actualArgumentTypes.add($3);
+                        };
+
+ActualTypeArgument: ReferenceType 
+                  | Wildcard;
+
+
+
+// 8 Classes
+
+// 8.1.1 ClassModifier: Annotation public protected private abstract static final strictfp 
+// 8.3.1 FieldModifier: Annotation public protected private static final transient volatile
+// 8.4.1 VariableModifier: final Annotation
+// 8.4.3 MethodModifier: Annotation public protected private abstract static final synchronized native strictfp
+// 8.8.3 ConstructorModifier: Annotation public protected private
+
 AnyModifiers_opt:
                 | AnyModifiers_opt AnyModifier;
 
@@ -161,11 +364,276 @@ AnyModifier: Annotation
            | TRANSIENT       { modifiers.add("transient"); }
            | STRICTFP        { modifiers.add("strictfp"); } ;
 
+// 8.1 Class Declaration
+ClassDeclaration: NormalClassDeclaration	
+                | EnumDeclaration;
 
-//--------------------------------------------------------------------------------
-// ANNOTATIONS
-//--------------------------------------------------------------------------------
+NormalClassDeclaration: 
+    AnyModifiers_opt /* =ClassModifiers_opt */ classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
+        cls.lineNumber = line;
+        cls.modifiers.addAll(modifiers); modifiers.clear(); 
+        cls.name = $3;
+        cls.typeParams = typeParams;
+        builder.beginClass(cls); 
+        cls = new ClassDef(); 
+    }
+    ClassBody
+    {
+      builder.endClass(); 
+    };    
 
+// 8.1.1 Class Modifiers
+// See: AnyModifiers
+
+// 8.1.2 Generic Classes and Type Parameters
+TypeParameters_opt: 
+                  | TypeParameters;
+
+TypeParameters: LESSTHAN 
+                { 
+                  typeParams = new LinkedList(); 
+                } 
+                TypeParameterList GREATERTHAN;
+
+TypeParameterList: TypeParameter 
+                 | TypeParameterList COMMA TypeParameter;
+                 
+// 8.1.5 Superinterfaces
+Interfaces_opt:
+              | Interfaces;
+              
+Interfaces:	IMPLEMENTS InterfaceTypeList;
+
+InterfaceTypeList: InterfaceType { cls.implementz.add($1); }
+                 | InterfaceTypeList COMMA InterfaceType { cls.implementz.add($3); };
+
+InterfaceType: classtype;
+
+// 8.1.6 Class Body and Member Declarations
+ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE; 
+
+// this is slighly different so we can get the correct linenumber
+ClassBodyDeclarations_opt:
+                         | ClassBodyDeclarations_opt
+                           { 
+                             line = lexer.getLine(); 
+                           }
+                           ClassBodyDeclaration;
+
+ClassBodyDeclaration: ClassMemberDeclaration
+/*                    | InstanceInitializer */
+                    | StaticInitializer
+                    | ConstructorDeclaration;
+
+ConstructorDeclaration: constructor;
+StaticInitializer: static_block;
+
+ClassMemberDeclaration:	FieldDeclaration
+                      | MethodDeclaration
+                      | ClassDeclaration
+/*                      | InterfaceDeclaration*/
+                      |	SEMI;
+
+classorinterface: 
+    CLASS { cls.type = ClassDef.CLASS; } | 
+    INTERFACE { cls.type = ClassDef.INTERFACE; } |
+    ANNOINTERFACE { cls.type = ClassDef.ANNOTATION_TYPE; };
+
+opt_extends: | EXTENDS extendslist;
+
+extendslist:
+    classtype { cls.extendz.add($1); } |
+    extendslist COMMA classtype { cls.extendz.add($3); };
+
+static_block:
+    AnyModifiers_opt CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
+
+// ----- FIELD
+
+FieldDeclaration: 
+    AnyModifiers_opt Type VariableDeclaratorId {
+        fieldType = $2;
+        makeField($3, lexer.getCodeBody());
+    }
+    extrafields SEMI {
+        modifiers.clear();
+    };
+  
+extrafields: | 
+    extrafields COMMA { line = lexer.getLine(); } VariableDeclaratorId {
+        makeField($4, lexer.getCodeBody());
+    }; 
+
+// 8.3 Field Declarations...
+VariableDeclaratorId: IDENTIFIER Dims_opt 
+                      {
+                        $$ = new TypeDef($1,$2);
+                      };
+
+// 8.4 Method Declarations
+MethodDeclaration: MethodHeader memberend /* =MethodBody*/ 
+                   {
+                     mth.body = $2;
+                     builder.endMethod(mth);
+                     mth = new MethodDef();
+                   };
+
+MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER 
+              {
+                builder.beginMethod();
+                mth.lineNumber = lexer.getLine();
+                mth.modifiers.addAll(modifiers); modifiers.clear();
+                mth.typeParams = typeParams;
+                mth.returnType = $3;
+                mth.name = $4;
+              } 
+              methoddef Dims_opt Throws_opt
+              {
+                mth.dimensions = $7;
+              } 
+            | AnyModifiers_opt Type /* =ResultType */ IDENTIFIER 
+              {
+                builder.beginMethod();
+                mth.lineNumber = lexer.getLine();
+                mth.modifiers.addAll(modifiers); modifiers.clear();
+                mth.returnType = $2;
+                mth.name = $3;
+              } 
+              methoddef Dims_opt Throws_opt 
+              {
+                mth.dimensions = $6;
+              };
+
+// 8.4.1 Formal Parameters
+FormalParameterList_opt:
+                       | FormalParameterList;
+                       
+FormalParameterList: LastFormalParameter
+                   | FormalParameters COMMA LastFormalParameter;
+
+FormalParameters: FormalParameter
+                | FormalParameters COMMA FormalParameter;
+                
+FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ Type VariableDeclaratorId
+                  {
+                    param.name = $3.name;
+                    param.type = $2;
+                    param.dimensions = $3.dimensions;
+                    param.isVarArgs = false;
+                    param.modifiers.addAll(modifiers); modifiers.clear();
+                    builder.addParameter(param);
+                    param = new FieldDef();
+                  };
+
+LastFormalParameter: AnyModifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
+                     {
+                       param.name = $4.name; 
+                       param.type = $2;
+                       param.dimensions = $4.dimensions;
+                       param.isVarArgs = true;
+                       param.modifiers.addAll(modifiers); modifiers.clear();
+                       builder.addParameter(param);
+                       param = new FieldDef();
+                     };
+                   | FormalParameter;
+
+// 8.4.6 Method Throws
+Throws_opt:
+          | THROWS ExceptionTypeList;
+
+ExceptionTypeList: classtype /*ExceptionType*/
+                   { 
+                     mth.exceptions.add($1); 
+                   }
+                 | ExceptionTypeList COMMA classtype /* =ExceptionType */
+                   {
+                     mth.exceptions.add($3);
+                   };
+                   
+// 8.4.7 Method Body
+
+memberend: CODEBLOCK 
+           {
+	         $$ = lexer.getCodeBody();
+           } 
+         | SEMI 
+           {
+             $$ = "";
+           };
+
+methoddef: PARENOPEN FormalParameterList_opt PARENCLOSE;
+
+// 8.8 Constructor Declarations
+constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER 
+             {
+               builder.beginConstructor();
+               mth.lineNumber = lexer.getLine();
+               mth.modifiers.addAll(modifiers); modifiers.clear();
+               mth.constructor = true; mth.name = $2;
+             }
+             methoddef Throws_opt memberend /* =MethodBody */ 
+             {
+               mth.body = $6;
+               builder.endConstructor(mth);
+               mth = new MethodDef(); 
+             }
+           | AnyModifiers_opt /* =ConstructorModifiers_opt */ TypeParameters IDENTIFIER 
+             {
+               builder.beginConstructor();
+               mth.lineNumber = lexer.getLine();
+               mth.typeParams = typeParams;
+               mth.modifiers.addAll(modifiers); modifiers.clear();
+               mth.constructor = true; mth.name = $3;
+             } 
+             methoddef Throws_opt memberend /* =MethodBody */ 
+             {
+               mth.body = $7;
+               builder.endConstructor(mth);
+               mth = new MethodDef(); 
+             };
+             
+// 8.9 Enums
+EnumDeclaration: AnyModifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Interfaces_opt 
+                 { 
+                   cls.lineNumber = line;
+                   cls.modifiers.addAll(modifiers);
+                   cls.name = $3;
+                   cls.type = ClassDef.ENUM;
+                   builder.beginClass(cls);
+                   cls = new ClassDef();
+                   fieldType = new TypeDef($3, 0);
+                 } 
+                 EnumBody;
+
+/* Specs say: { EnumConstants_opt ,_opt EnumBodyDeclarations_opt }
+   The optional COMMA causes trouble for the parser
+   For that reason the adjusted options of EnumConstants_opt, which will accept all cases 
+*/
+EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
+          { builder.endClass();
+            fieldType = null;
+            modifiers.clear();
+          };
+
+EnumConstants_opt:
+                 | EnumConstants_opt COMMA
+                 | EnumConstants_opt EnumConstant;
+                 
+EnumConstant: Annotations_opt IDENTIFIER Arguments_opt ClassBody_opt
+              { 
+                makeField(new TypeDef($2, 0), ""); 
+              };
+
+         
+Arguments_opt:
+             | PARENBLOCK /* =Arguments */;
+
+ClassBody_opt:
+             | CODEBLOCK /* =ClassBody */;
+
+EnumBodyDeclarations_opt:
+                        | SEMI ClassBodyDeclarations_opt;      
+                        
 // 9.7 Annotations
 
 Annotations_opt: 
@@ -228,63 +696,13 @@ ElementValues_opt:
                    } 
                  | ElementValues_opt COMMA;    
     
-ElementValue: expression 
+ElementValue: ConditionalExpression 
             | Annotation 
             | ElementValueArrayInitializer ;
 
-expression:
-	ConditionalExpression ;
-
-//15.25 Conditional Operator ? :	
-ConditionalExpression: ConditionalOrExpression 
-                     | ConditionalOrExpression QUERY expression COLON expression { $$ = new AnnotationQuery($1, $3, $5); };
-
-//15.24 Conditional-Or Operator ||
-ConditionalOrExpression: ConditionalAndExpression 
-                       | ConditionalOrExpression VERTLINE2 ConditionalAndExpression { $$ = new AnnotationLogicalOr($1, $3); };
-
-// 15.23 Conditional-And Operator &&
-ConditionalAndExpression: InclusiveOrExpression 
-                        | ConditionalAndExpression AMPERSAND2 InclusiveOrExpression { $$ = new AnnotationLogicalAnd($1, $3); };
-
-//15.22 Bitwise and Logical Operators
-InclusiveOrExpression: ExclusiveOrExpression 
-                     | InclusiveOrExpression VERTLINE ExclusiveOrExpression { $$ = new AnnotationOr($1, $3); };
-
-ExclusiveOrExpression: AndExpression 
-                     | ExclusiveOrExpression CIRCUMFLEX AndExpression { $$ = new AnnotationExclusiveOr($1, $3); };
-
-AndExpression: EqualityExpression 
-             | AndExpression AMPERSAND EqualityExpression { $$ = new AnnotationAnd($1, $3); };
-
-// 15.21 Equality Operators
-EqualityExpression: RelationalExpression 
-                  | EqualityExpression EQUALS2 RelationalExpression   { $$ = new AnnotationEquals($1, $3); } 
-                  | EqualityExpression NOTEQUALS RelationalExpression { $$ = new AnnotationNotEquals($1, $3); };
-
-// 15.20 Relational Operators
-RelationalExpression: ShiftExpression 
-                    | RelationalExpression LESSEQUALS ShiftExpression    { $$ = new AnnotationLessEquals($1, $3); } 
-                    | RelationalExpression GREATEREQUALS ShiftExpression { $$ = new AnnotationGreaterEquals($1, $3); } 
-                    | RelationalExpression LESSTHAN ShiftExpression      { $$ = new AnnotationLessThan($1, $3); } 
-                    | RelationalExpression GREATERTHAN ShiftExpression   { $$ = new AnnotationGreaterThan($1, $3); };
-
-// 15.19 Shift Operators
-ShiftExpression: AdditiveExpression 
-               | ShiftExpression LESSTHAN2 AdditiveExpression    { $$ = new AnnotationShiftLeft($1, $3); }
-               | ShiftExpression GREATERTHAN3 AdditiveExpression { $$ = new AnnotationUnsignedShiftRight($1, $3); } 
-               | ShiftExpression GREATERTHAN2 AdditiveExpression { $$ = new AnnotationShiftRight($1, $3); };
-
-// 15.18 Additive Operators
-AdditiveExpression:	MultiplicativeExpression 
-                  |	AdditiveExpression PLUS MultiplicativeExpression  { $$ = new AnnotationAdd($1, $3); } 
-                  |	AdditiveExpression MINUS MultiplicativeExpression { $$ = new AnnotationSubtract($1, $3); };
-
-// 15.17 Multiplicative Operators
-MultiplicativeExpression: UnaryExpression 
-                        | MultiplicativeExpression STAR UnaryExpression    { $$ = new AnnotationMultiply($1, $3); } 
-                        | MultiplicativeExpression SLASH UnaryExpression   { $$ = new AnnotationDivide($1, $3); } 
-                        | MultiplicativeExpression PERCENT UnaryExpression { $$ = new AnnotationRemainder($1, $3); };
+// 15.14 Postfix Expressions
+PostfixExpression: /* ExpressionName | PostIncrementExpression | PostDecrementExpression | */
+                   primary ;
 
 // 15.15 Unary Operators
 UnaryExpression: /* PreIncrementExpression | PreDecrementExpression | */
@@ -302,441 +720,100 @@ CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression { $$
               | PARENOPEN AnyName PARENCLOSE UnaryExpressionNotPlusMinus       { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
               | PARENOPEN AnyName dims PARENCLOSE UnaryExpressionNotPlusMinus  { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
 
-PostfixExpression: primary;
+// 15.17 Multiplicative Operators
+MultiplicativeExpression: UnaryExpression 
+                        | MultiplicativeExpression STAR UnaryExpression    { $$ = new AnnotationMultiply($1, $3); } 
+                        | MultiplicativeExpression SLASH UnaryExpression   { $$ = new AnnotationDivide($1, $3); } 
+                        | MultiplicativeExpression PERCENT UnaryExpression { $$ = new AnnotationRemainder($1, $3); };
 
-//Primary: PrimaryNoNewArray
-//       | ArrayCreationExpression;
-       
-//PrimaryNoNewArray: Literal
-//                 | Type DOT CLASS
-//                 | VOID DOT CLASS
-//                 | THIS
-//        ClassName.this
-//        ( Expression )
-//        ClassInstanceCreationExpression
-//        FieldAccess
-//        MethodInvocation
-//        ArrayAccess
-       
+// 15.18 Additive Operators
+AdditiveExpression:	MultiplicativeExpression 
+                  |	AdditiveExpression PLUS MultiplicativeExpression  { $$ = new AnnotationAdd($1, $3); } 
+                  |	AdditiveExpression MINUS MultiplicativeExpression { $$ = new AnnotationSubtract($1, $3); };
 
-primary:
-    Literal |
-    PARENOPEN expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
-    PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1.name, $2)); } |
-    AnyName DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
-    AnyName dims DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, $2)); } |
-    AnyName { $$ = new AnnotationFieldRef($1); };
-	
-Dims_opt:  { $$ = 0; }
-		| dims;	
-dims:
-    SQUAREOPEN SQUARECLOSE { $$ = 1; } |
-    dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };
-	
-Literal: INTEGER_LITERAL
-         { 
-           $$ = new AnnotationConstant(toInteger($1), $1); 
-         } 
-       | LONG_LITERAL 
-         { 
-           $$ = new AnnotationConstant(toLong($1), $1); 
-         } 
-       | FLOAT_LITERAL 
-         { 
-           $$ = new AnnotationConstant(toFloat($1), $1); 
-         } 
-       | DOUBLE_LITERAL 
-         { 
-           $$ = new AnnotationConstant(toDouble($1), $1);
-         } 
-       | BOOLEAN_LITERAL 
-         { 
-           $$ = new AnnotationConstant(toBoolean($1), $1);
-         } 
-       | CHAR_LITERAL 
-         {
-           String s = lexer.getCodeBody(); 
-           $$ = new AnnotationConstant(toChar(s), s); 
-         } 
-       | STRING_LITERAL 
-         { 
-           String s = lexer.getCodeBody(); 
-           $$ = new AnnotationConstant(toString(s), s); 
-         };
-        
-PrimitiveType:
-	NumericType |
-    BOOLEAN { $$ = new TypeDef("boolean"); };
+// 15.19 Shift Operators
+ShiftExpression: AdditiveExpression 
+               | ShiftExpression LESSTHAN2 AdditiveExpression    { $$ = new AnnotationShiftLeft($1, $3); }
+               | ShiftExpression GREATERTHAN3 AdditiveExpression { $$ = new AnnotationUnsignedShiftRight($1, $3); } 
+               | ShiftExpression GREATERTHAN2 AdditiveExpression { $$ = new AnnotationShiftRight($1, $3); };
 
-NumericType:
-	IntegralType |
-	FloatingPointType;
-	
-IntegralType:
-    BYTE { $$ = new TypeDef("byte"); } |
-    SHORT { $$ = new TypeDef("short"); } |
-    INT { $$ = new TypeDef("int"); } |
-    LONG { $$ = new TypeDef("long"); } |
-    CHAR { $$ = new TypeDef("char"); };
-
-FloatingPointType:
-    FLOAT { $$ = new TypeDef("float"); } |
-    DOUBLE { $$ = new TypeDef("double"); };
-        
-
-// ----- TYPES
-
-Type: PrimitiveType
-    | ReferenceType;
-
-ReferenceType: classtype Dims_opt 
-               {
-                 TypeDef td = $1;
-    	         td.dimensions = $2;
-                 $$ = td;
-               };
-
-classtype: typedeclspecifier LESSTHAN 
-           {
-    		 TypeDef td = new TypeDef($1,0);
-    		 td.actualArgumentTypes = new LinkedList();
-    		 $$ = typeStack.push(td);
-    	   } 
-    	   ActualTypeArgumentList 
-    	   { 
-    		 $$ = typeStack.pop();
-    	   }
-    	   GREATERTHAN 
-    	   {
-             $$ = $5;
-           } 
-         | typedeclspecifier 
-           {
-             $$ = new TypeDef($1,0); 
-           };
-
-typedeclspecifier:
-    AnyName |
-    classtype DOT IDENTIFIER { $$ = $1.name + '.' + $3; };
-
-ActualTypeArgumentList: ActualTypeArgument 
-                        { 
-                          (typeStack.peek()).actualArgumentTypes.add($1);
-                        }
-                      | ActualTypeArgumentList COMMA ActualTypeArgument 
-                        { 
-                          (typeStack.peek()).actualArgumentTypes.add($3);
-                        };
-
-ActualTypeArgument: ReferenceType 
-                  | Wildcard;
-
-// 4.5.1 Type Arguments and Wildcards
-Wildcard: QUERY              
-          { 
-            $$ = new WildcardTypeDef(); 
-          } 
-        | QUERY EXTENDS ReferenceType 
-          { 
-            $$ = new WildcardTypeDef($3, "extends" ); 
-          }
-        | QUERY SUPER ReferenceType
-          { 
-            $$ = new WildcardTypeDef($3, "super" ); 
-          };
-
-// 8.1.2 Generic Classes and Type Parameters
-TypeParameters_opt: 
-                  | TypeParameters;
-
-TypeParameters: LESSTHAN 
-                { 
-                  typeParams = new LinkedList(); 
-                } 
-                TypeParameterList GREATERTHAN;
-
-TypeParameterList: TypeParameter 
-                 | TypeParameterList COMMA TypeParameter;
-
-// 4.4 Type Variables
-TypeParameter: IDENTIFIER 
-               { 
-                 typeVariable = new TypeVariableDef($1);
-                 typeVariable.bounds = new LinkedList();
-               }
-               TypeBound_opt
-               {
-                 typeParams.add(typeVariable);
-                 typeVariable = null;
-               }
-               ;
-
-TypeBound_opt:
-             | TypeBound;
-
-TypeBound: EXTENDS ReferenceType /* =ClassOrInterfaceType */
-		   {
-		     typeVariable.bounds = new LinkedList();
-		     typeVariable.bounds.add($2); 
-		   }
-		   AdditionalBoundList_opt;
-		   
-AdditionalBoundList_opt:
-                       | AdditionalBoundList_opt AdditionalBound;		   
-
-AdditionalBound: AMPERSAND ReferenceType /* =InterfaceType */
-                 { 
-                   typeVariable.bounds.add($2); 
-                 };
-
-// ----- ENUM
-
-// 8.9 Enums
-EnumDeclaration: AnyModifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Interfaces_opt 
-                 { 
-                   cls.lineNumber = line;
-                   cls.modifiers.addAll(modifiers);
-                   cls.name = $3;
-                   cls.type = ClassDef.ENUM;
-                   builder.beginClass(cls);
-                   cls = new ClassDef();
-                   fieldType = new TypeDef($3, 0);
-                 } 
-                 EnumBody;
-
-/* Specs say: { EnumConstants_opt ,_opt EnumBodyDeclarations_opt }
-   The optional COMMA causes trouble for the parser
-   For that reason the adjusted options of EnumConstants_opt, which will accept all cases 
-*/
-EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
-          { builder.endClass();
-            fieldType = null;
-            modifiers.clear();
-          };
-
-EnumConstants_opt:
-                 | EnumConstants_opt COMMA
-                 | EnumConstants_opt EnumConstant;
-                 
-EnumConstant: Annotations_opt IDENTIFIER Arguments_opt ClassBody_opt
-              { 
-                makeField(new TypeDef($2, 0), ""); 
-              };
-
-         
-Arguments_opt:
-             | PARENBLOCK /* =Arguments */;
-
-ClassBody_opt:
-             | CODEBLOCK /* =ClassBody */;
-
-EnumBodyDeclarations_opt:
-                        | SEMI ClassBodyDeclarations_opt;
-          
-// ----- CLASS
-
-// 8.1 Class Declaration
-
-NormalClassDeclaration: 
-    AnyModifiers_opt classorinterface IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
-        cls.lineNumber = line;
-        cls.modifiers.addAll(modifiers); modifiers.clear(); 
-        cls.name = $3;
-        cls.typeParams = typeParams;
-        builder.beginClass(cls); 
-        cls = new ClassDef(); 
-    }
-    ClassBody
-    {
-      builder.endClass(); 
-    };    
-
-// 8.1.6 Class Body and Member Declarations
-ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE; 
-
-// this is slighly different so we can get the correct linenumber
-ClassBodyDeclarations_opt:
-                         | ClassBodyDeclarations_opt
-                           { 
-                             line = lexer.getLine(); 
-                           }
-                           ClassBodyDeclaration;
-
-ClassBodyDeclaration: ClassMemberDeclaration
-/*                    | InstanceInitializer */
-                    | StaticInitializer
-                    | ConstructorDeclaration;
-
-ConstructorDeclaration: constructor;
-StaticInitializer: static_block;
-
-ClassMemberDeclaration:	FieldDeclaration
-                      | MethodDeclaration
-                      | ClassDeclaration
-/*                      | InterfaceDeclaration*/
-                      |	SEMI;
-
-classorinterface: 
-    CLASS { cls.type = ClassDef.CLASS; } | 
-    INTERFACE { cls.type = ClassDef.INTERFACE; } |
-    ANNOINTERFACE { cls.type = ClassDef.ANNOTATION_TYPE; };
-
-opt_extends: | EXTENDS extendslist;
-
-extendslist:
-    classtype { cls.extendz.add($1); } |
-    extendslist COMMA classtype { cls.extendz.add($3); };
-
-// 8.1.5 Superinterfaces
-Interfaces_opt:
-              | Interfaces;
-              
-Interfaces:	IMPLEMENTS InterfaceTypeList;
-
-InterfaceTypeList: InterfaceType { cls.implementz.add($1); }
-                 | InterfaceTypeList COMMA InterfaceType { cls.implementz.add($3); };
-
-InterfaceType: classtype;
-
-static_block:
-    AnyModifiers_opt CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
-
-// ----- FIELD
-
-FieldDeclaration: 
-    AnyModifiers_opt Type VariableDeclaratorId {
-        fieldType = $2;
-        makeField($3, lexer.getCodeBody());
-    }
-    extrafields SEMI {
-        modifiers.clear();
-    };
-  
-extrafields: | 
-    extrafields COMMA { line = lexer.getLine(); } VariableDeclaratorId {
-        makeField($4, lexer.getCodeBody());
-    }; 
-
-// 8.3 Field Declarations...
-VariableDeclaratorId: IDENTIFIER Dims_opt 
-                      {
-                        $$ = new TypeDef($1,$2);
+// 15.20 Relational Operators
+RelationalExpression: ShiftExpression 
+                    | RelationalExpression LESSEQUALS ShiftExpression    
+                      { 
+                        $$ = new AnnotationLessEquals($1, $3);
+                      } 
+                    | RelationalExpression GREATEREQUALS ShiftExpression 
+                      { 
+                        $$ = new AnnotationGreaterEquals($1, $3); 
+                      } 
+                    | RelationalExpression LESSTHAN ShiftExpression      
+                      { 
+                        $$ = new AnnotationLessThan($1, $3); 
+                      } 
+                    | RelationalExpression GREATERTHAN ShiftExpression   
+                      { 
+                        $$ = new AnnotationGreaterThan($1, $3); 
                       };
 
-// 8.4 Method Declarations
-MethodDeclaration: MethodHeader memberend /* =MethodBody*/ 
-                   {
-                     mth.body = $2;
-                     builder.endMethod(mth);
-                     mth = new MethodDef();
-                   };
+// 15.21 Equality Operators
+EqualityExpression: RelationalExpression 
+                  | EqualityExpression EQUALS2 RelationalExpression   
+                    { 
+                      $$ = new AnnotationEquals($1, $3);
+                    } 
+                  | EqualityExpression NOTEQUALS RelationalExpression 
+                    { 
+                      $$ = new AnnotationNotEquals($1, $3); 
+                    };
 
-MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER 
-              {
-                builder.beginMethod();
-                mth.lineNumber = lexer.getLine();
-                mth.modifiers.addAll(modifiers); modifiers.clear();
-                mth.typeParams = typeParams;
-                mth.returnType = $3;
-                mth.name = $4;
-              } 
-              methoddef Dims_opt Throws_opt
-              {
-                mth.dimensions = $7;
-              } 
-            | AnyModifiers_opt Type /* =ResultType */ IDENTIFIER 
-              {
-                builder.beginMethod();
-                mth.lineNumber = lexer.getLine();
-                mth.modifiers.addAll(modifiers); modifiers.clear();
-                mth.returnType = $2;
-                mth.name = $3;
-              } 
-              methoddef Dims_opt Throws_opt 
-              {
-                mth.dimensions = $6;
-              };
+// 15.22 Bitwise and Logical Operators
+InclusiveOrExpression: ExclusiveOrExpression 
+                     | InclusiveOrExpression VERTLINE ExclusiveOrExpression 
+                       { 
+                         $$ = new AnnotationOr($1, $3); 
+                       };
 
-constructor:
-    AnyModifiers_opt IDENTIFIER {
-        builder.beginConstructor();
-        mth.lineNumber = lexer.getLine();
-        mth.modifiers.addAll(modifiers); modifiers.clear(); 
-        mth.constructor = true; mth.name = $2;
-    } methoddef Throws_opt memberend /* =MethodBody */ {
-        mth.body = $6;
-        builder.endConstructor(mth);
-        mth = new MethodDef(); 
-    } |
-    AnyModifiers_opt TypeParameters IDENTIFIER {
-        builder.beginConstructor();
-        mth.lineNumber = lexer.getLine();
-        mth.typeParams = typeParams;
-        mth.modifiers.addAll(modifiers); modifiers.clear(); 
-        mth.constructor = true; mth.name = $3;
-    } methoddef Throws_opt memberend /* =MethodBody */ {
-        mth.body = $7;
-        builder.endConstructor(mth);
-        mth = new MethodDef(); 
-    };
+ExclusiveOrExpression: AndExpression 
+                     | ExclusiveOrExpression CIRCUMFLEX AndExpression 
+                       { 
+                         $$ = new AnnotationExclusiveOr($1, $3);
+                       };
 
-// 8.4.7 Method Body
+AndExpression: EqualityExpression 
+             | AndExpression AMPERSAND EqualityExpression 
+               { 
+                 $$ = new AnnotationAnd($1, $3); 
+               };
 
-memberend: CODEBLOCK 
-           {
-	         $$ = lexer.getCodeBody();
-           } 
-         | SEMI 
-           {
-             $$ = "";
-           };
+// 15.23 Conditional-And Operator &&
+ConditionalAndExpression: InclusiveOrExpression 
+                        | ConditionalAndExpression AMPERSAND2 InclusiveOrExpression 
+                          { 
+                            $$ = new AnnotationLogicalAnd($1, $3); 
+                          };
 
-methoddef: PARENOPEN FormalParameterList_opt PARENCLOSE;
+// 15.24 Conditional-Or Operator ||
+ConditionalOrExpression: ConditionalAndExpression 
+                       | ConditionalOrExpression VERTLINE2 ConditionalAndExpression 
+                         { 
+                           $$ = new AnnotationLogicalOr($1, $3);
+                         };
 
-// 8.4.6 Method Throws
-Throws_opt:
-          | THROWS ExceptionTypeList;
-
-ExceptionTypeList: classtype /*ExceptionType*/
-                   { 
-                     mth.exceptions.add($1); 
-                   }
-                 | ExceptionTypeList COMMA classtype /* =ExceptionType */
-                   {
-                     mth.exceptions.add($3);
-                   };
-// 8.4.1 Formal Parameters
-FormalParameterList_opt:
-                       | FormalParameterList;
+// 15.25 Conditional Operator ? :	
+ConditionalExpression: ConditionalOrExpression 
+                     | ConditionalOrExpression QUERY Expression COLON ConditionalExpression 
+                       { 
+                         $$ = new AnnotationQuery($1, $3, $5);
+                       };
                        
-FormalParameterList: LastFormalParameter
-                   | FormalParameters COMMA LastFormalParameter;
+// 15.26 Assignment Operators
+AssignmentExpression: ConditionalExpression;
+                    /* | Assignment */ 
 
-FormalParameters: FormalParameter
-                | FormalParameters COMMA FormalParameter;
-                
-FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ Type VariableDeclaratorId
-                  {
-                    param.name = $3.name;
-                    param.type = $2;
-                    param.dimensions = $3.dimensions;
-                    param.isVarArgs = false;
-                    param.modifiers.addAll(modifiers); modifiers.clear();
-                    builder.addParameter(param);
-                    param = new FieldDef();
-                  };
+// 15.27 Expression
+Expression: AssignmentExpression;
 
-LastFormalParameter: AnyModifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
-                     {
-                       param.name = $4.name; 
-                       param.type = $2;
-                       param.dimensions = $4.dimensions;
-                       param.isVarArgs = true;
-                       param.modifiers.addAll(modifiers); modifiers.clear();
-                       builder.addParameter(param);
-                       param = new FieldDef();
-                     };
-                   | FormalParameter;
 %%
 
 private JavaLexer lexer;

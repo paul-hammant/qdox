@@ -222,6 +222,8 @@ ReferenceType: classtype Dims_opt
     	         td.dimensions = $2;
                  $$ = td;
                };
+               
+               
 // 4.4 Type Variables
 TypeParameter: IDENTIFIER 
                { 
@@ -238,7 +240,7 @@ TypeParameter: IDENTIFIER
 TypeBound_opt:
              | TypeBound;
 
-TypeBound: EXTENDS ReferenceType /* =ClassOrInterfaceType */
+TypeBound: EXTENDS classtype /* =ClassOrInterfaceType */
 		   {
 		     typeVariable.bounds = new LinkedList();
 		     typeVariable.bounds.add($2); 
@@ -248,7 +250,7 @@ TypeBound: EXTENDS ReferenceType /* =ClassOrInterfaceType */
 AdditionalBoundList_opt:
                        | AdditionalBoundList_opt AdditionalBound;		   
 
-AdditionalBound: AMPERSAND ReferenceType /* =InterfaceType */
+AdditionalBound: AMPERSAND classtype /* =InterfaceType */
                  { 
                    typeVariable.bounds.add($2); 
                  };
@@ -478,7 +480,7 @@ MethodDeclaration: MethodHeader memberend /* =MethodBody*/
                      mth = new MethodDef();
                    };
 
-MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER 
+MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
               {
                 builder.beginMethod();
                 mth.lineNumber = lexer.getLine();
@@ -487,11 +489,11 @@ MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER
                 mth.returnType = $3;
                 mth.name = $4;
               } 
-              methoddef Dims_opt Throws_opt
+              FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt
               {
-                mth.dimensions = $7;
+                mth.dimensions = $9;
               } 
-            | AnyModifiers_opt Type /* =ResultType */ IDENTIFIER 
+            | AnyModifiers_opt Type /* =ResultType */ IDENTIFIER PARENOPEN 
               {
                 builder.beginMethod();
                 mth.lineNumber = lexer.getLine();
@@ -499,9 +501,9 @@ MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER
                 mth.returnType = $2;
                 mth.name = $3;
               } 
-              methoddef Dims_opt Throws_opt 
+              FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt 
               {
-                mth.dimensions = $6;
+                mth.dimensions = $8;
               };
 
 // 8.4.1 Formal Parameters
@@ -561,23 +563,21 @@ memberend: CODEBLOCK
              $$ = "";
            };
 
-methoddef: PARENOPEN FormalParameterList_opt PARENCLOSE;
-
 // 8.8 Constructor Declarations
-constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER 
+constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOPEN 
              {
                builder.beginConstructor();
                mth.lineNumber = lexer.getLine();
                mth.modifiers.addAll(modifiers); modifiers.clear();
                mth.constructor = true; mth.name = $2;
              }
-             methoddef Throws_opt memberend /* =MethodBody */ 
+             FormalParameterList_opt PARENCLOSE Throws_opt memberend /* =MethodBody */ 
              {
-               mth.body = $6;
+               mth.body = $8;
                builder.endConstructor(mth);
                mth = new MethodDef(); 
              }
-           | AnyModifiers_opt /* =ConstructorModifiers_opt */ TypeParameters IDENTIFIER 
+           | AnyModifiers_opt /* =ConstructorModifiers_opt */ TypeParameters IDENTIFIER PARENOPEN 
              {
                builder.beginConstructor();
                mth.lineNumber = lexer.getLine();
@@ -585,9 +585,9 @@ constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER
                mth.modifiers.addAll(modifiers); modifiers.clear();
                mth.constructor = true; mth.name = $3;
              } 
-             methoddef Throws_opt memberend /* =MethodBody */ 
+             FormalParameterList_opt PARENCLOSE Throws_opt memberend /* =MethodBody */ 
              {
-               mth.body = $7;
+               mth.body = $9;
                builder.endConstructor(mth);
                mth = new MethodDef(); 
              };

@@ -62,7 +62,7 @@ import java.util.Stack;
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus primary
 %type <annoval> PostfixExpression CastExpression AssignmentExpression
 %type <ival> dims Dims_opt
-%type <sval> AnyName typedeclspecifier memberend
+%type <sval> AnyName TypeDeclSpecifier memberend
 %type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType ActualTypeArgument
 
 %%
@@ -227,7 +227,7 @@ ReferenceType: ClassOrInterfaceType Dims_opt
 // ClassType:            TypeDeclSpecifier TypeArguments_opt
 // InterfaceType:        TypeDeclSpecifier TypeArguments_opt
 // Parser can't see the difference  
-ClassOrInterfaceType: typedeclspecifier 
+ClassOrInterfaceType: TypeDeclSpecifier 
                       {
                         TypeDef td = new TypeDef($1,0);
                         $$ = typeStack.push(td);
@@ -236,6 +236,12 @@ ClassOrInterfaceType: typedeclspecifier
                       {
                         $$ = typeStack.pop();
                       };
+
+TypeDeclSpecifier: AnyName
+                 | ClassOrInterfaceType DOT IDENTIFIER 
+                   { 
+                     $$ = $1.name + '.' + $3;
+                   };
                
 // 4.4 Type Variables
 TypeParameter: IDENTIFIER 
@@ -338,13 +344,6 @@ Dims_opt:  { $$ = 0; }
 dims:
     SQUAREOPEN SQUARECLOSE { $$ = 1; } |
     dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };
-
-
-
-
-typedeclspecifier:
-    AnyName |
-    ClassOrInterfaceType DOT IDENTIFIER { $$ = $1.name + '.' + $3; };
 
 // 8 Classes
 

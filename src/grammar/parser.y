@@ -63,7 +63,7 @@ import java.util.Stack;
 %type <annoval> PostfixExpression CastExpression AssignmentExpression
 %type <ival> dims Dims_opt
 %type <sval> AnyName typedeclspecifier memberend
-%type <type> Type ReferenceType VariableDeclaratorId classtype ActualTypeArgument
+%type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType ActualTypeArgument
 
 %%
 // Source: Java Language Specification - Third Edition
@@ -216,13 +216,26 @@ FloatingPointType: FLOAT
                    };
                    
 // 4.3 Reference Types and Values
-ReferenceType: classtype Dims_opt 
+ReferenceType: ClassOrInterfaceType Dims_opt 
                {
                  TypeDef td = $1;
     	         td.dimensions = $2;
                  $$ = td;
                };
-               
+// Actually
+// ClassOrInterfaceType: ClassType | InterfaceType;
+// ClassType:            TypeDeclSpecifier TypeArguments_opt
+// InterfaceType:        TypeDeclSpecifier TypeArguments_opt
+// Parser can't see the difference  
+ClassOrInterfaceType: typedeclspecifier 
+                      {
+                        TypeDef td = new TypeDef($1,0);
+                        $$ = typeStack.push(td);
+                      }
+                      TypeArguments_opt
+                      {
+                        $$ = typeStack.pop();
+                      };
                
 // 4.4 Type Variables
 TypeParameter: IDENTIFIER 
@@ -234,13 +247,12 @@ TypeParameter: IDENTIFIER
                {
                  typeParams.add(typeVariable);
                  typeVariable = null;
-               }
-               ;
+               };
 
 TypeBound_opt:
              | TypeBound;
 
-TypeBound: EXTENDS classtype /* =ClassOrInterfaceType */
+TypeBound: EXTENDS ClassOrInterfaceType
 		   {
 		     typeVariable.bounds = new LinkedList();
 		     typeVariable.bounds.add($2); 
@@ -250,13 +262,35 @@ TypeBound: EXTENDS classtype /* =ClassOrInterfaceType */
 AdditionalBoundList_opt:
                        | AdditionalBoundList_opt AdditionalBound;		   
 
-AdditionalBound: AMPERSAND classtype /* =InterfaceType */
+AdditionalBound: AMPERSAND ClassOrInterfaceType
                  { 
                    typeVariable.bounds.add($2); 
                  };
 
-
 // 4.5.1 Type Arguments and Wildcards
+TypeArguments_opt:
+                 | TypeArguments;
+
+TypeArguments: LESSTHAN 
+               {
+                 typeStack.peek().actualArgumentTypes = new LinkedList();
+               }
+               ActualTypeArgumentList GREATERTHAN;
+
+ActualTypeArgumentList: ActualTypeArgument 
+                        { 
+                          (typeStack.peek()).actualArgumentTypes.add($1);
+                        }
+                      | ActualTypeArgumentList COMMA ActualTypeArgument 
+                        { 
+                          (typeStack.peek()).actualArgumentTypes.add($3);
+                        };
+
+ActualTypeArgument: ReferenceType 
+                  | Wildcard;
+                  
+// Actually Wildcard: ? WildcardBounds_Opt
+// but it's weird to let an optional bound return a value
 Wildcard: QUERY              
           { 
             $$ = new WildcardTypeDef(); 
@@ -305,42 +339,12 @@ dims:
     SQUAREOPEN SQUARECLOSE { $$ = 1; } |
     dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };
 
-classtype: typedeclspecifier LESSTHAN 
-           {
-    		 TypeDef td = new TypeDef($1,0);
-    		 td.actualArgumentTypes = new LinkedList();
-    		 $$ = typeStack.push(td);
-    	   } 
-    	   ActualTypeArgumentList 
-    	   { 
-    		 $$ = typeStack.pop();
-    	   }
-    	   GREATERTHAN 
-    	   {
-             $$ = $5;
-           } 
-         | typedeclspecifier 
-           {
-             $$ = new TypeDef($1,0); 
-           };
+
+
 
 typedeclspecifier:
     AnyName |
-    classtype DOT IDENTIFIER { $$ = $1.name + '.' + $3; };
-
-ActualTypeArgumentList: ActualTypeArgument 
-                        { 
-                          (typeStack.peek()).actualArgumentTypes.add($1);
-                        }
-                      | ActualTypeArgumentList COMMA ActualTypeArgument 
-                        { 
-                          (typeStack.peek()).actualArgumentTypes.add($3);
-                        };
-
-ActualTypeArgument: ReferenceType 
-                  | Wildcard;
-
-
+    ClassOrInterfaceType DOT IDENTIFIER { $$ = $1.name + '.' + $3; };
 
 // 8 Classes
 
@@ -409,7 +413,8 @@ Interfaces:	IMPLEMENTS InterfaceTypeList;
 InterfaceTypeList: InterfaceType { cls.implementz.add($1); }
                  | InterfaceTypeList COMMA InterfaceType { cls.implementz.add($3); };
 
-InterfaceType: classtype;
+// See ClassOrInterfaceType why like this
+InterfaceType: ClassOrInterfaceType;
 
 // 8.1.6 Class Body and Member Declarations
 ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE; 
@@ -444,8 +449,8 @@ classorinterface:
 opt_extends: | EXTENDS extendslist;
 
 extendslist:
-    classtype { cls.extendz.add($1); } |
-    extendslist COMMA classtype { cls.extendz.add($3); };
+    ClassOrInterfaceType { cls.extendz.add($1); } |
+    extendslist COMMA ClassOrInterfaceType { cls.extendz.add($3); };
 
 static_block:
     AnyModifiers_opt CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
@@ -543,11 +548,11 @@ LastFormalParameter: AnyModifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDO
 Throws_opt:
           | THROWS ExceptionTypeList;
 
-ExceptionTypeList: classtype /*ExceptionType*/
+ExceptionTypeList: ClassOrInterfaceType /*ExceptionType*/
                    { 
                      mth.exceptions.add($1); 
                    }
-                 | ExceptionTypeList COMMA classtype /* =ExceptionType */
+                 | ExceptionTypeList COMMA ClassOrInterfaceType /* =ExceptionType */
                    {
                      mth.exceptions.add($3);
                    };

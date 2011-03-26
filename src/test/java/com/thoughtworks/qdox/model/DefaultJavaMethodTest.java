@@ -11,16 +11,6 @@ public class DefaultJavaMethodTest
         super( s );
     }
 
-    public JavaClass newJavaClass()
-    {
-        return new DefaultJavaClass();
-    }
-
-    public JavaClass newJavaClass( String fullname )
-    {
-        return new DefaultJavaClass( fullname );
-    }
-
     public DefaultJavaMethod newJavaMethod()
     {
         return new DefaultJavaMethod();
@@ -39,11 +29,6 @@ public class DefaultJavaMethodTest
     public JavaParameter newJavaParameter( Type type, String name, boolean varArgs )
     {
         return new DefaultJavaParameter( type, name, varArgs );
-    }
-
-    public JavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary )
-    {
-        return new DefaultJavaSource(classLibrary);
     }
 
     public Type newType( String fullname )
@@ -86,22 +71,18 @@ public class DefaultJavaMethodTest
         method.setReturns( type );
     }
 
-    public void addClass( JavaSource source, JavaClass clazz )
+    public void setParentClass( DefaultJavaMethod method, JavaClass clazz )
     {
-        ((DefaultJavaClass) clazz).setSource( source );
-        ((DefaultJavaSource) source).addClass( clazz );
+        method.setParentClass( clazz );
     }
 
-    public void addMethod( JavaClass clazz, JavaMethod method )
+    @Override
+    public void setParameters( DefaultJavaMethod method, List<JavaParameter> parameters )
     {
-        ((DefaultJavaClass) clazz).addMethod( method );
-        ((AbstractBaseMethod) method).setParentClass( clazz );
-    }
-
-    public void addParameter( JavaMethod method, JavaParameter parameter )
-    {
-        ((AbstractBaseMethod) method).addParameter( parameter );
-        ((DefaultJavaParameter) parameter).setParentMethod( method );
+        for ( JavaParameter javaParameter : parameters )
+        {
+            method.addParameter( javaParameter );
+        }
     }
 
     public void setSourceCode( DefaultJavaMethod method, String code )

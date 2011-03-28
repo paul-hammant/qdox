@@ -43,11 +43,6 @@ public class DefaultJavaClassTest
         return new DefaultJavaSource(new SortedClassLibraryBuilder().getClassLibrary());
     }
 
-    public Type newType( String fullname )
-    {
-        return new Type( fullname );
-    }
-
     // Add-methods
     public void addClass( JavaClass clazz, JavaClass innerClazz )
     {

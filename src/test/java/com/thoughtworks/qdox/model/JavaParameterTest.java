@@ -10,12 +10,16 @@ public abstract class JavaParameterTest<P extends JavaParameter> extends TestCas
     }
     
     //constructors
-    public abstract P newJavaParameter(Type type, String name);
+    protected abstract P newJavaParameter(Type type, String name);
     
     //setters
-    public abstract void setMethod(P parameter, JavaMethod method);
+    protected abstract void setMethod(P parameter, JavaMethod method);
     
-    public abstract Type newType(String typeName);
+    protected Type newType(String typeName) {
+        Type result = mock(Type.class);
+        when( result.getFullyQualifiedName()).thenReturn( typeName );
+        return result;
+    }
 
     public void testParentMethod() throws Exception {
         P p = newJavaParameter(newType("x"), "x");

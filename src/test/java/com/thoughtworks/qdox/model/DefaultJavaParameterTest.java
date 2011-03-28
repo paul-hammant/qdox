@@ -3,7 +3,7 @@ package com.thoughtworks.qdox.model;
 public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParameter>
 {
 
-    protected DefaultJavaParameterTest( String s )
+    public DefaultJavaParameterTest( String s )
     {
         super( s );
     }

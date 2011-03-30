@@ -1,12 +1,13 @@
 package com.thoughtworks.qdox.model;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.mockito.Mockito.*;
 
 import junit.framework.TestCase;
 
@@ -32,10 +33,15 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     public abstract void setMethods(C clazz, List<JavaMethod> method);
     public abstract void setModifiers(C clazz, List<String> modifiers);
     public abstract void setName(C clazz, String name);
+    public abstract void setPackage(C clazz, JavaPackage pckg);
     public abstract void setSuperClass(C clazz, Type type);
     public abstract void setSource( C clazz, JavaSource source );
     
-    public abstract JavaPackage newJavaPackage(String name);
+    public JavaPackage newJavaPackage(String name) {
+        JavaPackage result = mock(JavaPackage.class);
+        when(result.getName()).thenReturn( name );
+        return result;
+    }
     public abstract JavaParameter newJavaParameter(Type type, String name);
     public abstract JavaParameter newJavaParameter(Type type, String name, boolean varArgs);
     public abstract JavaSource newJavaSource();
@@ -53,7 +59,6 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     public abstract void setPackage(JavaSource source, JavaPackage pckg);
     
     public abstract void addClass(JavaClass clazz, JavaClass innerClazz);
-    public abstract void addClass(JavaPackage pckg, JavaClass clazz);
     public abstract void addClass(JavaSource source, JavaClass clazz);
 
     protected void setUp() throws Exception {
@@ -577,17 +582,17 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     
     public void testInnerClassToString() throws Exception {
     	JavaPackage jPackage = newJavaPackage("com.thoughtworks.qdox.model");
-    	JavaClass jOuterClass = newJavaClass("OuterClass");
-    	addClass(jPackage, jOuterClass);
-    	JavaClass jInnerClass = newJavaClass("InnerClass");
+    	C jOuterClass = newJavaClass("OuterClass");
+    	setPackage(jOuterClass, jPackage);
+    	C jInnerClass = newJavaClass("InnerClass");
     	addClass(jOuterClass, jInnerClass);
     	assertEquals("class com.thoughtworks.qdox.model.OuterClass$InnerClass", jInnerClass.toString());
     }
     
     public void testInnerClassType() {
         JavaPackage jPackage = newJavaPackage("com.thoughtworks.qdox.model");
-        JavaClass jOuterClass = newJavaClass("OuterClass");
-        addClass(jPackage, jOuterClass);
+        C jOuterClass = newJavaClass("OuterClass");
+        setPackage( jOuterClass, jPackage );
         JavaClass jInnerClass = newJavaClass("InnerClass");
         addClass(jOuterClass, jInnerClass);
         assertEquals("com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.asType().getValue());
@@ -595,8 +600,8 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     
     public void testInnerInterfaceToString() {
     	JavaPackage jPackage = newJavaPackage("com.thoughtworks.qdox.model");
-    	JavaClass jOuterClass = newJavaClass("OuterClass");
-    	addClass(jPackage, jOuterClass);
+    	C jOuterClass = newJavaClass("OuterClass");
+    	setPackage( jOuterClass, jPackage );
     	C jInnerInterface = newJavaClass("InnerInterface");
     	setInterface(jInnerInterface, true);
     	addClass(jOuterClass, jInnerInterface);

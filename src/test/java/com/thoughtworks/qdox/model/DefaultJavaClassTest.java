@@ -23,11 +23,6 @@ public class DefaultJavaClassTest
         return new DefaultJavaClass( name );
     }
 
-    public JavaPackage newJavaPackage( String name )
-    {
-        return new DefaultJavaPackage( name );
-    }
-
     public JavaParameter newJavaParameter( Type type, String name )
     {
         return new DefaultJavaParameter( type, name );
@@ -48,12 +43,6 @@ public class DefaultJavaClassTest
     {
         ((DefaultJavaClass) clazz).addClass( innerClazz );
         ((DefaultJavaClass) innerClazz).setParentClass( clazz );
-    }
-
-    public void addClass( JavaPackage pckg, JavaClass clazz )
-    {
-        ((DefaultJavaPackage) pckg).addClass( clazz );
-        ((DefaultJavaClass) clazz).setJavaPackage( pckg );
     }
 
     public void addClass( JavaSource source, JavaClass clazz )
@@ -91,6 +80,11 @@ public class DefaultJavaClassTest
     public void setName( DefaultJavaClass clazz, String name )
     {
         clazz.setName( name );
+    }
+
+    public void setPackage( DefaultJavaClass clazz, JavaPackage pckg )
+    {
+        clazz.setJavaPackage( pckg );
     }
 
     public void setPackage( JavaSource source, JavaPackage pckg )

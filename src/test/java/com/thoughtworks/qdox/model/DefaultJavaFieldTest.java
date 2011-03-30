@@ -28,18 +28,6 @@ public class DefaultJavaFieldTest
     }
 
     @Override
-    public Type newType( String fullname )
-    {
-        return new Type( fullname );
-    }
-
-    @Override
-    public Type newType( String fullname, int dimensions )
-    {
-        return new Type( fullname, dimensions );
-    }
-
-    @Override
     public void setComment( DefaultJavaField fld, String comment )
     {
         fld.setComment( comment );

@@ -25,8 +25,27 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
     public abstract void setType(F fld, Type type);
     public abstract void setDeclaringClass(F fld, JavaClass cls);
     
-    public abstract Type newType(String fullname);
-    public abstract Type newType(String fullname, int dimensions);
+    public Type newType( String fullname )
+    {
+        return newType( fullname, 0 );
+    }
+
+    public Type newType(String fullname, int dimensions) 
+    {
+        Type result = mock( Type.class );
+        when( result.getFullyQualifiedName() ).thenReturn( fullname );
+        when( result.getValue() ).thenReturn( fullname );
+        //@todo fix
+        String toString = fullname;
+        when( result.getDimensions()).thenReturn( dimensions );
+        for(int i = 0; i < dimensions; i++)
+        {
+            toString += "[]";
+        }
+        when( result.toString() ).thenReturn( toString );
+        return result;
+    }
+    
     
     public void testGetCodeBlock() throws Exception {
         F fld = newJavaField();

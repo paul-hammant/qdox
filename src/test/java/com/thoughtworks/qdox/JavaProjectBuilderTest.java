@@ -461,7 +461,10 @@ public class JavaProjectBuilderTest extends TestCase
         JavaMethod getFoo = propertyClass.getMethodBySignature("getFoo", null);
         JavaMethod isBar = propertyClass.getMethodBySignature("isBar", null);
         JavaMethod get = propertyClass.getMethodBySignature("get", null);
-        JavaMethod set = propertyClass.getMethodBySignature("set", Collections.singletonList(new Type("int")));
+        Type intType = mock( Type.class );
+        when( intType.getValue() ).thenReturn( "int" );
+        when( intType.getDimensions() ).thenReturn( 0 );
+        JavaMethod set = propertyClass.getMethodBySignature( "set", Collections.singletonList( intType ) );
 
         JavaMethod protectedMethod = propertyClass.getMethodBySignature("protectedMethod", null);
         JavaMethod privateMethod = propertyClass.getMethodBySignature("privateMethod", null);

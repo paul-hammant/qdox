@@ -13,5 +13,7 @@ public interface JavaConstructor
     public List<Type> getExceptions();
 
     public String getSourceCode();
+    
+    public String getCodeBlock();
 
 }

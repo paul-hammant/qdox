@@ -132,13 +132,6 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         assertEquals("void blah() throws RuntimeException, java.lang.SheepException, CowException;\n", mth.getCodeBlock());
     }
 
-    public void testGetCodeBlockConstructor() throws Exception {
-        setName(mth, "Blah");
-        setModifiers(mth, Arrays.asList(new String[]{"public"}));
-        setConstructor(mth, true);
-        assertEquals("public Blah();\n", mth.getCodeBlock());
-    }
-
     public void testGetCodeBlockWithComment() throws Exception {
         setName(mth, "blah");
         setReturns(mth, newType("void"));

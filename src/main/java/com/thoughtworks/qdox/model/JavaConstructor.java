@@ -9,11 +9,15 @@ public interface JavaConstructor
     public List<JavaParameter> getParameters();
 
     public JavaParameter getParameterByName( String name );
-
+    
+    public List<Type> getParameterTypes();
+    
     public List<Type> getExceptions();
 
     public String getSourceCode();
     
     public String getCodeBlock();
+
+    public boolean isVarArgs();
 
 }

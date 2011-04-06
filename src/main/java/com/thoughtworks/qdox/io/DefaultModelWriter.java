@@ -176,9 +176,11 @@ public class DefaultModelWriter implements ModelWriter
         
         if (constructor.getExceptions().size() > 0) {
             buffer.write(" throws ");
-            for (Iterator<Type> excIter = constructor.getExceptions().iterator();excIter.hasNext();) {
+            for (Iterator<Type> excIter = constructor.getExceptions().iterator();excIter.hasNext();) 
+            {
                 buffer.write(excIter.next().getValue());
-                if(excIter.hasNext()) {
+                if(excIter.hasNext()) 
+                {
                     buffer.write(", ");
                 }
             }
@@ -186,7 +188,10 @@ public class DefaultModelWriter implements ModelWriter
         
         buffer.write( " {" );
         buffer.newline();
-        buffer.write( constructor.getSourceCode() );
+        if( constructor.getSourceCode() != null )
+        {
+          buffer.write( constructor.getSourceCode() );
+        }
         buffer.write( "}" );
         buffer.newline();
         

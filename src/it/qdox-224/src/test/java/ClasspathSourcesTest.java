@@ -19,8 +19,7 @@ public class ClasspathSourcesTest
         JavaProjectBuilder builder = new JavaProjectBuilder();
         builder.addClassLoader( ClassLoader.getSystemClassLoader() );
         JavaClass clazz = builder.getClassByName( "org.apache.commons.lang.BitField" );
-        //0 is constructor...
-        JavaMethod method = clazz.getMethods().get( 1 );
+        JavaMethod method = clazz.getMethods().get( 0 );
         assertEquals( "getValue", method.getName() );
         assertEquals( "holder", method.getParameters().get( 0 ).getName() );
         assertEquals( "see", method.getTags().get( 0 ).getName() );

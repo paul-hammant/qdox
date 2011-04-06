@@ -260,18 +260,24 @@ public class ModelBuilderTest extends TestCase {
 
     public void testAddMethodsToCorrectClass() throws Exception {
         builder.beginClass(new ClassDef());
-        builder.addMethod(new MethodDef());
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());
         builder.endClass();
 
         builder.beginClass(new ClassDef());
-        builder.addMethod(new MethodDef());
-        builder.addMethod(new MethodDef());
-        builder.addMethod(new MethodDef());
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());
         builder.endClass();
 
         builder.beginClass(new ClassDef());
-        builder.addMethod(new MethodDef());
-        builder.addMethod(new MethodDef());
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -293,12 +299,14 @@ public class ModelBuilderTest extends TestCase {
 
         MethodDef fooDef = new MethodDef();
         fooDef.name = "foo";
-        builder.addMethod(fooDef);
+        builder.beginMethod();
+        builder.endMethod(fooDef);
         builder.endClass();
 
         MethodDef barDef = new MethodDef();
         barDef.name = "bar";
-        builder.addMethod(barDef);
+        builder.beginMethod();
+        builder.endMethod(barDef);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -319,7 +327,8 @@ public class ModelBuilderTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        builder.addMethod(mth);
+        builder.beginMethod();
+        builder.endMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -339,7 +348,8 @@ public class ModelBuilderTest extends TestCase {
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         mth.dimensions = 0;
-        builder.addMethod(mth);
+        builder.beginMethod();
+        builder.endMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -353,7 +363,8 @@ public class ModelBuilderTest extends TestCase {
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         mth.dimensions = 1;
-        builder.addMethod(mth);
+        builder.beginMethod();
+        builder.endMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -367,7 +378,8 @@ public class ModelBuilderTest extends TestCase {
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         mth.dimensions = 2;
-        builder.addMethod(mth);
+        builder.beginMethod();
+        builder.endMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -377,9 +389,9 @@ public class ModelBuilderTest extends TestCase {
 
     public void testMethodParameters() throws Exception {
         builder.beginClass(new ClassDef());
-        MethodDef mth = new MethodDef();
+        builder.beginMethod();
 
-        builder.addMethod(mth);
+        MethodDef mth = new MethodDef();
 
         FieldDef f1 = new FieldDef();
         f1.name = "count";
@@ -392,6 +404,7 @@ public class ModelBuilderTest extends TestCase {
         f2.type = new TypeDef("String");
         builder.addParameter( f2 );
 
+        builder.endMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -405,8 +418,8 @@ public class ModelBuilderTest extends TestCase {
 
     public void testMethodParametersWithArrays() throws Exception {
         builder.beginClass(new ClassDef());
+        builder.beginMethod();
         MethodDef mth = new MethodDef();
-        builder.addMethod(mth);
 
         FieldDef f1 = new FieldDef();
         f1.name = "count";
@@ -422,6 +435,7 @@ public class ModelBuilderTest extends TestCase {
         f2.dimensions = 2;
         builder.addParameter( f2 );
 
+        builder.endMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -437,7 +451,8 @@ public class ModelBuilderTest extends TestCase {
         mth.exceptions.add(new TypeDef("RuntimeException"));
         mth.exceptions.add(new TypeDef("java.io.IOException"));
 
-        builder.addMethod(mth);
+        builder.beginMethod();
+        builder.endMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -457,7 +472,8 @@ public class ModelBuilderTest extends TestCase {
         mth.modifiers.add("final");
         mth.modifiers.add("synchronized");
 
-        builder.addMethod(mth);
+        builder.beginMethod();
+        builder.endMethod(mth);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -564,12 +580,14 @@ public class ModelBuilderTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
-        builder.addMethod(mth);
+        builder.beginMethod();
+        builder.endMethod(mth);
 
         MethodDef mth2 = new MethodDef();
         mth2.name = "method";
         mth2.returnType = new TypeDef("void");
-        builder.addMethod(mth2);
+        builder.beginMethod();
+        builder.endMethod(mth2);
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -616,7 +634,8 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
 
         builder.addJavaDoc("Hello");
-        builder.addMethod(new MethodDef());
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -645,15 +664,18 @@ public class ModelBuilderTest extends TestCase {
         builder.addField(new FieldDef());// f0
 
         builder.addJavaDoc("Hello");
-        builder.addMethod(new MethodDef());//m0
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());//m0
 
         builder.addJavaDoc("Hello field");
         builder.addField(new FieldDef());//f1
 
-        builder.addMethod(new MethodDef());//m1
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());//m1
 
         builder.addJavaDoc("World");
-        builder.addMethod(new MethodDef());//m2
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());//m2
 
         builder.endClass();
 
@@ -725,7 +747,8 @@ public class ModelBuilderTest extends TestCase {
 
         builder.addJavaDoc("");
         builder.addJavaDocTag(new TagDef("food", "is great"));
-        builder.addMethod(new MethodDef());
+        builder.beginMethod();
+        builder.endMethod(new MethodDef());
 
         builder.addJavaDoc("");
         builder.addJavaDocTag(new TagDef("chairs", "are boring"));

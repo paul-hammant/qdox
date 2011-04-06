@@ -79,10 +79,7 @@ public class DefaultJavaMethodTest
     @Override
     public void setParameters( DefaultJavaMethod method, List<JavaParameter> parameters )
     {
-        for ( JavaParameter javaParameter : parameters )
-        {
-            method.addParameter( javaParameter );
-        }
+        method.setParameters( parameters );
     }
 
     public void setSourceCode( DefaultJavaMethod method, String code )

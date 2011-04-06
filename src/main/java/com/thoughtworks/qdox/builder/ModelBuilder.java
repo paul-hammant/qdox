@@ -19,6 +19,7 @@ package com.thoughtworks.qdox.builder;
  * under the License.
  */
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,7 @@ import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.TypeVariable;
@@ -55,6 +57,7 @@ public class ModelBuilder implements Builder {
 
     private final DefaultJavaSource source;
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
+    private List<DefaultJavaParameter> parameterList = new LinkedList<DefaultJavaParameter>();
     private DefaultJavaConstructor currentConstructor;
     private DefaultJavaMethod currentMethod;
     private List<AnnoDef> currentAnnoDefs;
@@ -256,18 +259,20 @@ public class ModelBuilder implements Builder {
         }
 
         // modifiers
-//        currentConstructor.setModifiers(new LinkedList<String>( def.modifiers ));
+//        currentConstructor.setModifiers( new LinkedList<String>( def.modifiers ) );
         currentMethod.setModifiers(new LinkedList<String>(def.modifiers) );
+
+        if( !parameterList.isEmpty() ) 
+        {
+//            currentConstructor.setParameters( new ArrayList<JavaParameter>( parameterList ) );
+            currentMethod.setParameters( new ArrayList<JavaParameter>( parameterList ) );
+            parameterList.clear();
+        }
         
 //        currentConstructor.setSourceCode(def.body);
         currentMethod.setSourceCode( def.body );
     }
 
-    public void addMethod(MethodDef def) {
-    	beginMethod();
-    	endMethod(def);
-    }
-    
     public void beginMethod() {
     	currentMethod = new DefaultJavaMethod();
     	currentMethod.setParentClass(classStack.getFirst());
@@ -299,19 +304,20 @@ public class ModelBuilder implements Builder {
         }
         
         // exceptions
-        {
-            List<Type> exceptions = new LinkedList<Type>();
-            for (TypeDef type : def.exceptions) {
-                exceptions.add(createType(type, 0));
-            }
-            currentMethod.setExceptions(exceptions);
+        List<Type> exceptions = new LinkedList<Type>();
+        for (TypeDef type : def.exceptions) {
+            exceptions.add(createType(type, 0));
         }
+        currentMethod.setExceptions(exceptions);
 
         // modifiers
-        {
-            currentMethod.setModifiers(new LinkedList<String>( def.modifiers ));
-        }
+        currentMethod.setModifiers(new LinkedList<String>( def.modifiers ));
         
+        if( !parameterList.isEmpty() ) {
+            currentMethod.setParameters( new ArrayList<JavaParameter>( parameterList ) );
+            parameterList.clear();
+        }
+
         currentMethod.setSourceCode(def.body);
     }
 
@@ -355,7 +361,7 @@ public class ModelBuilder implements Builder {
         jParam.setModelWriterFactory(modelWriterFactory);
         addJavaDoc( jParam );
         setAnnotations( jParam );
-        currentMethod.addParameter( jParam );
+        parameterList.add( jParam );
 	}
 
     private void setAnnotations( final AbstractBaseJavaEntity entity ) {

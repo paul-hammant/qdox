@@ -50,10 +50,10 @@ public abstract class AbstractBaseMethod
         return getParentClass();
     }
 
-    public void addParameter( JavaParameter javaParameter )
+    public void setParameters( List<JavaParameter> javaParameters )
     {
-        parameters.add( javaParameter );
-        this.varArgs = javaParameter.isVarArgs();
+        parameters.addAll( javaParameters );
+        this.varArgs = javaParameters.get( javaParameters.size() -1 ).isVarArgs();
     }
 
     public void setExceptions( List<Type> exceptions )

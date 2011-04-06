@@ -159,7 +159,7 @@ public class BinaryClassParser
             Class<?> exception = exceptions[j];
             methodDef.exceptions.add(getTypeDef(exception));
         }
-        binaryBuilder.addMethod(methodDef);
+        binaryBuilder.beginMethod();
         for (int j = 0; j < parameterTypes.length; j++) {
             FieldDef param = new FieldDef();
             Class<?> parameterType = parameterTypes[j];
@@ -168,6 +168,7 @@ public class BinaryClassParser
             param.dimensions = getDimension(parameterType);
             binaryBuilder.addParameter( param );
         }
+        binaryBuilder.endMethod(methodDef);
     }
 
     private static final int getDimension(Class<?> c) {

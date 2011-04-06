@@ -64,18 +64,18 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     public boolean equals( Object obj );
 
     /**
-     * This method is NOT varArg aware. The overloaded method is.
+     * This method is NOT varArg aware.
      * 
      * @param name
      * @param parameterTypes
      * @return
-     * @deprecated use overloaded method 
      */
     public boolean signatureMatches( String name, List<Type> parameterTypes );
 
     /**
      * @param name method name
      * @param parameterTypes parameter types or null if there are no parameters.
+     * @param varArg <code>true</code> is signature should match a varArg-method, otherwise <code>false</code>
      * @return true if the signature and parameters match.
      */
     public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg );

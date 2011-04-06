@@ -362,4 +362,19 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     {
         return returns;
     }
+    
+    public boolean signatureMatches( String name, List<Type> parameterTypes )
+    {
+        return signatureMatches( name, parameterTypes, false );
+    }
+    
+    public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg )
+    {
+        if (!name.equals(this.getName())) 
+        {
+            return false;    
+        } 
+        return signatureMatches( parameterTypes, varArg );
+    }
+    
 }

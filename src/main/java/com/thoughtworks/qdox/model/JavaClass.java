@@ -100,10 +100,29 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     
     /**
      * 
-     * @return the list of constrcutors
+     * @return the list of constructors
      * @since 2.0
      */
     public List<JavaConstructor> getConstructors();
+    
+    
+    /**
+     * 
+     * @param parameterTypes
+     * @return the constructor matching the parameterTypes, otherwise <code>null</code>
+     * @since 2.0
+     */
+    public JavaConstructor getConstructor(List<Type> parameterTypes);
+    
+    /**
+     * 
+     * @param parameterTypes
+     * @param varArg
+     * @return the constructor matching the parameterTypes and the varArg, otherwise <code>null</code>
+     * @since 2.0
+     */
+    public JavaConstructor getConstructor(List<Type> parameterTypes, boolean varArg);
+    
 
     /**
      * @since 1.3

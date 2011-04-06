@@ -61,15 +61,8 @@ public abstract class AbstractBaseMethod
         this.exceptions = exceptions;
     }
 
-    public boolean signatureMatches( String name, List<Type> parameterTypes )
+    protected boolean signatureMatches( List<Type> parameterTypes, boolean varArgs )
     {
-        return signatureMatches( name, parameterTypes, false );
-    }
-
-    public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg )
-    {
-        if (!name.equals(this.getName())) return false;
-        
         List<Type> parameterTypeList;
         if( parameterTypes == null) {
             parameterTypeList = Collections.emptyList();
@@ -78,14 +71,18 @@ public abstract class AbstractBaseMethod
             parameterTypeList = parameterTypes;
         }
         
-        if (parameterTypeList.size() != this.getParameters().size()) return false;
+        if (parameterTypeList.size() != this.getParameters().size()) 
+        {
+            return false;   
+        }
         
-        for (int i = 0; i < parameters.size(); i++) {
-            if (!parameters.get(i).getType().equals(parameterTypes.get(i))) {
+        for (int i = 0; i < getParameters().size(); i++) 
+        {
+            if (!getParameters().get(i).getType().equals(parameterTypes.get(i))) {
                 return false;
             }
         }
-        return (this.varArgs == varArg);
+        return (this.varArgs == varArgs);
     }
 
     public boolean isPublic()

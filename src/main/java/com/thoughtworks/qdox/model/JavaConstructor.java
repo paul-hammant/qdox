@@ -2,6 +2,11 @@ package com.thoughtworks.qdox.model;
 
 import java.util.List;
 
+/**
+ * 
+ * @author Robert
+ * @since 2.0
+ */
 public interface JavaConstructor
     extends JavaAnnotatedElement, JavaGenericDeclaration, JavaMember
 {
@@ -19,5 +24,9 @@ public interface JavaConstructor
     public String getCodeBlock();
 
     public boolean isVarArgs();
+
+    public boolean signatureMatches( List<Type> parameterTypes );
+
+    public boolean signatureMatches( List<Type> parameterTypes, boolean varArgs );
 
 }

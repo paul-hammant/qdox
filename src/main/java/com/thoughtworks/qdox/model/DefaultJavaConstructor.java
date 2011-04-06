@@ -3,6 +3,11 @@ package com.thoughtworks.qdox.model;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * 
+ * @author Robert
+ * @since 2.0
+ */
 public class DefaultJavaConstructor
     extends AbstractBaseMethod implements JavaConstructor
 {
@@ -13,6 +18,16 @@ public class DefaultJavaConstructor
         return 0;
     }
 
+    public boolean signatureMatches( List<Type> parameterTypes )
+    {
+        return signatureMatches( parameterTypes, false );
+    }
+    
+    public boolean signatureMatches( List<Type> parameterTypes, boolean varArgs )
+    {
+        return super.signatureMatches( parameterTypes, varArgs );
+    }
+    
     public String getCodeBlock()
     {
         return getModelWriter().writeConstructor( this ).toString();

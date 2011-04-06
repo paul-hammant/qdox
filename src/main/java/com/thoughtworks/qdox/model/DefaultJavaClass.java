@@ -322,9 +322,35 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         return type;
     }
 
+    /**
+     * @since 2.0
+     */
     public List<JavaConstructor> getConstructors()
     {
         return constructors;
+    }
+    
+    /**
+     * @since 2.0
+     */
+    public JavaConstructor getConstructor( List<Type> parameterTypes )
+    {
+        return getConstructor( parameterTypes, false );
+    }
+    
+    /**
+     * @since 2.0
+     */
+    public JavaConstructor getConstructor( List<Type> parameterTypes, boolean varArgs )
+    {
+        for ( JavaConstructor constructor : getConstructors() )
+        {
+            if ( constructor.signatureMatches( parameterTypes, varArgs ) )
+            {
+                return constructor;
+            }
+        }
+        return null;
     }
     
     /* (non-Javadoc)
@@ -397,7 +423,6 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
                 return method;
             }
         }
-
         return null;
     }
     

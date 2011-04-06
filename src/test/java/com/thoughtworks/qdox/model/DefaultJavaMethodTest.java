@@ -51,11 +51,6 @@ public class DefaultJavaMethodTest
         method.setComment( comment );
     }
 
-    public void setConstructor( DefaultJavaMethod method, boolean isConstructor )
-    {
-        method.setConstructor( isConstructor );
-    }
-
     public void setName( DefaultJavaMethod method, String name )
     {
         method.setName( name );

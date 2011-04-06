@@ -213,13 +213,10 @@ public class DefaultModelWriter implements ModelWriter
             writeNonAccessibilityModifiers( method.getModifiers() );
         }
 
-        if ( !method.isConstructor() )
+        if ( isDeclaration )
         {
-            if ( isDeclaration )
-            {
-                buffer.write( method.getReturns().toString() );
-                buffer.write( ' ' );
-            }
+            buffer.write( method.getReturns().toString() );
+            buffer.write( ' ' );
         }
 
         buffer.write( method.getName() );

@@ -269,7 +269,6 @@ public class ModelBuilder implements Builder {
         // basic details
         currentMethod.setName(def.name);
         currentMethod.setReturns(createType(def.returnType, def.dimensions));
-        currentMethod.setConstructor(def.constructor);
 
         // typeParameters
         if (def.typeParams != null) {

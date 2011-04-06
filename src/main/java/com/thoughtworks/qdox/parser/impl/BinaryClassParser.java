@@ -88,13 +88,17 @@ public class BinaryClassParser
             // if no constructor exists.
             Constructor<?>[] constructors = clazz.getDeclaredConstructors();
             for (int i = 0; i < constructors.length; i++) {
-                addMethodOrConstructor(constructors[i], binaryBuilder);
+                binaryBuilder.beginConstructor();
+                MethodDef methodDef = createMethodDef(constructors[i], binaryBuilder);
+                binaryBuilder.endConstructor( methodDef );
             }
 
             // add the methods
             Method[] methods = clazz.getDeclaredMethods();
             for (int i = 0; i < methods.length; i++) {
-                addMethodOrConstructor(methods[i], binaryBuilder);
+                binaryBuilder.beginMethod();
+                MethodDef methodDef = createMethodDef(methods[i], binaryBuilder);
+                binaryBuilder.endMethod( methodDef );
             }
 
             Field[] fields = clazz.getDeclaredFields();
@@ -127,7 +131,7 @@ public class BinaryClassParser
         binaryBuilder.addField(fieldDef);
     }
 
-    private void addMethodOrConstructor(Member member, ModelBuilder binaryBuilder) {
+    private MethodDef createMethodDef(Member member, ModelBuilder binaryBuilder) {
         MethodDef methodDef = new MethodDef();
         // The name of constructors are qualified. Need to strip it.
         // This will work for regular methods too, since -1 + 1 = 0
@@ -159,7 +163,6 @@ public class BinaryClassParser
             Class<?> exception = exceptions[j];
             methodDef.exceptions.add(getTypeDef(exception));
         }
-        binaryBuilder.beginMethod();
         for (int j = 0; j < parameterTypes.length; j++) {
             FieldDef param = new FieldDef();
             Class<?> parameterType = parameterTypes[j];
@@ -168,7 +171,7 @@ public class BinaryClassParser
             param.dimensions = getDimension(parameterType);
             binaryBuilder.addParameter( param );
         }
-        binaryBuilder.endMethod(methodDef);
+        return methodDef;
     }
 
     private static final int getDimension(Class<?> c) {

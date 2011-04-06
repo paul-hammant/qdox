@@ -24,7 +24,6 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
     //setters
     public abstract void setExceptions(M method, List<Type> exceptions);
     public abstract void setComment(M method, String comment);
-    public abstract void setConstructor(M method, boolean isConstructor);
     public abstract void setName(M method, String name);
     public abstract void setModifiers(M method, List<String> modifiers);
     public abstract void setParameters(M method, List<JavaParameter> parameters);
@@ -192,25 +191,10 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         setName(m4, "thing");
         setReturns(m4, newType("int"));
 
-        M c1 = newJavaMethod();
-        setName(c1, "thing");
-        setConstructor(c1, true);
-        
-        M c2 = newJavaMethod();
-        setName(c2, "Thong");
-        setConstructor(c2, true);
-        
-        M c3 = newJavaMethod();
-        setName(c3, "Thong");
-        setConstructor(c3, true);
-        
         assertEquals(mth, m2);
         assertEquals(m2, mth);
         assertNotEquals(mth, m3);
         assertNotEquals(mth, m4);
-        assertNotEquals(m4, c1);
-        assertNotEquals(c1, c2);
-        assertEquals(c2, c3);
         assertFalse(mth.equals(null));
     }
 
@@ -263,17 +247,8 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         setParameters(m3, Arrays.asList( newJavaParameter(newType("int", 1), "blah"), newJavaParameter(newType("java.lang.String", 2), "thing")));
         setReturns(m3, newType("void"));
 
-        M c1 = newJavaMethod();
-        setName(c1, "Thong");
-        setConstructor(c1, true);
-        
-        M c2 = newJavaMethod();
-        setName(c2, "Thong");
-        setConstructor(c2, true);
-        
         assertEquals(mth.hashCode(), m2.hashCode());
         assertTrue(mth.hashCode() != m3.hashCode());
-        assertEquals(c1.hashCode(), c2.hashCode());
     }
 
     public void testSignatureMatches() throws Exception {
@@ -355,31 +330,6 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
     	assertEquals("public boolean java.lang.Object.equals(java.lang.Object)", mthd.toString());
     }
     
-    public void testConstructorToString() throws Exception {
-        JavaClass cls = mock(JavaClass.class);
-        when(cls.getFullyQualifiedName()).thenReturn( "a.b.Executor" );
-        M constructor = newJavaMethod(null,"Executor");
-        setConstructor( constructor, true );
-        setParentClass( constructor, cls );
-        assertEquals("a.b.Executor()", constructor.toString());
-    }
-
-    public void testConstructorReturnType() throws Exception {
-        M constructor = newJavaMethod(null,"Executor");
-        setConstructor( constructor, true );
-        assertEquals(null, constructor.getReturnType());
-    }
-
-    public void testConstructorParameterTypes() throws Exception {
-        JavaClass cls = mock(JavaClass.class);
-        when(cls.getFullyQualifiedName()).thenReturn( "a.b.Executor" );
-        M constructor = newJavaMethod(null,"Executor");
-        setParameters( constructor,  Collections.singletonList( newJavaParameter( newType("a.b.C"), "param" )  ));
-        setConstructor( constructor, true );
-        setParentClass( constructor, cls );
-        assertEquals("a.b.C", constructor.getParameterTypes().get(0).toString());
-    }
-
     private void assertNotEquals(Object o1, Object o2) {
         assertTrue(o1.toString() + " should not equals " + o2.toString(), !o1.equals(o2));
     }

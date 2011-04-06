@@ -39,12 +39,6 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
 
     /**
      * 
-     * @return true is this method is a constructor
-     */
-    public boolean isConstructor();
-
-    /**
-     * 
      * @return true is this method conains varArgs
      */
     public boolean isVarArgs();

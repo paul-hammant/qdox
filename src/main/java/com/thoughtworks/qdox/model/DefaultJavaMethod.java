@@ -29,7 +29,6 @@ import com.thoughtworks.qdox.io.IndentBuffer;
 public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod {
 
 	private Type returns = Type.VOID;
-    private boolean constructor;
     /**
      * The default constructor
      */
@@ -63,13 +62,6 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         return returns;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#isConstructor()
-     */
-    public boolean isConstructor() {
-        return constructor;
-    }
-    
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getCodeBlock()
      */
@@ -120,11 +112,9 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
             }
         }
 
-        if (!constructor) {
-            if(isDeclaration) {
-                result.write(returns.toString());
-                result.write(' ');
-            }
+        if(isDeclaration) {
+            result.write(returns.toString());
+            result.write(' ');
         }
 
         result.write(getName());
@@ -179,18 +169,12 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         this.returns = returns;
     }
 
-    public void setConstructor(boolean constructor) {
-        this.constructor = constructor;
-    }
-
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
         if (obj == null) return false;
         JavaMethod m = (JavaMethod) obj;
-
-        if (m.isConstructor() != isConstructor()) return false;
 
         if (m.getName() == null) return (getName() == null);
         if (!m.getName().equals(getName())) return false;
@@ -307,18 +291,12 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
 		if(isNative()) {
 			result.append("native ");
 		}
-		if (!constructor) {
-		    result.append(getReturns().getValue() + " ");
-		}
+	    result.append(getReturns().getValue() + " ");
 		if(getParentClass() != null) {
 			result.append(getParentClass().getFullyQualifiedName());
-			if (!constructor) {
-			    result.append(".");
-			}
+		    result.append(".");
 		}
-		if (!constructor) {
-		    result.append(getName());
-		}
+	    result.append(getName());
 		result.append("(");
 		for(int paramIndex=0;paramIndex<getParameters().size();paramIndex++) {
 			if(paramIndex>0) {

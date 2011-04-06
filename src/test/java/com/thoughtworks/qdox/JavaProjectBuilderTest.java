@@ -484,13 +484,6 @@ public class JavaProjectBuilderTest extends TestCase
         assertNotNull(privateMethod);
         assertNull(shouldntBeInherited);
 
-        assertFalse(getFoo.isConstructor());
-        assertFalse(isBar.isConstructor());
-        assertFalse(get.isConstructor());
-        assertFalse(set.isConstructor());
-        assertFalse(protectedMethod.isConstructor());
-        assertFalse(privateMethod.isConstructor());
-
         assertTrue(getFoo.isStatic());
         assertFalse(isBar.isStatic());
         assertFalse(get.isStatic());
@@ -514,9 +507,6 @@ public class JavaProjectBuilderTest extends TestCase
         JavaClass javaClass = builder.getClassByName("com.thoughtworks.qdox.testdata.DefaultCtor");
 
         JavaMethod ctor = javaClass.getMethodBySignature("DefaultCtor", null);
-
-        // Differs from binary as currently no way to identify default
-        // constructor in binary class.
         assertNull(ctor);
     }
 
@@ -524,10 +514,7 @@ public class JavaProjectBuilderTest extends TestCase
         JavaClass javaClass = builder.getClassByName("com.thoughtworks.qdox.testdata.DefaultCtor");
 
         JavaMethod ctor = javaClass.getMethodBySignature("DefaultCtor", null);
-
-        // Differs from source as currently no way to identify default 
-        // constructor in binary class.
-        assertNotNull(ctor);
+        assertNull(ctor);
     }
 
     /*

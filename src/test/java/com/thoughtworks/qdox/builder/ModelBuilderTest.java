@@ -9,6 +9,7 @@ import com.thoughtworks.qdox.library.ClassNameLibrary;
 import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
 import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
@@ -577,27 +578,25 @@ public class ModelBuilderTest extends TestCase {
     public void testSimpleConstructor() throws Exception {
         builder.beginClass(new ClassDef());
 
-        MethodDef mth = new MethodDef();
-        mth.name = "MyClass";
-        mth.constructor = true;
-        builder.beginMethod();
-        builder.endMethod(mth);
+        MethodDef c1 = new MethodDef();
+        c1.name = "MyClass";
+        builder.beginConstructor();
+        builder.endConstructor(c1);
 
-        MethodDef mth2 = new MethodDef();
-        mth2.name = "method";
-        mth2.returnType = new TypeDef("void");
+        MethodDef m1 = new MethodDef();
+        m1.name = "method";
+        m1.returnType = new TypeDef("void");
         builder.beginMethod();
-        builder.endMethod(mth2);
+        builder.endMethod(m1);
         builder.endClass();
 
         JavaSource source = builder.getSource();
 
-        JavaMethod result1 = source.getClasses().get(0).getMethods().get(0);
-        JavaMethod result2 = source.getClasses().get(0).getMethods().get(1);
+        JavaConstructor result1 = source.getClasses().get(0).getConstructors().get(0);
+        JavaMethod result2 = source.getClasses().get(0).getMethods().get(0);
 
-        assertTrue(result1.isConstructor());
-        assertNull(result1.getReturns());
-        assertTrue(!result2.isConstructor());
+        assertNotNull(result1);
+        assertNotNull(result2);
         assertNotNull(result2.getReturns());
     }
 

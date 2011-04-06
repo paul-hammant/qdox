@@ -221,11 +221,6 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.isAbstract();
     }
 
-    public boolean isConstructor()
-    {
-        return originalMethod.isConstructor();
-    }
-
     public boolean isFinal()
     {
         return originalMethod.isFinal();

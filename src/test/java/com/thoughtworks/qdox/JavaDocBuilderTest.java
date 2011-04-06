@@ -1,6 +1,9 @@
 package com.thoughtworks.qdox;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,6 +24,7 @@ import com.thoughtworks.qdox.model.BeanProperty;
 import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
@@ -452,11 +456,11 @@ public class JavaDocBuilderTest extends TestCase {
         assertEquals(1, propertyClass.getBeanProperties().size());
 
         // test ctor, methods and fields
-        List<JavaMethod> methods = propertyClass.getMethods();
-        assertEquals(8, methods.size());
+        assertEquals(6, propertyClass.getMethods().size());
+        assertEquals(2, propertyClass.getConstructors().size());
 
-        JavaMethod ctor = propertyClass.getMethodBySignature("PropertyClass", null);
-        JavaMethod ctor2 = propertyClass.getMethodBySignature("PropertyClass", Collections.singletonList(propertyClass.asType()));
+        JavaConstructor ctor = propertyClass.getConstructor( null );
+        JavaConstructor ctor2 = propertyClass.getConstructor(Collections.singletonList(propertyClass.asType()));
         JavaMethod getFoo = propertyClass.getMethodBySignature("getFoo", null);
         JavaMethod isBar = propertyClass.getMethodBySignature("isBar", null);
         JavaMethod get = propertyClass.getMethodBySignature("get", null);
@@ -479,8 +483,6 @@ public class JavaDocBuilderTest extends TestCase {
         assertNotNull(privateMethod);
         assertNull(shouldntBeInherited);
 
-        assertTrue(ctor.isConstructor());
-        assertTrue(ctor2.isConstructor());
         assertFalse(getFoo.isConstructor());
         assertFalse(isBar.isConstructor());
         assertFalse(get.isConstructor());

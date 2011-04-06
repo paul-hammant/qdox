@@ -202,41 +202,25 @@ public class ModelBuilder implements Builder {
         lastComment = null;
     }
     
-    public void addConstructor(MethodDef def) {
-        beginConstructor();
-        endConstructor(def);
-    }
-    
-    
-
     public void beginConstructor()
     {
-//        currentConstructor = new DefaultJavaConstructor();
-        currentMethod = new DefaultJavaMethod();
-        currentMethod.setConstructor( true );
+        currentConstructor = new DefaultJavaConstructor();
 
-//        currentConstructor.setParentClass( classStack.getFirst() );
-        currentMethod.setParentClass( classStack.getFirst() );
-//        classStack.getFirst().addConstructor( currentConstructor );
-        classStack.getFirst().addMethod( currentMethod );
-//        
-//        currentConstructor.setModelWriterFactory( modelWriterFactory );
-        currentMethod.setModelWriterFactory( modelWriterFactory );
-//        
-//        addJavaDoc( currentConstructor );
-        addJavaDoc( currentMethod );
-//        setAnnotations( currentConstructor );
-        setAnnotations( currentMethod );
+        currentConstructor.setParentClass( classStack.getFirst() );
+        classStack.getFirst().addConstructor( currentConstructor );
+
+        currentConstructor.setModelWriterFactory( modelWriterFactory );
+
+        addJavaDoc( currentConstructor );
+        setAnnotations( currentConstructor );
     }
 
     public void endConstructor( MethodDef def )
     {
-//        currentConstructor.setLineNumber(def.lineNumber);
-        currentMethod.setLineNumber( def.lineNumber );
+        currentConstructor.setLineNumber(def.lineNumber);
 
         // basic details
-//        currentConstructor.setName(def.name);
-        currentMethod.setName( def.name );
+        currentConstructor.setName(def.name);
 
         // typeParameters
         if (def.typeParams != null) {
@@ -244,33 +228,26 @@ public class ModelBuilder implements Builder {
             for(TypeVariableDef typeVariableDef : def.typeParams) {
                 typeParams.add(createTypeVariable(typeVariableDef));
             }
-//            currentConstructor.setTypeParameters(typeParams);
-            currentMethod.setTypeParameters( typeParams );
+            currentConstructor.setTypeParameters(typeParams);
         }
         
         // exceptions
-        {
-            List<Type> exceptions = new LinkedList<Type>();
-            for (TypeDef type : def.exceptions) {
-                exceptions.add(createType(type, 0));
-            }
-//            currentConstructor.setExceptions(exceptions);
-            currentMethod.setExceptions( exceptions );
+        List<Type> exceptions = new LinkedList<Type>();
+        for (TypeDef type : def.exceptions) {
+            exceptions.add(createType(type, 0));
         }
+        currentConstructor.setExceptions(exceptions);
 
         // modifiers
-//        currentConstructor.setModifiers( new LinkedList<String>( def.modifiers ) );
-        currentMethod.setModifiers(new LinkedList<String>(def.modifiers) );
+        currentConstructor.setModifiers( new LinkedList<String>( def.modifiers ) );
 
         if( !parameterList.isEmpty() ) 
         {
-//            currentConstructor.setParameters( new ArrayList<JavaParameter>( parameterList ) );
-            currentMethod.setParameters( new ArrayList<JavaParameter>( parameterList ) );
+            currentConstructor.setParameters( new ArrayList<JavaParameter>( parameterList ) );
             parameterList.clear();
         }
         
-//        currentConstructor.setSourceCode(def.body);
-        currentMethod.setSourceCode( def.body );
+        currentConstructor.setSourceCode(def.body);
     }
 
     public void beginMethod() {

@@ -75,8 +75,59 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
      */
     private String getSignature( boolean withModifiers, boolean isDeclaration )
     {
-        IndentBuffer result = new IndentBuffer();
-        writeBody(result, withModifiers, isDeclaration, false);
+        StringBuffer result = new StringBuffer();
+        if ( withModifiers ) {
+            for ( String modifier : getModifiers() ) 
+            {
+                // check for public, protected and private
+                if ( modifier.startsWith( "p" ) ) {
+                    result.append( modifier ).append( ' ' );
+                }
+            }
+            for ( String modifier : getModifiers() ) 
+            {
+                // check for public, protected and private
+                if ( !modifier.startsWith( "p" ) ) 
+                {
+                    result.append( modifier ).append( ' ' );
+                }
+            }
+        }
+
+        if(isDeclaration) {
+            result.append(returns.toString());
+            result.append(' ');
+        }
+
+        result.append(getName());
+        result.append('(');
+        for (ListIterator<JavaParameter> iter = getParameters().listIterator(); iter.hasNext();) {
+            JavaParameter parameter = iter.next();
+            if (isDeclaration) {
+                result.append(parameter.getType().toString());
+                if (parameter.isVarArgs()) {
+                    result.append("...");
+                }
+                result.append(' ');
+            }
+            result.append(parameter.getName());
+            if (iter.hasNext()) 
+            {
+                result.append(", ");
+            }
+        }
+        result.append(')');
+        if (isDeclaration) {
+            if (exceptions.size() > 0) {
+                result.append(" throws ");
+                for(Iterator<Type> excIter = exceptions.iterator();excIter.hasNext();) {
+                    result.append(excIter.next().getValue());
+                    if(excIter.hasNext()) {
+                        result.append(", ");
+                    }
+                }
+            }
+        }
         return result.toString();
     }
 
@@ -89,75 +140,6 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     public String getCallSignature()
     {
         return getSignature(false, false);
-    }
-
-    /**
-     * @since 1.3
-     */
-    protected void writeBody(IndentBuffer result, boolean withModifiers, boolean isDeclaration, boolean isPrettyPrint) {
-        if (withModifiers) {
-            for (String modifier : getModifiers()) {
-            	// check for public, protected and private
-                if (modifier.startsWith("p")) {
-                    result.write(modifier);
-                    result.write(' ');
-                }
-            }
-            for (String modifier : getModifiers()) {
-            	// check for public, protected and private
-                if (!modifier.startsWith("p")) {
-                    result.write(modifier);
-                    result.write(' ');
-                }
-            }
-        }
-
-        if(isDeclaration) {
-            result.write(returns.toString());
-            result.write(' ');
-        }
-
-        result.write(getName());
-        result.write('(');
-        for (ListIterator<JavaParameter> iter = getParameters().listIterator(); iter.hasNext();) {
-            JavaParameter parameter = iter.next();
-            if (isDeclaration) {
-                result.write(parameter.getType().toString());
-                if (parameter.isVarArgs()) {
-                    result.write("...");
-                }
-                result.write(' ');
-            }
-            result.write(parameter.getName());
-            if (iter.hasNext()) 
-            {
-                result.write(", ");
-            }
-        }
-        result.write(')');
-        if (isDeclaration) {
-            if (exceptions.size() > 0) {
-                result.write(" throws ");
-                for(Iterator<Type> excIter = exceptions.iterator();excIter.hasNext();) {
-                    result.write(excIter.next().getValue());
-                    if(excIter.hasNext()) {
-                        result.write(", ");
-                    }
-                }
-            }
-        }
-        if (isPrettyPrint) {
-            if (sourceCode != null && sourceCode.length() > 0) {
-                result.write(" {");
-                result.newline();
-                result.write(sourceCode);
-                result.write("}");
-                result.newline();
-            } else {
-                result.write(';');
-                result.newline();
-            }
-        }
     }
 
     /**

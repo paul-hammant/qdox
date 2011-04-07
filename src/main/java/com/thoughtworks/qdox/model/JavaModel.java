@@ -19,9 +19,9 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.util.List;
+import java.io.Serializable;
 
-public interface JavaModel
+public interface JavaModel extends Serializable
 {
     public String getCodeBlock();
 

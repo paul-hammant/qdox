@@ -21,7 +21,8 @@ package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
 
-public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Serializable, JavaParameter {
+public class DefaultJavaParameter extends AbstractBaseJavaEntity implements JavaParameter 
+{
 
     private String name;
     private Type type;
@@ -59,22 +60,6 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Seri
     public Type getType() {
         return type;
     }
-    
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        JavaParameter p = (JavaParameter) obj;
-        // name isn't used in equality check.
-        return getType().equals(p.getType());
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#hashCode()
-     */
-    public int hashCode() {
-        return getType().hashCode();
-    }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaParameter#getParentMethod()
@@ -102,12 +87,6 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Seri
         return varArgs;
     }
     
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#toString()
-     */
-    public String toString() {
-    	return getResolvedValue() + " "+ name;
-    }
     
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaParameter#getResolvedValue()
@@ -122,4 +101,27 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Seri
 	public String getResolvedGenericValue() {
 		return type.getResolvedGenericValue(getParentMethod().getTypeParameters());
 	}
+
+    @Override
+    public int hashCode() {
+        return getType().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        JavaParameter p = (JavaParameter) obj;
+        // name isn't used in equality check.
+        return getType().equals(p.getType());
+    }
+    
+    public int compareTo( JavaParameter o )
+    {
+        return type.compareTo( o );
+    }
+	
+    @Override
+    public String toString() {
+        return getResolvedValue() + " "+ name;
+    }
+	
 }

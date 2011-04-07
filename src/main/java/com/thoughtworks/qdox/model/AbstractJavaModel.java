@@ -1,12 +1,10 @@
 package com.thoughtworks.qdox.model;
 
-import java.io.Serializable;
-
 import com.thoughtworks.qdox.io.DefaultModelWriter;
 import com.thoughtworks.qdox.io.ModelWriter;
 import com.thoughtworks.qdox.io.ModelWriterFactory;
 
-public abstract class AbstractJavaModel implements JavaModel, Serializable {
+public abstract class AbstractJavaModel implements JavaModel {
 
     private ModelWriterFactory modelWriterFactory;
     private JavaSource source;

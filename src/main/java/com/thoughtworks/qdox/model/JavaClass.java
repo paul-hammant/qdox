@@ -251,17 +251,60 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     
     public List<String> getModifiers();
     
+    /**
+     * Return <code>true</code> if the class includes the public modifier, <code>false</code> otherwise.
+     * 
+     * @return <code>true</code> if class the public modifier; <code>false</code> otherwise.
+     */
     public boolean isPublic();
     
+    /**
+     * Return <code>true</code> if the class includes the protected modifier, <code>false</code> otherwise.
+     * 
+     * @return <code>true</code> if class the protected modifier; <code>false</code> otherwise.
+     */
     public boolean isProtected();
     
+    /**
+     * Return <code>true</code> if the class includes the private modifier, <code>false</code> otherwise.
+     * 
+     * @return <code>true</code> if class the private modifier; <code>false</code> otherwise.
+     */
     public boolean isPrivate();
     
+    /**
+     * Return <code>true</code> if the class includes the final modifier, <code>false</code> otherwise.
+     * 
+     * @return <code>true</code> if class the final modifier; <code>false</code> otherwise.
+     */
     public boolean isFinal();
     
+    /**
+     * Return <code>true</code> if the class includes the static modifier, <code>false</code> otherwise.
+     * 
+     * @return <code>true</code> if class the static modifier; <code>false</code> otherwise.
+     */
     public boolean isStatic();
     
+    /**
+     * Return <code>true</code> if the class includes the abstract modifier, <code>false</code> otherwise.
+     * 
+     * @return <code>true</code> if class the abstract modifier; <code>false</code> otherwise.
+     */
     public boolean isAbstract();
     
     public boolean isPrimitive();
+    
+    /**
+     * (API description of java.lang.Class.toString())
+     * 
+     * Converts the object to a string. 
+     * The string representation is the string "class" or "interface", followed by a space, and then by the fully qualified name of the class in the format returned by <code>getName</code>. 
+     * If this <code>Class</code> object represents a primitive type, this method returns the name of the primitive type. 
+     * If this <code>Class</code> object represents void this method returns "void".
+     *  
+     * @return a string representation of this class object.
+     */
+    @Override
+    public String toString();
 }

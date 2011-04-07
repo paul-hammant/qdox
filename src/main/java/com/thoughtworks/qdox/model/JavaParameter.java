@@ -25,16 +25,12 @@ package com.thoughtworks.qdox.model;
  * @author Robert Scholte
  *
  */
-public interface JavaParameter extends JavaAnnotatedElement
+public interface JavaParameter extends JavaAnnotatedElement, Comparable<JavaParameter>
 {
 
     public String getName();
 
     public Type getType();
-
-    public boolean equals( Object obj );
-
-    public int hashCode();
 
     public JavaMethod getParentMethod();
 

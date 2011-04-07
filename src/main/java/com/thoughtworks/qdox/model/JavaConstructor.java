@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * @since 2.0
  */
 public interface JavaConstructor
-    extends JavaAnnotatedElement, JavaGenericDeclaration, JavaMember
+    extends JavaModel, JavaAnnotatedElement, JavaGenericDeclaration, JavaMember, Serializable, Comparable<JavaConstructor>
 {
 
     public List<JavaParameter> getParameters();

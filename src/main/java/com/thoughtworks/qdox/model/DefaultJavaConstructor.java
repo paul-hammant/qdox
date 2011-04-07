@@ -12,12 +12,6 @@ public class DefaultJavaConstructor
     extends AbstractBaseMethod implements JavaConstructor
 {
 
-    public int compareTo( Object o )
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
     public boolean signatureMatches( List<Type> parameterTypes )
     {
         return signatureMatches( parameterTypes, false );
@@ -33,6 +27,7 @@ public class DefaultJavaConstructor
         return getModelWriter().writeConstructor( this ).toString();
     }
     
+    @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
         if(isPrivate()) {
@@ -68,9 +63,14 @@ public class DefaultJavaConstructor
         return result.toString();
     }
     
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#equals(java.lang.Object)
-     */
+    @Override
+    public int hashCode() {
+        int hashCode = getName().hashCode();
+        hashCode *= getParameters().size();
+        return hashCode;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) 
         {
@@ -101,10 +101,20 @@ public class DefaultJavaConstructor
         }
         return this.varArgs == c.isVarArgs();
     }
-
-    public int hashCode() {
-        int hashCode = getName().hashCode();
-        hashCode *= getParameters().size();
-        return hashCode;
+    
+    public int compareTo( JavaConstructor o )
+    {
+        int result = getName().compareTo( o.getName() );
+        if( result == 0 ) 
+        {
+            int lhs = getParameters().size();
+            int rhs = o.getParameters().size();
+            result = ((lhs < rhs) ? -1 : ((lhs > rhs) ? 1 : 0));
+        }
+        for ( int index = 0; result ==0 && index < getParameters().size(); index++ )
+        {
+            result = getParameters().get( index ).compareTo( o.getParameters().get( index ) );
+        }
+        return result;
     }
 }

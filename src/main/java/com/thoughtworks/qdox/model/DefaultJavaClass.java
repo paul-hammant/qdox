@@ -163,11 +163,10 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public List<JavaClass> getImplementedInterfaces() {
         List<JavaClass> result = new LinkedList<JavaClass>();
-
-        for (Type type : getImplements()) {
-            result.add(type.getJavaClass());
+        for ( Type implType : getImplements() ) 
+        {
+            result.add( implType.getJavaClass() );
         }
-
         return result;
     }
 
@@ -201,7 +200,10 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     }
 
     public void setSuperClass(Type type) {
-        if (isEnum) throw new IllegalArgumentException("enums cannot extend other classes");
+        if (isEnum) 
+        {
+            throw new IllegalArgumentException("enums cannot extend other classes");   
+        }
         superClass = type;
     }
 
@@ -273,8 +275,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      * @see com.thoughtworks.qdox.model.JavaClass#getPackageName()
      */
     public String getPackageName() {
-        JavaPackage javaPackage = getPackage();
-        return (javaPackage != null && javaPackage.getName() != null) ? javaPackage.getName() : "";
+        JavaPackage pckg = getPackage();
+        return ( pckg != null && pckg.getName() != null ) ? pckg.getName() : "";
     }
 
     /* (non-Javadoc)

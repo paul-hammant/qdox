@@ -30,6 +30,7 @@ public class FieldDef extends LocatedDef {
     public boolean isVarArgs;
     public String body = "";
 
+    @Override
     public boolean equals(Object obj) {
         FieldDef paramDef = (FieldDef) obj;
         boolean result = paramDef.name.equals(name)
@@ -48,11 +49,13 @@ public class FieldDef extends LocatedDef {
         return result;
     }
 
+    @Override
     public int hashCode() {
         return name.hashCode() + (type != null ? type.hashCode() : 0) +
                 dimensions + modifiers.hashCode() + (isVarArgs ? 79769989 : 0);
     }
 
+    @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append(modifiers);

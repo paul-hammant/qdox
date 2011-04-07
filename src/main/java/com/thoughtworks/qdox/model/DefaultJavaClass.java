@@ -734,6 +734,12 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     	}
     	return sb.toString();
     }
+    
+    @Override
+    public int hashCode()
+    {
+        return getFullyQualifiedName().hashCode();
+    }
 
     //ideally this shouldn't be required, but we must as long as Types can be created without classLibrary
     @Override

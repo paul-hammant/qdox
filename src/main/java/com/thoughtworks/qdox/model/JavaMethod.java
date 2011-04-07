@@ -55,8 +55,6 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      */
     public String getCallSignature();
 
-    public boolean equals( Object obj );
-
     /**
      * This method is NOT varArg aware.
      * 

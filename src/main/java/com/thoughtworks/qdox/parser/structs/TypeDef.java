@@ -36,6 +36,7 @@ public class TypeDef {
 		this(name, 0);
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		TypeDef typeDef = (TypeDef) obj;
         return typeDef.name.equals(name)
@@ -43,6 +44,7 @@ public class TypeDef {
                 && (typeDef.actualArgumentTypes != null ? typeDef.actualArgumentTypes.equals(actualArgumentTypes): actualArgumentTypes == null);
 	}
 
+	@Override
 	public int hashCode() {
         return name.hashCode() + 
                 dimensions + (actualArgumentTypes == null ? 0 : actualArgumentTypes.hashCode());

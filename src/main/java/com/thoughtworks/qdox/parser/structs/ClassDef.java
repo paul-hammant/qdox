@@ -38,6 +38,7 @@ public class ClassDef extends LocatedDef {
     public Set<TypeDef> implementz = new HashSet<TypeDef>();
     public String type = CLASS;
 
+    @Override
     public boolean equals(Object obj) {
         ClassDef classDef = (ClassDef) obj;
         return classDef.name.equals(name)
@@ -48,18 +49,20 @@ public class ClassDef extends LocatedDef {
                 && classDef.implementz.equals(implementz);
     }
 
+    @Override
     public int hashCode() {
         return name.hashCode() + type.hashCode() + typeParams.hashCode()+
                 modifiers.hashCode() + extendz.hashCode() +
                 implementz.hashCode();
     }
 
+    @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append(modifiers);
-        result.append(" ");
+        result.append(' ');
         result.append(type);
-        result.append(" ");
+        result.append(' ');
         result.append(name);
         //typeParams
         result.append(" extends ");

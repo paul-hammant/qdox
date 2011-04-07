@@ -32,6 +32,12 @@ public class PackageDef extends LocatedDef {
 		this.lineNumber = lineNumber;
 	}
 	
+	@Override
+	public int hashCode()
+	{
+	    return name.hashCode();
+	}
+	@Override
 	public boolean equals(Object obj) {
 		PackageDef packageDef = (PackageDef) obj;
 		return packageDef.name.equals(name);

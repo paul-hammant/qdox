@@ -34,6 +34,7 @@ public class TagDef extends LocatedDef {
         this(name, text, -1);
     }
     
+    @Override
     public boolean equals(Object obj) {
         TagDef tagDef = (TagDef) obj;
         return tagDef.name.equals(name)
@@ -41,10 +42,12 @@ public class TagDef extends LocatedDef {
                 && tagDef.lineNumber == lineNumber;
     }
 
+    @Override
     public int hashCode() {
         return name.hashCode() + text.hashCode() + lineNumber;
     }
 
+    @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append('@');

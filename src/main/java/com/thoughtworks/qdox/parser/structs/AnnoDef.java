@@ -32,15 +32,18 @@ public class AnnoDef extends LocatedDef implements ElemValueDef
     public TypeDef typeDef;
     public final Map<String, ElemValueDef> args = new LinkedHashMap<String, ElemValueDef>();
 
+    @Override
     public boolean equals(Object obj) {
         AnnoDef annoDef = (AnnoDef) obj;
         return annoDef.typeDef.equals(typeDef) && annoDef.args.equals(args);
     }
 
+    @Override
     public int hashCode() {
         return typeDef.hashCode() + args.hashCode();
     }
 
+    @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append('@');

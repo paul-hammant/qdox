@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MethodDef extends LocatedDef {
+
     public String name = "";
     public List<TypeVariableDef> typeParams;
     public TypeDef returnType;
@@ -36,6 +37,7 @@ public class MethodDef extends LocatedDef {
     public int dimensions;
     public String body;
 
+    @Override
     public boolean equals(Object obj) {
         MethodDef methodDef = (MethodDef) obj;
         boolean result;
@@ -58,6 +60,7 @@ public class MethodDef extends LocatedDef {
         return result;
     }
 
+    @Override
     public int hashCode() {
         return name.hashCode() + 
         		(returnType != null ? returnType.hashCode() : 0) +
@@ -66,6 +69,7 @@ public class MethodDef extends LocatedDef {
                 dimensions + (constructor ? 0 : 1);
     }
 
+    @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append(modifiers);

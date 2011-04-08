@@ -1,22 +1,20 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.io;
 
-import com.thoughtworks.qdox.io.IndentBuffer;
+import static org.junit.Assert.assertEquals;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
-public class IndentBufferTest extends TestCase {
+public class IndentBufferTest {
 
     private IndentBuffer buffer;
 
-    public IndentBufferTest(String s) {
-        super(s);
-    }
-
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         buffer = new IndentBuffer();
     }
 
+    @Test
     public void testNoIndentation() throws Exception {
         buffer.write("A string");
         buffer.newline();
@@ -29,6 +27,7 @@ public class IndentBufferTest extends TestCase {
         assertEquals(expected, buffer.toString());
     }
 
+    @Test
     public void testIndentation() throws Exception {
         buffer.write("Line1");
         buffer.newline();

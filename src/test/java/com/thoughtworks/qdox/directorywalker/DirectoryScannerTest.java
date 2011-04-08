@@ -1,7 +1,10 @@
 package com.thoughtworks.qdox.directorywalker;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.util.List;
 
@@ -190,8 +193,8 @@ public class DirectoryScannerTest
         FileVisitor visitor = mock( FileVisitor.class );
         scanner.scan( visitor );
 
-        org.mockito.Mockito.verify( visitor ).visitFile( blahTxt );
-        org.mockito.Mockito.verify( visitor ).visitFile( fooJava );
-        org.mockito.Mockito.verify( visitor ).visitFile( pigJava );
+        verify( visitor ).visitFile( blahTxt );
+        verify( visitor ).visitFile( fooJava );
+        verify( visitor ).visitFile( pigJava );
     }
 }

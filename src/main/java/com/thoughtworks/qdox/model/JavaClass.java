@@ -29,7 +29,7 @@ import com.thoughtworks.qdox.library.ClassLibrary;
  * 
  * @author Robert Scholte
  */
-public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElement, JavaGenericDeclaration
+public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElement, JavaGenericDeclaration, Comparable<JavaClass>
 {
 
     /**
@@ -242,8 +242,6 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     public List<JavaClass> getDerivedClasses();
 
     public List<DocletTag> getTagsByName( String name, boolean superclasses );
-
-    public int compareTo( Object o );
 
     public ClassLibrary getJavaClassLibrary();
 

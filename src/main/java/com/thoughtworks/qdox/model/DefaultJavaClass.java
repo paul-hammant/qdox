@@ -717,8 +717,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#compareTo(java.lang.Object)
      */
-    public int compareTo(Object o) {
-        return getFullyQualifiedName().compareTo(((JavaClass) o).getFullyQualifiedName());
+    public int compareTo(JavaClass o) {
+        return getFullyQualifiedName().compareTo(o.getFullyQualifiedName());
     }
 
     /**

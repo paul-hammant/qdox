@@ -12,7 +12,7 @@ import com.thoughtworks.qdox.model.Type;
 
 public class MethodsTest extends TestCase {
 
-    private JavaDocBuilder builder = new JavaDocBuilder();
+    private JavaProjectBuilder builder = new JavaProjectBuilder();
 
     public void testSupportsJava5VarArgsParameter() {
         JavaMethod javaMethod = buildMethod("void doStuff(AThing param1, BThing... param2);");

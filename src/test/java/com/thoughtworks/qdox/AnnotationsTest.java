@@ -13,10 +13,10 @@ import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
 
 public class AnnotationsTest extends TestCase {
 
-    private JavaDocBuilder builder;
+    private JavaProjectBuilder builder;
     public AnnotationsTest()
     {
-        builder = new JavaDocBuilder();
+        builder = new JavaProjectBuilder();
         //builder.setDebugLexer( true );
         //builder.setDebugParser( true );
     }
@@ -119,7 +119,7 @@ public class AnnotationsTest extends TestCase {
             + "}\n";
 
         builder.addSource(new StringReader(source));
-        assertEquals(1, builder.getClasses().length);
+        assertEquals(1, builder.getClasses().size());
     }
 
     public void testShouldIgnoreAnnotationWithClassType() {
@@ -205,7 +205,7 @@ public class AnnotationsTest extends TestCase {
     	String source = "@MyAnnotation()\n" +
     			"public class MyClass {}";
     	builder.addSource(new StringReader(source));
-    	assertEquals("MyAnnotation", builder.getClasses()[0].getAnnotations().get(0).getType().getValue());
+    	assertEquals("MyAnnotation", builder.getClasses().get(0).getAnnotations().get(0).getType().getValue());
     }
     
     public void testMethodAnnotationBeforeComment() throws Exception {
@@ -217,7 +217,7 @@ public class AnnotationsTest extends TestCase {
     			" public boolean isPostback() { return true;}\n" +
     			"}";
     	builder.addSource(new StringReader(source));
-    	assertEquals("java.lang.Override", builder.getClasses()[0].getMethods().get(0).getAnnotations().get(0).getType().getValue());
+    	assertEquals("java.lang.Override", builder.getClasses().get(0).getMethods().get(0).getAnnotations().get(0).getType().getValue());
     }
     
     public void testEnumsWithAnnotations() throws Exception {
@@ -238,7 +238,7 @@ public class AnnotationsTest extends TestCase {
         		"  static void get_tmp_dir( String targetfilename, @ParamInfo( direction = ParamInfo.Direction.OUT ) byte[] tmpDirOutput ) throws IOException {}\n" + 
         		"}";
         builder.addSource( new StringReader( source ) );
-        JavaMethod jMethod = builder.getClasses()[0].getMethods().get(0);
+        JavaMethod jMethod = builder.getClasses().get(0).getMethods().get(0);
         assertEquals( "NativeAccessible", jMethod.getAnnotations().get(0).getType().getValue() );
         JavaAnnotation annotation = jMethod.getParameters().get(1).getAnnotations().get(0);
         assertEquals( "ParamInfo", annotation.getType().getValue() );
@@ -252,13 +252,13 @@ public class AnnotationsTest extends TestCase {
         		"  public void testNothing() { }\n " +
         		"}";
         builder.addSource( new StringReader( source ) );
-        JavaMethod method = builder.getClasses()[0].getMethods().get(0);
+        JavaMethod method = builder.getClasses().get(0).getMethods().get(0);
         AnnotationFieldRef suppressWarnings = (AnnotationFieldRef) method.getAnnotations().get(0).getProperty( "value" );
-        assertEquals( builder.getClasses()[0].getFields().get(0), suppressWarnings.getField());
+        assertEquals( builder.getClasses().get(0).getFields().get(0), suppressWarnings.getField());
     }
     
     public void testDoubleEscapedString() throws Exception {
-        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaProjectBuilder builder = new JavaProjectBuilder();
         String source = "public class Foo {\n" +
         		"@SuppressWarnings({\"abc\\\\d\"})\n" +
         		"private void bar() { } }";

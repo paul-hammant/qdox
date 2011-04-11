@@ -13,7 +13,7 @@ import com.thoughtworks.qdox.model.JavaField;
 
 public class FieldsTest extends TestCase
 {
-    private JavaDocBuilder builder = new JavaDocBuilder();
+    private JavaProjectBuilder builder = new JavaProjectBuilder();
 
     public void testAssignmentViaBitShift() {
         String source = ""
@@ -57,7 +57,7 @@ public class FieldsTest extends TestCase
     			"}";
     	
     	builder.addSource(new StringReader(source));
-    	JavaField field = builder.getClasses()[0].getFields().get(0);
+    	JavaField field = builder.getClasses().get(0).getFields().get(0);
     	assertEquals("null", field.getInitializationExpression());
     }
     
@@ -70,7 +70,7 @@ public class FieldsTest extends TestCase
         		"    private Bla bla;" +
         		"}";
         builder.addSource( new StringReader( source ) );
-        JavaField field = builder.getClasses()[0].getFields().get(0);
+        JavaField field = builder.getClasses().get(0).getFields().get(0);
         assertEquals( "", field.getComment() );
         assertEquals( 2, field.getTags().size() );
     }
@@ -85,7 +85,7 @@ public class FieldsTest extends TestCase
                 "    private Bla bla;" +
                 "}";
         builder.addSource( new StringReader( source ) );
-        JavaField field = builder.getClasses()[0].getFields().get(0);
+        JavaField field = builder.getClasses().get(0).getFields().get(0);
         assertEquals( "Being Lazy Always", field.getComment() );
         assertEquals( 2, field.getTags().size() );
     }
@@ -103,7 +103,7 @@ public class FieldsTest extends TestCase
                 "    private Bla bla;" +
                 "}";
         builder.addSource( new StringReader( source ) );
-        JavaField field = builder.getClasses()[0].getFields().get(0);
+        JavaField field = builder.getClasses().get(0).getFields().get(0);
         assertEquals( "Being\r\nLazy\r\nAlways", field.getComment() );
         assertEquals( 2, field.getTags().size() );
     }

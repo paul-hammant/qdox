@@ -19,21 +19,6 @@ public abstract class AbstractDocletTagTest extends TestCase {
     	return getDocletTagFactory().createDocletTag(tag, text);
 	}
     
-    public void testValueRemainsIntact() throws Exception {
-        String in = ""
-                + "package x;\n"
-                + "/**\n"
-                + " * @tag aa count(*) bbb * ccc dd=e f='g' i = \"xx\"\n"
-                + " */\n"
-                + "class X {}";
-
-        JavaDocBuilder builder = new JavaDocBuilder(getDocletTagFactory());
-        builder.addSource(new StringReader(in));
-        DocletTag tag = builder.getClassByName("x.X").getTagByName("tag");
-
-        assertEquals("aa count(*) bbb * ccc dd=e f='g' i = \"xx\"", tag.getValue());
-    }
-
     public void testIndexedParameter() throws Exception {
         DocletTag tag = createDocletTag("x", "one two three four");
         assertEquals("one", tag.getParameters().get(0));

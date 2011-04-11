@@ -1052,6 +1052,20 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals("etc", fieldC.getComment());
     }
 
+    public void testValueRemainsIntact() throws Exception {
+        String in = ""
+                + "package x;\n"
+                + "/**\n"
+                + " * @tag aa count(*) bbb * ccc dd=e f='g' i = \"xx\"\n"
+                + " */\n"
+                + "class X {}";
+
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        builder.addSource(new StringReader(in));
+        DocletTag tag = builder.getClassByName("x.X").getTagByName("tag");
+
+        assertEquals("aa count(*) bbb * ccc dd=e f='g' i = \"xx\"", tag.getValue());
+    }
     
     public void testJiraQdox117() throws Exception {
         String sourceCode = "" +
@@ -1065,6 +1079,26 @@ public class JavaProjectBuilderTest extends TestCase
         JavaMethod javaMethod = javaClass.getMethods().get(0);
         assertEquals("\"test blah blah\"", javaMethod.getAnnotations().get(0).getNamedParameter("description").toString());
     }
+    
+    public void testJiraQdox131() throws Exception {
+        String sourceCode = "package com.acme.qdox;\n" + 
+               "\n" + 
+               "public class QDoxBugClass {\n" + 
+               "    final public static String C1 = \"C1\", C2 = \"C2\";\n" + 
+               "    final public static String[] ALL = { C1, C2 };    \n" + 
+               "    /*\n" + 
+               "    Comment\n" + 
+               "    */\n" + 
+               "    public void method() {\n" + 
+               "        System.out.println(\"This will contain the comment\");\n" + 
+               "    }\n" + 
+               "}\n" + 
+               "";
+       builder.addSource(new StringReader(sourceCode));
+       JavaClass aClass = builder.getClassByName("com.acme.qdox.QDoxBugClass");
+       assertEquals("\n        System.out.println(\"This will contain the comment\");\n    ", 
+               aClass.getMethods().get(0).getSourceCode());
+   }
     
     public void testJiraQdox134() throws Exception {
         String sourceCode = "/**\n" + 

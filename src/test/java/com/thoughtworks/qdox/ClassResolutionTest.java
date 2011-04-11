@@ -28,7 +28,7 @@ public class ClassResolutionTest extends TestCase {
                 + "}";
 
         // parse
-        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaProjectBuilder builder = new JavaProjectBuilder();
         builder.addSource(new StringReader(source1));
         builder.addSource(new StringReader(source2));
 
@@ -53,7 +53,7 @@ public class ClassResolutionTest extends TestCase {
                 + "}";
 
         // parse
-        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaProjectBuilder builder = new JavaProjectBuilder();
         builder.addSource(new StringReader(source));
 
         // find the parameter
@@ -62,7 +62,7 @@ public class ClassResolutionTest extends TestCase {
     }
 
     public void testAnonymousClass() {
-        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaProjectBuilder builder = new JavaProjectBuilder();
 
     	String source = ""
         	+ "public class AnimatedAlgorithm {\n"
@@ -80,7 +80,7 @@ public class ClassResolutionTest extends TestCase {
     
     //from QDOX-86
     public void testInnerClassInMethod() throws Exception {
-    	JavaDocBuilder builder = new JavaDocBuilder();
+        JavaProjectBuilder builder = new JavaProjectBuilder();
     	String source = "package some.pack;\n" +
     	"class Test {\n" +
     	"void some(Inner.Inner2 a) {}\n" +

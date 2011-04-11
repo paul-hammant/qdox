@@ -14,7 +14,7 @@ public class EnumsTest extends TestCase {
                 + "enum Enum2 {;}\n"
                 + "private enum Enum3 {,}";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         assertTrue(javaDocBuilder.getClassByName("Enum1").isEnum());
@@ -31,7 +31,7 @@ public class EnumsTest extends TestCase {
                 + "  int someField; "
                 + "}";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("X");
@@ -44,7 +44,7 @@ public class EnumsTest extends TestCase {
         String source = ""
                 + "public enum Enum1 implements java.io.Serializable { a, b }";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("Enum1");
@@ -56,7 +56,7 @@ public class EnumsTest extends TestCase {
         String source = ""
                 + "public enum Enum1 implements java.io.Serializable { a, @Deprecated b }";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("Enum1");
@@ -80,7 +80,7 @@ public class EnumsTest extends TestCase {
                 + "    }\n"
                 + "}";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("X$EnumWithConstructors");
@@ -98,7 +98,7 @@ public class EnumsTest extends TestCase {
                 + "    public abstract void speak();\n"
                 + "}";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         assertTrue(javaDocBuilder.getClassByName("Animal").isEnum());
@@ -114,7 +114,7 @@ public class EnumsTest extends TestCase {
                 + "\n"
                 + "}";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         assertTrue(javaDocBuilder.getClassByName("AccountType").isEnum());
@@ -125,7 +125,7 @@ public class EnumsTest extends TestCase {
         String source = ""
                 + "public enum Foo { BAR }\n";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         assertTrue(javaDocBuilder.getClassByName("Foo").isEnum());
@@ -142,7 +142,7 @@ public class EnumsTest extends TestCase {
         	"static class AnnotationContainer" +
         	"{ @ValueHintEnum(values = TestValueSet.class) String hint; }" +
         	"}";
-        new JavaDocBuilder().addSource(new StringReader(source));
+        new JavaProjectBuilder().addSource(new StringReader(source));
    }
     
     public void testEnumAfterClass() throws Exception {
@@ -155,7 +155,7 @@ public class EnumsTest extends TestCase {
         	"public enum TestValueSet" +
         	"{ VALUE_1 }" +
         	"}";
-        new JavaDocBuilder().addSource(new StringReader(source));
+        new JavaProjectBuilder().addSource(new StringReader(source));
    }
     
     //for QDOX-153
@@ -168,6 +168,6 @@ public class EnumsTest extends TestCase {
     			" public FacesCompositeELResolver(final Scope scope) {}\n" +
     			"}";
     	
-    	new JavaDocBuilder().addSource(new StringReader(source));
+    	new JavaProjectBuilder().addSource(new StringReader(source));
      }
 }

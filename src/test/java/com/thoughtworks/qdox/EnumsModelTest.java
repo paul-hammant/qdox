@@ -20,7 +20,7 @@ public class EnumsModelTest extends TestCase {
                 + "public enum Enum1 {}\n"
                 + "enum Enum2 {;}\n";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass enum1 = javaDocBuilder.getClassByName("Enum1");
@@ -38,7 +38,7 @@ public class EnumsModelTest extends TestCase {
                 + "  int someField; "
                 + "}";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("X");
@@ -82,7 +82,7 @@ public class EnumsModelTest extends TestCase {
         String source = ""
                 + "public enum Enum1 implements java.io.Serializable { a, b }";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("Enum1");
@@ -140,7 +140,7 @@ public class EnumsModelTest extends TestCase {
                 + "    }\n"
                 + "}";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("X$EnumWithConstructors");
@@ -181,7 +181,7 @@ public class EnumsModelTest extends TestCase {
                 + "    public abstract void speak();\n"
                 + "}";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("Animal");
@@ -198,7 +198,7 @@ public class EnumsModelTest extends TestCase {
         		"@MyAnno\n" +
         		"TEST;\n" +
         		"}\n";
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
     }
     

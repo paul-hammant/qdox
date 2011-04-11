@@ -23,7 +23,7 @@ import com.thoughtworks.qdox.model.Type;
  */
 public class JSR14Test extends TestCase {
 	
-	private JavaDocBuilder builder = new JavaDocBuilder();
+	private JavaProjectBuilder builder = new JavaProjectBuilder();
 
 	public void testSimpleSingleParameterizedTypeMethod() throws Exception {
     	JavaMethod javaMethod = buildMethod("java.util.List<String> getList();");
@@ -382,14 +382,11 @@ public class JSR14Test extends TestCase {
         String source2 = "class GroupControllerImpl extends\n" + 
         		"    GenericControllerImpl<Group, Long, GroupDAO>\n {}";
         String source3 = "interface GenericController<T, K> {}";
-        builder.addSource(new StringReader(source1));
-        builder.addSource(new StringReader(source2));
-        builder.addSource(new StringReader(source3));
-        JavaClass genericControllerImpl = builder.getSources()[0].getClasses().get(0);
+        JavaClass genericControllerImpl = builder.addSource(new StringReader(source1)).getClasses().get(0);
+        JavaClass groupControllerImpl = builder.addSource(new StringReader(source2)).getClasses().get(0);
+        JavaClass genericController = builder.addSource(new StringReader(source3)).getClasses().get(0);
         assertEquals( 3, genericControllerImpl.getTypeParameters().size() );
-        JavaClass groupControllerImpl = builder.getSources()[1].getClasses().get(0);
         assertEquals( 0, groupControllerImpl.getTypeParameters().size() );
-        JavaClass genericController = builder.getSources()[2].getClasses().get(0);
         assertEquals( 2, genericController.getTypeParameters().size() );
     }
     

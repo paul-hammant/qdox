@@ -64,28 +64,6 @@ public abstract class TypeTest extends TestCase {
         assertEquals("java.util.AbstractSet", superClass.getFullyQualifiedName());
     }
 
-    public void testIsPrimitive() throws Exception {
-    	ClassLibrary classLibrary = new ClassLibrary( ClassLoader.getSystemClassLoader() );
-        JavaDocBuilder builder = new JavaDocBuilder(classLibrary);
-        
-        JavaClass javaClass = builder.getClassByName("java.lang.Object");
-        assertEquals(true, javaClass.getMethodBySignature("notify", null).getReturns().isPrimitive());
-
-    } 
-    
-    public void testInnerClassToString() {
-        ClassLibrary classLibrary = new ClassLibrary( ClassLoader.getSystemClassLoader() );
-
-        String source = "public class Outer {\n" +
-            " private Inner ia;" +
-            " public class Inner { }" +
-            "}";
-        JavaDocBuilder builder = new JavaDocBuilder(classLibrary);
-        builder.addSource( new StringReader( source )  );
-        assertEquals("Outer.Inner", builder.getClassByName( "Outer" ).getFieldByName( "ia" ).getType().toString());
-        assertEquals("Outer.Inner", builder.getClassByName( "Outer" ).getFieldByName( "ia" ).getType().toGenericString());
-    }
-    
     public void testToStringVoid() {
         assertEquals("void", Type.VOID.toString());
     }

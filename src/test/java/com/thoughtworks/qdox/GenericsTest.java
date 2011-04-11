@@ -15,7 +15,7 @@ import com.thoughtworks.qdox.model.JavaMethod;
  */
 public class GenericsTest extends TestCase {
     
-    private JavaDocBuilder builder = new JavaDocBuilder();
+    private JavaProjectBuilder builder = new JavaProjectBuilder();
 
     public void testShouldUnderstandSingleGenericClassDeclarations() {
         String source = "" +

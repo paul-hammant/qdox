@@ -60,4 +60,52 @@ public class FieldsTest extends TestCase
     	JavaField field = builder.getClasses()[0].getFields().get(0);
     	assertEquals("null", field.getInitializationExpression());
     }
+    
+    public void testTwoDocletTags() throws Exception {
+        String source = "public class Foo {" +
+        		"    /**\r\n" + 
+        		"     * @parameter implementation=source2.sub.MyBla\r\n" + 
+        		"     * @required\r\n" + 
+        		"     */\r\n" + 
+        		"    private Bla bla;" +
+        		"}";
+        builder.addSource( new StringReader( source ) );
+        JavaField field = builder.getClasses()[0].getFields().get(0);
+        assertEquals( "", field.getComment() );
+        assertEquals( 2, field.getTags().size() );
+    }
+    
+    public void testCommentAndTwoDocletTags() throws Exception {
+        String source = "public class Foo {" +
+                "    /**\r\n" + 
+                "     * Being Lazy Always\r\n" + 
+                "     * @parameter implementation=source2.sub.MyBla\r\n" + 
+                "     * @required\r\n" + 
+                "     */\r\n" + 
+                "    private Bla bla;" +
+                "}";
+        builder.addSource( new StringReader( source ) );
+        JavaField field = builder.getClasses()[0].getFields().get(0);
+        assertEquals( "Being Lazy Always", field.getComment() );
+        assertEquals( 2, field.getTags().size() );
+    }
+
+    public void testMultiCommentAndTwoDocletTags() throws Exception {
+        String source = "public class Foo {" +
+                "    /**\r\n" + 
+                "     * Being\r\n" + 
+                "     * Lazy\r\n" + 
+                "     * Always\r\n" + 
+                "     * \r\n" + 
+                "     * @parameter implementation=source2.sub.MyBla\r\n" + 
+                "     * @required\r\n" + 
+                "     */\r\n" + 
+                "    private Bla bla;" +
+                "}";
+        builder.addSource( new StringReader( source ) );
+        JavaField field = builder.getClasses()[0].getFields().get(0);
+        assertEquals( "Being\r\nLazy\r\nAlways", field.getComment() );
+        assertEquals( 2, field.getTags().size() );
+    }
+
 }

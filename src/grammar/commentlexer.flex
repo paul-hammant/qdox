@@ -137,15 +137,19 @@ JavadocEnd              = "*"+ "/"
                       }
 }
 <JAVADOCCONTENT> {
-    [^ \t\r@]		  { 
+    [ \t]*  "@"       { 
+                        yypushback(1);
+                        popState(); 
+                        pushState(JAVADOCTAG); 
+                      }
+    [^ \t]  		  { 
                         yypushback(1); 
                         popState();
                         pushState(JAVADOCLINE); 
                       }
-    "@"      { 
-                        yypushback(1);
-                        popState(); 
-                        pushState(JAVADOCTAG); 
+   {Eol}              {
+                        popState();
+                        return DefaultJavaCommentParser.JAVADOCLINE;
                       }
 }
 

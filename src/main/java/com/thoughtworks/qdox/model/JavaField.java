@@ -24,9 +24,12 @@ public interface JavaField extends JavaAnnotatedElement, JavaMember, JavaModel
 
     public Type getType();
 
+    /**
+     * The in-code representation of this field.
+     * 
+     * @return the complete representation of this field
+     */
     public String getCodeBlock();
-
-    public int compareTo( Object o );
 
     public String getDeclarationSignature( boolean withModifiers );
 

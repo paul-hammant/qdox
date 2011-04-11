@@ -42,8 +42,6 @@ public interface JavaParameter extends JavaAnnotatedElement, Comparable<JavaPara
      */
     public boolean isVarArgs();
 
-    public String toString();
-
     /**
      * 
      * @return the resolved value if the method has typeParameters, otherwise type's value

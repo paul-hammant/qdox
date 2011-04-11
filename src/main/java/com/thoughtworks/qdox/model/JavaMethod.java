@@ -72,8 +72,6 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      */
     public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg );
 
-    public boolean isPublic();
-
     /**
      * @return true if this method is a Java Bean accessor
      * @since 1.3

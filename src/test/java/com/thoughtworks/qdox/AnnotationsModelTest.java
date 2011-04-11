@@ -24,8 +24,6 @@ public class AnnotationsModelTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         builder = new JavaProjectBuilder();
-        builder.setDebugLexer( true );
-        builder.setDebugParser( true );
     }
 
     protected JavaAnnotation checkClassAnnotation( String source ) {

@@ -33,8 +33,6 @@ public class AnnotationExpressionTest {
 	@Before
 	public void setUp() throws Exception {
         builder = new JavaProjectBuilder();
-        builder.setDebugLexer( true );
-        builder.setDebugParser( true );
     }
 
 	@Parameters

@@ -43,8 +43,6 @@ public class JavaProjectBuilderTest extends TestCase
     protected void setUp() throws Exception {
         super.setUp();
         builder = new JavaProjectBuilder();
-        builder.setDebugLexer( true );
-        builder.setDebugParser( true );
         createFile("target/test-source/com/blah/Thing.java", "com.blah", "Thing");
         createFile("target/test-source/com/blah/Another.java", "com.blah", "Another");
         createFile("target/test-source/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");

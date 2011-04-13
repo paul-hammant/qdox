@@ -22,7 +22,7 @@
     </section>
     <section>
       <name>Project Reports</name>
-      <page>changes-report.html</page>
+      <page>jira-report.html</page>
       <page>changes.html</page>
       <link title="JavaDoc">apidocs/index.html</link>
     </section>

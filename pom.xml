@@ -570,7 +570,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.2</version>
+        <version>2.3.1</version>
         <reportSets>
           <reportSet>
             <reports>
@@ -609,20 +609,17 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>2.1</version>
+        <version>2.4</version>
         <configuration>
-          <!-- changes-report -->
-          <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
           <!-- jira-report -->
-          <!-- <resolutionIds>Closed</resolutionIds> -->
-          <!-- <statusIds>Resolved, Closed</statusIds> -->
-          <!-- <onlyCurrentVersion>false</onlyCurrentVersion> -->
+          <columnNames>Key,Summary,Fix Version,Status,Resolution</columnNames>
+          <sortColumnNames>Fix Version DESC, Priority DESC, Created DESC</sortColumnNames>
+          <statusIds>Resolved, Closed</statusIds>
         </configuration>
         <reportSets>
           <reportSet>
             <reports>
-              <report>changes-report</report>
-              <!-- <report>jira-report</report> -->
+              <report>jira-report</report>
             </reports>
           </reportSet>
         </reportSets>

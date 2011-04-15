@@ -31,6 +31,7 @@ import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.parser.JavaLexer;
+import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;
 import com.thoughtworks.qdox.parser.impl.JFlexLexer;
 import com.thoughtworks.qdox.parser.impl.Parser;
@@ -67,6 +68,8 @@ public class ClassLoaderLibrary
 
     private boolean debugParser;
     
+    private ErrorHandler errorHandler;
+    
     public ClassLoaderLibrary( AbstractClassLibrary parent )
     {
         super( parent );
@@ -97,25 +100,40 @@ public class ClassLoaderLibrary
     protected JavaClass resolveJavaClass( String name )
     {
         JavaClass result = null;
-        for (Iterator<ClassLoader> iter = classLoaders.iterator(); iter.hasNext(); )
+        for ( ClassLoader classLoader : classLoaders )
         {
-            ClassLoader classLoader = (ClassLoader) iter.next();
             String resource = name;
             if(name.indexOf( '$' ) > 0) {
                 resource = resource.split( "$" )[0];
             }
             resource = resource.replace( '.', '/' )+".java";
             InputStream sourceStream = classLoader.getResourceAsStream( resource );
-            if(sourceStream != null) {
+            if( sourceStream != null ) 
+            {
                 ModelBuilder builder = getModelBuilder();
                 JavaLexer lexer = new JFlexLexer( sourceStream );
                 Parser parser = new Parser( lexer, builder );
                 parser.setDebugLexer( debugLexer );
                 parser.setDebugParser( debugParser );
-                if( parser.parse() ) {
-                    //@todo to get class by name
-                    result = builder.getSource().getClasses().get(0);
-                    break;
+                try 
+                {
+                    if( parser.parse() ) 
+                    {
+                        //@todo to get class by name
+                        result = builder.getSource().getClasses().get( 0 );
+                        break;
+                    }
+                }
+                catch( ParseException pe )
+                {
+                    if( errorHandler != null )
+                    {
+                        errorHandler.handle( pe );
+                    }
+                    else 
+                    {
+                        throw pe;
+                    }
                 }
             }
             if( result == null ) {
@@ -198,5 +216,10 @@ public class ClassLoaderLibrary
     public void setDebugParser( boolean debugParser )
     {
         this.debugParser = debugParser;
+    }
+    
+    public void setErrorHandler( ErrorHandler errorHandler )
+    {
+        this.errorHandler = errorHandler;
     }
 }

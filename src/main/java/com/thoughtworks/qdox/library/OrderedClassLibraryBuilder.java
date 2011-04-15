@@ -45,6 +45,8 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     
     private String encoding;
     
+    private ErrorHandler errorHandler;
+    
     private ModelBuilderFactory modelBuilderFactory;
     
     /**
@@ -79,6 +81,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         classLoaderLibrary.setModelBuilderFactory( modelBuilderFactory );
         classLoaderLibrary.setDebugLexer( debugLexer );
         classLoaderLibrary.setDebugParser( debugParser );
+        classLoaderLibrary.setErrorHandler( errorHandler );
         return this;
     }
 
@@ -153,6 +156,12 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         return this;
     }
     
+    public ClassLibraryBuilder setErrorHander( ErrorHandler errorHandler )
+    {
+        this.errorHandler = errorHandler;
+        return this;
+    }
+    
     public ClassLibraryBuilder setModelBuilderFactory( ModelBuilderFactory modelBuilderFactory )
     {
         this.modelBuilderFactory = modelBuilderFactory;
@@ -212,6 +221,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         sourceLibrary.setDebugLexer( debugLexer );
         sourceLibrary.setDebugParser( debugParser );
         sourceLibrary.setEncoding( encoding );
+        sourceLibrary.setErrorHandler( errorHandler );
     }
     
     private SourceLibrary getSourceLibrary() {

@@ -58,7 +58,9 @@ public class SourceLibrary
     private boolean debugParser;
     
     private String encoding = System.getProperty("file.encoding");
-
+    
+    private ErrorHandler errorHandler;
+    
     /**
      * Create a new instance of SourceLibrary and chain it to the parent 
      * 
@@ -124,29 +126,36 @@ public class SourceLibrary
         throws ParseException, IOException
     {
     	JavaSource result = parse( new FileInputStream( file ) );
-    	if(context.getPackageByName(result.getPackageName()) == null) {
-    		File packageFile = new File(file.getParentFile(), "package-info.java");
-    		if(packageFile.exists() && packageFile.isFile()) {
-        		JavaSource packageSource = parse(new FileInputStream(packageFile));
-        		context.add(packageSource.getPackage());
-    		}
+    	// if an error is handled by the errorHandler the result will be null
+    	if( result != null )
+    	{
+            if(context.getPackageByName(result.getPackageName()) == null) {
+                File packageFile = new File(file.getParentFile(), "package-info.java");
+                if(packageFile.exists() && packageFile.isFile()) {
+                    JavaSource packageSource = parse(new FileInputStream(packageFile));
+                    context.add(packageSource.getPackage());
+                }
+            }
+            registerJavaSource(result);
     	}
-    	registerJavaSource(result);
     	return result;
     }
 
     protected JavaSource parse( Reader reader )
         throws ParseException
     {
-        try {
+        try 
+        {
             return parse( new JFlexLexer( reader ) );
         }
-        finally {
+        finally 
+        {
             try
             {
                 reader.close();
             }
-            catch ( IOException e ) {
+            catch ( IOException e ) 
+            {
             }
         }
     }
@@ -154,15 +163,18 @@ public class SourceLibrary
     protected JavaSource parse( InputStream stream )
         throws ParseException
     {
-        try {
+        try 
+        {
             return parse( new JFlexLexer( stream ) );
         }
-        finally {
+        finally 
+        {
             try
             {
                 stream.close();
             }
-            catch ( IOException e ) {
+            catch ( IOException e ) 
+            {
             }
         }
     }
@@ -175,9 +187,22 @@ public class SourceLibrary
         Parser parser = new Parser( lexer, builder );
         parser.setDebugLexer( debugLexer );
         parser.setDebugParser( debugParser );
-        if ( parser.parse() )
+        try {
+            if ( parser.parse() )
+            {
+                result = builder.getSource();
+            }
+        }
+        catch( ParseException pe )
         {
-            result = builder.getSource();
+            if( errorHandler != null )
+            {
+                errorHandler.handle( pe );
+            }
+            else
+            {
+                throw pe;
+            }
         }
         return result;
     }
@@ -194,15 +219,22 @@ public class SourceLibrary
     protected JavaPackage resolveJavaPackage(String name) {
     	return context.removePackageByName( name );
     }
-    
-    private void registerJavaSource(JavaSource source) {
-        context.add( source );
-        if(context.getPackageByName(source.getPackageName()) == null) {
-            context.add( source.getPackage() );
-        }
 
-        for( JavaClass clazz : source.getClasses()) {
-            registerJavaClass( clazz );
+    /**
+     * 
+     * @param source the source, might be <code>null</code>
+     */
+    private void registerJavaSource(JavaSource source) {
+        if ( source != null )
+        {
+            context.add( source );
+            if(context.getPackageByName(source.getPackageName()) == null) {
+                context.add( source.getPackage() );
+            }
+
+            for( JavaClass clazz : source.getClasses()) {
+                registerJavaClass( clazz );
+            }
         }
     }
     
@@ -244,6 +276,11 @@ public class SourceLibrary
     public void setEncoding( String encoding )
     {
         this.encoding = encoding;
+    }
+    
+    public void setErrorHandler( ErrorHandler errorHandler )
+    {
+        this.errorHandler = errorHandler;
     }
     
     /**

@@ -20,6 +20,7 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.library.ErrorHandler;
 import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.BeanProperty;
@@ -1008,12 +1009,12 @@ public class JavaProjectBuilderTest extends TestCase
         }
     }
 
-    public void QDOX2_2FIX___testContinuesProcessingAfterBadFileIfCustomHandlerPermits() throws Exception {
+    public void testContinuesProcessingAfterBadFileIfCustomHandlerPermits() throws Exception {
         createFile("target/test-source/com/blah/Bad.java", "com.blah", "@%! BAD {}}}}");
 
-        JavaDocBuilder.ErrorHandler mockErrorHandler = mock(JavaDocBuilder.ErrorHandler.class);
+        ErrorHandler mockErrorHandler = mock(ErrorHandler.class);
 
-//        builder.setErrorHandler( mockErrorHandler );
+        builder.setErrorHandler( mockErrorHandler );
         builder.addSourceTree(new File("target/test-source"));
 
         assertNotNull(builder.getClassByName("com.blah.Thing"));

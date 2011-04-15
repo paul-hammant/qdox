@@ -159,4 +159,12 @@ public interface ClassLibraryBuilder extends Serializable
      */
     public ClassLibrary getClassLibrary();
 
+    /**
+     * Can handle ParseExceptions instead of crashing.
+     * Has only effect on the appendSource() methods
+     * 
+     * @param errorHandler
+     */
+    public ClassLibraryBuilder setErrorHander( ErrorHandler errorHandler );
+
 }

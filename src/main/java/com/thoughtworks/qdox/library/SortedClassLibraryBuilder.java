@@ -42,7 +42,7 @@ public class SortedClassLibraryBuilder
     private final SourceFolderLibrary sourceFolderLibrary;
 
     private final SourceLibrary sourceLibrary;
-
+    
     public SortedClassLibraryBuilder()
     {
         classNameLibrary = new ClassNameLibrary();
@@ -116,6 +116,14 @@ public class SortedClassLibraryBuilder
     {
         sourceFolderLibrary.setEncoding( encoding );
         sourceLibrary.setEncoding( encoding );
+        return this;
+    }
+    
+    public ClassLibraryBuilder setErrorHander( ErrorHandler errorHandler )
+    {
+        classLoaderLibrary.setErrorHandler( errorHandler );
+        sourceFolderLibrary.setErrorHandler( errorHandler );
+        sourceLibrary.setErrorHandler( errorHandler );
         return this;
     }
     

@@ -34,6 +34,7 @@ import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.FileVisitor;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 import com.thoughtworks.qdox.library.ClassLibraryBuilder;
+import com.thoughtworks.qdox.library.ErrorHandler;
 import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -119,6 +120,15 @@ public class JavaProjectBuilder
         classLibraryBuilder.setEncoding( encoding );
         return this;
     }
+    
+    /**
+     * Sets the errorHandler which will be triggered when a parse exception occurs.
+     * 
+     * @param errorHandler the errorHandler
+     */
+    public void setErrorHandler( ErrorHandler errorHandler) {
+        classLibraryBuilder.setErrorHander( errorHandler );
+    }
 
     public JavaSource addSource(File file) throws IOException, FileNotFoundException {
         return classLibraryBuilder.addSource( file );
@@ -137,12 +147,12 @@ public class JavaProjectBuilder
 
     public void addSourceTree( File file )
     {
-        FileVisitor errorHandler = new FileVisitor() {
+        FileVisitor visitor = new FileVisitor() {
             public void visitFile(File badFile) {
                 throw new RuntimeException("Cannot read file : " + badFile.getName());
             }
         };
-        addSourceTree(file, errorHandler);        
+        addSourceTree(file, visitor);        
     }
 
     public void addClassLoader( ClassLoader classLoader )
@@ -150,7 +160,7 @@ public class JavaProjectBuilder
         classLibraryBuilder.appendClassLoader( classLoader );
     }
 
-    public void addSourceTree( File file, final FileVisitor errorHandler )
+    public void addSourceTree( File file, final FileVisitor visitor )
     {
         DirectoryScanner scanner = new DirectoryScanner(file);
         scanner.addFilter(new SuffixFilter(".java"));
@@ -159,7 +169,7 @@ public class JavaProjectBuilder
                 try {
                     addSource(currentFile);
                 } catch (IOException e) {
-                    errorHandler.visitFile(currentFile);
+                    visitor.visitFile(currentFile);
                 }
             }
         });

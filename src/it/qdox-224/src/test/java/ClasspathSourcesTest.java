@@ -5,7 +5,6 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.*;
 

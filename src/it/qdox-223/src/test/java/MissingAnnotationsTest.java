@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.JavaProjectBuilder;
 
 public class MissingAnnotationsTest {

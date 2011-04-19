@@ -1,11 +1,8 @@
 package com.thoughtworks.qdox.model;
 
-import java.io.StringReader;
 import java.util.Map;
 
 import junit.framework.TestCase;
-
-import com.thoughtworks.qdox.JavaDocBuilder;
 
 public abstract class AbstractDocletTagTest extends TestCase {
 

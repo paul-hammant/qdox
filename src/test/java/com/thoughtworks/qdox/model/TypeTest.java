@@ -1,10 +1,7 @@
 package com.thoughtworks.qdox.model;
 
-import java.io.StringReader;
-
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.library.ClassLoaderLibrary;
 
 public abstract class TypeTest extends TestCase {

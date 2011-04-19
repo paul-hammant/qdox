@@ -171,7 +171,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertNotNull(builder.getClassByName("com.blah.subpackage.Cheese"));
     }
 
-    public void QDOX2_2FIX___testRecordFile() throws Exception {
+    public void testRecordFile() throws Exception {
         builder.addSource(new File("target/test-source/com/blah/Thing.java"));
 
         List<JavaSource> sources = builder.getSources();

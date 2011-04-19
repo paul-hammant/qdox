@@ -22,6 +22,7 @@ package com.thoughtworks.qdox.library;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,10 +68,13 @@ public class SourceFolderLibrary
             {
                 try
                 {
-                    JavaSource source = parse( new FileReader( classFile ) );
+                    JavaSource source = parse( new FileReader( classFile ), classFile.toURI().toURL() );
                     result = source.getNestedClassByName( className );
                 }
                 catch ( FileNotFoundException e )
+                {
+                }
+                catch ( MalformedURLException e )
                 {
                 }
             }

@@ -82,7 +82,12 @@ public class SourceLibrary
     public JavaSource addSource( Reader reader )
         throws ParseException
     {
-        JavaSource source = parse( reader );
+        return addSource( reader, null );
+    }
+    
+    private JavaSource addSource( Reader reader, URL url )
+    {
+        JavaSource source = parse( reader, url );
         registerJavaSource(source);
         return source;
     }
@@ -97,7 +102,7 @@ public class SourceLibrary
     public JavaSource addSource( InputStream stream )
         throws ParseException
     {
-        JavaSource source = parse( stream );
+        JavaSource source = parse( stream, null );
         registerJavaSource(source);
         return source;
     }
@@ -112,7 +117,7 @@ public class SourceLibrary
     public JavaSource addSource( URL url )
         throws ParseException, IOException
     {
-        return addSource( new InputStreamReader( url.openStream(), encoding) );
+        return addSource( new InputStreamReader( url.openStream(), encoding), url );
     }
 
     /**
@@ -129,7 +134,7 @@ public class SourceLibrary
         JavaSource result = null;
         if ( !"package-info.java".equals( file.getName() ) ) 
         {
-            result = parse( new FileInputStream( file ) );
+            result = parse( new FileInputStream( file ), file.toURI().toURL() );
             // if an error is handled by the errorHandler the result will be null
             if( result != null )
             {
@@ -138,7 +143,7 @@ public class SourceLibrary
                     File packageInfo = new File(file.getParentFile(), "package-info.java");
                     if( packageInfo.exists() )
                     {
-                        JavaPackage pckg = parse( new FileInputStream( packageInfo ) ).getPackage();
+                        JavaPackage pckg = parse( new FileInputStream( packageInfo ), packageInfo.toURI().toURL() ).getPackage();
                         context.add( pckg );
                     }
                 }
@@ -147,13 +152,13 @@ public class SourceLibrary
         }
     	return result;
     }
-
-    protected JavaSource parse( Reader reader )
+    
+    protected JavaSource parse( Reader reader, URL url )
         throws ParseException
     {
         try 
         {
-            return parse( new JFlexLexer( reader ) );
+            return parse( new JFlexLexer( reader ), url );
         }
         finally 
         {
@@ -167,12 +172,12 @@ public class SourceLibrary
         }
     }
 
-    protected JavaSource parse( InputStream stream )
+    protected JavaSource parse( InputStream stream, URL url )
         throws ParseException
     {
         try 
         {
-            return parse( new JFlexLexer( stream ) );
+            return parse( new JFlexLexer( stream ), url );
         }
         finally 
         {
@@ -186,11 +191,12 @@ public class SourceLibrary
         }
     }
 
-    private JavaSource parse( JavaLexer lexer )
+    private JavaSource parse( JavaLexer lexer, URL url )
         throws ParseException
     {
         JavaSource result = null;
         ModelBuilder builder = getModelBuilder();
+        builder.setUrl( url );
         Parser parser = new Parser( lexer, builder );
         parser.setDebugLexer( debugLexer );
         parser.setDebugParser( debugParser );

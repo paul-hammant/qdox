@@ -19,6 +19,7 @@ package com.thoughtworks.qdox.library;
  * under the License.
  */
 
+import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -292,6 +293,13 @@ public abstract class AbstractClassLibrary
         else {
             return new ModelBuilder( this, new DefaultDocletTagFactory());
         }
+    }
+    
+    protected ModelBuilder getModelBuilder( URL url )
+    {
+        ModelBuilder result = getModelBuilder();
+        result.setUrl( url );
+        return result;
     }
     
     /**

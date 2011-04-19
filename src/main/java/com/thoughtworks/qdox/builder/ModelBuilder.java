@@ -19,6 +19,7 @@ package com.thoughtworks.qdox.builder;
  * under the License.
  */
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -360,6 +361,11 @@ public class ModelBuilder implements Builder {
 
     public JavaSource getSource() {
         return source;
+    }
+
+    public void setUrl( URL url )
+    {
+        source.setURL( url );
     }
 
 }

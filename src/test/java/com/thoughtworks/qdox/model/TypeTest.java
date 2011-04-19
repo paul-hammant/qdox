@@ -1,5 +1,9 @@
 package com.thoughtworks.qdox.model;
 
+import static org.mockito.Mockito.*;
+
+import java.util.Collections;
+
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.library.ClassLoaderLibrary;
@@ -15,15 +19,13 @@ public abstract class TypeTest extends TestCase {
     public abstract Type newType(String fullname, int dimensions);
     public abstract Type newType(String fullname, int dimensions, JavaSource source);
     
-    public abstract void addImport(JavaSource source, String imp);
-
     public void testResolving() throws Exception {
-        ClassLibrary classLib = new ClassLibrary();
-        JavaSource src = newJavaSource(classLib);
-        addImport(src, "foo.*");
+        JavaSource src = mock(JavaSource.class);
+        when(src.getImports()).thenReturn( Collections.singletonList( "foo.*" ) );
         Type type = Type.createUnresolved("Bar", 0, src);
         assertEquals(false, type.isResolved());
-        classLib.getContext().add( new DefaultJavaClass("foo.Bar"));
+        
+        when(src.resolveType( "Bar" )).thenReturn( "foo.Bar" );
         assertEquals(true, type.isResolved());
         assertEquals("foo.Bar", type.getValue());
     }

@@ -55,7 +55,7 @@ public class ClassNameLibrary
     
     @Override
     protected JavaPackage resolveJavaPackage(String name) {
-    	return new DefaultJavaPackage(name);
+    	return null;
     }
     
     @Override

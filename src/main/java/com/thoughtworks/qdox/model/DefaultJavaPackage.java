@@ -32,9 +32,6 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 	private String name;
 	private List<JavaClass> classes = new LinkedList<JavaClass>();
 
-    public DefaultJavaPackage() {
-	}
-
     public DefaultJavaPackage(String name) {
 		this.name= name;
     }

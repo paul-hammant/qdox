@@ -126,14 +126,14 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals(2, classes.size());
     }
 
-    public void QDOX2_2FIX___testGetPackagesShowsOnePackageAndTwoClasses() {
+    public void testGetPackagesShowsOnePackageAndTwoClasses() {
         builder.addSourceTree(new File("target/test-source"));
         List<JavaPackage> packages = builder.getPackages();
         assertEquals(2, packages.size());
-        JavaPackage comBlahSubpackage = packages.get(0);
-        assertEquals("com.blah.subpackage", comBlahSubpackage.getName());
-        JavaPackage comBlah = packages.get(1);
+        JavaPackage comBlah = packages.get(0);
         assertEquals("com.blah", comBlah.getName());
+        JavaPackage comBlahSubpackage = packages.get(1);
+        assertEquals("com.blah.subpackage", comBlahSubpackage.getName());
         List<JavaClass> classes = comBlahSubpackage.getClasses();
         assertEquals(1, classes.size());
         assertEquals("Cheese", classes.get(0).getName());
@@ -1267,7 +1267,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
     // for QDOX-195
-    public void QDOX2_2FIX___testSharedPackageJavaClasses() {
+    public void testSharedPackageJavaClasses() {
         String source1 = "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n" +
                 "package com.foo;\n" +
                 "public class Bar1 {}";

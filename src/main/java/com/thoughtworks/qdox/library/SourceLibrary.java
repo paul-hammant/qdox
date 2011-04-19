@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.builder.ModelBuilder;
+import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -125,19 +126,25 @@ public class SourceLibrary
     public JavaSource addSource( File file )
         throws ParseException, IOException
     {
-    	JavaSource result = parse( new FileInputStream( file ) );
-    	// if an error is handled by the errorHandler the result will be null
-    	if( result != null )
-    	{
-            if(context.getPackageByName(result.getPackageName()) == null) {
-                File packageFile = new File(file.getParentFile(), "package-info.java");
-                if(packageFile.exists() && packageFile.isFile()) {
-                    JavaSource packageSource = parse(new FileInputStream(packageFile));
-                    context.add(packageSource.getPackage());
+        JavaSource result = null;
+        if ( !"package-info.java".equals( file.getName() ) ) 
+        {
+            result = parse( new FileInputStream( file ) );
+            // if an error is handled by the errorHandler the result will be null
+            if( result != null )
+            {
+                if( getJavaPackage( result.getPackageName() ) == null )
+                {
+                    File packageInfo = new File(file.getParentFile(), "package-info.java");
+                    if( packageInfo.exists() )
+                    {
+                        JavaPackage pckg = parse( new FileInputStream( packageInfo ) ).getPackage();
+                        context.add( pckg );
+                    }
                 }
+                registerJavaSource(result);
             }
-            registerJavaSource(result);
-    	}
+        }
     	return result;
     }
 
@@ -228,20 +235,28 @@ public class SourceLibrary
         if ( source != null )
         {
             context.add( source );
-            if(context.getPackageByName(source.getPackageName()) == null) {
-                context.add( source.getPackage() );
-            }
-
+            registerJavaPackage( source.getPackage() );
             for( JavaClass clazz : source.getClasses()) {
                 registerJavaClass( clazz );
             }
         }
     }
     
-    //@todo move to JavaClassContext
+    private void registerJavaPackage( JavaPackage pckg )
+    {
+        String pckgName = ( pckg == null || pckg.getName() == null ? "" : pckg.getName() );
+        if( getJavaPackage( pckgName ) == null )
+        {
+            DefaultJavaPackage packageInfo = new DefaultJavaPackage( pckgName );
+            packageInfo.setClassLibrary( this );
+            context.add( packageInfo );
+        }
+    }
+    
     private void registerJavaClass(JavaClass clazz) {
         if (clazz != null) {
             context.add( clazz );
+            getJavaPackage( clazz.getPackageName() ).getClasses().add( clazz );
         }
         for( JavaClass innerClazz : clazz.getNestedClasses()) {
             registerJavaClass( innerClazz );

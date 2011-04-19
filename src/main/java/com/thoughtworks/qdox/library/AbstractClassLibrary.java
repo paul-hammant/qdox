@@ -215,7 +215,7 @@ public abstract class AbstractClassLibrary
         return context.getPackages();
     }
     
-    public JavaPackage getJavaPackage( String name ) {
+    public final JavaPackage getJavaPackage( String name ) {
         JavaPackage result = context.getPackageByName( name );
         if (result == null) {
         	result = resolveJavaPackage( name );

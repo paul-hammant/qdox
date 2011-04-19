@@ -159,10 +159,11 @@ public class ClassLoaderLibrary
     
     @Override
     protected JavaPackage resolveJavaPackage(String name) {
-    	JavaPackage result = null;
+        DefaultJavaPackage result = null;
     	Package pckg = Package.getPackage(name);
     	if(pckg != null) {
     		result = new DefaultJavaPackage(name);
+    		result.setClassLibrary( this );
     	}
     	return result;
     }

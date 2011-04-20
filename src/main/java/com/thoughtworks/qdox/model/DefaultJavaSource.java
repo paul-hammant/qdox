@@ -33,6 +33,7 @@ import java.util.Set;
 import com.thoughtworks.qdox.io.DefaultModelWriter;
 import com.thoughtworks.qdox.io.ModelWriter;
 import com.thoughtworks.qdox.io.ModelWriterFactory;
+import com.thoughtworks.qdox.library.ClassLibrary;
 
 public class DefaultJavaSource implements Serializable, JavaSource {
 
@@ -50,7 +51,7 @@ public class DefaultJavaSource implements Serializable, JavaSource {
         PRIMITIVE_TYPES.add("void");
     }
 
-    private final com.thoughtworks.qdox.library.ClassLibrary classLibrary;
+    private final ClassLibrary classLibrary;
     private ModelWriterFactory modelWriterFactory;
     
     private JavaPackage packge;
@@ -59,7 +60,8 @@ public class DefaultJavaSource implements Serializable, JavaSource {
     private Map<String, String> resolvedTypeCache = new HashMap<String, String>();
     private URL url;
 
-    public DefaultJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary) {
+    public DefaultJavaSource( ClassLibrary classLibrary )
+    {
         this.classLibrary = classLibrary;
     }
 
@@ -329,7 +331,7 @@ public class DefaultJavaSource implements Serializable, JavaSource {
 	/* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaSource#getJavaClassLibrary()
      */
-	public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary()
+	public ClassLibrary getJavaClassLibrary()
 	{
 	    return classLibrary;
 	}

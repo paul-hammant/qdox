@@ -22,13 +22,15 @@ package com.thoughtworks.qdox.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
+
 /**
  * A representation of a package.
  * @since 1.9
  */
 public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPackage {
 
-    private com.thoughtworks.qdox.library.ClassLibrary classLibrary;
+    private ClassLibrary classLibrary;
 	private String name;
 	private List<JavaClass> classes = new LinkedList<JavaClass>();
 
@@ -48,7 +50,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 		return getModelWriter().writePackage(this).toString();
 	}
 	
-	public void setClassLibrary( com.thoughtworks.qdox.library.ClassLibrary classLibrary )
+	public void setClassLibrary( ClassLibrary classLibrary )
     {
         this.classLibrary = classLibrary;
     }

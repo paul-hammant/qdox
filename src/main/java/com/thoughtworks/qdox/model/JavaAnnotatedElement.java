@@ -30,21 +30,21 @@ public interface JavaAnnotatedElement
 	 * 
 	 * @return
 	 */
-    public List<Annotation> getAnnotations();
+    List<Annotation> getAnnotations();
     
-    public String getComment();
+    String getComment();
     
-	public List<DocletTag> getTags();
+	List<DocletTag> getTags();
 
-    public List<DocletTag> getTagsByName( String name );
+    List<DocletTag> getTagsByName( String name );
 
-    public DocletTag getTagByName( String name );
+    DocletTag getTagByName( String name );
 
     /**
      * Convenience method for <code>getTagByName(String).getNamedParameter(String)</code>
      * that also checks for null tag.
      * @since 1.3
      */
-    public String getNamedParameter(String tagName, String parameterName);
+    String getNamedParameter(String tagName, String parameterName);
 
 }

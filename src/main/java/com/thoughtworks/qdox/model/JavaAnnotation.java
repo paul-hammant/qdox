@@ -28,10 +28,10 @@ public interface JavaAnnotation {
 	/**
 	 * @return the annotation type
 	 */
-	public abstract Type getType();
+	Type getType();
 
-	public abstract Map<String, AnnotationValue> getPropertyMap();
+	Map<String, AnnotationValue> getPropertyMap();
 
-	public abstract AnnotationValue getProperty(String name);
+	AnnotationValue getProperty(String name);
 
 }

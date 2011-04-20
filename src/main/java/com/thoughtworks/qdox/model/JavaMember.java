@@ -41,97 +41,97 @@ public interface JavaMember
      * 
      * @return all modifiers is this member
      */
-    public List<String> getModifiers();
+    List<String> getModifiers();
     
     /**
      * Equivalent of {@link Member#getDeclaringClass()}
      * 
      * @return
      */
-    public JavaClass getDeclaringClass();    
+    JavaClass getDeclaringClass();    
     
     /**
      * Equivalent of {@link Member#getName()}
      * 
      * @return the name of this member
      */
-    public String getName();
+    String getName();
     
     /**
      * Equivalent of {@link Modifier#isAbstract(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>abstract</tt>; otherwise <tt>false</tt>
      */
-    public boolean isAbstract();
+    boolean isAbstract();
     
     /**
      * Equivalent of {@link Modifier#isFinal(int)}
      * 
      * @return <tt>true</tt> is this member is <tt>final</tt>; otherwise <tt>false</tt>
      */
-    public boolean isFinal();
+    boolean isFinal();
     
     /**
      * Equivalent of {@link Modifier#isNative(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>native</tt>; otherwise <tt>false</tt>
      */
-    public boolean isNative();
+    boolean isNative();
     
     /**
      * Equivalent of {@link Modifier#isPrivate(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>private</tt>; otherwise <tt>false</tt>
      */
-    public boolean isPrivate();
+    boolean isPrivate();
     
     /**
      * Equivalent of {@link Modifier#isProtected(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>protected</tt>; otherwise <tt>false</tt>
      */
-    public boolean isProtected();
+    boolean isProtected();
 
     /**
      * Equivalent of {@link Modifier#isPublic(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>public</tt>; otherwise <tt>false</tt>
      */
-    public boolean isPublic();
+    boolean isPublic();
     
     /**
      * Equivalent of {@link Modifier#isStatic(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>static</tt>; otherwise <tt>false</tt>
      */
-    public boolean isStatic();
+    boolean isStatic();
     
     /**
      * Equivalent of {@link Modifier#isStrict(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>strictfp</tt>; otherwise <tt>false</tt>
      */
-    public boolean isStrictfp();
+    boolean isStrictfp();
     
     /**
      * Equivalent of {@link Modifier#isSynchronized(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>synchronized</tt>; otherwise <tt>false</tt>
      */
-    public boolean isSynchronized();
+    boolean isSynchronized();
     
     /**
      * Equivalent of {@link Modifier#isTransient(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>transient</tt>; otherwise <tt>false</tt>
      */
-    public boolean isTransient();
+    boolean isTransient();
     
     /**
      * Equivalent of {@link Modifier#isVolatile(int)}
      * 
      * @return <tt>true</tt> if this member is <tt>volatile</tt>; otherwise <tt>false</tt>
      */
-    public boolean isVolatile();
+    boolean isVolatile();
 
 }

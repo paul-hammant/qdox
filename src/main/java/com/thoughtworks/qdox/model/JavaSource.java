@@ -22,7 +22,7 @@ package com.thoughtworks.qdox.model;
 import java.net.URL;
 import java.util.List;
 
-import com.thoughtworks.qdox.io.ModelWriter;
+import com.thoughtworks.qdox.library.ClassLibrary;
 
 /**
  * The root of every JavaModel, even for those based on binary classes.
@@ -35,44 +35,44 @@ public interface JavaSource extends JavaClassParent
     /**
      * @since 1.4
      */
-    public URL getURL();
+    URL getURL();
 
     /**
      * The package of this source or <code>null</code>
      * 
      * @return the package
      */
-    public JavaPackage getPackage();
+    JavaPackage getPackage();
 
     /**
      * Retrieve all the import
      * 
      * @return the imports, never <code>null</code>
      */
-    public List<String> getImports();
+    List<String> getImports();
 
     /**
      * A List with all direct classes of this source, never <code>null</code>
      * 
      * @return
      */
-    public List<JavaClass> getClasses();
+    List<JavaClass> getClasses();
 
     /**
      * Complete code representation of this source
      * 
      * @return
      */
-    public String getCodeBlock();
+    String getCodeBlock();
 
-    public String resolveType( String typeName );
+    String resolveType( String typeName );
 
     /**
      * If there's a package, return the packageName, followed by a dot, otherwise an empty String
      * 
      * @return
      */
-    public String getClassNamePrefix();
+    String getClassNamePrefix();
 
     /**
      * Try to get the JavaClass child based on its name relative to the package.
@@ -80,15 +80,15 @@ public interface JavaSource extends JavaClassParent
      * 
      * @return the resolved JavaClass or <code>null</code>
      */
-    public JavaClass getNestedClassByName( String name );
+    JavaClass getNestedClassByName( String name );
 
-    public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary();
+    ClassLibrary getJavaClassLibrary();
 
     /**
      * Returns the name of the package or an empty String  if there's no package
      * 
-     * @return
+     * @return the name 
      */
-    public String getPackageName();
+    String getPackageName();
 
 }

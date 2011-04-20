@@ -22,24 +22,24 @@ package com.thoughtworks.qdox.model;
 public interface JavaField extends JavaAnnotatedElement, JavaMember, JavaModel
 {
 
-    public Type getType();
+    Type getType();
 
     /**
      * The in-code representation of this field.
      * 
      * @return the complete representation of this field
      */
-    public String getCodeBlock();
+    String getCodeBlock();
 
-    public String getDeclarationSignature( boolean withModifiers );
+    String getDeclarationSignature( boolean withModifiers );
 
-    public String getCallSignature();
+    String getCallSignature();
 
     /**
      * Get the original expression used to initialize the field.
      *
      * @return initialization as string.
      */
-    public String getInitializationExpression();
+    String getInitializationExpression();
 
 }

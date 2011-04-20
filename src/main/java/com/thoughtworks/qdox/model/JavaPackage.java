@@ -29,12 +29,29 @@ public interface JavaPackage extends JavaModel, JavaAnnotatedElement
      *
      * @return all the classes found for the package
      */
-    public List<JavaClass> getClasses();
+    List<JavaClass> getClasses();
 
-    public JavaPackage getParentPackage();
+    /**
+     * The parent of this package
+     * 
+     * For instance: the package of <code>java.lang.reflect</code> is <code>java.lang</code>
+     * 
+     * @return the parent package
+     */
+    JavaPackage getParentPackage();
 
-    public List<JavaPackage> getSubPackages();
+    /**
+     * For instance: one of the children of <code>java.lang</code> would be <code>java.lang.reflect</code>
+     * 
+     * @return all the children of this package 
+     */
+    List<JavaPackage> getSubPackages();
 
-    public String getName();
+    /**
+     * The name of this package
+     * 
+     * @return the name
+     */
+    String getName();
 
 }

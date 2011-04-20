@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -27,12 +29,12 @@ public interface JavaClassParent {
      * @return the fully-qualified name of the type, or null if it cannot
      *     be resolved
      */
-    public String resolveType(String typeName);
+    String resolveType(String typeName);
 
-    public JavaSource getParentSource();
+    JavaSource getParentSource();
 
-    public JavaClass getNestedClassByName(String name);
+    JavaClass getNestedClassByName(String name);
     
-    public com.thoughtworks.qdox.library.ClassLibrary getJavaClassLibrary(); 
+    ClassLibrary getJavaClassLibrary(); 
     
 }

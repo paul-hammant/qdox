@@ -35,12 +35,12 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     /**
      * is interface?  (otherwise enum or class)
      */
-    public boolean isInterface();
+    boolean isInterface();
 
     /**
      * is enum?  (otherwise class or interface)
      */
-    public boolean isEnum();
+    boolean isEnum();
 
     /**
      * (don't know if this is required)
@@ -48,31 +48,31 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @return
      * @since 2.0 
      */
-    public boolean isAnnotation();
+    boolean isAnnotation();
 
-    public Type getSuperClass();
+    Type getSuperClass();
 
     /**
      * Shorthand for getSuperClass().getJavaClass() with null checking.
      */
-    public JavaClass getSuperJavaClass();
+    JavaClass getSuperJavaClass();
 
-    public List<Type> getImplements();
+    List<Type> getImplements();
 
     /**
      * @since 1.3
      */
-    public List<JavaClass> getImplementedInterfaces();
+    List<JavaClass> getImplementedInterfaces();
 
-    public String getCodeBlock();
+    String getCodeBlock();
 
-    public List<TypeVariable> getTypeParameters();
+    List<TypeVariable> getTypeParameters();
 
-    public JavaSource getParentSource();
+    JavaSource getParentSource();
 
-    public JavaPackage getPackage();
+    JavaPackage getPackage();
 
-    public JavaClassParent getParent();
+    JavaClassParent getParent();
 
     /**
      * If this class has a package, the packagename will be returned.
@@ -80,30 +80,30 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * 
      * @return
      */
-    public String getPackageName();
+    String getPackageName();
 
-    public String getFullyQualifiedName();
+    String getFullyQualifiedName();
 
     /**
      * @since 1.3
      */
-    public boolean isInner();
+    boolean isInner();
 
-    public String resolveType( String typeName );
+    String resolveType( String typeName );
 
-    public String getClassNamePrefix();
+    String getClassNamePrefix();
 
     @Deprecated
-    public Type asType();
+    Type asType();
 
-    public List<JavaMethod> getMethods();
+    List<JavaMethod> getMethods();
     
     /**
      * 
      * @return the list of constructors
      * @since 2.0
      */
-    public List<JavaConstructor> getConstructors();
+    List<JavaConstructor> getConstructors();
     
     
     /**
@@ -112,7 +112,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @return the constructor matching the parameterTypes, otherwise <code>null</code>
      * @since 2.0
      */
-    public JavaConstructor getConstructor(List<Type> parameterTypes);
+    JavaConstructor getConstructor(List<Type> parameterTypes);
     
     /**
      * 
@@ -121,13 +121,13 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @return the constructor matching the parameterTypes and the varArg, otherwise <code>null</code>
      * @since 2.0
      */
-    public JavaConstructor getConstructor(List<Type> parameterTypes, boolean varArg);
+    JavaConstructor getConstructor(List<Type> parameterTypes, boolean varArg);
     
 
     /**
      * @since 1.3
      */
-    public List<JavaMethod> getMethods( boolean superclasses );
+    List<JavaMethod> getMethods( boolean superclasses );
 
     /**
      * 
@@ -135,7 +135,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @param parameterTypes parameter types or null if there are no parameters.
      * @return the matching method or null if no match is found.
      */
-    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes );
+    JavaMethod getMethodBySignature( String name, List<Type> parameterTypes );
 
     /**
      * This should be the signature for getMethodBySignature
@@ -145,7 +145,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @param varArgs
      * @return
      */
-    public JavaMethod getMethod( String name, List<Type> parameterTypes, boolean varArgs );
+    JavaMethod getMethod( String name, List<Type> parameterTypes, boolean varArgs );
 
     /**
      * 
@@ -154,26 +154,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @param superclasses
      * @return
      */
-    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses );
-
-    /**
-     * 
-     * @param name
-     * @param parameterTypes
-     * @param superclasses
-     * @param varArg
-     * @return
-     */
-    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses, boolean varArg );
-
-    /**
-     * 
-     * @param name
-     * @param parameterTypes
-     * @param superclasses
-     * @return
-     */
-    public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses );
+    JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses );
 
     /**
      * 
@@ -183,115 +164,134 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @param varArg
      * @return
      */
-    public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses,
+    JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses, boolean varArg );
+
+    /**
+     * 
+     * @param name
+     * @param parameterTypes
+     * @param superclasses
+     * @return
+     */
+    List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses );
+
+    /**
+     * 
+     * @param name
+     * @param parameterTypes
+     * @param superclasses
+     * @param varArg
+     * @return
+     */
+    List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses,
                                                    boolean varArg );
 
-    public List<JavaField> getFields();
+    List<JavaField> getFields();
 
-    public JavaField getFieldByName( String name );
+    JavaField getFieldByName( String name );
 
     /**
      * @deprecated Use {@link #getNestedClasses()} instead.
      */
-    public List<JavaClass> getClasses();
+    List<JavaClass> getClasses();
 
     /**
      * @since 1.3
      */
-    public List<JavaClass> getNestedClasses();
+    List<JavaClass> getNestedClasses();
 
-    public JavaClass getNestedClassByName( String name );
-
-    /**
-     * @since 1.3
-     */
-    public boolean isA( String fullClassName );
+    JavaClass getNestedClassByName( String name );
 
     /**
      * @since 1.3
      */
-    public boolean isA( JavaClass javaClass );
+    boolean isA( String fullClassName );
+
+    /**
+     * @since 1.3
+     */
+    boolean isA( JavaClass javaClass );
 
     /**
      * Gets bean properties without looking in superclasses or interfaces.
      *
      * @since 1.3
      */
-    public List<BeanProperty> getBeanProperties();
+    List<BeanProperty> getBeanProperties();
 
     /**
      * @since 1.3
      */
-    public List<BeanProperty> getBeanProperties( boolean superclasses );
+    List<BeanProperty> getBeanProperties( boolean superclasses );
 
     /**
      * Gets bean property without looking in superclasses or interfaces.
      *
      * @since 1.3
      */
-    public BeanProperty getBeanProperty( String propertyName );
+    BeanProperty getBeanProperty( String propertyName );
 
     /**
      * @since 1.3
      */
-    public BeanProperty getBeanProperty( String propertyName, boolean superclasses );
+    BeanProperty getBeanProperty( String propertyName, boolean superclasses );
 
     /**
      * Gets the known derived classes. That is, subclasses or implementing classes.
      */
-    public List<JavaClass> getDerivedClasses();
+    List<JavaClass> getDerivedClasses();
 
-    public List<DocletTag> getTagsByName( String name, boolean superclasses );
+    List<DocletTag> getTagsByName( String name, boolean superclasses );
 
-    public ClassLibrary getJavaClassLibrary();
+    ClassLibrary getJavaClassLibrary();
 
-    public String getName();
+    String getName();
     
-    public List<String> getModifiers();
+    List<String> getModifiers();
     
     /**
      * Return <code>true</code> if the class includes the public modifier, <code>false</code> otherwise.
      * 
      * @return <code>true</code> if class the public modifier; <code>false</code> otherwise.
      */
-    public boolean isPublic();
+    boolean isPublic();
     
     /**
      * Return <code>true</code> if the class includes the protected modifier, <code>false</code> otherwise.
      * 
      * @return <code>true</code> if class the protected modifier; <code>false</code> otherwise.
      */
-    public boolean isProtected();
+    boolean isProtected();
     
     /**
      * Return <code>true</code> if the class includes the private modifier, <code>false</code> otherwise.
      * 
      * @return <code>true</code> if class the private modifier; <code>false</code> otherwise.
      */
-    public boolean isPrivate();
+    boolean isPrivate();
     
     /**
      * Return <code>true</code> if the class includes the final modifier, <code>false</code> otherwise.
      * 
      * @return <code>true</code> if class the final modifier; <code>false</code> otherwise.
      */
-    public boolean isFinal();
+    boolean isFinal();
     
     /**
      * Return <code>true</code> if the class includes the static modifier, <code>false</code> otherwise.
      * 
      * @return <code>true</code> if class the static modifier; <code>false</code> otherwise.
      */
-    public boolean isStatic();
+    boolean isStatic();
     
     /**
      * Return <code>true</code> if the class includes the abstract modifier, <code>false</code> otherwise.
      * 
      * @return <code>true</code> if class the abstract modifier; <code>false</code> otherwise.
      */
-    public boolean isAbstract();
+    boolean isAbstract();
     
-    public boolean isPrimitive();
+    boolean isPrimitive();
     
     /**
      * (API description of java.lang.Class.toString())
@@ -304,5 +304,5 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @return a string representation of this class object.
      */
     @Override
-    public String toString();
+    String toString();
 }

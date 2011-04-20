@@ -29,31 +29,31 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return the return type
      * @deprecated it is recommended to use getReturnType()
      */
-    public Type getReturns();
+    Type getReturns();
 
-    public List<JavaParameter> getParameters();
+    List<JavaParameter> getParameters();
 
-    public JavaParameter getParameterByName( String name );
+    JavaParameter getParameterByName( String name );
 
-    public List<Type> getExceptions();
+    List<Type> getExceptions();
 
     /**
      * 
      * @return true is this method conains varArgs
      */
-    public boolean isVarArgs();
+    boolean isVarArgs();
 
-    public String getCodeBlock();
-
-    /**
-     * @since 1.3
-     */
-    public String getDeclarationSignature( boolean withModifiers );
+    String getCodeBlock();
 
     /**
      * @since 1.3
      */
-    public String getCallSignature();
+    String getDeclarationSignature( boolean withModifiers );
+
+    /**
+     * @since 1.3
+     */
+    String getCallSignature();
 
     /**
      * This method is NOT varArg aware.
@@ -62,7 +62,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @param parameterTypes
      * @return
      */
-    public boolean signatureMatches( String name, List<Type> parameterTypes );
+    boolean signatureMatches( String name, List<Type> parameterTypes );
 
     /**
      * @param name method name
@@ -70,44 +70,44 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @param varArg <code>true</code> is signature should match a varArg-method, otherwise <code>false</code>
      * @return true if the signature and parameters match.
      */
-    public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg );
+    boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg );
 
     /**
      * @return true if this method is a Java Bean accessor
      * @since 1.3
      */
-    public boolean isPropertyAccessor();
+    boolean isPropertyAccessor();
 
     /**
      * @return true if this method is a Java Bean accessor
      * @since 1.3
      */
-    public boolean isPropertyMutator();
+    boolean isPropertyMutator();
 
     /**
      * @return the type of the property this method represents, or null if this method
      * is not a property mutator or property accessor.
      * @since 1.3
      */
-    public Type getPropertyType();
+    Type getPropertyType();
 
     /**
      * @return the name of the property this method represents, or null if this method
      * is not a property mutator or property accessor.
      * @since 1.3
      */
-    public String getPropertyName();
+    String getPropertyName();
 
-    public List<DocletTag> getTagsByName( String name, boolean inherited );
+    List<DocletTag> getTagsByName( String name, boolean inherited );
 
     /**
      * Get the original source code of the body of this method.
      *
      * @return Code as string.
      */
-    public String getSourceCode();
+    String getSourceCode();
 
-    public List<TypeVariable> getTypeParameters();
+    List<TypeVariable> getTypeParameters();
 
     /**
      * Equivalent of java.lang.reflect.Method.getGenericReturnType()
@@ -115,7 +115,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return the generic returntype
      * @since 1.12
      */
-    public Type getGenericReturnType();
+    Type getGenericReturnType();
 
     /**
      * Equivalent of java.lang.reflect.Method.getReturnType()
@@ -123,7 +123,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return
      * @since 1.12
      */
-    public Type getReturnType();
+    Type getReturnType();
 
     /**
      * If a class inherits this method from a generic class or interface, you can use this method to get the resolved return type
@@ -132,14 +132,14 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return
      * @since 1.12
      */
-    public Type getReturnType( boolean resolve );
+    Type getReturnType( boolean resolve );
 
     /**
      * 
      * @return the parameter types as array
      * @since 1.12
      */
-    public List<Type> getParameterTypes();
+    List<Type> getParameterTypes();
 
     /**
      * If a class inherits this method from a generic class or interface, you can use this method to get the resolved parameter types
@@ -148,10 +148,9 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return the parameter types as array
      * @since 1.12
      */
-    public List<Type> getParameterTypes( boolean resolve );
+    List<Type> getParameterTypes( boolean resolve );
 
-    public JavaClass getParentClass();
+    JavaClass getParentClass();
 
-    public DocletTag getTagByName( String string, boolean b );
-
+    DocletTag getTagByName( String string, boolean b );
 }

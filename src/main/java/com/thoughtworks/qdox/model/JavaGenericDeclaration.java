@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface JavaGenericDeclaration
 {
-    public List<TypeVariable> getTypeParameters();
+    List<TypeVariable> getTypeParameters();
 }

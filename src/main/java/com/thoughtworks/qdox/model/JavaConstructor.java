@@ -12,22 +12,22 @@ public interface JavaConstructor
     extends JavaModel, JavaAnnotatedElement, JavaGenericDeclaration, JavaMember, Serializable, Comparable<JavaConstructor>
 {
 
-    public List<JavaParameter> getParameters();
+    List<JavaParameter> getParameters();
 
-    public JavaParameter getParameterByName( String name );
+    JavaParameter getParameterByName( String name );
     
-    public List<Type> getParameterTypes();
+    List<Type> getParameterTypes();
     
-    public List<Type> getExceptions();
+    List<Type> getExceptions();
 
-    public String getSourceCode();
+    String getSourceCode();
     
-    public String getCodeBlock();
+    String getCodeBlock();
 
-    public boolean isVarArgs();
+    boolean isVarArgs();
 
-    public boolean signatureMatches( List<Type> parameterTypes );
+    boolean signatureMatches( List<Type> parameterTypes );
 
-    public boolean signatureMatches( List<Type> parameterTypes, boolean varArgs );
+    boolean signatureMatches( List<Type> parameterTypes, boolean varArgs );
 
 }

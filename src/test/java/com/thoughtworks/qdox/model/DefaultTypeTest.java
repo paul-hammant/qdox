@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
+
 
 public class DefaultTypeTest extends TypeTest
 {
@@ -9,7 +11,7 @@ public class DefaultTypeTest extends TypeTest
         super( s );
     }
 
-    public JavaSource newJavaSource( com.thoughtworks.qdox.library.ClassLibrary library )
+    public JavaSource newJavaSource( ClassLibrary library )
     {
         return new DefaultJavaSource(library);
     }

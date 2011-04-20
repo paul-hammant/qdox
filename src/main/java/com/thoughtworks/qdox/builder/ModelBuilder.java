@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.thoughtworks.qdox.io.ModelWriterFactory;
+import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.DefaultJavaClass;
@@ -67,7 +68,7 @@ public class ModelBuilder implements Builder {
     private DocletTagFactory docletTagFactory;
     private ModelWriterFactory modelWriterFactory;
 
-    public ModelBuilder(com.thoughtworks.qdox.library.ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
+    public ModelBuilder(ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
         this.docletTagFactory = docletTagFactory;
         this.source = new DefaultJavaSource(classLibrary);
         this.currentAnnoDefs = new LinkedList<AnnoDef>();

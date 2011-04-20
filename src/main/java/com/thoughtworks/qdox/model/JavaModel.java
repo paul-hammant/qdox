@@ -23,10 +23,24 @@ import java.io.Serializable;
 
 public interface JavaModel extends Serializable
 {
-    public String getCodeBlock();
+    /**
+     * 
+     * @return the codeblock
+     */
+    String getCodeBlock();
 
-    public JavaSource getSource();
+    /**
+     * The compilation unit, which includes the imports, the public and anonymous classes
+     * 
+     * @return the {@link JavaSource} of this element
+     */
+    JavaSource getSource();
     
-	public int getLineNumber();
+    /**
+     * The line number where this element started
+     * 
+     * @return the line number of this element
+     */
+	int getLineNumber();
 
 }

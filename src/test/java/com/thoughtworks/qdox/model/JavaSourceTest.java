@@ -9,6 +9,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 
 public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
@@ -20,15 +21,18 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
     }
 
     //constructors
-    public abstract S newJavaSource(com.thoughtworks.qdox.library.ClassLibrary classLibrary);
-    
+    public abstract S newJavaSource(ClassLibrary classLibrary);
     
     //setters
     public abstract void setClasses(S source, List<JavaClass> classes);
     public abstract void setImports(S source, List<String> imports);
     public abstract void setPackage(S source, JavaPackage pckg);
 
-    public abstract JavaPackage newJavaPackage(String name);
+    public JavaPackage newJavaPackage(String name) {
+        JavaPackage result = mock( JavaPackage.class );
+        when( result.getName() ).thenReturn( name );
+        return result;
+    }
 
     protected void setUp() throws Exception {
         super.setUp();

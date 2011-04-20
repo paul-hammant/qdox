@@ -28,26 +28,26 @@ package com.thoughtworks.qdox.model;
 public interface JavaParameter extends JavaAnnotatedElement, Comparable<JavaParameter>
 {
 
-    public String getName();
+    String getName();
 
-    public Type getType();
+    Type getType();
 
-    public JavaMethod getParentMethod();
+    JavaMethod getParentMethod();
 
-    public JavaClass getParentClass();
+    JavaClass getParentClass();
 
     /**
      * Is this a Java 5 var args type specified using three dots. e.g. void doStuff(Object... thing)
      * @since 1.6
      */
-    public boolean isVarArgs();
+    boolean isVarArgs();
 
     /**
      * 
      * @return the resolved value if the method has typeParameters, otherwise type's value
      * @since 1.10
      */
-    public String getResolvedValue();
+    String getResolvedValue();
 
-    public String getResolvedGenericValue();
+    String getResolvedGenericValue();
 }

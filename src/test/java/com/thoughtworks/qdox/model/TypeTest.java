@@ -1,11 +1,13 @@
 package com.thoughtworks.qdox.model;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.library.ClassLoaderLibrary;
 
 public abstract class TypeTest extends TestCase {
@@ -14,7 +16,7 @@ public abstract class TypeTest extends TestCase {
         super(s);
     }
     
-    public abstract JavaSource newJavaSource(com.thoughtworks.qdox.library.ClassLibrary library);
+    public abstract JavaSource newJavaSource( ClassLibrary library );
     public abstract Type newType(String fullname);
     public abstract Type newType(String fullname, int dimensions);
     public abstract Type newType(String fullname, int dimensions, JavaSource source);

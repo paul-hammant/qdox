@@ -201,38 +201,21 @@ public class DefaultModelWriter implements ModelWriter
     public ModelWriter writeMethod( JavaMethod method )
     {
         commentHeader( method );
-        writeMethodBody( method, true, true, true );
-        return this;
-    }
-
-    private void writeMethodBody( JavaMethod method, boolean withModifiers, boolean isDeclaration, boolean isPrettyPrint )
-    {
-        if ( withModifiers )
-        {
-            writeAccessibilityModifier( method.getModifiers() );
-            writeNonAccessibilityModifiers( method.getModifiers() );
-        }
-
-        if ( isDeclaration )
-        {
-            buffer.write( method.getReturns().toString() );
-            buffer.write( ' ' );
-        }
-
+        writeAccessibilityModifier( method.getModifiers() );
+        writeNonAccessibilityModifiers( method.getModifiers() );
+        buffer.write( method.getReturns().toString() );
+        buffer.write( ' ' );
         buffer.write( method.getName() );
         buffer.write( '(' );
         for(ListIterator<JavaParameter> iter = method.getParameters().listIterator(); iter.hasNext();)
         {
             JavaParameter parameter = iter.next();
-            if ( isDeclaration )
+            buffer.write( parameter.getType().toString() );
+            if ( parameter.isVarArgs() )
             {
-                buffer.write( parameter.getType().toString() );
-                if ( parameter.isVarArgs() )
-                {
-                    buffer.write( "..." );
-                }
-                buffer.write( ' ' );
+                buffer.write( "..." );
             }
+            buffer.write( ' ' );
             buffer.write( parameter.getName() );
             if ( iter.hasNext() ) {
                 buffer.write( ", " );
@@ -240,34 +223,29 @@ public class DefaultModelWriter implements ModelWriter
 
         }
         buffer.write( ')' );
-        if ( isDeclaration )
-        {
-            if (method.getExceptions().size() > 0) {
-                buffer.write(" throws ");
-                for (Iterator<Type> excIter = method.getExceptions().iterator();excIter.hasNext();) {
-                    buffer.write(excIter.next().getValue());
-                    if(excIter.hasNext()) {
-                        buffer.write(", ");
-                    }
+        if (method.getExceptions().size() > 0) {
+            buffer.write(" throws ");
+            for (Iterator<Type> excIter = method.getExceptions().iterator();excIter.hasNext();) {
+                buffer.write(excIter.next().getValue());
+                if(excIter.hasNext()) {
+                    buffer.write(", ");
                 }
             }
         }
-        if ( isPrettyPrint )
+        if ( method.getSourceCode() != null && method.getSourceCode().length() > 0 )
         {
-            if ( method.getSourceCode() != null && method.getSourceCode().length() > 0 )
-            {
-                buffer.write( " {" );
-                buffer.newline();
-                buffer.write( method.getSourceCode() );
-                buffer.write( "}" );
-                buffer.newline();
-            }
-            else
-            {
-                buffer.write( ';' );
-                buffer.newline();
-            }
+            buffer.write( " {" );
+            buffer.newline();
+            buffer.write( method.getSourceCode() );
+            buffer.write( "}" );
+            buffer.newline();
         }
+        else
+        {
+            buffer.write( ';' );
+            buffer.newline();
+        }
+        return this;
     }
     
     private void writeNonAccessibilityModifiers(List<String> modifiers) {

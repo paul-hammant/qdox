@@ -69,7 +69,7 @@ public class SourceFolderLibrary
                 try
                 {
                     JavaSource source = parse( new FileReader( classFile ), classFile.toURI().toURL() );
-                    result = source.getNestedClassByName( className );
+                    result = source.getClassByName( className );
                 }
                 catch ( FileNotFoundException e )
                 {

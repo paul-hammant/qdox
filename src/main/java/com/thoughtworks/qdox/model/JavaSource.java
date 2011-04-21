@@ -81,6 +81,16 @@ public interface JavaSource extends JavaClassParent
      * @return the resolved JavaClass or <code>null</code>
      */
     JavaClass getNestedClassByName( String name );
+    
+    /**
+     * Try to get any class of this source by name.
+     * The name can be both the fully qualified name or just the name of the class.
+     * 
+     * @param name the (fully qualified) name of the class 
+     * @return the matching class, otherwise <code>null</code>
+     * @since 2.0
+     */
+    JavaClass getClassByName( String name ); 
 
     ClassLibrary getJavaClassLibrary();
 

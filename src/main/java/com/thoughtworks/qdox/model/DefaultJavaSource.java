@@ -324,7 +324,46 @@ public class DefaultJavaSource implements Serializable, JavaSource {
                 break;
             }
         }
-
+        return result;
+    }
+    
+    public JavaClass getClassByName(String name) 
+    {
+        JavaClass result = null;
+        
+        for ( JavaClass candidateClass : classes )
+        {
+            result = getClassByName( candidateClass, name );
+            if ( result != null ) 
+            {
+                result = candidateClass;
+                break;
+            }
+        }
+        return result;
+    }
+    
+    private JavaClass getClassByName(JavaClass clss, String name) 
+    {
+        JavaClass result = null;
+        if ( clss.getFullyQualifiedName().equals( name ) ) 
+        {
+            result = clss;
+        }
+        else if ( clss.getName().equals(name)) 
+        {
+            result = clss;
+        }
+        else {
+            for ( JavaClass nestedClss : clss.getClasses() )
+            {
+                result = getClassByName( nestedClss, name );
+                if ( result != null ) 
+                {
+                    break;
+                }
+            }
+        }
         return result;
     }
 

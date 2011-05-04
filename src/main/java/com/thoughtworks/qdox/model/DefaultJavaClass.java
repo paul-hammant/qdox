@@ -714,13 +714,6 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         return new LinkedList<DocletTag>(result);
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaClass#compareTo(java.lang.Object)
-     */
-    public int compareTo(JavaClass o) {
-        return getFullyQualifiedName().compareTo(o.getFullyQualifiedName());
-    }
-
     /**
      * @see http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Class.html#toString()
      */

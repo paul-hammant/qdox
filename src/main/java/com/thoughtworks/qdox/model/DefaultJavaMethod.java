@@ -243,10 +243,6 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         return Introspector.decapitalize(getName().substring(start));
     }
 
-    public int compareTo(JavaMethod o) {
-        return getDeclarationSignature(false).compareTo(o.getDeclarationSignature(false));
-    }
-
     public String toString() {
 		StringBuffer result = new StringBuffer();
 		if(isPrivate()) {

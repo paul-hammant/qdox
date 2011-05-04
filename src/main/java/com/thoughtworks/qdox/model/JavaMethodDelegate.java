@@ -310,9 +310,4 @@ public class JavaMethodDelegate implements JavaMethod
     {
         return getParameterTypes( false );
     }
-    
-    public int compareTo( JavaMethod o )
-    {
-        return originalMethod.compareTo( o );
-    }
 }

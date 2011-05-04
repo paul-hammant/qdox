@@ -113,11 +113,6 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
         // name isn't used in equality check.
         return getType().equals(p.getType());
     }
-    
-    public int compareTo( JavaParameter o )
-    {
-        return type.compareTo( o );
-    }
 	
     @Override
     public String toString() {

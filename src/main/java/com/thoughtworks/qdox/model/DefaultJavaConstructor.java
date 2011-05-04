@@ -101,20 +101,4 @@ public class DefaultJavaConstructor
         }
         return this.varArgs == c.isVarArgs();
     }
-    
-    public int compareTo( JavaConstructor o )
-    {
-        int result = getName().compareTo( o.getName() );
-        if( result == 0 ) 
-        {
-            int lhs = getParameters().size();
-            int rhs = o.getParameters().size();
-            result = ((lhs < rhs) ? -1 : ((lhs > rhs) ? 1 : 0));
-        }
-        for ( int index = 0; result ==0 && index < getParameters().size(); index++ )
-        {
-            result = getParameters().get( index ).compareTo( o.getParameters().get( index ) );
-        }
-        return result;
-    }
 }

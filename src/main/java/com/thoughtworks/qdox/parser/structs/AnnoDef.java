@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.thoughtworks.qdox.builder.AnnotationTransformer;
-import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 import com.thoughtworks.qdox.parser.expression.ElemValueDef;
 
 public class AnnoDef extends LocatedDef implements ElemValueDef
@@ -67,15 +66,5 @@ public class AnnoDef extends LocatedDef implements ElemValueDef
     
     public <U> U transform(AnnotationTransformer<U> transformer) {
     	return transformer.transform(this);
-    }
-    
-    //@todo remove, refactoring helper
-    public Object accept(AnnotationVisitor visitor) {
-    	return null;
-    }
-    
-    //@todo remove, refactoring helper
-    public Object getParameterValue() {
-    	return this;
     }
 }

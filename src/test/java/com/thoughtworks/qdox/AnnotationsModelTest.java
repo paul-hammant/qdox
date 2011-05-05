@@ -10,6 +10,7 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.parser.expression.AnnotationAdd;
 import com.thoughtworks.qdox.parser.expression.AnnotationConstant;
 import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
@@ -138,7 +139,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
-        AnnotationAdd add = (AnnotationAdd) annotation.getProperty( "value" );
+        Add add = (Add) annotation.getProperty( "value" );
         assertEquals( "Left", new Integer( 1 ), ((AnnotationConstant) add.getLeft()).getValue() );
         assertEquals( "Right", new Integer( 1 ), ((AnnotationConstant) add.getRight()).getValue() );
     }
@@ -152,7 +153,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
-        AnnotationAdd add = (AnnotationAdd) annotation.getProperty( "value" );
+        Add add = (Add) annotation.getProperty( "value" );
         assertEquals( "Left", "value = ", ((AnnotationConstant) add.getLeft()).getValue() );
         assertEquals( "Right", new Integer( 1 ), ((AnnotationConstant) add.getRight()).getValue() );
     }

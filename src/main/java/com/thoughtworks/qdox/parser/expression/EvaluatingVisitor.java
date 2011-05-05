@@ -27,6 +27,25 @@ import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.expression.Add;
+import com.thoughtworks.qdox.model.expression.And;
+import com.thoughtworks.qdox.model.expression.Divide;
+import com.thoughtworks.qdox.model.expression.Equals;
+import com.thoughtworks.qdox.model.expression.ExclusiveOr;
+import com.thoughtworks.qdox.model.expression.GreaterEquals;
+import com.thoughtworks.qdox.model.expression.GreaterThan;
+import com.thoughtworks.qdox.model.expression.LessEquals;
+import com.thoughtworks.qdox.model.expression.LessThan;
+import com.thoughtworks.qdox.model.expression.LogicalAnd;
+import com.thoughtworks.qdox.model.expression.LogicalOr;
+import com.thoughtworks.qdox.model.expression.Multiply;
+import com.thoughtworks.qdox.model.expression.NotEquals;
+import com.thoughtworks.qdox.model.expression.Or;
+import com.thoughtworks.qdox.model.expression.Remainder;
+import com.thoughtworks.qdox.model.expression.ShiftLeft;
+import com.thoughtworks.qdox.model.expression.ShiftRight;
+import com.thoughtworks.qdox.model.expression.Subtract;
+import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
 
 /**
  * Visitor that evaluates annotation expressions.
@@ -157,7 +176,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         throw new UnsupportedOperationException( "Illegal annotation value '" + annotation + "'." );
     }
 
-    public Object visitAnnotationAdd( AnnotationAdd op ) {
+    public Object visitAnnotationAdd( Add op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -189,7 +208,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return constant.getValue();
     }
 
-    public Object visitAnnotationDivide( AnnotationDivide op ) {
+    public Object visitAnnotationDivide( Divide op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -231,7 +250,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
 
     protected abstract Object getFieldReferenceValue( JavaField javaField );
 
-    public Object visitAnnotationGreaterThan( AnnotationGreaterThan op ) {
+    public Object visitAnnotationGreaterThan( GreaterThan op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -256,7 +275,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public Object visitAnnotationLessThan( AnnotationLessThan op ) {
+    public Object visitAnnotationLessThan( LessThan op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -281,7 +300,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public Object visitAnnotationMultiply( AnnotationMultiply op ) {
+    public Object visitAnnotationMultiply( Multiply op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -310,7 +329,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return parenExpression.getValue().accept( this );
     }
 
-    public Object visitAnnotationSubtract( AnnotationSubtract op ) {
+    public Object visitAnnotationSubtract( Subtract op ) {
         Object left = op.getLeft().accept( this );
         Object right = op.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -351,7 +370,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return list;
     }
 
-    public Object visitAnnotationAnd( AnnotationAnd and ) {
+    public Object visitAnnotationAnd( And and ) {
         Object left = and.getLeft().accept( this );
         Object right = and.getRight().accept( this );
         Class<?> type = numericResultType( left, right );
@@ -370,7 +389,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationGreaterEquals( AnnotationGreaterEquals greaterEquals ) {
+    public Object visitAnnotationGreaterEquals( GreaterEquals greaterEquals ) {
         Object left = greaterEquals.getLeft().accept( this );
         Object right = greaterEquals.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -395,7 +414,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public Object visitAnnotationLessEquals( AnnotationLessEquals lessEquals ) {
+    public Object visitAnnotationLessEquals( LessEquals lessEquals ) {
         Object left = lessEquals.getLeft().accept( this );
         Object right = lessEquals.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -420,7 +439,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public Object visitAnnotationLogicalAnd( AnnotationLogicalAnd and ) {
+    public Object visitAnnotationLogicalAnd( LogicalAnd and ) {
         Object left = and.getLeft().accept( this );
         Object right = and.getRight().accept( this );
         boolean result;
@@ -449,7 +468,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public Object visitAnnotationLogicalOr( AnnotationLogicalOr or ) {
+    public Object visitAnnotationLogicalOr( LogicalOr or ) {
         Object left = or.getLeft().accept( this );
         Object right = or.getRight().accept( this );
         boolean result;
@@ -506,7 +525,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationOr( AnnotationOr or ) {
+    public Object visitAnnotationOr( Or or ) {
         Object left = or.getLeft().accept( this );
         Object right = or.getRight().accept( this );
         Class<?> type = numericResultType( left, right );
@@ -539,7 +558,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationRemainder( AnnotationRemainder remainder ) {
+    public Object visitAnnotationRemainder( Remainder remainder ) {
         Object left = remainder.getLeft().accept( this );
         Object right = remainder.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -564,7 +583,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationShiftLeft( AnnotationShiftLeft shiftLeft ) {
+    public Object visitAnnotationShiftLeft( ShiftLeft shiftLeft ) {
         Object left = shiftLeft.getLeft().accept( this );
         Object right = shiftLeft.getRight().accept( this );
         Class<?> type = numericResultType( left, right );
@@ -583,7 +602,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationShiftRight( AnnotationShiftRight shiftRight ) {
+    public Object visitAnnotationShiftRight( ShiftRight shiftRight ) {
         Object left = shiftRight.getLeft().accept( this );
         Object right = shiftRight.getRight().accept( this );
         Class<?> type = numericResultType( left, right );
@@ -602,7 +621,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationUnsignedShiftRight( AnnotationUnsignedShiftRight shiftRight ) {
+    public Object visitAnnotationUnsignedShiftRight( UnsignedShiftRight shiftRight ) {
         Object left = shiftRight.getLeft().accept( this );
         Object right = shiftRight.getRight().accept( this );
         Class<?> type = numericResultType( left, right );
@@ -621,7 +640,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationEquals( AnnotationEquals annotationEquals ) {
+    public Object visitAnnotationEquals( Equals annotationEquals ) {
         Object left = annotationEquals.getLeft().accept( this );
         Object right = annotationEquals.getRight().accept( this );
         Class<?> type = resultType( left, right );
@@ -646,7 +665,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public Object visitAnnotationExclusiveOr( AnnotationExclusiveOr annotationExclusiveOr ) {
+    public Object visitAnnotationExclusiveOr( ExclusiveOr annotationExclusiveOr ) {
         Object left = annotationExclusiveOr.getLeft().accept( this );
         Object right = annotationExclusiveOr.getRight().accept( this );
         Class<?> type = numericResultType( left, right );
@@ -665,7 +684,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationNotEquals( AnnotationNotEquals annotationNotEquals ) {
+    public Object visitAnnotationNotEquals( NotEquals annotationNotEquals ) {
         Object left = annotationNotEquals.getLeft().accept( this );
         Object right = annotationNotEquals.getRight().accept( this );
         Class<?> type = resultType( left, right );

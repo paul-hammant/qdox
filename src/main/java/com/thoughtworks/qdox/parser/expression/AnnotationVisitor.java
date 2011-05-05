@@ -19,7 +19,27 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
+
 import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.expression.Add;
+import com.thoughtworks.qdox.model.expression.And;
+import com.thoughtworks.qdox.model.expression.Divide;
+import com.thoughtworks.qdox.model.expression.Equals;
+import com.thoughtworks.qdox.model.expression.ExclusiveOr;
+import com.thoughtworks.qdox.model.expression.GreaterEquals;
+import com.thoughtworks.qdox.model.expression.GreaterThan;
+import com.thoughtworks.qdox.model.expression.LessEquals;
+import com.thoughtworks.qdox.model.expression.LessThan;
+import com.thoughtworks.qdox.model.expression.LogicalAnd;
+import com.thoughtworks.qdox.model.expression.LogicalOr;
+import com.thoughtworks.qdox.model.expression.Multiply;
+import com.thoughtworks.qdox.model.expression.NotEquals;
+import com.thoughtworks.qdox.model.expression.Or;
+import com.thoughtworks.qdox.model.expression.Remainder;
+import com.thoughtworks.qdox.model.expression.ShiftLeft;
+import com.thoughtworks.qdox.model.expression.ShiftRight;
+import com.thoughtworks.qdox.model.expression.Subtract;
+import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
 
 /**
  * Visitor class for the annotation model elements
@@ -28,17 +48,17 @@ import com.thoughtworks.qdox.model.Annotation;
  */
 public interface AnnotationVisitor {
 
-    public Object visitAnnotationAdd( AnnotationAdd add );
+    public Object visitAnnotationAdd( Add add );
 
-    public Object visitAnnotationSubtract( AnnotationSubtract subtract );
+    public Object visitAnnotationSubtract( Subtract subtract );
 
-    public Object visitAnnotationMultiply( AnnotationMultiply multiply );
+    public Object visitAnnotationMultiply( Multiply multiply );
 
-    public Object visitAnnotationDivide( AnnotationDivide divide );
+    public Object visitAnnotationDivide( Divide divide );
 
-    public Object visitAnnotationGreaterThan( AnnotationGreaterThan greaterThan );
+    public Object visitAnnotationGreaterThan( GreaterThan greaterThan );
 
-    public Object visitAnnotationLessThan( AnnotationLessThan lessThan );
+    public Object visitAnnotationLessThan( LessThan lessThan );
 
     public Object visitAnnotation( Annotation annotation );
 
@@ -52,25 +72,25 @@ public interface AnnotationVisitor {
 
     public Object visitAnnotationFieldRef( AnnotationFieldRef fieldRef );
 
-    public Object visitAnnotationLessEquals( AnnotationLessEquals lessEquals );
+    public Object visitAnnotationLessEquals( LessEquals lessEquals );
 
-    public Object visitAnnotationGreaterEquals( AnnotationGreaterEquals greaterEquals );
+    public Object visitAnnotationGreaterEquals( GreaterEquals greaterEquals );
 
-    public Object visitAnnotationRemainder( AnnotationRemainder remainder );
+    public Object visitAnnotationRemainder( Remainder remainder );
 
-    public Object visitAnnotationOr( AnnotationOr or );
+    public Object visitAnnotationOr( Or or );
 
-    public Object visitAnnotationAnd( AnnotationAnd and );
+    public Object visitAnnotationAnd( And and );
 
-    public Object visitAnnotationShiftLeft( AnnotationShiftLeft left );
+    public Object visitAnnotationShiftLeft( ShiftLeft left );
 
-    public Object visitAnnotationShiftRight( AnnotationShiftRight right );
+    public Object visitAnnotationShiftRight( ShiftRight right );
 
     public Object visitAnnotationNot( AnnotationNot not );
 
-    public Object visitAnnotationLogicalOr( AnnotationLogicalOr or );
+    public Object visitAnnotationLogicalOr( LogicalOr or );
 
-    public Object visitAnnotationLogicalAnd( AnnotationLogicalAnd and );
+    public Object visitAnnotationLogicalAnd( LogicalAnd and );
 
     public Object visitAnnotationLogicalNot( AnnotationLogicalNot not );
 
@@ -78,13 +98,13 @@ public interface AnnotationVisitor {
 
     public Object visitAnnotationPlusSign( AnnotationPlusSign sign );
 
-    public Object visitAnnotationUnsignedShiftRight( AnnotationUnsignedShiftRight right );
+    public Object visitAnnotationUnsignedShiftRight( UnsignedShiftRight right );
 
-    public Object visitAnnotationEquals( AnnotationEquals annotationEquals );
+    public Object visitAnnotationEquals( Equals annotationEquals );
 
-    public Object visitAnnotationNotEquals( AnnotationNotEquals annotationNotEquals );
+    public Object visitAnnotationNotEquals( NotEquals annotationNotEquals );
 
-    public Object visitAnnotationExclusiveOr( AnnotationExclusiveOr annotationExclusiveOr );
+    public Object visitAnnotationExclusiveOr( ExclusiveOr annotationExclusiveOr );
 
     public Object visitAnnotationQuery( AnnotationQuery annotationQuery );
 

@@ -1,4 +1,6 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
+
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,19 +21,12 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-public abstract class AnnotationBinaryOperator implements ElemValueDef {
+public abstract class BinaryOperator implements AnnotationValue {
 	
-	public ElemValueDef lhs, rhs;
-
     private AnnotationValue left;
     private AnnotationValue right;
     
-    public AnnotationBinaryOperator(ElemValueDef lhs, ElemValueDef rhs) {
-		this.lhs = lhs;
-		this.rhs = rhs;
-	}
-
-	public AnnotationBinaryOperator( AnnotationValue left, AnnotationValue right ) {
+	public BinaryOperator( AnnotationValue left, AnnotationValue right ) {
         this.left = left;
         this.right = right;
     }

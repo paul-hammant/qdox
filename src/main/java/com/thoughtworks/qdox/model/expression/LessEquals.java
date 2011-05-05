@@ -1,6 +1,7 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,36 +22,21 @@ import com.thoughtworks.qdox.builder.AnnotationTransformer;
  * under the License.
  */
 
-public class AnnotationUnsignedShiftRight extends AnnotationBinaryOperator {
+public class LessEquals extends BinaryOperator {
 
-    public AnnotationUnsignedShiftRight( AnnotationValue left, AnnotationValue right ) {
+    public LessEquals( AnnotationValue left, AnnotationValue right ) {
         super( left, right );
     }
 
-    public AnnotationUnsignedShiftRight(ElemValueDef lhs, ElemValueDef rhs) {
-    	super(lhs, rhs);
-    }
-
 	public String toString() {
-        return getLeft().toString() + " >>> " + getRight().toString();
+        return getLeft().toString() + " <= " + getRight().toString();
     }
 
-	/**
-     * @deprecated used by model
-     */
     public Object accept( AnnotationVisitor visitor ) {
-        return null;
+        return visitor.visitAnnotationLessEquals( this );
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object getParameterValue() {
-        return getLeft().getParameterValue() + " >>> " + getRight().getParameterValue();
+        return getLeft().getParameterValue() + " <= " + getRight().getParameterValue();
     }
-    
-    public <U> U transform(AnnotationTransformer<U> transformer) {
-    	return transformer.transform(this);
-    }
-
 }

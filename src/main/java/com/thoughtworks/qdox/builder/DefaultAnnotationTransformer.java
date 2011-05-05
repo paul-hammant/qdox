@@ -26,6 +26,25 @@ import java.util.Map;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.expression.Add;
+import com.thoughtworks.qdox.model.expression.And;
+import com.thoughtworks.qdox.model.expression.Divide;
+import com.thoughtworks.qdox.model.expression.Equals;
+import com.thoughtworks.qdox.model.expression.ExclusiveOr;
+import com.thoughtworks.qdox.model.expression.GreaterEquals;
+import com.thoughtworks.qdox.model.expression.GreaterThan;
+import com.thoughtworks.qdox.model.expression.LessEquals;
+import com.thoughtworks.qdox.model.expression.LessThan;
+import com.thoughtworks.qdox.model.expression.LogicalAnd;
+import com.thoughtworks.qdox.model.expression.LogicalOr;
+import com.thoughtworks.qdox.model.expression.Multiply;
+import com.thoughtworks.qdox.model.expression.NotEquals;
+import com.thoughtworks.qdox.model.expression.Or;
+import com.thoughtworks.qdox.model.expression.Remainder;
+import com.thoughtworks.qdox.model.expression.ShiftLeft;
+import com.thoughtworks.qdox.model.expression.ShiftRight;
+import com.thoughtworks.qdox.model.expression.Subtract;
+import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
 import com.thoughtworks.qdox.parser.expression.AnnotationAdd;
 import com.thoughtworks.qdox.parser.expression.AnnotationAnd;
 import com.thoughtworks.qdox.parser.expression.AnnotationCast;
@@ -103,7 +122,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationAdd annotationAdd) {
 		AnnotationValue left = annotationAdd.lhs.transform(this);
 		AnnotationValue right = annotationAdd.rhs.transform(this);
-		return new AnnotationAdd(left, right);
+		return new Add(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -112,7 +131,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationAnd annotationAnd) {
 		AnnotationValue left = annotationAnd.lhs.transform(this);
 		AnnotationValue right = annotationAnd.rhs.transform(this);
-		return new AnnotationAnd(left, right);
+		return new And(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -121,7 +140,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationDivide annotationDivide) {
 		AnnotationValue left = annotationDivide.lhs.transform(this);
 		AnnotationValue right = annotationDivide.rhs.transform(this);
-		return new AnnotationDivide(left, right);
+		return new Divide(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -130,7 +149,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationEquals annotationEquals) {
 		AnnotationValue left = annotationEquals.lhs.transform(this);
 		AnnotationValue right = annotationEquals.rhs.transform(this);
-		return new AnnotationEquals(left, right);
+		return new Equals(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -139,7 +158,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationExclusiveOr annotationExclusiveOr) {
 		AnnotationValue left = annotationExclusiveOr.lhs.transform(this);
 		AnnotationValue right = annotationExclusiveOr.rhs.transform(this);
-		return new AnnotationExclusiveOr(left, right);
+		return new ExclusiveOr(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -148,7 +167,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationGreaterEquals annotationGreaterEquals) {
 		AnnotationValue left = annotationGreaterEquals.lhs.transform(this);
 		AnnotationValue right = annotationGreaterEquals.rhs.transform(this);
-		return new AnnotationGreaterEquals(left, right);
+		return new GreaterEquals(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -157,7 +176,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationGreaterThan annotationGreaterThan) {
 		AnnotationValue left = annotationGreaterThan.lhs.transform(this);
 		AnnotationValue right = annotationGreaterThan.rhs.transform(this);
-		return new AnnotationGreaterThan(left, right);
+		return new GreaterThan(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -166,7 +185,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationLessEquals annotationLessEquals) {
 		AnnotationValue left = annotationLessEquals.lhs.transform(this);
 		AnnotationValue right = annotationLessEquals.rhs.transform(this);
-		return new AnnotationLessEquals(left, right);
+		return new LessEquals(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -175,7 +194,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationLessThan annotationLessThan) {
 		AnnotationValue left = annotationLessThan.lhs.transform(this);
 		AnnotationValue right = annotationLessThan.rhs.transform(this);
-		return new AnnotationLessThan(left, right);
+		return new LessThan(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -184,7 +203,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationLogicalAnd annotationLogicalAnd) {
 		AnnotationValue left = annotationLogicalAnd.lhs.transform(this);
 		AnnotationValue right = annotationLogicalAnd.rhs.transform(this);
-		return new AnnotationLogicalAnd(left, right);
+		return new LogicalAnd(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -193,7 +212,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationLogicalOr annotationLogicalOr) {
 		AnnotationValue left = annotationLogicalOr.lhs.transform(this);
 		AnnotationValue right = annotationLogicalOr.rhs.transform(this);
-		return new AnnotationLogicalOr(left, right);
+		return new LogicalOr(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -202,7 +221,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationMultiply annotationMultiply) {
 		AnnotationValue left = annotationMultiply.lhs.transform(this);
 		AnnotationValue right = annotationMultiply.rhs.transform(this);
-		return new AnnotationMultiply(left, right);
+		return new Multiply(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -211,7 +230,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationNotEquals annotationNotEquals) {
 		AnnotationValue left = annotationNotEquals.lhs.transform(this);
 		AnnotationValue right = annotationNotEquals.rhs.transform(this);
-		return new AnnotationNotEquals(left, right);
+		return new NotEquals(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -220,7 +239,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationOr annotationOr) {
 		AnnotationValue left = annotationOr.lhs.transform(this);
 		AnnotationValue right = annotationOr.rhs.transform(this);
-		return new AnnotationOr(left, right);
+		return new Or(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -229,7 +248,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationRemainder annotationRemainder) {
 		AnnotationValue left = annotationRemainder.lhs.transform(this);
 		AnnotationValue right = annotationRemainder.rhs.transform(this);
-		return new AnnotationRemainder(left, right);
+		return new Remainder(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -238,7 +257,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationShiftLeft annotationShiftLeft) {
 		AnnotationValue left = annotationShiftLeft.lhs.transform(this);
 		AnnotationValue right = annotationShiftLeft.rhs.transform(this);
-		return new AnnotationShiftLeft(left, right);
+		return new ShiftLeft(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -247,7 +266,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationShiftRight annotationShiftRight) {
 		AnnotationValue left = annotationShiftRight.lhs.transform(this);
 		AnnotationValue right = annotationShiftRight.rhs.transform(this);
-		return new AnnotationShiftRight(left, right);
+		return new ShiftRight(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -256,7 +275,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationSubtract annotationSubtract) {
 		AnnotationValue left = annotationSubtract.lhs.transform(this);
 		AnnotationValue right = annotationSubtract.rhs.transform(this);
-		return new AnnotationSubtract(left, right);
+		return new Subtract(left, right);
 	}
 
 	/* (non-Javadoc)
@@ -265,7 +284,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationUnsignedShiftRight annotationUnsignedShiftRight) {
 		AnnotationValue left = annotationUnsignedShiftRight.lhs.transform(this);
 		AnnotationValue right = annotationUnsignedShiftRight.rhs.transform(this);
-		return new AnnotationUnsignedShiftRight(left, right);
+		return new UnsignedShiftRight(left, right);
 	}
 
 	/* (non-Javadoc)

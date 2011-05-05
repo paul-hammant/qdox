@@ -35,10 +35,16 @@ public class AnnotationDivide extends AnnotationBinaryOperator {
         return getLeft().toString() + " / " + getRight().toString();
     }
 
+    /**
+     * @deprecated used by model
+     */
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationDivide( this );
+        return null;
     }
 
+    /**
+     * @deprecated used by model
+     */
     public Object getParameterValue() {
         return getLeft().getParameterValue() + " / " + getRight().getParameterValue();
     }

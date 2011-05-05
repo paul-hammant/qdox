@@ -1,4 +1,8 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
+
+import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,46 +23,33 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
-import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.parser.structs.TypeDef;
+public class Cast implements AnnotationValue {
 
-public class AnnotationTypeRef implements AnnotationValue, ElemValueDef {
-
-    private Type type;
-	public TypeDef typeDef;
-
-    public AnnotationTypeRef( Type type ) {
-        this.type = type;
-    }
+    private final Type type;
+    private final AnnotationValue value;
     
-    public AnnotationTypeRef(TypeDef typeDef) {
-		this.typeDef = typeDef;
-	}
+    public Cast( Type type, AnnotationValue value ) {
+        this.type = type;
+        this.value = value;
+    }
 
 	public Type getType() {
-        return type;
+        return this.type;
+    }
+
+    public AnnotationValue getValue() {
+        return this.value;
+    }
+
+    public Object accept( AnnotationVisitor visitor ) {
+        return visitor.visitAnnotationCast( this );
+    }
+
+    public Object getParameterValue() {
+        return "(" + type.getValue() + ") " + value.getParameterValue();
     }
 
     public String toString() {
-        return type.getValue() + ".class";
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object accept( AnnotationVisitor visitor ) {
-        return null;
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object getParameterValue() {
-        return type.getValue() + ".class";
-    }
-    
-    public <U> U transform(AnnotationTransformer<U> transformer) {
-    	return transformer.transform(this);
+        return "(" + type.getValue() + ") " + value.toString();
     }
 }

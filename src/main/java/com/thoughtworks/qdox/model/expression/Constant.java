@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,46 +19,39 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
-import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.parser.structs.TypeDef;
+import java.io.Serializable;
 
-public class AnnotationTypeRef implements AnnotationValue, ElemValueDef {
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
-    private Type type;
-	public TypeDef typeDef;
+public class Constant implements AnnotationValue, Serializable {
 
-    public AnnotationTypeRef( Type type ) {
-        this.type = type;
+    private final Object value;
+
+    private final String image;
+
+    public Constant( Object value, String image ) {
+        this.value = value;
+        this.image = image;
     }
-    
-    public AnnotationTypeRef(TypeDef typeDef) {
-		this.typeDef = typeDef;
-	}
 
-	public Type getType() {
-        return type;
+    public Object getValue() {
+        return value;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public String toString() {
-        return type.getValue() + ".class";
+        return image;
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object accept( AnnotationVisitor visitor ) {
-        return null;
+        return visitor.visitAnnotationConstant( this );
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object getParameterValue() {
-        return type.getValue() + ".class";
-    }
-    
-    public <U> U transform(AnnotationTransformer<U> transformer) {
-    	return transformer.transform(this);
+        return image;
     }
 }

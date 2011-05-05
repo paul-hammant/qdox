@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,14 +21,15 @@ package com.thoughtworks.qdox.parser.expression;
 
 import java.util.StringTokenizer;
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
-public class AnnotationFieldRef implements AnnotationValue, ElemValueDef {
+public class FieldRef implements AnnotationValue {
 
     private final int[] parts;
 
@@ -40,7 +41,7 @@ public class AnnotationFieldRef implements AnnotationValue, ElemValueDef {
 
     private int fieldIndex = -1;
 
-    public AnnotationFieldRef( String name ) {
+    public FieldRef( String name ) {
         this.name = name;
 
         int length = new StringTokenizer( name, "." ).countTokens();
@@ -70,16 +71,10 @@ public class AnnotationFieldRef implements AnnotationValue, ElemValueDef {
         return parts.length - 1;
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object accept( AnnotationVisitor visitor ) {
-        return null;
+        return visitor.visitAnnotationFieldRef( this );
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object getParameterValue() {
         return getName();
     }
@@ -163,9 +158,5 @@ public class AnnotationFieldRef implements AnnotationValue, ElemValueDef {
         }
 
         return field;
-    }
-
-    public <U> U transform(AnnotationTransformer<U> transformer) {
-    	return transformer.transform(this);
     }
 }

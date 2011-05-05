@@ -51,10 +51,16 @@ public class AnnotationCast implements AnnotationValue, ElemValueDef {
         return this.value;
     }
 
+    /**
+     * @deprecated used by model
+     */
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationCast( this );
+        return null;
     }
 
+    /**
+     * @deprecated used by model
+     */
     public Object getParameterValue() {
         return "(" + type.getValue() + ") " + value.getParameterValue();
     }

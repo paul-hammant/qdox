@@ -9,7 +9,7 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
+import com.thoughtworks.qdox.model.expression.FieldRef;
 
 public class AnnotationsTest extends TestCase {
 
@@ -253,7 +253,7 @@ public class AnnotationsTest extends TestCase {
         		"}";
         builder.addSource( new StringReader( source ) );
         JavaMethod method = builder.getClasses().get(0).getMethods().get(0);
-        AnnotationFieldRef suppressWarnings = (AnnotationFieldRef) method.getAnnotations().get(0).getProperty( "value" );
+        FieldRef suppressWarnings = (FieldRef) method.getAnnotations().get(0).getProperty( "value" );
         assertEquals( builder.getClasses().get(0).getFields().get(0), suppressWarnings.getField());
     }
     

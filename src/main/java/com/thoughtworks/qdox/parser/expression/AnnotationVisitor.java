@@ -23,9 +23,12 @@ package com.thoughtworks.qdox.parser.expression;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
+import com.thoughtworks.qdox.model.expression.Cast;
+import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.Divide;
 import com.thoughtworks.qdox.model.expression.Equals;
 import com.thoughtworks.qdox.model.expression.ExclusiveOr;
+import com.thoughtworks.qdox.model.expression.FieldRef;
 import com.thoughtworks.qdox.model.expression.GreaterEquals;
 import com.thoughtworks.qdox.model.expression.GreaterThan;
 import com.thoughtworks.qdox.model.expression.LessEquals;
@@ -35,10 +38,13 @@ import com.thoughtworks.qdox.model.expression.LogicalOr;
 import com.thoughtworks.qdox.model.expression.Multiply;
 import com.thoughtworks.qdox.model.expression.NotEquals;
 import com.thoughtworks.qdox.model.expression.Or;
+import com.thoughtworks.qdox.model.expression.ParenExpression;
+import com.thoughtworks.qdox.model.expression.Query;
 import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
 import com.thoughtworks.qdox.model.expression.ShiftRight;
 import com.thoughtworks.qdox.model.expression.Subtract;
+import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
 
 /**
@@ -62,15 +68,15 @@ public interface AnnotationVisitor {
 
     public Object visitAnnotation( Annotation annotation );
 
-    public Object visitAnnotationConstant( AnnotationConstant constant );
+    public Object visitAnnotationConstant( Constant constant );
 
-    public Object visitAnnotationParenExpression( AnnotationParenExpression expression );
+    public Object visitAnnotationParenExpression( ParenExpression expression );
 
     public Object visitAnnotationValueList( AnnotationValueList valueList );
 
-    public Object visitAnnotationTypeRef( AnnotationTypeRef typeRef );
+    public Object visitAnnotationTypeRef( TypeRef typeRef );
 
-    public Object visitAnnotationFieldRef( AnnotationFieldRef fieldRef );
+    public Object visitAnnotationFieldRef( FieldRef fieldRef );
 
     public Object visitAnnotationLessEquals( LessEquals lessEquals );
 
@@ -106,8 +112,8 @@ public interface AnnotationVisitor {
 
     public Object visitAnnotationExclusiveOr( ExclusiveOr annotationExclusiveOr );
 
-    public Object visitAnnotationQuery( AnnotationQuery annotationQuery );
+    public Object visitAnnotationQuery( Query annotationQuery );
 
-    public Object visitAnnotationCast( AnnotationCast annotationCast );
+    public Object visitAnnotationCast( Cast annotationCast );
 
 }

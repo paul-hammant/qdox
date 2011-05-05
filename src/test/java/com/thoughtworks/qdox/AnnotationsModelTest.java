@@ -11,9 +11,9 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.expression.Add;
-import com.thoughtworks.qdox.parser.expression.AnnotationAdd;
-import com.thoughtworks.qdox.parser.expression.AnnotationConstant;
-import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
+import com.thoughtworks.qdox.model.expression.Constant;
+import com.thoughtworks.qdox.model.expression.FieldRef;
+import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.parser.expression.AnnotationTypeRef;
 import com.thoughtworks.qdox.parser.expression.AnnotationValue;
 import com.thoughtworks.qdox.parser.expression.AnnotationValueList;
@@ -62,28 +62,28 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 8, annotation.getNamedParameterMap().size() );
 
-        AnnotationConstant f = (AnnotationConstant) annotation.getProperty( "f" );
+        Constant f = (Constant) annotation.getProperty( "f" );
         assertEquals( "f", new Float( 1 ), f.getValue() );
 
-        AnnotationConstant d = (AnnotationConstant) annotation.getProperty( "d" );
+        Constant d = (Constant) annotation.getProperty( "d" );
         assertEquals( "d", new Double( 1 ), d.getValue() );
 
-        AnnotationConstant i = (AnnotationConstant) annotation.getProperty( "i" );
+        Constant i = (Constant) annotation.getProperty( "i" );
         assertEquals( "i", new Integer( 1 ), i.getValue() );
 
-        AnnotationConstant ix = (AnnotationConstant) annotation.getProperty( "ix" );
+        Constant ix = (Constant) annotation.getProperty( "ix" );
         assertEquals( "ix", new Integer( 1 ), ix.getValue() );
 
-        AnnotationConstant l = (AnnotationConstant) annotation.getProperty( "l" );
+        Constant l = (Constant) annotation.getProperty( "l" );
         assertEquals( "l", new Long( 1 ), l.getValue() );
 
-        AnnotationConstant lx = (AnnotationConstant) annotation.getProperty( "lx" );
+        Constant lx = (Constant) annotation.getProperty( "lx" );
         assertEquals( "lx", new Long( 1 ), lx.getValue() );
 
-        AnnotationConstant c = (AnnotationConstant) annotation.getProperty( "c" );
+        Constant c = (Constant) annotation.getProperty( "c" );
         assertEquals( "c", new Character( 'c' ), c.getValue() );
 
-        AnnotationConstant s = (AnnotationConstant) annotation.getProperty( "s" );
+        Constant s = (Constant) annotation.getProperty( "s" );
         assertEquals( "s", "string", s.getValue() );
     }
 
@@ -96,19 +96,19 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 5, annotation.getPropertyMap().size() );
 
-        AnnotationConstant s1 = (AnnotationConstant) annotation.getProperty( "s1" );
+        Constant s1 = (Constant) annotation.getProperty( "s1" );
         assertEquals( "s1", "a\nb", s1.getValue() );
 
-        AnnotationConstant s2 = (AnnotationConstant) annotation.getProperty( "s2" );
+        Constant s2 = (Constant) annotation.getProperty( "s2" );
         assertEquals( "s2", "a\nb", s2.getValue() );
 
-        AnnotationConstant s3 = (AnnotationConstant) annotation.getProperty( "s3" );
+        Constant s3 = (Constant) annotation.getProperty( "s3" );
         assertEquals( "s3", "a\rb", s3.getValue() );
 
-        AnnotationConstant s4 = (AnnotationConstant) annotation.getProperty( "s4" );
+        Constant s4 = (Constant) annotation.getProperty( "s4" );
         assertEquals( "s4", "a\tb", s4.getValue() );
 
-        AnnotationConstant s5 = (AnnotationConstant) annotation.getProperty( "s5" );
+        Constant s5 = (Constant) annotation.getProperty( "s5" );
         assertEquals( "s5", "a\u0009b", s5.getValue() );
     }
 
@@ -140,8 +140,8 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         Add add = (Add) annotation.getProperty( "value" );
-        assertEquals( "Left", new Integer( 1 ), ((AnnotationConstant) add.getLeft()).getValue() );
-        assertEquals( "Right", new Integer( 1 ), ((AnnotationConstant) add.getRight()).getValue() );
+        assertEquals( "Left", new Integer( 1 ), ((Constant) add.getLeft()).getValue() );
+        assertEquals( "Right", new Integer( 1 ), ((Constant) add.getRight()).getValue() );
     }
 
     public void testExpressionAnnotation2() {
@@ -154,8 +154,8 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         Add add = (Add) annotation.getProperty( "value" );
-        assertEquals( "Left", "value = ", ((AnnotationConstant) add.getLeft()).getValue() );
-        assertEquals( "Right", new Integer( 1 ), ((AnnotationConstant) add.getRight()).getValue() );
+        assertEquals( "Left", "value = ", ((Constant) add.getLeft()).getValue() );
+        assertEquals( "Right", new Integer( 1 ), ((Constant) add.getRight()).getValue() );
     }
 
     public void testFieldRefAnnotation() {
@@ -167,7 +167,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
-        AnnotationFieldRef value = (AnnotationFieldRef) annotation.getProperty( "value" );
+        FieldRef value = (FieldRef) annotation.getProperty( "value" );
         assertEquals( "type", "double", value.getField().getType().getValue() );
         assertEquals( "class part", "java.lang.Math", value.getClassPart() );
         assertEquals( "field part", "E", value.getFieldPart() );
@@ -183,7 +183,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         Object value = annotation.getProperty( "value" );
-        AnnotationTypeRef ref = (AnnotationTypeRef) value;
+        TypeRef ref = (TypeRef) value;
         assertEquals( "value", "int", ref.getType().getValue() );
     }
 
@@ -197,7 +197,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         Object value = annotation.getProperty( "value" );
-        AnnotationTypeRef ref = (AnnotationTypeRef) value;
+        TypeRef ref = (TypeRef) value;
         assertEquals( "value", "java.util.Set", ref.getType().getValue() );
     }
 

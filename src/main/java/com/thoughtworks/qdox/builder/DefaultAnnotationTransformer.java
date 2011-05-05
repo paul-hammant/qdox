@@ -28,9 +28,12 @@ import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
+import com.thoughtworks.qdox.model.expression.Cast;
+import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.Divide;
 import com.thoughtworks.qdox.model.expression.Equals;
 import com.thoughtworks.qdox.model.expression.ExclusiveOr;
+import com.thoughtworks.qdox.model.expression.FieldRef;
 import com.thoughtworks.qdox.model.expression.GreaterEquals;
 import com.thoughtworks.qdox.model.expression.GreaterThan;
 import com.thoughtworks.qdox.model.expression.LessEquals;
@@ -40,10 +43,13 @@ import com.thoughtworks.qdox.model.expression.LogicalOr;
 import com.thoughtworks.qdox.model.expression.Multiply;
 import com.thoughtworks.qdox.model.expression.NotEquals;
 import com.thoughtworks.qdox.model.expression.Or;
+import com.thoughtworks.qdox.model.expression.ParenExpression;
+import com.thoughtworks.qdox.model.expression.Query;
 import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
 import com.thoughtworks.qdox.model.expression.ShiftRight;
 import com.thoughtworks.qdox.model.expression.Subtract;
+import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
 import com.thoughtworks.qdox.parser.expression.AnnotationAdd;
 import com.thoughtworks.qdox.parser.expression.AnnotationAnd;
@@ -293,7 +299,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationCast annotationCast) {
 		Type type = createType(annotationCast.typeDef, annotationCast.typeDef.dimensions);
 		AnnotationValue value = annotationCast.elemDef.transform(this);
-		return new AnnotationCast(type, value);
+		return new Cast(type, value);
 	}
 
 	/* (non-Javadoc)
@@ -302,16 +308,16 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	public AnnotationValue transform(AnnotationConstant annotationConstant) {
 		Object value = annotationConstant.getValue();
 		String image = annotationConstant.getImage();
-		return new AnnotationConstant(value, image);
+		return new Constant(value, image);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationFieldRef)
 	 */
 	public AnnotationValue transform(AnnotationFieldRef annotationFieldRef) {
-		AnnotationFieldRef result;
+		FieldRef result;
 		String name = annotationFieldRef.getName();
-		result = new AnnotationFieldRef(name);
+		result = new FieldRef(name);
 		result.setContext(parent);
 		return result;
 	}
@@ -345,7 +351,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 */
 	public AnnotationValue transform(AnnotationParenExpression annotationParenExpression) {
 		AnnotationValue value = annotationParenExpression.elemValueDef.transform(this);
-		return new AnnotationParenExpression(value);
+		return new ParenExpression(value);
 	}
 
 	/* (non-Javadoc)
@@ -363,7 +369,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 		AnnotationValue condition = annotationQuery.cond.transform(this);
 		AnnotationValue trueExpression = annotationQuery.trueExpr.transform(this);
 		AnnotationValue falseExpression = annotationQuery.falseExpr.transform(this);
-		return new AnnotationQuery(condition, trueExpression, falseExpression);
+		return new Query(condition, trueExpression, falseExpression);
 	}
 
 	/* (non-Javadoc)
@@ -371,7 +377,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 */
 	public AnnotationValue transform(AnnotationTypeRef annotationTypeRef) {
 		Type type = createType(annotationTypeRef.typeDef, annotationTypeRef.typeDef.dimensions);
-		return new AnnotationTypeRef(type);
+		return new TypeRef(type);
 	}
 
 }

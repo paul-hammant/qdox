@@ -42,10 +42,16 @@ public class AnnotationParenExpression implements AnnotationValue, ElemValueDef 
         return "(" + value.toString() + ")";
     }
 
+    /**
+     * @deprecated used by model
+     */
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationParenExpression( this );
+        return null;
     }
 
+    /**
+     * @deprecated used by model
+     */
     public Object getParameterValue() {
         return "(" + value.getParameterValue() + ")";
     }

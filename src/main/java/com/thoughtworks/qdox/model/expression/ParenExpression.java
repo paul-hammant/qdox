@@ -1,4 +1,7 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
+
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,46 +22,27 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
-import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.parser.structs.TypeDef;
+public class ParenExpression implements AnnotationValue {
 
-public class AnnotationTypeRef implements AnnotationValue, ElemValueDef {
+    private AnnotationValue value;
 
-    private Type type;
-	public TypeDef typeDef;
-
-    public AnnotationTypeRef( Type type ) {
-        this.type = type;
+    public ParenExpression( AnnotationValue value ) {
+        this.value = value;
     }
-    
-    public AnnotationTypeRef(TypeDef typeDef) {
-		this.typeDef = typeDef;
-	}
 
-	public Type getType() {
-        return type;
+	public AnnotationValue getValue() {
+        return value;
     }
 
     public String toString() {
-        return type.getValue() + ".class";
+        return "(" + value.toString() + ")";
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object accept( AnnotationVisitor visitor ) {
-        return null;
+        return visitor.visitAnnotationParenExpression( this );
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object getParameterValue() {
-        return type.getValue() + ".class";
-    }
-    
-    public <U> U transform(AnnotationTransformer<U> transformer) {
-    	return transformer.transform(this);
+        return "(" + value.getParameterValue() + ")";
     }
 }

@@ -29,9 +29,12 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
+import com.thoughtworks.qdox.model.expression.Cast;
+import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.Divide;
 import com.thoughtworks.qdox.model.expression.Equals;
 import com.thoughtworks.qdox.model.expression.ExclusiveOr;
+import com.thoughtworks.qdox.model.expression.FieldRef;
 import com.thoughtworks.qdox.model.expression.GreaterEquals;
 import com.thoughtworks.qdox.model.expression.GreaterThan;
 import com.thoughtworks.qdox.model.expression.LessEquals;
@@ -41,10 +44,13 @@ import com.thoughtworks.qdox.model.expression.LogicalOr;
 import com.thoughtworks.qdox.model.expression.Multiply;
 import com.thoughtworks.qdox.model.expression.NotEquals;
 import com.thoughtworks.qdox.model.expression.Or;
+import com.thoughtworks.qdox.model.expression.ParenExpression;
+import com.thoughtworks.qdox.model.expression.Query;
 import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
 import com.thoughtworks.qdox.model.expression.ShiftRight;
 import com.thoughtworks.qdox.model.expression.Subtract;
+import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
 
 /**
@@ -204,7 +210,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationConstant( AnnotationConstant constant ) {
+    public Object visitAnnotationConstant( Constant constant ) {
         return constant.getValue();
     }
 
@@ -233,7 +239,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationFieldRef( AnnotationFieldRef fieldRef ) {
+    public Object visitAnnotationFieldRef( FieldRef fieldRef ) {
         JavaField javaField = fieldRef.getField();
 
         if( javaField == null ) {
@@ -325,7 +331,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationParenExpression( AnnotationParenExpression parenExpression ) {
+    public Object visitAnnotationParenExpression( ParenExpression parenExpression ) {
         return parenExpression.getValue().accept( this );
     }
 
@@ -354,7 +360,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationTypeRef( AnnotationTypeRef typeRef ) {
+    public Object visitAnnotationTypeRef( TypeRef typeRef ) {
         JavaClass javaClass = typeRef.getType().getJavaClass();
         return javaClass;
     }
@@ -709,7 +715,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public Object visitAnnotationQuery( AnnotationQuery annotationQuery ) {
+    public Object visitAnnotationQuery( Query annotationQuery ) {
         Object value = annotationQuery.getCondition().accept( this );
 
         if( value == null || !(value instanceof Boolean) ) {
@@ -722,7 +728,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return expression.accept( this );
     }
 
-    public Object visitAnnotationCast( AnnotationCast annotationCast ) {
+    public Object visitAnnotationCast( Cast annotationCast ) {
         Object value = annotationCast.getValue().accept( this );
         String type = annotationCast.getType().getJavaClass().getFullyQualifiedName();
         Object result;

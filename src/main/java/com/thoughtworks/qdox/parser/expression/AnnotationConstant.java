@@ -46,10 +46,16 @@ public class AnnotationConstant implements AnnotationValue, ElemValueDef, Serial
         return image;
     }
 
+    /**
+     * @deprecated used by model
+     */
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationConstant( this );
+        return null;
     }
 
+    /**
+     * @deprecated used by model
+     */
     public Object getParameterValue() {
         return image;
     }

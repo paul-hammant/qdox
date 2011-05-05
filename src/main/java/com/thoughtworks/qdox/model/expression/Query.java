@@ -1,6 +1,7 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,37 +22,20 @@ import com.thoughtworks.qdox.builder.AnnotationTransformer;
  * under the License.
  */
 
-public class AnnotationQuery implements AnnotationValue, ElemValueDef {
+public class Query implements AnnotationValue {
 
     private final AnnotationValue condition;
-
     private final AnnotationValue trueExpression;
-
     private final AnnotationValue falseExpression;
 
-	public ElemValueDef cond;
-	public ElemValueDef trueExpr;
-	public ElemValueDef falseExpr;
-
-    public AnnotationQuery( AnnotationValue condition, AnnotationValue trueExpression, AnnotationValue falseExpression ) {
+    public Query( AnnotationValue condition, AnnotationValue trueExpression, AnnotationValue falseExpression ) {
         this.condition = condition;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
     }
 
-    public AnnotationQuery(ElemValueDef cond, ElemValueDef trueExpr,
-			ElemValueDef falseExpr) {
-    	condition = trueExpression = falseExpression = null;
-    	this.cond = cond;
-    	this.trueExpr = trueExpr;
-    	this.falseExpr = falseExpr;
-	}
-
-    /**
-     * @deprecated used by model
-     */
 	public Object accept( AnnotationVisitor visitor ) {
-        return null;
+        return visitor.visitAnnotationQuery( this );
     }
 
     public AnnotationValue getCondition() {
@@ -66,9 +50,6 @@ public class AnnotationQuery implements AnnotationValue, ElemValueDef {
         return this.falseExpression;
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object getParameterValue() {
         return condition.getParameterValue().toString() + " ? " + trueExpression.getParameterValue() + " : "
             + falseExpression.getParameterValue();
@@ -76,9 +57,5 @@ public class AnnotationQuery implements AnnotationValue, ElemValueDef {
 
     public String toString() {
         return condition.toString() + " ? " + trueExpression.toString() + " : " + falseExpression.toString();
-    }
-    
-    public <U> U transform(AnnotationTransformer<U> transformer) {
-    	return transformer.transform(this);
     }
 }

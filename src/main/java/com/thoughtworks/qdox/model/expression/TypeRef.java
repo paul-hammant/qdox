@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,23 +19,17 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.parser.structs.TypeDef;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
-public class AnnotationTypeRef implements AnnotationValue, ElemValueDef {
+public class TypeRef implements AnnotationValue {
 
     private Type type;
-	public TypeDef typeDef;
 
-    public AnnotationTypeRef( Type type ) {
+    public TypeRef( Type type ) {
         this.type = type;
     }
-    
-    public AnnotationTypeRef(TypeDef typeDef) {
-		this.typeDef = typeDef;
-	}
-
 	public Type getType() {
         return type;
     }
@@ -44,21 +38,11 @@ public class AnnotationTypeRef implements AnnotationValue, ElemValueDef {
         return type.getValue() + ".class";
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object accept( AnnotationVisitor visitor ) {
-        return null;
+        return visitor.visitAnnotationTypeRef( this );
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object getParameterValue() {
         return type.getValue() + ".class";
-    }
-    
-    public <U> U transform(AnnotationTransformer<U> transformer) {
-    	return transformer.transform(this);
     }
 }

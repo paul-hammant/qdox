@@ -1,6 +1,7 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
+import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,35 +22,21 @@ import com.thoughtworks.qdox.builder.AnnotationTransformer;
  * under the License.
  */
 
-public class AnnotationNot extends AnnotationUnaryOperator {
+public class Not extends UnaryOperator {
 
-    public AnnotationNot( AnnotationValue value ) {
+    public Not( AnnotationValue value ) {
         super( value );
     }
-
-    public AnnotationNot(ElemValueDef value) {
-    	super(value);
-	}
 
 	public String toString() {
         return "~" + getValue().toString();
     }
 
-	/**
-     * @deprecated used by model
-     */
     public Object accept( AnnotationVisitor visitor ) {
-        return null;
+        return visitor.visitAnnotationNot( this );
     }
 
-    /**
-     * @deprecated used by model
-     */
     public Object getParameterValue() {
         return "~" + getValue().toString();
-    }
-    
-    public <U> U transform(AnnotationTransformer<U> transformer) {
-    	return transformer.transform(this);
     }
 }

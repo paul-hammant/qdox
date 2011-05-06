@@ -35,10 +35,16 @@ public class AnnotationLogicalNot extends AnnotationUnaryOperator {
         return "!" + getValue().toString();
     }
 
+	/**
+     * @deprecated used by model
+     */
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationLogicalNot( this );
+        return null;
     }
 
+    /**
+     * @deprecated used by model
+     */
     public Object getParameterValue() {
         return "!" + getValue().toString();
     }

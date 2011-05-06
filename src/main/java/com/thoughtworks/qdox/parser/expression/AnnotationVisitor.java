@@ -34,11 +34,15 @@ import com.thoughtworks.qdox.model.expression.GreaterThan;
 import com.thoughtworks.qdox.model.expression.LessEquals;
 import com.thoughtworks.qdox.model.expression.LessThan;
 import com.thoughtworks.qdox.model.expression.LogicalAnd;
+import com.thoughtworks.qdox.model.expression.LogicalNot;
 import com.thoughtworks.qdox.model.expression.LogicalOr;
+import com.thoughtworks.qdox.model.expression.MinusSign;
 import com.thoughtworks.qdox.model.expression.Multiply;
+import com.thoughtworks.qdox.model.expression.Not;
 import com.thoughtworks.qdox.model.expression.NotEquals;
 import com.thoughtworks.qdox.model.expression.Or;
 import com.thoughtworks.qdox.model.expression.ParenExpression;
+import com.thoughtworks.qdox.model.expression.PlusSign;
 import com.thoughtworks.qdox.model.expression.Query;
 import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
@@ -92,17 +96,17 @@ public interface AnnotationVisitor {
 
     public Object visitAnnotationShiftRight( ShiftRight right );
 
-    public Object visitAnnotationNot( AnnotationNot not );
+    public Object visitAnnotationNot( Not not );
 
     public Object visitAnnotationLogicalOr( LogicalOr or );
 
     public Object visitAnnotationLogicalAnd( LogicalAnd and );
 
-    public Object visitAnnotationLogicalNot( AnnotationLogicalNot not );
+    public Object visitAnnotationLogicalNot( LogicalNot not );
 
-    public Object visitAnnotationMinusSign( AnnotationMinusSign sign );
+    public Object visitAnnotationMinusSign( MinusSign sign );
 
-    public Object visitAnnotationPlusSign( AnnotationPlusSign sign );
+    public Object visitAnnotationPlusSign( PlusSign sign );
 
     public Object visitAnnotationUnsignedShiftRight( UnsignedShiftRight right );
 

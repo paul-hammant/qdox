@@ -40,11 +40,15 @@ import com.thoughtworks.qdox.model.expression.GreaterThan;
 import com.thoughtworks.qdox.model.expression.LessEquals;
 import com.thoughtworks.qdox.model.expression.LessThan;
 import com.thoughtworks.qdox.model.expression.LogicalAnd;
+import com.thoughtworks.qdox.model.expression.LogicalNot;
 import com.thoughtworks.qdox.model.expression.LogicalOr;
+import com.thoughtworks.qdox.model.expression.MinusSign;
 import com.thoughtworks.qdox.model.expression.Multiply;
+import com.thoughtworks.qdox.model.expression.Not;
 import com.thoughtworks.qdox.model.expression.NotEquals;
 import com.thoughtworks.qdox.model.expression.Or;
 import com.thoughtworks.qdox.model.expression.ParenExpression;
+import com.thoughtworks.qdox.model.expression.PlusSign;
 import com.thoughtworks.qdox.model.expression.Query;
 import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
@@ -460,7 +464,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public Object visitAnnotationLogicalNot( AnnotationLogicalNot not ) {
+    public Object visitAnnotationLogicalNot( LogicalNot not ) {
         Object value = not.getValue().accept( this );
         boolean result;
 
@@ -489,7 +493,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public Object visitAnnotationMinusSign( AnnotationMinusSign sign ) {
+    public Object visitAnnotationMinusSign( MinusSign sign ) {
         Object value = sign.getValue().accept( this );
         Class<?> type = unaryResultType( value );
         Object result;
@@ -513,7 +517,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationNot( AnnotationNot not ) {
+    public Object visitAnnotationNot( Not not ) {
         Object value = not.getValue().accept( this );
         Object type = unaryNumericResultType( value );
         Object result;
@@ -550,7 +554,7 @@ public abstract class EvaluatingVisitor implements AnnotationVisitor {
         return result;
     }
 
-    public Object visitAnnotationPlusSign( AnnotationPlusSign sign ) {
+    public Object visitAnnotationPlusSign( PlusSign sign ) {
         Object value = sign.getValue().accept( this );
         Object result;
 

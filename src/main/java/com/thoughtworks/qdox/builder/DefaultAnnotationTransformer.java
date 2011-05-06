@@ -39,11 +39,15 @@ import com.thoughtworks.qdox.model.expression.GreaterThan;
 import com.thoughtworks.qdox.model.expression.LessEquals;
 import com.thoughtworks.qdox.model.expression.LessThan;
 import com.thoughtworks.qdox.model.expression.LogicalAnd;
+import com.thoughtworks.qdox.model.expression.LogicalNot;
 import com.thoughtworks.qdox.model.expression.LogicalOr;
+import com.thoughtworks.qdox.model.expression.MinusSign;
 import com.thoughtworks.qdox.model.expression.Multiply;
+import com.thoughtworks.qdox.model.expression.Not;
 import com.thoughtworks.qdox.model.expression.NotEquals;
 import com.thoughtworks.qdox.model.expression.Or;
 import com.thoughtworks.qdox.model.expression.ParenExpression;
+import com.thoughtworks.qdox.model.expression.PlusSign;
 import com.thoughtworks.qdox.model.expression.Query;
 import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
@@ -327,7 +331,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 */
 	public AnnotationValue transform(AnnotationLogicalNot annotationLogicalNot) {
 		AnnotationValue value = annotationLogicalNot.elemValueDef.transform(this);
-		return new AnnotationLogicalNot(value);
+		return new LogicalNot(value);
 	}
 
 	/* (non-Javadoc)
@@ -335,7 +339,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 */
 	public AnnotationValue transform(AnnotationMinusSign annotationMinusSign) {
 		AnnotationValue value = annotationMinusSign.elemValueDef.transform(this);
-		return new AnnotationMinusSign(value);
+		return new MinusSign(value);
 	}
 
 	/* (non-Javadoc)
@@ -343,7 +347,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 */
 	public AnnotationValue transform(AnnotationNot annotationNot) {
 		AnnotationValue value = annotationNot.elemValueDef.transform(this);
-		return new AnnotationNot(value);
+		return new Not(value);
 	}
 
 	/* (non-Javadoc)
@@ -359,7 +363,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 */
 	public AnnotationValue transform(AnnotationPlusSign annotationPlusSign) {
 		AnnotationValue value = annotationPlusSign.elemValueDef.transform(this);
-		return new AnnotationPlusSign(value);
+		return new PlusSign(value);
 	}
 
 	/* (non-Javadoc)

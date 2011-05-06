@@ -21,8 +21,6 @@ package com.thoughtworks.qdox.model.expression;
 
 import java.io.Serializable;
 
-import com.thoughtworks.qdox.parser.expression.AnnotationValue;
-import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 public class Constant implements AnnotationValue, Serializable {
 

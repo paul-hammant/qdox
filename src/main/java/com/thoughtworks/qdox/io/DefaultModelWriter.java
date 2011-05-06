@@ -35,7 +35,7 @@ import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.model.expression.AnnotationValue;
 
 
 public class DefaultModelWriter implements ModelWriter

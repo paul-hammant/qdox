@@ -26,8 +26,6 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.parser.expression.AnnotationValue;
-import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 public class FieldRef implements AnnotationValue {
 

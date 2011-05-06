@@ -20,8 +20,6 @@ package com.thoughtworks.qdox.model.expression;
  */
 
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.parser.expression.AnnotationValue;
-import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 public class TypeRef implements AnnotationValue {
 

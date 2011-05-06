@@ -1,0 +1,12 @@
+Migrating to QDox 2.0
+ 
+  QDox 2.0 is *not* 100% backwards compatible with previous versions. 
+  We've decided to move from java1.4 to java5, since support for java1.4 has ended ages ago.
+  Nowadays most applications are moving to java5 and so should QDox.
+  
+  Here are the required steps to take to move to QDox 2.x
+  
+  * Replace <<com.thoughtworks.qdox.JavaDocBuilder>> with <<com.thoughtworks.qdox.JavaDocBuilder>>
+  
+  * Refactor every javamodel array to generic <<List>> objects, for example: <<JavaClass[]>> will become <<List\<JavaClass\>>>
+  

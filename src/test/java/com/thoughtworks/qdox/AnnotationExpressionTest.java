@@ -12,11 +12,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.thoughtworks.qdox.builder.EvaluatingVisitor;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.parser.expression.AnnotationValue;
-import com.thoughtworks.qdox.parser.expression.EvaluatingVisitor;
+import com.thoughtworks.qdox.model.expression.AnnotationValue;
 
 @RunWith(Parameterized.class)
 public class AnnotationExpressionTest {

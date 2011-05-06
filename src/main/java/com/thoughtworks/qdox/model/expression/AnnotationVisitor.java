@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,35 +21,6 @@ package com.thoughtworks.qdox.parser.expression;
 
 
 import com.thoughtworks.qdox.model.Annotation;
-import com.thoughtworks.qdox.model.expression.Add;
-import com.thoughtworks.qdox.model.expression.And;
-import com.thoughtworks.qdox.model.expression.Cast;
-import com.thoughtworks.qdox.model.expression.Constant;
-import com.thoughtworks.qdox.model.expression.Divide;
-import com.thoughtworks.qdox.model.expression.Equals;
-import com.thoughtworks.qdox.model.expression.ExclusiveOr;
-import com.thoughtworks.qdox.model.expression.FieldRef;
-import com.thoughtworks.qdox.model.expression.GreaterEquals;
-import com.thoughtworks.qdox.model.expression.GreaterThan;
-import com.thoughtworks.qdox.model.expression.LessEquals;
-import com.thoughtworks.qdox.model.expression.LessThan;
-import com.thoughtworks.qdox.model.expression.LogicalAnd;
-import com.thoughtworks.qdox.model.expression.LogicalNot;
-import com.thoughtworks.qdox.model.expression.LogicalOr;
-import com.thoughtworks.qdox.model.expression.MinusSign;
-import com.thoughtworks.qdox.model.expression.Multiply;
-import com.thoughtworks.qdox.model.expression.Not;
-import com.thoughtworks.qdox.model.expression.NotEquals;
-import com.thoughtworks.qdox.model.expression.Or;
-import com.thoughtworks.qdox.model.expression.ParenExpression;
-import com.thoughtworks.qdox.model.expression.PlusSign;
-import com.thoughtworks.qdox.model.expression.Query;
-import com.thoughtworks.qdox.model.expression.Remainder;
-import com.thoughtworks.qdox.model.expression.ShiftLeft;
-import com.thoughtworks.qdox.model.expression.ShiftRight;
-import com.thoughtworks.qdox.model.expression.Subtract;
-import com.thoughtworks.qdox.model.expression.TypeRef;
-import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
 
 /**
  * Visitor class for the annotation model elements

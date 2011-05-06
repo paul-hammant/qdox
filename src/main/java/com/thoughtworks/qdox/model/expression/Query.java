@@ -1,7 +1,5 @@
 package com.thoughtworks.qdox.model.expression;
 
-import com.thoughtworks.qdox.parser.expression.AnnotationValue;
-import com.thoughtworks.qdox.parser.expression.AnnotationVisitor;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

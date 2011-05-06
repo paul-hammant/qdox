@@ -15,14 +15,4 @@ public class ElemValueListDef implements ElemValueDef{
 	public <U> U transform(AnnotationTransformer<U> transformer) {
 		return transformer.transform(this);
 	}
-
-	public Object accept(AnnotationVisitor visitor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getParameterValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

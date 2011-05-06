@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,6 +22,7 @@ package com.thoughtworks.qdox.parser.expression;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+
 
 public class AnnotationValueList implements AnnotationValue {
 

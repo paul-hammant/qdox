@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.model.expression;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

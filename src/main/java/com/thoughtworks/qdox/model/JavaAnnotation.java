@@ -21,7 +21,7 @@ package com.thoughtworks.qdox.model;
 
 import java.util.Map;
 
-import com.thoughtworks.qdox.parser.expression.AnnotationValue;
+import com.thoughtworks.qdox.model.expression.AnnotationValue;
 
 public interface JavaAnnotation {
 

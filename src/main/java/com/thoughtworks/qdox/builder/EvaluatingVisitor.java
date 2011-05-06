@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.parser.expression;
+package com.thoughtworks.qdox.builder;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,6 +29,9 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
+import com.thoughtworks.qdox.model.expression.AnnotationValue;
+import com.thoughtworks.qdox.model.expression.AnnotationValueList;
+import com.thoughtworks.qdox.model.expression.AnnotationVisitor;
 import com.thoughtworks.qdox.model.expression.Cast;
 import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.Divide;

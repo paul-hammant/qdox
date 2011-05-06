@@ -23,10 +23,9 @@ import java.io.Serializable;
 
 import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
-public class AnnotationConstant implements AnnotationValue, ElemValueDef, Serializable {
+public class AnnotationConstant implements ElemValueDef, Serializable {
 
     private final Object value;
-
     private final String image;
 
     public AnnotationConstant( Object value, String image ) {
@@ -43,20 +42,6 @@ public class AnnotationConstant implements AnnotationValue, ElemValueDef, Serial
     }
 
     public String toString() {
-        return image;
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object accept( AnnotationVisitor visitor ) {
-        return null;
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object getParameterValue() {
         return image;
     }
 

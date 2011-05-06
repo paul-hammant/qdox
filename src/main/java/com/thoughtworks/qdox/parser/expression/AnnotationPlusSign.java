@@ -23,30 +23,8 @@ import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
 public class AnnotationPlusSign extends AnnotationUnaryOperator {
 
-	public AnnotationPlusSign(AnnotationValue value) {
-		super(value);
-	}
-
 	public AnnotationPlusSign(ElemValueDef value) {
 		super(value);
-	}
-
-	public String toString() {
-		return "+" + getValue().toString();
-	}
-
-	/**
-     * @deprecated used by model
-     */
-	public Object accept(AnnotationVisitor visitor) {
-		return null;
-	}
-
-	/**
-     * @deprecated used by model
-     */
-	public Object getParameterValue() {
-		return "+" + getValue().toString();
 	}
 
 	public <U> U transform(AnnotationTransformer<U> transformer) {

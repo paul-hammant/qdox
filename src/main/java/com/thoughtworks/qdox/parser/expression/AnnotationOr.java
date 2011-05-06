@@ -23,34 +23,11 @@ import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
 public class AnnotationOr extends AnnotationBinaryOperator {
 
-    public AnnotationOr( AnnotationValue left, AnnotationValue right ) {
-        super( left, right );
-    }
-
     public AnnotationOr(ElemValueDef lhs, ElemValueDef rhs) {
     	super(lhs, rhs);
 	}
 
-	public String toString() {
-        return getLeft().toString() + " | " + getRight().toString();
-    }
-
-	/**
-     * @deprecated used by model
-     */
-    public Object accept( AnnotationVisitor visitor ) {
-        return null;
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object getParameterValue() {
-        return getLeft().getParameterValue() + " | " + getRight().getParameterValue();
-    }
-    
     public <U> U transform(AnnotationTransformer<U> transformer) {
     	return transformer.transform(this);
     }
-
 }

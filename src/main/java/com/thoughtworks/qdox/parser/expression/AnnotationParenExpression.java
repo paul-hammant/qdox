@@ -21,40 +21,13 @@ import com.thoughtworks.qdox.builder.AnnotationTransformer;
  * under the License.
  */
 
-public class AnnotationParenExpression implements AnnotationValue, ElemValueDef {
+public class AnnotationParenExpression implements ElemValueDef {
 
-    private AnnotationValue value;
 	public ElemValueDef elemValueDef;
-
-    public AnnotationParenExpression( AnnotationValue value ) {
-        this.value = value;
-    }
 
     public AnnotationParenExpression(ElemValueDef value) {
     	this.elemValueDef = value;
 	}
-
-	public AnnotationValue getValue() {
-        return value;
-    }
-
-    public String toString() {
-        return "(" + value.toString() + ")";
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object accept( AnnotationVisitor visitor ) {
-        return null;
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object getParameterValue() {
-        return "(" + value.getParameterValue() + ")";
-    }
     
     public <U> U transform(AnnotationTransformer<U> transformer) {
     	return transformer.transform(this);

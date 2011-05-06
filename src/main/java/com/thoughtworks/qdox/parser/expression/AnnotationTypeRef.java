@@ -20,43 +20,15 @@ package com.thoughtworks.qdox.parser.expression;
  */
 
 import com.thoughtworks.qdox.builder.AnnotationTransformer;
-import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
-public class AnnotationTypeRef implements AnnotationValue, ElemValueDef {
+public class AnnotationTypeRef implements ElemValueDef {
 
-    private Type type;
 	public TypeDef typeDef;
 
-    public AnnotationTypeRef( Type type ) {
-        this.type = type;
-    }
-    
     public AnnotationTypeRef(TypeDef typeDef) {
 		this.typeDef = typeDef;
 	}
-
-	public Type getType() {
-        return type;
-    }
-
-    public String toString() {
-        return type.getValue() + ".class";
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object accept( AnnotationVisitor visitor ) {
-        return null;
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object getParameterValue() {
-        return type.getValue() + ".class";
-    }
     
     public <U> U transform(AnnotationTransformer<U> transformer) {
     	return transformer.transform(this);

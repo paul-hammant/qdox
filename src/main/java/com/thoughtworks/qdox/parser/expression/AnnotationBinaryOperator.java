@@ -23,25 +23,8 @@ public abstract class AnnotationBinaryOperator implements ElemValueDef {
 	
 	public ElemValueDef lhs, rhs;
 
-    private AnnotationValue left;
-    private AnnotationValue right;
-    
     public AnnotationBinaryOperator(ElemValueDef lhs, ElemValueDef rhs) {
 		this.lhs = lhs;
 		this.rhs = rhs;
 	}
-
-	public AnnotationBinaryOperator( AnnotationValue left, AnnotationValue right ) {
-        this.left = left;
-        this.right = right;
-    }
-
-    public AnnotationValue getLeft() {
-        return left;
-    }
-
-    public AnnotationValue getRight() {
-        return right;
-    }
-
 }

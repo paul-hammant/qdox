@@ -21,62 +21,18 @@ import com.thoughtworks.qdox.builder.AnnotationTransformer;
  * under the License.
  */
 
-public class AnnotationQuery implements AnnotationValue, ElemValueDef {
-
-    private final AnnotationValue condition;
-
-    private final AnnotationValue trueExpression;
-
-    private final AnnotationValue falseExpression;
+public class AnnotationQuery implements ElemValueDef {
 
 	public ElemValueDef cond;
 	public ElemValueDef trueExpr;
 	public ElemValueDef falseExpr;
 
-    public AnnotationQuery( AnnotationValue condition, AnnotationValue trueExpression, AnnotationValue falseExpression ) {
-        this.condition = condition;
-        this.trueExpression = trueExpression;
-        this.falseExpression = falseExpression;
-    }
-
     public AnnotationQuery(ElemValueDef cond, ElemValueDef trueExpr,
 			ElemValueDef falseExpr) {
-    	condition = trueExpression = falseExpression = null;
     	this.cond = cond;
     	this.trueExpr = trueExpr;
     	this.falseExpr = falseExpr;
 	}
-
-    /**
-     * @deprecated used by model
-     */
-	public Object accept( AnnotationVisitor visitor ) {
-        return null;
-    }
-
-    public AnnotationValue getCondition() {
-        return this.condition;
-    }
-
-    public AnnotationValue getTrueExpression() {
-        return this.trueExpression;
-    }
-
-    public AnnotationValue getFalseExpression() {
-        return this.falseExpression;
-    }
-
-    /**
-     * @deprecated used by model
-     */
-    public Object getParameterValue() {
-        return condition.getParameterValue().toString() + " ? " + trueExpression.getParameterValue() + " : "
-            + falseExpression.getParameterValue();
-    }
-
-    public String toString() {
-        return condition.toString() + " ? " + trueExpression.toString() + " : " + falseExpression.toString();
-    }
     
     public <U> U transform(AnnotationTransformer<U> transformer) {
     	return transformer.transform(this);

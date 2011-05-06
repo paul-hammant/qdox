@@ -16,9 +16,9 @@ public abstract class AbstractBaseMethod
 
     private List<TypeVariable> typeParameters = Collections.emptyList();
     private List<JavaParameter> parameters = new LinkedList<JavaParameter>();
-    protected List<Type> exceptions = Collections.emptyList();
-    protected boolean varArgs;
-    protected String sourceCode;
+    private List<Type> exceptions = Collections.emptyList();
+    private boolean varArgs;
+    private String sourceCode;
 
     public List<JavaParameter> getParameters()
     {

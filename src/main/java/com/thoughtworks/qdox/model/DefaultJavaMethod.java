@@ -24,11 +24,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.thoughtworks.qdox.io.IndentBuffer;
-
 public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod {
 
 	private Type returns = Type.VOID;
+	
     /**
      * The default constructor
      */
@@ -118,9 +117,9 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         }
         result.append(')');
         if (isDeclaration) {
-            if (exceptions.size() > 0) {
+            if (getExceptions().size() > 0) {
                 result.append(" throws ");
-                for(Iterator<Type> excIter = exceptions.iterator();excIter.hasNext();) {
+                for(Iterator<Type> excIter = getExceptions().iterator();excIter.hasNext();) {
                     result.append(excIter.next().getValue());
                     if(excIter.hasNext()) {
                         result.append(", ");
@@ -151,32 +150,63 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         this.returns = returns;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
+    @Override
+    public boolean equals( Object obj ) 
+    {
+        if ( this == obj ) 
+        {
+          return true;    
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if ( !( obj instanceof JavaMethod ) ) 
+        {
+            return false;
+        }
+        
         JavaMethod m = (JavaMethod) obj;
 
-        if (m.getName() == null) return (getName() == null);
-        if (!m.getName().equals(getName())) return false;
+        if ( m.getName() == null) 
+        {
+            return (getName() == null);
+        }
+        if (!m.getName().equals(getName())) 
+        {
+            return false;
+        }
         
-        if (m.getReturns() == null) return (getReturns() == null);
-        if (!m.getReturns().equals(getReturns())) return false;
+        if (m.getReturns() == null) {
+            return (getReturns() == null);
+        }
+        if (!m.getReturns().equals(getReturns())) {
+            return false;
+        }
 
         List<JavaParameter> myParams = getParameters();
         List<JavaParameter> otherParams = m.getParameters();
-        if (otherParams.size() != myParams.size()) return false;
-        for (int i = 0; i < myParams.size(); i++) {
-            if (!otherParams.get(i).equals(myParams.get(i))) return false;
+        if (otherParams.size() != myParams.size()) 
+        {
+            return false;
+        }
+        for (int i = 0; i < myParams.size(); i++) 
+        {
+            if (!otherParams.get(i).equals(myParams.get(i))) {
+                return false;
+            }
         }
 
-        return this.varArgs == m.isVarArgs();
+        return this.isVarArgs() == m.isVarArgs();
     }
 
+    @Override
     public int hashCode() {
         int hashCode = getName().hashCode();
-        if (returns != null) hashCode *= returns.hashCode();
+        if (returns != null) 
+        {
+            hashCode *= returns.hashCode();
+        }
         hashCode *= getParameters().size();
         return hashCode;
     }
@@ -185,18 +215,22 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
      * @see com.thoughtworks.qdox.model.JavaMethod#isPropertyAccessor()
      */
     public boolean isPropertyAccessor() {
-        if (isStatic()) return false;
-        if (getParameters().size() != 0) return false;
-        
-        if (getName().startsWith("is")) {
-            return (getName().length() > 2
-                    && Character.isUpperCase(getName().charAt(2)));
+        if ( isStatic() ) 
+        {
+            return false;
         }
-        if (getName().startsWith("get")) {
-            return (getName().length() > 3
-                    && Character.isUpperCase(getName().charAt(3)));
+        if ( getParameters().size() != 0 ) {
+            return false;
         }
         
+        if ( getName().startsWith( "is" ) ) 
+        {
+            return ( getName().length() > 2 && Character.isUpperCase( getName().charAt(2) ) );
+        }
+        if ( getName().startsWith( "get" ) ) 
+        {
+            return ( getName().length() > 3 && Character.isUpperCase( getName().charAt(3) ) );
+        }
         return false;
     }
 
@@ -204,12 +238,18 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
      * @see com.thoughtworks.qdox.model.JavaMethod#isPropertyMutator()
      */
     public boolean isPropertyMutator() {
-        if (isStatic()) return false;
-        if (getParameters().size() != 1) return false;
+        if ( isStatic() ) 
+        {
+            return false;
+        }
+        if ( getParameters().size() != 1 ) 
+        {
+            return false;
+        }
         
-        if (getName().startsWith("set")) {
-            return (getName().length() > 3
-                    && Character.isUpperCase(getName().charAt(3)));
+        if ( getName().startsWith( "set" ) ) 
+        {
+            return ( getName().length() > 3 && Character.isUpperCase( getName().charAt( 3 ) ) );
         }
 
         return false;
@@ -218,11 +258,14 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getPropertyType()
      */
-    public Type getPropertyType() {
-        if (isPropertyAccessor()) {
+    public Type getPropertyType() 
+    {
+        if ( isPropertyAccessor() ) 
+        {
             return getReturns();
         }
-        if (isPropertyMutator()) {
+        if ( isPropertyMutator() )
+        {
             return getParameters().get(0).getType();
         } 
         return null;
@@ -233,68 +276,88 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
      */
     public String getPropertyName() {
         int start = -1;
-        if (getName().startsWith("get") || getName().startsWith("set")) {
+        if ( getName().startsWith( "get" ) || getName().startsWith( "set" ) ) 
+        {
             start = 3;
-        } else if (getName().startsWith("is")) {
+        } 
+        else if ( getName().startsWith( "is" ) ) 
+        {
             start = 2;
-        } else {
+        } 
+        else 
+        {
             return null;
         }
-        return Introspector.decapitalize(getName().substring(start));
+        return Introspector.decapitalize( getName().substring(start) );
     }
 
-    public String toString() {
-		StringBuffer result = new StringBuffer();
-		if(isPrivate()) {
-			result.append("private ");
-		}
-		else if(isProtected()) {
-			result.append("protected ");
-		}
-		else if(isPublic()) {
-			result.append("public ");
-		}
-		if(isAbstract()) {
-			result.append("abstract ");
-		}
-		if(isStatic()) {
-			result.append("static ");
-		}
-		if(isFinal()) {
-			result.append("final ");
-		}
-		if(isSynchronized()) {
-			result.append("synchronized ");
-		}
-		if(isNative()) {
-			result.append("native ");
-		}
-	    result.append(getReturns().getValue() + " ");
-		if(getParentClass() != null) {
-			result.append(getParentClass().getFullyQualifiedName());
-		    result.append(".");
-		}
-	    result.append(getName());
-		result.append("(");
-		for(int paramIndex=0;paramIndex<getParameters().size();paramIndex++) {
-			if(paramIndex>0) {
-				result.append(",");
-			}
-			String typeValue = getParameters().get(paramIndex).getType().getResolvedValue(getTypeParameters());
-			result.append(typeValue);
-		}
-		result.append(")");
-		if (exceptions.size() > 0) {
-            result.append(" throws ");
-            for (Iterator<Type> excIter = exceptions.iterator();excIter.hasNext();) {
-                result.append(excIter.next().getValue());
-                if(excIter.hasNext()) {
-                    result.append(",");
+    public String toString()
+    {
+        StringBuffer result = new StringBuffer();
+        if ( isPrivate() )
+        {
+            result.append( "private " );
+        }
+        else if ( isProtected() )
+        {
+            result.append( "protected " );
+        }
+        else if ( isPublic() )
+        {
+            result.append( "public " );
+        }
+        if ( isAbstract() )
+        {
+            result.append( "abstract " );
+        }
+        if ( isStatic() )
+        {
+            result.append( "static " );
+        }
+        if ( isFinal() )
+        {
+            result.append( "final " );
+        }
+        if ( isSynchronized() )
+        {
+            result.append( "synchronized " );
+        }
+        if ( isNative() )
+        {
+            result.append( "native " );
+        }
+        result.append( getReturns().getValue() + " " );
+        if ( getParentClass() != null )
+        {
+            result.append( getParentClass().getFullyQualifiedName() );
+            result.append( "." );
+        }
+        result.append( getName() );
+        result.append( "(" );
+        for ( int paramIndex = 0; paramIndex < getParameters().size(); paramIndex++ )
+        {
+            if ( paramIndex > 0 )
+            {
+                result.append( "," );
+            }
+            String typeValue = getParameters().get( paramIndex ).getType().getResolvedValue( getTypeParameters() );
+            result.append( typeValue );
+        }
+        result.append( ")" );
+        if ( getExceptions().size() > 0 )
+        {
+            result.append( " throws " );
+            for ( Iterator<Type> excIter = getExceptions().iterator(); excIter.hasNext(); )
+            {
+                result.append( excIter.next().getValue() );
+                if ( excIter.hasNext() )
+                {
+                    result.append( "," );
                 }
             }
         }
-		return result.toString();
-	}
+        return result.toString();
+    }
 
 	/* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getGenericReturnType()
@@ -326,7 +389,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     
     public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg )
     {
-        if (!name.equals(this.getName())) 
+        if ( !name.equals( this.getName() ) ) 
         {
             return false;    
         } 

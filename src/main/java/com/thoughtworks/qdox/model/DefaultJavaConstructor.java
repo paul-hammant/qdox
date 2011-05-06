@@ -28,35 +28,45 @@ public class DefaultJavaConstructor
     }
     
     @Override
-    public String toString() {
+    public String toString()
+    {
         StringBuffer result = new StringBuffer();
-        if(isPrivate()) {
-            result.append("private ");
+        if ( isPrivate() )
+        {
+            result.append( "private " );
         }
-        else if(isProtected()) {
-            result.append("protected ");
+        else if ( isProtected() )
+        {
+            result.append( "protected " );
         }
-        else if(isPublic()) {
-            result.append("public ");
+        else if ( isPublic() )
+        {
+            result.append( "public " );
         }
-        if(getParentClass() != null) {
-            result.append(getParentClass().getFullyQualifiedName());
+        if ( getParentClass() != null )
+        {
+            result.append( getParentClass().getFullyQualifiedName() );
         }
-        result.append("(");
-        for(int paramIndex=0;paramIndex<getParameters().size();paramIndex++) {
-            if(paramIndex>0) {
-                result.append(",");
+        result.append( "(" );
+        for ( int paramIndex = 0; paramIndex < getParameters().size(); paramIndex++ )
+        {
+            if ( paramIndex > 0 )
+            {
+                result.append( "," );
             }
-            String typeValue = getParameters().get(paramIndex).getType().getResolvedValue(getTypeParameters());
-            result.append(typeValue);
+            String typeValue = getParameters().get( paramIndex ).getType().getResolvedValue( getTypeParameters() );
+            result.append( typeValue );
         }
-        result.append(")");
-        if (exceptions.size() > 0) {
-            result.append(" throws ");
-            for (Iterator<Type> excIter = exceptions.iterator();excIter.hasNext();) {
-                result.append(excIter.next().getValue());
-                if(excIter.hasNext()) {
-                    result.append(",");
+        result.append( ")" );
+        if ( getExceptions().size() > 0 )
+        {
+            result.append( " throws " );
+            for ( Iterator<Type> excIter = getExceptions().iterator(); excIter.hasNext(); )
+            {
+                result.append( excIter.next().getValue() );
+                if ( excIter.hasNext() )
+                {
+                    result.append( "," );
                 }
             }
         }
@@ -71,34 +81,40 @@ public class DefaultJavaConstructor
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) 
+    public boolean equals( Object obj )
+    {
+        if ( this == obj )
         {
             return true;
         }
-        if (obj == null) 
+        if ( obj == null )
         {
-            return false;   
+            return false;
+        }
+        if ( !( obj instanceof JavaConstructor ) )
+        {
+            return false;
         }
 
         JavaConstructor c = (JavaConstructor) obj;
-        if (!c.getName().equals(getName())) {
-            return false;   
+        if ( !c.getName().equals( getName() ) )
+        {
+            return false;
         }
-        
+
         List<JavaParameter> myParams = getParameters();
         List<JavaParameter> otherParams = c.getParameters();
-        if (otherParams.size() != myParams.size()) 
+        if ( otherParams.size() != myParams.size() )
         {
-            return false;   
+            return false;
         }
-        for (int i = 0; i < myParams.size(); i++) 
+        for ( int i = 0; i < myParams.size(); i++ )
         {
-            if (!otherParams.get(i).equals(myParams.get(i)))
+            if ( !otherParams.get( i ).equals( myParams.get( i ) ) )
             {
                 return false;
             }
         }
-        return this.varArgs == c.isVarArgs();
+        return this.isVarArgs() == c.isVarArgs();
     }
 }

@@ -21,12 +21,12 @@ package com.thoughtworks.qdox;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -88,7 +88,7 @@ public class JavaProjectBuilder
     /**
      * Enable the debugmode for the Lexer
      * 
-     * @param debugLexer true to enable, false to disable
+     * @param debugLexer <code>true</code> to enable, <code>false</code> to disable
      * @return This javaProjectBuilder itself 
      */
     public JavaProjectBuilder setDebugLexer( boolean debugLexer )
@@ -100,7 +100,7 @@ public class JavaProjectBuilder
     /**
      * Enable the debugmode for the Parser
      * 
-     * @param debugParser true to enable, false to disable
+     * @param debugParser <code>true</code> to enable, <code>false</code> to disable
      * @return This javaProjectBuilder itself
      */
     public JavaProjectBuilder setDebugParser( boolean debugParser )
@@ -112,8 +112,8 @@ public class JavaProjectBuilder
     /**
      * Sets the encoding when using Files or URL's to parse.
      * 
-     * @param encoding
-     * @return
+     * @param encoding the encoding to use for {@link File} or ({@link URL}
+     * @return this javaProjectBuilder itself
      */
     public JavaProjectBuilder setEncoding( String encoding )
     {
@@ -125,54 +125,85 @@ public class JavaProjectBuilder
      * Sets the errorHandler which will be triggered when a parse exception occurs.
      * 
      * @param errorHandler the errorHandler
+     * @return this javaProjectBuilder itself
      */
-    public void setErrorHandler( ErrorHandler errorHandler) {
+    public JavaProjectBuilder setErrorHandler( ErrorHandler errorHandler) {
         classLibraryBuilder.setErrorHander( errorHandler );
+        return this;
     }
 
-    public JavaSource addSource(File file) throws IOException, FileNotFoundException {
+    /**
+     * Add a java file to this JavaProjectBuilder
+     * 
+     * @param file a java file
+     * @return the {@link JavaSource} of the parsed file 
+     * @throws IOException
+     */
+    public JavaSource addSource(File file) throws IOException 
+    {
         return classLibraryBuilder.addSource( file );
     }
     
     // Resource adders
     
-    public JavaSource addSource(Reader reader) {
+    public JavaSource addSource( Reader reader ) 
+    {
         return classLibraryBuilder.addSource( reader );
     }
 
+    /**
+     * Add a sourcefolder to this javaprojectbuilder, but don't parse any file.
+     * This is a lazy parser. 
+     * Only if a JavaClass is called it will be searched by matching the package with the folder structure and the classname with the filename
+     * 
+     * @see {@link #addSourceTree(File)}
+     * @param sourceFolder the sourcefolder to add
+     */
     public void addSourceFolder( File sourceFolder )
     {
         classLibraryBuilder.appendSourceFolder( sourceFolder );
     }
 
-    public void addSourceTree( File file )
+    
+    /**
+     * Add all java files of the {@value directory} recursively
+     * 
+     * @param directory the directory from which all java files should be parsed.
+     */
+    public void addSourceTree( File directory )
     {
         FileVisitor visitor = new FileVisitor() {
             public void visitFile(File badFile) {
                 throw new RuntimeException("Cannot read file : " + badFile.getName());
             }
         };
-        addSourceTree(file, visitor);        
+        addSourceTree(directory, visitor);        
     }
 
-    public void addClassLoader( ClassLoader classLoader )
+    /**
+     * Add all java files of the {@value directory} recursively
+     * 
+     * @param directory the directory from which all java files should be parsed.
+     * @param errorHandler a fileVisitor which will be triggered when an {@link IOException} occurs.
+     */
+    public void addSourceTree( File directory, final FileVisitor errorHandler )
     {
-        classLibraryBuilder.appendClassLoader( classLoader );
-    }
-
-    public void addSourceTree( File file, final FileVisitor visitor )
-    {
-        DirectoryScanner scanner = new DirectoryScanner(file);
+        DirectoryScanner scanner = new DirectoryScanner(directory);
         scanner.addFilter(new SuffixFilter(".java"));
         scanner.scan(new FileVisitor() {
             public void visitFile(File currentFile) {
                 try {
                     addSource(currentFile);
                 } catch (IOException e) {
-                    visitor.visitFile(currentFile);
+                    errorHandler.visitFile(currentFile);
                 }
             }
         });
+    }
+    
+    public void addClassLoader( ClassLoader classLoader )
+    {
+        classLibraryBuilder.appendClassLoader( classLoader );
     }
 
     // Java Object Model -getters
@@ -219,16 +250,19 @@ public class JavaProjectBuilder
     /**
      * Persist the classLibraryBuilder to a file
      * 
-     * @param file
-     * @throws IOException
+     * @param file the file to serialize to
+     * @throws IOException Any exception thrown by the underlying OutputStream
      */
     public void save( File file ) throws IOException
     {
-        FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream out = new ObjectOutputStream(fos);
-        try {
-            out.writeObject(classLibraryBuilder);
-        } finally {
+        FileOutputStream fos = new FileOutputStream( file );
+        ObjectOutputStream out = new ObjectOutputStream( fos );
+        try
+        {
+            out.writeObject( classLibraryBuilder );
+        }
+        finally
+        {
             out.close();
             fos.close();
         }

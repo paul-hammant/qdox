@@ -19,11 +19,9 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-import java.io.Serializable;
-
 import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
-public class AnnotationConstant implements ElemValueDef, Serializable {
+public class AnnotationConstant implements ElemValueDef {
 
     private final Object value;
     private final String image;

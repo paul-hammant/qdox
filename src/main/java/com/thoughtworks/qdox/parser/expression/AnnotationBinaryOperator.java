@@ -21,10 +21,27 @@ package com.thoughtworks.qdox.parser.expression;
 
 public abstract class AnnotationBinaryOperator implements ElemValueDef {
 	
-	public ElemValueDef lhs, rhs;
+	private final ElemValueDef lhs;
+    private final ElemValueDef rhs;
 
     public AnnotationBinaryOperator(ElemValueDef lhs, ElemValueDef rhs) {
-		this.lhs = lhs;
+		this.lhs  = lhs;
 		this.rhs = rhs;
 	}
+
+    /**
+     * @return the lhs
+     */
+    public ElemValueDef getLeft()
+    {
+        return lhs;
+    }
+
+    /**
+     * @return the rhs
+     */
+    public ElemValueDef getRight()
+    {
+        return rhs;
+    }
 }

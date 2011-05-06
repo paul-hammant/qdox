@@ -23,9 +23,9 @@ import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
 public class AnnotationQuery implements ElemValueDef {
 
-	public ElemValueDef cond;
-	public ElemValueDef trueExpr;
-	public ElemValueDef falseExpr;
+	private final ElemValueDef cond;
+	private final ElemValueDef trueExpr;
+	private final ElemValueDef falseExpr;
 
     public AnnotationQuery(ElemValueDef cond, ElemValueDef trueExpr,
 			ElemValueDef falseExpr) {
@@ -36,5 +36,30 @@ public class AnnotationQuery implements ElemValueDef {
     
     public <U> U transform(AnnotationTransformer<U> transformer) {
     	return transformer.transform(this);
+    }
+
+
+    /**
+     * @return the cond
+     */
+    public ElemValueDef getCondition()
+    {
+        return cond;
+    }
+
+    /**
+     * @return the trueExpr
+     */
+    public ElemValueDef getTrueExpression()
+    {
+        return trueExpr;
+    }
+
+    /**
+     * @return the falseExpr
+     */
+    public ElemValueDef getFalseExpression()
+    {
+        return falseExpr;
     }
 }

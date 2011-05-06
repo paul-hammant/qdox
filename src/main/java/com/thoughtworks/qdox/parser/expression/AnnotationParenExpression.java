@@ -23,7 +23,7 @@ import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
 public class AnnotationParenExpression implements ElemValueDef {
 
-	public ElemValueDef elemValueDef;
+	private final ElemValueDef elemValueDef;
 
     public AnnotationParenExpression(ElemValueDef value) {
     	this.elemValueDef = value;
@@ -31,6 +31,14 @@ public class AnnotationParenExpression implements ElemValueDef {
     
     public <U> U transform(AnnotationTransformer<U> transformer) {
     	return transformer.transform(this);
+    }
+
+    /**
+     * @return the elemValueDef
+     */
+    public ElemValueDef getElemValueDef()
+    {
+        return elemValueDef;
     }
 
 }

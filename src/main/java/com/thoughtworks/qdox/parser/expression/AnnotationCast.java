@@ -22,18 +22,31 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
  * under the License.
  */
 
-public class AnnotationCast implements ElemValueDef {
+public class AnnotationCast implements ElemValueDef
+{
 
-    public TypeDef typeDef;
-    public ElemValueDef elemDef;
+    private final TypeDef typeDef;
 
-    public AnnotationCast(TypeDef type, ElemValueDef value) {
-    	this.typeDef = type;
-    	this.elemDef = value;
-	}
-	
-    public <U> U transform(AnnotationTransformer<U> transformer) {
-    	return transformer.transform(this);
+    private final ElemValueDef elemDef;
+
+    public AnnotationCast( TypeDef type, ElemValueDef value )
+    {
+        this.typeDef = type;
+        this.elemDef = value;
     }
 
+    public TypeDef getTypeDef()
+    {
+        return typeDef;
+    }
+
+    public ElemValueDef getElemDef()
+    {
+        return elemDef;
+    }
+
+    public <U> U transform( AnnotationTransformer<U> transformer )
+    {
+        return transformer.transform( this );
+    }
 }

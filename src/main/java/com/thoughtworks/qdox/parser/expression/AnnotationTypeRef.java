@@ -24,7 +24,7 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 public class AnnotationTypeRef implements ElemValueDef {
 
-	public TypeDef typeDef;
+	private TypeDef typeDef;
 
     public AnnotationTypeRef(TypeDef typeDef) {
 		this.typeDef = typeDef;
@@ -33,4 +33,9 @@ public class AnnotationTypeRef implements ElemValueDef {
     public <U> U transform(AnnotationTransformer<U> transformer) {
     	return transformer.transform(this);
     }
+    
+    public TypeDef getTypeDef()
+    {
+        return typeDef;
+    } 
 }

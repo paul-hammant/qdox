@@ -130,8 +130,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationAdd)
 	 */
 	public AnnotationValue transform(AnnotationAdd annotationAdd) {
-		AnnotationValue left = annotationAdd.lhs.transform(this);
-		AnnotationValue right = annotationAdd.rhs.transform(this);
+		AnnotationValue left = annotationAdd.getLeft().transform(this);
+		AnnotationValue right = annotationAdd.getRight().transform(this);
 		return new Add(left, right);
 	}
 
@@ -139,8 +139,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationAnd)
 	 */
 	public AnnotationValue transform(AnnotationAnd annotationAnd) {
-		AnnotationValue left = annotationAnd.lhs.transform(this);
-		AnnotationValue right = annotationAnd.rhs.transform(this);
+		AnnotationValue left = annotationAnd.getLeft().transform(this);
+		AnnotationValue right = annotationAnd.getRight().transform(this);
 		return new And(left, right);
 	}
 
@@ -148,8 +148,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationDivide)
 	 */
 	public AnnotationValue transform(AnnotationDivide annotationDivide) {
-		AnnotationValue left = annotationDivide.lhs.transform(this);
-		AnnotationValue right = annotationDivide.rhs.transform(this);
+		AnnotationValue left = annotationDivide.getLeft().transform(this);
+		AnnotationValue right = annotationDivide.getRight().transform(this);
 		return new Divide(left, right);
 	}
 
@@ -157,8 +157,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationEquals)
 	 */
 	public AnnotationValue transform(AnnotationEquals annotationEquals) {
-		AnnotationValue left = annotationEquals.lhs.transform(this);
-		AnnotationValue right = annotationEquals.rhs.transform(this);
+		AnnotationValue left = annotationEquals.getLeft().transform(this);
+		AnnotationValue right = annotationEquals.getRight().transform(this);
 		return new Equals(left, right);
 	}
 
@@ -166,8 +166,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationExclusiveOr)
 	 */
 	public AnnotationValue transform(AnnotationExclusiveOr annotationExclusiveOr) {
-		AnnotationValue left = annotationExclusiveOr.lhs.transform(this);
-		AnnotationValue right = annotationExclusiveOr.rhs.transform(this);
+		AnnotationValue left = annotationExclusiveOr.getLeft().transform(this);
+		AnnotationValue right = annotationExclusiveOr.getRight().transform(this);
 		return new ExclusiveOr(left, right);
 	}
 
@@ -175,8 +175,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationGreaterEquals)
 	 */
 	public AnnotationValue transform(AnnotationGreaterEquals annotationGreaterEquals) {
-		AnnotationValue left = annotationGreaterEquals.lhs.transform(this);
-		AnnotationValue right = annotationGreaterEquals.rhs.transform(this);
+		AnnotationValue left = annotationGreaterEquals.getLeft().transform(this);
+		AnnotationValue right = annotationGreaterEquals.getRight().transform(this);
 		return new GreaterEquals(left, right);
 	}
 
@@ -184,8 +184,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationGreaterThan)
 	 */
 	public AnnotationValue transform(AnnotationGreaterThan annotationGreaterThan) {
-		AnnotationValue left = annotationGreaterThan.lhs.transform(this);
-		AnnotationValue right = annotationGreaterThan.rhs.transform(this);
+		AnnotationValue left = annotationGreaterThan.getLeft().transform(this);
+		AnnotationValue right = annotationGreaterThan.getRight().transform(this);
 		return new GreaterThan(left, right);
 	}
 
@@ -193,8 +193,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationLessEquals)
 	 */
 	public AnnotationValue transform(AnnotationLessEquals annotationLessEquals) {
-		AnnotationValue left = annotationLessEquals.lhs.transform(this);
-		AnnotationValue right = annotationLessEquals.rhs.transform(this);
+		AnnotationValue left = annotationLessEquals.getLeft().transform(this);
+		AnnotationValue right = annotationLessEquals.getRight().transform(this);
 		return new LessEquals(left, right);
 	}
 
@@ -202,8 +202,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationLessThan)
 	 */
 	public AnnotationValue transform(AnnotationLessThan annotationLessThan) {
-		AnnotationValue left = annotationLessThan.lhs.transform(this);
-		AnnotationValue right = annotationLessThan.rhs.transform(this);
+		AnnotationValue left = annotationLessThan.getLeft().transform(this);
+		AnnotationValue right = annotationLessThan.getRight().transform(this);
 		return new LessThan(left, right);
 	}
 
@@ -211,8 +211,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationLogicalAnd)
 	 */
 	public AnnotationValue transform(AnnotationLogicalAnd annotationLogicalAnd) {
-		AnnotationValue left = annotationLogicalAnd.lhs.transform(this);
-		AnnotationValue right = annotationLogicalAnd.rhs.transform(this);
+		AnnotationValue left = annotationLogicalAnd.getLeft().transform(this);
+		AnnotationValue right = annotationLogicalAnd.getRight().transform(this);
 		return new LogicalAnd(left, right);
 	}
 
@@ -220,8 +220,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationLogicalOr)
 	 */
 	public AnnotationValue transform(AnnotationLogicalOr annotationLogicalOr) {
-		AnnotationValue left = annotationLogicalOr.lhs.transform(this);
-		AnnotationValue right = annotationLogicalOr.rhs.transform(this);
+		AnnotationValue left = annotationLogicalOr.getLeft().transform(this);
+		AnnotationValue right = annotationLogicalOr.getRight().transform(this);
 		return new LogicalOr(left, right);
 	}
 
@@ -229,8 +229,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationMultiply)
 	 */
 	public AnnotationValue transform(AnnotationMultiply annotationMultiply) {
-		AnnotationValue left = annotationMultiply.lhs.transform(this);
-		AnnotationValue right = annotationMultiply.rhs.transform(this);
+		AnnotationValue left = annotationMultiply.getLeft().transform(this);
+		AnnotationValue right = annotationMultiply.getRight().transform(this);
 		return new Multiply(left, right);
 	}
 
@@ -238,8 +238,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationNotEquals)
 	 */
 	public AnnotationValue transform(AnnotationNotEquals annotationNotEquals) {
-		AnnotationValue left = annotationNotEquals.lhs.transform(this);
-		AnnotationValue right = annotationNotEquals.rhs.transform(this);
+		AnnotationValue left = annotationNotEquals.getLeft().transform(this);
+		AnnotationValue right = annotationNotEquals.getRight().transform(this);
 		return new NotEquals(left, right);
 	}
 
@@ -247,8 +247,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationOr)
 	 */
 	public AnnotationValue transform(AnnotationOr annotationOr) {
-		AnnotationValue left = annotationOr.lhs.transform(this);
-		AnnotationValue right = annotationOr.rhs.transform(this);
+		AnnotationValue left = annotationOr.getLeft().transform(this);
+		AnnotationValue right = annotationOr.getRight().transform(this);
 		return new Or(left, right);
 	}
 
@@ -256,8 +256,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationRemainder)
 	 */
 	public AnnotationValue transform(AnnotationRemainder annotationRemainder) {
-		AnnotationValue left = annotationRemainder.lhs.transform(this);
-		AnnotationValue right = annotationRemainder.rhs.transform(this);
+		AnnotationValue left = annotationRemainder.getLeft().transform(this);
+		AnnotationValue right = annotationRemainder.getRight().transform(this);
 		return new Remainder(left, right);
 	}
 
@@ -265,8 +265,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationShiftLeft)
 	 */
 	public AnnotationValue transform(AnnotationShiftLeft annotationShiftLeft) {
-		AnnotationValue left = annotationShiftLeft.lhs.transform(this);
-		AnnotationValue right = annotationShiftLeft.rhs.transform(this);
+		AnnotationValue left = annotationShiftLeft.getLeft().transform(this);
+		AnnotationValue right = annotationShiftLeft.getRight().transform(this);
 		return new ShiftLeft(left, right);
 	}
 
@@ -274,8 +274,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationShiftRight)
 	 */
 	public AnnotationValue transform(AnnotationShiftRight annotationShiftRight) {
-		AnnotationValue left = annotationShiftRight.lhs.transform(this);
-		AnnotationValue right = annotationShiftRight.rhs.transform(this);
+		AnnotationValue left = annotationShiftRight.getLeft().transform(this);
+		AnnotationValue right = annotationShiftRight.getRight().transform(this);
 		return new ShiftRight(left, right);
 	}
 
@@ -283,8 +283,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationSubtract)
 	 */
 	public AnnotationValue transform(AnnotationSubtract annotationSubtract) {
-		AnnotationValue left = annotationSubtract.lhs.transform(this);
-		AnnotationValue right = annotationSubtract.rhs.transform(this);
+		AnnotationValue left = annotationSubtract.getLeft().transform(this);
+		AnnotationValue right = annotationSubtract.getRight().transform(this);
 		return new Subtract(left, right);
 	}
 
@@ -292,8 +292,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationUnsignedShiftRight)
 	 */
 	public AnnotationValue transform(AnnotationUnsignedShiftRight annotationUnsignedShiftRight) {
-		AnnotationValue left = annotationUnsignedShiftRight.lhs.transform(this);
-		AnnotationValue right = annotationUnsignedShiftRight.rhs.transform(this);
+		AnnotationValue left = annotationUnsignedShiftRight.getLeft().transform(this);
+		AnnotationValue right = annotationUnsignedShiftRight.getRight().transform(this);
 		return new UnsignedShiftRight(left, right);
 	}
 
@@ -301,8 +301,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationCast)
 	 */
 	public AnnotationValue transform(AnnotationCast annotationCast) {
-		Type type = createType(annotationCast.typeDef, annotationCast.typeDef.dimensions);
-		AnnotationValue value = annotationCast.elemDef.transform(this);
+		Type type = createType(annotationCast.getTypeDef(), annotationCast.getTypeDef().dimensions);
+		AnnotationValue value = annotationCast.getElemDef().transform(this);
 		return new Cast(type, value);
 	}
 
@@ -330,7 +330,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationLogicalNot)
 	 */
 	public AnnotationValue transform(AnnotationLogicalNot annotationLogicalNot) {
-		AnnotationValue value = annotationLogicalNot.elemValueDef.transform(this);
+		AnnotationValue value = annotationLogicalNot.getElemValueDef().transform(this);
 		return new LogicalNot(value);
 	}
 
@@ -338,7 +338,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationMinusSign)
 	 */
 	public AnnotationValue transform(AnnotationMinusSign annotationMinusSign) {
-		AnnotationValue value = annotationMinusSign.elemValueDef.transform(this);
+		AnnotationValue value = annotationMinusSign.getElemValueDef().transform(this);
 		return new MinusSign(value);
 	}
 
@@ -346,7 +346,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationNot)
 	 */
 	public AnnotationValue transform(AnnotationNot annotationNot) {
-		AnnotationValue value = annotationNot.elemValueDef.transform(this);
+		AnnotationValue value = annotationNot.getElemValueDef().transform(this);
 		return new Not(value);
 	}
 
@@ -354,7 +354,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationParenExpression)
 	 */
 	public AnnotationValue transform(AnnotationParenExpression annotationParenExpression) {
-		AnnotationValue value = annotationParenExpression.elemValueDef.transform(this);
+		AnnotationValue value = annotationParenExpression.getElemValueDef().transform(this);
 		return new ParenExpression(value);
 	}
 
@@ -362,7 +362,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationPlusSign)
 	 */
 	public AnnotationValue transform(AnnotationPlusSign annotationPlusSign) {
-		AnnotationValue value = annotationPlusSign.elemValueDef.transform(this);
+		AnnotationValue value = annotationPlusSign.getElemValueDef().transform(this);
 		return new PlusSign(value);
 	}
 
@@ -370,9 +370,9 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationQuery)
 	 */
 	public AnnotationValue transform(AnnotationQuery annotationQuery) {
-		AnnotationValue condition = annotationQuery.cond.transform(this);
-		AnnotationValue trueExpression = annotationQuery.trueExpr.transform(this);
-		AnnotationValue falseExpression = annotationQuery.falseExpr.transform(this);
+		AnnotationValue condition = annotationQuery.getCondition().transform(this);
+		AnnotationValue trueExpression = annotationQuery.getTrueExpression().transform(this);
+		AnnotationValue falseExpression = annotationQuery.getFalseExpression().transform(this);
 		return new Query(condition, trueExpression, falseExpression);
 	}
 
@@ -380,7 +380,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationTypeRef)
 	 */
 	public AnnotationValue transform(AnnotationTypeRef annotationTypeRef) {
-		Type type = createType(annotationTypeRef.typeDef, annotationTypeRef.typeDef.dimensions);
+		Type type = createType(annotationTypeRef.getTypeDef(), annotationTypeRef.getTypeDef().dimensions);
 		return new TypeRef(type);
 	}
 

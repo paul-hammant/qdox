@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.parser.expression;
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

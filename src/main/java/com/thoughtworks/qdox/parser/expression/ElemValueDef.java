@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.parser.expression;
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
 public interface ElemValueDef {
 

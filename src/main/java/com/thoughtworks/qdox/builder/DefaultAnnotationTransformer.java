@@ -84,6 +84,7 @@ import com.thoughtworks.qdox.parser.expression.AnnotationRemainder;
 import com.thoughtworks.qdox.parser.expression.AnnotationShiftLeft;
 import com.thoughtworks.qdox.parser.expression.AnnotationShiftRight;
 import com.thoughtworks.qdox.parser.expression.AnnotationSubtract;
+import com.thoughtworks.qdox.parser.expression.AnnotationTransformer;
 import com.thoughtworks.qdox.parser.expression.AnnotationTypeRef;
 import com.thoughtworks.qdox.parser.expression.AnnotationUnsignedShiftRight;
 import com.thoughtworks.qdox.parser.expression.ElemValueDef;

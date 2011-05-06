@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
+import com.thoughtworks.qdox.parser.expression.AnnotationTransformer;
 import com.thoughtworks.qdox.parser.expression.ElemValueDef;
 
 public class AnnoDef extends LocatedDef implements ElemValueDef

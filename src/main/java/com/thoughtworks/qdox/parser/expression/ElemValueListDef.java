@@ -2,7 +2,6 @@ package com.thoughtworks.qdox.parser.expression;
 
 import java.util.List;
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
 public class ElemValueListDef implements ElemValueDef{
 

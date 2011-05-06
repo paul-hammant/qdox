@@ -19,7 +19,6 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-import com.thoughtworks.qdox.builder.AnnotationTransformer;
 
 public class AnnotationFieldRef implements ElemValueDef {
 

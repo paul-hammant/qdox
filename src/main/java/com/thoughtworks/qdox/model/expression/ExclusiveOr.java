@@ -31,7 +31,7 @@ public class ExclusiveOr extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationExclusiveOr( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

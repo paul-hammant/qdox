@@ -31,7 +31,7 @@ public class Remainder extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationRemainder( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

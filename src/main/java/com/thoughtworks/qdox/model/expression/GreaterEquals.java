@@ -31,7 +31,7 @@ public class GreaterEquals extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationGreaterEquals( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

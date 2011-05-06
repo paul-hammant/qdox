@@ -31,7 +31,7 @@ public class And extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationAnd( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

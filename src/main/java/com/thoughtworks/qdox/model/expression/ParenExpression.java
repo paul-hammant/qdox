@@ -37,7 +37,7 @@ public class ParenExpression implements AnnotationValue {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationParenExpression( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

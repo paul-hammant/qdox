@@ -31,7 +31,7 @@ public class Not extends UnaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationNot( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

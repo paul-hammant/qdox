@@ -46,7 +46,7 @@ public class Constant implements AnnotationValue, Serializable {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationConstant( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

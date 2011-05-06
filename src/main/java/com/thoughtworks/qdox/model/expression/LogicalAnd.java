@@ -31,7 +31,7 @@ public class LogicalAnd extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationLogicalAnd( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

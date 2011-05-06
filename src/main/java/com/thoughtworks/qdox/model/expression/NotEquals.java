@@ -31,7 +31,7 @@ public class NotEquals extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationNotEquals( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

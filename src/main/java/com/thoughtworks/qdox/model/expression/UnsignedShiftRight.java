@@ -31,7 +31,7 @@ public class UnsignedShiftRight extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationUnsignedShiftRight( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

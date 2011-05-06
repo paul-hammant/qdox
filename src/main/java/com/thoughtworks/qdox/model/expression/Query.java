@@ -33,7 +33,7 @@ public class Query implements AnnotationValue {
     }
 
 	public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationQuery( this );
+        return visitor.visit( this );
     }
 
     public AnnotationValue getCondition() {

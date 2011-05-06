@@ -31,7 +31,7 @@ public class Equals extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationEquals( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

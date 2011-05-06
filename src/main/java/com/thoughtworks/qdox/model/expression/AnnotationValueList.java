@@ -55,7 +55,7 @@ public class AnnotationValueList implements AnnotationValue {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationValueList( this );
+        return visitor.visit( this );
     }
 
     public List<Object> getParameterValue() {

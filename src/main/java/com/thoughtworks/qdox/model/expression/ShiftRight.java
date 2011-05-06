@@ -31,7 +31,7 @@ public class ShiftRight extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationShiftRight( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

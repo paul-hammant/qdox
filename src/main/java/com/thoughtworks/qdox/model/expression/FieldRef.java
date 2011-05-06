@@ -70,7 +70,7 @@ public class FieldRef implements AnnotationValue {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationFieldRef( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

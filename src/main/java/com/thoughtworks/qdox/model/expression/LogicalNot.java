@@ -31,7 +31,7 @@ public class LogicalNot extends UnaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationLogicalNot( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

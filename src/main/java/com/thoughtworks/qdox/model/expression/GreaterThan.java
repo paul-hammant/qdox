@@ -31,7 +31,7 @@ public class GreaterThan extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationGreaterThan( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

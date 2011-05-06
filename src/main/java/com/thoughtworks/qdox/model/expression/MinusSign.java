@@ -31,7 +31,7 @@ public class MinusSign extends UnaryOperator {
 	}
 
 	public Object accept(AnnotationVisitor visitor) {
-		return visitor.visitAnnotationMinusSign(this);
+		return visitor.visit(this);
 	}
 
 	public Object getParameterValue() {

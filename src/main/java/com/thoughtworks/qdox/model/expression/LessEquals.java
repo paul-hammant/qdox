@@ -31,7 +31,7 @@ public class LessEquals extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationLessEquals( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

@@ -31,7 +31,7 @@ public class Subtract extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationSubtract( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

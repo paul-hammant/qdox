@@ -31,7 +31,7 @@ public class LogicalOr extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationLogicalOr( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

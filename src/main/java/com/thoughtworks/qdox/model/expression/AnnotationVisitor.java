@@ -29,66 +29,66 @@ import com.thoughtworks.qdox.model.Annotation;
  */
 public interface AnnotationVisitor {
 
-    public Object visitAnnotationAdd( Add add );
+    public Object visit( Add add );
 
-    public Object visitAnnotationSubtract( Subtract subtract );
+    public Object visit( Subtract subtract );
 
-    public Object visitAnnotationMultiply( Multiply multiply );
+    public Object visit( Multiply multiply );
 
-    public Object visitAnnotationDivide( Divide divide );
+    public Object visit( Divide divide );
 
-    public Object visitAnnotationGreaterThan( GreaterThan greaterThan );
+    public Object visit( GreaterThan greaterThan );
 
-    public Object visitAnnotationLessThan( LessThan lessThan );
+    public Object visit( LessThan lessThan );
 
-    public Object visitAnnotation( Annotation annotation );
+    public Object visit( Annotation annotation );
 
-    public Object visitAnnotationConstant( Constant constant );
+    public Object visit( Constant constant );
 
-    public Object visitAnnotationParenExpression( ParenExpression expression );
+    public Object visit( ParenExpression expression );
 
-    public Object visitAnnotationValueList( AnnotationValueList valueList );
+    public Object visit( AnnotationValueList valueList );
 
-    public Object visitAnnotationTypeRef( TypeRef typeRef );
+    public Object visit( TypeRef typeRef );
 
-    public Object visitAnnotationFieldRef( FieldRef fieldRef );
+    public Object visit( FieldRef fieldRef );
 
-    public Object visitAnnotationLessEquals( LessEquals lessEquals );
+    public Object visit( LessEquals lessEquals );
 
-    public Object visitAnnotationGreaterEquals( GreaterEquals greaterEquals );
+    public Object visit( GreaterEquals greaterEquals );
 
-    public Object visitAnnotationRemainder( Remainder remainder );
+    public Object visit( Remainder remainder );
 
-    public Object visitAnnotationOr( Or or );
+    public Object visit( Or or );
 
-    public Object visitAnnotationAnd( And and );
+    public Object visit( And and );
 
-    public Object visitAnnotationShiftLeft( ShiftLeft left );
+    public Object visit( ShiftLeft left );
 
-    public Object visitAnnotationShiftRight( ShiftRight right );
+    public Object visit( ShiftRight right );
 
-    public Object visitAnnotationNot( Not not );
+    public Object visit( Not not );
 
-    public Object visitAnnotationLogicalOr( LogicalOr or );
+    public Object visit( LogicalOr or );
 
-    public Object visitAnnotationLogicalAnd( LogicalAnd and );
+    public Object visit( LogicalAnd and );
 
-    public Object visitAnnotationLogicalNot( LogicalNot not );
+    public Object visit( LogicalNot not );
 
-    public Object visitAnnotationMinusSign( MinusSign sign );
+    public Object visit( MinusSign sign );
 
-    public Object visitAnnotationPlusSign( PlusSign sign );
+    public Object visit( PlusSign sign );
 
-    public Object visitAnnotationUnsignedShiftRight( UnsignedShiftRight right );
+    public Object visit( UnsignedShiftRight right );
 
-    public Object visitAnnotationEquals( Equals annotationEquals );
+    public Object visit( Equals annotationEquals );
 
-    public Object visitAnnotationNotEquals( NotEquals annotationNotEquals );
+    public Object visit( NotEquals annotationNotEquals );
 
-    public Object visitAnnotationExclusiveOr( ExclusiveOr annotationExclusiveOr );
+    public Object visit( ExclusiveOr annotationExclusiveOr );
 
-    public Object visitAnnotationQuery( Query annotationQuery );
+    public Object visit( Query annotationQuery );
 
-    public Object visitAnnotationCast( Cast annotationCast );
+    public Object visit( Cast annotationCast );
 
 }

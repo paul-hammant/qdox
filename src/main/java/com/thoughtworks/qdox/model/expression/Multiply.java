@@ -31,7 +31,7 @@ public class Multiply extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationMultiply( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

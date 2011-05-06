@@ -31,7 +31,7 @@ public class Divide extends BinaryOperator {
     }
 
     public Object accept( AnnotationVisitor visitor ) {
-        return visitor.visitAnnotationDivide( this );
+        return visitor.visit( this );
     }
 
     public Object getParameterValue() {

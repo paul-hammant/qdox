@@ -108,14 +108,13 @@ public class FieldRef implements AnnotationValue {
     protected JavaField resolveField( JavaClass javaClass, int start, int end ) {
         JavaField field = null;
 
-        for( int i = start; i < end; ++i ) {
+        for( int i = start; i < end; ++i ) 
+        {
             field = javaClass.getFieldByName( getNamePart( i ) );
 
             if( field == null ) {
                 break;
             }
-
-            javaClass = field.getType().getJavaClass();
         }
 
         return field;

@@ -177,7 +177,7 @@ public abstract class EvaluatingVisitor
      * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170952">section
      *      5.6.2<a>
      */
-    protected static Class<?> unaryNumericResultType( Object value )
+    protected static Class<?> unaryNumericResultType( final Object value )
     {
         Class<?> type = void.class;
 
@@ -187,7 +187,7 @@ public abstract class EvaluatingVisitor
         }
         else if ( value instanceof Long )
         {
-            value = Long.class;
+            type = Long.class;
         }
 
         return type;

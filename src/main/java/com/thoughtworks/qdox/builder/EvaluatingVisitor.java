@@ -150,7 +150,7 @@ public abstract class EvaluatingVisitor
      * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section
      *      5.6.1<a>
      */
-    protected static Class<?> numericResultType( Object left, Object right )
+    protected static Class<?> numericResultType( final Object left, final Object right )
     {
         Class<?> type = void.class;
 

@@ -71,6 +71,54 @@ public class EvaluatingVisitorTest
         assertEquals( void.class, EvaluatingVisitor.unaryResultType( new Object() ) );
         assertEquals( void.class, EvaluatingVisitor.unaryResultType( null ) );
     }
+    
+    @Test
+    public void testNumericResultTypeLong()
+        throws Exception
+    {
+        assertEquals( Long.class, EvaluatingVisitor.numericResultType( (long) 0, (long) 0 ) );
+        assertEquals( Long.class, EvaluatingVisitor.numericResultType( (int) 0, (long) 0 ) );
+        assertEquals( Long.class, EvaluatingVisitor.numericResultType( (long) 0, (int) 0 ) );
+    }
+    
+    @Test
+    public void testNumericResultTypeInteger()
+        throws Exception
+    {
+        assertEquals( Integer.class, EvaluatingVisitor.numericResultType( (int) 0, (int) 0 ) );
+        assertEquals( Integer.class, EvaluatingVisitor.numericResultType( (short) 0, (int) 0 ) );
+        assertEquals( Integer.class, EvaluatingVisitor.numericResultType( (int) 0, (short) 0 ) );
+    }
+    
+    @Test
+    public void testNumericResultTypeVoid()
+        throws Exception
+    {
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (double) 0, (double) 0 ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (float) 0, (double) 0 ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (double) 0, (float) 0 ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (float) 0, (float) 0 ) );
+
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (double) 0, new Object() ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (float) 0, new Object() ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (long) 0, new Object() ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (int) 0, new Object() ) );
+
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( new Object(), (double) 0 ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( new Object(), (float) 0 ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( new Object(), (long) 0 ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( new Object(), (int) 0 ) );
+        
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (double) 0, null ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (float) 0, null ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (long) 0, null ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( (int) 0, null ) );
+
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( null, (double) 0 ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( null, (float) 0 ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( null, (long) 0 ) );
+        assertEquals( void.class, EvaluatingVisitor.numericResultType( null, (int) 0 ) );
+    }
 
     @Test
     public void testResultTypeDouble()

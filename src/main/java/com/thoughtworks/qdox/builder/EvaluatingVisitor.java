@@ -193,7 +193,7 @@ public abstract class EvaluatingVisitor
         return type;
     }
 
-    protected static Class<?> unaryResultType( Object value )
+    protected static Class<?> unaryResultType( final Object value )
     {
         Class<?> type = unaryNumericResultType( value );
 
@@ -201,11 +201,11 @@ public abstract class EvaluatingVisitor
         {
             if ( value instanceof Float )
             {
-                value = Float.class;
+                type = Float.class;
             }
             else if ( value instanceof Double )
             {
-                value = Double.class;
+                type = Double.class;
             }
         }
 

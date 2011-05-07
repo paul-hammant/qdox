@@ -23,4 +23,20 @@ public class EvaluatingVisitorTest
         assertEquals( void.class, EvaluatingVisitor.unaryNumericResultType( null ) );
     }
     
+    @Test
+    public void testUnaryResultType() throws Exception 
+    {
+        assertEquals( Integer.class, EvaluatingVisitor.unaryResultType( 0 ) );
+        assertEquals( Integer.class, EvaluatingVisitor.unaryResultType( ( byte ) 0  ) );
+        assertEquals( Integer.class, EvaluatingVisitor.unaryResultType( ( short ) 0  ) );
+        assertEquals( Integer.class, EvaluatingVisitor.unaryResultType( ( char ) 0 ) );
+        
+        assertEquals( Long.class, EvaluatingVisitor.unaryResultType( 0L ) );
+        
+        assertEquals( Double.class, EvaluatingVisitor.unaryResultType( ( double ) 0 ) );
+        assertEquals( Float.class, EvaluatingVisitor.unaryResultType( ( float ) 0 ) );
+
+        assertEquals( void.class, EvaluatingVisitor.unaryResultType( new Object() ) );
+        assertEquals( void.class, EvaluatingVisitor.unaryResultType( null ) );
+    }
 }

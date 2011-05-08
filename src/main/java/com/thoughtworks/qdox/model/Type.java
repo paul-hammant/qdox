@@ -45,20 +45,6 @@ public class Type implements Comparable, Serializable {
         this.context = context;
     }
     
-    public Type(String fullName, TypeDef typeDef, int dimensions, JavaClassParent context) {
-    	this.fullName = fullName;
-        this.name = typeDef.name;
-        this.dimensions = typeDef.dimensions + dimensions; //in some cases dimensions can be spread. Collect them here
-        if(typeDef.actualArgumentTypes != null && !typeDef.actualArgumentTypes.isEmpty()) {
-        	actualArgumentTypes = new LinkedList<Type>();
-        	for(TypeDef actualArgType : typeDef.actualArgumentTypes) {
-        		actualArgumentTypes.add(createUnresolved(actualArgType, context));
-        	}
-        }
-        this.context = context;
-	}
-
-
     public Type(String fullName, int dimensions, JavaClassParent context) {
         this(fullName, (String) null, dimensions, context);
     }
@@ -71,19 +57,31 @@ public class Type implements Comparable, Serializable {
         this(fullName, 0);
     }
     
+    public Type(TypeDef typeDef, int dimensions, JavaClassParent context) {
+        this.name = typeDef.name;
+        this.dimensions = typeDef.dimensions + dimensions; //in some cases dimensions can be spread. Collect them here
+        if(typeDef.actualArgumentTypes != null && !typeDef.actualArgumentTypes.isEmpty()) {
+        	actualArgumentTypes = new LinkedList<Type>();
+        	for(TypeDef actualArgType : typeDef.actualArgumentTypes) {
+        		actualArgumentTypes.add(createUnresolved(actualArgType, context));
+        	}
+        }
+        this.context = context;
+	}
+    
 	public static Type createUnresolved(String name, int dimensions, JavaClassParent context) {
         return new Type(null, name, dimensions, context);
     }
     
 	public static Type createUnresolved(TypeDef typeDef, int dimensions, JavaClassParent context) {
-        return new Type(null, typeDef, dimensions, context);
+        return new Type(typeDef, dimensions, context);
 	}
 	
 	public static Type createUnresolved(TypeDef typeDef, JavaClassParent context) {
 		if(typeDef instanceof WildcardTypeDef) {
 			return new WildcardType((WildcardTypeDef) typeDef, context);
 		}
-        return new Type(null, typeDef, 0, context);
+        return new Type(typeDef, 0, context);
 	}
 
     

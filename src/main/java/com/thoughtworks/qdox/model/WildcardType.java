@@ -42,7 +42,7 @@ public class WildcardType extends Type {
 	}
 
 	public WildcardType(WildcardTypeDef typeDef, JavaClassParent context) {
-		super(null, typeDef, 0, context);
+		super(typeDef, 0, context);
 		this.wildcardExpressionType = typeDef.getWildcardExpressionType();
 	}
 

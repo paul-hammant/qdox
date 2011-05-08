@@ -20,11 +20,7 @@ package com.thoughtworks.qdox.model;
  */
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-
-import com.thoughtworks.qdox.parser.structs.TypeDef;
-import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
 /**
  * 
  * 
@@ -35,23 +31,28 @@ public class TypeVariable extends Type {
 
 	private List<Type> bounds;
 
-	public TypeVariable(String fullName, TypeVariableDef def, JavaClassParent context) {
-		super(fullName, def.name, 0, context);
-		if(def.bounds != null && !def.bounds.isEmpty()) {
-			bounds = new LinkedList<Type>();
-        	for(TypeDef typeDef : def.bounds) {
-        		bounds.add(createUnresolved(typeDef, context));
-        	}
-        }
-	}
+    public TypeVariable( String fullName, String name, JavaClassParent context ) {
+        super( fullName, name, 0, context );
+    }
+    
+	/**
+     * @return the bounds
+     */
+    public List<Type> getBounds()
+    {
+        return bounds;
+    }
 
-	public static TypeVariable createUnresolved(TypeVariableDef def, JavaClassParent context) {
-		return new TypeVariable(null, def, context);
-	}
-	
-	
+    /**
+     * @param bounds the bounds to set
+     */
+    public void setBounds( List<Type> bounds )
+    {
+        this.bounds = bounds;
+    }
+
 	public String getValue() {
-		return (bounds == null || bounds.isEmpty() ? ""  : bounds.get(0).getValue());
+		return ( bounds == null || bounds.isEmpty() ? ""  : bounds.get(0).getValue() );
 	}
 	
 	public String getGenericValue() {

@@ -38,6 +38,7 @@ import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
@@ -303,8 +304,19 @@ public class ModelBuilder implements Builder {
     	if(typeVariableDef == null) {
     		return null;
     	}
-    	return TypeVariable.createUnresolved(typeVariableDef, classStack.isEmpty() ? source : classStack.getFirst());
-
+    	JavaClassParent context = classStack.isEmpty() ? source : classStack.getFirst();
+    	TypeVariable result = new TypeVariable( null, 
+    	                                        typeVariableDef.name,
+    	                                        context );
+    	
+        if( typeVariableDef.bounds != null && !typeVariableDef.bounds.isEmpty() ) {
+            List<Type> bounds = new LinkedList<Type>();
+            for(TypeDef typeDef : typeVariableDef.bounds) {
+                bounds.add(createType(typeDef, 0));
+            }
+            result.setBounds( bounds );
+        }
+        return result;
 	}
 
 	public void addField(FieldDef def) {

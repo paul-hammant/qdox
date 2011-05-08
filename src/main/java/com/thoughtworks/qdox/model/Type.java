@@ -25,8 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.thoughtworks.qdox.builder.TypeAssembler;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
-import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
 public class Type implements Comparable, Serializable {
 
@@ -63,7 +63,7 @@ public class Type implements Comparable, Serializable {
         if(typeDef.actualArgumentTypes != null && !typeDef.actualArgumentTypes.isEmpty()) {
         	actualArgumentTypes = new LinkedList<Type>();
         	for(TypeDef actualArgType : typeDef.actualArgumentTypes) {
-        		actualArgumentTypes.add(createUnresolved(actualArgType, context));
+        		actualArgumentTypes.add(TypeAssembler.createUnresolved(actualArgType, context));
         	}
         }
         this.context = context;
@@ -73,19 +73,7 @@ public class Type implements Comparable, Serializable {
         return new Type(null, name, dimensions, context);
     }
     
-	public static Type createUnresolved(TypeDef typeDef, int dimensions, JavaClassParent context) {
-        return new Type(typeDef, dimensions, context);
-	}
-	
-	public static Type createUnresolved(TypeDef typeDef, JavaClassParent context) {
-		if(typeDef instanceof WildcardTypeDef) {
-			return new WildcardType((WildcardTypeDef) typeDef, context);
-		}
-        return new Type(typeDef, 0, context);
-	}
-
-    
-    public JavaClassParent getJavaClassParent() {
+	public JavaClassParent getJavaClassParent() {
         return context;
     }
 

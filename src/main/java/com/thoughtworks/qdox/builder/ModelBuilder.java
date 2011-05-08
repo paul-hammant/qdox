@@ -185,7 +185,7 @@ public class ModelBuilder implements Builder {
     	if(typeDef == null) {
     		return null;
     	}
-    	return Type.createUnresolved(typeDef, dimensions, classStack.isEmpty() ? source : classStack.getFirst());
+    	return TypeAssembler.createUnresolved(typeDef, dimensions, classStack.isEmpty() ? source : classStack.getFirst());
     }
 
     private void addJavaDoc(AbstractBaseJavaEntity entity) {

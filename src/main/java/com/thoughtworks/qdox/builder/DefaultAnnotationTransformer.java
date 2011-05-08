@@ -116,7 +116,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
     	if(typeDef == null) {
     		return null;
     	}
-    	return Type.createUnresolved(typeDef, dimensions, parent.getParentClass() != null ? parent.getParentClass() : parent.getSource());
+    	return TypeAssembler.createUnresolved(typeDef, dimensions, parent.getParentClass() != null ? parent.getParentClass() : parent.getSource());
     }
     
     public AnnotationValue transform(ElemValueListDef elemValueListDef) {

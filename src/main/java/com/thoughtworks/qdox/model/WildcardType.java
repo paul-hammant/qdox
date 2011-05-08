@@ -36,11 +36,6 @@ public class WildcardType extends Type {
 		super("?");
 	}
 	
-	
-	public WildcardType(WildcardTypeDef typeDef) {
-		this(typeDef, null);
-	}
-
 	public WildcardType(WildcardTypeDef typeDef, JavaClassParent context) {
 		super(typeDef, 0, context);
 		this.wildcardExpressionType = typeDef.getWildcardExpressionType();
@@ -48,7 +43,8 @@ public class WildcardType extends Type {
 
 	public String getGenericValue() {
 		String result = "";
-		if(wildcardExpressionType != null) {
+		if( wildcardExpressionType != null ) 
+		{
 			result += "? " + wildcardExpressionType+ " ";
 		}
 		result += super.getGenericValue();

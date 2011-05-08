@@ -53,8 +53,7 @@ public class BinaryClassParser
             String packageName = getPackageName(name);
             binaryBuilder.addPackage(new PackageDef(packageName));
 
-            ClassDef classDef = new ClassDef();
-            classDef.name = getClassName(name);
+            ClassDef classDef = new ClassDef( getClassName(name) );
 
             // Set the extended class and interfaces.
             Class<?>[] interfaces = clazz.getInterfaces();

@@ -108,7 +108,7 @@ public class ModelBuilder implements Builder {
         newClass.setModelWriterFactory(modelWriterFactory);
 
         // basic details
-        newClass.setName(def.name);
+        newClass.setName(def.getName());
         newClass.setInterface(ClassDef.INTERFACE.equals(def.type));
         newClass.setEnum(ClassDef.ENUM.equals(def.type));
         newClass.setAnnotation(ClassDef.ANNOTATION_TYPE.equals(def.type));

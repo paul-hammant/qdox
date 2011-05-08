@@ -31,17 +31,42 @@ public class ClassDef extends LocatedDef {
     public static final String ENUM = "enum";
     public static final String ANNOTATION_TYPE = "@interface";
     
-    public String name = "";
+    private String name = "";
     public Set<String> modifiers = new HashSet<String>();
     public List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>();
     public Set<TypeDef> extendz = new HashSet<TypeDef>();
     public Set<TypeDef> implementz = new HashSet<TypeDef>();
     public String type = CLASS;
+    
+    public ClassDef()
+    {
+    }
 
+    public ClassDef( String name )
+    {
+        this.name = name;
+    }
+    
+    /**
+     * @param name the name to set
+     */
+    public void setName( String name )
+    {
+        this.name = name;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName()
+    {
+        return name;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         ClassDef classDef = (ClassDef) obj;
-        return classDef.name.equals(name)
+        return classDef.getName().equals(getName())
                 && classDef.type == type
                 && classDef.typeParams.equals( typeParams )
                 && classDef.modifiers.equals(modifiers)
@@ -51,7 +76,7 @@ public class ClassDef extends LocatedDef {
 
     @Override
     public int hashCode() {
-        return name.hashCode() + type.hashCode() + typeParams.hashCode()+
+        return getName().hashCode() + type.hashCode() + typeParams.hashCode()+
                 modifiers.hashCode() + extendz.hashCode() +
                 implementz.hashCode();
     }
@@ -63,7 +88,7 @@ public class ClassDef extends LocatedDef {
         result.append(' ');
         result.append(type);
         result.append(' ');
-        result.append(name);
+        result.append(getName());
         //typeParams
         result.append(" extends ");
         result.append(extendz);
@@ -71,4 +96,5 @@ public class ClassDef extends LocatedDef {
         result.append(implementz);
         return result.toString();
     }
+
 }

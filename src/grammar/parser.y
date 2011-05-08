@@ -377,7 +377,7 @@ NormalClassDeclaration:
     AnyModifiers_opt /* =ClassModifiers_opt */ classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
         cls.lineNumber = line;
         cls.modifiers.addAll(modifiers); modifiers.clear(); 
-        cls.name = $3;
+        cls.setName( $3 );
         cls.typeParams = typeParams;
         builder.beginClass(cls); 
         cls = new ClassDef(); 
@@ -601,7 +601,7 @@ EnumDeclaration: AnyModifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Inter
                  { 
                    cls.lineNumber = line;
                    cls.modifiers.addAll(modifiers);
-                   cls.name = $3;
+                   cls.setName( $3 );
                    cls.type = ClassDef.ENUM;
                    builder.beginClass(cls);
                    cls = new ClassDef();

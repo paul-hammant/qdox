@@ -46,13 +46,11 @@ public class ModelBuilderTest extends TestCase {
     }
 
     public void testSimpleClass() throws Exception {
-        ClassDef cls = new ClassDef();
-        cls.name = "Thingy";
+        ClassDef cls = new ClassDef("Thingy");
         builder.beginClass(cls);
         builder.endClass();
 
-        ClassDef cls2 = new ClassDef();
-        cls2.name = "ThingyThing";
+        ClassDef cls2 = new ClassDef("ThingyThing");
         builder.beginClass(cls2);
         builder.endClass();
 
@@ -290,12 +288,10 @@ public class ModelBuilderTest extends TestCase {
     public void testInnerClass() throws Exception {
         builder.addPackage(new PackageDef("xyz"));
 
-        ClassDef outerDef = new ClassDef();
-        outerDef.name = "Outer";
+        ClassDef outerDef = new ClassDef("Outer");
         builder.beginClass(outerDef);
 
-        ClassDef innerDef = new ClassDef();
-        innerDef.name = "Inner";
+        ClassDef innerDef = new ClassDef("Inner");
         builder.beginClass(innerDef);
 
         MethodDef fooDef = new MethodDef();
@@ -819,8 +815,7 @@ public class ModelBuilderTest extends TestCase {
 
     public void testModelHashCodes() {
 
-        ClassDef classDef = new ClassDef();
-        classDef.name = "hello";
+        ClassDef classDef = new ClassDef("hello");
         assertTrue(classDef.hashCode() > 0);
 
         MethodDef methodDef = new MethodDef();

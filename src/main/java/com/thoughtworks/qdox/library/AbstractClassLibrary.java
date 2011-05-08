@@ -111,9 +111,7 @@ public abstract class AbstractClassLibrary
     private JavaClass createStub( String name )
     {
         ModelBuilder unknownBuilder = getModelBuilder();
-        ClassDef classDef = new ClassDef();
-        classDef.name = name;
-        unknownBuilder.beginClass( classDef );
+        unknownBuilder.beginClass( new ClassDef( name ) );
         unknownBuilder.endClass();
         JavaSource unknownSource = unknownBuilder.getSource();
         JavaClass result = unknownSource.getClasses().get( 0 );

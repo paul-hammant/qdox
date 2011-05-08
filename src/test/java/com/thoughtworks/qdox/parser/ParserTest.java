@@ -263,7 +263,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
 
         // verify
         verify(builder).beginClass( cls );
@@ -285,7 +285,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyInterface";
+        cls.setName( "MyInterface" );
         cls.type = ClassDef.INTERFACE;
 
         // verify
@@ -308,7 +308,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyEnum";
+        cls.setName( "MyEnum" );
         cls.type = ClassDef.ENUM;
 
         // verify
@@ -337,7 +337,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MySubClass";
+        cls.setName( "MySubClass" );
         cls.extendz.add(new TypeDef("com.blah.MyBaseClass"));
 
         // verify
@@ -368,7 +368,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyInterface";
+        cls.setName( "MyInterface" );
         cls.type = ClassDef.INTERFACE;
         cls.extendz.add(new TypeDef("com.blah.AnotherInterface"));
         cls.extendz.add(new TypeDef("Serializable"));
@@ -399,7 +399,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         cls.implementz.add(new TypeDef("com.blah.AnInterface"));
 
         // verify
@@ -436,7 +436,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         cls.implementz.add(new TypeDef("com.blah.AnInterface"));
         cls.implementz.add(new TypeDef("java.io.Serializable"));
         cls.implementz.add(new TypeDef("Eatable"));
@@ -471,7 +471,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         cls.extendz.add(new TypeDef("mypackage.BaseClass"));
         cls.implementz.add(new TypeDef("com.blah.AnInterface"));
 
@@ -513,7 +513,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         cls.extendz.add(new TypeDef("mypackage.BaseClass"));
         cls.implementz.add(new TypeDef("com.blah.AnInterface"));
         cls.implementz.add(new TypeDef("java.io.Serializable"));
@@ -541,7 +541,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         cls.modifiers.add("public");
         cls.modifiers.add("final");
 
@@ -570,7 +570,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         cls.modifiers.add("public");
         cls.modifiers.add("protected");
         cls.modifiers.add("private");
@@ -610,17 +610,17 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls1 = new ClassDef();
-        cls1.name = "Class1";
+        cls1.setName( "Class1" );
         cls1.type = ClassDef.CLASS;
 
         ClassDef cls2 = new ClassDef();
-        cls2.name = "Class2";
+        cls2.setName( "Class2" );
         cls2.type = ClassDef.CLASS;
         cls2.modifiers.add("public");
         cls2.extendz.add(new TypeDef("SubClass"));
 
         ClassDef cls3 = new ClassDef();
-        cls3.name = "Intf1";
+        cls3.setName( "Intf1" );
         cls3.type = ClassDef.INTERFACE;
 
         // verify
@@ -652,11 +652,11 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls1 = new ClassDef();
-        cls1.name = "Class1";
+        cls1.setName( "Class1" );
         cls1.type = ClassDef.CLASS;
 
         ClassDef cls2 = new ClassDef();
-        cls2.name = "Class2";
+        cls2.setName( "Class2" );
         cls2.type = ClassDef.CLASS;
 
         // verify
@@ -783,7 +783,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -817,7 +817,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -851,7 +851,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("Something");
@@ -889,7 +889,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("com.blah.Something");
@@ -936,7 +936,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("com.blah.Something");
@@ -981,7 +981,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1025,7 +1025,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1068,7 +1068,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1118,7 +1118,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1168,7 +1168,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1210,7 +1210,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1249,7 +1249,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1291,7 +1291,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1334,7 +1334,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1381,7 +1381,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
@@ -1416,7 +1416,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
@@ -1452,7 +1452,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
@@ -1500,7 +1500,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
@@ -1544,7 +1544,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
@@ -1586,7 +1586,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef mth = new MethodDef();
         mth.name = "MyClass";
         mth.constructor = true;
@@ -1620,7 +1620,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
@@ -1655,7 +1655,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("java.lang.String");
@@ -1693,7 +1693,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
@@ -1733,7 +1733,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         FieldDef fld1 = new FieldDef();
         fld1.name = "thing";
         fld1.type = new TypeDef("String");
@@ -1772,7 +1772,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
         fld.name = "l";
         fld.type = new TypeDef("List");
@@ -1811,7 +1811,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
         fld.name = "l";
         fld.type = new TypeDef("List");
@@ -1850,7 +1850,7 @@ public class ParserTest extends TestCase {
 
         // expect no the method, and it shouldn't be static.
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         MethodDef method = new MethodDef();
         method.name = "doStuff";
         method.returnType = new TypeDef("void");
@@ -1889,11 +1889,11 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
         ClassDef cls2 = new ClassDef();
-        cls2.name = "InnerCls";
+        cls2.setName( "InnerCls" );
         ClassDef cls3 = new ClassDef();
-        cls3.name = "AnotherClass";
+        cls3.setName( "AnotherClass" );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1921,7 +1921,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "MyClass";
+        cls.setName( "MyClass" );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1948,7 +1948,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
@@ -1982,7 +1982,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
@@ -2018,7 +2018,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
@@ -2052,7 +2052,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
@@ -2089,7 +2089,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
@@ -2127,7 +2127,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         FieldDef fld = new FieldDef();
         fld.name = "count";
         fld.type = new TypeDef("int");
@@ -2166,7 +2166,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
@@ -2203,7 +2203,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
@@ -2245,7 +2245,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
@@ -2286,7 +2286,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
@@ -2332,7 +2332,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
@@ -2382,7 +2382,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         MethodDef mth = new MethodDef();
         mth.name = "count";
         mth.returnType = new TypeDef("int");
@@ -2427,7 +2427,7 @@ public class ParserTest extends TestCase {
 
         // expectations
         ClassDef cls = new ClassDef();
-        cls.name = "x";
+        cls.setName( "x" );
         MethodDef mth = new MethodDef();
         mth.name = "doStuff";
         mth.returnType = new TypeDef("void");
@@ -2468,7 +2468,7 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.type = ClassDef.ENUM;
-        cls.name = "x";
+        cls.setName( "x" );
 //        MethodDef mth = new MethodDef();
 //        mth.name = "a";
         FieldDef fld0 = new FieldDef();
@@ -2507,7 +2507,7 @@ public class ParserTest extends TestCase {
      // expectations
         ClassDef cls = new ClassDef();
         cls.type = ClassDef.ENUM;
-        cls.name = "x";
+        cls.setName( "x" );
 //        MethodDef mth = new MethodDef();
 //        mth.name = "a";
         FieldDef fld = new FieldDef();

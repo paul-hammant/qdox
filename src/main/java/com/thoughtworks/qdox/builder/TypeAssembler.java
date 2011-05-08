@@ -1,5 +1,8 @@
 package com.thoughtworks.qdox.builder;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.WildcardType;
@@ -31,7 +34,10 @@ public class TypeAssembler
         Type result;
     	if(typeDef instanceof WildcardTypeDef) 
     	{
-    		result = new WildcardType((WildcardTypeDef) typeDef, context);
+    	    WildcardTypeDef wildcard = (WildcardTypeDef) typeDef;
+    		result = new WildcardType( wildcard.name, 
+    		                           wildcard.getWildcardExpressionType(), 
+    		                           context);
     	}
     	else 
     	{

@@ -30,15 +30,18 @@ import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
  */
 public class WildcardType extends Type {
 
+    /**
+     * A wildcardExpression is either <code>super</code> or <code>extends</code> or <code>null</code>
+     */
 	private String wildcardExpressionType = null;
 	
 	public WildcardType() {
 		super("?");
 	}
 	
-	public WildcardType(WildcardTypeDef typeDef, JavaClassParent context) {
-		super(typeDef, 0, context);
-		this.wildcardExpressionType = typeDef.getWildcardExpressionType();
+	public WildcardType(String name, String wildcardExpressionType, JavaClassParent context) {
+		super(null, name, 0, context);
+		this.wildcardExpressionType = wildcardExpressionType;
 	}
 
 	public String getGenericValue() {

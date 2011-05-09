@@ -25,9 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.thoughtworks.qdox.builder.TypeAssembler;
-import com.thoughtworks.qdox.parser.structs.TypeDef;
-
 public class Type implements Comparable, Serializable {
 
     public static final Type VOID = new Type("void");
@@ -56,18 +53,6 @@ public class Type implements Comparable, Serializable {
     public Type(String fullName) {
         this(fullName, 0);
     }
-    
-    public Type(TypeDef typeDef, int dimensions, JavaClassParent context) {
-        this.name = typeDef.name;
-        this.dimensions = typeDef.dimensions + dimensions; //in some cases dimensions can be spread. Collect them here
-        if(typeDef.actualArgumentTypes != null && !typeDef.actualArgumentTypes.isEmpty()) {
-        	actualArgumentTypes = new LinkedList<Type>();
-        	for(TypeDef actualArgType : typeDef.actualArgumentTypes) {
-        		actualArgumentTypes.add(TypeAssembler.createUnresolved(actualArgType, context));
-        	}
-        }
-        this.context = context;
-	}
     
 	public static Type createUnresolved(String name, int dimensions, JavaClassParent context) {
         return new Type(null, name, dimensions, context);
@@ -232,6 +217,11 @@ public class Type implements Comparable, Serializable {
     public List<Type> getActualTypeArguments()
     {
         return actualArgumentTypes;
+    }
+    
+    public void setActualArgumentTypes( List<Type> actualArgumentTypes )
+    {
+        this.actualArgumentTypes = actualArgumentTypes;
     }
     
     /**

@@ -26,24 +26,31 @@ public class TypeAssembler
      * @return the Type
      */
     public static Type createUnresolved(TypeDef typeDef, int dimensions, JavaClassParent context) {
-        return new Type(typeDef, dimensions, context);
+        Type result;
+        if(typeDef instanceof WildcardTypeDef) 
+        {
+            WildcardTypeDef wildcard = (WildcardTypeDef) typeDef;
+            result = new WildcardType( wildcard.name, 
+                                       wildcard.getWildcardExpressionType(), 
+                                       context);
+        }
+        else 
+        {
+            result = Type.createUnresolved( typeDef.name, typeDef.dimensions + dimensions, context);
+            if(typeDef.actualArgumentTypes != null && !typeDef.actualArgumentTypes.isEmpty()) {
+                List<Type> actualArgumentTypes = new LinkedList<Type>();
+                for(TypeDef actualArgType : typeDef.actualArgumentTypes) {
+                    actualArgumentTypes.add(TypeAssembler.createUnresolved(actualArgType, context));
+                }
+                result.setActualArgumentTypes( actualArgumentTypes );
+            }
+        }
+        return result;
     }
 
     public static Type createUnresolved(TypeDef typeDef, JavaClassParent context) 
     {
-        Type result;
-    	if(typeDef instanceof WildcardTypeDef) 
-    	{
-    	    WildcardTypeDef wildcard = (WildcardTypeDef) typeDef;
-    		result = new WildcardType( wildcard.name, 
-    		                           wildcard.getWildcardExpressionType(), 
-    		                           context);
-    	}
-    	else 
-    	{
-    	    result = new Type(typeDef, 0, context);
-    	}
-        return result;
+        return createUnresolved( typeDef, 0, context );
     }
 
 }

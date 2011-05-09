@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.io;
+package com.thoughtworks.qdox.writer;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

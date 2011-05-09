@@ -25,7 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.thoughtworks.qdox.io.ModelWriterFactory;
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.Annotation;
@@ -51,6 +50,7 @@ import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
+import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>

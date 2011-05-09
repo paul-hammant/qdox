@@ -1,8 +1,8 @@
 package com.thoughtworks.qdox.model;
 
-import com.thoughtworks.qdox.io.DefaultModelWriter;
-import com.thoughtworks.qdox.io.ModelWriter;
-import com.thoughtworks.qdox.io.ModelWriterFactory;
+import com.thoughtworks.qdox.writer.DefaultModelWriter;
+import com.thoughtworks.qdox.writer.ModelWriter;
+import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
  * Every element of a class, including the class itself is a javaModel.

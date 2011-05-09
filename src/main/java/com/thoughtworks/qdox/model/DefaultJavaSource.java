@@ -30,10 +30,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.thoughtworks.qdox.io.DefaultModelWriter;
-import com.thoughtworks.qdox.io.ModelWriter;
-import com.thoughtworks.qdox.io.ModelWriterFactory;
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.writer.DefaultModelWriter;
+import com.thoughtworks.qdox.writer.ModelWriter;
+import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 public class DefaultJavaSource implements Serializable, JavaSource {
 

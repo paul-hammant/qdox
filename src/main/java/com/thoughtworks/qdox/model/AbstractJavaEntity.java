@@ -22,7 +22,7 @@ package com.thoughtworks.qdox.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.thoughtworks.qdox.io.IndentBuffer;
+import com.thoughtworks.qdox.writer.IndentBuffer;
 
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements JavaModel {
 

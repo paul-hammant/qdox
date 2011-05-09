@@ -19,13 +19,13 @@ package com.thoughtworks.qdox.builder;
  * under the License.
  */
 
-import com.thoughtworks.qdox.io.ModelWriterFactory;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
+import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 public interface Builder {
 

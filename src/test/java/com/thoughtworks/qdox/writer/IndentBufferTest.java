@@ -1,9 +1,11 @@
-package com.thoughtworks.qdox.io;
+package com.thoughtworks.qdox.writer;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.thoughtworks.qdox.writer.IndentBuffer;
 
 public class IndentBufferTest {
 

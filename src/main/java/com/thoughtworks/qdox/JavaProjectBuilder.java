@@ -42,7 +42,7 @@ import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 
 /**
- * This is the improved version of the JavaDocBuilder. It has the following tasks:
+ * This is the improved version of the JavaDocBuilder of QDox 1.x, which has the following tasks:
  * <ul>
  *   <li>Provide adders for all kind of resources, such as classloaders, java files and source directories</li>
  *   <li>Provide setters to enable the debug-mode for the Lexer and Parser (which are used when parsing sourcefiles) and the encoding
@@ -201,32 +201,76 @@ public class JavaProjectBuilder
         });
     }
     
+    /**
+     * Add the classLoader to this JavaProjectBuilder
+     * 
+     * @param classLoader
+     */
     public void addClassLoader( ClassLoader classLoader )
     {
         classLibraryBuilder.appendClassLoader( classLoader );
     }
 
     // Java Object Model -getters
-    
+
+    /**
+     * Try to retrieve a JavaClass by its name.
+     * 
+     * @param name the fully qualified name of the class
+     * @return the matching {@link JavaClass}, otherwise <code>null</code>
+     */
     public JavaClass getClassByName( String name )
     {
         return classLibraryBuilder.getClassLibrary().getJavaClass( name );
     }
     
+    /**
+     * Get all the sources added.
+     * This will only contain the sources added as sourcefile, sourcetree or sourcefolder.
+     * 
+     * @return a list of sources
+     * @see {@link #addSource(File)}
+     * @see {@link #addSource(Reader)}
+     * @see {@link #addSourceFolder(File)}
+     * @see {@link #addSourceTree(File)}
+     */
     public List<JavaSource> getSources() {
         return classLibraryBuilder.getClassLibrary().getJavaSources();
     }
 
+    /**
+     * Retrieve all classes which were added by sources
+     * 
+     * @return a list of javaclasses, never <code>null</code>
+     * @see {@link #addSource(File)}
+     * @see {@link #addSource(Reader)}
+     * @see {@link #addSourceFolder(File)}
+     * @see {@link #addSourceTree(File)}
+     */
     public List<JavaClass> getClasses()
     {
         return classLibraryBuilder.getClassLibrary().getJavaClasses();
     }
 
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public JavaPackage getPackageByName( String name )
     {
         return classLibraryBuilder.getClassLibrary().getJavaPackage( name );
     }
-    
+
+    /**
+     * Retrieve all packages which were added by sources.
+     * 
+     * @return a list of packages, never <code>null</code>
+     * @see {@link #addSource(File)}
+     * @see {@link #addSource(Reader)}
+     * @see {@link #addSourceFolder(File)}
+     * @see {@link #addSourceTree(File)}
+     */
     public List<JavaPackage> getPackages()
     {
         return classLibraryBuilder.getClassLibrary().getJavaPackages();

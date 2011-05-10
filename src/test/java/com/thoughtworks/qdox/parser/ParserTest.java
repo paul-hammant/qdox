@@ -12,6 +12,7 @@ import java.util.LinkedList;
 
 import junit.framework.TestCase;
 
+import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.answers.ReturnsElementsOf;
 
 import com.thoughtworks.qdox.builder.Builder;
@@ -20,7 +21,6 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
-import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
@@ -63,7 +63,9 @@ public class ParserTest extends TestCase {
         parser.parse();
 
         // verify
-        verify(builder).addPackage( new PackageDef("mypackage") );
+        ArgumentCaptor<PackageDef> argument = ArgumentCaptor.forClass(PackageDef.class);
+        verify(builder).addPackage( argument.capture() );
+        assertEquals( "mypackage", argument.getValue().getName() );
     }
 
     public void testPackageWithMultipleWords() throws Exception {
@@ -85,7 +87,9 @@ public class ParserTest extends TestCase {
         parser.parse();
 
         // verify
-        verify(builder).addPackage( new PackageDef("com.blah.thingy.x") );
+        ArgumentCaptor<PackageDef> argument = ArgumentCaptor.forClass(PackageDef.class);
+        verify(builder).addPackage( argument.capture() );
+        assertEquals( "com.blah.thingy.x", argument.getValue().getName() );
     }
 
     public void testImportWithOneWord() throws Exception {

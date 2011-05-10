@@ -21,25 +21,22 @@ package com.thoughtworks.qdox.parser.structs;
 
 public class PackageDef extends LocatedDef {
 
-	public String name = "";
+	private String name = "";
 	
 	public PackageDef(String name) {
 		this.name = name;
 	}
 	
 	public PackageDef(String name, int lineNumber) {
-		this.name = name;
+        this.name = name;
 		this.lineNumber = lineNumber;
 	}
 	
-	@Override
-	public int hashCode()
-	{
-	    return name.hashCode();
-	}
-	@Override
-	public boolean equals(Object obj) {
-		PackageDef packageDef = (PackageDef) obj;
-		return packageDef.name.equals(name);
-	}
+    /**
+     * @return the name
+     */
+    public String getName()
+    {
+        return name;
+    }
 }

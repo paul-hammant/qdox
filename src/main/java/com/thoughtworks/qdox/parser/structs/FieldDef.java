@@ -22,51 +22,162 @@ package com.thoughtworks.qdox.parser.structs;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Used for both fields and parameters
+ * 
+ *
+ */
 public class FieldDef extends LocatedDef {
-    public String name = "";
-    public TypeDef type;
-    public Set<String> modifiers = new HashSet<String>();
-    public int dimensions;
-    public boolean isVarArgs;
-    public String body = "";
+    
+    private String name = "";
+    private TypeDef type;
+    private Set<String> modifiers = new HashSet<String>();
+    private int dimensions;
+    private boolean isVarArgs;
+    private String body = "";
+    
+    public FieldDef()
+    {
+    }
+    
+    public FieldDef( String name )
+    {
+        this.name = name;
+    }
 
     @Override
     public boolean equals(Object obj) {
         FieldDef paramDef = (FieldDef) obj;
-        boolean result = paramDef.name.equals(name)
-                && paramDef.modifiers.equals(modifiers)
-                && paramDef.isVarArgs == isVarArgs;
-        if(paramDef.type == null) {
-        	result &= (type == null)
-        		&& paramDef.dimensions == dimensions;
+        boolean result = paramDef.getName().equals(getName())
+                && paramDef.getModifiers().equals(getModifiers())
+                && paramDef.isVarArgs() == isVarArgs();
+        if(paramDef.getType() == null) {
+        	result &= (getType() == null)
+        		&& paramDef.getDimensions() == getDimensions();
         }
         else {
-        	result &= (type != null)
-        		&&(paramDef.type.name.equals(type.name))
-        		&&(paramDef.type.actualArgumentTypes == null ? type.actualArgumentTypes == null: paramDef.type.actualArgumentTypes.equals(type.actualArgumentTypes))
-        		&&(paramDef.type.dimensions + paramDef.dimensions == dimensions + type.dimensions);
+        	result &= (getType() != null)
+        		&&(paramDef.getType().name.equals(getType().name))
+        		&&(paramDef.getType().actualArgumentTypes == null ? getType().actualArgumentTypes == null: paramDef.getType().actualArgumentTypes.equals(getType().actualArgumentTypes))
+        		&&(paramDef.getType().dimensions + paramDef.getDimensions() == getDimensions() + getType().dimensions);
         }
         return result;
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode() + (type != null ? type.hashCode() : 0) +
-                dimensions + modifiers.hashCode() + (isVarArgs ? 79769989 : 0);
+        return getName().hashCode() + (getType() != null ? getType().hashCode() : 0) +
+                getDimensions() + getModifiers().hashCode() + (isVarArgs() ? 79769989 : 0);
     }
 
     @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
-        result.append(modifiers);
+        result.append(getModifiers());
         result.append(' ');
-        result.append(type);
-        for (int i = 0; i < dimensions; i++) result.append("[]");
+        result.append(getType());
+        for (int i = 0; i < getDimensions(); i++) result.append("[]");
         result.append(' ');
-        result.append(name);
-        if(body.length() > 0){
-            result.append(" = ").append(body);
+        result.append(getName());
+        if(getBody().length() > 0){
+            result.append(" = ").append(getBody());
         }
         return result.toString();
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName( String name )
+    {
+        this.name = name;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType( TypeDef type )
+    {
+        this.type = type;
+    }
+
+    /**
+     * @return the type
+     */
+    public TypeDef getType()
+    {
+        return type;
+    }
+
+    /**
+     * @param dimensions the dimensions to set
+     */
+    public void setDimensions( int dimensions )
+    {
+        this.dimensions = dimensions;
+    }
+
+    /**
+     * @return the dimensions
+     */
+    public int getDimensions()
+    {
+        return dimensions;
+    }
+
+    /**
+     * @param isVarArgs the isVarArgs to set
+     */
+    public void setVarArgs( boolean isVarArgs )
+    {
+        this.isVarArgs = isVarArgs;
+    }
+
+    /**
+     * @return the isVarArgs
+     */
+    public boolean isVarArgs()
+    {
+        return isVarArgs;
+    }
+
+    /**
+     * @param body the body to set
+     */
+    public void setBody( String body )
+    {
+        this.body = body;
+    }
+
+    /**
+     * @return the body
+     */
+    public String getBody()
+    {
+        return body;
+    }
+
+    /**
+     * @param modifiers the modifiers to set
+     */
+    public void setModifiers( Set<String> modifiers )
+    {
+        this.modifiers = modifiers;
+    }
+
+    /**
+     * @return the modifiers
+     */
+    public Set<String> getModifiers()
+    {
+        return modifiers;
     }
 }

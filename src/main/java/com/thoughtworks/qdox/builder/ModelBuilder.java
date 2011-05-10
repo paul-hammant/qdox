@@ -325,16 +325,16 @@ public class ModelBuilder implements Builder {
         currentField.setLineNumber(def.lineNumber);
         currentField.setModelWriterFactory(modelWriterFactory);
 
-        currentField.setName(def.name);
-        currentField.setType(createType(def.type, def.dimensions));
+        currentField.setName(def.getName());
+        currentField.setType(createType(def.getType(), def.getDimensions()));
 
         // modifiers
         {
-            currentField.setModifiers(new LinkedList<String>(def.modifiers));
+            currentField.setModifiers(new LinkedList<String>(def.getModifiers()));
         }
 	
         // code body
-        currentField.setInitializationExpression(def.body);
+        currentField.setInitializationExpression(def.getBody());
 	
         // javadoc
         addJavaDoc(currentField);
@@ -346,7 +346,7 @@ public class ModelBuilder implements Builder {
     }
 	
 	public void addParameter(FieldDef fieldDef) {
-	    DefaultJavaParameter jParam = new DefaultJavaParameter(createType(fieldDef.type, fieldDef.dimensions), fieldDef.name, fieldDef.isVarArgs);
+	    DefaultJavaParameter jParam = new DefaultJavaParameter(createType(fieldDef.getType(), fieldDef.getDimensions()), fieldDef.getName(), fieldDef.isVarArgs());
         jParam.setParentMethod( currentMethod );
         jParam.setModelWriterFactory(modelWriterFactory);
         addJavaDoc( jParam );

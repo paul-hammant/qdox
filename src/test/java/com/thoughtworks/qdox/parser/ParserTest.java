@@ -990,8 +990,8 @@ public class ParserTest extends TestCase {
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
-        p1.name = "numberOfTimes";
-        p1.type = new TypeDef("int");
+        p1.setName( "numberOfTimes" );
+        p1.setType( new TypeDef("int") );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1034,8 +1034,8 @@ public class ParserTest extends TestCase {
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
-        p1.name = "numberOfTimes";
-        p1.type = new TypeDef("java.lang.String");
+        p1.setName( "numberOfTimes" );
+        p1.setType( new TypeDef("java.lang.String") );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1077,11 +1077,11 @@ public class ParserTest extends TestCase {
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
-        p1.name = "numberOfTimes";
-        p1.type = new TypeDef("int");
+        p1.setName( "numberOfTimes" );
+        p1.setType( new TypeDef("int") );
         FieldDef p2 = new FieldDef();
-        p2.name = "name";
-        p2.type = new TypeDef("String");
+        p2.setName( "name" );
+        p2.setType( new TypeDef("String") );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1127,14 +1127,14 @@ public class ParserTest extends TestCase {
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
-        p1.name = "numberOfTimes";
-        p1.type = new TypeDef("int");
+        p1.setName( "numberOfTimes" );
+        p1.setType( new TypeDef("int") );
         FieldDef p2 = new FieldDef();
-        p2.name = "name";
-        p2.type = new TypeDef("String");
+        p2.setName( "name" );
+        p2.setType( new TypeDef("String") );
         FieldDef p3 = new FieldDef();
-        p3.name = "x";
-        p3.type = new TypeDef("boolean");
+        p3.setName( "x" );
+        p3.setType( new TypeDef("boolean") );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1177,10 +1177,10 @@ public class ParserTest extends TestCase {
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
-        p1.name = "numberOfTimes";
-        p1.type = new TypeDef("int");
-        p1.modifiers.add("final");
-        p1.modifiers.add("volatile");
+        p1.setName( "numberOfTimes" );
+        p1.setType( new TypeDef("int") );
+        p1.getModifiers().add("final");
+        p1.getModifiers().add("volatile");
         
         // verify
         verify(builder).beginClass( cls );
@@ -1462,8 +1462,8 @@ public class ParserTest extends TestCase {
         mth.constructor = true;
         mth.modifiers.add("public");
         FieldDef p1 = new FieldDef();
-        p1.name = "count";
-        p1.type = new TypeDef("int");
+        p1.setName( "count" );
+        p1.setType( new TypeDef("int") );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1510,11 +1510,11 @@ public class ParserTest extends TestCase {
         mth.constructor = true;
         mth.modifiers.add("public");
         FieldDef p1 = new FieldDef();
-        p1.name = "count";
-        p1.type = new TypeDef("int");
+        p1.setName( "count" );
+        p1.setType( new TypeDef("int") );
         FieldDef p2 = new FieldDef();
-        p2.name = "thingy";
-        p2.type = new TypeDef("java.lang.String");
+        p2.setName( "thingy" );
+        p2.setType( new TypeDef("java.lang.String") );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1626,8 +1626,8 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1661,8 +1661,8 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("java.lang.String");
+        fld.setName( "count" );
+        fld.setType( new TypeDef("java.lang.String") );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1699,15 +1699,15 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.modifiers.add("public");
-        fld.modifiers.add("protected");
-        fld.modifiers.add("private");
-        fld.modifiers.add("static");
-        fld.modifiers.add("final");
-        fld.modifiers.add("transient");
-        fld.modifiers.add("strictfp");
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.getModifiers().add("public");
+        fld.getModifiers().add("protected");
+        fld.getModifiers().add("private");
+        fld.getModifiers().add("static");
+        fld.getModifiers().add("final");
+        fld.getModifiers().add("transient");
+        fld.getModifiers().add("strictfp");
 
         // verify
         verify(builder).beginClass( cls );
@@ -1739,11 +1739,11 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
         FieldDef fld1 = new FieldDef();
-        fld1.name = "thing";
-        fld1.type = new TypeDef("String");
+        fld1.setName( "thing" );
+        fld1.setType( new TypeDef("String") );
         FieldDef fld2 = new FieldDef();
-        fld2.name = "another";
-        fld2.type = new TypeDef("String");
+        fld2.setName( "another" );
+        fld2.setType( new TypeDef("String") );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1778,10 +1778,10 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
-        fld.name = "l";
-        fld.type = new TypeDef("List");
-        fld.type.actualArgumentTypes = new ArrayList<TypeDef>();
-        fld.type.actualArgumentTypes.add(new TypeDef("String"));
+        fld.setName( "l" );
+        fld.setType( new TypeDef("List") );
+        fld.getType().actualArgumentTypes = new ArrayList<TypeDef>();
+        fld.getType().actualArgumentTypes.add(new TypeDef("String"));
 
         // verify
         verify(builder).beginClass( cls );
@@ -1817,10 +1817,10 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
         FieldDef fld = new FieldDef();
-        fld.name = "l";
-        fld.type = new TypeDef("List");
-        fld.type.actualArgumentTypes = new ArrayList<TypeDef>();
-        fld.type.actualArgumentTypes.add(new WildcardTypeDef(new TypeDef("A"), "extends"));
+        fld.setName( "l" );
+        fld.setType( new TypeDef("List") );
+        fld.getType().actualArgumentTypes = new ArrayList<TypeDef>();
+        fld.getType().actualArgumentTypes.add(new WildcardTypeDef(new TypeDef("A"), "extends"));
         
         // verify
         verify(builder).beginClass( cls );
@@ -1954,9 +1954,9 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.dimensions = 0;
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.setDimensions( 0 );
 
         // verify
         verify(builder).beginClass( cls );
@@ -1988,9 +1988,9 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.dimensions = 1;
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.setDimensions( 1 );
 
         // verify
         verify(builder).beginClass( cls );
@@ -2024,9 +2024,9 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.dimensions = 2;
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.setDimensions( 2 );
 
         // verify
         verify(builder).beginClass( cls );
@@ -2058,9 +2058,9 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.dimensions = 1;
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.setDimensions( 1 );
 
         // verify
         verify(builder).beginClass( cls );
@@ -2095,9 +2095,9 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.dimensions = 3;
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.setDimensions( 3 );
 
         // verify
         verify(builder).beginClass( cls );
@@ -2133,13 +2133,13 @@ public class ParserTest extends TestCase {
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.dimensions = 1;
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.setDimensions( 1 );
         FieldDef fld2 = new FieldDef();
-        fld2.name = "count2";
-        fld2.type = new TypeDef("int");
-        fld2.dimensions = 0;
+        fld2.setName( "count2" );
+        fld2.setType( new TypeDef("int") );
+        fld2.setDimensions( 0 );
 
         // verify
         verify(builder).beginClass( cls );
@@ -2296,9 +2296,9 @@ public class ParserTest extends TestCase {
         mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
         FieldDef p1 = new FieldDef();
-        p1.name = "p1";
-        p1.type = new TypeDef("int");
-        p1.dimensions = 0;
+        p1.setName( "p1" );
+        p1.setType( new TypeDef("int") );
+        p1.setDimensions( 0 );
 
         // verify
         verify(builder).beginClass( cls );
@@ -2342,9 +2342,9 @@ public class ParserTest extends TestCase {
         mth.returnType = new TypeDef("int");
         mth.dimensions = 0;
         FieldDef p1 = new FieldDef();
-        p1.name = "p1";
-        p1.type = new TypeDef("int");
-        p1.dimensions = 1;
+        p1.setName( "p1" );
+        p1.setType( new TypeDef("int") );
+        p1.setDimensions( 1 );
 
         // verify
         verify(builder).beginClass( cls );
@@ -2392,9 +2392,9 @@ public class ParserTest extends TestCase {
         mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
         FieldDef p1 = new FieldDef();
-        p1.name = "p1";
-        p1.type = new TypeDef("int");
-        p1.dimensions = 2;
+        p1.setName( "p1" );
+        p1.setType( new TypeDef("int") );
+        p1.setDimensions( 2 );
 
         // verify
         verify(builder).beginClass( cls );
@@ -2436,10 +2436,10 @@ public class ParserTest extends TestCase {
         mth.name = "doStuff";
         mth.returnType = new TypeDef("void");
         FieldDef p1 = new FieldDef();
-        p1.name = "stuff";
-        p1.type = new TypeDef("int");
-        p1.dimensions = 0;
-        p1.isVarArgs = true;
+        p1.setName( "stuff" );
+        p1.setType( new TypeDef("int") );
+        p1.setDimensions( 0 );
+        p1.setVarArgs( true );
 
         // verify
         verify(builder).beginClass( cls );
@@ -2476,13 +2476,13 @@ public class ParserTest extends TestCase {
 //        MethodDef mth = new MethodDef();
 //        mth.name = "a";
         FieldDef fld0 = new FieldDef();
-        fld0.type = new TypeDef( "x" ); //bug @todo fixme
-        fld0.name = "a";
-        fld0.body = "";
+        fld0.setType( new TypeDef( "x" ) ); //bug @todo fixme
+        fld0.setName( "a" );
+        fld0.setBody( "" );
         FieldDef fld = new FieldDef();
-        fld.type = new TypeDef("int");
-        fld.name = "someField";
-        fld.body = "";
+        fld.setType( new TypeDef("int") );
+        fld.setName( "someField" );
+        fld.setBody( "" );
         
         // verify
         verify(builder).beginClass( cls );
@@ -2515,9 +2515,9 @@ public class ParserTest extends TestCase {
 //        MethodDef mth = new MethodDef();
 //        mth.name = "a";
         FieldDef fld = new FieldDef();
-        fld.type = new TypeDef( "x" ); //bug @todo fixme
-        fld.name = "a";
-        fld.body = "";
+        fld.setType( new TypeDef( "x" ) ); //bug @todo fixme
+        fld.setName( "a" );
+        fld.setBody( "" );
 
         // verify
         verify(builder).beginClass( cls );

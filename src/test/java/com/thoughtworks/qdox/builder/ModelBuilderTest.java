@@ -391,14 +391,14 @@ public class ModelBuilderTest extends TestCase {
         MethodDef mth = new MethodDef();
 
         FieldDef f1 = new FieldDef();
-        f1.name = "count";
-        f1.type = new TypeDef("int");
-        f1.modifiers.add("final");
+        f1.setName( "count" );
+        f1.setType( new TypeDef("int") );
+        f1.getModifiers().add("final");
         builder.addParameter( f1 );
 
         FieldDef f2 = new FieldDef();
-        f2.name = "name";
-        f2.type = new TypeDef("String");
+        f2.setName( "name" );
+        f2.setType( new TypeDef("String") );
         builder.addParameter( f2 );
 
         builder.endMethod(mth);
@@ -419,17 +419,17 @@ public class ModelBuilderTest extends TestCase {
         MethodDef mth = new MethodDef();
 
         FieldDef f1 = new FieldDef();
-        f1.name = "count";
-        f1.type = new TypeDef("int");
-        f1.modifiers.add("final");
-        f1.dimensions = 1;
+        f1.setName( "count" );
+        f1.setType( new TypeDef("int") );
+        f1.getModifiers().add("final");
+        f1.setDimensions( 1 );
         builder.addParameter( f1 );
 
 
         FieldDef f2 = new FieldDef();
-        f2.name = "name";
-        f2.type = new TypeDef("String");
-        f2.dimensions = 2;
+        f2.setName( "name" );
+        f2.setType( new TypeDef("String") );
+        f2.setDimensions( 2 );
         builder.addParameter( f2 );
 
         builder.endMethod(mth);
@@ -488,8 +488,8 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
 
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
         builder.addField(fld);
         builder.endClass();
 
@@ -506,8 +506,8 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
 
         FieldDef fld = new FieldDef();
-        fld.modifiers.add("blah2");
-        fld.modifiers.add("blah");
+        fld.getModifiers().add("blah2");
+        fld.getModifiers().add("blah");
         builder.addField(fld);
         builder.endClass();
 
@@ -525,9 +525,9 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
 
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.dimensions = 0;
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.setDimensions( 0 );
         builder.addField(fld);
         builder.endClass();
 
@@ -542,9 +542,10 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
 
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.dimensions = 1;
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.setDimensions( 1 );
+        
         builder.addField(fld);
         builder.endClass();
 
@@ -559,9 +560,9 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
 
         FieldDef fld = new FieldDef();
-        fld.name = "count";
-        fld.type = new TypeDef("int");
-        fld.dimensions = 2;
+        fld.setName( "count" );
+        fld.setType( new TypeDef("int") );
+        fld.setDimensions( 2 );
         builder.addField(fld);
         builder.endClass();
 
@@ -823,7 +824,7 @@ public class ModelBuilderTest extends TestCase {
         assertTrue(methodDef.hashCode() > 0);
 
         FieldDef fieldDef = new FieldDef();
-        fieldDef.name = "hello";
+        fieldDef.setName( "hello" );
         assertTrue(fieldDef.hashCode() > 0);
 
         JavaParameter javaParameter = new DefaultJavaParameter(new Type("q"), "w");

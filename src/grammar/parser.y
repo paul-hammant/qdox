@@ -522,22 +522,22 @@ FormalParameters: FormalParameter
                 
 FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ Type VariableDeclaratorId
                   {
-                    param.name = $3.name;
-                    param.type = $2;
-                    param.dimensions = $3.dimensions;
-                    param.isVarArgs = false;
-                    param.modifiers.addAll(modifiers); modifiers.clear();
+                    param.setName($3.name);
+                    param.setType($2);
+                    param.setDimensions($3.dimensions);
+                    param.setVarArgs(false);
+                    param.getModifiers().addAll(modifiers); modifiers.clear();
                     builder.addParameter(param);
                     param = new FieldDef();
                   };
 
 LastFormalParameter: AnyModifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
                      {
-                       param.name = $4.name; 
-                       param.type = $2;
-                       param.dimensions = $4.dimensions;
-                       param.isVarArgs = true;
-                       param.modifiers.addAll(modifiers); modifiers.clear();
+                       param.setName($4.name); 
+                       param.setType($2);
+                       param.setDimensions($4.dimensions);
+                       param.setVarArgs(true);
+                       param.getModifiers().addAll(modifiers); modifiers.clear();
                        builder.addParameter(param);
                        param = new FieldDef();
                      };
@@ -906,13 +906,12 @@ private class Value {
 
 
 private void makeField(TypeDef field, String body) {
-    FieldDef fd = new FieldDef();
+    FieldDef fd = new FieldDef( field.name );
     fd.lineNumber = line;
-    fd.modifiers.addAll(modifiers); 
-    fd.name = field.name;
-    fd.type = fieldType;
-    fd.dimensions = field.dimensions;
-    fd.body = body;
+    fd.getModifiers().addAll(modifiers); 
+    fd.setType( fieldType );
+    fd.setDimensions(field.dimensions);
+    fd.setBody(body);
     builder.addField(fd);
 }
 

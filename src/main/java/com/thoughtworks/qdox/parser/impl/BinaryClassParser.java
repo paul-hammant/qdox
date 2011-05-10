@@ -121,12 +121,11 @@ public class BinaryClassParser
     }
 
     private void addField(Field field, ModelBuilder binaryBuilder) {
-        FieldDef fieldDef = new FieldDef();
+        FieldDef fieldDef = new FieldDef( field.getName() );
         Class<?> fieldType = field.getType();
-        fieldDef.name = field.getName();
-        fieldDef.type = getTypeDef(fieldType);
-        fieldDef.dimensions = getDimension(fieldType);
-        addModifiers( fieldDef.modifiers, field.getModifiers());
+        fieldDef.setType( getTypeDef(fieldType) );
+        fieldDef.setDimensions( getDimension(fieldType) );
+        addModifiers( fieldDef.getModifiers(), field.getModifiers());
         binaryBuilder.addField(fieldDef);
     }
 
@@ -163,11 +162,10 @@ public class BinaryClassParser
             methodDef.exceptions.add(getTypeDef(exception));
         }
         for (int j = 0; j < parameterTypes.length; j++) {
-            FieldDef param = new FieldDef();
+            FieldDef param = new FieldDef( "p" + j );
             Class<?> parameterType = parameterTypes[j];
-            param.name = "p" + j;
-            param.type = getTypeDef(parameterType);
-            param.dimensions = getDimension(parameterType);
+            param.setType( getTypeDef(parameterType) );
+            param.setDimensions( getDimension(parameterType) );
             binaryBuilder.addParameter( param );
         }
         return methodDef;

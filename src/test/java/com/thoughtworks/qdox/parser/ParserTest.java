@@ -12,6 +12,7 @@ import java.util.LinkedList;
 
 import junit.framework.TestCase;
 
+import org.junit.Assert;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.answers.ReturnsElementsOf;
 
@@ -989,15 +990,16 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        FieldDef p1 = new FieldDef();
-        p1.setName( "numberOfTimes" );
-        p1.setType( new TypeDef("int") );
+        ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass( FieldDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
         verify(builder).endMethod( mth );
-        verify(builder).addParameter( p1 );
+        
+        verify(builder).addParameter( p1.capture() );
+        assertEquals( "numberOfTimes", p1.getValue().getName() );
+        assertEquals( new TypeDef("int"), p1.getValue().getType() );
         verify(builder).endClass();
     }
 
@@ -1033,15 +1035,15 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        FieldDef p1 = new FieldDef();
-        p1.setName( "numberOfTimes" );
-        p1.setType( new TypeDef("java.lang.String") );
+        ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass( FieldDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
         verify(builder).endMethod( mth );
-        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p1.capture() );
+        assertEquals( "numberOfTimes", p1.getValue().getName() );
+        assertEquals( new TypeDef("java.lang.String"), p1.getValue().getType() );
         verify(builder).endClass();
     }
 
@@ -1076,19 +1078,19 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        FieldDef p1 = new FieldDef();
-        p1.setName( "numberOfTimes" );
-        p1.setType( new TypeDef("int") );
-        FieldDef p2 = new FieldDef();
-        p2.setName( "name" );
-        p2.setType( new TypeDef("String") );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
         verify(builder).endMethod( mth );
-        verify(builder).addParameter( p1 );
-        verify(builder).addParameter( p2 );
+        verify(builder, times(2) ).addParameter( p.capture() );
+        FieldDef p1 = p.getAllValues().get( 0 );
+        assertEquals( "numberOfTimes", p1.getName() );
+        assertEquals( new TypeDef( "int" ), p1.getType() );
+        FieldDef p2 = p.getAllValues().get( 1 );
+        assertEquals( "name", p2.getName() );
+        assertEquals( new TypeDef( "String" ), p2.getType() );
         verify(builder).endClass();
     }
 
@@ -1126,24 +1128,23 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        FieldDef p1 = new FieldDef();
-        p1.setName( "numberOfTimes" );
-        p1.setType( new TypeDef("int") );
-        FieldDef p2 = new FieldDef();
-        p2.setName( "name" );
-        p2.setType( new TypeDef("String") );
-        FieldDef p3 = new FieldDef();
-        p3.setName( "x" );
-        p3.setType( new TypeDef("boolean") );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
-        verify(builder).beginClass( cls );
-        verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
-        verify(builder).addParameter( p1 );
-        verify(builder).addParameter( p2 );
-        verify(builder).addParameter( p3 );
-        verify(builder).endClass();
+        verify( builder ).beginClass( cls );
+        verify( builder ).beginMethod();
+        verify( builder ).endMethod( mth );
+        verify( builder, times(3) ).addParameter( p.capture() );
+        FieldDef p1 = p.getAllValues().get( 0 );
+        assertEquals( "numberOfTimes", p1.getName() );
+        assertEquals( new TypeDef( "int" ), p1.getType() );
+        FieldDef p2 = p.getAllValues().get( 1 );
+        assertEquals( "name", p2.getName() );
+        assertEquals( new TypeDef( "String" ), p2.getType() );
+        FieldDef p3 = p.getAllValues().get( 2 );
+        assertEquals( "x", p3.getName() );
+        assertEquals( new TypeDef( "boolean" ), p3.getType() );
+        verify( builder ).endClass();
     }
 
     public void testMethodWithOneArgThatHasModifier() throws Exception {
@@ -1176,17 +1177,16 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doSomething";
         mth.returnType = new TypeDef("void");
-        FieldDef p1 = new FieldDef();
-        p1.setName( "numberOfTimes" );
-        p1.setType( new TypeDef("int") );
-        p1.getModifiers().add("final");
-        p1.getModifiers().add("volatile");
+        ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
         
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
         verify(builder).endMethod( mth );
-        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p1.capture() );
+        assertEquals( "numberOfTimes", p1.getValue().getName() );
+        Assert.assertArrayEquals( new String[] { "final", "volatile" }, p1.getValue().getModifiers().toArray( new String[0] ) );
+        assertEquals( new TypeDef("int"), p1.getValue().getType() );
         verify(builder).endClass();
     }
 
@@ -1461,14 +1461,14 @@ public class ParserTest extends TestCase {
         mth.name = "MyClass";
         mth.constructor = true;
         mth.modifiers.add("public");
-        FieldDef p1 = new FieldDef();
-        p1.setName( "count" );
-        p1.setType( new TypeDef("int") );
+        ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginConstructor();
-        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p1.capture() );
+        assertEquals( "count", p1.getValue().getName() );
+        assertEquals( new TypeDef("int"), p1.getValue().getType() );
         verify(builder).endConstructor( mth );
         verify(builder).endClass();
     }
@@ -1509,18 +1509,18 @@ public class ParserTest extends TestCase {
         mth.name = "MyClass";
         mth.constructor = true;
         mth.modifiers.add("public");
-        FieldDef p1 = new FieldDef();
-        p1.setName( "count" );
-        p1.setType( new TypeDef("int") );
-        FieldDef p2 = new FieldDef();
-        p2.setName( "thingy" );
-        p2.setType( new TypeDef("java.lang.String") );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginConstructor();
-        verify(builder).addParameter( p1 );
-        verify(builder).addParameter( p2 );
+        verify(builder, times(2) ).addParameter( p.capture() );
+        FieldDef p1 = p.getAllValues().get( 0 );
+        assertEquals( "count", p1.getName() );
+        assertEquals( new TypeDef("int"), p1.getType() );
+        FieldDef p2 = p.getAllValues().get( 1 );
+        assertEquals( "thingy", p2.getName() );
+        assertEquals( new TypeDef("java.lang.String"), p2.getType() );
         verify(builder).endConstructor( mth );
         verify(builder).endClass();
     }
@@ -1625,13 +1625,14 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "count" );
-        fld.setType( new TypeDef("int") );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+        FieldDef fld = p.getValue();
+        assertEquals( "count", fld.getName() );
+        assertEquals(new TypeDef("int"), fld.getType() );
         verify(builder).endClass();
     }
 
@@ -1660,13 +1661,14 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "count" );
-        fld.setType( new TypeDef("java.lang.String") );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+        FieldDef fld = p.getValue();
+        assertEquals( "count", fld.getName() );
+        assertEquals( new TypeDef("java.lang.String"), fld.getType() );
         verify(builder).endClass();
     }
 
@@ -1698,20 +1700,16 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "count" );
-        fld.setType( new TypeDef("int") );
-        fld.getModifiers().add("public");
-        fld.getModifiers().add("protected");
-        fld.getModifiers().add("private");
-        fld.getModifiers().add("static");
-        fld.getModifiers().add("final");
-        fld.getModifiers().add("transient");
-        fld.getModifiers().add("strictfp");
-
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
+        
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+        FieldDef fld = p.getValue();
+        assertEquals( "count", fld.getName() );
+        assertEquals( new TypeDef("int"), fld.getType() );
+        Assert.assertArrayEquals( new String[] {"public", "protected", "private", "static", "final", "transient", "strictfp"}, 
+        			fld.getModifiers().toArray(new String[0]));
         verify(builder).endClass();
     }
 
@@ -1738,17 +1736,17 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        FieldDef fld1 = new FieldDef();
-        fld1.setName( "thing" );
-        fld1.setType( new TypeDef("String") );
-        FieldDef fld2 = new FieldDef();
-        fld2.setName( "another" );
-        fld2.setType( new TypeDef("String") );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld1 );
-        verify(builder).addField( fld2 );
+        verify(builder, times(2)).addField( p.capture() );
+        FieldDef fld1 = p.getAllValues().get( 0 );
+        assertEquals( "thing", fld1.getName() );
+        assertEquals( new TypeDef("String"), fld1.getType() );
+        FieldDef fld2 = p.getAllValues().get( 1 );
+        assertEquals( "another", fld2.getName() );
+        assertEquals( new TypeDef("String"), fld2.getType() );
         verify(builder).endClass();
     }
 
@@ -1777,15 +1775,18 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "l" );
-        fld.setType( new TypeDef("List") );
-        fld.getType().actualArgumentTypes = new ArrayList<TypeDef>();
-        fld.getType().actualArgumentTypes.add(new TypeDef("String"));
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+
+        FieldDef fld = p.getValue();
+        assertEquals( "l", fld.getName() );
+        assertEquals( "List", fld.getType().name );
+        assertEquals( 1, fld.getType().actualArgumentTypes.size() );
+        assertEquals( new TypeDef("String"), fld.getType().actualArgumentTypes.get(0) );
+        
         verify(builder).endClass();
     }
 
@@ -1816,15 +1817,16 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "l" );
-        fld.setType( new TypeDef("List") );
-        fld.getType().actualArgumentTypes = new ArrayList<TypeDef>();
-        fld.getType().actualArgumentTypes.add(new WildcardTypeDef(new TypeDef("A"), "extends"));
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
         
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+        FieldDef fld = p.getValue();
+        assertEquals( "l", fld.getName() );
+        assertEquals( "List", fld.getType().name );
+        assertEquals( 1, fld.getType().actualArgumentTypes.size() );
+        assertEquals( new WildcardTypeDef(new TypeDef("A"), "extends"), fld.getType().actualArgumentTypes.get( 0 ) );
         verify(builder).endClass();
     }
 
@@ -1953,14 +1955,15 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "count" );
-        fld.setType( new TypeDef("int") );
-        fld.setDimensions( 0 );
-
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
+        
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+        FieldDef fld = p.getValue();
+        assertEquals( "count", fld.getName() );
+        assertEquals( new TypeDef("int"), fld.getType() );
+        assertEquals( 0, fld.getDimensions() );
         verify(builder).endClass();
     }
 
@@ -1987,14 +1990,16 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "count" );
-        fld.setType( new TypeDef("int") );
-        fld.setDimensions( 1 );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+        FieldDef fld = p.getValue();
+        assertEquals( "count", fld.getName() );
+        assertEquals( 0, fld.getDimensions() );
+        assertEquals( "int", fld.getType().name );
+        assertEquals( 1, fld.getType().dimensions );
         verify(builder).endClass();
     }
 
@@ -2023,14 +2028,16 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "count" );
-        fld.setType( new TypeDef("int") );
-        fld.setDimensions( 2 );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+        FieldDef fld = p.getValue();
+        assertEquals( "count", fld.getName() );
+        assertEquals( 0, fld.getDimensions() );
+        assertEquals( "int", fld.getType().name );
+        assertEquals( 2, fld.getType().dimensions );
         verify(builder).endClass();
     }
 
@@ -2057,14 +2064,16 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "count" );
-        fld.setType( new TypeDef("int") );
-        fld.setDimensions( 1 );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+        FieldDef fld = p.getValue();
+        assertEquals( "count", fld.getName() );
+        assertEquals( 1, fld.getDimensions() );
+        assertEquals( new TypeDef("int"), fld.getType() );
+        assertEquals( 0, fld.getType().dimensions );
         verify(builder).endClass();
     }
 
@@ -2094,14 +2103,16 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "count" );
-        fld.setType( new TypeDef("int") );
-        fld.setDimensions( 3 );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
+        verify(builder).addField( p.capture() );
+        FieldDef fld = p.getValue();
+        assertEquals( "count", fld.getName() );
+        assertEquals( 1, fld.getDimensions() );
+        assertEquals( "int", fld.getType().name );
+        assertEquals( 2, fld.getType().dimensions );
         verify(builder).endClass();
     }
 
@@ -2132,19 +2143,19 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        FieldDef fld = new FieldDef();
-        fld.setName( "count" );
-        fld.setType( new TypeDef("int") );
-        fld.setDimensions( 1 );
-        FieldDef fld2 = new FieldDef();
-        fld2.setName( "count2" );
-        fld2.setType( new TypeDef("int") );
-        fld2.setDimensions( 0 );
+        ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
-        verify(builder).addField( fld );
-        verify(builder).addField( fld2 );
+        verify(builder, times(2) ).addField( p.capture() );
+        FieldDef fld = p.getAllValues().get( 0 );
+        assertEquals( "count", fld.getName() );
+        assertEquals( 1, fld.getDimensions() );
+        assertEquals( new TypeDef("int"), fld.getType() );
+        FieldDef fld2 = p.getAllValues().get( 1 );
+        assertEquals( "count2", fld2.getName() );
+        assertEquals( 0, fld2.getDimensions() );
+        assertEquals( new TypeDef("int"), fld2.getType() );
         verify(builder).endClass();
     }
 
@@ -2295,15 +2306,15 @@ public class ParserTest extends TestCase {
         mth.name = "count";
         mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
-        FieldDef p1 = new FieldDef();
-        p1.setName( "p1" );
-        p1.setType( new TypeDef("int") );
-        p1.setDimensions( 0 );
+        ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p1.capture() );
+        assertEquals( "p1", p1.getValue().getName() );
+        assertEquals( new TypeDef("int"), p1.getValue().getType() );
+        assertEquals( 0, p1.getValue().getDimensions() );
         verify(builder).endMethod( mth );
         verify(builder).endClass();
     }
@@ -2341,15 +2352,17 @@ public class ParserTest extends TestCase {
         mth.name = "count";
         mth.returnType = new TypeDef("int");
         mth.dimensions = 0;
-        FieldDef p1 = new FieldDef();
-        p1.setName( "p1" );
-        p1.setType( new TypeDef("int") );
-        p1.setDimensions( 1 );
+        ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
+        
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p1.capture() );
+        assertEquals( "p1", p1.getValue().getName() );
+        assertEquals( 0, p1.getValue().getDimensions() );
+        assertEquals( "int", p1.getValue().getType().name );
+        assertEquals( 1, p1.getValue().getType().dimensions );
         verify(builder).endMethod( mth );
         verify(builder).endClass();
     }
@@ -2391,17 +2404,18 @@ public class ParserTest extends TestCase {
         mth.name = "count";
         mth.returnType = new TypeDef("int");
         mth.dimensions = 1;
-        FieldDef p1 = new FieldDef();
-        p1.setName( "p1" );
-        p1.setType( new TypeDef("int") );
-        p1.setDimensions( 2 );
+        ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p1.capture() );
+        assertEquals( "p1", p1.getValue().getName() );
+        assertEquals( "int", p1.getValue().getType().name );
+        assertEquals( 2, p1.getValue().getType().dimensions );
         verify(builder).endMethod( mth );
         verify(builder).endClass();
+        
     }
 
     public void testMethodWithVarArgsParameter() throws Exception {
@@ -2435,16 +2449,16 @@ public class ParserTest extends TestCase {
         MethodDef mth = new MethodDef();
         mth.name = "doStuff";
         mth.returnType = new TypeDef("void");
-        FieldDef p1 = new FieldDef();
-        p1.setName( "stuff" );
-        p1.setType( new TypeDef("int") );
-        p1.setDimensions( 0 );
-        p1.setVarArgs( true );
-
+        ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
+        
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).addParameter( p1 );
+        verify(builder).addParameter( p1.capture() );
+        assertEquals( "stuff" , p1.getValue().getName() );
+        assertEquals( new TypeDef("int") , p1.getValue().getType() );
+        assertEquals( 0 , p1.getValue().getDimensions() );
+        assertEquals( true , p1.getValue().isVarArgs() );
         verify(builder).endMethod( mth );
         verify(builder).endClass();
     }
@@ -2475,21 +2489,22 @@ public class ParserTest extends TestCase {
         cls.setName( "x" );
 //        MethodDef mth = new MethodDef();
 //        mth.name = "a";
-        FieldDef fld0 = new FieldDef();
-        fld0.setType( new TypeDef( "x" ) ); //bug @todo fixme
-        fld0.setName( "a" );
-        fld0.setBody( "" );
-        FieldDef fld = new FieldDef();
-        fld.setType( new TypeDef("int") );
-        fld.setName( "someField" );
-        fld.setBody( "" );
+        
+        ArgumentCaptor<FieldDef> f = ArgumentCaptor.forClass(FieldDef.class);
         
         // verify
         verify(builder).beginClass( cls );
 //        verify(mockBuilder).beginConstructor();
 //        verify(mockBuilder).endConstructor(mth);
-        verify(builder).addField( fld0 );
-        verify(builder).addField( fld );
+        verify(builder, times(2) ).addField( f.capture() );
+        FieldDef fld0 = f.getAllValues().get( 0 );
+        assertEquals( "a", fld0.getName() );
+        assertEquals( new TypeDef( "x" ), fld0.getType() ); //bug @todo fixme
+        assertEquals( "", fld0.getBody() );
+        FieldDef fld1 = f.getAllValues().get( 1 );
+        assertEquals( "someField", fld1.getName() );
+        assertEquals( new TypeDef("int"), fld1.getType() );
+        assertEquals( null, fld1.getBody() );
         verify(builder).endClass();
     }
     
@@ -2514,16 +2529,18 @@ public class ParserTest extends TestCase {
         cls.setName( "x" );
 //        MethodDef mth = new MethodDef();
 //        mth.name = "a";
-        FieldDef fld = new FieldDef();
-        fld.setType( new TypeDef( "x" ) ); //bug @todo fixme
-        fld.setName( "a" );
-        fld.setBody( "" );
+        ArgumentCaptor<FieldDef> f = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
 //      verify(mockBuilder).beginConstructor();
 //      verify(mockBuilder).endConstructor(mth);
-        verify(builder).addField( fld );
+        verify(builder).addField( f.capture() );
+        FieldDef fld = f.getValue();
+        assertEquals( "a", fld.getName() );
+        assertEquals( new TypeDef( "x" ), fld.getType() ); //bug @todo fixme
+        assertEquals( "" , fld.getBody() );
+        
         verify(builder).endClass();
     }
 

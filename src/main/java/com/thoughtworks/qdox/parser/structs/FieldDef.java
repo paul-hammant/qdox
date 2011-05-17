@@ -19,7 +19,7 @@ package com.thoughtworks.qdox.parser.structs;
  * under the License.
  */
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -31,7 +31,7 @@ public class FieldDef extends LocatedDef {
     
     private String name = "";
     private TypeDef type;
-    private Set<String> modifiers = new HashSet<String>();
+    private Set<String> modifiers = new LinkedHashSet<String>();
     private int dimensions;
     private boolean isVarArgs;
     private String body = "";
@@ -43,46 +43,6 @@ public class FieldDef extends LocatedDef {
     public FieldDef( String name )
     {
         this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        FieldDef paramDef = (FieldDef) obj;
-        boolean result = paramDef.getName().equals(getName())
-                && paramDef.getModifiers().equals(getModifiers())
-                && paramDef.isVarArgs() == isVarArgs();
-        if(paramDef.getType() == null) {
-        	result &= (getType() == null)
-        		&& paramDef.getDimensions() == getDimensions();
-        }
-        else {
-        	result &= (getType() != null)
-        		&&(paramDef.getType().name.equals(getType().name))
-        		&&(paramDef.getType().actualArgumentTypes == null ? getType().actualArgumentTypes == null: paramDef.getType().actualArgumentTypes.equals(getType().actualArgumentTypes))
-        		&&(paramDef.getType().dimensions + paramDef.getDimensions() == getDimensions() + getType().dimensions);
-        }
-        return result;
-    }
-
-    @Override
-    public int hashCode() {
-        return getName().hashCode() + (getType() != null ? getType().hashCode() : 0) +
-                getDimensions() + getModifiers().hashCode() + (isVarArgs() ? 79769989 : 0);
-    }
-
-    @Override
-    public String toString() {
-        StringBuffer result = new StringBuffer();
-        result.append(getModifiers());
-        result.append(' ');
-        result.append(getType());
-        for (int i = 0; i < getDimensions(); i++) result.append("[]");
-        result.append(' ');
-        result.append(getName());
-        if(getBody().length() > 0){
-            result.append(" = ").append(getBody());
-        }
-        return result.toString();
     }
 
     /**

@@ -830,7 +830,7 @@ private LinkedList<AnnoDef> annotationStack = new LinkedList<AnnoDef>(); // Use 
 private List<List<ElemValueDef>> annoValueListStack = new LinkedList<List<ElemValueDef>>(); // Use LinkedList instead of Stack because it is unsynchronized
 private List<ElemValueDef> annoValueList = null;
 private FieldDef param = new FieldDef();
-private java.util.Set<String> modifiers = new java.util.HashSet<String>();
+private java.util.Set<String> modifiers = new java.util.LinkedHashSet<String>();
 private TypeDef fieldType;
 private TypeVariableDef typeVariable;
 private Stack<TypeDef> typeStack = new Stack<TypeDef>();

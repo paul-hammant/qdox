@@ -295,13 +295,13 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(innerDef);
 
         MethodDef fooDef = new MethodDef();
-        fooDef.name = "foo";
+        fooDef.setName("foo");
         builder.beginMethod();
         builder.endMethod(fooDef);
         builder.endClass();
 
         MethodDef barDef = new MethodDef();
-        barDef.name = "bar";
+        barDef.setName("bar");
         builder.beginMethod();
         builder.endMethod(barDef);
         builder.endClass();
@@ -322,8 +322,8 @@ public class ModelBuilderTest extends TestCase {
     public void testSimpleMethod() throws Exception {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
+        mth.setName("doSomething");
+        mth.setReturnType(new TypeDef("void"));
         builder.beginMethod();
         builder.endMethod(mth);
         builder.endClass();
@@ -342,9 +342,9 @@ public class ModelBuilderTest extends TestCase {
     public void testMethodNoArray() throws Exception {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.dimensions = 0;
+        mth.setName("doSomething");
+        mth.setReturnType(new TypeDef("void"));
+        mth.setDimensions(0);
         builder.beginMethod();
         builder.endMethod(mth);
         builder.endClass();
@@ -357,9 +357,9 @@ public class ModelBuilderTest extends TestCase {
     public void testMethod1dArray() throws Exception {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.dimensions = 1;
+        mth.setName("doSomething");
+        mth.setReturnType(new TypeDef("void"));
+        mth.setDimensions(1);
         builder.beginMethod();
         builder.endMethod(mth);
         builder.endClass();
@@ -372,9 +372,9 @@ public class ModelBuilderTest extends TestCase {
     public void testMethod2dArray() throws Exception {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.dimensions = 2;
+        mth.setName("doSomething");
+        mth.setReturnType(new TypeDef("void"));
+        mth.setDimensions(2);
         builder.beginMethod();
         builder.endMethod(mth);
         builder.endClass();
@@ -445,8 +445,8 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
 
-        mth.exceptions.add(new TypeDef("RuntimeException"));
-        mth.exceptions.add(new TypeDef("java.io.IOException"));
+        mth.getExceptions().add(new TypeDef("RuntimeException"));
+        mth.getExceptions().add(new TypeDef("java.io.IOException"));
 
         builder.beginMethod();
         builder.endMethod(mth);
@@ -465,9 +465,9 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
         MethodDef mth = new MethodDef();
 
-        mth.modifiers.add("public");
-        mth.modifiers.add("final");
-        mth.modifiers.add("synchronized");
+        mth.getModifiers().add("public");
+        mth.getModifiers().add("final");
+        mth.getModifiers().add("synchronized");
 
         builder.beginMethod();
         builder.endMethod(mth);
@@ -576,13 +576,13 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
 
         MethodDef c1 = new MethodDef();
-        c1.name = "MyClass";
+        c1.setName("MyClass");
         builder.beginConstructor();
         builder.endConstructor(c1);
 
         MethodDef m1 = new MethodDef();
-        m1.name = "method";
-        m1.returnType = new TypeDef("void");
+        m1.setName("method");
+        m1.setReturnType(new TypeDef("void"));
         builder.beginMethod();
         builder.endMethod(m1);
         builder.endClass();
@@ -820,7 +820,7 @@ public class ModelBuilderTest extends TestCase {
         assertTrue(classDef.hashCode() > 0);
 
         MethodDef methodDef = new MethodDef();
-        methodDef.name = "hello";
+        methodDef.setName("hello");
         assertTrue(methodDef.hashCode() > 0);
 
         FieldDef fieldDef = new FieldDef();

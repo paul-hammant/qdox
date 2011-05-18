@@ -6,7 +6,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -27,7 +26,7 @@ import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
 public class ParserTest extends TestCase {
     
-    private Collection<Integer> lexValues = new LinkedList<Integer>();
+	private Collection<Integer> lexValues = new LinkedList<Integer>();
     private Collection<String> textValues = new LinkedList<String>();
     
     private JavaLexer lexer;
@@ -789,14 +788,16 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-
+        ArgumentCaptor<MethodDef> captor = ArgumentCaptor.forClass(MethodDef.class);
+        
         // verify
         verify(builder).beginClass(cls);
         verify(builder).beginMethod();
-        verify(builder).endMethod(mth);
+        verify(builder).endMethod( captor.capture() );
+        MethodDef mth = captor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
+        
         verify(builder).endClass();
     }
 
@@ -823,14 +824,15 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
+        ArgumentCaptor<MethodDef> captor = ArgumentCaptor.forClass( MethodDef.class );
         
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( captor.capture() );
+        MethodDef mth = captor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
         verify(builder).endClass();
     }
 
@@ -857,14 +859,15 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("Something");
+        ArgumentCaptor<MethodDef> captor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( captor.capture() );
+        MethodDef mth = captor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("Something"), mth.getReturnType() );
         verify(builder).endClass();
     }
 
@@ -895,14 +898,15 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("com.blah.Something");
+        ArgumentCaptor<MethodDef> captor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( captor.capture() );
+        MethodDef mth = captor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("com.blah.Something"), mth.getReturnType() );
         verify(builder).endClass();
     }
 
@@ -942,23 +946,17 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("com.blah.Something");
-        mth.modifiers.add("public");
-        mth.modifiers.add("protected");
-        mth.modifiers.add("private");
-        mth.modifiers.add("abstract");
-        mth.modifiers.add("static");
-        mth.modifiers.add("final");
-        mth.modifiers.add("native");
-        mth.modifiers.add("synchronized");
-        mth.modifiers.add("volatile");
+        ArgumentCaptor<MethodDef> captor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( captor.capture() );
+        MethodDef mth = captor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("com.blah.Something"), mth.getReturnType() );
+        Assert.assertArrayEquals(new String[]{"public", "protected", "private", "abstract", "static", "final", "native", "synchronized", "volatile"}, 
+        		mth.getModifiers().toArray(new String[0]));
         verify(builder).endClass();
     }
 
@@ -987,20 +985,22 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
         ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass( FieldDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
-        
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).addParameter( p1.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
+        
         assertEquals( "numberOfTimes", p1.getValue().getName() );
         assertEquals( new TypeDef("int"), p1.getValue().getType() );
-        verify(builder).endClass();
     }
 
     public void testMethodWithOneFullyQualifiedArg() throws Exception {
@@ -1032,19 +1032,22 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
         ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass( FieldDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).addParameter( p1.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
+
         assertEquals( "numberOfTimes", p1.getValue().getName() );
         assertEquals( new TypeDef("java.lang.String"), p1.getValue().getType() );
-        verify(builder).endClass();
     }
 
     public void testMethodWithTwoArgs() throws Exception {
@@ -1075,23 +1078,28 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
+        
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
         ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder, times(2) ).addParameter( p.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
+        
         FieldDef p1 = p.getAllValues().get( 0 );
         assertEquals( "numberOfTimes", p1.getName() );
         assertEquals( new TypeDef( "int" ), p1.getType() );
         FieldDef p2 = p.getAllValues().get( 1 );
         assertEquals( "name", p2.getName() );
         assertEquals( new TypeDef( "String" ), p2.getType() );
-        verify(builder).endClass();
+        
     }
 
     public void testMethodWithThreeArgs() throws Exception {
@@ -1125,16 +1133,20 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
         ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify( builder ).beginClass( cls );
         verify( builder ).beginMethod();
-        verify( builder ).endMethod( mth );
+        verify( builder ).endMethod( methodCaptor.capture() );
         verify( builder, times(3) ).addParameter( p.capture() );
+        verify( builder ).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
+
         FieldDef p1 = p.getAllValues().get( 0 );
         assertEquals( "numberOfTimes", p1.getName() );
         assertEquals( new TypeDef( "int" ), p1.getType() );
@@ -1144,7 +1156,6 @@ public class ParserTest extends TestCase {
         FieldDef p3 = p.getAllValues().get( 2 );
         assertEquals( "x", p3.getName() );
         assertEquals( new TypeDef( "boolean" ), p3.getType() );
-        verify( builder ).endClass();
     }
 
     public void testMethodWithOneArgThatHasModifier() throws Exception {
@@ -1174,20 +1185,23 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
         ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
         
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).addParameter( p1.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
+
         assertEquals( "numberOfTimes", p1.getValue().getName() );
         Assert.assertArrayEquals( new String[] { "final", "volatile" }, p1.getValue().getModifiers().toArray( new String[0] ) );
         assertEquals( new TypeDef("int"), p1.getValue().getType() );
-        verify(builder).endClass();
     }
 
     public void testMethodThrowingOneException() throws Exception {
@@ -1215,16 +1229,18 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.exceptions.add(new TypeDef("IOException"));
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef( "void" ), mth.getReturnType() );
+        Assert.assertArrayEquals( new TypeDef[] { new TypeDef("IOException")}, mth.getExceptions().toArray(new TypeDef[0]));
     }
 
     public void testMethodThrowingTwoExceptions() throws Exception {
@@ -1254,17 +1270,20 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.exceptions.add(new TypeDef("IOException"));
-        mth.exceptions.add(new TypeDef("MyException"));
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
+        Assert.assertArrayEquals( new TypeDef[] { new TypeDef("IOException"), new TypeDef("MyException") }, 
+        		mth.getExceptions().toArray(new TypeDef[0]));
+
     }
 
     public void testMethodThrowingThreeExceptions() throws Exception {
@@ -1296,18 +1315,19 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.exceptions.add(new TypeDef("IOException"));
-        mth.exceptions.add(new TypeDef("MyException"));
-        mth.exceptions.add(new TypeDef("AnotherException"));
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).endClass();
+        
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef( "void" ), mth.getReturnType() );
+        Assert.assertArrayEquals( new TypeDef[] { new TypeDef( "IOException" ), new TypeDef( "MyException" ),
+            new TypeDef( "AnotherException" ) }, mth.getExceptions().toArray( new TypeDef[0] ) );
     }
 
     public void testMethodThrowingOneFullyQualifiedException() throws Exception {
@@ -1339,16 +1359,18 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.exceptions.add(new TypeDef("java.io.IOException"));
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
+        Assert.assertArrayEquals( new TypeDef[] {new TypeDef("java.io.IOException")}, mth.getExceptions().toArray( new TypeDef[0] ) );
     }
 
     public void testMethodThrowingTwoFullyQualifiedException() throws Exception {
@@ -1386,17 +1408,19 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doSomething";
-        mth.returnType = new TypeDef("void");
-        mth.exceptions.add(new TypeDef("java.io.IOException"));
-        mth.exceptions.add(new TypeDef("java.lang.RuntimeException"));
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
-        verify(builder).beginClass( cls );
-        verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
-        verify(builder).endClass();
+        verify( builder ).beginClass( cls );
+        verify( builder ).beginMethod();
+        verify( builder ).endMethod( methodCaptor.capture() );
+        verify( builder ).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doSomething", mth.getName() );
+        assertEquals( new TypeDef( "void" ), mth.getReturnType() );
+        Assert.assertArrayEquals( new TypeDef[] { new TypeDef( "java.io.IOException" ),
+            new TypeDef( "java.lang.RuntimeException" ) }, mth.getExceptions().toArray( new TypeDef[0] ) );
     }
 
     public void testDefaultConstructor() throws Exception {
@@ -1421,15 +1445,17 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "MyClass";
-        mth.constructor = true;
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginConstructor();
-        verify(builder).endConstructor( mth );
+        verify(builder).endConstructor( methodCaptor.capture() );
         verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "MyClass", mth.getName() );
+        assertEquals(true, mth.isConstructor() );
     }
 
     public void testPublicConstructorWithParam() throws Exception {
@@ -1457,20 +1483,24 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "MyClass";
-        mth.constructor = true;
-        mth.modifiers.add("public");
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
         ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginConstructor();
         verify(builder).addParameter( p1.capture() );
+        verify(builder).endConstructor( methodCaptor.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "MyClass", mth.getName() );
+        assertEquals( true, mth.isConstructor() );
+        Assert.assertArrayEquals( new String[] { "public" }, mth.getModifiers().toArray( new String[0] ) );
+
         assertEquals( "count", p1.getValue().getName() );
         assertEquals( new TypeDef("int"), p1.getValue().getType() );
-        verify(builder).endConstructor( mth );
-        verify(builder).endClass();
+
     }
 
     public void testConstructorWithMultipleParams() throws Exception {
@@ -1505,25 +1535,29 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "MyClass";
-        mth.constructor = true;
-        mth.modifiers.add("public");
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
         ArgumentCaptor<FieldDef> p = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginConstructor();
         verify(builder, times(2) ).addParameter( p.capture() );
+        verify(builder).endConstructor( methodCaptor.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "MyClass", mth.getName() );
+        assertEquals( true, mth.isConstructor() );
+        Assert.assertArrayEquals( new String[] { "public" }, mth.getModifiers().toArray( new String[0] ) ); 
+        
+
         FieldDef p1 = p.getAllValues().get( 0 );
         assertEquals( "count", p1.getName() );
         assertEquals( new TypeDef("int"), p1.getType() );
         FieldDef p2 = p.getAllValues().get( 1 );
         assertEquals( "thingy", p2.getName() );
         assertEquals( new TypeDef("java.lang.String"), p2.getType() );
-        verify(builder).endConstructor( mth );
-        verify(builder).endClass();
-    }
+}
 
     public void testConstructorWithException() throws Exception {
 
@@ -1549,16 +1583,19 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "MyClass";
-        mth.constructor = true;
-        mth.exceptions.add(new TypeDef("SomeException"));
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
-        verify(builder).beginClass( cls );
-        verify(builder).beginConstructor();
-        verify(builder).endConstructor( mth );
-        verify(builder).endClass();
+        verify( builder ).beginClass( cls );
+        verify( builder ).beginConstructor();
+        verify( builder ).endConstructor( methodCaptor.capture() );
+        verify( builder ).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "MyClass", mth.getName() );
+        assertEquals( true, mth.isConstructor() );
+        Assert.assertArrayEquals( new TypeDef[] { new TypeDef( "SomeException" ) },
+                                  mth.getExceptions().toArray( new TypeDef[0] ) );
     }
 
     public void testConstructorWithMultipleException() throws Exception {
@@ -1591,17 +1628,19 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef mth = new MethodDef();
-        mth.name = "MyClass";
-        mth.constructor = true;
-        mth.exceptions.add(new TypeDef("SomeException"));
-        mth.exceptions.add(new TypeDef("java.io.IOException"));
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginConstructor();
-        verify(builder).endConstructor( mth );
+        verify(builder).endConstructor( methodCaptor.capture() );
         verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "MyClass", mth.getName() );
+        assertEquals( true, mth.isConstructor() );
+        Assert.assertArrayEquals( new TypeDef[] { new TypeDef("java.io.IOException"), new TypeDef("SomeException") }, 
+                                  mth.getExceptions().toArray( new TypeDef[0] ) );
     }
 
     public void testField() throws Exception {
@@ -1857,14 +1896,15 @@ public class ParserTest extends TestCase {
         // expect no the method, and it shouldn't be static.
         ClassDef cls = new ClassDef();
         cls.setName( "MyClass" );
-        MethodDef method = new MethodDef();
-        method.name = "doStuff";
-        method.returnType = new TypeDef("void");
+        ArgumentCaptor<MethodDef> captor = ArgumentCaptor.forClass(MethodDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod(method);
+        verify(builder).endMethod( captor.capture() );
+        MethodDef method = captor.getValue();
+        assertEquals( "doStuff", method.getName() );
+        assertEquals( new TypeDef("void"), method.getReturnType() );
         verify(builder).endClass();
     }
 
@@ -2072,8 +2112,7 @@ public class ParserTest extends TestCase {
         FieldDef fld = p.getValue();
         assertEquals( "count", fld.getName() );
         assertEquals( 1, fld.getDimensions() );
-        assertEquals( new TypeDef("int"), fld.getType() );
-        assertEquals( 0, fld.getType().dimensions );
+        assertEquals( new TypeDef("int", 0), fld.getType() );
         verify(builder).endClass();
     }
 
@@ -2182,16 +2221,20 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        MethodDef mth = new MethodDef();
-        mth.name = "count";
-        mth.returnType = new TypeDef("int");
-        mth.dimensions = 0;
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).endClass();
+        
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "count", mth.getName() );
+        assertEquals( new TypeDef("int"), mth.getReturnType() );
+        assertEquals( 0, mth.getDimensions() );
+        mth.setDimensions(0);
+
     }
 
     public void testMethodArray() throws Exception {
@@ -2219,16 +2262,18 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        MethodDef mth = new MethodDef();
-        mth.name = "count";
-        mth.returnType = new TypeDef("int");
-        mth.dimensions = 1;
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "count", mth.getName() );
+        assertEquals( "int", mth.getReturnType().name );
+        assertEquals( 1, mth.getReturnType().dimensions);
     }
 
     public void testMethodWithArrayDefinedAtEnd() throws Exception {
@@ -2261,16 +2306,18 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        MethodDef mth = new MethodDef();
-        mth.name = "count";
-        mth.returnType = new TypeDef("int");
-        mth.dimensions = 1;
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
-        verify(builder).endMethod( mth );
+        verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "count", mth.getName() );
+        assertEquals( 1, mth.getDimensions() );
+        assertEquals( new TypeDef("int"), mth.getReturnType() );
     }
 
     public void testMethodReturningArrayWithParamNoArray() throws Exception {
@@ -2302,21 +2349,23 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        MethodDef mth = new MethodDef();
-        mth.name = "count";
-        mth.returnType = new TypeDef("int");
-        mth.dimensions = 1;
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
         ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
         verify(builder).addParameter( p1.capture() );
+        verify(builder).endMethod( methodCaptor.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "count", mth.getName() );
+        assertEquals( new TypeDef("int", 1), mth.getReturnType() );
+        
         assertEquals( "p1", p1.getValue().getName() );
         assertEquals( new TypeDef("int"), p1.getValue().getType() );
         assertEquals( 0, p1.getValue().getDimensions() );
-        verify(builder).endMethod( mth );
-        verify(builder).endClass();
     }
 
     public void testMethodReturningNoArrayWithParamArray() throws Exception {
@@ -2348,23 +2397,25 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        MethodDef mth = new MethodDef();
-        mth.name = "count";
-        mth.returnType = new TypeDef("int");
-        mth.dimensions = 0;
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
         ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
         
-
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
         verify(builder).addParameter( p1.capture() );
+        verify(builder).endMethod( methodCaptor.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "count", mth.getName() );
+        assertEquals( new TypeDef("int"), mth.getReturnType() );
+        assertEquals( 0, mth.getDimensions() );
+
         assertEquals( "p1", p1.getValue().getName() );
         assertEquals( 0, p1.getValue().getDimensions() );
         assertEquals( "int", p1.getValue().getType().name );
         assertEquals( 1, p1.getValue().getType().dimensions );
-        verify(builder).endMethod( mth );
-        verify(builder).endClass();
     }
 
     public void testMethodReturningArrayWithParam2dArray() throws Exception {
@@ -2400,22 +2451,24 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        MethodDef mth = new MethodDef();
-        mth.name = "count";
-        mth.returnType = new TypeDef("int");
-        mth.dimensions = 1;
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
         ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
         verify(builder).addParameter( p1.capture() );
+        verify(builder).endMethod( methodCaptor.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "count", mth.getName() );
+        assertEquals( new TypeDef("int", 1), mth.getReturnType() );
+
         assertEquals( "p1", p1.getValue().getName() );
         assertEquals( "int", p1.getValue().getType().name );
         assertEquals( 2, p1.getValue().getType().dimensions );
-        verify(builder).endMethod( mth );
-        verify(builder).endClass();
-        
+
     }
 
     public void testMethodWithVarArgsParameter() throws Exception {
@@ -2446,21 +2499,24 @@ public class ParserTest extends TestCase {
         // expectations
         ClassDef cls = new ClassDef();
         cls.setName( "x" );
-        MethodDef mth = new MethodDef();
-        mth.name = "doStuff";
-        mth.returnType = new TypeDef("void");
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
         ArgumentCaptor<FieldDef> p1 = ArgumentCaptor.forClass(FieldDef.class);
         
         // verify
         verify(builder).beginClass( cls );
         verify(builder).beginMethod();
         verify(builder).addParameter( p1.capture() );
+        verify(builder).endMethod( methodCaptor.capture() );
+        verify(builder).endClass();
+
+        MethodDef mth = methodCaptor.getValue();
+        assertEquals( "doStuff", mth.getName() );
+        assertEquals( new TypeDef("void"), mth.getReturnType() );
+
         assertEquals( "stuff" , p1.getValue().getName() );
         assertEquals( new TypeDef("int") , p1.getValue().getType() );
         assertEquals( 0 , p1.getValue().getDimensions() );
         assertEquals( true , p1.getValue().isVarArgs() );
-        verify(builder).endMethod( mth );
-        verify(builder).endClass();
     }
 
     public void testEnumWithConstructors() throws Exception {

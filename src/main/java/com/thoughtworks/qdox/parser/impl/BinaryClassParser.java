@@ -134,13 +134,13 @@ public class BinaryClassParser
         // The name of constructors are qualified. Need to strip it.
         // This will work for regular methods too, since -1 + 1 = 0
         int lastDot = member.getName().lastIndexOf('.');
-        methodDef.name = member.getName().substring(lastDot + 1);
+        methodDef.setName(member.getName().substring(lastDot + 1));
 
-        addModifiers(methodDef.modifiers, member.getModifiers());
+        addModifiers(methodDef.getModifiers(), member.getModifiers());
         Class<?>[] exceptions;
         Class<?>[] parameterTypes;
         if (member instanceof Method) {
-            methodDef.constructor = false;
+            methodDef.setConstructor(false);
 
             // For some stupid reason, these methods are not defined in Member,
             // but in both Method and Construcotr.
@@ -148,18 +148,18 @@ public class BinaryClassParser
             parameterTypes = ((Method) member).getParameterTypes();
 
             Class<?> returnType = ((Method) member).getReturnType();
-            methodDef.returnType = getTypeDef(returnType);
-            methodDef.dimensions = getDimension(returnType);
+            methodDef.setReturnType(getTypeDef(returnType));
+            methodDef.setDimensions(getDimension(returnType));
 
         } else {
-            methodDef.constructor = true;
+            methodDef.setConstructor(true);
 
             exceptions = ((Constructor<?>) member).getExceptionTypes();
             parameterTypes = ((Constructor<?>) member).getParameterTypes();
         }
         for (int j = 0; j < exceptions.length; j++) {
             Class<?> exception = exceptions[j];
-            methodDef.exceptions.add(getTypeDef(exception));
+            methodDef.getExceptions().add(getTypeDef(exception));
         }
         for (int j = 0; j < parameterTypes.length; j++) {
             FieldDef param = new FieldDef( "p" + j );

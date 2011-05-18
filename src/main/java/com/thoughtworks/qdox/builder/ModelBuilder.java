@@ -223,12 +223,12 @@ public class ModelBuilder implements Builder {
         currentConstructor.setLineNumber(def.lineNumber);
 
         // basic details
-        currentConstructor.setName(def.name);
+        currentConstructor.setName(def.getName());
 
         // typeParameters
-        if (def.typeParams != null) {
+        if (def.getTypeParams() != null) {
             List<TypeVariable> typeParams = new LinkedList<TypeVariable>();
-            for(TypeVariableDef typeVariableDef : def.typeParams) {
+            for(TypeVariableDef typeVariableDef : def.getTypeParams()) {
                 typeParams.add(createTypeVariable(typeVariableDef));
             }
             currentConstructor.setTypeParameters(typeParams);
@@ -236,13 +236,13 @@ public class ModelBuilder implements Builder {
         
         // exceptions
         List<Type> exceptions = new LinkedList<Type>();
-        for (TypeDef type : def.exceptions) {
+        for (TypeDef type : def.getExceptions()) {
             exceptions.add(createType(type, 0));
         }
         currentConstructor.setExceptions(exceptions);
 
         // modifiers
-        currentConstructor.setModifiers( new LinkedList<String>( def.modifiers ) );
+        currentConstructor.setModifiers( new LinkedList<String>( def.getModifiers() ) );
 
         if( !parameterList.isEmpty() ) 
         {
@@ -250,7 +250,7 @@ public class ModelBuilder implements Builder {
             parameterList.clear();
         }
         
-        currentConstructor.setSourceCode(def.body);
+        currentConstructor.setSourceCode(def.getBody());
     }
 
     public void beginMethod() {
@@ -270,13 +270,13 @@ public class ModelBuilder implements Builder {
         currentMethod.setLineNumber(def.lineNumber);
 
         // basic details
-        currentMethod.setName(def.name);
-        currentMethod.setReturns(createType(def.returnType, def.dimensions));
+        currentMethod.setName(def.getName());
+        currentMethod.setReturns(createType(def.getReturnType(), def.getDimensions()));
 
         // typeParameters
-        if (def.typeParams != null) {
+        if (def.getTypeParams() != null) {
         	List<TypeVariable> typeParams = new LinkedList<TypeVariable>();
-        	for(TypeVariableDef typeVariableDef : def.typeParams) {
+        	for(TypeVariableDef typeVariableDef : def.getTypeParams()) {
         		typeParams.add(createTypeVariable(typeVariableDef));
         	}
             currentMethod.setTypeParameters(typeParams);
@@ -284,20 +284,20 @@ public class ModelBuilder implements Builder {
         
         // exceptions
         List<Type> exceptions = new LinkedList<Type>();
-        for (TypeDef type : def.exceptions) {
+        for (TypeDef type : def.getExceptions()) {
             exceptions.add(createType(type, 0));
         }
         currentMethod.setExceptions(exceptions);
 
         // modifiers
-        currentMethod.setModifiers(new LinkedList<String>( def.modifiers ));
+        currentMethod.setModifiers(new LinkedList<String>( def.getModifiers() ));
         
         if( !parameterList.isEmpty() ) {
             currentMethod.setParameters( new ArrayList<JavaParameter>( parameterList ) );
             parameterList.clear();
         }
 
-        currentMethod.setSourceCode(def.body);
+        currentMethod.setSourceCode(def.getBody());
     }
 
     private TypeVariable createTypeVariable(TypeVariableDef typeVariableDef) {

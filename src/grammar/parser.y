@@ -479,7 +479,7 @@ VariableDeclaratorId: IDENTIFIER Dims_opt
 // 8.4 Method Declarations
 MethodDeclaration: MethodHeader memberend /* =MethodBody*/ 
                    {
-                     mth.body = $2;
+                     mth.setBody($2);
                      builder.endMethod(mth);
                      mth = new MethodDef();
                    };
@@ -488,26 +488,26 @@ MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER 
               {
                 builder.beginMethod();
                 mth.lineNumber = lexer.getLine();
-                mth.modifiers.addAll(modifiers); modifiers.clear();
-                mth.typeParams = typeParams;
-                mth.returnType = $3;
-                mth.name = $4;
+                mth.getModifiers().addAll(modifiers); modifiers.clear();
+                mth.setTypeParams(typeParams);
+                mth.setReturnType($3);
+                mth.setName($4);
               } 
               FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt
               {
-                mth.dimensions = $9;
+                mth.setDimensions($9);
               } 
             | AnyModifiers_opt Type /* =ResultType */ IDENTIFIER PARENOPEN 
               {
                 builder.beginMethod();
                 mth.lineNumber = lexer.getLine();
-                mth.modifiers.addAll(modifiers); modifiers.clear();
-                mth.returnType = $2;
-                mth.name = $3;
+                mth.getModifiers().addAll(modifiers); modifiers.clear();
+                mth.setReturnType($2);
+                mth.setName($3);
               } 
               FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt 
               {
-                mth.dimensions = $8;
+                mth.setDimensions($8);
               };
 
 // 8.4.1 Formal Parameters
@@ -549,11 +549,11 @@ Throws_opt:
 
 ExceptionTypeList: ClassOrInterfaceType /*ExceptionType*/
                    { 
-                     mth.exceptions.add($1); 
+                     mth.getExceptions().add($1); 
                    }
                  | ExceptionTypeList COMMA ClassOrInterfaceType /* =ExceptionType */
                    {
-                     mth.exceptions.add($3);
+                     mth.getExceptions().add($3);
                    };
                    
 // 8.4.7 Method Body
@@ -572,12 +572,13 @@ constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOP
              {
                builder.beginConstructor();
                mth.lineNumber = lexer.getLine();
-               mth.modifiers.addAll(modifiers); modifiers.clear();
-               mth.constructor = true; mth.name = $2;
+               mth.getModifiers().addAll(modifiers); modifiers.clear();
+               mth.setConstructor(true); 
+               mth.setName($2);
              }
              FormalParameterList_opt PARENCLOSE Throws_opt memberend /* =MethodBody */ 
              {
-               mth.body = $8;
+               mth.setBody($8);
                builder.endConstructor(mth);
                mth = new MethodDef(); 
              }
@@ -585,13 +586,14 @@ constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOP
              {
                builder.beginConstructor();
                mth.lineNumber = lexer.getLine();
-               mth.typeParams = typeParams;
-               mth.modifiers.addAll(modifiers); modifiers.clear();
-               mth.constructor = true; mth.name = $3;
+               mth.setTypeParams(typeParams);
+               mth.getModifiers().addAll(modifiers); modifiers.clear();
+               mth.setConstructor(true); 
+               mth.setName($3);
              } 
              FormalParameterList_opt PARENCLOSE Throws_opt memberend /* =MethodBody */ 
              {
-               mth.body = $9;
+               mth.setBody($9);
                builder.endConstructor(mth);
                mth = new MethodDef(); 
              };

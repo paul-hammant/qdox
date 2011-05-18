@@ -19,71 +19,102 @@ package com.thoughtworks.qdox.parser.structs;
  * under the License.
  */
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 public class MethodDef extends LocatedDef {
 
-    public String name = "";
-    public List<TypeVariableDef> typeParams;
-    public TypeDef returnType;
-    public Set<String> modifiers = new HashSet<String>();
-    public List<TypeVariableDef> params = new LinkedList<TypeVariableDef>();
-    public Set<TypeDef> exceptions = new LinkedHashSet<TypeDef>();
-    public boolean constructor = false;
-    public int dimensions;
-    public String body;
-
-    @Override
-    public boolean equals(Object obj) {
-        MethodDef methodDef = (MethodDef) obj;
-        boolean result;
-        result = methodDef.name.equals(name)
-                && methodDef.modifiers.equals(modifiers)
-                && methodDef.params.equals(params)
-                && methodDef.exceptions.equals(exceptions)
-                && methodDef.constructor == constructor;
-        if(methodDef.returnType == null) {
-        	result &= (returnType == null)
-        		&& methodDef.dimensions == dimensions;
-        	
-        }
-        else {
-        	result &= (returnType != null)        		
-        			&&(methodDef.returnType.name.equals(returnType.name))
-        			&&(methodDef.returnType.actualArgumentTypes == null ? returnType.actualArgumentTypes == null: methodDef.returnType.actualArgumentTypes.equals(returnType.actualArgumentTypes))
-        			&&(methodDef.returnType.dimensions + methodDef.dimensions == dimensions + returnType.dimensions);
-        }
-        return result;
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode() + 
-        		(returnType != null ? returnType.hashCode() : 0) +
-                modifiers.hashCode() + params.hashCode() +
-                params.hashCode() + exceptions.hashCode() +
-                dimensions + (constructor ? 0 : 1);
-    }
-
+    private String name = "";
+    private List<TypeVariableDef> typeParams;
+    private TypeDef returnType;
+    private Set<String> modifiers = new LinkedHashSet<String>();
+    private Set<TypeDef> exceptions = new LinkedHashSet<TypeDef>();
+    private boolean constructor = false;
+    private int dimensions;
+    private String body;
+    
     @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
-        result.append(modifiers);
+        result.append(getModifiers());
         result.append(' ');
-        result.append((returnType != null ? returnType.toString() : ""));
-        for (int i = 0; i < dimensions; i++) result.append("[]");
+        result.append((getReturnType() != null ? getReturnType().toString() : ""));
+        for (int i = 0; i < getDimensions(); i++) result.append("[]");
         result.append(' ');
-        result.append(name);
+        result.append(getName());
         result.append('(');
-        result.append(params);
+        result.append(getTypeParams());
         result.append(')');
         result.append(" throws ");
-        result.append(exceptions);
-        result.append(body);
+        result.append(getExceptions());
+        result.append(getBody());
         return result.toString();
+    }
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setReturnType(TypeDef returnType) {
+		this.returnType = returnType;
+	}
+
+	public TypeDef getReturnType() {
+		return returnType;
+	}
+
+	public void setModifiers(Set<String> modifiers) {
+		this.modifiers = modifiers;
+	}
+
+	public Set<String> getModifiers() {
+		return modifiers;
+	}
+
+	public void setConstructor(boolean constructor) {
+		this.constructor = constructor;
+	}
+
+	public boolean isConstructor() {
+		return constructor;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setDimensions(int dimensions) {
+		this.dimensions = dimensions;
+	}
+
+	public int getDimensions() {
+		return dimensions;
+	}
+
+	public void setExceptions(Set<TypeDef> exceptions) {
+		this.exceptions = exceptions;
+	}
+
+	public Set<TypeDef> getExceptions() {
+		return exceptions;
+	}
+
+    public void setTypeParams( List<TypeVariableDef> typeParams )
+    {
+        this.typeParams = typeParams;
+    }
+
+    public List<TypeVariableDef> getTypeParams()
+    {
+        return typeParams;
     }
 }

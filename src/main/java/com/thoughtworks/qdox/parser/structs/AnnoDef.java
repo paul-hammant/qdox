@@ -19,7 +19,6 @@ package com.thoughtworks.qdox.parser.structs;
  * under the License.
  */
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,36 +27,12 @@ import com.thoughtworks.qdox.parser.expression.ElemValueDef;
 
 public class AnnoDef extends LocatedDef implements ElemValueDef
 {
-    public TypeDef typeDef;
-    public final Map<String, ElemValueDef> args = new LinkedHashMap<String, ElemValueDef>();
+    private TypeDef typeDef;
+    private final Map<String, ElemValueDef> args = new LinkedHashMap<String, ElemValueDef>();
 
-    @Override
-    public boolean equals(Object obj) {
-        AnnoDef annoDef = (AnnoDef) obj;
-        return annoDef.typeDef.equals(typeDef) && annoDef.args.equals(args);
-    }
-
-    @Override
-    public int hashCode() {
-        return typeDef.hashCode() + args.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        StringBuffer result = new StringBuffer();
-        result.append('@');
-        result.append(typeDef.name);
-        if( !args.isEmpty() ) {
-        	result.append('(');
-            for(Iterator<Map.Entry<String, ElemValueDef>> i = args.entrySet().iterator(); i.hasNext();) {
-            	result.append( i.next());
-            	if(i.hasNext()) {
-            		result.append(',');
-            	}
-            } 
-            result.append(')');
-        }
-        return result.toString();
+    public AnnoDef( TypeDef typeDef )
+    {
+        this.typeDef = typeDef;
     }
     
     public AnnoDef getValue() {
@@ -66,5 +41,15 @@ public class AnnoDef extends LocatedDef implements ElemValueDef
     
     public <U> U transform(AnnotationTransformer<U> transformer) {
     	return transformer.transform(this);
+    }
+
+    public TypeDef getTypeDef()
+    {
+        return typeDef;
+    }
+
+    public Map<String, ElemValueDef> getArgs()
+    {
+        return args;
     }
 }

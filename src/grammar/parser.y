@@ -647,8 +647,7 @@ Annotations_opt:
 
 Annotation /* = NormalAnnotation*/: AT AnyName /* =TypeName */ 
                                     {
-                                      AnnoDef annotation = new AnnoDef();
-                                      annotation.typeDef = new TypeDef($2);
+                                      AnnoDef annotation = new AnnoDef( new TypeDef($2) );
                                       annotation.lineNumber = lexer.getLine();
                                       annotationStack.addFirst(annotation);
                                     }
@@ -665,7 +664,7 @@ Annotation /* = NormalAnnotation*/: AT AnyName /* =TypeName */
 annotationParensOpt:
 	               | PARENOPEN ElementValue PARENCLOSE 
 	                 { 
-	                   annotationStack.getFirst().args.put("value", $2);
+	                   annotationStack.getFirst().getArgs().put("value", $2);
                      }
 	               | PARENOPEN ElementValuePairs_opt PARENCLOSE;
   
@@ -678,7 +677,7 @@ ElementValuePairs: ElementValuePair
     
 ElementValuePair: IDENTIFIER EQUALS ElementValue 
                   {
-                    annotationStack.getFirst().args.put($1, $3);
+                    annotationStack.getFirst().getArgs().put($1, $3);
                   };
 
 /* Specs say: { ElementValues_opt COMMA_opt }

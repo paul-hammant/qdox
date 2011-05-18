@@ -104,8 +104,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.structs.AnnoDef)
 	 */
 	public Annotation transform(AnnoDef annoDef) {
-    	Annotation annotation = new Annotation(createType(annoDef.typeDef, 0), annoDef.lineNumber);
-    	for(Map.Entry<String, ElemValueDef> annoVal : annoDef.args.entrySet()) {
+    	Annotation annotation = new Annotation(createType(annoDef.getTypeDef(), 0), annoDef.lineNumber);
+    	for(Map.Entry<String, ElemValueDef> annoVal : annoDef.getArgs().entrySet()) {
     		annotation.setProperty(annoVal.getKey(), annoVal.getValue().transform(this));
     	}
     	annotation.setContext(parent);

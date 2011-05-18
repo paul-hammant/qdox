@@ -32,16 +32,23 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
     }
 
     public DefaultJavaField(Type type, String name) {
-        setType(type);
-        setName(name);
+        this( name );
+        this.type = type;
     }
     
+    /**
+     * Retrieve the class containing this field
+     * 
+     * @return the declaring class
+     */
     public JavaClass getDeclaringClass() {
     	return getParentClass();
     }
     
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaField#getType()
+    /**
+     * Retrieve the Type of this field
+     * 
+     * @return the Type of this field
      */
     public Type getType() {
         return type;
@@ -57,13 +64,6 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaField#compareTo(java.lang.Object)
-     */
-    public int compareTo(Object o) {
-        return getName().compareTo(((JavaField)o).getName());
     }
 
     /* (non-Javadoc)
@@ -90,8 +90,11 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
         return getName();
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaField#getInitializationExpression()
+    /**
+     * This value represents an assignment to the name.
+     * It can hold a primitive, Object of field reference of any class.
+     * 
+     * @return the expression, otherwise <code>null</code>
      */
     public String getInitializationExpression(){
     	return initializationExpression;
@@ -127,8 +130,8 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
     	if(isVolatile()) {
     		result.append("volatile ");
     	}
-    	result.append(getType().getValue() + " ");
-    	result.append(getDeclaringClass().getFullyQualifiedName() + "." +getName());
+    	result.append( type.getValue() + " ");
+    	result.append( getDeclaringClass().getFullyQualifiedName() + "." +getName() );
     	return result.toString();
     }
 }

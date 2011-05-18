@@ -123,8 +123,8 @@ public class FieldRef implements AnnotationValue {
     public JavaField getField() {
         if( fieldIndex < 0 ) {
             if( context.getParentClass() != null ) {
-                JavaClass javaClass = context.getParentClass();
-                field = resolveField( javaClass, 0, parts.length -1 );
+                JavaClass cls = context.getParentClass();
+                field = resolveField( cls, 0, parts.length -1 );
                 fieldIndex = 0;
             }
 

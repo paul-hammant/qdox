@@ -283,9 +283,9 @@ public class JavaProjectBuilder
         List<JavaClass> result = new LinkedList<JavaClass>();
         List<JavaClass> classArray = classLibraryBuilder.getClassLibrary().getJavaClasses();
         for (int classIndex = 0;classIndex < classArray.size(); classIndex++) {
-            JavaClass clazz = classArray.get(classIndex);
-            if (searcher.eval(clazz)) {
-                result.add(clazz);
+            JavaClass cls = classArray.get(classIndex);
+            if (searcher.eval(cls)) {
+                result.add(cls);
             }
         }
         return result;

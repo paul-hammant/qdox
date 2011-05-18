@@ -27,7 +27,7 @@ import com.thoughtworks.qdox.writer.IndentBuffer;
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements JavaModel {
 
     private List<String> modifiers = new LinkedList<String>();
-    private JavaClass parentClass;
+    private JavaClass parentCls;
 	private String name;
     /**
      * Return list of modifiers as Strings.
@@ -101,12 +101,12 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
 
     public void setParentClass( JavaClass parentClass )
     {
-        this.parentClass = parentClass;
+        this.parentCls = parentClass;
     }
     
     public JavaClass getParentClass()
     {
-        return parentClass;
+        return parentCls;
     }
 
 	public String getName() {

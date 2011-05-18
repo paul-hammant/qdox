@@ -242,8 +242,8 @@ public class SourceLibrary
         {
             context.add( source );
             registerJavaPackage( source.getPackage() );
-            for( JavaClass clazz : source.getClasses()) {
-                registerJavaClass( clazz );
+            for( JavaClass cls : source.getClasses()) {
+                registerJavaClass( cls );
             }
         }
     }
@@ -259,13 +259,13 @@ public class SourceLibrary
         }
     }
     
-    private void registerJavaClass(JavaClass clazz) {
-        if (clazz != null) {
-            context.add( clazz );
-            getJavaPackage( clazz.getPackageName() ).getClasses().add( clazz );
+    private void registerJavaClass(JavaClass cls) {
+        if (cls != null) {
+            context.add( cls );
+            getJavaPackage( cls.getPackageName() ).getClasses().add( cls );
         }
-        for( JavaClass innerClazz : clazz.getNestedClasses()) {
-            registerJavaClass( innerClazz );
+        for( JavaClass innerCls : cls.getNestedClasses()) {
+            registerJavaClass( innerCls );
         }
     }
 

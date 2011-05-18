@@ -92,12 +92,12 @@ public abstract class AbstractBaseMethod
 
     public List<DocletTag> getTagsByName( String name, boolean inherited )
     {
-        JavaClass clazz = getParentClass();
+        JavaClass cls = getParentClass();
         List<Type> types = new LinkedList<Type>();
         for (JavaParameter parameter : getParameters()) {
             types.add(parameter.getType());
         }
-        List<JavaMethod> methods = clazz.getMethodsBySignature(getName(), types, true);
+        List<JavaMethod> methods = cls.getMethodsBySignature(getName(), types, true);
     
         List<DocletTag> result = new LinkedList<DocletTag>();
         for (JavaMethod method : methods) {

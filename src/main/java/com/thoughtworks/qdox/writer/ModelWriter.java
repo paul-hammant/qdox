@@ -34,7 +34,7 @@ public interface ModelWriter
     
     public ModelWriter writePackage( JavaPackage pckg );
 
-    public ModelWriter writeClass( JavaClass clazz );
+    public ModelWriter writeClass( JavaClass cls );
     
     public ModelWriter writeField( JavaField field );
     

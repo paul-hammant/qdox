@@ -60,8 +60,8 @@ public class DefaultModelWriter implements ModelWriter
 
         // classes
         for(ListIterator<JavaClass> iter = source.getClasses().listIterator();iter.hasNext();) {
-            JavaClass clazz = iter.next();
-            writeClass( clazz );
+            JavaClass cls = iter.next();
+            writeClass( cls );
             if (iter.hasNext()) { 
                 buffer.newline(); 
             }
@@ -81,32 +81,32 @@ public class DefaultModelWriter implements ModelWriter
         return this;
     }
     
-    public ModelWriter writeClass( JavaClass clazz )
+    public ModelWriter writeClass( JavaClass cls )
     {
-        commentHeader( clazz );
+        commentHeader( cls );
         
-        writeAccessibilityModifier(clazz.getModifiers());
-        writeNonAccessibilityModifiers(clazz.getModifiers());
+        writeAccessibilityModifier(cls.getModifiers());
+        writeNonAccessibilityModifiers(cls.getModifiers());
 
-        buffer.write(clazz.isEnum() ? "enum " : 
-            clazz.isInterface() ? "interface " : 
-                clazz.isAnnotation() ? "@interface " : "class ");
-        buffer.write(clazz.getName());
+        buffer.write(cls.isEnum() ? "enum " : 
+            cls.isInterface() ? "interface " : 
+                cls.isAnnotation() ? "@interface " : "class ");
+        buffer.write(cls.getName());
 
         // subclass
-        if (clazz.getSuperClass() != null) {
-            String className = clazz.getSuperClass().getValue();
+        if (cls.getSuperClass() != null) {
+            String className = cls.getSuperClass().getValue();
             if(!"java.lang.Object".equals(className) && !"java.lang.Enum".equals(className)) {
                 buffer.write(" extends ");
-                buffer.write(clazz.getSuperClass().getValue());
+                buffer.write(cls.getSuperClass().getValue());
             }
         }
 
         // implements
-        if (clazz.getImplements().size() > 0) {
-            buffer.write(clazz.isInterface() ? " extends " : " implements ");
+        if (cls.getImplements().size() > 0) {
+            buffer.write(cls.isInterface() ? " extends " : " implements ");
             
-            for (ListIterator<Type> iter = clazz.getImplements().listIterator(); iter.hasNext();) {
+            for (ListIterator<Type> iter = cls.getImplements().listIterator(); iter.hasNext();) {
                 buffer.write(iter.next().getValue());
                 if ( iter.hasNext() ) {
                     buffer.write(", ");
@@ -119,21 +119,21 @@ public class DefaultModelWriter implements ModelWriter
         buffer.indent();
 
         // fields
-        for (JavaField javaField : clazz.getFields()) {
+        for (JavaField javaField : cls.getFields()) {
             buffer.newline();
             writeField(javaField);
         }
 
         // methods
-        for (JavaMethod javaMethod : clazz.getMethods()) {
+        for (JavaMethod javaMethod : cls.getMethods()) {
             buffer.newline();
             writeMethod(javaMethod);
         }
 
         // inner-classes
-        for (JavaClass javaClass : clazz.getNestedClasses()) {
+        for (JavaClass innerCls : cls.getNestedClasses()) {
             buffer.newline();
-            writeClass(javaClass);
+            writeClass(innerCls);
         }
 
         buffer.deindent();

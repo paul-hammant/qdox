@@ -318,9 +318,9 @@ public class DefaultJavaSource implements Serializable, JavaSource {
     public JavaClass getNestedClassByName(String name) {
         JavaClass result = null;
         
-        for (JavaClass candidateClass : classes) {
-            if (candidateClass.getName().equals(name)) {
-                result = candidateClass;
+        for (JavaClass candidateCls : classes) {
+            if (candidateCls.getName().equals(name)) {
+                result = candidateCls;
                 break;
             }
         }
@@ -331,33 +331,33 @@ public class DefaultJavaSource implements Serializable, JavaSource {
     {
         JavaClass result = null;
         
-        for ( JavaClass candidateClass : classes )
+        for ( JavaClass candidateCls : classes )
         {
-            result = getClassByName( candidateClass, name );
+            result = getClassByName( candidateCls, name );
             if ( result != null ) 
             {
-                result = candidateClass;
+                result = candidateCls;
                 break;
             }
         }
         return result;
     }
     
-    private JavaClass getClassByName(JavaClass clss, String name) 
+    private JavaClass getClassByName(JavaClass cls, String name) 
     {
         JavaClass result = null;
-        if ( clss.getFullyQualifiedName().equals( name ) ) 
+        if ( cls.getFullyQualifiedName().equals( name ) ) 
         {
-            result = clss;
+            result = cls;
         }
-        else if ( clss.getName().equals(name)) 
+        else if ( cls.getName().equals(name)) 
         {
-            result = clss;
+            result = cls;
         }
         else {
-            for ( JavaClass nestedClss : clss.getClasses() )
+            for ( JavaClass innerCls : cls.getClasses() )
             {
-                result = getClassByName( nestedClss, name );
+                result = getClassByName( innerCls, name );
                 if ( result != null ) 
                 {
                     break;

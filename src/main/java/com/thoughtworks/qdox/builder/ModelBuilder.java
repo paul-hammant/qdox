@@ -110,20 +110,20 @@ public class ModelBuilder implements Builder {
 
         // basic details
         newClass.setName(def.getName());
-        newClass.setInterface(ClassDef.INTERFACE.equals(def.type));
-        newClass.setEnum(ClassDef.ENUM.equals(def.type));
-        newClass.setAnnotation(ClassDef.ANNOTATION_TYPE.equals(def.type));
+        newClass.setInterface(ClassDef.INTERFACE.equals(def.getType()));
+        newClass.setEnum(ClassDef.ENUM.equals(def.getType()));
+        newClass.setAnnotation(ClassDef.ANNOTATION_TYPE.equals(def.getType()));
 
         // superclass
         if (newClass.isInterface()) {
             newClass.setSuperClass(null);
         } else if (!newClass.isEnum()) {
-            newClass.setSuperClass(def.extendz.size() > 0 ? createType((TypeDef) def.extendz.toArray()[0], 0) : null);
+            newClass.setSuperClass(def.getExtends().size() > 0 ? createType((TypeDef) def.getExtends().toArray()[0], 0) : null);
         }
 
         // implements
         {
-            Set<TypeDef> implementSet = newClass.isInterface() ? def.extendz : def.implementz;
+            Set<TypeDef> implementSet = newClass.isInterface() ? def.getExtends() : def.getImplements();
             List<Type> implementz = new LinkedList<Type>();
             for(TypeDef implementType:implementSet) {
                 implementz.add(createType(implementType, 0));
@@ -133,13 +133,13 @@ public class ModelBuilder implements Builder {
 
         // modifiers
         {
-            newClass.setModifiers(new LinkedList<String>(def.modifiers));
+            newClass.setModifiers(new LinkedList<String>(def.getModifiers()));
         }
         
         // typeParameters
-        if (def.typeParams != null) {
+        if (def.getTypeParameters() != null) {
             List<TypeVariable> typeParams = new LinkedList<TypeVariable>();
-            for(TypeVariableDef typeVariableDef : def.typeParams) {
+            for(TypeVariableDef typeVariableDef : def.getTypeParameters()) {
                 typeParams.add(createTypeVariable(typeVariableDef));
             }
             newClass.setTypeParameters(typeParams);

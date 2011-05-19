@@ -59,24 +59,24 @@ public class BinaryClassParser
             Class<?>[] interfaces = clazz.getInterfaces();
             if (clazz.isInterface()) {
                 // It's an interface
-                classDef.type = ClassDef.INTERFACE;
+                classDef.setType( ClassDef.INTERFACE );
                 for (int i = 0; i < interfaces.length; i++) {
                     Class<?> anInterface = interfaces[i];
-                    classDef.extendz.add(new TypeDef(anInterface.getName()));
+                    classDef.getExtends().add(new TypeDef(anInterface.getName()));
                 }
             } else {
                 // It's a class
                 for (int i = 0; i < interfaces.length; i++) {
                     Class<?> anInterface = interfaces[i];
-                    classDef.implementz.add(new TypeDef(anInterface.getName()));
+                    classDef.getImplements().add(new TypeDef(anInterface.getName()));
                 }
                 Class<?> superclass = clazz.getSuperclass();
                 if (superclass != null) {
-                    classDef.extendz.add(new TypeDef(superclass.getName()));
+                    classDef.getExtends().add(new TypeDef(superclass.getName()));
                 }
             }
 
-            addModifiers(classDef.modifiers, clazz.getModifiers());
+            addModifiers(classDef.getModifiers(), clazz.getModifiers());
 
             binaryBuilder.beginClass(classDef);
 

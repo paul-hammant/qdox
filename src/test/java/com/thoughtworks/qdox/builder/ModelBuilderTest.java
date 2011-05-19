@@ -67,7 +67,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.type = ClassDef.INTERFACE;
+        cls2.setType( ClassDef.INTERFACE );
         builder.beginClass(cls2);
         builder.endClass();
 
@@ -83,7 +83,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.type = ClassDef.ENUM;
+        cls2.setType( ClassDef.ENUM );
         builder.beginClass(cls2);
         builder.endClass();
 
@@ -95,7 +95,7 @@ public class ModelBuilderTest extends TestCase {
 
     public void testAnnotationType() throws Exception {
         ClassDef cls = new ClassDef();
-        cls.type = ClassDef.ANNOTATION_TYPE;
+        cls.setType( ClassDef.ANNOTATION_TYPE );
         builder.beginClass(cls);
         builder.endClass();
 
@@ -110,7 +110,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.extendz.add(new TypeDef("Another"));
+        cls2.getExtends().add(new TypeDef("Another"));
         builder.beginClass(cls2);
         builder.endClass();
         builder.addImport("com.thoughtworks.*");
@@ -138,13 +138,13 @@ public class ModelBuilderTest extends TestCase {
 
     public void testInterfaceExtends() throws Exception {
         ClassDef cls = new ClassDef();
-        cls.type = ClassDef.INTERFACE;
+        cls.setType( ClassDef.INTERFACE );
         builder.beginClass(cls);
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.type = ClassDef.INTERFACE;
-        cls2.extendz.add(new TypeDef("Another"));
+        cls2.setType( ClassDef.INTERFACE );
+        cls2.getExtends().add(new TypeDef("Another"));
         builder.beginClass(cls2);
         builder.endClass();
 
@@ -160,10 +160,10 @@ public class ModelBuilderTest extends TestCase {
 
     public void testInterfaceExtendsMultiple() throws Exception {
         ClassDef cls = new ClassDef();
-        cls.type = ClassDef.INTERFACE;
-        cls.extendz.add(new TypeDef("Another"));
-        cls.extendz.add(new TypeDef("java.io.Serializable"));
-        cls.extendz.add(new TypeDef("BottleOpener"));
+        cls.setType( ClassDef.INTERFACE );
+        cls.getExtends().add(new TypeDef("Another"));
+        cls.getExtends().add(new TypeDef("java.io.Serializable"));
+        cls.getExtends().add(new TypeDef("BottleOpener"));
         builder.beginClass(cls);
         builder.endClass();
 
@@ -185,7 +185,7 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.implementz.add(new TypeDef("SomeInterface"));
+        cls2.getImplements().add(new TypeDef("SomeInterface"));
         builder.beginClass(cls2);
         builder.endClass();
 
@@ -202,8 +202,8 @@ public class ModelBuilderTest extends TestCase {
 
     public void testClassImplementsMultiple() throws Exception {
         ClassDef cls = new ClassDef();
-        cls.implementz.add(new TypeDef("SomeInterface"));
-        cls.implementz.add(new TypeDef("XX"));
+        cls.getImplements().add(new TypeDef("SomeInterface"));
+        cls.getImplements().add(new TypeDef("XX"));
         builder.beginClass(cls);
         builder.endClass();
 
@@ -218,9 +218,9 @@ public class ModelBuilderTest extends TestCase {
 
     public void testClassExtendsAndImplements() throws Exception {
         ClassDef cls = new ClassDef();
-        cls.extendz.add(new TypeDef("SubClass"));
-        cls.implementz.add(new TypeDef("SomeInterface"));
-        cls.implementz.add(new TypeDef("XX"));
+        cls.getExtends().add(new TypeDef("SubClass"));
+        cls.getImplements().add(new TypeDef("SomeInterface"));
+        cls.getImplements().add(new TypeDef("XX"));
         builder.beginClass(cls);
         builder.endClass();
 
@@ -240,8 +240,8 @@ public class ModelBuilderTest extends TestCase {
         builder.endClass();
 
         ClassDef cls2 = new ClassDef();
-        cls2.modifiers.add("public");
-        cls2.modifiers.add("final");
+        cls2.getModifiers().add("public");
+        cls2.getModifiers().add("final");
         builder.beginClass(cls2);
         builder.endClass();
 

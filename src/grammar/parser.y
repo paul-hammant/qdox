@@ -376,9 +376,9 @@ ClassDeclaration: NormalClassDeclaration
 NormalClassDeclaration: 
     AnyModifiers_opt /* =ClassModifiers_opt */ classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
         cls.lineNumber = line;
-        cls.modifiers.addAll(modifiers); modifiers.clear(); 
+        cls.getModifiers().addAll(modifiers); modifiers.clear(); 
         cls.setName( $3 );
-        cls.typeParams = typeParams;
+        cls.setTypeParameters(typeParams);
         builder.beginClass(cls); 
         cls = new ClassDef(); 
     }
@@ -396,7 +396,7 @@ TypeParameters_opt:
 
 TypeParameters: LESSTHAN 
                 { 
-                  typeParams = new LinkedList(); 
+                  typeParams = new LinkedList<TypeVariableDef>(); 
                 } 
                 TypeParameterList GREATERTHAN;
 
@@ -409,8 +409,8 @@ Interfaces_opt:
               
 Interfaces:	IMPLEMENTS InterfaceTypeList;
 
-InterfaceTypeList: InterfaceType { cls.implementz.add($1); }
-                 | InterfaceTypeList COMMA InterfaceType { cls.implementz.add($3); };
+InterfaceTypeList: InterfaceType { cls.getImplements().add($1); }
+                 | InterfaceTypeList COMMA InterfaceType { cls.getImplements().add($3); };
 
 // See ClassOrInterfaceType why like this
 InterfaceType: ClassOrInterfaceType;
@@ -441,15 +441,15 @@ ClassMemberDeclaration:	FieldDeclaration
                       |	SEMI;
 
 classorinterface: 
-    CLASS { cls.type = ClassDef.CLASS; } | 
-    INTERFACE { cls.type = ClassDef.INTERFACE; } |
-    ANNOINTERFACE { cls.type = ClassDef.ANNOTATION_TYPE; };
+    CLASS { cls.setType(ClassDef.CLASS); } | 
+    INTERFACE { cls.setType(ClassDef.INTERFACE); } |
+    ANNOINTERFACE { cls.setType(ClassDef.ANNOTATION_TYPE); };
 
 opt_extends: | EXTENDS extendslist;
 
 extendslist:
-    ClassOrInterfaceType { cls.extendz.add($1); } |
-    extendslist COMMA ClassOrInterfaceType { cls.extendz.add($3); };
+    ClassOrInterfaceType { cls.getExtends().add($1); } |
+    extendslist COMMA ClassOrInterfaceType { cls.getExtends().add($3); };
 
 static_block:
     AnyModifiers_opt CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
@@ -602,9 +602,9 @@ constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOP
 EnumDeclaration: AnyModifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Interfaces_opt 
                  { 
                    cls.lineNumber = line;
-                   cls.modifiers.addAll(modifiers);
+                   cls.getModifiers().addAll(modifiers);
                    cls.setName( $3 );
-                   cls.type = ClassDef.ENUM;
+                   cls.setType(ClassDef.ENUM);
                    builder.beginClass(cls);
                    cls = new ClassDef();
                    fieldType = new TypeDef($3, 0);

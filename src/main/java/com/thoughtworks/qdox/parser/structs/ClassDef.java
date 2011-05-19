@@ -20,6 +20,7 @@ package com.thoughtworks.qdox.parser.structs;
  */
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -32,11 +33,11 @@ public class ClassDef extends LocatedDef {
     public static final String ANNOTATION_TYPE = "@interface";
     
     private String name = "";
-    public Set<String> modifiers = new HashSet<String>();
-    public List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>();
-    public Set<TypeDef> extendz = new HashSet<TypeDef>();
-    public Set<TypeDef> implementz = new HashSet<TypeDef>();
-    public String type = CLASS;
+    private Set<String> modifiers = new LinkedHashSet<String>();
+    private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>();
+    private Set<TypeDef> extendz = new HashSet<TypeDef>();
+    private Set<TypeDef> implementz = new HashSet<TypeDef>();
+    private String type = CLASS;
     
     public ClassDef()
     {
@@ -62,39 +63,71 @@ public class ClassDef extends LocatedDef {
     {
         return name;
     }
-    
-    @Override
-    public boolean equals(Object obj) {
-        ClassDef classDef = (ClassDef) obj;
-        return classDef.getName().equals(getName())
-                && classDef.type == type
-                && classDef.typeParams.equals( typeParams )
-                && classDef.modifiers.equals(modifiers)
-                && classDef.extendz.equals(extendz)
-                && classDef.implementz.equals(implementz);
-    }
-
-    @Override
-    public int hashCode() {
-        return getName().hashCode() + type.hashCode() + typeParams.hashCode()+
-                modifiers.hashCode() + extendz.hashCode() +
-                implementz.hashCode();
-    }
 
     @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
-        result.append(modifiers);
+        result.append(getModifiers());
         result.append(' ');
-        result.append(type);
+        result.append(getType());
         result.append(' ');
         result.append(getName());
         //typeParams
         result.append(" extends ");
-        result.append(extendz);
+        result.append(getExtends());
         result.append(" implements ");
-        result.append(implementz);
+        result.append(getImplements());
         return result.toString();
+    }
+
+    public void setModifiers( Set<String> modifiers )
+    {
+        this.modifiers = modifiers;
+    }
+
+    public Set<String> getModifiers()
+    {
+        return modifiers;
+    }
+
+    public void setType( String type )
+    {
+        this.type = type;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setImplements( Set<TypeDef> implementz )
+    {
+        this.implementz = implementz;
+    }
+
+    public Set<TypeDef> getImplements()
+    {
+        return implementz;
+    }
+
+    public void setExtends( Set<TypeDef> extendz )
+    {
+        this.extendz = extendz;
+    }
+
+    public Set<TypeDef> getExtends()
+    {
+        return extendz;
+    }
+
+    public void setTypeParameters( List<TypeVariableDef> typeParams )
+    {
+        this.typeParams = typeParams;
+    }
+
+    public List<TypeVariableDef> getTypeParameters()
+    {
+        return typeParams;
     }
 
 }

@@ -335,9 +335,11 @@ public class GenericsTest extends TestCase {
         "}";
         String source3="public interface SubjectService extends RemoteService, SubjectDao {\r\n" + 
         "}";
+        String source4="public interface RemoteService {}";
         builder.addSource( new StringReader( source1 ) );
         builder.addSource( new StringReader( source2 ) );
         builder.addSource( new StringReader( source3 ) );
+        builder.addSource( new StringReader( source4 ) );
         
         JavaClass clazz = builder.getClassByName( "SubjectService" );
         JavaMethod method = clazz.getMethods( true ).get(0);

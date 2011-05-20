@@ -35,8 +35,8 @@ public class ClassDef extends LocatedDef {
     private String name = "";
     private Set<String> modifiers = new LinkedHashSet<String>();
     private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>();
-    private Set<TypeDef> extendz = new HashSet<TypeDef>();
-    private Set<TypeDef> implementz = new HashSet<TypeDef>();
+    private Set<TypeDef> extendz = new LinkedHashSet<TypeDef>();
+    private Set<TypeDef> implementz = new LinkedHashSet<TypeDef>();
     private String type = CLASS;
     
     public ClassDef()

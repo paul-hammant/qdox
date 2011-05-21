@@ -103,7 +103,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 
         JavaPackage that = (JavaPackage) o;
 
-        return ( !name.equals( that.getName() ) );
+        return ( name.equals( that.getName() ) );
     }
 
     public int hashCode() {

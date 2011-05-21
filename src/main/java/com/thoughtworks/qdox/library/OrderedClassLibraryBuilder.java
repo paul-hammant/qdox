@@ -27,6 +27,7 @@ import java.net.URL;
 
 import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
  * This library resolves JavaClasses in the order in which class sources are added.
@@ -48,6 +49,8 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     private ErrorHandler errorHandler;
     
     private ModelBuilderFactory modelBuilderFactory;
+    
+    private ModelWriterFactory modelWriterFactory;
     
     /**
      * Default constructor which sets the root classLibrary to ClassNameLibrary.
@@ -79,6 +82,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
         classLoaderLibrary.addClassLoader( classLoader );
         classLoaderLibrary.setModelBuilderFactory( modelBuilderFactory );
+        classLoaderLibrary.setModelWriterFactory( modelWriterFactory );
         classLoaderLibrary.setDebugLexer( debugLexer );
         classLoaderLibrary.setDebugParser( debugParser );
         classLoaderLibrary.setErrorHandler( errorHandler );
@@ -94,6 +98,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
         classLoaderLibrary.addDefaultLoader();
         classLoaderLibrary.setModelBuilderFactory( modelBuilderFactory );
+        classLoaderLibrary.setModelWriterFactory( modelWriterFactory );
         return this;
     }
 
@@ -167,6 +172,12 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         this.modelBuilderFactory = modelBuilderFactory;
         return this;
     }
+    
+    public ClassLibraryBuilder setModelWriterFactory( ModelWriterFactory modelWriterFactory )
+    {
+        this.modelWriterFactory = modelWriterFactory;
+        return this;
+    }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#getClassLibrary()
@@ -218,6 +229,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     
     private void prepareSourceLibrary( SourceLibrary sourceLibrary ) {
         sourceLibrary.setModelBuilderFactory( modelBuilderFactory );
+        sourceLibrary.setModelWriterFactory( modelWriterFactory );
         sourceLibrary.setDebugLexer( debugLexer );
         sourceLibrary.setDebugParser( debugParser );
         sourceLibrary.setEncoding( encoding );

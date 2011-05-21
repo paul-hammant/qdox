@@ -28,6 +28,7 @@ import java.net.URL;
 
 import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
  * This builder helps to construct a library. 
@@ -152,6 +153,8 @@ public interface ClassLibraryBuilder extends Serializable
      */
     public ClassLibraryBuilder setModelBuilderFactory( ModelBuilderFactory factory );
 
+    public ClassLibraryBuilder setModelWriterFactory( ModelWriterFactory factory );
+    
     /**
      * Get the library based on the strategy of the implementation
      * 

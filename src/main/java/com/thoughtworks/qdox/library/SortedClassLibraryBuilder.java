@@ -27,6 +27,7 @@ import java.net.URL;
 
 import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
  * @author Robert Scholte
@@ -133,6 +134,16 @@ public class SortedClassLibraryBuilder
         classLoaderLibrary.setModelBuilderFactory( factory );
         sourceFolderLibrary.setModelBuilderFactory( factory );
         sourceLibrary.setModelBuilderFactory( factory );
+        return this;
+    }
+    
+    
+    public ClassLibraryBuilder setModelWriterFactory( ModelWriterFactory modelWriterFactory )
+    {
+        classNameLibrary.setModelWriterFactory( modelWriterFactory );
+        classLoaderLibrary.setModelWriterFactory( modelWriterFactory );
+        sourceFolderLibrary.setModelWriterFactory( modelWriterFactory );
+        sourceLibrary.setModelWriterFactory( modelWriterFactory );
         return this;
     }
 

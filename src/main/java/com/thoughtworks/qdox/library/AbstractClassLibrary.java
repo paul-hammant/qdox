@@ -32,6 +32,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
  * A ClassLibrary can be compared with a java classloader. 
@@ -49,8 +50,10 @@ public abstract class AbstractClassLibrary
     
     private ModelBuilderFactory modelBuilderFactory;
 
-    private JavaClassContext context = new JavaClassContext();
+    private ModelWriterFactory modelWriterFactory;
     
+    private JavaClassContext context = new JavaClassContext();
+
     /**
      * constructor for root ClassLibrary
      */
@@ -277,6 +280,12 @@ public abstract class AbstractClassLibrary
         this.modelBuilderFactory = factory;
     }
     
+    public final void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
+    {
+        this.modelWriterFactory = modelWriterFactory;
+    }
+
+    
     /**
      * If there's a modelBuilderFactory available, ask it for a new instance.
      * Otherwise, return a default ModelBuilder.
@@ -284,13 +293,19 @@ public abstract class AbstractClassLibrary
      * 
      * @return a new instance of a ModelBuilder, never <code>null</code>
      */
-    protected ModelBuilder getModelBuilder() {
-        if ( modelBuilderFactory != null) {
-            return modelBuilderFactory.newInstance( this ); 
+    protected ModelBuilder getModelBuilder()
+    {
+        ModelBuilder result;
+        if ( modelBuilderFactory != null )
+        {
+            result = modelBuilderFactory.newInstance( this );
         }
-        else {
-            return new ModelBuilder( this, new DefaultDocletTagFactory());
+        else
+        {
+            result = new ModelBuilder( this, new DefaultDocletTagFactory() );
         }
+        result.setModelWriterFactory( modelWriterFactory );
+        return result;
     }
     
     protected ModelBuilder getModelBuilder( URL url )

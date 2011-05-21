@@ -1,6 +1,6 @@
 package com.thoughtworks.qdox.builder;
 
-import java.util.Collections;
+//import java.util.Collections;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -169,12 +169,10 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        // sorted
-        Collections.sort(source.getClasses().get(0).getImplements());
         assertEquals(3, source.getClasses().get(0).getImplements().size());
         assertEquals("Another", source.getClasses().get(0).getImplements().get(0).getValue());
-        assertEquals("BottleOpener", source.getClasses().get(0).getImplements().get(1).getValue());
-        assertEquals("java.io.Serializable", source.getClasses().get(0).getImplements().get(2).getValue());
+        assertEquals("java.io.Serializable", source.getClasses().get(0).getImplements().get(1).getValue());
+        assertEquals("BottleOpener", source.getClasses().get(0).getImplements().get(2).getValue());
 
         assertNull(source.getClasses().get(0).getSuperClass());
     }
@@ -211,7 +209,6 @@ public class ModelBuilderTest extends TestCase {
 
         assertEquals(2, source.getClasses().get(0).getImplements().size());
 
-        Collections.sort(source.getClasses().get(0).getImplements());
         assertEquals("SomeInterface", source.getClasses().get(0).getImplements().get(0).getValue());
         assertEquals("XX", source.getClasses().get(0).getImplements().get(1).getValue());
     }
@@ -228,7 +225,6 @@ public class ModelBuilderTest extends TestCase {
 
         assertEquals(2, source.getClasses().get(0).getImplements().size());
 
-        Collections.sort(source.getClasses().get(0).getImplements());
         assertEquals("SomeInterface", source.getClasses().get(0).getImplements().get(0).getValue());
         assertEquals("XX", source.getClasses().get(0).getImplements().get(1).getValue());
 
@@ -250,11 +246,9 @@ public class ModelBuilderTest extends TestCase {
         assertEquals(0, source.getClasses().get(0).getModifiers().size());
         assertEquals(2, source.getClasses().get(1).getModifiers().size());
 
-        // sorted
         List<String> modifiers = source.getClasses().get(1).getModifiers();
-        Collections.sort(modifiers);
-        assertEquals("final", modifiers.get(0));
-        assertEquals("public", modifiers.get(1));
+        assertEquals("public", modifiers.get(0));
+        assertEquals("final", modifiers.get(1));
     }
 
     public void testAddMethodsToCorrectClass() throws Exception {
@@ -455,8 +449,6 @@ public class ModelBuilderTest extends TestCase {
         JavaSource source = builder.getSource();
         JavaMethod result = source.getClasses().get(0).getMethods().get(0);
         assertEquals(2, result.getExceptions().size());
-        // sorted
-        Collections.sort( result.getExceptions() );
         assertEquals("RuntimeException", result.getExceptions().get(0).getValue());
         assertEquals("java.io.IOException", result.getExceptions().get(1).getValue());
     }
@@ -476,11 +468,10 @@ public class ModelBuilderTest extends TestCase {
         JavaSource source = builder.getSource();
         JavaMethod result = source.getClasses().get(0).getMethods().get(0);
         assertEquals(3, result.getModifiers().size());
-        // sorted
+
         List<String> modifiers = result.getModifiers();
-        Collections.sort(modifiers);
-        assertEquals("final", modifiers.get(0));
-        assertEquals("public", modifiers.get(1));
+        assertEquals("public", modifiers.get(0));
+        assertEquals("final", modifiers.get(1));
         assertEquals("synchronized", modifiers.get(2));
     }
 
@@ -516,9 +507,8 @@ public class ModelBuilderTest extends TestCase {
         JavaField result = source.getClasses().get(0).getFields().get(0);
         assertNotNull(result);
         assertNotNull(result.getModifiers());
-        Collections.sort(result.getModifiers());
-        assertEquals("blah", result.getModifiers().get(0));
-        assertEquals("blah2", result.getModifiers().get(1));
+        assertEquals("blah2", result.getModifiers().get(0));
+        assertEquals("blah", result.getModifiers().get(1));
     }
 
     public void testFieldNoArray() throws Exception {

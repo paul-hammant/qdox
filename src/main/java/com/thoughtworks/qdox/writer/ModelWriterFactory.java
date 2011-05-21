@@ -19,7 +19,15 @@ package com.thoughtworks.qdox.writer;
  * under the License.
  */
 
+/**
+ * Factory for constructing a new {@link ModelWriter} 
+ */
 public interface ModelWriterFactory
 {
-    public ModelWriter newInstance();
+    /**
+     * When called, a new instance must be returned.
+     * 
+     * @return a new ModelWriter
+     */
+    ModelWriter newInstance();
 }

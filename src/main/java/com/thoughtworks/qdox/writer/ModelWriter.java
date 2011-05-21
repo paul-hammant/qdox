@@ -28,22 +28,148 @@ import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 
+/**
+ * Interface for a custom ModelWriter.
+ * 
+ * QDox doesn't keep any formatting information of the original source file (if it's there).
+ * With a ModelWriter you can specify the way elements look if you write them to any output. 
+ * 
+ * 
+ * @author Robert Scholte
+ * @since 2.0
+ */
 public interface ModelWriter
 {
-    public ModelWriter writeSource( JavaSource source );
+    /**
+     * Write the complete source file
+     * 
+     * A standard source writer should write:
+     * <ul>
+     *  <li>the package</li>
+     *  <li>the imports</li>
+     *  <li>the classes</li>
+     * </ul> 
+     * 
+     * @param src the source
+     * @return itself
+     */
+    ModelWriter writeSource( JavaSource src );
     
-    public ModelWriter writePackage( JavaPackage pckg );
+    /**
+     * Write the java package
+     * 
+     * A standard package writer should write:
+     * <ul>
+     *   <li>the javadoc</li>
+     *   <li>the annotations</li>
+     *   <li>the package signature</li>
+     * </ul>
+     * 
+     * @param pkg the package
+     * @return itself
+     */
+    ModelWriter writePackage( JavaPackage pkg );
 
-    public ModelWriter writeClass( JavaClass cls );
+    /**
+     * Write the java class
+     * 
+     * A standard class writer should write:
+     * <ul>
+     *   <li>the javadoc</li>
+     *   <li>the annotations</li>
+     *   <li>the class signature, containing:
+     *     <ul>
+     *       <li>the fields</li>
+     *       <li>the constructors</li>
+     *       <li>the methods</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * 
+     * @param cls the class
+     * @return itself
+     */
+    ModelWriter writeClass( JavaClass cls );
     
-    public ModelWriter writeField( JavaField field );
+    /**
+     * Write the java field
+     * 
+     * A standard field writer should write:
+     * <ul>
+     *   <li>the javadoc</li>
+     *   <li>the annotations</li>
+     *   <li>the field signature</li>
+     * </ul>
+     * 
+     * @param fld the field
+     * @return itself
+     */
+    ModelWriter writeField( JavaField fld );
     
-    public ModelWriter writeAnnotation( JavaAnnotation annotation );
+    /**
+     * Write the java annotation
+     * 
+     * A standard annotation writer should write:
+     * <ul>
+     *   <li>the annotation signature</li>
+     * </ul>
+     * 
+     * @param ann the annotation 
+     * @return itself
+     */
+    ModelWriter writeAnnotation( JavaAnnotation ann );
 
-    public ModelWriter writeMethod( JavaMethod method );
+    /**
+     * Write the java method
+     * 
+     * A standard method writer should write:
+     * <ul>
+     *   <li>the javadoc</li>
+     *   <li>the annotations</li>
+     *   <li>the method signature, containing:
+     *     <ul>
+     *       <li>the parameters</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * 
+     * @param mth the method
+     * @return itself
+     */
+    ModelWriter writeMethod( JavaMethod mth );
 
-    public ModelWriter writeParameter( JavaParameter parameter );
+    /**
+     * Write the java parameter
+     * 
+     * A standard parameter writer should write:
+     * <ul>
+     *   <li>the javadoc</li>
+     *   <li>the annotations</li>
+     *   <li>the parameter signature</li>
+     * </ul>
+     * 
+     * @param prm the parameter
+     * @return itself
+     */
+    ModelWriter writeParameter( JavaParameter prm );
 
-    public ModelWriter writeConstructor( JavaConstructor defaultJavaConstructor );
+    /**
+     * Write the java constructor.
+     * 
+     * A standard constructor writer should write:
+     * <ul>
+     *   <li>the javadoc</li>
+     *   <li>the annotations</li>
+     *   <li>the constructor signature, containing:
+     *     <ul>
+     *       <li>the parameters</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * 
+     * @param cns the constructor
+     * @return itself
+     */
+    ModelWriter writeConstructor( JavaConstructor cns );
 
 }

@@ -87,11 +87,7 @@ public class DefaultJavaConstructor
         {
             return true;
         }
-        if ( obj == null )
-        {
-            return false;
-        }
-        if ( !( obj instanceof JavaConstructor ) )
+        if ( obj == null || !( obj instanceof JavaConstructor ) )
         {
             return false;
         }

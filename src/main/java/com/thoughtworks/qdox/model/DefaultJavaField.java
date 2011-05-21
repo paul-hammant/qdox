@@ -134,4 +134,35 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
     	result.append( getDeclaringClass().getFullyQualifiedName() + "." +getName() );
     	return result.toString();
     }
+    
+    /**
+     * Compares this Field against the specified object. 
+     * Returns <code>true</code> if the objects are the same. 
+     * Two Field objects are the same if they were declared by the same class and have the same name and type.  
+     */
+    @Override
+    public boolean equals( Object obj )
+    {
+        if(this == obj) 
+        {
+            return true;
+        }
+        if (obj == null || !(obj instanceof JavaField) )
+        {
+            return false;
+        }
+        JavaField fld = (JavaField) obj;
+        if ( fld.getDeclaringClass().equals( this.getDeclaringClass() ) ) 
+        {
+            return false;
+        }
+        //Don't see any reason to compare the Type. Otherwise it's already invalid
+        return fld.getName().equals( this.getName() );
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return getDeclaringClass().hashCode() * getName().hashCode();
+    }
 }

@@ -108,10 +108,19 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals( Object obj )
+    {
+        if ( this == obj )
+        {
+            return true;
+        }
+        if ( obj == null || !( obj instanceof JavaParameter ) )
+        {
+            return false;
+        }
         JavaParameter p = (JavaParameter) obj;
         // name isn't used in equality check.
-        return getType().equals(p.getType());
+        return getType().equals( p.getType() );
     }
 	
     @Override

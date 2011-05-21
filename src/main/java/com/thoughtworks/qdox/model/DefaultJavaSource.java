@@ -19,9 +19,7 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.io.File;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,7 +33,7 @@ import com.thoughtworks.qdox.writer.DefaultModelWriter;
 import com.thoughtworks.qdox.writer.ModelWriter;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
-public class DefaultJavaSource implements Serializable, JavaSource {
+public class DefaultJavaSource implements JavaSource, Serializable {
 
     private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>();
 
@@ -54,12 +52,17 @@ public class DefaultJavaSource implements Serializable, JavaSource {
     private final ClassLibrary classLibrary;
     private ModelWriterFactory modelWriterFactory;
     
-    private JavaPackage packge;
+    private JavaPackage pkg;
     private List<String> imports = new LinkedList<String>();
     private List<JavaClass> classes = new LinkedList<JavaClass>();
     private Map<String, String> resolvedTypeCache = new HashMap<String, String>();
     private URL url;
 
+    /**
+     * Default constructor for the Default JavaSource 
+     * 
+     * @param classLibrary the classLibrary, should not be <code>null</code>
+     */
     public DefaultJavaSource( ClassLibrary classLibrary )
     {
         this.classLibrary = classLibrary;
@@ -79,33 +82,15 @@ public class DefaultJavaSource implements Serializable, JavaSource {
         return url;
     }
 
-    /**
-     * @deprecated use setURL
-     */
-    public void setFile(File file) {
-        try {
-            setURL(file.toURL());
-        } catch (MalformedURLException e) {
-            throw new IllegalStateException(e.getMessage());
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getFile()
-     */
-    public File getFile() {
-        return new File(url.getFile());
-    }
-
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaSource#getPackage()
      */
     public JavaPackage getPackage() {
-        return packge;
+        return pkg;
     }
 
-    public void setPackage(JavaPackage packge) {
-        this.packge = packge;
+    public void setPackage(JavaPackage pkg) {
+        this.pkg = pkg;
     }
 
     public void addImport(String imp) {
@@ -220,20 +205,16 @@ public class DefaultJavaSource implements Serializable, JavaSource {
                 break lookup;
             }
 
-            if(classLibrary != null) {
-                // check for a class in the same package
-                resolvedName = resolveFromLibrary( getClassNamePrefix() + nestedName );
-                
-                if(resolvedName != null) {
-                    break lookup;
-                }
-                
-                // try java.lang.*
-                resolvedName = resolveFromLibrary( "java.lang." + nestedName );
-
-                if(resolvedName != null) {
-                    break lookup;
-                }
+            // check for a class in the same package
+            resolvedName = resolveFromLibrary( getClassNamePrefix() + nestedName );
+            if(resolvedName != null) {
+                break lookup;
+            }
+            
+            // try java.lang.*
+            resolvedName = resolveFromLibrary( "java.lang." + nestedName );
+            if(resolvedName != null) {
+                break lookup;
             }
             
             // Check type-import-on-demand
@@ -276,27 +257,22 @@ public class DefaultJavaSource implements Serializable, JavaSource {
     }
     
     private String resolveFullyQualifiedType(String typeName) {
-        if (classLibrary != null) {
-            int indexOfLastDot = typeName.lastIndexOf('.');
+        int indexOfLastDot = typeName.lastIndexOf('.');
+        
+        if (indexOfLastDot >= 0) {
+            String root = typeName.substring(0,indexOfLastDot);
+            String leaf = typeName.substring(indexOfLastDot+1);
+            String resolvedTypeName = resolveFullyQualifiedType(root + "$" + leaf);
             
-            if (indexOfLastDot >= 0) {
-                String root = typeName.substring(0,indexOfLastDot);
-                String leaf = typeName.substring(indexOfLastDot+1);
-                String resolvedTypeName = resolveFullyQualifiedType(root + "$" + leaf);
-                
-                if(resolvedTypeName != null) {
-                    return resolvedTypeName;
-                }
-            }
-    
-            // check for fully-qualified class
-            if ( classLibrary != null) {
-                if( classLibrary.hasClassReference( typeName )) {
-                    return typeName;
-                }
+            if(resolvedTypeName != null) {
+                return resolvedTypeName;
             }
         }
 
+        if( classLibrary.hasClassReference( typeName )) 
+        {
+            return typeName;
+        }
         return null;
     }
 
@@ -380,7 +356,7 @@ public class DefaultJavaSource implements Serializable, JavaSource {
      */
     public String getPackageName()
     {
-        return (packge == null ? "" : packge.getName());
+        return (pkg == null ? "" : pkg.getName());
     }
     
     /**
@@ -393,10 +369,7 @@ public class DefaultJavaSource implements Serializable, JavaSource {
         this.modelWriterFactory = modelWriterFactory;
     }
     
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getModelWriter()
-     */
-    public ModelWriter getModelWriter()
+    private ModelWriter getModelWriter()
     {
         ModelWriter result; 
         if (modelWriterFactory != null) {

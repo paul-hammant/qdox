@@ -736,21 +736,21 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         return getFullyQualifiedName().hashCode();
     }
 
-    //ideally this shouldn't be required, but we must as long as Types can be created without classLibrary
+    // ideally this shouldn't be required, but we must as long as Types can be created without classLibrary
     @Override
-    public boolean equals(Object obj) {
-    	if(obj == null) {
-    		return false;
-    	}
-    	if(this == obj) {
-    		return true;
-    	}
-    	if(!(obj instanceof JavaClass)) {
-    		return false;
-    	}
-    	JavaClass clazz = (JavaClass) obj;
-    	return this.getFullyQualifiedName().equals(clazz.getFullyQualifiedName());
-    	
+    public boolean equals( Object obj )
+    {
+        if ( this == obj )
+        {
+            return true;
+        }
+        if ( this == null || !( obj instanceof JavaClass ) )
+        {
+            return false;
+        }
+        JavaClass clazz = (JavaClass) obj;
+        return this.getFullyQualifiedName().equals( clazz.getFullyQualifiedName() );
+
     }
 
     /* (non-Javadoc)

@@ -90,15 +90,20 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
         return retList;
     }
 
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof JavaPackage)) return false;
+    public boolean equals( Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+        if ( o == null || !( o instanceof JavaPackage ) )
+        {
+            return false;
+        }
 
         JavaPackage that = (JavaPackage) o;
 
-        if (!name.equals(that.getName())) return false;
-
-        return true;
+        return ( !name.equals( that.getName() ) );
     }
 
     public int hashCode() {

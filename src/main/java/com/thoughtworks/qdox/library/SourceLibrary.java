@@ -208,6 +208,7 @@ public class SourceLibrary
         }
         catch( ParseException pe )
         {
+            pe.setSourceInfo( url.toExternalForm() );
             if( errorHandler != null )
             {
                 errorHandler.handle( pe );

@@ -126,6 +126,7 @@ public class ClassLoaderLibrary
                 }
                 catch( ParseException pe )
                 {
+                    pe.setSourceInfo( resource );
                     if( errorHandler != null )
                     {
                         errorHandler.handle( pe );

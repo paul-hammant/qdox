@@ -22,31 +22,69 @@ package com.thoughtworks.qdox.parser;
 /**
  * Thrown to indicate an error during parsing
  */
-public class ParseException extends RuntimeException {
+public class ParseException
+    extends RuntimeException
+{
 
-    private int line;
-    private int column;
-    private String errorMessage;
+    /**
+     * The line where the ParserException occurred
+     */
+    private int line = -1;
 
-    public ParseException(String message, int line, int column) {
-        errorMessage = message + " @[" + line + "," + column + "] in ";
+    /**
+     * The column where the ParserException occurred
+     */
+    private int column = -1;
+
+    /**
+     * The sourceInfo of where the exception occurred
+     */
+    private String sourceInfo;
+
+    /**
+     * Default constructor for the ParseException
+     * 
+     * @param message the message
+     * @param line the line number
+     * @param column the column number
+     */
+    public ParseException( String message, int line, int column )
+    {
+        super( message );
         this.line = line;
         this.column = column;
     }
 
-    public int getLine() {
+    public int getLine()
+    {
         return line;
     }
 
-    public int getColumn() {
+    public int getColumn()
+    {
         return column;
     }
 
-    public void setSourceInfo(String sourceInfo) {
-        errorMessage += sourceInfo;
+    public void setSourceInfo( String sourceInfo )
+    {
+        sourceInfo += sourceInfo;
     }
 
-    public String getMessage() {
-        return errorMessage;
+    
+    public String getMessage()
+    {
+        StringBuffer buffer = new StringBuffer( super.getMessage() );
+        if ( line >=0 ) {
+            buffer.append( " @[" ).append( line );
+            
+            if( column >=0 ) {
+               buffer.append( "," + column );  
+            }
+            buffer.append( "]" );
+        }
+        if ( sourceInfo != null ) {
+            buffer.append( " in " ).append( sourceInfo );
+        }
+        return buffer.toString();
     }
 }

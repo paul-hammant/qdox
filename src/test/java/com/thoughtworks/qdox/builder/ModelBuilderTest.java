@@ -1,18 +1,15 @@
 package com.thoughtworks.qdox.builder;
 
-//import java.util.Collections;
 import java.util.List;
 
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.library.ClassNameLibrary;
 import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
-import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
@@ -804,33 +801,12 @@ public class ModelBuilderTest extends TestCase {
         assertEquals("org.apache.*", result.getImports().get(2));
     }
 
-    public void testModelHashCodes() {
-
-        ClassDef classDef = new ClassDef("hello");
-        assertTrue(classDef.hashCode() > 0);
-
-        MethodDef methodDef = new MethodDef();
-        methodDef.setName("hello");
-        assertTrue(methodDef.hashCode() > 0);
-
-        FieldDef fieldDef = new FieldDef();
-        fieldDef.setName( "hello" );
-        assertTrue(fieldDef.hashCode() > 0);
-
-        JavaParameter javaParameter = new DefaultJavaParameter(new Type("q"), "w");
-        assertTrue(javaParameter.hashCode() > 0);
-
-    }
-
-
     public void testType() {
-
         Type type1 = new Type("fred", 1);
         Type type2 = new Type("fred", 1);
         Type type3 = new Type("wilma", 2);
-        assertTrue(type1.compareTo(type2) == 0);
-        assertFalse(type1.compareTo(type3) == 0);
-        assertTrue(type1.compareTo("barney") == 0);
+        assertTrue( type1.equals(type2) );
+        assertFalse( type1.equals(type3) );
     }
 
 

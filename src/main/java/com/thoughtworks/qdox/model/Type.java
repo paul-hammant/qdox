@@ -25,7 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class Type implements Comparable, Serializable {
+public class Type implements Serializable {
 
     public static final Type VOID = new Type("void");
 
@@ -180,16 +180,6 @@ public class Type implements Comparable, Serializable {
             fullName = context.resolveType(name);
         }
         return (fullName != null);
-    }
-
-    /**
-     * @see java.lang.Comparable#compareTo(Object)
-     */
-    public int compareTo(Object o) {
-        if (!(o instanceof Type))
-            return 0;
-
-        return getValue().compareTo(((Type) o).getValue());
     }
 
     /**

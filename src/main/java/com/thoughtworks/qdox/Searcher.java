@@ -21,8 +21,20 @@ package com.thoughtworks.qdox;
 
 import com.thoughtworks.qdox.model.JavaClass;
 
-public interface Searcher {
+/**
+ * A filter which evaluates the JavaClass and decides if it's part of the criteria. 
+ * 
+ *
+ */
+public interface Searcher
+{
 
-    boolean eval(JavaClass cls);
+    /**
+     * Evaluate the class
+     * 
+     * @param cls the class to evaluate
+     * @return <code>true</code> if this class should be part of the criteria, otherwise <code>false</code>
+     */
+    boolean eval( JavaClass cls );
 
 }

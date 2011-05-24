@@ -20,15 +20,21 @@ package com.thoughtworks.qdox.parser;
  */
 
 /**
- * JavaDoc is not part of the Java Language Specification, it should be treated as a special type of comment.
- * This means it can appear almost everywhere, although there are only a few places where JavaDoc has effect.
+ * JavaDoc is not part of the Java Language Specification, it should be treated as a special type of comment. This means
+ * it can appear almost everywhere, although there are only a few places where JavaDoc has effect. When the parser has
+ * finished a comment, it will trigger the commentHandler by calling the onComment-method.
  * 
- * When the parser has finished a comment, it will trigger the commentHandler by calling the onComment-method.     
- * 
- * 
+ * @author Robert Scholte
  * @since 2.0
  */
 public interface CommentHandler
 {
-  public void onComment(String comment, int line, int column);
+    /**
+     * Called if the parser hits a comment
+     * 
+     * @param comment the comment
+     * @param line the line number
+     * @param column the column number
+     */
+    void onComment( String comment, int line, int column );
 }

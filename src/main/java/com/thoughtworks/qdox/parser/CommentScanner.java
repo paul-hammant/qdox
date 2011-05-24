@@ -22,9 +22,16 @@ package com.thoughtworks.qdox.parser;
 /**
  * Classes implementing this interface can trigger the handler for every time it has parsed a comment. 
  * 
+ * @author Robert Scholte
  * @since 2.0
  */
 public interface CommentScanner
 {
-    public void addCommentHandler( CommentHandler handler );
+    /**
+     * Register this handler as a comment-listener.
+     * If scanner hits a comment, all handlers will be triggered.
+     * 
+     * @param handler the commentHandler to add to the CommentScanner
+     */
+    void addCommentHandler( CommentHandler handler );
 }

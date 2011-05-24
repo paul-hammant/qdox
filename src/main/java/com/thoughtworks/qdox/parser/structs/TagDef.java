@@ -19,44 +19,57 @@ package com.thoughtworks.qdox.parser.structs;
  * under the License.
  */
 
-public class TagDef extends LocatedDef {
+public class TagDef
+    extends LocatedDef
+{
 
-    public String name;
-    public String text;
-    
-    public TagDef(String name, String text, int lineNumber) {
-        this.name = name;
-        this.text = text;
+    private String name;
+
+    private String text;
+
+    public TagDef( String name, String text, int lineNumber )
+    {
+        this.setName( name );
+        this.setText( text );
         this.lineNumber = lineNumber;
     }
 
-    public TagDef(String name, String text) {
-        this(name, text, -1);
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        TagDef tagDef = (TagDef) obj;
-        return tagDef.name.equals(name)
-                && tagDef.text.equals(text)
-                && tagDef.lineNumber == lineNumber;
+    public TagDef( String name, String text )
+    {
+        this( name, text, -1 );
     }
 
     @Override
-    public int hashCode() {
-        return name.hashCode() + text.hashCode() + lineNumber;
-    }
-
-    @Override
-    public String toString() {
+    public String toString()
+    {
         StringBuffer result = new StringBuffer();
-        result.append('@');
-        result.append(name);
-        result.append(" => \"");
-        result.append(text);
-        result.append("\" @ line ");
-        result.append(lineNumber);
+        result.append( '@' );
+        result.append( name );
+        result.append( " => \"" );
+        result.append( text );
+        result.append( "\" @ line " );
+        result.append( lineNumber );
         return result.toString();
+    }
+
+    public void setName( String name )
+    {
+        this.name = name;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setText( String text )
+    {
+        this.text = text;
+    }
+
+    public String getText()
+    {
+        return text;
     }
 
 }

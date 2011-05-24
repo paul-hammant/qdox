@@ -194,7 +194,7 @@ public class ModelBuilder implements Builder {
         for (TagDef tagDef : lastTagSet) {
             tagList.add( 
                 docletTagFactory.createDocletTag(
-                    tagDef.name, tagDef.text, 
+                    tagDef.getName(), tagDef.getText(), 
                     entity, tagDef.lineNumber
                 )
             );

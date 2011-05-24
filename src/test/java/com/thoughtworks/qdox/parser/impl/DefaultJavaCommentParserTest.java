@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.parser.impl;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.LinkedList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.answers.ReturnsElementsOf;
 
 import com.thoughtworks.qdox.builder.Builder;
@@ -68,9 +70,14 @@ public class DefaultJavaCommentParserTest
         // execute
         DefaultJavaCommentParser parser = new DefaultJavaCommentParser(lexer, builder);
         parser.parse();
+        
+        ArgumentCaptor<TagDef> tagCaptor = ArgumentCaptor.forClass( TagDef.class );
 
         // verify
-        verify(builder).addJavaDocTag( new TagDef("This", "is great!") );
+        verify(builder).addJavaDocTag( tagCaptor.capture() );
+        TagDef tag = tagCaptor.getValue();
+        assertEquals( "This", tag.getName() );
+        assertEquals( "is great!", tag.getText() );
     }
 
     @Test
@@ -86,9 +93,14 @@ public class DefaultJavaCommentParserTest
         // execute
         DefaultJavaCommentParser parser = new DefaultJavaCommentParser(lexer, builder);
         parser.parse();
+        
+        ArgumentCaptor<TagDef> tagCaptor = ArgumentCaptor.forClass( TagDef.class );
 
         // verify
-        verify(builder).addJavaDocTag( new TagDef("eatme", "") );
+        verify(builder).addJavaDocTag( tagCaptor.capture() );
+        TagDef tag = tagCaptor.getValue();
+        assertEquals( "eatme", tag.getName() );
+        assertEquals( "", tag.getText() );
     }
 
     @Test
@@ -104,9 +116,14 @@ public class DefaultJavaCommentParserTest
         // execute
         DefaultJavaCommentParser parser = new DefaultJavaCommentParser(lexer, builder);
         parser.parse();
+        
+        ArgumentCaptor<TagDef> tagCaptor = ArgumentCaptor.forClass( TagDef.class );
 
         // verify
-        verify(builder).addJavaDocTag( new TagDef("This", "is great! Mmmkay.") );
+        verify( builder ).addJavaDocTag( tagCaptor.capture() );
+        TagDef tag = tagCaptor.getValue();
+        assertEquals( "This", tag.getName() );
+        assertEquals( "is great! Mmmkay.", tag.getText() );
     }
 
     @Test
@@ -125,9 +142,16 @@ public class DefaultJavaCommentParserTest
         DefaultJavaCommentParser parser = new DefaultJavaCommentParser(lexer, builder);
         parser.parse();
 
+        ArgumentCaptor<TagDef> tagCaptor = ArgumentCaptor.forClass( TagDef.class );
+
         // verify
-        verify(builder).addJavaDocTag( new TagDef("This", "is great!") );
-        verify(builder).addJavaDocTag( new TagDef("mock", "generate") );
+        verify(builder, times(2)).addJavaDocTag( tagCaptor.capture() );
+        TagDef tag1 = tagCaptor.getAllValues().get( 0 );
+        assertEquals( "This", tag1.getName() );
+        assertEquals( "is great!", tag1.getText() );
+        TagDef tag2 = tagCaptor.getAllValues().get( 1 ) ;
+        assertEquals( "mock", tag2.getName() );
+        assertEquals( "generate", tag2.getText() );
     }
 
     @Test
@@ -146,12 +170,18 @@ public class DefaultJavaCommentParserTest
         // execute
         DefaultJavaCommentParser parser = new DefaultJavaCommentParser(lexer, builder);
         parser.parse();
+        
+        ArgumentCaptor<TagDef> tagCaptor = ArgumentCaptor.forClass( TagDef.class );
 
         // verify
         verify(builder).addJavaDoc( "Welcome! Here is my class." );
-        verify(builder).addJavaDocTag( new TagDef("This", "is great!") );
-        verify(builder).addJavaDocTag( new TagDef("mock", "generate") );
-
+        verify(builder, times(2) ).addJavaDocTag( tagCaptor.capture() );
+        TagDef tag1 = tagCaptor.getAllValues().get( 0 );
+        assertEquals( "This", tag1.getName() );
+        assertEquals( "is great!", tag1.getText() );
+        TagDef tag2 = tagCaptor.getAllValues().get( 1 ) ;
+        assertEquals( "mock", tag2.getName() );
+        assertEquals( "generate", tag2.getText() );
     }
 
     @Test

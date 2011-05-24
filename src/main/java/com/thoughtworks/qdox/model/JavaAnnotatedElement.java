@@ -22,8 +22,26 @@ package com.thoughtworks.qdox.model;
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 
+/**
+ * <p>
+ * Modeled equivalent of {@link AnnotatedElement}, providing the most important methods.
+ * Where the original {@link AnnotatedElement} is using an Array, this model is using a {@link List}.
+ * </p>
+ * <p>
+ * Where you can use Annotations, you can also use JavaDoc. For that reason all JavaDoc methods have been added to this interface.
+ * </p>
+ * <p>
+ * Some methods were already part of some implementations, which might result in an earlier version then this interface.
+ * </p>
+ * 
+ * @author Robert Scholte
+ * @since 2.0
+ *
+ */
 public interface JavaAnnotatedElement
 {
+    // Methods from AnnotatedElement
+    
 	/**
 	 * 
 	 * Equivalent of {@link AnnotatedElement#getAnnotations()}
@@ -32,17 +50,44 @@ public interface JavaAnnotatedElement
 	 */
     List<Annotation> getAnnotations();
     
+    // JavaDoc specific methods
+    
+    /**
+     * Retrieve the javadoc comment of this annotated element.
+     * This is the part between &#47;&#42;&#42; and the &#42;&#47;, but without the doclet tags
+     * 
+     * @return the comment, otherwise <code>null</code>
+     */
     String getComment();
     
+    /**
+     * Retrieve all defined doclet tags.
+     * 
+     * @return a list of DocletTags, never <code>null</code>
+     */
 	List<DocletTag> getTags();
 
+	/**
+	 * Retrieve all doclettags with a specific name.
+	 * 
+	 * @param name the name of the doclet tag
+	 * @return a list of doclettags, never <code>null</code>
+	 */
     List<DocletTag> getTagsByName( String name );
 
+    /**
+     * Retrieve the doclettag by the specified name.
+     * If there are more than one tags, only return the first one.
+     * 
+     * @param name the name of the doclettag trying to retrieve
+     * @return the first doclettag matching the name, otherwise <code>null</code>
+     */
     DocletTag getTagByName( String name );
 
     /**
      * Convenience method for <code>getTagByName(String).getNamedParameter(String)</code>
      * that also checks for null tag.
+     * 
      * @since 1.3
      */
     String getNamedParameter(String tagName, String parameterName);

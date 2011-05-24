@@ -34,13 +34,13 @@ public interface AnnotationValue {
      * @param visitor Visitor
      * @return Visitor result
      */
-    public Object accept( AnnotationVisitor visitor );
+    Object accept( AnnotationVisitor visitor );
 
     /**
      * Get a parameter value for {@link Annotation#getNamedParameter(String)}.
      * 
      * @return Parameter value
      */
-    public Object getParameterValue();
+    Object getParameterValue();
 
 }

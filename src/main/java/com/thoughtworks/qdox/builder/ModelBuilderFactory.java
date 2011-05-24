@@ -23,9 +23,20 @@ import java.io.Serializable;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 
+/**
+ * The ModelBuilderFactory for constructing ModelBuilders
+ * 
+ * @author Robert Scholte
+ *
+ */
 public interface ModelBuilderFactory extends Serializable
 {
-    public ModelBuilder newInstance();
-    
-    public ModelBuilder newInstance( ClassLibrary library );
+    /**
+     * Return a new instance of a ModelBuilder.
+     * Parsers will use exactly one instance per java source file or class.
+     * 
+     * @param library the classLibrary
+     * @return a new ModelBuilder
+     */
+    ModelBuilder newInstance( ClassLibrary library );
 }

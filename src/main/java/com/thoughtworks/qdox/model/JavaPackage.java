@@ -27,7 +27,7 @@ public interface JavaPackage extends JavaModel, JavaAnnotatedElement
     /**
      * Returns all the classes found for the package.
      *
-     * @return all the classes found for the package
+     * @return all the classes found for the package, never <code>null</code>
      */
     List<JavaClass> getClasses();
 
@@ -43,14 +43,14 @@ public interface JavaPackage extends JavaModel, JavaAnnotatedElement
     /**
      * For instance: one of the children of <code>java.lang</code> would be <code>java.lang.reflect</code>
      * 
-     * @return all the children of this package 
+     * @return all the children of this package , never <code>null</code>
      */
     List<JavaPackage> getSubPackages();
 
     /**
      * The name of this package
      * 
-     * @return the name
+     * @return the name, should never be <code>null</code>
      */
     String getName();
 

@@ -44,6 +44,7 @@ import java.util.Stack;
 // strongly typed tokens/types
 %token <sval> IDENTIFIER
 %token <sval> BOOLEAN_LITERAL
+%token <sval> BYTE_LITERAL
 %token <sval> INTEGER_LITERAL
 %token <sval> LONG_LITERAL
 %token <sval> FLOAT_LITERAL
@@ -1031,13 +1032,22 @@ private Boolean toBoolean(String str) {
 	return new Boolean( str );
 }
 
-private Integer toInteger(String str) {
+protected Byte toByte(String str) {
+   str = str.trim();
+   
+   return Byte.parseByte(str.substring(2), 2);
+}
+
+protected Integer toInteger(String str) {
 	str = str.trim();
 	
 	Integer result;
 	
 	if(str.startsWith("0x") || str.startsWith( "0X" ) ) {
 		result = new Integer( Integer.parseInt( str.substring( 2 ), 16 ) );
+	}
+	else if(str.startsWith("0b") || str.startsWith( "0B" ) ) {
+		result = new Integer( Integer.parseInt( str.substring( 2 ), 2 ) );
 	}
 	else if(str.length() > 1 && str.startsWith("0") ) {
 		result = new Integer( Integer.parseInt( str.substring( 1 ), 8 ) );
@@ -1049,7 +1059,7 @@ private Integer toInteger(String str) {
 	return result;
 }
 
-private Long toLong(String str) {
+protected Long toLong(String str) {
 	str = str.trim();
 
 	Long result;
@@ -1063,6 +1073,9 @@ private Long toLong(String str) {
 	if(str.startsWith("0x") || str.startsWith( "0X" ) ) {
 		result = new Long( Long.parseLong( str.substring( 2, len ), 16 ) );
 	}
+	else if(str.startsWith("0b") || str.startsWith( "0B" ) ) {
+		result = new Long( Long.parseLong( str.substring( 2, len ), 2 ) );
+	}
 	else if(str.startsWith("0") ) {
 		result = new Long( Long.parseLong( str.substring( 1, len ), 8 ) );
 	}
@@ -1073,12 +1086,12 @@ private Long toLong(String str) {
 	return result;
 }
 
-private Float toFloat(String str) {
+protected Float toFloat(String str) {
 	str = str.trim();
 	return new Float( str );
 }
 
-private Double toDouble(String str) {
+protected Double toDouble(String str) {
 	str = str.trim();
 
 	if( !str.endsWith("d") && !str.endsWith("D") ) {
@@ -1091,7 +1104,7 @@ private Double toDouble(String str) {
 /**
  * Convert a character literal into a character.
  */
-private Character toChar(String str) {
+protected Character toChar(String str) {
 	str = str.trim();
 
 	if( !str.startsWith("'") && !str.endsWith("'") ) {
@@ -1110,7 +1123,7 @@ private Character toChar(String str) {
 /**
  * Convert a string literal into a string.
  */
-private String toString(String str) {
+protected String toString(String str) {
 	str = str.trim();
 
 	if( str.length() < 2 && !str.startsWith("\"") && !str.endsWith("\"") ) {

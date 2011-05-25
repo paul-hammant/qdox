@@ -107,7 +107,14 @@ public class AnnotationExpressionTest {
 			    { "{\"Children\", \"Unscrupulous dentists\"}", Arrays.asList(new String[]{"Children", "Unscrupulous dentists"})},
 
 			    //test Array-valued annotation ending with a comma
-			    { "{\"deprecated\", }", Arrays.asList(new String[]{"deprecated"})}
+			    { "{\"deprecated\", }", Arrays.asList(new String[]{"deprecated"})},
+			    
+			    //Binary Literals (added in JDK7)
+                {"(byte)0b00100001", Byte.parseByte( "100001", 2)},
+                {"(short)0b0110000101000101", Short.parseShort( "0110000101000101", 2)},
+                {"0b101", Integer.parseInt( "101", 2)},
+                {"0B101", Integer.parseInt( "101", 2)},
+                {"0b00010000101000101101000010100010110100001010001011010000101000101L", Long.parseLong( "00010000101000101101000010100010110100001010001011010000101000101", 2)}
 		});
 	}
 

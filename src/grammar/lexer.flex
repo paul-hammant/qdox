@@ -132,8 +132,8 @@ import java.util.*;
 Eol                     = \r|\n|\r\n
 WhiteSpace              = {Eol} | [ \t\f]
 CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
-IntegerLiteral			= (( [1-9] ([0-9])* ) | ( "0" [xX] ([0-9]|[a-f]|[A-F])+ ) | ( "0" ([0-7])* ))
-LongLiteral				= (( [1-9] ([0-9])* ) | ( "0" [xX] ([0-9]|[a-f]|[A-F])+ ) | ( "0" ([0-7])* )) [lL]
+IntegerLiteral			= (( [1-9] ([0-9])* ) | "0" [bB] [0-1]+ | ( "0" [xX] ([0-9]|[a-f]|[A-F])+ ) | ( "0" ([0-7])* ))
+LongLiteral				= (( [1-9] ([0-9])* ) | "0" [bB] [0-1]+ | ( "0" [xX] ([0-9]|[a-f]|[A-F])+ ) | ( "0" ([0-7])* )) [lL]
 Exponent				= [eE] [+-]? ([0-9])+
 FloatLiteral			= ( [0-9]+ ("." [0-9]+)? ({Exponent})? ([fF])? ) |
 						  ( "." [0-9]+ ({Exponent})? ([fF])? ) |

@@ -20,7 +20,6 @@ package com.thoughtworks.qdox.library;
  */
 
 import com.thoughtworks.qdox.builder.ModelBuilder;
-import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -36,10 +35,6 @@ public class ClassNameLibrary
     extends AbstractClassLibrary
 {
 
-    public ClassNameLibrary()
-    {
-    }
-
     @Override
     protected JavaClass resolveJavaClass( String name )
     {
@@ -47,8 +42,7 @@ public class ClassNameLibrary
         unknownBuilder.beginClass( new ClassDef( name ) );
         unknownBuilder.endClass();
         JavaSource unknownSource = unknownBuilder.getSource();
-        JavaClass result = unknownSource.getClasses().get( 0 );
-        return result;
+        return unknownSource.getClasses().get( 0 );
     }
     
     @Override

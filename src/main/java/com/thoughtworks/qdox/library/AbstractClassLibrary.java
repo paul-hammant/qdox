@@ -117,8 +117,7 @@ public abstract class AbstractClassLibrary
         unknownBuilder.beginClass( new ClassDef( name ) );
         unknownBuilder.endClass();
         JavaSource unknownSource = unknownBuilder.getSource();
-        JavaClass result = unknownSource.getClasses().get( 0 );
-        return result;
+        return unknownSource.getClasses().get( 0 );
     }
 
     /**

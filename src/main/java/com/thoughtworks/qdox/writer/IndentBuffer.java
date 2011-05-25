@@ -19,44 +19,69 @@ package com.thoughtworks.qdox.writer;
  * under the License.
  */
 
-public class IndentBuffer {
+public class IndentBuffer
+{
 
+    private String eol = "\n";
+    private String indentation = "\t";
     private StringBuffer buffer = new StringBuffer();
+
     private int depth = 0;
+
     private boolean newLine;
-
-    public void write(String s) {
-        checkNewLine();
-        buffer.append(s);
+    
+    public void setEol( String eol )
+    {
+        this.eol = eol;
+    }
+    
+    public void setIndentation( String indentation )
+    {
+        this.indentation = indentation;
     }
 
-    public void write(char s) {
+    public void write( String s )
+    {
         checkNewLine();
-        buffer.append(s);
+        buffer.append( s );
     }
 
-    public void newline() {
-        buffer.append('\n');
+    public void write( char s )
+    {
+        checkNewLine();
+        buffer.append( s );
+    }
+
+    public void newline()
+    {
+        buffer.append( eol );
         newLine = true;
     }
 
-    public void indent() {
+    public void indent()
+    {
         depth++;
     }
 
-    public void deindent() {
+    public void deindent()
+    {
         depth--;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return buffer.toString();
     }
 
-    private void checkNewLine() {
-        if (newLine) {
-            for (int i = 0; i < depth; i++) buffer.append('\t');
+    private void checkNewLine()
+    {
+        if ( newLine )
+        {
+            for ( int i = 0; i < depth; i++ )
+            {
+                buffer.append( indentation );
+            }
             newLine = false;
         }
     }
-
 }

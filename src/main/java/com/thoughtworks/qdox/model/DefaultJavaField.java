@@ -130,8 +130,8 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
     	if(isVolatile()) {
     		result.append("volatile ");
     	}
-    	result.append( type.getValue() + " ");
-    	result.append( getDeclaringClass().getFullyQualifiedName() + "." +getName() );
+    	result.append( type.getValue() ).append(' ');
+    	result.append( getDeclaringClass().getFullyQualifiedName() ).append( '.' ).append( getName() );
     	return result.toString();
     }
     

@@ -322,7 +322,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         {
             result.append( "native " );
         }
-        result.append( getReturns().getValue() + " " );
+        result.append( getReturns().getValue() ).append( ' ' );
         if ( getParentClass() != null )
         {
             result.append( getParentClass().getFullyQualifiedName() );

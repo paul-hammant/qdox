@@ -138,16 +138,24 @@ public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
         this.context = context;
     }
 
-    public String toString() {
+    public String toString()
+    {
         StringBuffer result = new StringBuffer();
-        result.append('@');
-        result.append(type.getValue());
-        result.append('(');
-        if( !namedParameters.isEmpty() ) {
-            for(Iterator<Entry<String, Object>> i = namedParameters.entrySet().iterator(); i.hasNext();) result.append( i.next() + ",");
-            result.deleteCharAt( result.length()-1 );
+        result.append( '@' );
+        result.append( type.getValue() );
+        result.append( '(' );
+        if ( !namedParameters.isEmpty() )
+        {
+            for ( Iterator<Entry<String, Object>> i = namedParameters.entrySet().iterator(); i.hasNext(); )
+            {
+                result.append( i.next() );
+                if ( i.hasNext() )
+                {
+                    result.append( ',' );
+                }
+            }
         }
-        result.append(')');
+        result.append( ')' );
         return result.toString();
     }
 }

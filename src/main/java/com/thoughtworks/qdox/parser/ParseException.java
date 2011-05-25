@@ -78,7 +78,7 @@ public class ParseException
             buffer.append( " @[" ).append( line );
             
             if( column >=0 ) {
-               buffer.append( "," + column );  
+               buffer.append( ',' ).append( column );  
             }
             buffer.append( "]" );
         }

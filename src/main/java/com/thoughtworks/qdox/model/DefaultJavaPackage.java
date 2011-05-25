@@ -25,7 +25,8 @@ import java.util.List;
 import com.thoughtworks.qdox.library.ClassLibrary;
 
 /**
- * A representation of a package.
+ * The default implementation of {@link JavaPackage}, representing a {@link Package}.
+ * 
  * @since 1.9
  */
 public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPackage {
@@ -34,10 +35,19 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 	private String name;
 	private List<JavaClass> classes = new LinkedList<JavaClass>();
 
+	/**
+	 * 
+	 * @param name the name of the package, should never be <code>null</code>
+	 */
     public DefaultJavaPackage(String name) {
 		this.name= name;
     }
 
+    /**
+     * Equivalent of {@link Package#getName()}
+     * 
+     * @return the name of the package
+     */
 	public String getName() {
 		return name;
 	}
@@ -72,8 +82,9 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 	    }
 	}
 
-    public JavaPackage getParentPackage() {
-        String parentName = name.substring(0,name.lastIndexOf("."));
+    public JavaPackage getParentPackage()
+    {
+        String parentName = name.substring( 0, name.lastIndexOf( '.' ) );
         return classLibrary.getJavaPackage( parentName );
     }
 
@@ -111,7 +122,9 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
     }
     
     /**
-     * @see http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Package.html#toString()
+     * Equivalent of {@link Package#toString()}
+     * 
+     * @return the string representation of the package.
      */
     public String toString() {
     	return "package " + name;

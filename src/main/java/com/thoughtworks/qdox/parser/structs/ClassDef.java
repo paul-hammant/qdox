@@ -19,7 +19,6 @@ package com.thoughtworks.qdox.parser.structs;
  * under the License.
  */
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;

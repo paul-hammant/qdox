@@ -219,12 +219,18 @@ public class Type implements Serializable {
      * 
      * @return
      */
-    public String toString() {
-        if (dimensions == 0) return getValue();
-        StringBuffer buff = new StringBuffer(getValue());
-        for (int i = 0; i < dimensions; i++) buff.append("[]");
-        String result = buff.toString();
-        return result;
+    public String toString()
+    {
+        if ( dimensions == 0 )
+        {
+            return getValue();
+        }
+        StringBuffer buff = new StringBuffer( getValue() );
+        for ( int i = 0; i < dimensions; i++ )
+        {
+            buff.append( "[]" );
+        }
+        return buff.toString();
     }
 
     /**
@@ -240,19 +246,34 @@ public class Type implements Serializable {
      * @return 
      */
     public String toGenericString() {
-        if (dimensions == 0) return getGenericValue();
+        if (dimensions == 0) 
+        {
+            return getGenericValue();
+        }
         StringBuffer buff = new StringBuffer(getGenericValue());
-        for (int i = 0; i < dimensions; i++) buff.append("[]");
-        String result = buff.toString();
-        return result;
+        for (int i = 0; i < dimensions; i++) 
+        {
+            buff.append("[]");
+        }
+        return buff.toString();
     }
 
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
+    @Override
+    public boolean equals( Object obj )
+    {
+        if ( this == obj )
+        {
+            return true;
+        }
+        if ( obj == null || !( obj instanceof Type ) )
+        {
+            return false;
+        }
         Type t = (Type) obj;
-        return getValue().equals(t.getValue()) && t.getDimensions() == getDimensions();
+        return getValue().equals( t.getValue() ) && t.getDimensions() == getDimensions();
     }
 
+    @Override
     public int hashCode() {
         return getValue().hashCode();
     }
@@ -308,7 +329,8 @@ public class Type implements Serializable {
         String value = getValue();
         if (value == null || value.length() == 0 || value.indexOf('.') > -1) {
             return false;
-        } else {
+        } else 
+        {
            return "void".equals(value)           
             || "boolean".equals(value)
             || "byte".equals(value)

@@ -15,7 +15,7 @@ import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
  * @author Robert Scholte
  * @since 2.0
  */
-public class TypeAssembler
+public final class TypeAssembler
 {
     private TypeAssembler()
     {

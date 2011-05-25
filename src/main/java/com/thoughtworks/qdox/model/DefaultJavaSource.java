@@ -21,6 +21,7 @@ package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -112,7 +113,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
      * @see com.thoughtworks.qdox.model.JavaSource#getClasses()
      */
     public List<JavaClass> getClasses() {
-      return classes;
+      return Collections.unmodifiableList( classes );
     }
 
     /* (non-Javadoc)
@@ -234,7 +235,8 @@ public class DefaultJavaSource implements JavaSource, Serializable {
             
         for (String imprt : getImports()) {
             //static imports can refer to inner classes
-            if(imprt.startsWith( "static " ) ) {
+            if( imprt.startsWith( "static " ) ) 
+            {
                 imprt = imprt.substring( 7 );
             }
             if (imprt.equals(importSpec) || (!fullMatch && imprt.endsWith(dotSuffix))) {
@@ -280,8 +282,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
      * @see com.thoughtworks.qdox.model.JavaSource#getClassNamePrefix()
      */
     public String getClassNamePrefix() {
-        if (getPackage() == null) return "";
-        return getPackage().getName() + ".";
+        return ( pkg == null ? "" : pkg.getName() + "." ); 
     }
 
     public JavaSource getParentSource() {
@@ -319,7 +320,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return result;
     }
     
-    private JavaClass getClassByName(JavaClass cls, String name) 
+    private static JavaClass getClassByName(JavaClass cls, String name) 
     {
         JavaClass result = null;
         if ( cls.getFullyQualifiedName().equals( name ) ) 

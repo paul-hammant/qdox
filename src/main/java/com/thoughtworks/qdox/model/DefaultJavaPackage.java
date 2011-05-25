@@ -96,7 +96,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
         {
             return true;
         }
-        if ( o == null || !( o instanceof JavaPackage ) )
+        if ( !( o instanceof JavaPackage ) )
         {
             return false;
         }

@@ -114,7 +114,7 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
         {
             return true;
         }
-        if ( obj == null || !( obj instanceof JavaParameter ) )
+        if ( !( obj instanceof JavaParameter ) )
         {
             return false;
         }

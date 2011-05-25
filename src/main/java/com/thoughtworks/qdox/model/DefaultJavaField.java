@@ -147,7 +147,7 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
         {
             return true;
         }
-        if (obj == null || !(obj instanceof JavaField) )
+        if ( !(obj instanceof JavaField) )
         {
             return false;
         }

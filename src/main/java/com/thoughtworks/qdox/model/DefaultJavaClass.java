@@ -744,7 +744,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         {
             return true;
         }
-        if ( this == null || !( obj instanceof JavaClass ) )
+        if ( !( obj instanceof JavaClass ) )
         {
             return false;
         }

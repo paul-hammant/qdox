@@ -875,7 +875,7 @@ public abstract class EvaluatingVisitor
     {
         Object value = annotationQuery.getCondition().accept( this );
 
-        if ( value == null || !( value instanceof Boolean ) )
+        if ( !( value instanceof Boolean ) )
         {
             throw new IllegalArgumentException( "Cannot evaluate '" + annotationQuery + "'." );
         }

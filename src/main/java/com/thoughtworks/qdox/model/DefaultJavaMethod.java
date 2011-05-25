@@ -157,7 +157,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         {
           return true;    
         }
-        if (obj == null || !( obj instanceof JavaMethod ) ) 
+        if ( !( obj instanceof JavaMethod ) ) 
         {
             return false;
         }

@@ -19,20 +19,21 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
+import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.thoughtworks.qdox.writer.IndentBuffer;
 
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements JavaModel {
 
     private List<String> modifiers = new LinkedList<String>();
     private JavaClass parentCls;
 	private String name;
-    /**
+
+	/**
      * Return list of modifiers as Strings.
      * (public, private, protected, final, abstract, static)
-     */
+	 * @return a list of modifiers, never <code>null</code>
+	 */
     public List<String> getModifiers() {
         return modifiers;
     }
@@ -41,60 +42,114 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         this.modifiers = modifiers;
     }
 
-    //helper methods for querying the modifiers
+    /**
+     * Equivalent of {@link Modifier#isAbstract(int)}
+     * 
+     * @return <code>true</code> if entity is abstract, otherwise <code>false</code>
+     */
     public boolean isAbstract() {
         return isModifierPresent("abstract");
     }
 
+    /**
+     * Equivalent of {@link Modifier#isPublic(int)}
+     * 
+     * @return <code>true</code> if entity is public, otherwise <code>false</code>
+     */
     public boolean isPublic() {
         return isModifierPresent("public");
     }
 
+    /**
+     * Equivalent of {@link Modifier#isPrivate(int)}
+     * 
+     * @return <code>true</code> if entity is private, otherwise <code>false</code>
+     */
     public boolean isPrivate() {
         return isModifierPresent("private");
     }
 
+    /**
+     * Equivalent of {@link Modifier#isProtected(int)}
+     * 
+     * @return <code>true</code> if entity is protected, otherwise <code>false</code>
+     */
     public boolean isProtected() {
         return isModifierPresent("protected");
     }
 
+    /**
+     * Equivalent of {@link Modifier#isStatic(int)}
+     * 
+     * @return <code>true</code> if entity is static, otherwise <code>false</code>
+     */
     public boolean isStatic() {
         return isModifierPresent("static");
     }
 
+    /**
+     * Equivalent of {@link Modifier#isFinal(int)}
+     * 
+     * @return <code>true</code> if entity is final, otherwise <code>false</code>
+     */
     public boolean isFinal() {
         return isModifierPresent("final");
     }
 
+    /**
+     * Equivalent of {@link Modifier#isSynchronized(int)}
+     * 
+     * @return <code>true</code> if entity is sunchronized, otherwise <code>false</code>
+     */
     public boolean isSynchronized() {
         return isModifierPresent("synchronized");
     }
 
+    /**
+     * Equivalent of {@link Modifier#isTransient(int)}
+     * 
+     * @return <code>true</code> if entity is transient, otherwise <code>false</code>
+     */
     public boolean isTransient() {
         return isModifierPresent("transient");
     }
 
-	/**
-	 * @since 1.4
-	 */
+    /**
+     * Equivalent of {@link Modifier#isVolatile(int)}
+     * 
+     * @return <code>true</code> if entity is volatile, otherwise <code>false</code>
+     * @since 1.4
+     */
     public boolean isVolatile() {
         return isModifierPresent("volatile");
     }
 
-	/**
-	 * @since 1.4
-	 */
+    /**
+     * Equivalent of {@link Modifier#isNative(int)}
+     * 
+     * @return <code>true</code> if entity is native, otherwise <code>false</code>
+     * @since 1.4
+     */
     public boolean isNative() {
         return isModifierPresent("native");
     }
 
-	/**
-	 * @since 1.4
-	 */
+    /**
+     * Equivalent of {@link Modifier#isStrict(int)}
+     * 
+     * @return <code>true</code> if entity is strictfp, otherwise <code>false</code>
+     * @since 1.4
+     */
     public boolean isStrictfp() {
         return isModifierPresent("strictfp");
     }
 
+    /**
+     * Returns <code>true</code> if one of the modifiers matches the modifier
+     * 
+     * @param modifier the modifier
+     * @return <code>true</code> if the modifier is present, otherwise <code>false</code>
+     */
     private boolean isModifierPresent(String modifier) {
         return modifiers.contains(modifier);
     }

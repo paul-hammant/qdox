@@ -39,19 +39,27 @@ public interface ClassLibrary
      * Check if this library holds a reference based on the name.
      * 
      * @param name the Fully Qualified Name trying to resolve
-     * @return true if the classLibrary has a reference
+     * @return true if the classLibrary has a reference, otherwise <code>false</code>
      */
-    public boolean hasClassReference( String name );
+    boolean hasClassReference( String name );
 
     /**
      * Get the JavaClass or null if it's not possible
      * 
      * @param name The fully qualified name of the JavaClass
-     * @return The JavaClass or null
+     * @return the JavaClass, otherwise <code>null</code>
      */
-    public JavaClass getJavaClass( String name );
+    JavaClass getJavaClass( String name );
 
-    public JavaClass getJavaClass( String name, boolean createStub );
+    /**
+     * Try to retrieve the JavaClass by a fully qualified name.
+     * If the JavaClss doesn't exist and createStub is <code>true</code> make a stub, otherwise return <code>null</code>
+     * 
+     * @param name the fully qualified name of the class
+     * @param createStub force creation of a stub if the class can't be found
+     * @return the JavaClass, might be <code>null</code> depending on the value of createStub. 
+     */
+    JavaClass getJavaClass( String name, boolean createStub );
 
     
     /**
@@ -60,7 +68,7 @@ public interface ClassLibrary
      * 
      * @return all JavaClasses as a List, never <code>null</code>
      */
-    public List<JavaClass> getJavaClasses();
+    List<JavaClass> getJavaClasses();
     
     /**
      * Return all JavaSources of the current library.
@@ -68,15 +76,15 @@ public interface ClassLibrary
      * 
      * @return all JavaSources as a List, never <code>null</code>
      */
-    public List<JavaSource> getJavaSources();
+    List<JavaSource> getJavaSources();
     
     /**
      * Get the JavaPackage or null if it's not possible
      * 
      * @param name The fully qualified name of the JavaPackage
-     * @return The JavaPackage or null
+     * @return The package, otherwise <code>null</code>
      */
-    public JavaPackage getJavaPackage( String name );
+    JavaPackage getJavaPackage( String name );
 
     /**
      * Return all JavaPackages of the current library.
@@ -84,5 +92,5 @@ public interface ClassLibrary
      * 
      * @return all JavaPackages as a List, never <code>null</code>
      */
-    public List<JavaPackage> getJavaPackages();
+    List<JavaPackage> getJavaPackages();
 }

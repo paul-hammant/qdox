@@ -47,35 +47,35 @@ public interface ClassLibraryBuilder extends Serializable
      * @param classLoader the classloader to add
      * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader );
+    ClassLibraryBuilder appendClassLoader( ClassLoader classLoader );
 
     /**
      * Add the defaultClassLoaders and return itse
      * 
      * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder appendDefaultClassLoaders();
+    ClassLibraryBuilder appendDefaultClassLoaders();
 
     /**
      * 
      * @param sourceFolder
      * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder appendSourceFolder( File sourceFolder );
+    ClassLibraryBuilder appendSourceFolder( File sourceFolder );
 
     /**
      * 
      * @param stream
      * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder appendSource( InputStream stream );
+    ClassLibraryBuilder appendSource( InputStream stream );
 
     /**
      * 
      * @param reader
      * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder appendSource( Reader reader );
+    ClassLibraryBuilder appendSource( Reader reader );
 
     /**
      * 
@@ -83,7 +83,7 @@ public interface ClassLibraryBuilder extends Serializable
      * @return this ClassLibraryBuilder instance
      * @throws IOException
      */
-    public ClassLibraryBuilder appendSource( URL url ) throws IOException;
+    ClassLibraryBuilder appendSource( URL url ) throws IOException;
 
     /**
      * 
@@ -91,14 +91,14 @@ public interface ClassLibraryBuilder extends Serializable
      * @return this ClassLibraryBuilder instance
      * @throws IOException
      */
-    public ClassLibraryBuilder appendSource( File file ) throws IOException;
+    ClassLibraryBuilder appendSource( File file ) throws IOException;
 
     /**
      * 
      * @param stream
      * @return the created JavaSource
      */
-    public JavaSource addSource( InputStream stream );
+    JavaSource addSource( InputStream stream );
 
     /**
      * Add the source content of the reader to the ClassLibrary and return the generated JavaSource
@@ -106,7 +106,7 @@ public interface ClassLibraryBuilder extends Serializable
      * @param reader
      * @return the created JavaSource
      */
-    public JavaSource addSource( Reader reader );
+    JavaSource addSource( Reader reader );
     
     /**
      * 
@@ -114,7 +114,7 @@ public interface ClassLibraryBuilder extends Serializable
      * @return the created JavaSource
      * @throws IOException
      */
-    public JavaSource addSource( URL url ) throws IOException;
+    JavaSource addSource( URL url ) throws IOException;
     
     /**
      * 
@@ -122,52 +122,59 @@ public interface ClassLibraryBuilder extends Serializable
      * @return the created JavaSource
      * @throws IOException
      */
-    public JavaSource addSource( File file ) throws IOException;
+    JavaSource addSource( File file ) throws IOException;
     
     /**
      * 
      * @param debugLexer
      * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder setDebugLexer( boolean debugLexer );
+    ClassLibraryBuilder setDebugLexer( boolean debugLexer );
 
     /**
      * 
      * @param debugParser
      * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder setDebugParser( boolean debugParser );
+    ClassLibraryBuilder setDebugParser( boolean debugParser );
     
     /**
      * 
      * @param encoding
      * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder setEncoding( String encoding );
+    ClassLibraryBuilder setEncoding( String encoding );
     
     /**
      * Define the {@link ModelBuilderFactory} which the parsers should use to construct the JavaModel Objects
      * 
-     * @param factory
+     * @param factory the modelBuilderFactory
      * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder setModelBuilderFactory( ModelBuilderFactory factory );
+    ClassLibraryBuilder setModelBuilderFactory( ModelBuilderFactory factory );
 
-    public ClassLibraryBuilder setModelWriterFactory( ModelWriterFactory factory );
+    /**
+     * Define the {@link ModelWriterFactory} which is used by the classes when calling for the codeBlock.
+     * 
+     * @param factory the modelWriterFactory
+     * @return this ClassLibraryBuilder instance
+     */
+    ClassLibraryBuilder setModelWriterFactory( ModelWriterFactory factory );
     
     /**
      * Get the library based on the strategy of the implementation
      * 
      * @return the constructed ClassLibrary
      */
-    public ClassLibrary getClassLibrary();
+    ClassLibrary getClassLibrary();
 
     /**
      * Can handle ParseExceptions instead of crashing.
      * Has only effect on the appendSource() methods
      * 
-     * @param errorHandler
+     * @param errorHandler the errorHandler
+     * @return this ClassLibraryBuilder instance
      */
-    public ClassLibraryBuilder setErrorHander( ErrorHandler errorHandler );
+    ClassLibraryBuilder setErrorHander( ErrorHandler errorHandler );
 
 }

@@ -171,7 +171,7 @@ public class BinaryClassParser
         return methodDef;
     }
 
-    private static final int getDimension(Class<?> c) {
+    private static int getDimension(Class<?> c) {
         return c.getName().lastIndexOf('[') + 1;
     }
 

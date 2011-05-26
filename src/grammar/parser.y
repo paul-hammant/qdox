@@ -1029,13 +1029,13 @@ private String convertString(String str) {
 private Boolean toBoolean(String str) {
 	str = str.trim();
 
-	return new Boolean( str );
+	return Boolean.valueOf( str );
 }
 
 protected Byte toByte(String str) {
    str = str.trim();
    
-   return Byte.parseByte(str.substring(2), 2);
+   return Byte.valueOf(str.substring(2), 2);
 }
 
 protected Integer toInteger(String str) {
@@ -1044,16 +1044,16 @@ protected Integer toInteger(String str) {
 	Integer result;
 	
 	if(str.startsWith("0x") || str.startsWith( "0X" ) ) {
-		result = new Integer( Integer.parseInt( str.substring( 2 ), 16 ) );
+		result = Integer.valueOf( str.substring( 2 ), 16 );
 	}
 	else if(str.startsWith("0b") || str.startsWith( "0B" ) ) {
-		result = new Integer( Integer.parseInt( str.substring( 2 ), 2 ) );
+		result = Integer.valueOf( str.substring( 2 ), 2 );
 	}
 	else if(str.length() > 1 && str.startsWith("0") ) {
-		result = new Integer( Integer.parseInt( str.substring( 1 ), 8 ) );
+		result = Integer.valueOf( str.substring( 1 ), 8 );
 	}
 	else {
-		result = new Integer( str );
+		result = Integer.valueOf( str );
 	}
 	
 	return result;
@@ -1070,25 +1070,27 @@ protected Long toLong(String str) {
 	
 	int len = str.length() - 1;
 	
-	if(str.startsWith("0x") || str.startsWith( "0X" ) ) {
-		result = new Long( Long.parseLong( str.substring( 2, len ), 16 ) );
+	if(str.startsWith("0x") || str.startsWith( "0X" ) )
+	{
+		result = Long.valueOf( str.substring( 2, len ), 16 );
 	}
-	else if(str.startsWith("0b") || str.startsWith( "0B" ) ) {
-		result = new Long( Long.parseLong( str.substring( 2, len ), 2 ) );
+	else if(str.startsWith("0b") || str.startsWith( "0B" ) )
+	{
+		result = Long.valueOf( str.substring( 2, len ), 2 );
 	}
-	else if(str.startsWith("0") ) {
-		result = new Long( Long.parseLong( str.substring( 1, len ), 8 ) );
+	else if(str.startsWith("0") )
+	{
+		result = Long.valueOf( str.substring( 1, len ), 8 );
 	}
 	else {
-		result = new Long( str.substring( 0, len ) );
+		result = Long.valueOf( str.substring( 0, len ) );
 	}
-
 	return result;
 }
 
 protected Float toFloat(String str) {
 	str = str.trim();
-	return new Float( str );
+	return Float.valueOf( str );
 }
 
 protected Double toDouble(String str) {
@@ -1098,7 +1100,7 @@ protected Double toDouble(String str) {
 		yyerror( "Double literal must end with 'd' or 'D'." );
 	}
 	
-	return new Double( str.substring( 0, str.length() - 1 ) );
+	return Double.valueOf( str.substring( 0, str.length() - 1 ) );
 }
 
 /**
@@ -1117,7 +1119,7 @@ protected Character toChar(String str) {
 		yyerror("Only one character allowed in character constants.");
 	}
 	
-	return new Character( str2.charAt( 0 ) );
+	return Character.valueOf( str2.charAt( 0 ) );
 }
 
 /**

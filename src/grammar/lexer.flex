@@ -102,11 +102,6 @@ import java.util.*;
       }
     }
     
-    private void popStream() throws java.io.IOException {
-    	write();
-    	yypopStream();
-    }
-    
     public String getCodeBody(){
         String s = codeBody.toString();
         codeBody = new StringBuffer(8192);

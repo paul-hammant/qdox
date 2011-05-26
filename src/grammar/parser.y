@@ -1033,13 +1033,13 @@ private Boolean toBoolean(String str) {
 }
 
 protected Byte toByte(String str) {
-   str = str.trim();
+   str = str.trim().replaceAll("_", "");
    
    return Byte.valueOf(str.substring(2), 2);
 }
 
 protected Integer toInteger(String str) {
-	str = str.trim();
+	str = str.trim().replaceAll("_", "");
 	
 	Integer result;
 	
@@ -1060,7 +1060,7 @@ protected Integer toInteger(String str) {
 }
 
 protected Long toLong(String str) {
-	str = str.trim();
+	str = str.trim().replaceAll("_", "");
 
 	Long result;
 	
@@ -1089,12 +1089,12 @@ protected Long toLong(String str) {
 }
 
 protected Float toFloat(String str) {
-	str = str.trim();
+	str = str.trim().replaceAll("_", "");
 	return Float.valueOf( str );
 }
 
 protected Double toDouble(String str) {
-	str = str.trim();
+	str = str.trim().replaceAll("_", "");
 
 	if( !str.endsWith("d") && !str.endsWith("D") ) {
 		yyerror( "Double literal must end with 'd' or 'D'." );

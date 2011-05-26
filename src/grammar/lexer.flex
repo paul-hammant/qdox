@@ -127,8 +127,12 @@ import java.util.*;
 Eol                     = \r|\n|\r\n
 WhiteSpace              = {Eol} | [ \t\f]
 CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
-IntegerLiteral			= (( [1-9] ([0-9])* ) | "0" [bB] [0-1]+ | ( "0" [xX] ([0-9]|[a-f]|[A-F])+ ) | ( "0" ([0-7])* ))
-LongLiteral				= (( [1-9] ([0-9])* ) | "0" [bB] [0-1]+ | ( "0" [xX] ([0-9]|[a-f]|[A-F])+ ) | ( "0" ([0-7])* )) [lL]
+DecimalIntegerLiteral   = ( [0-9] | [1-9] [_0-9]* [0-9] )
+HexIntegerLiteral       = ( "0" [xX] ( [0-9a-fA-F] | [0-9a-fA-F] [_0-9a-fA-F]* [0-9a-fA-F] ) )
+OctalIntegerLiteral     = ( "0" [_0-7]* [0-7] )
+BinaryIntegerLiteral    = ( "0" [bB] ( [01] | [01] [_01]* [01] ) )
+IntegerLiteral			= ( {DecimalIntegerLiteral} | {BinaryIntegerLiteral} | {HexIntegerLiteral} | {OctalIntegerLiteral} )
+LongLiteral				= ( {DecimalIntegerLiteral} | {BinaryIntegerLiteral} | {HexIntegerLiteral} | {OctalIntegerLiteral} ) [lL]
 Exponent				= [eE] [+-]? ([0-9])+
 FloatLiteral			= ( [0-9]+ ("." [0-9]+)? ({Exponent})? ([fF])? ) |
 						  ( "." [0-9]+ ({Exponent})? ([fF])? ) |

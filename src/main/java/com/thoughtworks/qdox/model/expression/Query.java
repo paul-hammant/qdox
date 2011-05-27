@@ -48,7 +48,7 @@ public class Query implements AnnotationValue {
         return this.falseExpression;
     }
 
-    public Object getParameterValue() {
+    public String getParameterValue() {
         return condition.getParameterValue().toString() + " ? " + trueExpression.getParameterValue() + " : "
             + falseExpression.getParameterValue();
     }

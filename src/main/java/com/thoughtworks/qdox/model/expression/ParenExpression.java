@@ -40,7 +40,7 @@ public class ParenExpression implements AnnotationValue {
         return visitor.visit( this );
     }
 
-    public Object getParameterValue() {
+    public String getParameterValue() {
         return "(" + value.getParameterValue() + ")";
     }
 }

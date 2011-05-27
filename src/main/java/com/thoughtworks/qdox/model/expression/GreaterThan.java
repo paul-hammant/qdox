@@ -34,7 +34,7 @@ public class GreaterThan extends BinaryOperator {
         return visitor.visit( this );
     }
 
-    public Object getParameterValue() {
+    public String getParameterValue() {
         return getLeft().getParameterValue() + " > " + getRight().getParameterValue();
     }
 }

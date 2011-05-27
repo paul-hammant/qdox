@@ -49,7 +49,7 @@ public class Constant implements AnnotationValue, Serializable {
         return visitor.visit( this );
     }
 
-    public Object getParameterValue() {
+    public String getParameterValue() {
         return image;
     }
 }

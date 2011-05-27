@@ -43,7 +43,7 @@ public class Cast implements AnnotationValue {
         return visitor.visit( this );
     }
 
-    public Object getParameterValue() {
+    public String getParameterValue() {
         return "(" + type.getValue() + ") " + value.getParameterValue();
     }
 

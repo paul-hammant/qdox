@@ -34,7 +34,7 @@ public class Not extends UnaryOperator {
         return visitor.visit( this );
     }
 
-    public Object getParameterValue() {
+    public String getParameterValue() {
         return "~" + getValue().toString();
     }
 }

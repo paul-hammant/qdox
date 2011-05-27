@@ -40,7 +40,7 @@ public class TypeRef implements AnnotationValue {
         return visitor.visit( this );
     }
 
-    public Object getParameterValue() {
+    public String getParameterValue() {
         return type.getValue() + ".class";
     }
 }

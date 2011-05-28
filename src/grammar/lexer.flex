@@ -133,13 +133,13 @@ HexNumeral                      = ( "0" [xX] {HexDigits} )
 OctalNumeral                    = ( "0" [_0-7]* [0-7] )
 BinaryNumeral                   = ( "0" [bB] ( [01] | [01] [_01]* [01] ) )
 IntegerLiteral			        = ( {DecimalNumeral} | {BinaryNumeral} | {HexNumeral} | {OctalNumeral} ) ([lL])?
-Exponent				        = [eE] [+-]? ([0-9])+
+Exponent				        = [eE] [+-]? {DecimalNumeral}
 FloatingPointLiteral            = ( {DecimalFloatingPointLiteral} | {HexadecimalFloatingPointLiteral} )
-DecimalFloatingPointLiteral	    = ( [0-9]+ ("." [0-9]+)? ({Exponent})? ([dDfF])? ) |
-						          ( "." [0-9]+ ({Exponent})? ([dDfF])?) |
-						          ( ([0-9])+ {Exponent} ([dDfF])?) |
-						          ( ([0-9])+ ({Exponent} )? ([dDfF]) )
-BinaryExponent                  = [pP] [+-]? ([0-9])+					          
+DecimalFloatingPointLiteral	    = ( {DecimalNumeral} ("." {DecimalNumeral})? ({Exponent})? ([dDfF])? ) |
+						          ( "." {DecimalNumeral} ({Exponent})? ([dDfF])?) |
+						          ( {DecimalNumeral} {Exponent} ([dDfF])?) |
+						          ( {DecimalNumeral} ({Exponent} )? ([dDfF]) )
+BinaryExponent                  = [pP] [+-]? ({DecimalNumeral})+					          
 HexSignificand                  = ( {HexNumeral} "."? ) |
                                   ( "0" [xX] ( {HexDigits} )? "." ( {HexDigits} ) )
 HexadecimalFloatingPointLiteral = {HexSignificand} {BinaryExponent} ([dDfF])?

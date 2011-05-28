@@ -22,24 +22,25 @@ package com.thoughtworks.qdox.parser.expression;
 
 public class AnnotationConstant implements ElemValueDef {
 
-    private final Object value;
-    private final String image;
+    private final String value;
+    private Class<?> type;
 
-    public AnnotationConstant( Object value, String image ) {
+    public AnnotationConstant( String value, Class<?> type ) {
         this.value = value;
-        this.image = image;
+        this.type = type;
     }
 
-    public Object getValue() {
+    public Class<?> getType()
+    {
+        return type;
+    }
+
+    public String getValue() {
         return value;
     }
 
-    public String getImage() {
-        return image;
-    }
-
     public String toString() {
-        return image;
+        return value;
     }
 
     public <U> U transform(AnnotationTransformer<U> transformer) {

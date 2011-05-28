@@ -131,17 +131,12 @@ DecimalIntegerLiteral   = ( [0-9] | [1-9] [_0-9]* [0-9] )
 HexIntegerLiteral       = ( "0" [xX] ( [0-9a-fA-F] | [0-9a-fA-F] [_0-9a-fA-F]* [0-9a-fA-F] ) )
 OctalIntegerLiteral     = ( "0" [_0-7]* [0-7] )
 BinaryIntegerLiteral    = ( "0" [bB] ( [01] | [01] [_01]* [01] ) )
-IntegerLiteral			= ( {DecimalIntegerLiteral} | {BinaryIntegerLiteral} | {HexIntegerLiteral} | {OctalIntegerLiteral} )
-LongLiteral				= ( {DecimalIntegerLiteral} | {BinaryIntegerLiteral} | {HexIntegerLiteral} | {OctalIntegerLiteral} ) [lL]
+IntegerLiteral			= ( {DecimalIntegerLiteral} | {BinaryIntegerLiteral} | {HexIntegerLiteral} | {OctalIntegerLiteral} ) ([lL])?
 Exponent				= [eE] [+-]? ([0-9])+
-FloatLiteral			= ( [0-9]+ ("." [0-9]+)? ({Exponent})? ([fF])? ) |
-						  ( "." [0-9]+ ({Exponent})? ([fF])? ) |
-						  ( ([0-9])+ {Exponent} ([fF])? ) |
-						  ( ([0-9])+ ({Exponent})? [fF] )
-DoubleLiteral			= ( [0-9]+ ("." [0-9]+)? ({Exponent})? [dD] ) |
-						  ( "." [0-9]+ ({Exponent})? [dD] ) |
-						  ( ([0-9])+ {Exponent} [dD] ) |
-						  ( ([0-9])+ ({Exponent})? [dD] )
+FloatingPointLiteral	= ( [0-9]+ ("." [0-9]+)? ({Exponent})? ([dDfF])? ) |
+						  ( "." [0-9]+ ({Exponent})? ([dDfF])? ) |
+						  ( ([0-9])+ {Exponent} ([dDfF])? ) |
+						  ( ([0-9])+ ({Exponent})? [dDfF]? )
 UnicodeChar = \\u[a-fA-F0-9]{4}						  
 Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 Annotation = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
@@ -364,9 +359,7 @@ JavadocEnd  = "*"+ "/"
     "~"                 { return Parser.TILDE; }
 
 	{IntegerLiteral}	{ return Parser.INTEGER_LITERAL; }
-	{LongLiteral}		{ return Parser.LONG_LITERAL; }
-	{FloatLiteral}		{ return Parser.FLOAT_LITERAL; }
-	{DoubleLiteral}		{ return Parser.DOUBLE_LITERAL; }
+	{FloatingPointLiteral} { return Parser.FLOAT_LITERAL; }
 	"true" | "false"	{ return Parser.BOOLEAN_LITERAL; }
 	
 	"class"				{ return Parser.CLASS; }

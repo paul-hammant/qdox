@@ -311,9 +311,32 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationConstant)
 	 */
 	public AnnotationValue transform(AnnotationConstant annotationConstant) {
-		Object value = annotationConstant.getValue();
-		String image = annotationConstant.getImage();
-		return new Constant(value, image);
+	    AnnotationValue result;
+		String image = annotationConstant.getValue();
+		Class<?> type = annotationConstant.getType();
+		if( type == Integer.class )
+		{
+		    result = Constant.newIntegerLiteral( image );
+		}
+		else if ( type == String.class )
+		{
+		    result = Constant.newStringLiteral( image );
+		}
+		else if ( type == Boolean.class ) 
+		{
+		    result = Constant.newBooleanLiteral( image );
+		}
+		else if ( type == Character.class ) 
+		{
+		  result = Constant.newCharacterLiteral( image );    
+		}
+		else if ( type == Float.class ) {
+		    result = Constant.newFloatingPointLiteral( image );
+		}
+		else {
+		    result = null; //unknown??
+		}
+		return result;
 	}
 
 	/* (non-Javadoc)

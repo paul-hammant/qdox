@@ -46,9 +46,7 @@ import java.util.Stack;
 %token <sval> BOOLEAN_LITERAL
 %token <sval> BYTE_LITERAL
 %token <sval> INTEGER_LITERAL
-%token <sval> LONG_LITERAL
 %token <sval> FLOAT_LITERAL
-%token <sval> DOUBLE_LITERAL
 %token <sval> CHAR_LITERAL
 %token <sval> STRING_LITERAL
 %token <ival> VERTLINE2 AMPERSAND2 VERTLINE CIRCUMFLEX AMPERSAND EQUALS2 NOTEQUALS
@@ -141,33 +139,25 @@ TypeDeclaration: ClassDeclaration
 // NOTE: LONG_LITERAL and DOUBLE_LITERAL are not part of 
 Literal: INTEGER_LITERAL
          { 
-           $$ = new AnnotationConstant(toInteger($1), $1); 
-         } 
-       | LONG_LITERAL 
-         { 
-           $$ = new AnnotationConstant(toLong($1), $1); 
+           $$ = new AnnotationConstant($1, Integer.class); 
          } 
        | FLOAT_LITERAL 
          { 
-           $$ = new AnnotationConstant(toFloat($1), $1); 
-         } 
-       | DOUBLE_LITERAL 
-         { 
-           $$ = new AnnotationConstant(toDouble($1), $1);
+           $$ = new AnnotationConstant($1, Float.class); 
          } 
        | BOOLEAN_LITERAL 
          { 
-           $$ = new AnnotationConstant(toBoolean($1), $1);
+           $$ = new AnnotationConstant($1, Boolean.class);
          } 
        | CHAR_LITERAL 
          {
            String s = lexer.getCodeBody(); 
-           $$ = new AnnotationConstant(toChar(s), s); 
+           $$ = new AnnotationConstant(s, Character.class); 
          } 
        | STRING_LITERAL 
          { 
            String s = lexer.getCodeBody(); 
-           $$ = new AnnotationConstant(toString(s), s); 
+           $$ = new AnnotationConstant(s, String.class); 
          };
 
 // 4 Types, Values, and Variables
@@ -925,213 +915,4 @@ public void onComment( String comment, int line, int column ) {
   commentParser.setDebugLexer( this.debugLexer );
   commentParser.setDebugParser( this.yydebug );
   commentParser.parse();
-}
-
-private String convertString(String str) {
-	StringBuffer buf = new StringBuffer();
-	boolean escaped = false;
-	int unicode = 0;
-	int value = 0;
-	int octal = 0;
-	boolean consumed = false;
-	
-	for(int i = 0; i < str.length(); ++ i) {
-		char ch = str.charAt( i );
-		
-		if(octal > 0) {
-			if( value >= '0' && value <= '7' ) {
-				value = ( value << 3 ) | Character.digit( ch, 8 );
-				-- octal;
-				consumed = true;
-			}
-			else {
-				octal = 0;
-			}
-			
-			if( octal == 0 ) {
-				buf.append( (char) value );		
-				value = 0;
-			}
-		}
-		
-		if(!consumed) {
-			if(unicode > 0) {
-				value = ( value << 4 ) | Character.digit( ch, 16 );
-				
-				-- unicode;
-		
-				if(unicode == 0) {
-					buf.append( (char)value );
-					value = 0;
-				}
-			}
-			else if(escaped) {
-				if(ch == 'u' || ch == 'U') {
-					unicode = 4;
-				}
-				else if(ch >= '0' && ch <= '7') {
-					octal = (ch > '3') ? 1 : 2;
-					value = Character.digit( ch, 8 );
-				}
-				else {
-					switch( ch ) {
-						case 'b':
-							buf.append('\b');
-							break;
-							
-						case 'f':
-							buf.append('\f');
-							break;
-							
-						case 'n':
-							buf.append('\n');
-							break;
-							
-						case 'r':
-							buf.append('\r');
-							break;
-							
-						case 't':
-							buf.append('\t');
-							break;
-							
-						case '\'':
-							buf.append('\'');
-							break;
-	
-						case '\"':
-							buf.append('\"');
-							break;
-	
-						case '\\':
-							buf.append('\\');
-							break;
-							
-						default:
-							yyerror( "Illegal escape character '" + ch + "'" );
-					}
-				}
-				
-				escaped = false;
-			}
-			else if(ch == '\\') {
-				escaped = true;
-			}
-			else {
-				buf.append( ch );
-			}
-		}
-	}
-
-	return buf.toString();
-}
-
-private Boolean toBoolean(String str) {
-	str = str.trim();
-
-	return Boolean.valueOf( str );
-}
-
-protected Byte toByte(String str) {
-   str = str.trim().replaceAll("_", "");
-   
-   return Byte.valueOf(str.substring(2), 2);
-}
-
-protected Integer toInteger(String str) {
-	str = str.trim().replaceAll("_", "");
-	
-	Integer result;
-	
-	if(str.startsWith("0x") || str.startsWith( "0X" ) ) {
-		result = Integer.valueOf( str.substring( 2 ), 16 );
-	}
-	else if(str.startsWith("0b") || str.startsWith( "0B" ) ) {
-		result = Integer.valueOf( str.substring( 2 ), 2 );
-	}
-	else if(str.length() > 1 && str.startsWith("0") ) {
-		result = Integer.valueOf( str.substring( 1 ), 8 );
-	}
-	else {
-		result = Integer.valueOf( str );
-	}
-	
-	return result;
-}
-
-protected Long toLong(String str) {
-	str = str.trim().replaceAll("_", "");
-
-	Long result;
-	
-	if( !str.endsWith("l") && !str.endsWith("L") ) {
-		yyerror( "Long literal must end with 'l' or 'L'." );
-	}
-	
-	int len = str.length() - 1;
-	
-	if(str.startsWith("0x") || str.startsWith( "0X" ) )
-	{
-		result = Long.valueOf( str.substring( 2, len ), 16 );
-	}
-	else if(str.startsWith("0b") || str.startsWith( "0B" ) )
-	{
-		result = Long.valueOf( str.substring( 2, len ), 2 );
-	}
-	else if(str.startsWith("0") )
-	{
-		result = Long.valueOf( str.substring( 1, len ), 8 );
-	}
-	else {
-		result = Long.valueOf( str.substring( 0, len ) );
-	}
-	return result;
-}
-
-protected Float toFloat(String str) {
-	str = str.trim().replaceAll("_", "");
-	return Float.valueOf( str );
-}
-
-protected Double toDouble(String str) {
-	str = str.trim().replaceAll("_", "");
-
-	if( !str.endsWith("d") && !str.endsWith("D") ) {
-		yyerror( "Double literal must end with 'd' or 'D'." );
-	}
-	
-	return Double.valueOf( str.substring( 0, str.length() - 1 ) );
-}
-
-/**
- * Convert a character literal into a character.
- */
-protected Character toChar(String str) {
-	str = str.trim();
-
-	if( !str.startsWith("'") && !str.endsWith("'") ) {
-		yyerror("Character must be single quoted.");
-	}
-
-	String str2 = convertString( str.substring( 1, str.length() - 1 ) );
-	
-	if( str2.length() != 1) {
-		yyerror("Only one character allowed in character constants.");
-	}
-	
-	return Character.valueOf( str2.charAt( 0 ) );
-}
-
-/**
- * Convert a string literal into a string.
- */
-protected String toString(String str) {
-	str = str.trim();
-
-	if( str.length() < 2 && !str.startsWith("\"") && !str.endsWith("\"") ) {
-		yyerror("String must be double quoted.");
-	}
-
-	String str2 = convertString( str.substring( 1, str.length() - 1 ) );
-	return str2;
 }

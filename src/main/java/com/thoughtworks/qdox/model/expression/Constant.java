@@ -1,5 +1,8 @@
 package com.thoughtworks.qdox.model.expression;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -263,7 +266,7 @@ public abstract class Constant
             offset = 2;
             // result = Integer.valueOf( str.substring( 2 ), 2 );
         }
-        else if ( str.length() > 1 && str.startsWith( "0" ) )
+        else if ( Pattern.compile( "^0[0-7]" ).matcher( str ).find() )
         {
             radix = 8;
             offset = 1;

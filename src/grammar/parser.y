@@ -44,7 +44,6 @@ import java.util.Stack;
 // strongly typed tokens/types
 %token <sval> IDENTIFIER
 %token <sval> BOOLEAN_LITERAL
-%token <sval> BYTE_LITERAL
 %token <sval> INTEGER_LITERAL
 %token <sval> FLOAT_LITERAL
 %token <sval> CHAR_LITERAL
@@ -238,7 +237,7 @@ TypeDeclSpecifier: AnyName
 TypeParameter: IDENTIFIER 
                { 
                  typeVariable = new TypeVariableDef($1);
-                 typeVariable.bounds = new LinkedList();
+                 typeVariable.bounds = new LinkedList<TypeDef>();
                }
                TypeBound_opt
                {
@@ -251,7 +250,7 @@ TypeBound_opt:
 
 TypeBound: EXTENDS ClassOrInterfaceType
 		   {
-		     typeVariable.bounds = new LinkedList();
+		     typeVariable.bounds = new LinkedList<TypeDef>();
 		     typeVariable.bounds.add($2); 
 		   }
 		   AdditionalBoundList_opt;
@@ -270,7 +269,7 @@ TypeArguments_opt:
 
 TypeArguments: LESSTHAN 
                {
-                 typeStack.peek().actualArgumentTypes = new LinkedList();
+                 typeStack.peek().actualArgumentTypes = new LinkedList<TypeDef>();
                }
                ActualTypeArgumentList GREATERTHAN;
 
@@ -677,7 +676,7 @@ ElementValuePair: IDENTIFIER EQUALS ElementValue
 */    
 ElementValueArrayInitializer: {
                                 annoValueListStack.add(annoValueList);
-                                annoValueList = new LinkedList();
+                                annoValueList = new LinkedList<ElemValueDef>();
                               }
                               BRACEOPEN ElementValues_opt BRACECLOSE
                               { 

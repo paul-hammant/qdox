@@ -124,23 +124,29 @@ import java.util.*;
 
 %}
 
-Eol                     = \r|\n|\r\n
-WhiteSpace              = {Eol} | [ \t\f]
-CommentChar             = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
-DecimalIntegerLiteral   = ( [0-9] | [1-9] [_0-9]* [0-9] )
-HexIntegerLiteral       = ( "0" [xX] ( [0-9a-fA-F] | [0-9a-fA-F] [_0-9a-fA-F]* [0-9a-fA-F] ) )
-OctalIntegerLiteral     = ( "0" [_0-7]* [0-7] )
-BinaryIntegerLiteral    = ( "0" [bB] ( [01] | [01] [_01]* [01] ) )
-IntegerLiteral			= ( {DecimalIntegerLiteral} | {BinaryIntegerLiteral} | {HexIntegerLiteral} | {OctalIntegerLiteral} ) ([lL])?
-Exponent				= [eE] [+-]? ([0-9])+
-FloatingPointLiteral	= ( [0-9]+ ("." [0-9]+)? ({Exponent})? ([dDfF])? ) |
-						  ( "." [0-9]+ ({Exponent})? ([dDfF])? ) |
-						  ( ([0-9])+ {Exponent} ([dDfF])? ) |
-						  ( ([0-9])+ ({Exponent})? [dDfF]? )
-UnicodeChar = \\u[a-fA-F0-9]{4}						  
-Id						= ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
-Annotation = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
-JavadocEnd  = "*"+ "/"
+Eol                             = \r|\n|\r\n
+WhiteSpace                      = {Eol} | [ \t\f]
+CommentChar                     = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
+DecimalNumeral                  = ( [0-9] | [1-9] [_0-9]* [0-9] )
+HexDigits                       = ( [0-9a-fA-F] | [0-9a-fA-F] [_0-9a-fA-F]* [0-9a-fA-F] )
+HexNumeral                      = ( "0" [xX] {HexDigits} )
+OctalNumeral                    = ( "0" [_0-7]* [0-7] )
+BinaryNumeral                   = ( "0" [bB] ( [01] | [01] [_01]* [01] ) )
+IntegerLiteral			        = ( {DecimalNumeral} | {BinaryNumeral} | {HexNumeral} | {OctalNumeral} ) ([lL])?
+Exponent				        = [eE] [+-]? ([0-9])+
+FloatingPointLiteral            = ( {DecimalFloatingPointLiteral} | {HexadecimalFloatingPointLiteral} )
+DecimalFloatingPointLiteral	    = ( [0-9]+ ("." [0-9]+)? ({Exponent})? ([dDfF])? ) |
+						          ( "." [0-9]+ ({Exponent})? ([dDfF])?) |
+						          ( ([0-9])+ {Exponent} ([dDfF])?) |
+						          ( ([0-9])+ ({Exponent} )? ([dDfF]) )
+BinaryExponent                  = [pP] [+-]? ([0-9])+					          
+HexSignificand                  = ( {HexNumeral} "."? ) |
+                                  ( "0" [xX] ( {HexDigits} )? "." ( {HexDigits} ) )
+HexadecimalFloatingPointLiteral = {HexSignificand} {BinaryExponent} ([dDfF])?
+UnicodeChar                     = \\u[a-fA-F0-9]{4}						  
+Id						        = ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
+Annotation                      = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
+JavadocEnd                      = "*"+ "/"
 
 %state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ENUM
 

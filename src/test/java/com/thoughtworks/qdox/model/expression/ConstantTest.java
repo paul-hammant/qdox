@@ -6,9 +6,9 @@ import org.junit.Test;
 
 public class ConstantTest
 {
-    int i = 00;
     
-    
+    float i = 0xp+1f;
+
     @Test
     public void testBinaryInteger() {
         assertEquals( Integer.valueOf( "0", 2 ), Constant.newIntegerLiteral( "0b0" ).getValue() );
@@ -22,7 +22,7 @@ public class ConstantTest
     }
     
     @Test 
-    public void OctalInteger() {
+    public void testOctalInteger() {
         assertEquals( Integer.valueOf( "0", 8 ), Constant.newIntegerLiteral( "00" ).getValue() );
         assertEquals( Integer.valueOf( "0", 8 ), Constant.newIntegerLiteral( "000" ).getValue() );
         assertEquals( Integer.valueOf( "10", 8 ), Constant.newIntegerLiteral( "010" ).getValue() );
@@ -105,5 +105,178 @@ public class ConstantTest
         assertEquals( Long.valueOf( "10", 16 ), Constant.newIntegerLiteral( "0X10L" ).getValue() );
     }
     
+    @Test
+    public void testBoolean() {
+        assertEquals( Boolean.TRUE, Constant.newBooleanLiteral( "true" ).getValue() );
+        assertEquals( Boolean.FALSE, Constant.newBooleanLiteral( "false" ).getValue() );
+    }
     
+
+    @Test
+    public void testDecimalFloatingPoint() {
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( "0.0" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( "0.0f" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( "0.0F" ).getValue() );
+        
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( "000.0" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( "000.0f" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( "000.0F" ).getValue() );
+        
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( "0.000" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( "0.000f" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( "0.000F" ).getValue() );
+        
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( ".0" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( ".0f" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( ".0F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( ".00" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( ".00f" ).getValue() );
+        assertEquals( Float.valueOf( "0.0" ), Constant.newFloatingPointLiteral( ".00F" ).getValue() );
+        
+        assertEquals( Float.valueOf( "0" ), Constant.newFloatingPointLiteral( "0f" ).getValue() );
+        assertEquals( Float.valueOf( "0" ), Constant.newFloatingPointLiteral( "0F" ).getValue() );
+
+    }
+    
+    @Test
+    public void testDecimalFloatingPointWithExponent() {
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0e1" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0E1" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0e1f" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0E1f" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0e1F" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0E1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "2.0e-1" ), Constant.newFloatingPointLiteral( "2.0e-1" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e-1" ), Constant.newFloatingPointLiteral( "2.0E-1" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e-1" ), Constant.newFloatingPointLiteral( "2.0e-1f" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e-1" ), Constant.newFloatingPointLiteral( "2.0E-1f" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e-1" ), Constant.newFloatingPointLiteral( "2.0e-1F" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e-1" ), Constant.newFloatingPointLiteral( "2.0E-1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0e+1" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0E+1" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0e+1f" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0E+1f" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0e+1F" ).getValue() );
+        assertEquals( Float.valueOf( "2.0e1" ), Constant.newFloatingPointLiteral( "2.0E+1F" ).getValue() );
+
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2e1" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2E1" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2e1f" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2E1f" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2e1F" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2E1F" ).getValue() );
+
+        assertEquals( Float.valueOf( ".2e-1" ), Constant.newFloatingPointLiteral( ".2e-1" ).getValue() );
+        assertEquals( Float.valueOf( ".2e-1" ), Constant.newFloatingPointLiteral( ".2E-1" ).getValue() );
+        assertEquals( Float.valueOf( ".2e-1" ), Constant.newFloatingPointLiteral( ".2e-1f" ).getValue() );
+        assertEquals( Float.valueOf( ".2e-1" ), Constant.newFloatingPointLiteral( ".2E-1f" ).getValue() );
+        assertEquals( Float.valueOf( ".2e-1" ), Constant.newFloatingPointLiteral( ".2e-1F" ).getValue() );
+        assertEquals( Float.valueOf( ".2e-1" ), Constant.newFloatingPointLiteral( ".2E-1F" ).getValue() );
+
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2e+1" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2E+1" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2e+1f" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2E+1f" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2e+1F" ).getValue() );
+        assertEquals( Float.valueOf( ".2e1" ), Constant.newFloatingPointLiteral( ".2E+1F" ).getValue() );
+        
+        assertEquals( Float.valueOf( "2e1" ), Constant.newFloatingPointLiteral( "2e1" ).getValue() );
+        assertEquals( Float.valueOf( "2e1" ), Constant.newFloatingPointLiteral( "2E1" ).getValue() );
+        
+        assertEquals( Float.valueOf( "2e-1" ), Constant.newFloatingPointLiteral( "2e-1" ).getValue() );
+        assertEquals( Float.valueOf( "2e-1" ), Constant.newFloatingPointLiteral( "2E-1" ).getValue() );
+        
+        assertEquals( Float.valueOf( "2e1" ), Constant.newFloatingPointLiteral( "2e+1" ).getValue() );
+        assertEquals( Float.valueOf( "2e1" ), Constant.newFloatingPointLiteral( "2E+1" ).getValue() );
+   }
+    
+    @Test
+    public void testHexadecimalFloatingPoint() {
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2p1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2p1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2p1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2p1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2p1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2p1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0x2p-1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0X2p-1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0x2p-1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0X2p-1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0x2p-1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0X2p-1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2p+1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2p+1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2p+1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2p+1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2p+1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2p+1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2.p1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2.p1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2.p1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2.p1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2.p1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2.p1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0x2.p-1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0X2.p-1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0x2.p-1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0X2.p-1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0x2.p-1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p-1" ), Constant.newFloatingPointLiteral( "0X2.p-1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2.p+1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2.p+1" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2.p+1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2.p+1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0x2.p+1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x2p1" ), Constant.newFloatingPointLiteral( "0X2.p+1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0x.2p1" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0X.2p1" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0x.2p1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0X.2p1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0x.2p1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0X.2p1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x.2p-1" ), Constant.newFloatingPointLiteral( "0x.2p-1" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p-1" ), Constant.newFloatingPointLiteral( "0X.2p-1" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p-1" ), Constant.newFloatingPointLiteral( "0x.2p-1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p-1" ), Constant.newFloatingPointLiteral( "0X.2p-1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p-1" ), Constant.newFloatingPointLiteral( "0x.2p-1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p-1" ), Constant.newFloatingPointLiteral( "0X.2p-1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0x.2p+1" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0X.2p+1" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0x.2p+1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0X.2p+1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0x.2p+1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x.2p1" ), Constant.newFloatingPointLiteral( "0X.2p+1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0x3.2p1" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0X3.2p1" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0x3.2p1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0X3.2p1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0x3.2p1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0X3.2p1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x3.2p-1" ), Constant.newFloatingPointLiteral( "0x3.2p-1" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p-1" ), Constant.newFloatingPointLiteral( "0X3.2p-1" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p-1" ), Constant.newFloatingPointLiteral( "0x3.2p-1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p-1" ), Constant.newFloatingPointLiteral( "0X3.2p-1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p-1" ), Constant.newFloatingPointLiteral( "0x3.2p-1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p-1" ), Constant.newFloatingPointLiteral( "0X3.2p-1F" ).getValue() );
+
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0x3.2p+1" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0X3.2p+1" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0x3.2p+1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0X3.2p+1f" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0x3.2p+1F" ).getValue() );
+        assertEquals( Float.valueOf( "0x3.2p1" ), Constant.newFloatingPointLiteral( "0X3.2p+1F" ).getValue() );
+}
 }

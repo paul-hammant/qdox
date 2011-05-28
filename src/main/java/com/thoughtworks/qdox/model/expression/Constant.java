@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.expression;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /*
@@ -232,132 +231,98 @@ public abstract class Constant
         return buf.toString();
     }
 
-    protected static Boolean toBoolean( String str )
+    protected static Boolean toBoolean( String value )
     {
-        str = str.trim();
-
-        return Boolean.valueOf( str );
+        return Boolean.valueOf( value );
     }
 
-    protected static Byte toByte( String str )
+    protected static Number toIntegerLiteral( String value )
     {
-        str = str.trim().replaceAll( "_", "" );
-
-        return Byte.valueOf( str.substring( 2 ), 2 );
-    }
-
-    protected static Number toIntegerLiteral( String str )
-    {
-        str = str.trim().replaceAll( "_", "" );
+        String literal = value.replaceAll( "_", "" );
 
         Number result;
         int radix = 10; // default
         int offset = 0;
 
-        if ( str.startsWith( "0x" ) || str.startsWith( "0X" ) )
+        if ( Pattern.compile( "^0[xX]" ).matcher( literal ).find() )
         {
             radix = 16;
             offset = 2;
-            // result = Integer.valueOf( str.substring( 2 ), 16 );
         }
-        else if ( str.startsWith( "0b" ) || str.startsWith( "0B" ) )
+        else if ( Pattern.compile( "^0[bB]" ).matcher( literal ).find() )
         {
             radix = 2;
             offset = 2;
-            // result = Integer.valueOf( str.substring( 2 ), 2 );
         }
-        else if ( Pattern.compile( "^0[0-7]" ).matcher( str ).find() )
+        else if ( Pattern.compile( "^0[0-7]" ).matcher( literal ).find() )
         {
             radix = 8;
             offset = 1;
-            // result = Integer.valueOf( str.substring( 1 ), 8 );
+        }
+        if ( Pattern.compile( "[lL]$" ).matcher( literal ).find() )
+        {
+            result = Long.valueOf( literal.substring( offset, literal.length() - 1 ), radix );
         }
         else
         {
-            // result = Integer.valueOf( str );
-        }
-
-        if ( str.matches( ".+[lL]" ) )
-        {
-            result = Long.valueOf( str.substring( offset, str.length() - 1 ), radix );
-        }
-        else
-        {
-            result = Integer.valueOf( str.substring( offset ), radix );
+            result = Integer.valueOf( literal.substring( offset ), radix );
         }
 
         return result;
     }
 
-    protected static Number toFloatingPointLiteral( String str )
+    protected static Number toFloatingPointLiteral( String value )
     {
-        str = str.trim().replaceAll( "_", "" );
+        String literal = value.replaceAll( "_", "" );
 
         Number result;
 
-        if ( str.matches( ".+[dD]" ) )
+        if ( Pattern.compile( "[dD]$" ).matcher( literal ).find() )
         {
-            result = Double.valueOf( str.substring( 0, str.length() - 1 ) );
+            result = Double.valueOf( literal.substring( 0, literal.length() - 1 ) );
         }
-        else if ( str.matches( ".+[fF]" ) )
+        else if ( Pattern.compile( "[fF]$" ).matcher( literal ).find()  )
         {
-            result = Float.valueOf( str.substring( 0, str.length() - 1 ) );
+            result = Float.valueOf( literal.substring( 0, literal.length() - 1 ) );
         }
         else
         {
-            result = Float.valueOf( str );
+            result = Float.valueOf( literal );
         }
 
         return result;
-    }
-
-    protected static Double toDouble( String str )
-    {
-        str = str.trim().replaceAll( "_", "" );
-
-        if ( !str.endsWith( "d" ) && !str.endsWith( "D" ) )
-        {
-            // yyerror( "Double literal must end with 'd' or 'D'." );
-        }
-
-        return Double.valueOf( str.substring( 0, str.length() - 1 ) );
     }
 
     /**
      * Convert a character literal into a character.
      */
-    protected static Character toChar( String str )
+    protected static Character toChar( String value )
     {
-        str = str.trim();
-
-        if ( !str.startsWith( "'" ) && !str.endsWith( "'" ) )
+        if ( !value.startsWith( "'" ) && !value.endsWith( "'" ) )
         {
-            // yyerror("Character must be single quoted.");
+            throw new IllegalArgumentException( "Character must be single quoted." );
         }
 
-        String str2 = convertString( str.substring( 1, str.length() - 1 ) );
+        String literal = convertString( value.substring( 1, value.length() - 1 ) );
 
-        if ( str2.length() != 1 )
+        if ( literal.length() != 1 )
         {
-            // yyerror("Only one character allowed in character constants.");
+            throw new IllegalArgumentException( "Only one character allowed in character constants." );
         }
 
-        return Character.valueOf( str2.charAt( 0 ) );
+        return Character.valueOf( literal.charAt( 0 ) );
     }
 
     /**
      * Convert a string literal into a string.
      */
-    protected static String toString( String str )
+    protected static String toString( String value )
     {
-        str = str.trim();
-
-        if ( str.length() < 2 && !str.startsWith( "\"" ) && !str.endsWith( "\"" ) )
+        if ( value.length() < 2 && !value.startsWith( "\"" ) && !value.endsWith( "\"" ) )
         {
-            // yyerror("String must be double quoted.");
+            throw new IllegalArgumentException( "String must be double quoted." );
         }
 
-        String str2 = convertString( str.substring( 1, str.length() - 1 ) );
-        return str2;
+        return convertString( value.substring( 1, value.length() - 1 ) );
     }
 }

@@ -7,8 +7,6 @@ import org.junit.Test;
 public class ConstantTest
 {
     
-    float i = 0xp+1f;
-
     @Test
     public void testBinaryInteger() {
         assertEquals( Integer.valueOf( "0", 2 ), Constant.newIntegerLiteral( "0b0" ).getValue() );

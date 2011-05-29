@@ -35,13 +35,6 @@ import com.thoughtworks.qdox.library.ClassLibrary;
  */
 public class DefaultJavaClass extends AbstractInheritableJavaEntity implements JavaClass {
 
-    private static Type OBJECT_TYPE;
-    private static Type ENUM_TYPE;
-    private static Type ANNOTATION = new Type("java.lang.annotation.Annotation");
-    
-    private static JavaClass OBJECT_JAVACLASS;
-    private static JavaClass ENUM_JAVACLASS;
-
     private List<JavaConstructor> constructors = new LinkedList<JavaConstructor>();
     private List<JavaMethod> methods = new LinkedList<JavaMethod>();
     private List<JavaField> fields = new LinkedList<JavaField>();
@@ -106,12 +99,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      * @see com.thoughtworks.qdox.model.JavaClass#getSuperClass()
      */
     public Type getSuperClass() {
-        if(OBJECT_TYPE == null) {
-            if(getSource().getJavaClassLibrary() != null) {
-                OBJECT_TYPE = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
-                ENUM_TYPE = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
-            }
-        }
+        Type OBJECT_TYPE = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
+        Type ENUM_TYPE = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
         
         boolean iAmJavaLangObject = OBJECT_TYPE.equals(asType());
 
@@ -129,12 +118,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public JavaClass getSuperJavaClass() {
         JavaClass result = null;
-        if(OBJECT_JAVACLASS == null) {
-            if(getSource().getJavaClassLibrary() != null) {
-                OBJECT_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" );
-                ENUM_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" );
-            }
-        }
+        JavaClass OBJECT_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" );
+        JavaClass ENUM_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" );
         
         boolean iAmJavaLangObject = OBJECT_JAVACLASS.equals(this);
         

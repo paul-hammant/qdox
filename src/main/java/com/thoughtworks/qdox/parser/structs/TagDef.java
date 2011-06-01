@@ -31,7 +31,7 @@ public class TagDef
     {
         this.setName( name );
         this.setText( text );
-        this.lineNumber = lineNumber;
+        this.setLineNumber( lineNumber );
     }
 
     public TagDef( String name, String text )
@@ -48,7 +48,7 @@ public class TagDef
         result.append( " => \"" );
         result.append( text );
         result.append( "\" @ line " );
-        result.append( lineNumber );
+        result.append( getLineNumber() );
         return result.toString();
     }
 

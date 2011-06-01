@@ -21,7 +21,24 @@ package com.thoughtworks.qdox.parser.structs;
 
 public class LocatedDef {
 	
-	public int lineNumber;
-	public int columnNumber;
+	private int lineNumber;
+	private int columnNumber;
+	
+    public void setLineNumber( int lineNumber )
+    {
+        this.lineNumber = lineNumber;
+    }
+    public int getLineNumber()
+    {
+        return lineNumber;
+    }
+    public void setColumnNumber( int columnNumber )
+    {
+        this.columnNumber = columnNumber;
+    }
+    public int getColumnNumber()
+    {
+        return columnNumber;
+    }
 
 }

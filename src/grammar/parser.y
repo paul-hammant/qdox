@@ -365,7 +365,7 @@ ClassDeclaration: NormalClassDeclaration
 
 NormalClassDeclaration: 
     AnyModifiers_opt /* =ClassModifiers_opt */ classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
-        cls.lineNumber = line;
+        cls.setLineNumber(line);
         cls.getModifiers().addAll(modifiers); modifiers.clear(); 
         cls.setName( $3 );
         cls.setTypeParameters(typeParams);
@@ -477,7 +477,7 @@ MethodDeclaration: MethodHeader memberend /* =MethodBody*/
 MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
               {
                 builder.beginMethod();
-                mth.lineNumber = lexer.getLine();
+                mth.setLineNumber(lexer.getLine());
                 mth.getModifiers().addAll(modifiers); modifiers.clear();
                 mth.setTypeParams(typeParams);
                 mth.setReturnType($3);
@@ -490,7 +490,7 @@ MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER 
             | AnyModifiers_opt Type /* =ResultType */ IDENTIFIER PARENOPEN 
               {
                 builder.beginMethod();
-                mth.lineNumber = lexer.getLine();
+                mth.setLineNumber(lexer.getLine());
                 mth.getModifiers().addAll(modifiers); modifiers.clear();
                 mth.setReturnType($2);
                 mth.setName($3);
@@ -561,7 +561,7 @@ memberend: CODEBLOCK
 constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOPEN 
              {
                builder.beginConstructor();
-               mth.lineNumber = lexer.getLine();
+               mth.setLineNumber(lexer.getLine());
                mth.getModifiers().addAll(modifiers); modifiers.clear();
                mth.setConstructor(true); 
                mth.setName($2);
@@ -575,7 +575,7 @@ constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOP
            | AnyModifiers_opt /* =ConstructorModifiers_opt */ TypeParameters IDENTIFIER PARENOPEN 
              {
                builder.beginConstructor();
-               mth.lineNumber = lexer.getLine();
+               mth.setLineNumber(lexer.getLine());
                mth.setTypeParams(typeParams);
                mth.getModifiers().addAll(modifiers); modifiers.clear();
                mth.setConstructor(true); 
@@ -591,7 +591,7 @@ constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOP
 // 8.9 Enums
 EnumDeclaration: AnyModifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Interfaces_opt 
                  { 
-                   cls.lineNumber = line;
+                   cls.setLineNumber(line);
                    cls.getModifiers().addAll(modifiers);
                    cls.setName( $3 );
                    cls.setType(ClassDef.ENUM);
@@ -638,7 +638,7 @@ Annotations_opt:
 Annotation /* = NormalAnnotation*/: AT AnyName /* =TypeName */ 
                                     {
                                       AnnoDef annotation = new AnnoDef( new TypeDef($2) );
-                                      annotation.lineNumber = lexer.getLine();
+                                      annotation.setLineNumber(lexer.getLine());
                                       annotationStack.addFirst(annotation);
                                     }
                                     annotationParensOpt
@@ -898,7 +898,7 @@ private class Value {
 
 private void makeField(TypeDef field, String body) {
     FieldDef fd = new FieldDef( field.name );
-    fd.lineNumber = line;
+    fd.setLineNumber(line);
     fd.getModifiers().addAll(modifiers); 
     fd.setType( fieldType );
     fd.setDimensions(field.dimensions);

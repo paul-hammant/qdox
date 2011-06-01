@@ -84,7 +84,7 @@ public class ModelBuilder implements Builder {
     public void addPackage(PackageDef packageDef) {
         DefaultJavaPackage jPackage = new DefaultJavaPackage(packageDef.getName());
         jPackage.setClassLibrary( source.getJavaClassLibrary());
-        jPackage.setLineNumber(packageDef.lineNumber);
+        jPackage.setLineNumber(packageDef.getLineNumber());
         jPackage.setModelWriterFactory(modelWriterFactory);
         addJavaDoc(jPackage);
     	setAnnotations(jPackage);
@@ -105,7 +105,7 @@ public class ModelBuilder implements Builder {
 
     public void beginClass(ClassDef def) {
         DefaultJavaClass newClass = new DefaultJavaClass(source);
-        newClass.setLineNumber(def.lineNumber);
+        newClass.setLineNumber(def.getLineNumber());
         newClass.setModelWriterFactory(modelWriterFactory);
 
         // basic details
@@ -195,7 +195,7 @@ public class ModelBuilder implements Builder {
             tagList.add( 
                 docletTagFactory.createDocletTag(
                     tagDef.getName(), tagDef.getText(), 
-                    entity, tagDef.lineNumber
+                    entity, tagDef.getLineNumber()
                 )
             );
         }
@@ -220,7 +220,7 @@ public class ModelBuilder implements Builder {
 
     public void endConstructor( MethodDef def )
     {
-        currentConstructor.setLineNumber(def.lineNumber);
+        currentConstructor.setLineNumber(def.getLineNumber());
 
         // basic details
         currentConstructor.setName(def.getName());
@@ -267,7 +267,7 @@ public class ModelBuilder implements Builder {
     }
     
     public void endMethod(MethodDef def) {
-        currentMethod.setLineNumber(def.lineNumber);
+        currentMethod.setLineNumber(def.getLineNumber());
 
         // basic details
         currentMethod.setName(def.getName());
@@ -322,7 +322,7 @@ public class ModelBuilder implements Builder {
 	public void addField(FieldDef def) {
         DefaultJavaField currentField = new DefaultJavaField();
         currentField.setParentClass(classStack.getFirst());
-        currentField.setLineNumber(def.lineNumber);
+        currentField.setLineNumber(def.getLineNumber());
         currentField.setModelWriterFactory(modelWriterFactory);
 
         currentField.setName(def.getName());

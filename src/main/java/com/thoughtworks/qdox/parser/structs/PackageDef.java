@@ -29,7 +29,7 @@ public class PackageDef extends LocatedDef {
 	
 	public PackageDef(String name, int lineNumber) {
         this.name = name;
-		this.lineNumber = lineNumber;
+		this.setLineNumber( lineNumber );
 	}
 	
     /**

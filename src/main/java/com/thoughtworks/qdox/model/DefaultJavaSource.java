@@ -127,18 +127,22 @@ public class DefaultJavaSource implements JavaSource, Serializable {
     	return getCodeBlock();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaSource#resolveType(java.lang.String)
      */
-    public String resolveType(String typeName) {
-        if (resolvedTypeCache.containsKey(typeName)) {
-            return resolvedTypeCache.get(typeName);
+    public String resolveType( String typeName )
+    {
+        String result = resolvedTypeCache.get( typeName );
+        if ( result == null )
+        {
+            result = resolveTypeInternal( typeName );
+            if ( result != null )
+            {
+                resolvedTypeCache.put( typeName, result );
+            }
         }
-        String resolved = resolveTypeInternal(typeName);
-        if (resolved != null) {
-            resolvedTypeCache.put(typeName, resolved);
-        }
-        return resolved;
+        return result;
     }
     
     /**

@@ -93,15 +93,6 @@ import java.util.*;
         yybegin(stateStack[--stateDepth]);
     }
     
-    private int peekState(int relative) {
-      if(relative > stateDepth) {
-        return -1;
-      }
-      else {
-        return stateStack[stateDepth - relative];
-      }
-    }
-    
     public String getCodeBody(){
         String s = codeBody.toString();
         codeBody = new StringBuffer(8192);

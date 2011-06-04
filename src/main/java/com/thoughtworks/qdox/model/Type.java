@@ -311,21 +311,16 @@ public class Type implements Serializable {
      * @since 1.6
      */
     public boolean isPrimitive() {
-        String value = getValue();
-        if (value == null || value.length() == 0 || value.indexOf('.') > -1) {
-            return false;
-        } else 
-        {
-           return "void".equals(value)           
-            || "boolean".equals(value)
-            || "byte".equals(value)
-            || "char".equals(value)
-            || "short".equals(value)
-            || "int".equals(value)
-            || "long".equals(value)
-            || "float".equals(value)
-            || "double".equals(value);
-        }
+       String value = getValue();
+       return "void".equals(value)           
+        || "boolean".equals(value)
+        || "byte".equals(value)
+        || "char".equals(value)
+        || "short".equals(value)
+        || "int".equals(value)
+        || "long".equals(value)
+        || "float".equals(value)
+        || "double".equals(value);
     }
 
     /**

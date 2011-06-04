@@ -175,7 +175,7 @@ public class Type implements Serializable {
      * 
      * @return 
      */
-    public boolean isResolved() {
+    protected boolean isResolved() {
         if (fullName == null && context != null) {
             fullName = context.resolveType(name);
         }

@@ -414,8 +414,6 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         assertEquals("com.thoughtworks.qdox", cls.getPackageName());
         assertEquals("com.thoughtworks.qdox.MyClass",
                 cls.getFullyQualifiedName());
-        assertTrue(cls.asType().isResolved());
-        assertEquals("com.thoughtworks.qdox.MyClass", cls.asType().getValue());
     }
 
     public void testGetClassNamePrefix() {

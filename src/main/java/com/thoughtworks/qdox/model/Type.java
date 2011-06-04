@@ -279,16 +279,13 @@ public class Type implements Serializable {
     }
 
     public JavaClass getJavaClass() {
-    	JavaClass result = null;
+    	JavaClass result;
     	
         JavaClassParent javaClassParent = getJavaClassParent();
-        if (javaClassParent != null) {
-        	result = javaClassParent.getNestedClassByName(getFullyQualifiedName());
-	        if(result == null) {
-	            if(javaClassParent.getJavaClassLibrary() != null) {
-	                result = javaClassParent.getJavaClassLibrary().getJavaClass( getFullyQualifiedName(), true );
-	            }
-	        }
+    	result = javaClassParent.getNestedClassByName(getFullyQualifiedName());
+        if(result == null) 
+        {
+            result = javaClassParent.getJavaClassLibrary().getJavaClass( getFullyQualifiedName(), true );
         }
         return result;
     }
@@ -297,25 +294,13 @@ public class Type implements Serializable {
      * @since 1.3
      */
     public boolean isA(Type type) {
-        if (this.equals(type)) {
+        if (this == type) {
             return true;
         } else {
             JavaClass cls = getJavaClass();
+            
             if (cls != null) {
-                // ask our interfaces
-                for (Type implementz : cls.getImplements()) {
-                    if (implementz.isA(type)) {
-                        return true;
-                    }
-                }
-
-                // ask our superclass
-                Type supertype = cls.getSuperClass();
-                if (supertype != null) {
-                    if (supertype.isA(type)) {
-                        return true;
-                    }
-                }
+                return cls.isA( type.getJavaClass() );
             }
         }
         // We'we walked up the hierarchy and found nothing.

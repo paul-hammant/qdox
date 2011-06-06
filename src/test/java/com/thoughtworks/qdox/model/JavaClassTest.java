@@ -593,7 +593,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         setPackage( jOuterClass, jPackage );
         JavaClass jInnerClass = newJavaClass("InnerClass");
         addClass(jOuterClass, jInnerClass);
-        assertEquals("com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.asType().getValue());
+        assertEquals( "com.thoughtworks.qdox.model.OuterClass$InnerClass", jInnerClass.getFullyQualifiedName() );
     }
     
     public void testInnerInterfaceToString() {

@@ -881,7 +881,7 @@ public class JavaProjectBuilderTest extends TestCase
             builder.getClassByName("p1.A").getNestedClassByName("Inner");
         JavaField innerField = 
             builder.getClassByName("p2.B").getFieldByName("innerField");
-        assertEquals(innerClass.asType(), innerField.getType());
+        assertEquals(innerClass, innerField.getType().getJavaClass() );
         assertEquals("p1.A$Inner", innerField.getType().getFullyQualifiedName());
     }
 

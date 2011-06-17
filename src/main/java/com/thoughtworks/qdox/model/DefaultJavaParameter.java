@@ -19,7 +19,6 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.io.Serializable;
 
 public class DefaultJavaParameter extends AbstractBaseJavaEntity implements JavaParameter 
 {
@@ -86,20 +85,40 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     public boolean isVarArgs() {
         return varArgs;
     }
+
+    public String getFullyQualifiedName()
+    {
+        return type.getFullyQualifiedName();
+    }
     
+    public String getValue()
+    {
+        return type.getValue();
+    }
     
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaParameter#getResolvedValue()
      */
     public String getResolvedValue() {
-		return type.getResolvedValue(getParentMethod().getTypeParameters());
+        return type.getResolvedValue( getParentMethod().getTypeParameters() );
     }
 
+    public String getResolvedFullyQualifiedName() 
+    {
+        return type.getResolvedFullyQualifiedName( getParentMethod().getTypeParameters() );
+    }
+    
 	/* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaParameter#getResolvedGenericValue()
      */
-	public String getResolvedGenericValue() {
-		return type.getResolvedGenericValue(getParentMethod().getTypeParameters());
+	public String getResolvedGenericValue() 
+	{
+		return type.getResolvedGenericValue( getParentMethod().getTypeParameters() );
+	}
+	
+	public String getResolvedGenericFullyQualifiedName()
+	{
+	    return type.getResolvedGenericFullyQualifiedName( getParentMethod().getTypeParameters() );
 	}
 
     @Override

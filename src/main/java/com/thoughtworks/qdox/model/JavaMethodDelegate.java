@@ -51,7 +51,7 @@ public class JavaMethodDelegate implements JavaMethod
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
             {
-                result = new Type( "java.lang.Object" );
+                result = new Type( "java.lang.Object", 0, callingClass );
             }
         }
         
@@ -67,7 +67,7 @@ public class JavaMethodDelegate implements JavaMethod
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && !type.getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
             {
-                result.add(new Type( "java.lang.Object" ));
+                result.add(new Type( "java.lang.Object", 0, callingClass ));
             }
             else {
                 result.add(curType);

@@ -217,7 +217,8 @@ public class AnnotationsTest extends TestCase {
     			" public boolean isPostback() { return true;}\n" +
     			"}";
     	builder.addSource(new StringReader(source));
-    	assertEquals("java.lang.Override", builder.getClasses().get(0).getMethods().get(0).getAnnotations().get(0).getType().getValue());
+    	assertEquals("Override", builder.getClasses().get(0).getMethods().get(0).getAnnotations().get(0).getType().getValue());
+        assertEquals("java.lang.Override", builder.getClasses().get(0).getMethods().get(0).getAnnotations().get(0).getType().getFullyQualifiedName());
     }
     
     public void testEnumsWithAnnotations() throws Exception {

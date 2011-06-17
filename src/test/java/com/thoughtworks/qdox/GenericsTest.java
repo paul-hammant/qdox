@@ -309,14 +309,16 @@ public class GenericsTest extends TestCase {
         method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "getAll", null, true );
         assertEquals( "List<Subject>", method.getReturnType( true ).getGenericValue() );
         method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "asMap", null, true );
-        assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericValue() );
+        assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericFullyQualifiedName() );
+        assertEquals( "Map<Long,Subject>", method.getReturnType( true ).getGenericValue() );
         
         method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "getRandom", null, true );
         assertEquals( "Subject", method.getReturnType( true ).getGenericValue() );
         method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "getAll", null, true );
         assertEquals( "List<Subject>", method.getReturnType( true ).getGenericValue() );
         method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "asMap", null, true );
-        assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericValue() );
+        assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericFullyQualifiedName() );
+        assertEquals( "Map<Long,Subject>", method.getReturnType( true ).getGenericValue() );
     }
     
     //for QDOX-210
@@ -344,10 +346,12 @@ public class GenericsTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "SubjectService" );
         JavaMethod method = clazz.getMethods( true ).get(0);
         assertEquals( "getAll", method.getName() );
-        assertEquals( "java.util.List<Subject>", method.getReturnType( true ).getGenericValue() );
+        assertEquals( "java.util.List<Subject>", method.getReturnType( true ).getGenericFullyQualifiedName() );
+        assertEquals( "List<Subject>", method.getReturnType( true ).getGenericValue() );
         method = clazz.getMethods( true ).get(2);
         assertEquals( "findById", method.getName() );
-        assertEquals( "java.lang.Long", method.getParameterTypes( true ).get(0).getGenericValue() );
+        assertEquals( "java.lang.Long", method.getParameterTypes( true ).get(0).getGenericFullyQualifiedName() );
+        assertEquals( "Long", method.getParameterTypes( true ).get(0).getGenericValue() );
     }
     
     

@@ -21,21 +21,23 @@ package com.thoughtworks.qdox.model;
 
 import java.util.Iterator;
 import java.util.List;
+
 /**
- * 
- * 
  * @author Robert Scholte
  * @since 1.10
  */
-public class TypeVariable extends Type {
+public class TypeVariable
+    extends Type
+{
 
-	private List<Type> bounds;
+    private List<Type> bounds;
 
-    public TypeVariable( String fullName, String name, JavaClassParent context ) {
+    public TypeVariable( String fullName, String name, JavaClassParent context )
+    {
         super( fullName, name, 0, context );
     }
-    
-	/**
+
+    /**
      * @return the bounds
      */
     public List<Type> getBounds()
@@ -51,28 +53,67 @@ public class TypeVariable extends Type {
         this.bounds = bounds;
     }
 
-	public String getValue() {
-		return ( bounds == null || bounds.isEmpty() ? ""  : bounds.get(0).getValue() );
-	}
-	
-	public String getGenericValue() {
-		StringBuffer result = new StringBuffer("<");
-		result.append(super.getValue());
-		if(bounds != null && !bounds.isEmpty()) {
-			result.append(" extends ");
-			for(Iterator<Type> iter = bounds.iterator(); iter.hasNext();) {
-				result.append(iter.next().getGenericValue());
-                if(iter.hasNext()) {
-                    result.append(",");
+    @Override
+    public String getFullyQualifiedName()
+    {
+        return super.getValue();
+    }
+
+    @Override
+    public String getGenericFullyQualifiedName()
+    {
+        StringBuffer result = new StringBuffer( super.getFullyQualifiedName() );
+        if ( bounds != null && !bounds.isEmpty() )
+        {
+            result.append( " extends " );
+            for ( Iterator<Type> iter = bounds.iterator(); iter.hasNext(); )
+            {
+                result.append( iter.next().getGenericFullyQualifiedName() );
+                if ( iter.hasNext() )
+                {
+                    result.append( "," );
                 }
-			}
-		}
-		result.append(">");
-		return result.toString();
-	}
-	
-	public String getName() {
-		return super.getValue();
-	}
+            }
+        }
+        return result.toString();
+    }
+
+    public String getValue()
+    {
+        return super.getValue();
+    }
+
+    public String getGenericValue()
+    {
+        StringBuffer result = new StringBuffer( super.getValue() );
+        if ( bounds != null && !bounds.isEmpty() )
+        {
+            result.append( " extends " );
+            for ( Iterator<Type> iter = bounds.iterator(); iter.hasNext(); )
+            {
+                result.append( iter.next().getGenericValue() );
+                if ( iter.hasNext() )
+                {
+                    result.append( "," );
+                }
+            }
+        }
+        return result.toString();
+    }
+
+    public String getName()
+    {
+        return super.getValue();
+    }
+
+    public String getResolvedValue()
+    {
+        return bounds.get( 0 ).getValue();
+    }
+
+    public String getResolvedFullyQualifiedName()
+    {
+        return bounds.get( 0 ).getFullyQualifiedName();
+    }
 
 }

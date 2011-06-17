@@ -117,7 +117,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      * Shorthand for getSuperClass().getJavaClass() with null checking.
      */
     public JavaClass getSuperJavaClass() {
-        JavaClass result = null;
+        JavaClass result;
         JavaClass OBJECT_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" );
         JavaClass ENUM_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" );
         
@@ -269,6 +269,23 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public String getFullyQualifiedName() {
         return (getParentClass() != null ? (getParentClass().getClassNamePrefix()) : getPackage() != null ? (getPackage().getName()+".") : "") + getName();
+    }
+    
+    public String getGenericFullyQualifiedName() {
+        return getFullyQualifiedName();
+    }
+    
+    /**
+     * @return the simple name
+     */
+    public String getValue()
+    {
+        return getName();
+    }
+    
+    public String getGenericValue()
+    {
+        return getValue();
     }
 
     /* (non-Javadoc)

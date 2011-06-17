@@ -29,7 +29,8 @@ public abstract class TypeTest extends TestCase {
         
         when(src.resolveType( "Bar" )).thenReturn( "foo.Bar" );
         assertEquals(true, type.isResolved());
-        assertEquals("foo.Bar", type.getValue());
+        assertEquals("Bar", type.getValue());
+        assertEquals("foo.Bar", type.getFullyQualifiedName());
     }
 
     public void testArrayType() throws Exception {

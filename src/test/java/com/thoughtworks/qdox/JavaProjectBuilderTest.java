@@ -63,7 +63,8 @@ public class JavaProjectBuilderTest extends TestCase
 
         JavaClass testClassList = sources.get(0).getClasses().get(0);
         assertEquals("TestClassList", testClassList.getName());
-        assertEquals("com.thoughtworks.util.TestClass", testClassList.getSuperClass().getValue());
+        assertEquals("TestClass", testClassList.getSuperClass().getValue());
+        assertEquals("com.thoughtworks.util.TestClass", testClassList.getSuperClass().getFullyQualifiedName());
 
         JavaClass testClass = sources.get(1).getClasses().get(0);
         assertEquals("TestClass", testClass.getName());
@@ -226,7 +227,8 @@ public class JavaProjectBuilderTest extends TestCase
                 + "class X extends List {}";
         builder.addSource(new StringReader(in));
         JavaClass cls = builder.getClassByName("x.X");
-        assertEquals("java.util.List", cls.getSuperClass().getValue());
+        assertEquals("List", cls.getSuperClass().getValue());
+        assertEquals("java.util.List", cls.getSuperClass().getFullyQualifiedName());
     }
 
     public void testAddMoreClassLoaders() throws Exception {
@@ -267,8 +269,10 @@ public class JavaProjectBuilderTest extends TestCase
         // be sure no default classloaders have been added
         assertNull(builder.getClassByName(Knife.class.getName()));
         JavaClass cls = builder.getClassByName("x.X");
-        assertEquals("com.thoughtworks.qdox.Spoon", cls.getMethods().get(0).getReturns().getValue());
-        assertEquals("com.thoughtworks.qdox.Fork", cls.getMethods().get(1).getReturns().getValue());
+        assertEquals("Spoon", cls.getMethods().get(0).getReturns().getValue());
+        assertEquals("com.thoughtworks.qdox.Spoon", cls.getMethods().get(0).getReturns().getFullyQualifiedName());
+        assertEquals("Fork", cls.getMethods().get(1).getReturns().getValue());
+        assertEquals("com.thoughtworks.qdox.Fork", cls.getMethods().get(1).getReturns().getFullyQualifiedName());
         // unresolved
         assertEquals("Cabbage", cls.getMethods().get(2).getReturns().getValue());
 
@@ -299,7 +303,7 @@ public class JavaProjectBuilderTest extends TestCase
 
         JavaClass cls = builder.getClassByName("x.X");
         Type returnType = cls.getMethods().get(0).getReturns();
-        JavaClass returnClass = builder.getClassByName(returnType.getValue());
+        JavaClass returnClass = builder.getClassByName(returnType.getFullyQualifiedName());
 
         assertEquals("java.util.ArrayList", returnClass.getFullyQualifiedName());
 
@@ -465,7 +469,7 @@ public class JavaProjectBuilderTest extends TestCase
         JavaMethod isBar = propertyClass.getMethodBySignature("isBar", null);
         JavaMethod get = propertyClass.getMethodBySignature("get", null);
         Type intType = mock( Type.class );
-        when( intType.getValue() ).thenReturn( "int" );
+        when( intType.getFullyQualifiedName() ).thenReturn( "int" );
         when( intType.getDimensions() ).thenReturn( 0 );
         JavaMethod set = propertyClass.getMethodBySignature( "set", Collections.singletonList( intType ) );
 
@@ -547,8 +551,8 @@ public class JavaProjectBuilderTest extends TestCase
         assertNotNull(newBuilder.getClassByName("com.blah.subpackage.Cheese"));
 
         newBuilder.addSource(new StringReader("package x; import java.util.*; class Z extends List{}"));
-        assertEquals("java.util.List", newBuilder.getClassByName("x.Z").getSuperClass().getValue());
-
+        assertEquals("List", newBuilder.getClassByName("x.Z").getSuperClass().getValue());
+        assertEquals("java.util.List", newBuilder.getClassByName("x.Z").getSuperClass().getFullyQualifiedName());
     }
     
     public void testSaveAndRestoreWithoutDefaultClassloaders() throws Exception {
@@ -1138,7 +1142,8 @@ public class JavaProjectBuilderTest extends TestCase
                 "}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        assertEquals("javax.faces.component.UIOutput", javaClass.getSuperClass().getValue());
+        assertEquals("UIOutput", javaClass.getSuperClass().getValue());
+        assertEquals("javax.faces.component.UIOutput", javaClass.getSuperClass().getFullyQualifiedName());
     }
     
     //for QDox-154
@@ -1340,5 +1345,18 @@ public class JavaProjectBuilderTest extends TestCase
         String string = (String) propertyMap.get("name");
         // This one does not work
         assertEquals("\"test\"", string);
+    }
+    
+    
+    // for QDOX-230
+    public void testInterfaceAnnotations() throws Exception {
+        String source = "@RemoteServiceRelativePath(\"greetings\")\r\n" + 
+        		"public interface GreetingService extends RemoteService {\r\n" + 
+        		"    String greetServer(String name) throws IllegalArgumentException;\r\n" + 
+        		"}";
+        builder.addSource(new StringReader( source ));
+        JavaClass cls = builder.getClassByName( "GreetingService" );
+        assertEquals( 1, cls.getAnnotations().size() );
+        
     }
 }

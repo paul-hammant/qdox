@@ -83,6 +83,8 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     String getPackageName();
 
     String getFullyQualifiedName();
+    
+    String getGenericFullyQualifiedName();
 
     /**
      * @since 1.3
@@ -246,6 +248,23 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     ClassLibrary getJavaClassLibrary();
 
     String getName();
+    
+    /**
+     * If there's a reference to this class, use the value used in the code. Otherwise return the simple name.
+     * When including all imports, you should be safe to use this method.
+     * This won't return generics, so it's java1.4 safe.  
+     * 
+     * @return
+     */
+    String getValue();
+    
+    /**
+     * A java5+ representation of the class.
+     * When including all imports, you should be safe to use this method.
+     * 
+     * @return
+     */
+    String getGenericValue();
     
     List<String> getModifiers();
     

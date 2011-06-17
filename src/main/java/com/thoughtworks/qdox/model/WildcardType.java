@@ -53,4 +53,22 @@ public class WildcardType extends Type {
 		result += super.getGenericValue();
 		return result;
 	}
+	
+	@Override
+	public String getFullyQualifiedName()
+	{
+	    return "?";
+	}
+	
+	@Override
+	public String getGenericFullyQualifiedName()
+	{
+	    String result = "";
+        if( wildcardExpressionType != null ) 
+        {
+            result += "? " + wildcardExpressionType+ " ";
+        }
+        result += super.getFullyQualifiedName();
+        return result; 
+	}
 }

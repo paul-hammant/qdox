@@ -41,13 +41,43 @@ public interface JavaParameter extends JavaAnnotatedElement
      * @since 1.6
      */
     boolean isVarArgs();
-
+    
     /**
      * 
-     * @return the resolved value if the method has typeParameters, otherwise type's value
+     * @return the value of the type, never <code>null</code>
+     */
+    String getValue();
+    
+    /**
+     * 
+     * @return the FQN of the type, never <code>null</code>
+     */
+    String getFullyQualifiedName();
+
+    /**
+     * @return the resolved value of the type
      * @since 1.10
      */
     String getResolvedValue();
 
+    /**
+     * 
+     * @return the resolved generic value of the type, never <code>null</code>
+     * @since 2.0
+     */
     String getResolvedGenericValue();
+    
+    /**
+     * 
+     * @return the resolved FQN, never <code>null</code>
+     * @since 2.0
+     */
+    String getResolvedFullyQualifiedName();
+
+    /**
+     * 
+     * @return the resolved generic FQN, never <code>null</code>
+     * @since 2.0
+     */
+    String getResolvedGenericFullyQualifiedName();
 }

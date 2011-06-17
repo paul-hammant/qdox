@@ -50,6 +50,11 @@ public class Type implements Serializable {
         this(fullName, dimensions, null);
     }
 
+    /**
+     * Should only be used by primitives, since they don't have a classloader.
+     * 
+     * @param fullName
+     */
     public Type(String fullName) {
         this(fullName, 0);
     }
@@ -99,8 +104,7 @@ public class Type implements Serializable {
      * @return type representation for code usage
      */
     public String getValue() {
-        String fqn = getFullyQualifiedName();
-        return ( fqn == null ? "" : fqn.replaceAll( "\\$", "." ) );
+        return ( name != null ?  name : getFullyQualifiedName().replaceAll( "\\$", "." ) );
     }
     
     /**
@@ -139,7 +143,7 @@ public class Type implements Serializable {
     	StringBuffer result = new StringBuffer(getResolvedValue(typeVariableList));
     	if(actualArgumentTypes != null && actualArgumentTypes.size() > 0) {
     		for(int index = 0;index < actualArgumentTypes.size(); index++) {
-    			result.append(actualArgumentTypes.get(index).getResolvedGenericValue(typeVariableList));   			
+    			result.append(actualArgumentTypes.get(index).resolve(typeVariableList));   			
     			if(index + 1 != actualArgumentTypes.size()) {
     				result.append(",");
     			}
@@ -152,22 +156,26 @@ public class Type implements Serializable {
     	String result = getValue();
     	for(TypeVariable typeParameter : typeParameters) {
 			if(typeParameter.getName().equals(getValue())) {
-				result = typeParameter.getValue();
+				result = typeParameter.getBounds().get( 0 ).getValue();
 				break;
 			}
 		}
     	return result;
     }
     
-    protected String getResolvedGenericValue(List<TypeVariable> typeParameters) {
-    	String result = getGenericValue(typeParameters);
-    	for(TypeVariable typeParameter : typeParameters) {
-			if(typeParameter.getName().equals(getValue())) {
-				result = typeParameter.getGenericValue();
-				break;
-			}
-		}
-    	return result;
+    protected TypeVariable resolve( List<TypeVariable> typeParameters )
+    {
+        TypeVariable result = null;
+        // String result = getGenericValue(typeParameters);
+        for ( TypeVariable typeParameter : typeParameters )
+        {
+            if ( typeParameter.getName().equals( getValue() ) )
+            {
+                result = typeParameter;
+                break;
+            }
+        }
+        return result;
     }
 
     /**
@@ -246,11 +254,7 @@ public class Type implements Serializable {
      * @return 
      */
     public String toGenericString() {
-        if (dimensions == 0) 
-        {
-            return getGenericValue();
-        }
-        StringBuffer buff = new StringBuffer(getGenericValue());
+        StringBuffer buff = new StringBuffer(getGenericFullyQualifiedName());
         for (int i = 0; i < dimensions; i++) 
         {
             buff.append("[]");
@@ -270,7 +274,7 @@ public class Type implements Serializable {
             return false;
         }
         Type t = (Type) obj;
-        return getValue().equals( t.getValue() ) && t.getDimensions() == getDimensions();
+        return getFullyQualifiedName().equals( t.getFullyQualifiedName() ) && t.getDimensions() == getDimensions();
     }
 
     @Override
@@ -380,6 +384,85 @@ public class Type implements Serializable {
             }
         }
         return result;
+    }
+
+    public String getGenericFullyQualifiedName()
+    {
+        StringBuffer result = new StringBuffer( getFullyQualifiedName() );
+        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        {
+            result.append( "<" );
+            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            {
+                result.append( iter.next().getGenericFullyQualifiedName() );
+                if ( iter.hasNext() )
+                {
+                    result.append( "," );
+                }
+            }
+            result.append( ">" );
+        }
+        for ( int i = 0; i < dimensions; i++ )
+        {
+            result.append( "[]" );
+        }
+        return result.toString();
+    }
+
+    public String getResolvedGenericValue( List<TypeVariable> typeParameters )
+    {
+        StringBuffer result = new StringBuffer();
+        TypeVariable variable = resolve( typeParameters );
+        result.append( variable == null ? getValue() : variable.getBounds().get(0).getValue() );
+        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        {
+            result.append( "<" );
+            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            {
+                result.append( iter.next().getGenericValue(typeParameters) );
+                if ( iter.hasNext() )
+                {
+                    result.append( "," );
+                }
+            }
+            result.append( ">" );
+        }
+        for ( int i = 0; i < dimensions; i++ )
+        {
+            result.append( "[]" );
+        }
+        return result.toString();
+    }
+
+    protected String getResolvedGenericFullyQualifiedName( List<TypeVariable> typeParameters )
+    {
+        StringBuffer result = new StringBuffer();
+        TypeVariable variable = resolve( typeParameters );
+        result.append( variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
+        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        {
+            result.append( "<" );
+            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            {
+                result.append( iter.next().getResolvedFullyQualifiedName( typeParameters) );
+                if ( iter.hasNext() )
+                {
+                    result.append( "," );
+                }
+            }
+            result.append( ">" );
+        }
+        for ( int i = 0; i < dimensions; i++ )
+        {
+            result.append( "[]" );
+        }
+        return result.toString();
+    }
+
+    protected String getResolvedFullyQualifiedName( List<TypeVariable> typeParameters )
+    {
+        TypeVariable variable = resolve( typeParameters );
+        return (variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
     }
 
 }

@@ -10,3 +10,5 @@ Migrating to QDox 2.0
   
   * Refactor every javamodel array to generic <<List>> objects, for example: <<JavaClass[]>> will become <<List\<JavaClass\>>>
   
+  * Redefined getValue(). This would normally return the FQN, but now it'll return the value as used in the code(when available).
+  

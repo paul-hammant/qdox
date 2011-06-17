@@ -322,7 +322,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         {
             result.append( "native " );
         }
-        result.append( getReturns().getValue() ).append( ' ' );
+        result.append( getReturns().getFullyQualifiedName() ).append( ' ' );
         if ( getParentClass() != null )
         {
             result.append( getParentClass().getFullyQualifiedName() );
@@ -336,8 +336,9 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
             {
                 result.append( "," );
             }
-            String typeValue = getParameters().get( paramIndex ).getType().getResolvedValue( getTypeParameters() );
-            result.append( typeValue );
+            Type originalType = getParameters().get( paramIndex ).getType();
+            TypeVariable typeVariable = originalType.resolve( getTypeParameters() ); 
+            result.append( typeVariable == null ? originalType.getFullyQualifiedName() : typeVariable.getResolvedFullyQualifiedName() );
         }
         result.append( ")" );
         if ( getExceptions().size() > 0 )
@@ -345,7 +346,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
             result.append( " throws " );
             for ( Iterator<Type> excIter = getExceptions().iterator(); excIter.hasNext(); )
             {
-                result.append( excIter.next().getValue() );
+                result.append( excIter.next().getFullyQualifiedName() );
                 if ( excIter.hasNext() )
                 {
                     result.append( "," );

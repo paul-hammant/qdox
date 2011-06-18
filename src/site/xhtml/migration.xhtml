@@ -1,0 +1,34 @@
+<html>
+<head/>
+<body>
+<h1>Migrating to QDox 2.0</h1>
+
+<h3>Farewell JavaDocBuilder, hello JavaProjectBuilder</h3>
+
+<h3>Farewell OrderedMap, hello LinkedHashMap</h3>
+<p>
+Before JDK1.3 there was no implementation available which could hold the order in which entries were added to a Map.
+With JDK1.4 the LinkedHashMap was introduced.
+We've decided to make use of this class which also means projects using QDox need at least JDK1.4.
+If you want QDox to <strong>parse</strong> code with an older JDK version, you'll have to configure the ClassLoaderLibrary feeding it with the required classloaders.
+</p>
+
+<h3>Farewell JavaClass, hello JavaClass</h3>
+Looks like nothing has changed, but we've decided to change all models to interfaces and give them a default implementation.
+This way we can hide all methods which the ModelBuilder needs to build the model and you'll only see those methods which are interesting for you.
+This also means that the default implementations looks much more like plain old Java Objects, its binding logic has been moved to the ModelBuilder.
+
+<h3>Farewell AbstractQDoxTask for Ant</h3>
+We've decided to remove this Abstract AntTask. It doesn't belong in the core of QDox, but it's an prepared Ant Task to use QDox.
+Although we'd defined this dependency as optional, it kind of spoiled the pom.xml. 
+
+<h3>Farewell APITestCase for JUnit3</h3>
+
+
+<h2>Summary</h2>
+<ul>
+  <li>Use the JavaProjectBuilder instead of the JavaDocBuilder</li>
+  <li>QDox requires at least JDK1.4</li>
+</ul>
+</body>
+</html>

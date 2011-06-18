@@ -4,13 +4,13 @@
   </head>
   <body>
 
-			<p>After the source code has been <a href="usage.html">parsed</a>, the content of the files can be navigated using a simple to use and intuitive object model.</p>
+  <p>After the source code has been <a href="usage.html">parsed</a>, the content of the files can be navigated using a simple to use and intuitive object model.</p>
 
-          <h2><a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html">JavaSource</a></h2>
-            <p>Represents a complete .java file. This contains a collection of classes.</p>
+  <h2><a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html">JavaSource</a></h2>
+  <p>Represents a complete .java file. This contains a collection of classes.</p>
 
-            <h3>Example Input</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Input</h3>
+  <div class="Source Java"><pre>
     package com.blah.foo;
     
     import java.awt.*;
@@ -52,10 +52,10 @@
     public class BarClass  {
     ...
     }
-            </pre></div>
+  </pre></div>
             
-            <h3>Example Code</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Code</h3>
+  <div class="Source Java"><pre>
     JavaDocBuilder builder = new JavaDocBuilder();
     builder.addSource(myReader);
     
@@ -67,14 +67,14 @@
     String name          = pkg.<a href="apidocs/com/thoughtworks/qdox/model/JavaPackage.html#getName()">getName</a>(); // "com.blah.foo"
     String toString      = pkg.<a href="apidocs/com/thoughtworks/qdox/model/JavaPackage.html#toString()">toString</a>(); // "package com.blah.foo" conform javaAPI
     JavaPackage parent   = pkg.<a href="apidocs/com/thoughtworks/qdox/model/JavaPackage.html#getParentPackage()">getParentPackage</a>(); //
-            </pre></div>            
+  </pre></div>            
 
-					<h2><a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html">JavaClass</a></h2>
-						<p>Represents a class or interface. This contains doclet tags, fields and methods. Information about the class
-						definition is available, such as which classes are extended, which interfaces implemented and modifiers.</p>
+  <h2><a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html">JavaClass</a></h2>
+  <p>Represents a class or interface. This contains doclet tags, fields and methods. Information about the class
+	 definition is available, such as which classes are extended, which interfaces implemented and modifiers.</p>
 
-						<h3>Example Input</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Input</h3>
+  <div class="Source Java"><pre>
     package com.blah.foo;
     
     import java.io.*;
@@ -92,10 +92,10 @@
       private int getNumber() { ... }
     
     }
-            </pre></div>
+  </pre></div>
 
-						<h3>Example Code</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Code</h3>
+  <div class="Source Java"><pre>
     JavaDocBuilder builder = new JavaDocBuilder();
     builder.addSource(myReader);
     
@@ -121,14 +121,13 @@
     JavaMethod getNumber = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getMethods()">getMethods</a>()[1];
     
     JavaSource javaSource = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getParentSource()">getParentSource</a>();
-            </pre></div>
-					</p>
+  </pre></div>
 
-					<h2><a href="apidocs/com/thoughtworks/qdox/model/JavaField.html">JavaField</a></h2>
-						<p>Represents a field in a class. This has doclet tags, a name and a type.</p>
+  <h2><a href="apidocs/com/thoughtworks/qdox/model/JavaField.html">JavaField</a></h2>
+  <p>Represents a field in a class. This has doclet tags, a name and a type.</p>
 
-						<h3>Example Input</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Input</h3>
+  <div class="Source Java"><pre>
     import java.util.Date;
     
     public class MyClass  {
@@ -163,11 +162,11 @@
     JavaClass javaClass = d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getParentClass()">getParentClass</a>();
             </pre></div>
 
-					<h2><a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html">JavaMethod</a></h2>
-						<p>Represents a method in a class. This has doclet tags, a name, return type, parameters and exceptions.</p>
+  <h2><a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html">JavaMethod</a></h2>
+  <p>Represents a method in a class. This has doclet tags, a name, return type, parameters and exceptions.</p>
 
-						<h3>Example Input</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Input</h3>
+  <div class="Source Java"><pre>
     import java.util.Date;
     import java.io.*;
     
@@ -183,10 +182,10 @@
       }
     
     }
-            </pre></div>
+  </pre></div>
 
-						<h3>Example Code</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Code</h3>
+  <div class="Source Java"><pre>
     JavaMethod m = cls.getMethods()[0];
     
     String mName = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getName()">getName</a>(); // "doStuff";
@@ -205,14 +204,14 @@
     JavaParameter stuffParam = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getParameters()">getParameters</a>()[1];
     
     JavaClass javaClass = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getParentClass()">getParentClass</a>();
-            </pre></div>
+  </pre></div>
 
-					<h2><a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html">JavaParameter</a></h2>
-						<p>Represents a parameter passed to a method. This has a name and a type.</p>
+  <h2><a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html">JavaParameter</a></h2>
+  <p>Represents a parameter passed to a method. This has a name and a type.</p>
 
 
-						<h3>Example Input</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Input</h3>
+  <div class="Source Java"><pre>
     public class MyClass  {
     
       public void stuff(int n, Object[] objects) {
@@ -220,9 +219,10 @@
       }
     
     }
-            </pre></div>
-						<h3>Example Code</h3>
-            <div class="Source Java"><pre>
+  </pre></div>
+  
+  <h3>Example Code</h3>
+  <div class="Source Java"><pre>
     JavaMethod m = cls.getMethods()[0];
     
     JavaParameter n = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getParameters()">getParameters</a>()[0];
@@ -235,14 +235,16 @@
     boolean oArray = o.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getType()">getType</a>().<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // true
     
     JavaMethod javaMethod = o.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getParentMethod()">getParentMethod</a>();
-            </pre></div>
+  </pre></div>
 
-  				<h2><a href="apidocs/com/thoughtworks/qdox/model/Type.html">Type</a></h2>
-            <p>Represents a specific instance of a class used by another class (such as return value, superclass, etc).
-						The value represents the name of the class. Array dimensions are also available. Since 1.8 it's also possible to get the generic value of the Type</p>
+  <h2><a href="apidocs/com/thoughtworks/qdox/model/Type.html">Type</a></h2>
+  <p>Represents a specific instance of a class used by another class (such as return value, superclass, etc).
+     The value represents the name of the class. Array dimensions are also available. Since 1.8 it's also possible to get the generic value of the Type</p>
 
-						<h3>Example Input</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Input</h3>
+  <div class="Source Java"><pre>
+    <![CDATA[
+  
     import java.util.*;
     
     public class MyClass  {
@@ -253,10 +255,11 @@
       }
     
     }
-            </pre></div>
+    ]]>
+  </pre></div>
 
-						<h3>Example Code</h3>
-            <div class="Source Java"><pre>
+  <h3>Example Code</h3>
+  <div class="Source Java"><pre>
     JavaMethod m = cls.getMethods()[0];
     
     Type returns = m.getReturns();
@@ -281,7 +284,7 @@
     
     Type stringList = m.getParameters()[3].getType();
     stringList.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getValue()">getValue</a>(); // "java.util.List"
-    stringList.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getGenericValue()">getGenericValue</a>(); // "java.util.List<java.lang.String>"
+    stringList.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getGenericValue()">getGenericValue</a>(); // <![CDATA["java.util.List<java.lang.String>"]]>
     stringList.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // false
     stringList.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getDimensions()">getDimensions</a>(); // 0
           </pre></div>

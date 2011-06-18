@@ -21,7 +21,7 @@
         Some methods require extra attention, because there's not an exact match. Watch out for differences between Type and JavaClass.
         <table>
           <tr><th>Java API</th><th>QDOX</th></tr>
-          <tr class="b"><td>((java.lang.Method) aMethod).getReturnsType().toString()</td><td>((com.thoughtworks.qdox.model.JavaMethod) aMethod).getReturns().toString()</td>
+          <tr class="b"><td>((java.lang.Method) aMethod).getReturnsType().toString()</td><td>((com.thoughtworks.qdox.model.JavaMethod) aMethod).getReturns().toString()</td></tr>
         </table> 
         </p>
         <p>com.thoughtworks.qdox.model.Type.getValue() will return the typeName for usage in the code. The new method com.thoughtworks.qdox.model.Type.getFullQualifiedName() will return the FQN as defined by the java specs. 

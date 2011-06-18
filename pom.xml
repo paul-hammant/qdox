@@ -348,81 +348,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
-          <templateFile>${basedir}/src/site/templates/site-template.vm</templateFile>
+          <templateFile>${basedir}/src/site/templates/site.vm</templateFile>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.xsite</groupId>
-        <artifactId>xsite-maven-plugin</artifactId>
-        <version>1.2</version>
-        <configuration>
-          <sitemapPath>content/website.xml</sitemapPath>
-          <skinPath>templates/skin.html</skinPath>
-          <sourceDirectoryPath>${xsite.sourceDirectoryPath}</sourceDirectoryPath>
-          <outputDirectoryPath>${project.build.directory}/site</outputDirectoryPath>
-          <resourcePaths>resources</resourcePaths>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>site</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.4.3</version>
-        <executions>
-          <execution>
-            <id>pre-copy-resources</id>
-            <phase>pre-site</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${xsite.sourceDirectoryPath}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>src/site</directory>
-                  <excludes>
-                    <exclude>**/download.html</exclude>
-                    <exclude>**/skin.html</exclude>
-                  </excludes>
-                </resource>
-                <resource>
-                  <directory>src/site</directory>
-                  <includes>
-                    <include>**/download.html</include>
-                    <include>**/skin.html</include>
-                  </includes>
-                  <filtering>true</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>post-copy-resources</id>
-            <phase>site</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/site</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${xsite.sourceDirectoryPath}/content</directory>
-                  <includes>
-                    <include>images/*.*</include>
-                    <include>apidocs/**/*.*</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -565,7 +492,6 @@
 
   <!-- Reports -->
   <reporting>
-    <outputDirectory>${xsite.sourceDirectoryPath}/content</outputDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

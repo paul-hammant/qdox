@@ -120,14 +120,14 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
     public void testGetCodeBlockTwoException() throws Exception {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
-        setExceptions(mth, Arrays.asList( new Type[]{newType("RuntimeException"), newType("java.lang.SheepException", 1)}));
+        setExceptions(mth, Arrays.asList( new Type[]{newType("RuntimeException"), newType("java.lang.SheepException")}));
         assertEquals("void blah() throws RuntimeException, java.lang.SheepException;\n", mth.getCodeBlock());
     }
 
     public void testGetCodeBlockThreeException() throws Exception {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
-        setExceptions(mth, Arrays.asList( new Type[]{newType("RuntimeException"), newType("java.lang.SheepException", 1), newType("CowException", 1)}));
+        setExceptions(mth, Arrays.asList( new Type[]{newType("RuntimeException"), newType("java.lang.SheepException"), newType("CowException")}));
         assertEquals("void blah() throws RuntimeException, java.lang.SheepException, CowException;\n", mth.getCodeBlock());
     }
 

@@ -43,6 +43,18 @@ public abstract class TypeTest extends TestCase {
         assertEquals("int[]", newType("int", 1).toString());
         assertEquals("long[][][]", newType("long", 3).toString());
     }
+    
+    public void testFullyQualifiedName() throws Exception {
+        assertEquals("int", newType("int").getFullyQualifiedName());
+        assertEquals("int[]", newType("int", 1).getFullyQualifiedName());
+        assertEquals("long[][][]", newType("long", 3).getFullyQualifiedName());
+    }
+
+    public void testComponentType() throws Exception {
+        assertNull( newType("int").getComponentType());
+        assertEquals("int", newType("int", 1).getComponentType().getFullyQualifiedName());
+        assertEquals("long", newType("long", 3).getComponentType().getFullyQualifiedName());
+    }
 
     public void testEquals() throws Exception {
         assertEquals(newType("string"),

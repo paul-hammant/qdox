@@ -12,3 +12,6 @@ Migrating to QDox 2.0
   
   * Redefined getValue(). This would normally return the FQN, but now it'll return the value as used in the code(when available).
   
+  * Redefined getFullyQualifiedName(). This used to return the classname, but according to the specs it should also return the array dimensions.
+    To get the classname, use <<getComponentType()>>.
+  

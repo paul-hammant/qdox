@@ -53,10 +53,11 @@ public class Type implements Serializable {
     /**
      * Should only be used by primitives, since they don't have a classloader.
      * 
-     * @param fullName
+     * @param fullName the name of the primitive
      */
-    public Type(String fullName) {
-        this(fullName, 0);
+    public Type( String fullName ) 
+    {
+        this( fullName, 0 );
     }
     
 	public static Type createUnresolved(String name, int dimensions, JavaClassParent context) {
@@ -68,9 +69,10 @@ public class Type implements Serializable {
     }
 
     /**
-     * Returns the FQN of an Object or the handler of a Type
-     * If the name of the can't be resolved based on the imports and the classes on the classpath the name will be returned
-     * InnerClasses will use the $ sign
+     * Returns the FQN of an Object or the handler of a Type.
+     * If the name of the can't be resolved based on the imports and the classes on the classpath the name will be returned.
+     * InnerClasses will use the $ sign.
+     * If the type is an array, the brackets will be included. The get only the name, use {@link #getComponentType()}.
      * 
      * Some examples how names will be translated 
      * <pre>
@@ -79,15 +81,31 @@ public class Type implements Serializable {
      * ?  > ?
      * T  > T
      * anypackage.Outer.Inner > anypackage.Outer$Inner
+     * String[][] > java.lang.String[][]
      * </pre>
      * 
-     * @return
+     * @return the fully qualified name, never <code>null</code>
+     * @see #getComponentType()
      */
     public String getFullyQualifiedName() {
-        
-        return isResolved() ? fullName : name;
+        StringBuffer result = new StringBuffer( isResolved() ? fullName : name );
+        for (int i = 0; i < dimensions; i++) 
+        {
+            result.append("[]");
+        }
+        return result.toString();
     }
 
+    /**
+     * Equivalent of {@link Class#getComponentType()}
+     * If this type is an array, return its component type
+     * 
+     * @return the type of array if it's one, otherwise <code>null</code>
+     */
+    public JavaClass getComponentType() {
+      return isArray() ? getJavaClass() : null;
+    }
+    
     /**
      * The FQN representation of an Object for code usage
      * This implementation ignores generics
@@ -135,7 +153,10 @@ public class Type implements Serializable {
     		}
     		result.append(">");
     	}
-    	for (int i = 0; i < dimensions; i++) result.append("[]");
+    	for (int i = 0; i < dimensions; i++) 
+    	{
+    	    result.append("[]");
+    	}
         return result.toString();
     }
     
@@ -193,7 +214,7 @@ public class Type implements Serializable {
     /**
      * Returns true if this Type is an array
      * 
-     * @return
+     * @return true if this type is an array, otherwise <code>null</code>
      */
     public boolean isArray() {
         return dimensions > 0;
@@ -202,7 +223,7 @@ public class Type implements Serializable {
     /**
      * Returns the depth of this array, 0 if it's not an array
      * 
-     * @return The depth of this array
+     * @return The depth of this array, at least <code>0</code>
      */
     public int getDimensions() {
         return dimensions;
@@ -223,22 +244,15 @@ public class Type implements Serializable {
     }
     
     /**
-     * Returns getValue() extended with the array information 
+     * Equivalent of {@link Class#toString()}. 
+     * Converts the object to a string.
      * 
-     * @return
+     * @return a string representation of this type.
+     * @see Class#toString()
      */
     public String toString()
     {
-        if ( dimensions == 0 )
-        {
-            return getValue();
-        }
-        StringBuffer buff = new StringBuffer( getValue() );
-        for ( int i = 0; i < dimensions; i++ )
-        {
-            buff.append( "[]" );
-        }
-        return buff.toString();
+        return getFullyQualifiedName();
     }
 
     /**
@@ -251,15 +265,10 @@ public class Type implements Serializable {
      * Outer.Inner > Outer.Inner 
      * Outer.Inner<Object>[][] > Outer.Inner<java.lang.Object>[][] 
      * </pre>
-     * @return 
+     * @return a generic string representation of this type.
      */
     public String toGenericString() {
-        StringBuffer buff = new StringBuffer(getGenericFullyQualifiedName());
-        for (int i = 0; i < dimensions; i++) 
-        {
-            buff.append("[]");
-        }
-        return buff.toString();
+        return getGenericFullyQualifiedName();
     }
 
     @Override
@@ -269,7 +278,7 @@ public class Type implements Serializable {
         {
             return true;
         }
-        if ( obj == null || !( obj instanceof Type ) )
+        if ( !( obj instanceof Type ) )
         {
             return false;
         }
@@ -279,18 +288,27 @@ public class Type implements Serializable {
 
     @Override
     public int hashCode() {
-        return getValue().hashCode();
+        return getFullyQualifiedName().hashCode();
     }
 
-    public JavaClass getJavaClass() {
-    	JavaClass result;
-    	
-        JavaClassParent javaClassParent = getJavaClassParent();
-    	result = javaClassParent.getNestedClassByName(getFullyQualifiedName());
-        if(result == null) 
+    public JavaClass getJavaClass()
+    {
+        JavaClass result;
+        String qualifiedName = isResolved() ? fullName : name;
+        if ( isPrimitive( qualifiedName ) )
         {
-            result = javaClassParent.getJavaClassLibrary().getJavaClass( getFullyQualifiedName(), true );
+            result = new DefaultJavaClass( qualifiedName );
         }
+        else
+        {
+            JavaClassParent javaClassParent = getJavaClassParent();
+            result = javaClassParent.getNestedClassByName( qualifiedName );
+            if ( result == null )
+            {
+                result = javaClassParent.getJavaClassLibrary().getJavaClass( qualifiedName, true );
+            }
+        }
+
         return result;
     }
 
@@ -315,8 +333,12 @@ public class Type implements Serializable {
      * @since 1.6
      */
     public boolean isPrimitive() {
-       String value = getValue();
-       return "void".equals(value)           
+       return isPrimitive( getValue() );
+    }
+    
+    private static boolean isPrimitive( String value )
+    {
+        return "void".equals(value)           
         || "boolean".equals(value)
         || "byte".equals(value)
         || "char".equals(value)
@@ -325,6 +347,7 @@ public class Type implements Serializable {
         || "long".equals(value)
         || "float".equals(value)
         || "double".equals(value);
+        
     }
 
     /**
@@ -386,9 +409,13 @@ public class Type implements Serializable {
         return result;
     }
 
+    /**
+     * 
+     * @return a generic string representation of this type with fully qualified names.
+     */
     public String getGenericFullyQualifiedName()
     {
-        StringBuffer result = new StringBuffer( getFullyQualifiedName() );
+        StringBuffer result = new StringBuffer( isResolved() ? fullName : name );
         if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
         {
             result.append( "<" );

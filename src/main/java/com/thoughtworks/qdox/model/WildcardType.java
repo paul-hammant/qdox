@@ -19,7 +19,6 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
 /**
  * This class supports both the 'super' and 'extends' wildcards.

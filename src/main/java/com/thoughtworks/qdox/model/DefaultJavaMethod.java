@@ -116,8 +116,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
             }
         }
         result.append(')');
-        if (isDeclaration) {
-            if (getExceptions().size() > 0) {
+        if (isDeclaration  && !getExceptions().isEmpty() ) {
                 result.append(" throws ");
                 for(Iterator<Type> excIter = getExceptions().iterator();excIter.hasNext();) {
                     result.append(excIter.next().getValue());
@@ -125,7 +124,6 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
                         result.append(", ");
                     }
                 }
-            }
         }
         return result.toString();
     }
@@ -151,49 +149,52 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     }
 
     @Override
-    public boolean equals( Object obj ) 
+    public boolean equals( Object obj )
     {
-        if ( this == obj ) 
+        if ( this == obj )
         {
-          return true;    
+            return true;
         }
-        if ( !( obj instanceof JavaMethod ) ) 
+        if ( !( obj instanceof JavaMethod ) )
         {
-            return false;
-        }
-        
-        JavaMethod m = (JavaMethod) obj;
-
-        if ( m.getName() == null) 
-        {
-            return (getName() == null);
-        }
-        if (!m.getName().equals(getName())) 
-        {
-            return false;
-        }
-        
-        if (m.getReturns() == null) {
-            return (getReturns() == null);
-        }
-        if (!m.getReturns().equals(getReturns())) {
             return false;
         }
 
-        List<JavaParameter> myParams = getParameters();
-        List<JavaParameter> otherParams = m.getParameters();
-        if (otherParams.size() != myParams.size()) 
+        JavaMethod other = (JavaMethod) obj;
+        //use 'this' from here to make it better readable
+        if ( other.getName() != null && !other.getName().equals( this.getName() ) )
         {
             return false;
         }
-        for (int i = 0; i < myParams.size(); i++) 
+        if ( this.getName() != null && !this.getName().equals( other.getName() ) )
         {
-            if (!otherParams.get(i).equals(myParams.get(i))) {
+            return false;
+        }
+
+        if ( other.getReturns() != null && !other.getReturns().equals( this.getReturns() ) )
+        {
+            return false;
+        }
+        if ( this.getReturns() != null && !this.getReturns().equals( other.getReturns() ) )
+        {
+            return false;
+        }
+
+        List<JavaParameter> thisParams = this.getParameters();
+        List<JavaParameter> otherParams = other.getParameters();
+        if ( otherParams.size() != thisParams.size() )
+        {
+            return false;
+        }
+        for ( int i = 0; i < thisParams.size(); i++ )
+        {
+            if ( !otherParams.get( i ).equals( thisParams.get( i ) ) )
+            {
                 return false;
             }
         }
 
-        return this.isVarArgs() == m.isVarArgs();
+        return this.isVarArgs() == other.isVarArgs();
     }
 
     @Override

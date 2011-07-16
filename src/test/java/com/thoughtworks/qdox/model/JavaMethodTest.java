@@ -191,11 +191,21 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         setName(m4, "thing");
         setReturns(m4, newType("int"));
 
+        M m5 = newJavaMethod();
+        M m6 = newJavaMethod();
+        
+        M m7 = newJavaMethod();
+        setReturns(m7, newType("int"));
+
         assertEquals(mth, m2);
         assertEquals(m2, mth);
         assertNotEquals(mth, m3);
         assertNotEquals(mth, m4);
         assertFalse(mth.equals(null));
+        assertNotEquals( m4, m5 );
+        assertNotEquals( m5, m4 );
+        assertEquals( m5, m6 );
+        assertNotEquals( m5, m7 );
     }
 
     public void testEqualsWithParameters() throws Exception {

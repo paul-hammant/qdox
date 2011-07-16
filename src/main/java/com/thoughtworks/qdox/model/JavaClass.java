@@ -19,6 +19,8 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
+import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
@@ -33,19 +35,33 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
 {
 
     /**
-     * is interface?  (otherwise enum or class)
+     * (API description of {@link java.lang.Class#isInterface()})
+     * <p>
+     * Determines if the specified <code>Class</code> object represents an interface type.
+     * </p>
+     * 
+     * @return <code>true</code> if this object represents an interface, otherwise <code>false</code>
      */
     boolean isInterface();
 
     /**
-     * is enum?  (otherwise class or interface)
+     * (API description of {@link java.lang.Class#isEnum()})
+     * <p>
+     * Returns <code>true</code> if and only if this class was declared as an enum in the source code.
+     * </p>
+     * 
+     * @return <code>true</code> if this object represents an enum, otherwise <code>false</code>
+
      */
     boolean isEnum();
 
     /**
-     * (don't know if this is required)
+     * (API description of {@link java.lang.Class#isAnnotation()})
+     * <p>Returns true if this <code>Class</code> object represents an annotation type. 
+     *    Note that if this method returns true, {@link #isInterface()} would also return true, as all annotation types are also interfaces.
+     * </p>
      * 
-     * @return
+     * @return <code>true</code> if this object represents an annotation, otherwise <code>false</code>
      * @since 2.0 
      */
     boolean isAnnotation();
@@ -78,21 +94,39 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * If this class has a package, the packagename will be returned.
      * Otherwise an empty String.
      * 
-     * @return
+     * @return the name of the package, otherwise an empty String
      */
     String getPackageName();
 
     String getFullyQualifiedName();
     
-    String getGenericFullyQualifiedName();
-
     /**
      * @since 1.3
+     * @return <code>true</code> if this class is an inner class, otherwise <code>false</code>
      */
     boolean isInner();
 
-    String resolveType( String typeName );
+    /**
+     * Tries to return the fully qualified name based on the name.
+     * The name tries to match the following:
+     * <ul>
+     *   <li>primitives or void</li>
+     *   <li>java.lang.*</li>
+     *   <li>inner classes</li>
+     *   <li>explicit imports</li>
+     *   <li>implicit imports</li>
+     * </ul> 
+     * 
+     * @return the resolved name, otherwise the name itself.
+     */
+    String resolveType( String name );
 
+    /**
+     * If this class has a package, it will return the package name, followed by a "."(dot).
+     * Otherwise it will return an empty String
+     * 
+     * @return the package name plus a dot if there's a package, otherwise an empty String
+     */
     String getClassNamePrefix();
 
     @Deprecated
@@ -198,6 +232,9 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     List<JavaClass> getClasses();
 
     /**
+     * Equivalent of {@link Class#getDeclaredClasses()}
+     * 
+     * @return a list of declared classes, never <code>null</code>
      * @since 1.3
      */
     List<JavaClass> getNestedClasses();
@@ -239,6 +276,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     BeanProperty getBeanProperty( String propertyName, boolean superclasses );
 
     /**
+     * Equivalent of {@link Class#getClasses()}
      * Gets the known derived classes. That is, subclasses or implementing classes.
      */
     List<JavaClass> getDerivedClasses();
@@ -247,14 +285,25 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
 
     ClassLibrary getJavaClassLibrary();
 
+    /**
+     * Equivalent of {@link java.lang.Class#getName()}.
+     * 
+     * @return the fully qualified name of the class
+     */
     String getName();
     
     /**
      * If there's a reference to this class, use the value used in the code. Otherwise return the simple name.
      * When including all imports, you should be safe to use this method.
-     * This won't return generics, so it's java1.4 safe.  
+     * This won't return generics, so it's java1.4 safe.
      * 
-     * @return
+     * Examples:
+     * <pre>
+     *  private String fieldA;           // getValue() will return "String"
+     *  private java.lang.String fieldA; // getValue() will return "java.lang.String"
+     * </pre>
+     * 
+     * @return the name of the class as used in the source source
      */
     String getValue();
     
@@ -266,54 +315,82 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      */
     String getGenericValue();
     
+    /**
+     * Equivalent of {@link Class#getModifiers()}
+     * 
+     * <strong>This does not follow the java-api</strong>
+     * The Class.getModifiers() returns an <code>int</code>, which should be decoded with the {@link Modifier}.
+     * This method will return a list of strings representing the modifiers.
+     * If this member was extracted from a source, it will keep its order. 
+     * Otherwise if will be in the preferred order of the java-api.
+     * 
+     * @return all modifiers is this member
+     */
     List<String> getModifiers();
     
     /**
+     * (API description of {@link Modifier#isPublic(int)})
+     * <p>
      * Return <code>true</code> if the class includes the public modifier, <code>false</code> otherwise.
+     * <p>
      * 
-     * @return <code>true</code> if class the public modifier; <code>false</code> otherwise.
+     * @return <code>true</code> if class has the public modifier, otherwise <code>false</code>
      */
     boolean isPublic();
     
     /**
+     * (API description of {@link Modifier#isProtected(int)})
+     * <p>
      * Return <code>true</code> if the class includes the protected modifier, <code>false</code> otherwise.
+     * </p>
      * 
-     * @return <code>true</code> if class the protected modifier; <code>false</code> otherwise.
+     * @return <code>true</code> if class has the protected modifier, otherwise <code>false</code>
      */
     boolean isProtected();
     
     /**
+     * (API description of {@link Modifier#isPrivate(int)})
+     * <p>
      * Return <code>true</code> if the class includes the private modifier, <code>false</code> otherwise.
+     * </p>
      * 
-     * @return <code>true</code> if class the private modifier; <code>false</code> otherwise.
+     * @return <code>true</code> if class has the private modifier, otherwise <code>false</code>
      */
     boolean isPrivate();
     
     /**
+     * (API description of {@link Modifier#isFinal(int)})
+     * <p>
      * Return <code>true</code> if the class includes the final modifier, <code>false</code> otherwise.
+     * </p>
      * 
-     * @return <code>true</code> if class the final modifier; <code>false</code> otherwise.
+     * @return <code>true</code> if class has the final modifier, otherwise <code>false</code>
      */
     boolean isFinal();
     
     /**
+     * (API description of {@link Modifier#isStatic((int)})
+     * <p>
      * Return <code>true</code> if the class includes the static modifier, <code>false</code> otherwise.
+     * </p>
      * 
-     * @return <code>true</code> if class the static modifier; <code>false</code> otherwise.
+     * @return <code>true</code> if class the static modifier, otherwise <code>false</code>
      */
     boolean isStatic();
     
     /**
+     * (API description of {@link Modifier#isAbstract(int)})
+     * 
      * Return <code>true</code> if the class includes the abstract modifier, <code>false</code> otherwise.
      * 
-     * @return <code>true</code> if class the abstract modifier; <code>false</code> otherwise.
+     * @return <code>true</code> if class has the abstract modifier, otherwise <code>false</code>
      */
     boolean isAbstract();
     
     boolean isPrimitive();
     
     /**
-     * (API description of java.lang.Class.toString())
+     * (API description of {@link java.lang.Class#toString()})
      * 
      * Converts the object to a string. 
      * The string representation is the string "class" or "interface", followed by a space, and then by the fully qualified name of the class in the format returned by <code>getName</code>. 

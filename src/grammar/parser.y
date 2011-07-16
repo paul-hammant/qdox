@@ -206,6 +206,10 @@ FloatingPointType: FLOAT
                    };
                    
 // 4.3 Reference Types and Values
+// Actually
+// ReferenceType: ClassOrInterfaceType | TypeVariable | ArrayType
+// TypeVariable:  Identifier
+// ArrayType:     Type [ ]
 ReferenceType: ClassOrInterfaceType Dims_opt 
                {
                  TypeDef td = $1;
@@ -226,7 +230,9 @@ ClassOrInterfaceType: TypeDeclSpecifier
                       {
                         $$ = typeStack.pop();
                       };
-
+// Actually
+// TypeDeclSpecifier: TypeName | ClassOrInterfaceType . Identifier
+// TypeName:          Identifier | TypeName . Identifier
 TypeDeclSpecifier: AnyName
                  | ClassOrInterfaceType DOT IDENTIFIER 
                    { 

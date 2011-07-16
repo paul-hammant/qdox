@@ -48,14 +48,14 @@ public class DefaultJavaConstructor
             result.append( getParentClass().getFullyQualifiedName() );
         }
         result.append( "(" );
-        for ( int paramIndex = 0; paramIndex < getParameters().size(); paramIndex++ )
+        for ( Iterator<JavaParameter> paramIter = getParameters().iterator(); paramIter.hasNext();)
         {
-            if ( paramIndex > 0 )
+            String typeValue = paramIter.next().getType().getResolvedValue( getTypeParameters() );
+            result.append( typeValue );
+            if ( paramIter.hasNext() )
             {
                 result.append( "," );
             }
-            String typeValue = getParameters().get( paramIndex ).getType().getResolvedValue( getTypeParameters() );
-            result.append( typeValue );
         }
         result.append( ")" );
         if ( getExceptions().size() > 0 )

@@ -39,12 +39,10 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     private List<JavaMethod> methods = new LinkedList<JavaMethod>();
     private List<JavaField> fields = new LinkedList<JavaField>();
     private List<JavaClass> classes = new LinkedList<JavaClass>();
-    private boolean interfce;
-    private boolean isEnum;
-    private boolean isAnnotation;
+    private boolean anInterface;
+    private boolean anEnum;
+    private boolean anAnnotation;
 
-    // Don't access this directly. Use asType() to get my Type
-    private Type type;
     private Type superClass;
     private List<Type> implementz = new LinkedList<Type>();
     private List<TypeVariable> typeParameters = new LinkedList<TypeVariable>(); 
@@ -64,15 +62,20 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         setSource(source);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#isInterface()
      */
     public boolean isInterface() {
-        return interfce;
+        return anInterface;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isPrimitive()
+     */
 	public boolean isPrimitive() {
-		String name = getName();
+		final String name = getName();
 		return "void".equals(name) || "boolean".equals(name)
 				|| "byte".equals(name) || "char".equals(name)
 				|| "short".equals(name) || "int".equals(name)
@@ -80,11 +83,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
 				|| "double".equals(name);
 	}
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaClass#isEnum()
-     */
     public boolean isEnum() {
-        return isEnum;
+        return anEnum;
     }
     
     /* (non-Javadoc)
@@ -92,7 +92,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public boolean isAnnotation()
     {
-        return isAnnotation;
+        return anAnnotation;
     }
 
     /* (non-Javadoc)
@@ -104,9 +104,9 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         
         boolean iAmJavaLangObject = OBJECT_TYPE.equals(asType());
 
-        if (isEnum) {
+        if (anEnum) {
             return ENUM_TYPE;
-        } else if (!interfce && !isAnnotation && (superClass == null) && !iAmJavaLangObject) {
+        } else if (!anInterface && !anAnnotation && (superClass == null) && !iAmJavaLangObject) {
             return OBJECT_TYPE;
         }
 
@@ -123,9 +123,9 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         
         boolean iAmJavaLangObject = OBJECT_JAVACLASS.equals(this);
         
-        if (isEnum) {
+        if (anEnum) {
             result = ENUM_JAVACLASS;
-        } else if (!interfce && !isAnnotation && (superClass == null) && !iAmJavaLangObject) {
+        } else if (!anInterface && !anAnnotation && (superClass == null) && !iAmJavaLangObject) {
             result = OBJECT_JAVACLASS;
         }
         else if(superClass != null) {
@@ -163,16 +163,16 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         return getModelWriter().writeClass( this ).toString();
     }
     
-    public void setInterface(boolean interfce) {
-        this.interfce = interfce;
+    public void setInterface(boolean anInterface) {
+        this.anInterface = anInterface;
     }
 
-    public void setEnum(boolean isEnum) {
-        this.isEnum = isEnum;
+    public void setEnum(boolean anEnum) {
+        this.anEnum = anEnum;
     }
 
-    public void setAnnotation(boolean isAnnotation) {
-        this.isAnnotation = isAnnotation;
+    public void setAnnotation(boolean anAnnotation) {
+        this.anAnnotation = anAnnotation;
     }
 
     public void addConstructor( JavaConstructor constructor )
@@ -185,7 +185,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     }
 
     public void setSuperClass(Type type) {
-        if (isEnum) 
+        if (anEnum) 
         {
             throw new IllegalArgumentException("enums cannot extend other classes");   
         }
@@ -225,7 +225,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getParentSource()
      */
-    public JavaSource getParentSource() {
+    public JavaSource getParentSource() 
+    {
         return (getParentClass() != null ? getParentClass().getParentSource() : super.getSource());
     }
     
@@ -250,7 +251,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     public JavaClassParent getParent()
     {
         JavaClassParent result = getParentClass();
-        if (result == null) {
+        if (result == null) 
+        {
             result = getParentSource();
         }
         return result;
@@ -259,30 +261,36 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getPackageName()
      */
-    public String getPackageName() {
+    public String getPackageName()
+    {
         JavaPackage pckg = getPackage();
         return ( pckg != null && pckg.getName() != null ) ? pckg.getName() : "";
     }
 
-    /* (non-Javadoc)
+    /* 
+     * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getFullyQualifiedName()
      */
-    public String getFullyQualifiedName() {
-        return (getParentClass() != null ? (getParentClass().getClassNamePrefix()) : getPackage() != null ? (getPackage().getName()+".") : "") + getName();
+    public String getFullyQualifiedName()
+    {
+        return ( getParentClass() != null  ? ( getParentClass().getClassNamePrefix() )
+                        : getPackage() != null ? ( getPackage().getName() + "." ) : "" )
+            + getName();
     }
-    
-    public String getGenericFullyQualifiedName() {
-        return getFullyQualifiedName();
-    }
-    
-    /**
-     * @return the simple name
+
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getValue()
      */
     public String getValue()
     {
         return getName();
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getGenericValue()
+     */
     public String getGenericValue()
     {
         return getValue();
@@ -291,27 +299,33 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#isInner()
      */
-    public boolean isInner() {
+    public boolean isInner()
+    {
         return getParentClass() != null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#resolveType(java.lang.String)
      */
-    public String resolveType(String typeName) {
+    public String resolveType( String typeName )
+    {
         // Maybe it's an inner class?
-        for (JavaClass innerClass : getNestedClasses()) {
-            if (innerClass.getName().equals(typeName)) {
+        for ( JavaClass innerClass : getNestedClasses() )
+        {
+            if ( innerClass.getName().equals( typeName ) )
+            {
                 return innerClass.getFullyQualifiedName();
             }
         }
-        return getParent().resolveType(typeName);
+        return getParent().resolveType( typeName );
     }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getClassNamePrefix()
      */
-    public String getClassNamePrefix() {
+    public String getClassNamePrefix()
+    {
         return getFullyQualifiedName() + "$";
     }
 
@@ -319,31 +333,30 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      * @see com.thoughtworks.qdox.model.JavaClass#asType()
      */
     public Type asType() {
-        if (type == null) {
-            type = new Type(getFullyQualifiedName(), 0, this);
-        }
-
-        return type;
+        return new Type(getFullyQualifiedName(), 0, this);
     }
 
-    /**
-     * @since 2.0
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getConstructors()
      */
     public List<JavaConstructor> getConstructors()
     {
         return constructors;
     }
-    
-    /**
-     * @since 2.0
+
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getConstructor(java.util.List)
      */
     public JavaConstructor getConstructor( List<Type> parameterTypes )
     {
         return getConstructor( parameterTypes, false );
     }
     
-    /**
-     * @since 2.0
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getConstructor(java.util.List, boolean)
      */
     public JavaConstructor getConstructor( List<Type> parameterTypes, boolean varArgs )
     {
@@ -360,28 +373,38 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethods()
      */
-    public List<JavaMethod> getMethods() {
+    public List<JavaMethod> getMethods()
+    {
         return methods;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethods(boolean)
      */
-    public List<JavaMethod> getMethods(boolean superclasses) {
-        if (superclasses) {
-            return new LinkedList<JavaMethod>(getMethodsFromSuperclassAndInterfaces(this, this).values());
-        } else {
+    public List<JavaMethod> getMethods( boolean superclasses )
+    {
+        if ( superclasses )
+        {
+            return new LinkedList<JavaMethod>( getMethodsFromSuperclassAndInterfaces( this, this ).values() );
+        }
+        else
+        {
             return getMethods();
         }
     }
     
-    private static Map<String, JavaMethod> getMethodsFromSuperclassAndInterfaces(JavaClass rootClass, JavaClass callingClazz) {
+    private static Map<String, JavaMethod> getMethodsFromSuperclassAndInterfaces( JavaClass rootClass,
+                                                                                  JavaClass callingClazz )
+    {
 
         Map<String, JavaMethod> result = new LinkedHashMap<String, JavaMethod>();
-        
-        for (JavaMethod method : callingClazz.getMethods()) {
-            if (!method.isPrivate()) {
-                String signature = method.getDeclarationSignature(false);
+
+        for ( JavaMethod method : callingClazz.getMethods() )
+        {
+            if ( !method.isPrivate() )
+            {
+                String signature = method.getDeclarationSignature( false );
                 result.put( signature, new JavaMethodDelegate( rootClass, method ) );
             }
         }
@@ -389,24 +412,31 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         JavaClass superclass = callingClazz.getSuperJavaClass();
 
         // TODO workaround for a bug in getSuperJavaClass
-        if ((superclass != null) && (superclass != callingClazz)) {
-            Map<String, JavaMethod> superClassMethods = getMethodsFromSuperclassAndInterfaces(callingClazz, superclass);
-            for(Map.Entry<String, JavaMethod> methodEntry : superClassMethods.entrySet()) {
-                if (!result.containsKey(methodEntry.getKey())) {
+        if ( ( superclass != null ) && ( superclass != callingClazz ) )
+        {
+            Map<String, JavaMethod> superClassMethods =
+                getMethodsFromSuperclassAndInterfaces( callingClazz, superclass );
+            for ( Map.Entry<String, JavaMethod> methodEntry : superClassMethods.entrySet() )
+            {
+                if ( !result.containsKey( methodEntry.getKey() ) )
+                {
                     result.put( methodEntry.getKey(), new JavaMethodDelegate( superclass, methodEntry.getValue() ) );
                 }
             }
 
         }
 
-        for (JavaClass clazz : callingClazz.getImplementedInterfaces()) {
-            Map<String, JavaMethod> interfaceMethods = getMethodsFromSuperclassAndInterfaces(callingClazz, clazz);
-            for(Map.Entry<String, JavaMethod> methodEntry : interfaceMethods.entrySet()) {
-                if (!result.containsKey(methodEntry.getKey())) {
+        for ( JavaClass clazz : callingClazz.getImplementedInterfaces() )
+        {
+            Map<String, JavaMethod> interfaceMethods = getMethodsFromSuperclassAndInterfaces( callingClazz, clazz );
+            for ( Map.Entry<String, JavaMethod> methodEntry : interfaceMethods.entrySet() )
+            {
+                if ( !result.containsKey( methodEntry.getKey() ) )
+                {
                     result.put( methodEntry.getKey(), new JavaMethodDelegate( clazz, methodEntry.getValue() ) );
                 }
             }
-            
+
         }
         return result;
     }
@@ -505,9 +535,12 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getFieldByName(java.lang.String)
      */
-    public JavaField getFieldByName(String name) {
-        for ( JavaField field : getFields()) {
-            if (field.getName().equals(name)) {
+    public JavaField getFieldByName( String name )
+    {
+        for ( JavaField field : getFields() )
+        {
+            if ( field.getName().equals( name ) )
+            {
                 return field;
             }
         }
@@ -588,9 +621,9 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     	else if (javaClass != null) 
     	{
             // ask our interfaces
-            for (JavaClass implementz : getImplementedInterfaces()) 
+            for (JavaClass intrfc : getImplementedInterfaces()) 
             {
-                if (implementz.isA(javaClass)) 
+                if (intrfc.isA(javaClass)) 
                 {
                     return true;
                 }
@@ -608,81 +641,94 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getBeanProperties()
      */
-    public List<BeanProperty> getBeanProperties() {
-        return getBeanProperties(false);
+    public List<BeanProperty> getBeanProperties()
+    {
+        return getBeanProperties( false );
     }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getBeanProperties(boolean)
      */
-    public List<BeanProperty> getBeanProperties(boolean superclasses) {
-        Map<String, BeanProperty> beanPropertyMap = getBeanPropertyMap(superclasses);
+    public List<BeanProperty> getBeanProperties( boolean superclasses )
+    {
+        Map<String, BeanProperty> beanPropertyMap = getBeanPropertyMap( superclasses );
         Collection<BeanProperty> beanPropertyCollection = beanPropertyMap.values();
 
-        return new LinkedList<BeanProperty>(beanPropertyCollection);
+        return new LinkedList<BeanProperty>( beanPropertyCollection );
     }
 
-    private Map<String, BeanProperty> getBeanPropertyMap(boolean superclasses) {
-        List<JavaMethod> methods = getMethods(superclasses);
+    private Map<String, BeanProperty> getBeanPropertyMap( boolean superclasses )
+    {
+        List<JavaMethod> superMethods = getMethods( superclasses );
         Map<String, BeanProperty> beanPropertyMap = new LinkedHashMap<String, BeanProperty>();
 
         // loop over the methods.
-        for (JavaMethod method:methods) {
-            if (method.isPropertyAccessor()) {
-                String propertyName = method.getPropertyName();
-                BeanProperty beanProperty = getOrCreateProperty(beanPropertyMap,
-                        propertyName);
+        for ( JavaMethod superMethod : superMethods )
+        {
+            if ( superMethod.isPropertyAccessor() )
+            {
+                String propertyName = superMethod.getPropertyName();
+                BeanProperty beanProperty = getOrCreateProperty( beanPropertyMap, propertyName );
 
-                beanProperty.setAccessor(method);
-                beanProperty.setType(method.getPropertyType());
-            } else if (method.isPropertyMutator()) {
-                String propertyName = method.getPropertyName();
-                BeanProperty beanProperty = getOrCreateProperty(beanPropertyMap,
-                        propertyName);
+                beanProperty.setAccessor( superMethod );
+                beanProperty.setType( superMethod.getPropertyType() );
+            }
+            else if ( superMethod.isPropertyMutator() )
+            {
+                String propertyName = superMethod.getPropertyName();
+                BeanProperty beanProperty = getOrCreateProperty( beanPropertyMap, propertyName );
 
-                beanProperty.setMutator(method);
-                beanProperty.setType(method.getPropertyType());
+                beanProperty.setMutator( superMethod );
+                beanProperty.setType( superMethod.getPropertyType() );
             }
         }
 
         return beanPropertyMap;
     }
 
-    private BeanProperty getOrCreateProperty(Map<String, BeanProperty> beanPropertyMap,
-                                             String propertyName) {
-        BeanProperty result = (BeanProperty) beanPropertyMap.get(propertyName);
+    private BeanProperty getOrCreateProperty( Map<String, BeanProperty> beanPropertyMap, String propertyName )
+    {
+        BeanProperty result = beanPropertyMap.get( propertyName );
 
-        if (result == null) {
-            result = new BeanProperty(propertyName);
-            beanPropertyMap.put(propertyName, result);
+        if ( result == null )
+        {
+            result = new BeanProperty( propertyName );
+            beanPropertyMap.put( propertyName, result );
         }
 
         return result;
     }
 
-    /* (non-Javadoc)
+    /* 
+     * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getBeanProperty(java.lang.String)
      */
-    public BeanProperty getBeanProperty(String propertyName) {
-        return getBeanProperty(propertyName, false);
+    public BeanProperty getBeanProperty( String propertyName )
+    {
+        return getBeanProperty( propertyName, false );
     }
 
-    /* (non-Javadoc)
+    /* 
+     * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getBeanProperty(java.lang.String, boolean)
      */
-    public BeanProperty getBeanProperty(String propertyName,
-                                        boolean superclasses) {
-        return getBeanPropertyMap(superclasses).get(propertyName);
+    public BeanProperty getBeanProperty( String propertyName, boolean superclasses )
+    {
+        return getBeanPropertyMap( superclasses ).get( propertyName );
     }
 
-    /**
-     * Gets the known derived classes. That is, subclasses or implementing classes.
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getDerivedClasses()
      */
-    public List<JavaClass> getDerivedClasses() {
+    public List<JavaClass> getDerivedClasses()
+    {
         List<JavaClass> result = new LinkedList<JavaClass>();
-        for (JavaClass clazz : getSource().getJavaClassLibrary().getJavaClasses()) {
-            if (clazz.isA(this) && !(clazz == this)) {
-                result.add(clazz);
+        for ( JavaClass clazz : getSource().getJavaClassLibrary().getJavaClasses() )
+        {
+            if ( clazz.isA( this ) && !( clazz == this ) )
+            {
+                result.add( clazz );
             }
         }
         return result;
@@ -691,8 +737,9 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getTagsByName(java.lang.String, boolean)
      */
-    public List<DocletTag> getTagsByName(String name, boolean superclasses) {
-        return getTagsRecursive(this, name, superclasses);
+    public List<DocletTag> getTagsByName( String name, boolean superclasses )
+    {
+        return getTagsRecursive( this, name, superclasses );
     }
 
     private List<DocletTag> getTagsRecursive(JavaClass javaClass, String name, boolean superclasses) {
@@ -707,9 +754,9 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
                 result.addAll(getTagsRecursive(superclass, name, superclasses));
             }
 
-            for (JavaClass implementz : javaClass.getImplementedInterfaces()) {
-                if (implementz != null) {
-                    result.addAll(getTagsRecursive(implementz, name, superclasses));
+            for (JavaClass intrfc : javaClass.getImplementedInterfaces()) {
+                if (intrfc != null) {
+                    result.addAll(getTagsRecursive(intrfc, name, superclasses));
                 }
             }
         }
@@ -719,17 +766,21 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /**
      * @see http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Class.html#toString()
      */
-    public String toString() {
-    	StringBuffer sb = new StringBuffer();
-    	if(isPrimitive()) {
-    		sb.append(getName());
-    	}
-    	else {
-        	sb.append(isInterface() ? "interface" : "class");
-        	sb.append(" ");
-        	sb.append(getFullyQualifiedName());
-    	}
-    	return sb.toString();
+    @Override
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer();
+        if ( isPrimitive() )
+        {
+            sb.append( getName() );
+        }
+        else
+        {
+            sb.append( isInterface() ? "interface" : "class" );
+            sb.append( " " );
+            sb.append( getFullyQualifiedName() );
+        }
+        return sb.toString();
     }
     
     @Override

@@ -28,16 +28,35 @@ package com.thoughtworks.qdox.model;
 public interface JavaParameter extends JavaAnnotatedElement
 {
 
+    /**
+     * 
+     * @return the name of the parameter
+     */
     String getName();
 
+    /**
+     * 
+     * @return the type of this parameter
+     */
     Type getType();
 
+    /**
+     * Returns the declaring method of this parameter
+     * 
+     * @return the declaring method 
+     */
     JavaMethod getParentMethod();
 
+    /**
+     * The declaring class of the declaring method of this parameter.
+     * 
+     * @return the declaring class of the declaring method
+     */
     JavaClass getParentClass();
 
     /**
-     * Is this a Java 5 var args type specified using three dots. e.g. void doStuff(Object... thing)
+     * Is this a Java 5 var args type specified using three dots. e.g. <code>void doStuff(Object... thing)</code>
+     * 
      * @since 1.6
      */
     boolean isVarArgs();

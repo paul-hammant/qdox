@@ -74,7 +74,7 @@ public abstract class AbstractClassLibrary
      * the concrete class. If there's still no JavaClass, ask the parent (if available) to resolve it.
      * 
      * @param name
-     * @return
+     * @return 
      */
     public final JavaClass getJavaClass( String name ) {
        return getJavaClass( name, false ); 
@@ -265,7 +265,7 @@ public abstract class AbstractClassLibrary
      * This method is used to detect if there's a match with this classname.
      * The name could be constructed based on imports and inner class paths.
      * 
-     * @param name the fully qualifed name of the class
+     * @param name the fully qualified name of the class
      * @return true if this ClassLibrary has a reference to this class.
      */
     protected abstract boolean containsClassReference( String name );
@@ -279,9 +279,14 @@ public abstract class AbstractClassLibrary
         this.modelBuilderFactory = factory;
     }
     
-    public final void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
+    /**
+     * Set the ModelWriterFactory for this class.
+     * 
+     * @param factory the ModelWriterFactory
+     */
+    public final void setModelWriterFactory( ModelWriterFactory factory )
     {
-        this.modelWriterFactory = modelWriterFactory;
+        this.modelWriterFactory = factory;
     }
 
     

@@ -19,7 +19,6 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
@@ -117,9 +116,25 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      *   <li>implicit imports</li>
      * </ul> 
      * 
-     * @return the resolved name, otherwise the name itself.
+     * @return the resolved name, otherwise <code>null</code>.
      */
     String resolveType( String name );
+    
+    /**
+     * The name can be both absolute (including the package) or relative (matching a subclass or an import).
+     * 
+     * @param name
+     * @return
+     */
+    String resolveCanonicalName( String name );
+    
+    /**
+     * The name can be both absolute (including the package) or relative (matching a subclass or an import).
+     * 
+     * @param name the name to resolve
+     * @return the resolved fully qualified name, otherwise <code>null</code> 
+     */
+    String resolveFullyQualifiedName( String name );
 
     /**
      * If this class has a package, it will return the package name, followed by a "."(dot).
@@ -291,6 +306,13 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @return the fully qualified name of the class
      */
     String getName();
+    
+    /**
+     * Equivalent of (@link {@link java.lang.Class#getCanonicalName()}.
+     * 
+     * @return the canonical name of this class
+     */
+    String getCanonicalName();
     
     /**
      * If there's a reference to this class, use the value used in the code. Otherwise return the simple name.

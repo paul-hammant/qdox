@@ -277,6 +277,15 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
                         : getPackage() != null ? ( getPackage().getName() + "." ) : "" )
             + getName();
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getCanonicalName()
+     */
+    public String getCanonicalName()
+    {
+        return getFullyQualifiedName().replace( '$', '.' );
+    }
 
     /*
      * (non-Javadoc)
@@ -319,6 +328,32 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
             }
         }
         return getParent().resolveType( typeName );
+    }
+    
+    public String resolveCanonicalName( String name )
+    {
+        // Maybe it's an inner class?
+        for ( JavaClass innerClass : getNestedClasses() )
+        {
+            if ( innerClass.getName().equals( name ) )
+            {
+                return innerClass.getName();
+            }
+        }
+        return getParent().resolveCanonicalName( name );
+    }
+    
+    public String resolveFullyQualifiedName( String name )
+    {
+        // Maybe it's an inner class?
+        for ( JavaClass innerClass : getNestedClasses() )
+        {
+            if ( innerClass.getName().equals( name ) )
+            {
+                return innerClass.getFullyQualifiedName();
+            }
+        }
+        return getParent().resolveFullyQualifiedName( name );
     }
 
     /* (non-Javadoc)

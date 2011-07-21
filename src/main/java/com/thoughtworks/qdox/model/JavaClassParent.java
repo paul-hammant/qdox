@@ -30,6 +30,10 @@ public interface JavaClassParent {
      *     be resolved
      */
     String resolveType(String typeName);
+    
+    String resolveCanonicalName(String typeName);
+    
+    String resolveFullyQualifiedName(String typeName);
 
     JavaSource getParentSource();
 

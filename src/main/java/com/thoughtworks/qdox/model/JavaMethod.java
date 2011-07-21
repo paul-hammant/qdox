@@ -19,6 +19,7 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel, JavaGenericDeclaration
@@ -38,8 +39,10 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     List<Type> getExceptions();
 
     /**
+     * Equivalent of {@link Method#isVarArgs()}
      * 
-     * @return true is this method conains varArgs
+     * @return <code>true</code> if this method was declared to take a variable number of arguments, 
+     *          otherwise <code>false</code>
      */
     boolean isVarArgs();
 
@@ -73,26 +76,46 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg );
 
     /**
-     * @return true if this method is a Java Bean accessor
+     * Returns <code>true</code> if this method follows the bean convention of being an accessor.
+     * 
+     * <pre>
+     *   public String getName();             // true
+     *   public boolean isValid()             // true
+     *   public String getName( String def ); // false, it has a parameter
+     *   public String gettingUp();           // false, 'get' is not followed by an uppercase character
+     *   public boolean isolate();            // false, 'is' is not followed by an uppercase character
+     *   public static String getName();      // false, it is static
+     * </pre>
+     * 
+     * @return <code>true</code> if this method is a Java Bean accessor, otherwise <code>false</code>
      * @since 1.3
      */
     boolean isPropertyAccessor();
 
     /**
-     * @return true if this method is a Java Bean accessor
+     * Returns <code>true</code> if this method follows the bean convention of being an mutator.
+     * 
+     * <pre>
+     *  public void setName(String name);        // true
+     *  public void setUp();                     // false, it has no parameter
+     *  public void settingUp(String def);       // false, 'set' is not followed by an uppercase character
+     *  public static void setName(String name); // false, it is static
+     * </pre>
+     * 
+     * @return <code>true</code> if this method is a Java Bean mutator, otherwise <code>false</code>
      * @since 1.3
      */
     boolean isPropertyMutator();
 
     /**
-     * @return the type of the property this method represents, or null if this method
+     * @return the type of the property this method represents, or <code>null</code> if this method
      * is not a property mutator or property accessor.
      * @since 1.3
      */
     Type getPropertyType();
 
     /**
-     * @return the name of the property this method represents, or null if this method
+     * @return the name of the property this method represents, or <code>null</code> if this method
      * is not a property mutator or property accessor.
      * @since 1.3
      */

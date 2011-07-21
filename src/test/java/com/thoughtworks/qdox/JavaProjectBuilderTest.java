@@ -1357,6 +1357,23 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource(new StringReader( source ));
         JavaClass cls = builder.getClassByName( "GreetingService" );
         assertEquals( 1, cls.getAnnotations().size() );
-        
+    }
+    
+    public void testCanonicalName()
+        throws Exception
+    {
+        String source =
+            "package com.foo;\b" + "public class Outer {\n" + "public class Inner {\n" + "public class Core {}\n"
+                + "}\n" + "}\n";
+        builder.addSource( new StringReader( source ) );
+        JavaClass cls = builder.getClasses().get( 0 );
+        assertEquals( "com.foo.Outer", cls.getFullyQualifiedName() );
+        assertEquals( "com.foo.Outer", cls.getCanonicalName() );
+        cls = cls.getNestedClassByName( "Inner" );
+        assertEquals( "com.foo.Outer$Inner", cls.getFullyQualifiedName() );
+        assertEquals( "com.foo.Outer.Inner", cls.getCanonicalName() );
+        cls = cls.getNestedClassByName( "Core" );
+        assertEquals( "com.foo.Outer$Inner$Core", cls.getFullyQualifiedName() );
+        assertEquals( "com.foo.Outer.Inner.Core", cls.getCanonicalName() );
     }
 }

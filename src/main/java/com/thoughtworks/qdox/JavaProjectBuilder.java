@@ -44,17 +44,20 @@ import com.thoughtworks.qdox.model.JavaSource;
 /**
  * This is the improved version of the JavaDocBuilder of QDox 1.x, which has the following tasks:
  * <ul>
- *   <li>Provide adders for all kind of resources, such as classloaders, java files and source directories</li>
- *   <li>Provide setters to enable the debug-mode for the Lexer and Parser (which are used when parsing sourcefiles) and the encoding
- *   <li>Provide getter for retrieving Java Object Models from these libraries, such as JavaSources, JavaClasses and JavaPackages</li>
- *   <li>Provide a method to search through all the parsed JavaClasses </li>
- *   <li>Provide store and load methods for the JavaProjectBuilder</li> 
+ * <li>Provide adders for all kind of resources, such as classloaders, java files and source directories</li>
+ * <li>Provide setters to enable the debug-mode for the Lexer and Parser (which are used when parsing sourcefiles) and
+ * the encoding
+ * <li>Provide getter for retrieving Java Object Models from these libraries, such as JavaSources, JavaClasses and
+ * JavaPackages</li>
+ * <li>Provide a method to search through all the parsed JavaClasses</li>
+ * <li>Provide store and load methods for the JavaProjectBuilder</li>
+ * <li>Provide the option to set an ErrorHandler</li>
  * </ul>
- * 
- * By default the JavaProjectBuilder will use the {@link} SortedClassLibraryBuilder}, which means it doesn't matter in which order you add the resources,
- * first all sources and sourcefolders, followed by the classloaders. Another implementation for the ClassLibraryBuilder is the
- * {@link OrderedClassLibraryBuilder}, which preserves the order in which resources are added. 
- * By creating a new JavaProjectBuilder with your own ClassLibraryBuilder you can decide which loading strategy should be used.  
+ * By default the JavaProjectBuilder will use the {@link SortedClassLibraryBuilder}, which means it doesn't matter in
+ * which order you add the resources, first all sources and sourcefolders, followed by the classloaders. Another
+ * implementation for the ClassLibraryBuilder is the {@link OrderedClassLibraryBuilder}, which preserves the order in
+ * which resources are added. By creating a new JavaProjectBuilder with your own ClassLibraryBuilder you can decide
+ * which loading strategy should be used.
  * 
  * @author Robert Scholte
  * @since 2.0
@@ -62,14 +65,14 @@ import com.thoughtworks.qdox.model.JavaSource;
 public class JavaProjectBuilder
 {
     private final ClassLibraryBuilder classLibraryBuilder;
-    
+
     // Constructors
-    
+
     /**
      * Default constructor, which will use the {@link SortedClassLibraryBuilder} implementation
      */
     public JavaProjectBuilder()
-    {        
+    {
         this.classLibraryBuilder = new SortedClassLibraryBuilder();
     }
 
@@ -78,18 +81,18 @@ public class JavaProjectBuilder
      * 
      * @param classLibraryBuilder custom implementation of {@link ClassLibraryBuilder}
      */
-    public JavaProjectBuilder(ClassLibraryBuilder classLibraryBuilder)
-    {        
+    public JavaProjectBuilder( ClassLibraryBuilder classLibraryBuilder )
+    {
         this.classLibraryBuilder = classLibraryBuilder;
     }
 
     // Lexer and Parser -setters
-    
+
     /**
      * Enable the debugmode for the Lexer
      * 
      * @param debugLexer <code>true</code> to enable, <code>false</code> to disable
-     * @return This javaProjectBuilder itself 
+     * @return this javaProjectBuilder itself
      */
     public JavaProjectBuilder setDebugLexer( boolean debugLexer )
     {
@@ -101,7 +104,7 @@ public class JavaProjectBuilder
      * Enable the debugmode for the Parser
      * 
      * @param debugParser <code>true</code> to enable, <code>false</code> to disable
-     * @return This javaProjectBuilder itself
+     * @return this javaProjectBuilder itself
      */
     public JavaProjectBuilder setDebugParser( boolean debugParser )
     {
@@ -112,7 +115,7 @@ public class JavaProjectBuilder
     /**
      * Sets the encoding when using Files or URL's to parse.
      * 
-     * @param encoding the encoding to use for {@link File} or ({@link URL}
+     * @param encoding the encoding to use for {@link File} or {@link URL}
      * @return this javaProjectBuilder itself
      */
     public JavaProjectBuilder setEncoding( String encoding )
@@ -120,14 +123,15 @@ public class JavaProjectBuilder
         classLibraryBuilder.setEncoding( encoding );
         return this;
     }
-    
+
     /**
      * Sets the errorHandler which will be triggered when a parse exception occurs.
      * 
      * @param errorHandler the errorHandler
      * @return this javaProjectBuilder itself
      */
-    public JavaProjectBuilder setErrorHandler( ErrorHandler errorHandler) {
+    public JavaProjectBuilder setErrorHandler( ErrorHandler errorHandler )
+    {
         classLibraryBuilder.setErrorHander( errorHandler );
         return this;
     }
@@ -136,27 +140,28 @@ public class JavaProjectBuilder
      * Add a java file to this JavaProjectBuilder
      * 
      * @param file a java file
-     * @return the {@link JavaSource} of the parsed file 
-     * @throws IOException
+     * @return the {@link JavaSource} of the parsed file
+     * @throws IOException if file is a directory or can't be read
      */
-    public JavaSource addSource(File file) throws IOException 
+    public JavaSource addSource( File file )
+        throws IOException
     {
         return classLibraryBuilder.addSource( file );
     }
-    
+
     // Resource adders
-    
-    public JavaSource addSource( Reader reader ) 
+
+    public JavaSource addSource( Reader reader )
     {
         return classLibraryBuilder.addSource( reader );
     }
 
     /**
-     * Add a sourcefolder to this javaprojectbuilder, but don't parse any file.
-     * This is a lazy parser. 
-     * Only if a JavaClass is called it will be searched by matching the package with the folder structure and the classname with the filename
+     * Add a sourcefolder to this javaprojectbuilder, but don't parse any file. This is a lazy parser. Only if a
+     * JavaClass is called it will be searched by matching the package with the folder structure and the classname with
+     * the filename
      * 
-     * @see {@link #addSourceTree(File)}
+     * @see #addSourceTree(File)
      * @param sourceFolder the sourcefolder to add
      */
     public void addSourceFolder( File sourceFolder )
@@ -164,47 +169,53 @@ public class JavaProjectBuilder
         classLibraryBuilder.appendSourceFolder( sourceFolder );
     }
 
-    
     /**
-     * Add all java files of the {@value directory} recursively
+     * Add all java files of the {@code directory} recursively
      * 
      * @param directory the directory from which all java files should be parsed.
      */
     public void addSourceTree( File directory )
     {
-        FileVisitor visitor = new FileVisitor() {
-            public void visitFile(File badFile) {
-                throw new RuntimeException("Cannot read file : " + badFile.getName());
+        FileVisitor visitor = new FileVisitor()
+        {
+            public void visitFile( File badFile )
+            {
+                throw new RuntimeException( "Cannot read file : " + badFile.getName() );
             }
         };
-        addSourceTree(directory, visitor);        
+        addSourceTree( directory, visitor );
     }
 
     /**
-     * Add all java files of the {@value directory} recursively
+     * Add all java files of the {@code directory} recursively
      * 
      * @param directory the directory from which all java files should be parsed.
      * @param errorHandler a fileVisitor which will be triggered when an {@link IOException} occurs.
      */
     public void addSourceTree( File directory, final FileVisitor errorHandler )
     {
-        DirectoryScanner scanner = new DirectoryScanner(directory);
-        scanner.addFilter(new SuffixFilter(".java"));
-        scanner.scan(new FileVisitor() {
-            public void visitFile(File currentFile) {
-                try {
-                    addSource(currentFile);
-                } catch (IOException e) {
-                    errorHandler.visitFile(currentFile);
+        DirectoryScanner scanner = new DirectoryScanner( directory );
+        scanner.addFilter( new SuffixFilter( ".java" ) );
+        scanner.scan( new FileVisitor()
+        {
+            public void visitFile( File currentFile )
+            {
+                try
+                {
+                    addSource( currentFile );
+                }
+                catch ( IOException e )
+                {
+                    errorHandler.visitFile( currentFile );
                 }
             }
-        });
+        } );
     }
-    
+
     /**
-     * Add the classLoader to this JavaProjectBuilder
+     * Add the {@link ClassLoader} to this JavaProjectBuilder
      * 
-     * @param classLoader
+     * @param classLoader the classloader to add
      */
     public void addClassLoader( ClassLoader classLoader )
     {
@@ -214,27 +225,27 @@ public class JavaProjectBuilder
     // Java Object Model -getters
 
     /**
-     * Try to retrieve a JavaClass by its name.
+     * Try to retrieve a {@link JavaClass} by its name.
      * 
      * @param name the fully qualified name of the class
-     * @return the matching {@link JavaClass}, otherwise <code>null</code>
+     * @return the matching JavaClass, otherwise <code>null</code>
      */
     public JavaClass getClassByName( String name )
     {
         return classLibraryBuilder.getClassLibrary().getJavaClass( name );
     }
-    
+
     /**
-     * Get all the sources added.
-     * This will only contain the sources added as sourcefile, sourcetree or sourcefolder.
+     * Get all the sources added. This will only contain the sources added as sourcefile, sourcetree or sourcefolder.
      * 
      * @return a list of sources
-     * @see {@link #addSource(File)}
-     * @see {@link #addSource(Reader)}
-     * @see {@link #addSourceFolder(File)}
-     * @see {@link #addSourceTree(File)}
+     * @see #addSource(File)
+     * @see #addSource(Reader)
+     * @see #addSourceFolder(File)
+     * @see #addSourceTree(File)
      */
-    public List<JavaSource> getSources() {
+    public List<JavaSource> getSources()
+    {
         return classLibraryBuilder.getClassLibrary().getJavaSources();
     }
 
@@ -242,10 +253,10 @@ public class JavaProjectBuilder
      * Retrieve all classes which were added by sources
      * 
      * @return a list of javaclasses, never <code>null</code>
-     * @see {@link #addSource(File)}
-     * @see {@link #addSource(Reader)}
-     * @see {@link #addSourceFolder(File)}
-     * @see {@link #addSourceTree(File)}
+     * @see #addSource(File)
+     * @see #addSource(Reader)
+     * @see #addSourceFolder(File)
+     * @see #addSourceTree(File)
      */
     public List<JavaClass> getClasses()
     {
@@ -253,9 +264,10 @@ public class JavaProjectBuilder
     }
 
     /**
+     * Try to retrieve a {@link JavaPackage} by its name.
      * 
-     * @param name
-     * @return
+     * @param name the package name
+     * @return the matching JavaPackage, otherwise <code>null</code>
      */
     public JavaPackage getPackageByName( String name )
     {
@@ -266,10 +278,10 @@ public class JavaProjectBuilder
      * Retrieve all packages which were added by sources.
      * 
      * @return a list of packages, never <code>null</code>
-     * @see {@link #addSource(File)}
-     * @see {@link #addSource(Reader)}
-     * @see {@link #addSourceFolder(File)}
-     * @see {@link #addSourceTree(File)}
+     * @see #addSource(File)
+     * @see #addSource(Reader)
+     * @see #addSourceFolder(File)
+     * @see #addSourceTree(File)
      */
     public List<JavaPackage> getPackages()
     {
@@ -277,15 +289,17 @@ public class JavaProjectBuilder
     }
 
     // Searcher
-    
+
     public List<JavaClass> search( Searcher searcher )
     {
         List<JavaClass> result = new LinkedList<JavaClass>();
         List<JavaClass> classArray = classLibraryBuilder.getClassLibrary().getJavaClasses();
-        for (int classIndex = 0;classIndex < classArray.size(); classIndex++) {
-            JavaClass cls = classArray.get(classIndex);
-            if (searcher.eval(cls)) {
-                result.add(cls);
+        for ( int classIndex = 0; classIndex < classArray.size(); classIndex++ )
+        {
+            JavaClass cls = classArray.get( classIndex );
+            if ( searcher.eval( cls ) )
+            {
+                result.add( cls );
             }
         }
         return result;
@@ -297,7 +311,8 @@ public class JavaProjectBuilder
      * @param file the file to serialize to
      * @throws IOException Any exception thrown by the underlying OutputStream
      */
-    public void save( File file ) throws IOException
+    public void save( File file )
+        throws IOException
     {
         FileOutputStream fos = new FileOutputStream( file );
         ObjectOutputStream out = new ObjectOutputStream( fos );
@@ -315,16 +330,23 @@ public class JavaProjectBuilder
     /**
      * Note that after loading JavaDocBuilder classloaders need to be re-added.
      */
-    public static JavaProjectBuilder load(File file) throws IOException {
-        FileInputStream fis = new FileInputStream(file);
-        ObjectInputStream in = new ObjectInputStream(fis);
+    public static JavaProjectBuilder load( File file )
+        throws IOException
+    {
+        FileInputStream fis = new FileInputStream( file );
+        ObjectInputStream in = new ObjectInputStream( fis );
         JavaProjectBuilder builder;
-        try {
+        try
+        {
             ClassLibraryBuilder libraryBuilder = (ClassLibraryBuilder) in.readObject();
-            builder = new JavaProjectBuilder(libraryBuilder);
-        } catch (ClassNotFoundException e) {
-            throw new Error("Couldn't load class : " + e.getMessage());
-        } finally {
+            builder = new JavaProjectBuilder( libraryBuilder );
+        }
+        catch ( ClassNotFoundException e )
+        {
+            throw new Error( "Couldn't load class : " + e.getMessage() );
+        }
+        finally
+        {
             in.close();
             fis.close();
         }

@@ -28,13 +28,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 
 /**
- * JavaClassContext gives you a mechanism to get a JavaClass.
+ * JavaClassContext gives you a mechanism to get a {@link JavaClass}.
  * If a class couldn't be found in the cache, the class will be pulled from the classLibrary, the builder will create the corresponding JavaClass and put it in the cache.  
  * 
  * 
@@ -52,10 +51,10 @@ public class JavaClassContext implements Serializable {
 	}
 	
 	/**
-	 * Retrieve the {@link JavaClass} based on the name
+	 * Retrieve the {@link JavaClass} based on the {@code name}.
 	 * 
 	 * @param name the fully qualified name of the class
-	 * @return the stored {@link JavaClass}, otherwise <code>null</code>
+	 * @return the stored JavaClass, otherwise <code>null</code>
 	 */
 	public JavaClass getClassByName(String name) 
 	{
@@ -63,10 +62,10 @@ public class JavaClassContext implements Serializable {
 	}
 	
 	/**
-	 * Remove and return the {@link JavaClass} based on the name
+	 * Remove and return the {@link JavaClass} based on the {@code name}.
 	 * 
 	 * @param name the fully qualified name of the class
-	 * @return the removed {@link JavaClass}, otherwise <code>null</code> 
+	 * @return the removed JavaClass, otherwise <code>null</code> 
 	 */
 	public JavaClass removeClassByName(String name) 
 	{
@@ -76,26 +75,26 @@ public class JavaClassContext implements Serializable {
 	/**
 	 * Return all stored JavaClasses
 	 * 
-	 * @return an array of JavaClasses, never <code>null</code>
+	 * @return a list of JavaClasses, never <code>null</code>
 	 */
 	public List<JavaClass> getClasses() {
 		return Collections.unmodifiableList( new LinkedList<JavaClass>(classMap.values()) );
 	}
 	
 	/**
-	 * Store this JavaClass based on its fully qualified name
+	 * Store this {@link JavaClass} based on its fully qualified name
 	 * 
-	 * @param javaClass the {@link JavaClass} to add
+	 * @param javaClass the JavaClass to add
 	 */
 	public void add(JavaClass javaClass) {
 	    classMap.put(javaClass.getFullyQualifiedName(), javaClass);
 	}
 	
 	/**
-	 * Retrieve the {@link JavaPackage} based on the name
+	 * Retrieve the {@link JavaPackage} based on the {@code name}.
 	 * 
 	 * @param name the fully qualified name of the package
-	 * @return the stored {@link JavaPackage}, otherwise <code>null</code>
+	 * @return the stored JavaPackage, otherwise <code>null</code>
 	 */
     public JavaPackage getPackageByName( String name )
     {
@@ -103,10 +102,10 @@ public class JavaClassContext implements Serializable {
     }
     
     /**
-     * Remove and return the {@link JavaPacakge} based on the name
+     * Remove and return the {@link JavaPackage} based on the {@code name}.
      * 
      * @param name the fully qualified name of the class
-     * @return the removed {@link JavaPackage}, otherwise <code>null</code> 
+     * @return the removed JavaPackage, otherwise <code>null</code> 
      */
     public JavaPackage removePackageByName( String name )
     {
@@ -114,9 +113,9 @@ public class JavaClassContext implements Serializable {
     }
 
     /**
-     * A null-safe implementation to store a JavaPackage in this context 
+     * A null-safe implementation to store a {@link JavaPackage} in this context 
      * 
-     * @param jPackage the {@link JavaPackage} to add
+     * @param jPackage the JavaPackage to add
      */
     public void add( JavaPackage jPackage )
     {
@@ -128,7 +127,7 @@ public class JavaClassContext implements Serializable {
     /**
      * Return all stored JavaPackages
      * 
-     * @return an array of JavaPackages, never <code>null</code>
+     * @return a list of JavaPackages, never <code>null</code>
      */
     public List<JavaPackage> getPackages()
     {
@@ -139,7 +138,7 @@ public class JavaClassContext implements Serializable {
     /**
      * Store a {@link JavaSource} in this context 
      * 
-     * @param source the {@link JavaSource} to add
+     * @param source the JavaSource to add
      */
     public void add( JavaSource source )
     {
@@ -149,7 +148,7 @@ public class JavaClassContext implements Serializable {
     /**
      * Return all stored JavaSources
      * 
-     * @return an array of JavaSources, never <code>null</code>
+     * @return a list of JavaSources, never <code>null</code>
      */
     public List<JavaSource> getSources()
     {

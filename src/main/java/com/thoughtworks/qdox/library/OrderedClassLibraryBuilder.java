@@ -66,13 +66,17 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
      * Constructor for which you can set the root ClassLibrary
      * If you set this to null, all classes should be available on the classpath.
      * 
-     * @param classLibrary
+     * @param rootClassLibrary
      */
-    public OrderedClassLibraryBuilder(AbstractClassLibrary rootClassLibrary)
+    public OrderedClassLibraryBuilder( AbstractClassLibrary rootClassLibrary )
     {
         this.classLibrary = rootClassLibrary;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#appendClassLoader(java.lang.ClassLoader)
+     */
     public ClassLibraryBuilder appendClassLoader( ClassLoader classLoader )
     {
         if ( !( classLibrary instanceof ClassLoaderLibrary ) )
@@ -89,6 +93,10 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#appendDefaultClassLoaders()
+     */
     public ClassLibraryBuilder appendDefaultClassLoaders()
     {
         if ( !( classLibrary instanceof ClassLoaderLibrary ) )
@@ -155,24 +163,40 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         return this;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#setEncoding(java.lang.String)
+     */
     public ClassLibraryBuilder setEncoding( String encoding )
     {
         this.encoding = encoding;
         return this;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#setErrorHander(com.thoughtworks.qdox.library.ErrorHandler)
+     */
     public ClassLibraryBuilder setErrorHander( ErrorHandler errorHandler )
     {
         this.errorHandler = errorHandler;
         return this;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#setModelBuilderFactory(com.thoughtworks.qdox.builder.ModelBuilderFactory)
+     */
     public ClassLibraryBuilder setModelBuilderFactory( ModelBuilderFactory modelBuilderFactory )
     {
         this.modelBuilderFactory = modelBuilderFactory;
         return this;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#setModelWriterFactory(com.thoughtworks.qdox.writer.ModelWriterFactory)
+     */
     public ClassLibraryBuilder setModelWriterFactory( ModelWriterFactory modelWriterFactory )
     {
         this.modelWriterFactory = modelWriterFactory;
@@ -186,7 +210,11 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         return classLibrary;
     }
-
+    
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#appendSource(java.net.URL)
+     */
     public ClassLibraryBuilder appendSource( URL url ) throws IOException
     {
         SourceLibrary sourceLibrary = getSourceLibrary();
@@ -194,6 +222,10 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         return this;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#appendSource(java.io.File)
+     */
     public ClassLibraryBuilder appendSource( File file )
         throws IOException
     {
@@ -202,24 +234,40 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#addSource(java.io.InputStream)
+     */
     public JavaSource addSource( InputStream stream )
     {
         SourceLibrary sourceLibrary = getSourceLibrary();
         return sourceLibrary.addSource( stream );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#addSource(java.io.Reader)
+     */
     public JavaSource addSource( Reader reader )
     {
         SourceLibrary sourceLibrary = getSourceLibrary();
         return sourceLibrary.addSource( reader );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#addSource(java.net.URL)
+     */
     public JavaSource addSource( URL url ) throws IOException
     {
         SourceLibrary sourceLibrary = getSourceLibrary();
         return sourceLibrary.addSource( url );
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#addSource(java.io.File)
+     */
     public JavaSource addSource( File file )
         throws IOException
     {

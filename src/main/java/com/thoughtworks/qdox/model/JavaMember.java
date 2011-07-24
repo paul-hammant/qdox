@@ -19,12 +19,10 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.lang.reflect.Member;
-import java.lang.reflect.Modifier;
 import java.util.List;
 
 /**
- * JavaModel representation of a {@link Member} including related methods of {@ Modifier}
+ * JavaModel representation of a {@link java.lang.reflect.Member} including related methods of {@link java.lang.reflect.Modifier}
  * 
  * @author Robert Scholte
  * @since 2.0
@@ -32,10 +30,10 @@ import java.util.List;
 public interface JavaMember
 {
     /**
-     * Equivalent of {@link Member#getModifiers()}
+     * Equivalent of {@link java.lang.reflect.Member#getModifiers()}
      * 
      * <strong>This does not follow the java-api</strong>
-     * With the {@link Member}-class, getModifiers returns an <code>int</code>, which should be decoded with the {@link Modifier}
+     * With the Member-class, getModifiers returns an <code>int</code>, which should be decoded with the Modifier.
      * If this member was extracted from a source, it will keep its order. 
      * Otherwise if will be in the preferred order of the java-api.
      * 
@@ -44,93 +42,93 @@ public interface JavaMember
     List<String> getModifiers();
     
     /**
-     * Equivalent of {@link Member#getDeclaringClass()}
+     * Equivalent of {@link java.lang.reflect.Member#getDeclaringClass()}
      * 
      * @return
      */
     JavaClass getDeclaringClass();    
     
     /**
-     * Equivalent of {@link Member#getName()}
+     * Equivalent of {@link java.lang.reflect.Member#getName()}
      * 
      * @return the name of this member
      */
     String getName();
     
     /**
-     * Equivalent of {@link Modifier#isAbstract(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isAbstract(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>abstract</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>abstract</code>, otherwise <code>false</code>
      */
     boolean isAbstract();
     
     /**
-     * Equivalent of {@link Modifier#isFinal(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isFinal(int)}
      * 
-     * @return <tt>true</tt> is this member is <tt>final</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> is this member is <code>final</code>, otherwise <code>false</code>
      */
     boolean isFinal();
     
     /**
-     * Equivalent of {@link Modifier#isNative(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isNative(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>native</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>native</code>, otherwise <code>false</code>
      */
     boolean isNative();
     
     /**
-     * Equivalent of {@link Modifier#isPrivate(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isPrivate(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>private</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>private</code>, otherwise <code>false</code>
      */
     boolean isPrivate();
     
     /**
-     * Equivalent of {@link Modifier#isProtected(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isProtected(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>protected</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>protected</code>; otherwise <code>false</code>
      */
     boolean isProtected();
 
     /**
-     * Equivalent of {@link Modifier#isPublic(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isPublic(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>public</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>public</code>, otherwise <code>false</code>
      */
     boolean isPublic();
     
     /**
-     * Equivalent of {@link Modifier#isStatic(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isStatic(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>static</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>static</code>, otherwise <code>false</code>
      */
     boolean isStatic();
     
     /**
-     * Equivalent of {@link Modifier#isStrict(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isStrict(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>strictfp</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>strictfp</code>, otherwise <code>false</code>
      */
     boolean isStrictfp();
     
     /**
-     * Equivalent of {@link Modifier#isSynchronized(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isSynchronized(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>synchronized</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>synchronized</code>, otherwise <code>false</code>
      */
     boolean isSynchronized();
     
     /**
-     * Equivalent of {@link Modifier#isTransient(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isTransient(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>transient</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>transient</code>, otherwise <code>false</code>
      */
     boolean isTransient();
     
     /**
-     * Equivalent of {@link Modifier#isVolatile(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isVolatile(int)}
      * 
-     * @return <tt>true</tt> if this member is <tt>volatile</tt>; otherwise <tt>false</tt>
+     * @return <code>true</code> if this member is <code>volatile</code>, otherwise <code>false</code>
      */
     boolean isVolatile();
 

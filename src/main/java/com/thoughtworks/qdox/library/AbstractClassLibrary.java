@@ -74,11 +74,12 @@ public abstract class AbstractClassLibrary
      * the concrete class. If there's still no JavaClass, ask the parent (if available) to resolve it.
      * 
      * @param name
-     * @return 
+     * @return the JavaClass matching the name, otherwise <code>null</code>
      */
     public final JavaClass getJavaClass( String name ) {
        return getJavaClass( name, false ); 
     }
+    
     public final JavaClass getJavaClass( String name, boolean createStub ) {
         JavaClass result = context.getClassByName( name );
         if ( result == null )
@@ -124,8 +125,8 @@ public abstract class AbstractClassLibrary
      * The implementation should check it's sources to see if it can build a JavaClass Model If not, just return null;
      * Once found it will be mapped, so there's no need to keep a reference to this object.
      * 
-     * @param name
-     * @return
+     * @param name the fully qualified name
+     * @return the resolved JavaClass, otherwise <code>null</code>
      */
     protected abstract JavaClass resolveJavaClass( String name );
     
@@ -138,7 +139,7 @@ public abstract class AbstractClassLibrary
      * 
      * 
      * @param filter
-     * @return
+     * @return JavaSources matching the filter
      */
     protected final List<JavaSource> getJavaSources( ClassLibraryFilter filter) {
         List<JavaSource> result = new LinkedList<JavaSource>(); 
@@ -179,7 +180,7 @@ public abstract class AbstractClassLibrary
      * Subclasses can call this method to gather all JavaClass object, including those from the parent.
      * 
      * @param filter
-     * @return
+     * @return JavaClasses matching the filter
      */
     protected final List<JavaClass> getJavaClasses( ClassLibraryFilter filter) {
         List<JavaClass> result = new LinkedList<JavaClass>(); 
@@ -216,6 +217,10 @@ public abstract class AbstractClassLibrary
         return context.getPackages();
     }
     
+    /**
+     * @param name the fully qualified name
+     * @return the JavaPackage matching the name, otherwise <code>null</code>
+     */
     public final JavaPackage getJavaPackage( String name ) {
         JavaPackage result = context.getPackageByName( name );
         if (result == null) {
@@ -248,6 +253,8 @@ public abstract class AbstractClassLibrary
      * If not, find out if this classlibrary is able to build a model for this class
      * Otherwise ask the parent if it could build a JavaClass.
      * 
+     * @param name the fully qualified name
+     * @return <code>true</code> if there is a reference, otherwise <code>false</code>
      */
     public boolean hasClassReference( String name )
     {
@@ -273,7 +280,7 @@ public abstract class AbstractClassLibrary
     /**
      * Set the ModelBuilderFactory for this classLibrary. 
      * 
-     * @param factory
+     * @param factory the model builder factory
      */
     public final void setModelBuilderFactory( ModelBuilderFactory factory ) {
         this.modelBuilderFactory = factory;
@@ -282,7 +289,7 @@ public abstract class AbstractClassLibrary
     /**
      * Set the ModelWriterFactory for this class.
      * 
-     * @param factory the ModelWriterFactory
+     * @param factory the model writer factory
      */
     public final void setModelWriterFactory( ModelWriterFactory factory )
     {

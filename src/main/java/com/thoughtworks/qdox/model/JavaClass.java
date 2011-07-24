@@ -19,7 +19,6 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.lang.reflect.Modifier;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
@@ -341,7 +340,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * Equivalent of {@link Class#getModifiers()}
      * 
      * <strong>This does not follow the java-api</strong>
-     * The Class.getModifiers() returns an <code>int</code>, which should be decoded with the {@link Modifier}.
+     * The Class.getModifiers() returns an <code>int</code>, which should be decoded with the {@link java.lang.reflect.Modifier}.
      * This method will return a list of strings representing the modifiers.
      * If this member was extracted from a source, it will keep its order. 
      * Otherwise if will be in the preferred order of the java-api.
@@ -351,7 +350,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     List<String> getModifiers();
     
     /**
-     * (API description of {@link Modifier#isPublic(int)})
+     * (API description of {@link java.lang.reflect.Modifier#isPublic(int)})
      * <p>
      * Return <code>true</code> if the class includes the public modifier, <code>false</code> otherwise.
      * <p>
@@ -361,7 +360,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     boolean isPublic();
     
     /**
-     * (API description of {@link Modifier#isProtected(int)})
+     * (API description of {@link java.lang.reflect.Modifier#isProtected(int)})
      * <p>
      * Return <code>true</code> if the class includes the protected modifier, <code>false</code> otherwise.
      * </p>
@@ -371,7 +370,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     boolean isProtected();
     
     /**
-     * (API description of {@link Modifier#isPrivate(int)})
+     * (API description of {@link java.lang.reflect.Modifier#isPrivate(int)})
      * <p>
      * Return <code>true</code> if the class includes the private modifier, <code>false</code> otherwise.
      * </p>
@@ -381,7 +380,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     boolean isPrivate();
     
     /**
-     * (API description of {@link Modifier#isFinal(int)})
+     * (API description of {@link java.lang.reflect.Modifier#isFinal(int)})
      * <p>
      * Return <code>true</code> if the class includes the final modifier, <code>false</code> otherwise.
      * </p>
@@ -391,7 +390,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     boolean isFinal();
     
     /**
-     * (API description of {@link Modifier#isStatic((int)})
+     * (API description of {@link java.lang.reflect.Modifier#isStatic(int)})
      * <p>
      * Return <code>true</code> if the class includes the static modifier, <code>false</code> otherwise.
      * </p>
@@ -401,7 +400,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     boolean isStatic();
     
     /**
-     * (API description of {@link Modifier#isAbstract(int)})
+     * (API description of {@link java.lang.reflect.Modifier#isAbstract(int)})
      * 
      * Return <code>true</code> if the class includes the abstract modifier, <code>false</code> otherwise.
      * 

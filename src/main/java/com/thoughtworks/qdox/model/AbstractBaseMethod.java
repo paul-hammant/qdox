@@ -15,7 +15,7 @@ public abstract class AbstractBaseMethod
 {
 
     private List<TypeVariable> typeParameters = Collections.emptyList();
-    private List<JavaParameter> parameters = new LinkedList<JavaParameter>();
+    private List<JavaParameter> parameters = Collections.emptyList();
     private List<Type> exceptions = Collections.emptyList();
     private boolean varArgs;
     private String sourceCode;
@@ -52,7 +52,7 @@ public abstract class AbstractBaseMethod
 
     public void setParameters( List<JavaParameter> javaParameters )
     {
-        parameters.addAll( javaParameters );
+        parameters = javaParameters;
         this.varArgs = javaParameters.get( javaParameters.size() -1 ).isVarArgs();
     }
 

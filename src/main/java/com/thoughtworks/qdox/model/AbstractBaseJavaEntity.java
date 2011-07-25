@@ -27,8 +27,8 @@ import java.util.List;
 public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implements Serializable {
 
 	private List<Annotation> annotations = Collections.emptyList();
-	protected String comment;
-	protected List<DocletTag> tags = new LinkedList<DocletTag>();
+	private String comment;
+	private List<DocletTag> tags = Collections.emptyList();
 
 	public AbstractBaseJavaEntity() {
 		super();

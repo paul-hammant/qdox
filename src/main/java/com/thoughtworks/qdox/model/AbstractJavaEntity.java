@@ -20,12 +20,13 @@ package com.thoughtworks.qdox.model;
  */
 
 import java.lang.reflect.Modifier;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements JavaModel {
 
-    private List<String> modifiers = new LinkedList<String>();
+    private List<String> modifiers = Collections.emptyList();
     private JavaClass parentCls;
 	private String name;
 

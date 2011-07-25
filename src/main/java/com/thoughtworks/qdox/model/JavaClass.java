@@ -24,7 +24,7 @@ import java.util.List;
 import com.thoughtworks.qdox.library.ClassLibrary;
 
 /**
- * Modeled equivalent of {@link Class}, providing the most important methods.
+ * Equivalent of {@link java.lang.Class}, providing the most important methods.
  * Where the original Class is using an Array, this model is using a List.
  * 
  * @author Robert Scholte
@@ -122,8 +122,9 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     /**
      * The name can be both absolute (including the package) or relative (matching a subclass or an import).
      * 
-     * @param name
-     * @return
+     * @param name the name to resolve
+     * @return the resolved canonical name, otherwise <code>null</code>
+     * @since 2.0
      */
     String resolveCanonicalName( String name );
     
@@ -131,7 +132,8 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * The name can be both absolute (including the package) or relative (matching a subclass or an import).
      * 
      * @param name the name to resolve
-     * @return the resolved fully qualified name, otherwise <code>null</code> 
+     * @return the resolved fully qualified name, otherwise <code>null</code>
+     * @since 2.0
      */
     String resolveFullyQualifiedName( String name );
 
@@ -158,17 +160,17 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     
     /**
      * 
-     * @param parameterTypes
-     * @return the constructor matching the parameterTypes, otherwise <code>null</code>
+     * @param parameterTypes the parameter types of the constructor, can be <code>null</code>
+     * @return the matching constructor, otherwise <code>null</code>
      * @since 2.0
      */
     JavaConstructor getConstructor(List<Type> parameterTypes);
     
     /**
      * 
-     * @param parameterTypes
-     * @param varArg
-     * @return the constructor matching the parameterTypes and the varArg, otherwise <code>null</code>
+     * @param parameterTypes the parameter types of the constructor, can be <code>null</code>
+     * @param varArg define is the constructor has varArgs
+     * @return the matching constructor, otherwise <code>null</code>
      * @since 2.0
      */
     JavaConstructor getConstructor(List<Type> parameterTypes, boolean varArg);
@@ -181,57 +183,57 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
 
     /**
      * 
-     * @param name           method name
-     * @param parameterTypes parameter types or null if there are no parameters.
-     * @return the matching method or null if no match is found.
+     * @param name the name of the method
+     * @param parameterTypes the parameter types of the method, can be <code>null</code>.
+     * @return the matching method, otherwise <code>null</code>
      */
     JavaMethod getMethodBySignature( String name, List<Type> parameterTypes );
 
     /**
-     * This should be the signature for getMethodBySignature
+     * This should be the signature for getMethodBySignature.
      * 
-     * @param name
-     * @param parameterTypes
-     * @param varArgs
-     * @return
+     * @param name the name of the method
+     * @param parameterTypes the parameter types of the method, can be <code>null<code>
+     * @param varArgs define if the method has varArgs
+     * @return the matching method, otherwise <code>null</code>
      */
     JavaMethod getMethod( String name, List<Type> parameterTypes, boolean varArgs );
 
     /**
      * 
-     * @param name
-     * @param parameterTypes
-     * @param superclasses
-     * @return
+     * @param name the name of the method
+     * @param parameterTypes the parameter types of the method, can be <code>null</code>
+     * @param superclasses to define if superclasses should be included as well
+     * @return the matching method, otherwise <code>null</code> 
      */
     JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses );
 
     /**
      * 
-     * @param name
-     * @param parameterTypes
+     * @param name the name of the method
+     * @param parameterTypes the parameter types of the method, can be <code>null<code>
      * @param superclasses
-     * @param varArg
-     * @return
+     * @param varArg define if the method has varArgs
+     * @return the matching method, otherwise <code>null</code>
      */
     JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses, boolean varArg );
 
     /**
      * 
-     * @param name
-     * @param parameterTypes
-     * @param superclasses
-     * @return
+     * @param name the name of the method
+     * @param parameterTypes the parameter types of the method, can be <code>null<code>
+     * @param superclasses to define if superclasses should be included as well
+     * @return the matching methods, otherwise <code>null</code>
      */
     List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses );
 
     /**
      * 
-     * @param name
-     * @param parameterTypes
-     * @param superclasses
-     * @param varArg
-     * @return
+     * @param name the name of the method
+     * @param parameterTypes the parameter types of the method, can be <code>null<code>
+     * @param superclasses to define if superclasses should be included as well
+     * @param varArg define if the method has varArgs
+     * @return the matching methods, otherwise <code>null</code>
      */
     List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses,
                                                    boolean varArg );
@@ -261,6 +263,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     boolean isA( String fullClassName );
 
     /**
+     * @param javaClass 
      * @since 1.3
      */
     boolean isA( JavaClass javaClass );
@@ -273,6 +276,8 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     List<BeanProperty> getBeanProperties();
 
     /**
+     * 
+     * @param superclasses to define if superclasses should be included as well
      * @since 1.3
      */
     List<BeanProperty> getBeanProperties( boolean superclasses );
@@ -280,11 +285,15 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     /**
      * Gets bean property without looking in superclasses or interfaces.
      *
+     * @param propertyName the name of the property
      * @since 1.3
      */
     BeanProperty getBeanProperty( String propertyName );
 
     /**
+     * @param propertyName the name of the property
+     * @param superclasses to define if superclasses should be included as well
+     * 
      * @since 1.3
      */
     BeanProperty getBeanProperty( String propertyName, boolean superclasses );
@@ -322,9 +331,10 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * <pre>
      *  private String fieldA;           // getValue() will return "String"
      *  private java.lang.String fieldA; // getValue() will return "java.lang.String"
+     *  private List<String> aList;      // getValue() will return "List"
      * </pre>
      * 
-     * @return the name of the class as used in the source source
+     * @return the name of the class as used in the source
      */
     String getValue();
     
@@ -332,7 +342,13 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * A java5+ representation of the class.
      * When including all imports, you should be safe to use this method.
      * 
-     * @return
+     * Examples:
+     * <pre>
+     *  private String fieldA;           // getValue() will return "String"
+     *  private java.lang.String fieldA; // getValue() will return "java.lang.String"
+     *  private List<String> aList;      // getValue() will return "List<String>"
+     * </pre>     * 
+     * @return the generic name of the class as used in the source
      */
     String getGenericValue();
     

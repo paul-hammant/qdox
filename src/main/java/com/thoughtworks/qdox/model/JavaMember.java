@@ -44,7 +44,7 @@ public interface JavaMember
     /**
      * Equivalent of {@link java.lang.reflect.Member#getDeclaringClass()}
      * 
-     * @return
+     * @return the declaring class
      */
     JavaClass getDeclaringClass();    
     

@@ -19,13 +19,12 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 
 /**
  * <p>
- * Modeled equivalent of {@link AnnotatedElement}, providing the most important methods.
- * Where the original {@link AnnotatedElement} is using an Array, this model is using a {@link List}.
+ * Equivalent of {@link java.lang.reflect.AnnotatedElement}, providing the most important methods.
+ * Where the original AnnotatedElement is using an Array, this model is using a {@link List}.
  * </p>
  * <p>
  * Where you can use Annotations, you can also use JavaDoc. For that reason all JavaDoc methods have been added to this interface.
@@ -44,9 +43,9 @@ public interface JavaAnnotatedElement
     
 	/**
 	 * 
-	 * Equivalent of {@link AnnotatedElement#getAnnotations()}
+	 * Equivalent of {@link java.lang.reflect.AnnotatedElement#getAnnotations()}
 	 * 
-	 * @return
+	 * @return a list of Annotations, never <code>null</code>
 	 */
     List<Annotation> getAnnotations();
     
@@ -88,6 +87,9 @@ public interface JavaAnnotatedElement
      * Convenience method for <code>getTagByName(String).getNamedParameter(String)</code>
      * that also checks for null tag.
      * 
+     * @param tagName the tag name
+     * @param parameterName the parameter name
+     * @return the value of the matching parameter, otherwise <code>null</code>
      * @since 1.3
      */
     String getNamedParameter(String tagName, String parameterName);

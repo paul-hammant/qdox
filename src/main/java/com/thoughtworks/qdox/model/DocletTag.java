@@ -47,13 +47,12 @@ public interface DocletTag extends Serializable {
 
     /**
      * @param key name of a named-parameter
-     * @return the corresponding value, 
-     *   or null if no such named-parameter was present 
+     * @return the matching value, otherwise <code>null</code>
      */
     String getNamedParameter(String key);
 
     /**
-     * @return a Map containing all the named-parameters
+     * @return a Map containing all the named-parameters, never <code>null</code>
      */
     Map<String, String> getNamedParameterMap();
     

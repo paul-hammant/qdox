@@ -36,10 +36,9 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
         this.type = type;
     }
     
-    /**
-     * Retrieve the class containing this field
-     * 
-     * @return the declaring class
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaMember#getDeclaringClass()
      */
     public JavaClass getDeclaringClass() {
     	return getParentClass();
@@ -90,11 +89,10 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
         return getName();
     }
 
-    /**
-     * This value represents an assignment to the name.
-     * It can hold a primitive, Object of field reference of any class.
-     * 
-     * @return the expression, otherwise <code>null</code>
+
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaField#getInitializationExpression()
      */
     public String getInitializationExpression(){
     	return initializationExpression;
@@ -105,7 +103,7 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
     }
 
     /**
-     * @see http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Field.html#toString()
+     * @see java.lang.reflect.Field#toString()
      */
     public String toString() {
     	StringBuffer result = new StringBuffer();

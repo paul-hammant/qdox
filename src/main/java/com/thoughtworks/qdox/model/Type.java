@@ -199,11 +199,6 @@ public class Type implements Serializable {
         return result;
     }
 
-    /**
-     * Checks if the FQN of this Type is resolved 
-     * 
-     * @return 
-     */
     protected boolean isResolved() {
         if (fullName == null && context != null) {
             fullName = context.resolveType(name);
@@ -357,13 +352,6 @@ public class Type implements Serializable {
         return "void".equals(getValue());
     }
 
-    /**
-     * 
-     * @param parentClass
-     * @param subclass
-     * @return
-     * @since 1.12
-     */
     protected Type resolve( JavaClass parentClass, JavaClass subclass )
     {
         Type result = this;

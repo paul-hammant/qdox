@@ -641,8 +641,9 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         return false;
     }
 
-    /**
-     * @since 1.3
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isA(com.thoughtworks.qdox.model.JavaClass)
      */
     public boolean isA(JavaClass javaClass) {
     	if (this == javaClass) 
@@ -799,7 +800,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     }
 
     /**
-     * @see http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Class.html#toString()
+     * @see java.lang.Class#toString()
      */
     @Override
     public String toString()

@@ -54,14 +54,14 @@ public interface JavaSource extends JavaClassParent
     /**
      * A List with all direct classes of this source, never <code>null</code>
      * 
-     * @return
+     * @return a list of JavaClasses, never <code>null</code>
      */
     List<JavaClass> getClasses();
 
     /**
      * Complete code representation of this source
      * 
-     * @return
+     * @return the code block of this source
      */
     String getCodeBlock();
 
@@ -70,7 +70,7 @@ public interface JavaSource extends JavaClassParent
     /**
      * If there's a package, return the packageName, followed by a dot, otherwise an empty String
      * 
-     * @return
+     * @return the class name prefix, otherwise an empty String
      */
     String getClassNamePrefix();
 
@@ -78,7 +78,7 @@ public interface JavaSource extends JavaClassParent
      * Try to get the JavaClass child based on its name relative to the package.
      * This doesn't try to resolve it by recursion.
      * 
-     * @return the resolved JavaClass or <code>null</code>
+     * @return the resolved JavaClass, otherwise <code>null</code>
      */
     JavaClass getNestedClassByName( String name );
     
@@ -97,7 +97,7 @@ public interface JavaSource extends JavaClassParent
     /**
      * Returns the name of the package or an empty String  if there's no package
      * 
-     * @return the name 
+     * @return the package name, otherwise an empty String 
      */
     String getPackageName();
 

@@ -19,7 +19,6 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel, JavaGenericDeclaration
@@ -39,7 +38,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     List<Type> getExceptions();
 
     /**
-     * Equivalent of {@link Method#isVarArgs()}
+     * Equivalent of {@link java.lang.reflect.Method#isVarArgs()}
      * 
      * @return <code>true</code> if this method was declared to take a variable number of arguments, 
      *          otherwise <code>false</code>
@@ -61,17 +60,17 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     /**
      * This method is NOT varArg aware.
      * 
-     * @param name
-     * @param parameterTypes
-     * @return
+     * @param name the name of the method
+     * @param parameterTypes the parameter types of the method, can be <code>null</code>
+     * @return <code>true</code> if this method matches the signature, otherwise <code>false</code>
      */
     boolean signatureMatches( String name, List<Type> parameterTypes );
 
     /**
-     * @param name method name
-     * @param parameterTypes parameter types or null if there are no parameters.
+     * @param name the name of the method
+     * @param parameterTypes the parameter types, can be <code>null</code>
      * @param varArg <code>true</code> is signature should match a varArg-method, otherwise <code>false</code>
-     * @return true if the signature and parameters match.
+     * @return <code>true</code> if this method matches the signature, otherwise <code>false</code>
      */
     boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg );
 
@@ -135,7 +134,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     /**
      * Equivalent of java.lang.reflect.Method.getGenericReturnType()
      * 
-     * @return the generic returntype
+     * @return the generic return type
      * @since 1.12
      */
     Type getGenericReturnType();
@@ -143,7 +142,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     /**
      * Equivalent of java.lang.reflect.Method.getReturnType()
      * 
-     * @return
+     * @return the return type
      * @since 1.12
      */
     Type getReturnType();
@@ -151,15 +150,15 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     /**
      * If a class inherits this method from a generic class or interface, you can use this method to get the resolved return type
      * 
-     * @param resolve
-     * @return
+     * @param resolve define if generic should be resolved
+     * @return the return type
      * @since 1.12
      */
     Type getReturnType( boolean resolve );
 
     /**
      * 
-     * @return the parameter types as array
+     * @return the parameter types
      * @since 1.12
      */
     List<Type> getParameterTypes();
@@ -168,7 +167,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * If a class inherits this method from a generic class or interface, you can use this method to get the resolved parameter types
      * 
      * @param resolve
-     * @return the parameter types as array
+     * @return the parameter types
      * @since 1.12
      */
     List<Type> getParameterTypes( boolean resolve );

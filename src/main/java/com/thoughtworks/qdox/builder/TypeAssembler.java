@@ -36,15 +36,15 @@ public final class TypeAssembler
         if ( typeDef instanceof WildcardTypeDef )
         {
             WildcardTypeDef wildcard = (WildcardTypeDef) typeDef;
-            result = new WildcardType( wildcard.name, wildcard.getWildcardExpressionType(), context );
+            result = new WildcardType( wildcard.getName(), wildcard.getWildcardExpressionType(), context );
         }
         else
         {
-            result = Type.createUnresolved( typeDef.name, typeDef.dimensions + dimensions, context );
-            if ( typeDef.actualArgumentTypes != null && !typeDef.actualArgumentTypes.isEmpty() )
+            result = Type.createUnresolved( typeDef.getName(), typeDef.getDimensions() + dimensions, context );
+            if ( typeDef.getActualArgumentTypes() != null && !typeDef.getActualArgumentTypes().isEmpty() )
             {
                 List<Type> actualArgumentTypes = new LinkedList<Type>();
-                for ( TypeDef actualArgType : typeDef.actualArgumentTypes )
+                for ( TypeDef actualArgType : typeDef.getActualArgumentTypes() )
                 {
                     actualArgumentTypes.add( TypeAssembler.createUnresolved( actualArgType, context ) );
                 }

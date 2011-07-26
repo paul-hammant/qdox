@@ -23,8 +23,8 @@ import java.util.List;
 
 public class TypeVariableDef {
 
-	public String name;
-	public List<TypeDef> bounds;
+	private String name;
+	private List<TypeDef> bounds;
 
 	public TypeVariableDef(String name) {
 		this.name = name;
@@ -36,5 +36,19 @@ public class TypeVariableDef {
 		this.bounds = bounds;
 	}
 	
+	public void setBounds( List<TypeDef> bounds )
+    {
+        this.bounds = bounds;
+    }
+	
+	public String getName()
+    {
+        return name;
+    }
+	
+	public List<TypeDef> getBounds()
+    {
+        return bounds;
+    }
 	
 }

@@ -121,7 +121,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
     
     public AnnotationValue transform(ElemValueListDef elemValueListDef) {
     	List<AnnotationValue> parsedList = new LinkedList<AnnotationValue>();
-		for(ElemValueDef val : elemValueListDef.valueList) {
+		for(ElemValueDef val : elemValueListDef.getValueList()) {
 			parsedList.add(val.transform(this));
 		}
 		return new AnnotationValueList(parsedList);
@@ -302,7 +302,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationCast)
 	 */
 	public AnnotationValue transform(AnnotationCast annotationCast) {
-		Type type = createType(annotationCast.getTypeDef(), annotationCast.getTypeDef().dimensions);
+		Type type = createType(annotationCast.getTypeDef(), annotationCast.getTypeDef().getDimensions() );
 		AnnotationValue value = annotationCast.getElemDef().transform(this);
 		return new Cast(type, value);
 	}
@@ -404,7 +404,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.expression.AnnotationTypeRef)
 	 */
 	public AnnotationValue transform(AnnotationTypeRef annotationTypeRef) {
-		Type type = createType(annotationTypeRef.getTypeDef(), annotationTypeRef.getTypeDef().dimensions);
+		Type type = createType(annotationTypeRef.getTypeDef(), annotationTypeRef.getTypeDef().getDimensions() );
 		return new TypeRef(type);
 	}
 

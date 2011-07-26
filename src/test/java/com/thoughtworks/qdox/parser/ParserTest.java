@@ -1871,9 +1871,9 @@ public class ParserTest extends TestCase {
         assertEquals( "MyClass", cls.getName() );
         FieldDef fld = fieldCaptor.getValue();
         assertEquals( "l", fld.getName() );
-        assertEquals( "List", fld.getType().name );
-        assertEquals( 1, fld.getType().actualArgumentTypes.size() );
-        assertEquals( new TypeDef( "String" ), fld.getType().actualArgumentTypes.get( 0 ) );
+        assertEquals( "List", fld.getType().getName() );
+        assertEquals( 1, fld.getType().getActualArgumentTypes().size() );
+        assertEquals( new TypeDef( "String" ), fld.getType().getActualArgumentTypes().get( 0 ) );
     }
 
     public void testFieldWithWildcardGenericType() throws Exception {
@@ -1913,9 +1913,9 @@ public class ParserTest extends TestCase {
         assertEquals( "MyClass", cls.getName() );
         FieldDef fld = fieldCaptor.getValue();
         assertEquals( "l", fld.getName() );
-        assertEquals( "List", fld.getType().name );
-        assertEquals( 1, fld.getType().actualArgumentTypes.size() );
-        assertEquals( new WildcardTypeDef( new TypeDef( "A" ), "extends" ), fld.getType().actualArgumentTypes.get( 0 ) );
+        assertEquals( "List", fld.getType().getName() );
+        assertEquals( 1, fld.getType().getActualArgumentTypes().size() );
+        assertEquals( new WildcardTypeDef( new TypeDef( "A" ), "extends" ), fld.getType().getActualArgumentTypes().get( 0 ) );
     }
 
     public void testStaticBlock() throws Exception {
@@ -2093,8 +2093,8 @@ public class ParserTest extends TestCase {
         FieldDef fld = fieldCaptor.getValue();
         assertEquals( "count", fld.getName() );
         assertEquals( 0, fld.getDimensions() );
-        assertEquals( "int", fld.getType().name );
-        assertEquals( 1, fld.getType().dimensions );
+        assertEquals( "int", fld.getType().getName() );
+        assertEquals( 1, fld.getType().getDimensions() );
     }
 
     public void testField2dArrayOnType() throws Exception {
@@ -2133,8 +2133,8 @@ public class ParserTest extends TestCase {
         FieldDef fld = fieldCaptor.getValue();
         assertEquals( "count", fld.getName() );
         assertEquals( 0, fld.getDimensions() );
-        assertEquals( "int", fld.getType().name );
-        assertEquals( 2, fld.getType().dimensions );
+        assertEquals( "int", fld.getType().getName() );
+        assertEquals( 2, fld.getType().getDimensions() );
     }
 
     public void testFieldArrayOnName() throws Exception {
@@ -2211,8 +2211,8 @@ public class ParserTest extends TestCase {
         FieldDef fld = fieldCaptor.getValue();
         assertEquals( "count", fld.getName() );
         assertEquals( 1, fld.getDimensions() );
-        assertEquals( "int", fld.getType().name );
-        assertEquals( 2, fld.getType().dimensions );
+        assertEquals( "int", fld.getType().getName() );
+        assertEquals( 2, fld.getType().getDimensions() );
     }
 
     public void testFieldArrayThenAnotherNonArray() throws Exception {
@@ -2334,8 +2334,8 @@ public class ParserTest extends TestCase {
         assertEquals( "x", cls.getName() );
         MethodDef mth = methodCaptor.getValue();
         assertEquals( "count", mth.getName() );
-        assertEquals( "int", mth.getReturnType().name );
-        assertEquals( 1, mth.getReturnType().dimensions);
+        assertEquals( "int", mth.getReturnType().getName() );
+        assertEquals( 1, mth.getReturnType().getDimensions());
     }
 
     public void testMethodWithArrayDefinedAtEnd() throws Exception {
@@ -2479,8 +2479,8 @@ public class ParserTest extends TestCase {
         FieldDef prm = parameterCaptor.getValue();
         assertEquals( "p1", prm.getName() );
         assertEquals( 0, prm.getDimensions() );
-        assertEquals( "int", prm.getType().name );
-        assertEquals( 1, prm.getType().dimensions );
+        assertEquals( "int", prm.getType().getName() );
+        assertEquals( 1, prm.getType().getDimensions() );
     }
 
     public void testMethodReturningArrayWithParam2dArray() throws Exception {
@@ -2532,8 +2532,8 @@ public class ParserTest extends TestCase {
         assertEquals( new TypeDef("int", 1), mth.getReturnType() );
         FieldDef prm = parameterCaptor.getValue();
         assertEquals( "p1", prm.getName() );
-        assertEquals( "int", prm.getType().name );
-        assertEquals( 2, prm.getType().dimensions );
+        assertEquals( "int", prm.getType().getName() );
+        assertEquals( 2, prm.getType().getDimensions() );
 
     }
 

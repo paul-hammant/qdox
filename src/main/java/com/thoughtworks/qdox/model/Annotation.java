@@ -76,7 +76,7 @@ public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
         this(type, null, null, line);
     }
 
-    public void setProperty(String name, AnnotationValue value) {
+    public final void setProperty(String name, AnnotationValue value) {
         properties.put( name, value );
         namedParameters.put( name, value.getParameterValue() );
     }

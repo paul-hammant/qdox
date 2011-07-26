@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ElemValueListDef implements ElemValueDef{
 
-	public List<ElemValueDef> valueList;
+	private List<ElemValueDef> valueList;
 	
 	public ElemValueListDef(List<ElemValueDef> annoValueList) {
 		this.valueList = annoValueList;
@@ -14,4 +14,12 @@ public class ElemValueListDef implements ElemValueDef{
 	public <U> U transform(AnnotationTransformer<U> transformer) {
 		return transformer.transform(this);
 	}
+
+    /**
+     * @return the valueList
+     */
+    public List<ElemValueDef> getValueList()
+    {
+        return valueList;
+    }
 }

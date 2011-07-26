@@ -50,7 +50,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
      * @param name the name of this method
      */
     public DefaultJavaMethod(Type returns, String name) {
-        setReturns(returns);
+        this.returns = returns;
         setName(name);
     }
     

@@ -300,24 +300,26 @@ public class ModelBuilder implements Builder {
         currentMethod.setSourceCode(def.getBody());
     }
 
-    private TypeVariable createTypeVariable(TypeVariableDef typeVariableDef) {
-    	if(typeVariableDef == null) {
-    		return null;
-    	}
-    	JavaClassParent context = classStack.isEmpty() ? source : classStack.getFirst();
-    	TypeVariable result = new TypeVariable( null, 
-    	                                        typeVariableDef.name,
-    	                                        context );
-    	
-        if( typeVariableDef.bounds != null && !typeVariableDef.bounds.isEmpty() ) {
+    private TypeVariable createTypeVariable( TypeVariableDef typeVariableDef )
+    {
+        if ( typeVariableDef == null )
+        {
+            return null;
+        }
+        JavaClassParent context = classStack.isEmpty() ? source : classStack.getFirst();
+        TypeVariable result = new TypeVariable( null, typeVariableDef.getName(), context );
+
+        if ( typeVariableDef.getBounds() != null && !typeVariableDef.getBounds().isEmpty() )
+        {
             List<Type> bounds = new LinkedList<Type>();
-            for(TypeDef typeDef : typeVariableDef.bounds) {
-                bounds.add(createType(typeDef, 0));
+            for ( TypeDef typeDef : typeVariableDef.getBounds() )
+            {
+                bounds.add( createType( typeDef, 0 ) );
             }
             result.setBounds( bounds );
         }
         return result;
-	}
+    }
 
 	public void addField(FieldDef def) {
         DefaultJavaField currentField = new DefaultJavaField();

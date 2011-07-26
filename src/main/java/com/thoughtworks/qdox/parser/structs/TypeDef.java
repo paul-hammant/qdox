@@ -23,9 +23,9 @@ import java.util.List;
 
 public class TypeDef {
 
-    public String name;
-    public int dimensions;
-    public List<TypeDef> actualArgumentTypes; 
+    private String name;
+    private int dimensions;
+    private List<TypeDef> actualArgumentTypes; 
 
     public TypeDef(String name, int dimensions) {
         this.name = name;
@@ -36,17 +36,48 @@ public class TypeDef {
 		this(name, 0);
 	}
 	
+	public String getName()
+    {
+        return name;
+    }
+	
+	public int getDimensions()
+    {
+        return dimensions;
+    }
+	
+	public void setDimensions( int dimensions )
+    {
+        this.dimensions = dimensions;
+    }
+	
 	@Override
 	public boolean equals(Object obj) {
 		TypeDef typeDef = (TypeDef) obj;
         return typeDef.name.equals(name)
                 && typeDef.dimensions == dimensions
-                && (typeDef.actualArgumentTypes != null ? typeDef.actualArgumentTypes.equals(actualArgumentTypes): actualArgumentTypes == null);
+                && (typeDef.getActualArgumentTypes() != null ? typeDef.getActualArgumentTypes().equals(getActualArgumentTypes()): getActualArgumentTypes() == null);
 	}
 
 	@Override
 	public int hashCode() {
         return name.hashCode() + 
-                dimensions + (actualArgumentTypes == null ? 0 : actualArgumentTypes.hashCode());
+                dimensions + (getActualArgumentTypes() == null ? 0 : getActualArgumentTypes().hashCode());
+    }
+
+    /**
+     * @param actualArgumentTypes the actualArgumentTypes to set
+     */
+    public void setActualArgumentTypes( List<TypeDef> actualArgumentTypes )
+    {
+        this.actualArgumentTypes = actualArgumentTypes;
+    }
+
+    /**
+     * @return the actualArgumentTypes
+     */
+    public List<TypeDef> getActualArgumentTypes()
+    {
+        return actualArgumentTypes;
     }
 }

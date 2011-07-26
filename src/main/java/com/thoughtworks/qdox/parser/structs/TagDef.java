@@ -24,13 +24,12 @@ public class TagDef
 {
 
     private String name;
-
     private String text;
 
     public TagDef( String name, String text, int lineNumber )
     {
-        this.setName( name );
-        this.setText( text );
+        this.name = name;
+        this.text = text;
         this.setLineNumber( lineNumber );
     }
 

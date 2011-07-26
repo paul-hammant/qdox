@@ -39,7 +39,7 @@ public class WildcardTypeDef extends TypeDef {
 	}
 	
 	public WildcardTypeDef(TypeDef typeDef, String wildcardExpressionType) {
-		super(typeDef.name, typeDef.dimensions);
+		super( typeDef.getName(), typeDef.getDimensions() );
 		this.typeDef = typeDef;
 		this.wildcardExpressionType = wildcardExpressionType;
 	}

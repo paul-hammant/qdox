@@ -213,7 +213,7 @@ FloatingPointType: FLOAT
 ReferenceType: ClassOrInterfaceType Dims_opt 
                {
                  TypeDef td = $1;
-    	         td.dimensions = $2;
+    	         td.setDimensions($2);
                  $$ = td;
                };
 // Actually
@@ -236,14 +236,14 @@ ClassOrInterfaceType: TypeDeclSpecifier
 TypeDeclSpecifier: AnyName
                  | ClassOrInterfaceType DOT IDENTIFIER 
                    { 
-                     $$ = $1.name + '.' + $3;
+                     $$ = $1.getName() + '.' + $3;
                    };
                
 // 4.4 Type Variables
 TypeParameter: IDENTIFIER 
                { 
                  typeVariable = new TypeVariableDef($1);
-                 typeVariable.bounds = new LinkedList<TypeDef>();
+                 typeVariable.setBounds(new LinkedList<TypeDef>());
                }
                TypeBound_opt
                {
@@ -256,8 +256,8 @@ TypeBound_opt:
 
 TypeBound: EXTENDS ClassOrInterfaceType
 		   {
-		     typeVariable.bounds = new LinkedList<TypeDef>();
-		     typeVariable.bounds.add($2); 
+		     typeVariable.setBounds(new LinkedList<TypeDef>());
+		     typeVariable.getBounds().add($2);
 		   }
 		   AdditionalBoundList_opt;
 		   
@@ -266,7 +266,7 @@ AdditionalBoundList_opt:
 
 AdditionalBound: AMPERSAND ClassOrInterfaceType
                  { 
-                   typeVariable.bounds.add($2); 
+                   typeVariable.getBounds().add($2); 
                  };
 
 // 4.5.1 Type Arguments and Wildcards
@@ -275,17 +275,17 @@ TypeArguments_opt:
 
 TypeArguments: LESSTHAN 
                {
-                 typeStack.peek().actualArgumentTypes = new LinkedList<TypeDef>();
+                 typeStack.peek().setActualArgumentTypes(new LinkedList<TypeDef>());
                }
                ActualTypeArgumentList GREATERTHAN;
 
 ActualTypeArgumentList: ActualTypeArgument 
                         { 
-                          (typeStack.peek()).actualArgumentTypes.add($1);
+                          (typeStack.peek()).getActualArgumentTypes().add($1);
                         }
                       | ActualTypeArgumentList COMMA ActualTypeArgument 
                         { 
-                          (typeStack.peek()).actualArgumentTypes.add($3);
+                          (typeStack.peek()).getActualArgumentTypes().add($3);
                         };
 
 ActualTypeArgument: ReferenceType 
@@ -330,7 +330,7 @@ AnyName: IDENTIFIER { $$ = $1; }
 primary:
     Literal |
     PARENOPEN Expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
-    PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1.name, $2)); } |
+    PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1.getName(), $2)); } |
     AnyName DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
     AnyName dims DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, $2)); } |
     AnyName { $$ = new AnnotationFieldRef($1); };
@@ -518,9 +518,9 @@ FormalParameters: FormalParameter
                 
 FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ Type VariableDeclaratorId
                   {
-                    param.setName($3.name);
+                    param.setName($3.getName());
                     param.setType($2);
-                    param.setDimensions($3.dimensions);
+                    param.setDimensions($3.getDimensions());
                     param.setVarArgs(false);
                     param.getModifiers().addAll(modifiers); modifiers.clear();
                     builder.addParameter(param);
@@ -529,9 +529,9 @@ FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ Type VariableDec
 
 LastFormalParameter: AnyModifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
                      {
-                       param.setName($4.name); 
+                       param.setName($4.getName()); 
                        param.setType($2);
-                       param.setDimensions($4.dimensions);
+                       param.setDimensions($4.getDimensions());
                        param.setVarArgs(true);
                        param.getModifiers().addAll(modifiers); modifiers.clear();
                        builder.addParameter(param);
@@ -717,9 +717,9 @@ UnaryExpressionNotPlusMinus: PostfixExpression
                            | CastExpression;
 
 // 15.16 Cast Expressions	
-CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression { $$ = new AnnotationCast(new TypeDef($2.name, $3), $5); } 
-              | PARENOPEN AnyName PARENCLOSE UnaryExpressionNotPlusMinus       { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
-              | PARENOPEN AnyName dims PARENCLOSE UnaryExpressionNotPlusMinus  { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
+CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression   { $$ = new AnnotationCast(new TypeDef($2.getName(), $3), $5); } 
+              | PARENOPEN AnyName PARENCLOSE UnaryExpressionNotPlusMinus      { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
+              | PARENOPEN AnyName dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
 
 // 15.17 Multiplicative Operators
 MultiplicativeExpression: UnaryExpression 
@@ -903,11 +903,11 @@ private class Value {
 
 
 private void makeField(TypeDef field, String body) {
-    FieldDef fd = new FieldDef( field.name );
+    FieldDef fd = new FieldDef( field.getName() );
     fd.setLineNumber(line);
     fd.getModifiers().addAll(modifiers); 
     fd.setType( fieldType );
-    fd.setDimensions(field.dimensions);
+    fd.setDimensions(field.getDimensions());
     fd.setBody(body);
     builder.addField(fd);
 }

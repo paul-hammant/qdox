@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
-import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +34,6 @@ import com.thoughtworks.qdox.directorywalker.FileVisitor;
 import com.thoughtworks.qdox.directorywalker.SuffixFilter;
 import com.thoughtworks.qdox.library.ClassLibraryBuilder;
 import com.thoughtworks.qdox.library.ErrorHandler;
-import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
@@ -53,9 +51,9 @@ import com.thoughtworks.qdox.model.JavaSource;
  * <li>Provide store and load methods for the JavaProjectBuilder</li>
  * <li>Provide the option to set an ErrorHandler</li>
  * </ul>
- * By default the JavaProjectBuilder will use the {@link SortedClassLibraryBuilder}, which means it doesn't matter in
+ * By default the JavaProjectBuilder will use the {@link com.thoughtworks.qdox.library.SortedClassLibraryBuilder}, which means it doesn't matter in
  * which order you add the resources, first all sources and sourcefolders, followed by the classloaders. Another
- * implementation for the ClassLibraryBuilder is the {@link OrderedClassLibraryBuilder}, which preserves the order in
+ * implementation for the ClassLibraryBuilder is the {@link com.thoughtworks.qdox.library.OrderedClassLibraryBuilder}, which preserves the order in
  * which resources are added. By creating a new JavaProjectBuilder with your own ClassLibraryBuilder you can decide
  * which loading strategy should be used.
  * 
@@ -115,7 +113,7 @@ public class JavaProjectBuilder
     /**
      * Sets the encoding when using Files or URL's to parse.
      * 
-     * @param encoding the encoding to use for {@link File} or {@link URL}
+     * @param encoding the encoding to use for {@link java.io.File} or {@link java.net.URL}
      * @return this javaProjectBuilder itself
      */
     public JavaProjectBuilder setEncoding( String encoding )
@@ -213,7 +211,7 @@ public class JavaProjectBuilder
     }
 
     /**
-     * Add the {@link ClassLoader} to this JavaProjectBuilder
+     * Add the {@link java.lang.ClassLoader} to this JavaProjectBuilder
      * 
      * @param classLoader the classloader to add
      */

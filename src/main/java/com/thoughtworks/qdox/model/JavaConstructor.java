@@ -20,14 +20,13 @@ package com.thoughtworks.qdox.model;
  */
 
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.util.List;
 
 /**
- * Modeled equivalent of {@link Constructor}, providing the most important methods.
- * Where the original {@link Constructor} is using an Array, this model is using a {@link List}.
+ * Modeled equivalent of {@link java.lang.reflect.Constructor}, providing the most important methods.
+ * Where the original Constructor is using an Array, this model is using a {@link List}.
  * 
- * @author Robert
+ * @author Robert Scholte
  * @since 2.0
  */
 public interface JavaConstructor
@@ -36,7 +35,7 @@ public interface JavaConstructor
     // Methods from Constructor
       
     /**
-     * Equivalent of {@link Constructor#getParameterTypes()}, where a JavaParameter also contains the original name if available.
+     * Equivalent of {@link java.lang.reflect.Constructor#getParameterTypes()}, where a JavaParameter also contains the original name if available.
      * 
      * @return a list of JavaParameters, never <code>null</code>
      */
@@ -50,21 +49,21 @@ public interface JavaConstructor
     JavaParameter getParameterByName( String name );
     
     /**
-     * Equivalent of {@link Constructor#getParameterTypes()}
+     * Equivalent of {@link java.lang.reflect.Constructor#getParameterTypes()}
      * 
      * @return a list of JavaParameters, never <code>null</code>
      */
     List<Type> getParameterTypes();
     
     /**
-     * Equivalent of {@link Constructor#getExceptionTypes()}
+     * Equivalent of {@link java.lang.reflect.Constructor#getExceptionTypes()}
      * 
      * @return a list of Exceptions, never <code>null</code>
      */
     List<Type> getExceptions();
 
     /**
-     * Equivalent of {@link Constructor#isVarArgs()} 
+     * Equivalent of {@link java.lang.reflect.Constructor#isVarArgs()} 
      * 
      * @return <code>true</code> if the final parameter is a varArg, otherwise <code>false</code>
      */

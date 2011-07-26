@@ -1,8 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,8 +20,8 @@ import java.util.List;
  */
 
 /**
- * Modeled equivalent of {@link Field}, providing the most important methods.
- * Where the original {@link Field} is using an Array, this model is using a {@link List}.
+ * Modeled equivalent of {@link java.lang.reflect.Field}, providing the most important methods.
+ * Where the original Field is using an Array, this model is using a {@link java.util.List}.
  * 
  */
 public interface JavaField extends JavaAnnotatedElement, JavaMember, JavaModel
@@ -32,7 +29,7 @@ public interface JavaField extends JavaAnnotatedElement, JavaMember, JavaModel
     // Methods of Field
 
     /**
-     * Equivalent of {@link Field#getType()}
+     * Equivalent of {@link java.lang.reflect.Field#getType()}
      * 
      * @return the type of this field, should never be <code>null</code>.
      */

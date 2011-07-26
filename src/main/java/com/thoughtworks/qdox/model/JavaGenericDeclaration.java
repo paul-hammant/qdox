@@ -19,12 +19,11 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.lang.reflect.GenericDeclaration;
 import java.util.List;
 
 /**
- * Modeled equivalent of {@link GenericDeclaration}.
- * Where the original {@link GenericDeclaration} is using an Array, this model is using a {@link List}.
+ * Equivalent of {@link java.lang.reflect.GenericDeclaration}.
+ * Where the original GenericDeclaration uses an Array, the JavaGenericDeclaration is using a {@link List}.
  * 
  * @author Robert Scholte
  * @since 2.0
@@ -32,7 +31,7 @@ import java.util.List;
 public interface JavaGenericDeclaration
 {
     /**
-     * Equivalent of {@link GenericDeclaration#getTypeParameters()}
+     * Equivalent of {@link java.lang.reflect.GenericDeclaration#getTypeParameters()}
      * 
      * @return a list of typeParameters, never <code>null</code> 
      */

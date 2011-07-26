@@ -19,9 +19,7 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.lang.reflect.Modifier;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements JavaModel {
@@ -44,7 +42,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isAbstract(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isAbstract(int)}
      * 
      * @return <code>true</code> if entity is abstract, otherwise <code>false</code>
      */
@@ -53,7 +51,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isPublic(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isPublic(int)}
      * 
      * @return <code>true</code> if entity is public, otherwise <code>false</code>
      */
@@ -62,7 +60,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isPrivate(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isPrivate(int)}
      * 
      * @return <code>true</code> if entity is private, otherwise <code>false</code>
      */
@@ -71,7 +69,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isProtected(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isProtected(int)}
      * 
      * @return <code>true</code> if entity is protected, otherwise <code>false</code>
      */
@@ -80,7 +78,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isStatic(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isStatic(int)}
      * 
      * @return <code>true</code> if entity is static, otherwise <code>false</code>
      */
@@ -89,7 +87,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isFinal(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isFinal(int)}
      * 
      * @return <code>true</code> if entity is final, otherwise <code>false</code>
      */
@@ -98,7 +96,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isSynchronized(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isSynchronized(int)}
      * 
      * @return <code>true</code> if entity is sunchronized, otherwise <code>false</code>
      */
@@ -107,7 +105,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isTransient(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isTransient(int)}
      * 
      * @return <code>true</code> if entity is transient, otherwise <code>false</code>
      */
@@ -116,7 +114,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isVolatile(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isVolatile(int)}
      * 
      * @return <code>true</code> if entity is volatile, otherwise <code>false</code>
      * @since 1.4
@@ -126,7 +124,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isNative(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isNative(int)}
      * 
      * @return <code>true</code> if entity is native, otherwise <code>false</code>
      * @since 1.4
@@ -136,7 +134,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Equivalent of {@link Modifier#isStrict(int)}
+     * Equivalent of {@link java.lang.reflect.Modifier#isStrict(int)}
      * 
      * @return <code>true</code> if entity is strictfp, otherwise <code>false</code>
      * @since 1.4
@@ -146,7 +144,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /**
-     * Returns <code>true</code> if one of the modifiers matches the modifier
+     * Returns <code>true</code> if one of the modifiers matches the {@code modifier}
      * 
      * @param modifier the modifier
      * @return <code>true</code> if the modifier is present, otherwise <code>false</code>

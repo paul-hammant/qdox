@@ -24,13 +24,10 @@ import java.util.List;
 /**
  * <p>
  * Equivalent of {@link java.lang.reflect.AnnotatedElement}, providing the most important methods.
- * Where the original AnnotatedElement is using an Array, this model is using a {@link List}.
+ * Where the original AnnotatedElement uses an Array, the JavaAnnotatedElement is using a {@link List}.
  * </p>
  * <p>
  * Where you can use Annotations, you can also use JavaDoc. For that reason all JavaDoc methods have been added to this interface.
- * </p>
- * <p>
- * Some methods were already part of some implementations, which might result in an earlier version then this interface.
  * </p>
  * 
  * @author Robert Scholte

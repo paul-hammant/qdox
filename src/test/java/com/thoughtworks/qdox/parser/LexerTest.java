@@ -60,7 +60,7 @@ public class LexerTest extends TestCase {
 
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.CLASS, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, "X", lexer);
         assertLex(Parser.BRACEOPEN, lexer);
         assertLex(Parser.STATIC, lexer);
         assertLex(Parser.CODEBLOCK, lexer);
@@ -109,7 +109,7 @@ public class LexerTest extends TestCase {
 
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.CLASS, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, "X", lexer);
         assertLex(Parser.BRACEOPEN, lexer);
 
         assertLex(Parser.IDENTIFIER, "int", lexer);
@@ -128,7 +128,7 @@ public class LexerTest extends TestCase {
 
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.CLASS, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, "X", lexer);
         assertLex(Parser.BRACEOPEN, lexer);
 
         assertLex(Parser.IDENTIFIER, "int", lexer);
@@ -155,7 +155,7 @@ public class LexerTest extends TestCase {
     }
 
     public void testUnicodeInFile() throws Exception {
-        Lexer lexer = new JFlexLexer(new FileReader("src/test/java/com/thoughtworks/qdox/testdata/Unicode.java"));
+        Lexer lexer = new JFlexLexer( getClass().getResourceAsStream( "/com/thoughtworks/qdox/testdata/Unicode.java" ) );
         assertLex(Parser.PACKAGE, lexer);
         assertLex(Parser.IDENTIFIER, lexer);
         assertLex(Parser.DOT, lexer);
@@ -400,13 +400,13 @@ public class LexerTest extends TestCase {
         assertLex(Parser.IDENTIFIER, "month", lexer);
         assertLex(Parser.EQUALS, lexer);
         assertLex(Parser.STRING_LITERAL, "\"", lexer);
-        // TODO the above should be ...
-        // assertLex(Parser.STRING_LITERAL, "Jan", lexer);
+        assertEquals("\"Jan\"", lexer.getCodeBody());
         assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.AT, "@", lexer);
         assertLex(Parser.IDENTIFIER, "Note", lexer);
         assertLex(Parser.PARENOPEN, lexer);
         assertLex(Parser.STRING_LITERAL, lexer);
+        assertEquals( "\"Just ignore me\"", lexer.getCodeBody() );
         assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.PUBLIC, lexer);
         assertLex(Parser.CLASS, lexer);
@@ -451,8 +451,10 @@ public class LexerTest extends TestCase {
         assertLex(Parser.PARENOPEN, "(", lexer);
         assertLex(Parser.BRACEOPEN, "{", lexer);
         assertLex(Parser.STRING_LITERAL, "\"", lexer);
+        assertEquals( "\"Children\"", lexer.getCodeBody() );
         assertLex(Parser.COMMA, ",", lexer);
         assertLex(Parser.STRING_LITERAL, "\"", lexer);
+        assertEquals( "\"Unscrupulous dentists\"", lexer.getCodeBody() );
         assertLex(Parser.BRACECLOSE, "}", lexer);
         assertLex(Parser.PARENCLOSE, ")", lexer);
         assertLex(Parser.PUBLIC, "public", lexer);
@@ -467,13 +469,13 @@ public class LexerTest extends TestCase {
         String in = "enum Foo { a(\"hello\"); int someField; }";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.ENUM, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, "Foo", lexer);
         assertLex(Parser.BRACEOPEN, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, "a", lexer);
         assertLex(Parser.PARENBLOCK, lexer);
         assertLex(Parser.SEMI, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, "int", lexer);
+        assertLex(Parser.IDENTIFIER, "someField", lexer);
         assertLex(Parser.SEMI, lexer);
         assertLex(Parser.BRACECLOSE, lexer);
     }
@@ -485,9 +487,9 @@ public class LexerTest extends TestCase {
                 + "}";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.ENUM, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, "Animal", lexer);
         assertLex(Parser.BRACEOPEN, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, "DUCK", lexer);
         assertLex(Parser.CODEBLOCK, lexer);
         assertLex(Parser.BRACECLOSE, lexer);
     }
@@ -519,7 +521,7 @@ public class LexerTest extends TestCase {
 
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(Parser.INTERFACE, lexer);
-        assertLex(Parser.IDENTIFIER, lexer);
+        assertLex(Parser.IDENTIFIER, "X", lexer);
         assertLex(Parser.BRACEOPEN, lexer);
         assertLex(Parser.IDENTIFIER, "void", lexer);
         assertLex(Parser.IDENTIFIER, "paramWithNonAsciis\\u00E4\\u00F6\\u00FC\\u00DF", lexer);
@@ -536,17 +538,19 @@ public class LexerTest extends TestCase {
     			"@MyFunction.MyInterface( prefix1 = \"abc\", prefix2 = \"abc\" )";
     	Lexer lexer = new JFlexLexer(new StringReader(in));
     	assertLex(Parser.AT, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "MyFunction", lexer);
     	assertLex(Parser.DOT, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "MyInterface", lexer);
     	assertLex(Parser.PARENOPEN, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "prefix1", lexer);
     	assertLex(Parser.EQUALS, lexer);
     	assertLex(Parser.STRING_LITERAL, lexer);
+    	assertEquals( "\"abc\"", lexer.getCodeBody() );
     	assertLex(Parser.COMMA, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "prefix2", lexer);
     	assertLex(Parser.EQUALS, lexer);
     	assertLex(Parser.STRING_LITERAL, lexer);
+    	assertEquals( "\"abc\"", lexer.getCodeBody() );
     	assertLex(Parser.PARENCLOSE, lexer);
     }
 
@@ -554,27 +558,30 @@ public class LexerTest extends TestCase {
     	String in = "@Override\n public boolean isReadOnly(final ELContext context)";
     	Lexer lexer = new JFlexLexer(new StringReader(in));
     	assertLex(Parser.AT, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "Override", lexer);
     	assertLex(Parser.PUBLIC, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "boolean", lexer);
+    	assertLex(Parser.IDENTIFIER, "isReadOnly", lexer);
     	assertLex(Parser.PARENOPEN, lexer);
     	assertLex(Parser.FINAL, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "ELContext", lexer);
+    	assertLex(Parser.IDENTIFIER, "context", lexer);
     	assertLex(Parser.PARENCLOSE, lexer);
     }
     
-    public void testMultipleRowAnnotation() throws Exception {
-    	String in = "@JSFComponent\n  (name = \"h:inputHidden\")";
-    	Lexer lexer = new JFlexLexer(new StringReader(in));
-    	assertLex(Parser.AT, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
-    	assertLex(Parser.PARENOPEN, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
-    	assertLex(Parser.EQUALS, lexer);
-    	assertLex(Parser.STRING_LITERAL, lexer);
-    	assertLex(Parser.PARENCLOSE, lexer);
+    public void testMultipleRowAnnotation()
+        throws Exception
+    {
+        String in = "@JSFComponent\n  (name = \"h:inputHidden\")";
+        Lexer lexer = new JFlexLexer( new StringReader( in ) );
+        assertLex( Parser.AT, lexer );
+        assertLex( Parser.IDENTIFIER, "JSFComponent", lexer );
+        assertLex( Parser.PARENOPEN, lexer );
+        assertLex( Parser.IDENTIFIER, "name", lexer );
+        assertLex( Parser.EQUALS, lexer );
+        assertLex( Parser.STRING_LITERAL, lexer );
+        assertEquals( "\"h:inputHidden\"", lexer.getCodeBody() );
+        assertLex( Parser.PARENCLOSE, lexer );
     }
     
     public void testEnumWithAnnotations() throws Exception {
@@ -585,18 +592,19 @@ public class LexerTest extends TestCase {
 		"}";  
     	Lexer lexer = new JFlexLexer(new StringReader(in));
     	assertLex(Parser.CLASS, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "Foo", lexer);
     	assertLex(Parser.BRACEOPEN, lexer);
     	assertLex(Parser.PUBLIC, lexer);
     	assertLex(Parser.ENUM, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "BasicType", lexer);
     	assertLex(Parser.BRACEOPEN, lexer);
     	assertLex(Parser.AT, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "XmlEnumValue", lexer);
     	assertLex(Parser.PARENOPEN, lexer);
     	assertLex(Parser.STRING_LITERAL, lexer);
+    	assertEquals( "\"text\"", lexer.getCodeBody() );
     	assertLex(Parser.PARENCLOSE, lexer);
-    	assertLex(Parser.IDENTIFIER, lexer);
+    	assertLex(Parser.IDENTIFIER, "VALUE", lexer);
     	assertLex(Parser.PARENBLOCK, lexer);
     	assertLex(Parser.SEMI, lexer);
     }

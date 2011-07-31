@@ -99,8 +99,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      * @see com.thoughtworks.qdox.model.JavaClass#getSuperClass()
      */
     public Type getSuperClass() {
-        Type OBJECT_TYPE = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
-        Type ENUM_TYPE = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
+        Type OBJECT_TYPE = getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
+        Type ENUM_TYPE = getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
         
         boolean iAmJavaLangObject = OBJECT_TYPE.equals(asType());
 
@@ -118,8 +118,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public JavaClass getSuperJavaClass() {
         JavaClass result;
-        JavaClass OBJECT_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Object" );
-        JavaClass ENUM_JAVACLASS = getSource().getJavaClassLibrary().getJavaClass( "java.lang.Enum" );
+        JavaClass OBJECT_JAVACLASS = getJavaClassLibrary().getJavaClass( "java.lang.Object" );
+        JavaClass ENUM_JAVACLASS = getJavaClassLibrary().getJavaClass( "java.lang.Enum" );
         
         boolean iAmJavaLangObject = OBJECT_JAVACLASS.equals(this);
         
@@ -135,6 +135,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         }
         return result;
     }
+    
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getImplements()
@@ -445,9 +446,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         }
 
         JavaClass superclass = callingClazz.getSuperJavaClass();
-
-        // TODO workaround for a bug in getSuperJavaClass
-        if ( ( superclass != null ) && ( superclass != callingClazz ) )
+        if ( superclass != null )
         {
             Map<String, JavaMethod> superClassMethods =
                 getMethodsFromSuperclassAndInterfaces( callingClazz, superclass );
@@ -784,9 +783,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         if (superclasses) {
             JavaClass superclass = javaClass.getSuperJavaClass();
 
-            // THIS IS A HACK AROUND A BUG THAT MUST BE SOLVED!!!
-            // SOMETIMES A CLASS RETURNS ITSELF AS SUPER ?!?!?!?!?!
-            if ((superclass != null) && (superclass != javaClass)) {
+            if ( superclass != null ) {
                 result.addAll(getTagsRecursive(superclass, name, superclasses));
             }
 

@@ -173,10 +173,9 @@ public class DefaultJavaSource implements JavaSource, Serializable {
      * <li>Type-Import-on-Demand Declaration</li>
      * <li>Automatic Imports</li>
      * </ol>
-     * @todo Static imports are not handled yet
      * 
-     * @param typeName
-     * @return Resolved type name
+     * @param typeName the name to resolve
+     * @return the resolved type name, otherwise <code>null</code>
      */
     private String resolveTypeInternal(String typeName) {
         String resolvedName = null;

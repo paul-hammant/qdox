@@ -97,47 +97,48 @@ public class ClassLoaderLibrary
     }
 
     @Override
-    protected JavaClass resolveJavaClass( String name )
+    protected JavaClass resolveJavaClass( final String name )
     {
         JavaClass result = null;
         for ( ClassLoader classLoader : classLoaders )
         {
             String resource = name;
-            if(name.indexOf( '$' ) > 0) {
+            if ( resource.indexOf( '$' ) > 0 )
+            {
                 resource = resource.split( "$" )[0];
             }
-            resource = resource.replace( '.', '/' )+".java";
+            resource = resource.replace( '.', '/' ) + ".java";
             InputStream sourceStream = classLoader.getResourceAsStream( resource );
-            if( sourceStream != null ) 
+            if ( sourceStream != null )
             {
                 ModelBuilder builder = getModelBuilder();
                 JavaLexer lexer = new JFlexLexer( sourceStream );
                 Parser parser = new Parser( lexer, builder );
                 parser.setDebugLexer( debugLexer );
                 parser.setDebugParser( debugParser );
-                try 
+                try
                 {
-                    if( parser.parse() ) 
+                    if ( parser.parse() )
                     {
-                        //@todo to get class by name
-                        result = builder.getSource().getClasses().get( 0 );
+                        result = builder.getSource().getClassByName( name );
                         break;
                     }
                 }
-                catch( ParseException pe )
+                catch ( ParseException pe )
                 {
                     pe.setSourceInfo( resource );
-                    if( errorHandler != null )
+                    if ( errorHandler != null )
                     {
                         errorHandler.handle( pe );
                     }
-                    else 
+                    else
                     {
                         throw pe;
                     }
                 }
             }
-            if( result == null ) {
+            if ( result == null )
+            {
                 try
                 {
                     Class<?> clazz = classLoader.loadClass( name );
@@ -145,8 +146,7 @@ public class ClassLoaderLibrary
                     BinaryClassParser parser = new BinaryClassParser( clazz, builder );
                     if ( parser.parse() )
                     {
-                        //this works, classloaders parse the FQN (including nested classes) directly
-                        result = builder.getSource().getClasses().get( 0 );
+                        result = builder.getSource().getClassByName( name );
                         break;
                     }
                 }

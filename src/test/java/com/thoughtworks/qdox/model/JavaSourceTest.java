@@ -169,39 +169,40 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         assertEquals(null, source.resolveType("not.Found"));
     }
 
-    public void testResolveFullyQualifiedName() throws Exception {
-        source.getJavaClassLibrary().getJavaClass("open.Bar");
-        assertEquals("open.Bar", source.resolveType("open.Bar"));
+    public void testResolveFullyQualifiedName() throws Exception
+    {
+        assertNotNull( source.getJavaClassLibrary().getJavaClass( "open.Bar" ) );
+        assertEquals( "open.Bar", source.resolveType( "open.Bar" ) );
     }
     
     public void testResolveFullyQualifiedImport() throws Exception {
-        setImports(source, Collections.singletonList("foo.Bar"));
-        source.getJavaClassLibrary().getJavaClass("foo.Bar");
-        assertEquals("foo.Bar", source.resolveType("Bar"));
+        setImports( source, Collections.singletonList( "foo.Bar" ) );
+        assertNotNull( source.getJavaClassLibrary().getJavaClass( "foo.Bar" ) );
+        assertEquals( "foo.Bar", source.resolveType( "Bar" ) );
     }
 
     public void testResolveChooseFirstMatchingImport() throws Exception {
         List<String> imports = new ArrayList<String>();
-        imports.add("bogus.package.MyType");
-        imports.add("com.thoughtworks.qdox.model.Type");
-        imports.add("another.package.Type");
+        imports.add( "bogus.package.MyType" );
+        imports.add( "com.thoughtworks.qdox.model.Type" );
+        imports.add( "another.package.Type" );
         setImports( source, imports );
-        source.getJavaClassLibrary().getJavaClass("bogus.package.MyType");
-        source.getJavaClassLibrary().getJavaClass("com.thoughtworks.qdox.model.Type");
-        source.getJavaClassLibrary().getJavaClass("another.package.Type");
-        assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
+        assertNotNull( source.getJavaClassLibrary().getJavaClass( "bogus.package.MyType" ) );
+        assertNotNull( source.getJavaClassLibrary().getJavaClass( "com.thoughtworks.qdox.model.Type" ) );
+        assertNotNull( source.getJavaClassLibrary().getJavaClass( "another.package.Type" ) );
+        assertEquals( "com.thoughtworks.qdox.model.Type", source.resolveType( "Type" ) );
     }
 
     public void testResolveSamePackage() throws Exception {
         setPackage(source, newJavaPackage("foo"));
-        source.getJavaClassLibrary().getJavaClass("foo.Bar");
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("foo.Bar") );
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveFullyQualifiedTrumpsSamePackage() throws Exception {
         setPackage(source, newJavaPackage("foo"));
-        source.getJavaClassLibrary().getJavaClass("foo.Bar");
-        source.getJavaClassLibrary().getJavaClass("open.Bar");
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("foo.Bar") );
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("open.Bar") );
         assertEquals("open.Bar", source.resolveType("open.Bar"));
     }
 
@@ -210,19 +211,19 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         imports.add("bar.Bar");
         imports.add("foo.Bar");
         setImports( source, imports );
-        source.getJavaClassLibrary().getJavaClass("foo.*");
-        source.getJavaClassLibrary().getJavaClass("bar.Bar");
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("foo.*") );
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("bar.Bar") );
         assertEquals("bar.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveWildcard() throws Exception {
-        source.getJavaClassLibrary().getJavaClass("foo.Bar");
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("foo.Bar") );
         setImports(source, Collections.singletonList("foo.*"));
         assertEquals("foo.Bar", source.resolveType("Bar"));
     }
 
     public void testResolveJavaLangClass() throws Exception {
-        source.getJavaClassLibrary().getJavaClass("java.lang.System");
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("java.lang.System") );
         assertEquals("java.lang.System", source.resolveType("System"));
     }
 
@@ -231,21 +232,21 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         imports.add("com.thoughtworks.qdox.model.Type");
         imports.add("foo.*");
         setImports( source, imports );
-        source.getJavaClassLibrary().getJavaClass("com.thoughtworks.qdox.model.Type");
-        source.getJavaClassLibrary().getJavaClass("foo.Type");
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("com.thoughtworks.qdox.model.Type") );
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("foo.Type") );
         assertEquals("com.thoughtworks.qdox.model.Type", source.resolveType("Type"));
     }
 
     public void testResolveFullyQualifiedInnerClass() throws Exception {
         setPackage(source, newJavaPackage("foo"));
-        source.getJavaClassLibrary().getJavaClass("foo.Bar$Fnord");
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("foo.Bar$Fnord") );
         assertEquals("foo.Bar$Fnord", source.resolveType("foo.Bar.Fnord"));
     }
 
     public void testResolvePartiallySpecifiedInnerClass() throws Exception {
         setPackage(source, newJavaPackage("foo"));
         setImports(source, Collections.singletonList("java.util.*"));
-        source.getJavaClassLibrary().getJavaClass("foo.Bar$Fnord");
+        assertNotNull( source.getJavaClassLibrary().getJavaClass("foo.Bar$Fnord") );
         assertEquals("foo.Bar$Fnord", source.resolveType("Bar.Fnord"));
         assertEquals("java.util.Map$Entry", source.resolveType("Map.Entry"));
     }

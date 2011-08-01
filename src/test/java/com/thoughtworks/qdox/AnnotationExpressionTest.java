@@ -145,6 +145,7 @@ public class AnnotationExpressionTest {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         AnnotationValue value = annotation.getProperty( "value" );

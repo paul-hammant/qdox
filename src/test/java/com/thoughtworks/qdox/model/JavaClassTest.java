@@ -690,6 +690,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         //should be fixed if we can get rid of the Type-visibility
         JavaClass clazz = newJavaClass( "a.b.Sample" );
         assertEquals( "java.lang.Object", clazz.getSuperClass().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "java.lang.Object", clazz.getSuperClass().getFullyQualifiedName() );
     }
     
 }

@@ -440,7 +440,7 @@ public abstract class EvaluatingVisitor
 
     public Object visit( TypeRef typeRef )
     {
-        return typeRef.getType().getJavaClass();
+        return typeRef.getType();
     }
 
     public Object visit( AnnotationValueList valueList )
@@ -890,7 +890,7 @@ public abstract class EvaluatingVisitor
     public Object visit( Cast annotationCast )
     {
         Object value = annotationCast.getValue().accept( this );
-        String type = annotationCast.getType().getJavaClass().getFullyQualifiedName();
+        String type = annotationCast.getType().getFullyQualifiedName();
         Object result;
 
         if ( value instanceof Number )

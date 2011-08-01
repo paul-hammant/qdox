@@ -72,8 +72,7 @@ public abstract class TypeTest extends TestCase {
         ClassLoaderLibrary library = new ClassLoaderLibrary( null );
         library.addDefaultLoader();
         JavaSource javaSource = newJavaSource(library);
-        Type type = newType("java.util.HashSet", 0, javaSource);
-        JavaClass clazz = type.getJavaClass();
+        JavaClass clazz = newType("java.util.HashSet", 0, javaSource);
         JavaClass superClass = clazz.getSuperJavaClass();
         assertEquals("java.util.AbstractSet", superClass.getFullyQualifiedName());
     }

@@ -25,7 +25,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class Type implements Serializable {
+import com.thoughtworks.qdox.library.ClassLibrary;
+
+public class Type implements JavaClass, Serializable {
 
     public static final Type VOID = new Type("void");
 
@@ -34,7 +36,7 @@ public class Type implements Serializable {
     private String fullName;
     private int dimensions;
     private List<Type> actualArgumentTypes;
-
+    
     public Type(String fullName, String name, int dimensions, JavaClassParent context) {
         this.fullName = fullName;
         this.name = name;
@@ -103,7 +105,7 @@ public class Type implements Serializable {
      * @return the type of array if it's one, otherwise <code>null</code>
      */
     public JavaClass getComponentType() {
-      return isArray() ? getJavaClass() : null;
+      return isArray() ? resolveRealClass() : null;
     }
     
     /**
@@ -199,11 +201,13 @@ public class Type implements Serializable {
         return result;
     }
 
-    protected boolean isResolved() {
-        if (fullName == null && context != null) {
-            fullName = context.resolveType(name);
+    protected boolean isResolved()
+    {
+        if ( fullName == null && context != null )
+        {
+            fullName = context.resolveType( name );
         }
-        return (fullName != null);
+        return ( fullName != null );
     }
 
     /**
@@ -285,8 +289,8 @@ public class Type implements Serializable {
     public int hashCode() {
         return getFullyQualifiedName().hashCode();
     }
-
-    public JavaClass getJavaClass()
+    
+    private JavaClass resolveRealClass() 
     {
         JavaClass result;
         String qualifiedName = isResolved() ? fullName : name;
@@ -300,7 +304,7 @@ public class Type implements Serializable {
             result = javaClassParent.getNestedClassByName( qualifiedName );
             if ( result == null )
             {
-                result = javaClassParent.getJavaClassLibrary().getJavaClass( qualifiedName, true );
+                result = getJavaClassLibrary().getJavaClass( qualifiedName, true );
             }
         }
 
@@ -308,20 +312,28 @@ public class Type implements Serializable {
     }
 
     /**
+     *  
+     * @return this
+     * @deprecated Type already has the JavaClass interface
+     */
+    public JavaClass getJavaClass()
+    {
+        return this;
+    }
+
+    /**
      * @since 1.3
      */
-    public boolean isA(Type type) {
-        if (this == type) {
+    public boolean isA( Type type )
+    {
+        if ( this == type )
+        {
             return true;
-        } else {
-            JavaClass cls = getJavaClass();
-            
-            if (cls != null) {
-                return cls.isA( type.getJavaClass() );
-            }
         }
-        // We'we walked up the hierarchy and found nothing.
-        return false;
+        else
+        {
+            return this.isA( type );
+        }
     }
 
     /**
@@ -478,6 +490,313 @@ public class Type implements Serializable {
     {
         TypeVariable variable = resolve( typeParameters );
         return (variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
+    }
+
+    //Delegating methods
+    public JavaSource getSource()
+    {
+        return resolveRealClass().getSource();
+    }
+
+    public int getLineNumber()
+    {
+        return resolveRealClass().getLineNumber();
+    }
+
+    public boolean isInterface()
+    {
+        return resolveRealClass().isInterface();
+    }
+
+    public List<Annotation> getAnnotations()
+    {
+        return resolveRealClass().getAnnotations();
+    }
+
+    public boolean isEnum()
+    {
+        return resolveRealClass().isEnum();
+    }
+
+    public String getComment()
+    {
+        return resolveRealClass().getComment();
+    }
+
+    public List<DocletTag> getTags()
+    {
+        return resolveRealClass().getTags();
+    }
+
+    public boolean isAnnotation()
+    {
+        return resolveRealClass().isAnnotation();
+    }
+
+    public List<DocletTag> getTagsByName( String name )
+    {
+        return resolveRealClass().getTagsByName( name );
+    }
+
+    public DocletTag getTagByName( String name )
+    {
+        return resolveRealClass().getTagByName( name );
+    }
+
+    public Type getSuperClass()
+    {
+        return resolveRealClass().getSuperClass();
+    }
+
+    public JavaClass getSuperJavaClass()
+    {
+        return resolveRealClass().getSuperJavaClass();
+    }
+
+    public List<Type> getImplements()
+    {
+        return resolveRealClass().getImplements();
+    }
+
+    public List<JavaClass> getImplementedInterfaces()
+    {
+        return resolveRealClass().getImplementedInterfaces();
+    }
+
+    public String getNamedParameter( String tagName, String parameterName )
+    {
+        return resolveRealClass().getNamedParameter( tagName, parameterName );
+    }
+
+    public String getCodeBlock()
+    {
+        return resolveRealClass().getCodeBlock();
+    }
+
+    public List<TypeVariable> getTypeParameters()
+    {
+        return resolveRealClass().getTypeParameters();
+    }
+
+    public JavaSource getParentSource()
+    {
+        return resolveRealClass().getParentSource();
+    }
+
+    public JavaPackage getPackage()
+    {
+        return resolveRealClass().getPackage();
+    }
+
+    public JavaClassParent getParent()
+    {
+        return resolveRealClass().getParent();
+    }
+
+    public String getPackageName()
+    {
+        return resolveRealClass().getPackageName();
+    }
+
+    public boolean isInner()
+    {
+        return resolveRealClass().isInner();
+    }
+
+    public String resolveType( String name )
+    {
+        return resolveRealClass().resolveType( name );
+    }
+
+    public String resolveCanonicalName( String name )
+    {
+        return resolveRealClass().resolveCanonicalName( name );
+    }
+
+    public String resolveFullyQualifiedName( String name )
+    {
+        return resolveRealClass().resolveFullyQualifiedName( name );
+    }
+
+    public String getClassNamePrefix()
+    {
+        return resolveRealClass().getClassNamePrefix();
+    }
+
+    public Type asType()
+    {
+        return resolveRealClass().asType();
+    }
+
+    public List<JavaMethod> getMethods()
+    {
+        return resolveRealClass().getMethods();
+    }
+
+    public List<JavaConstructor> getConstructors()
+    {
+        return resolveRealClass().getConstructors();
+    }
+
+    public JavaConstructor getConstructor( List<Type> parameterTypes )
+    {
+        return resolveRealClass().getConstructor( parameterTypes );
+    }
+
+    public JavaConstructor getConstructor( List<Type> parameterTypes, boolean varArg )
+    {
+        return resolveRealClass().getConstructor( parameterTypes, varArg );
+    }
+
+    public List<JavaMethod> getMethods( boolean superclasses )
+    {
+        return resolveRealClass().getMethods( superclasses );
+    }
+
+    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes )
+    {
+        return resolveRealClass().getMethodBySignature( name, parameterTypes );
+    }
+
+    public JavaMethod getMethod( String name, List<Type> parameterTypes, boolean varArgs )
+    {
+        return resolveRealClass().getMethod( name, parameterTypes, varArgs );
+    }
+
+    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses )
+    {
+        return resolveRealClass().getMethodBySignature( name, parameterTypes, superclasses );
+    }
+
+    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses, boolean varArg )
+    {
+        return resolveRealClass().getMethodBySignature( name, parameterTypes, superclasses, varArg );
+    }
+
+    public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses )
+    {
+        return resolveRealClass().getMethodsBySignature( name, parameterTypes, superclasses );
+    }
+
+    public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses,
+                                                   boolean varArg )
+    {
+        return resolveRealClass().getMethodsBySignature( name, parameterTypes, superclasses, varArg );
+    }
+
+    public List<JavaField> getFields()
+    {
+        return resolveRealClass().getFields();
+    }
+
+    public JavaField getFieldByName( String name )
+    {
+        return resolveRealClass().getFieldByName( name );
+    }
+
+    public List<JavaClass> getClasses()
+    {
+        return resolveRealClass().getClasses();
+    }
+
+    public List<JavaClass> getNestedClasses()
+    {
+        return resolveRealClass().getNestedClasses();
+    }
+
+    public JavaClass getNestedClassByName( String name )
+    {
+        return resolveRealClass().getNestedClassByName( name );
+    }
+
+    public boolean isA( String fullClassName )
+    {
+        return resolveRealClass().isA( fullClassName );
+    }
+
+    public boolean isA( JavaClass javaClass )
+    {
+        return resolveRealClass().isA( javaClass );
+    }
+
+    public List<BeanProperty> getBeanProperties()
+    {
+        return resolveRealClass().getBeanProperties();
+    }
+
+    public List<BeanProperty> getBeanProperties( boolean superclasses )
+    {
+        return resolveRealClass().getBeanProperties( superclasses );
+    }
+
+    public BeanProperty getBeanProperty( String propertyName )
+    {
+        return resolveRealClass().getBeanProperty( propertyName );
+    }
+
+    public BeanProperty getBeanProperty( String propertyName, boolean superclasses )
+    {
+        return resolveRealClass().getBeanProperty( propertyName, superclasses );
+    }
+
+    public List<JavaClass> getDerivedClasses()
+    {
+        return resolveRealClass().getDerivedClasses();
+    }
+
+    public List<DocletTag> getTagsByName( String name, boolean superclasses )
+    {
+        return resolveRealClass().getTagsByName( name, superclasses );
+    }
+
+    public ClassLibrary getJavaClassLibrary()
+    {
+        return context.getJavaClassLibrary();
+    }
+
+    public String getName()
+    {
+        return resolveRealClass().getName();
+    }
+
+    public String getCanonicalName()
+    {
+        return resolveRealClass().getCanonicalName();
+    }
+
+    public List<String> getModifiers()
+    {
+        return resolveRealClass().getModifiers();
+    }
+
+    public boolean isPublic()
+    {
+        return resolveRealClass().isPublic();
+    }
+
+    public boolean isProtected()
+    {
+        return resolveRealClass().isProtected();
+    }
+
+    public boolean isPrivate()
+    {
+        return resolveRealClass().isPrivate();
+    }
+
+    public boolean isFinal()
+    {
+        return resolveRealClass().isFinal();
+    }
+
+    public boolean isStatic()
+    {
+        return resolveRealClass().isStatic();
+    }
+
+    public boolean isAbstract()
+    {
+        return resolveRealClass().isAbstract();
     }
 
 }

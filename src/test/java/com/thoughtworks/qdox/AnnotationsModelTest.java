@@ -33,7 +33,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
-
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         return annotation;
     }
 
@@ -60,6 +60,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         Annotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 8, annotation.getNamedParameterMap().size() );
 
         Constant f = (Constant) annotation.getProperty( "f" );
@@ -94,6 +95,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 5, annotation.getPropertyMap().size() );
 
         Constant s1 = (Constant) annotation.getProperty( "s1" );
@@ -119,6 +121,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         AnnotationValueList list = (AnnotationValueList) annotation.getProperty( "value" );
@@ -137,6 +140,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         Add add = (Add) annotation.getProperty( "value" );
@@ -151,6 +155,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         Add add = (Add) annotation.getProperty( "value" );
@@ -165,6 +170,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         FieldRef value = (FieldRef) annotation.getProperty( "value" );
@@ -180,6 +186,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         Object value = annotation.getProperty( "value" );
@@ -194,6 +201,7 @@ public class AnnotationsModelTest extends TestCase {
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
         assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         Object value = annotation.getProperty( "value" );

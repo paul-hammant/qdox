@@ -664,6 +664,7 @@ public class JavaProjectBuilderTest extends TestCase
         JavaField field1 = outer.getFieldByName("field1");
         Type type = field1.getType();
         assertEquals("foo.Outer$Inner", type.getJavaClass().getFullyQualifiedName());
+        assertEquals("foo.Outer$Inner", type.getFullyQualifiedName());
     }
 
     public void testJiraQdox16() {
@@ -886,6 +887,7 @@ public class JavaProjectBuilderTest extends TestCase
         JavaField innerField = 
             builder.getClassByName("p2.B").getFieldByName("innerField");
         assertEquals(innerClass, innerField.getType().getJavaClass() );
+        assertEquals(innerClass, innerField.getType() );
         assertEquals("p1.A$Inner", innerField.getType().getFullyQualifiedName());
     }
 
@@ -1300,7 +1302,7 @@ public class JavaProjectBuilderTest extends TestCase
                 "}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.addSource( new StringReader( source ) ).getClasses().get(0);
-        JavaClass thing = clazz.getMethods().get(0).getReturns().getJavaClass();
+        JavaClass thing = clazz.getMethods().get(0).getReturns();
         assertEquals("com.blah.Thing", thing.getFullyQualifiedName());
         assertNotNull(thing.getSource());
     }

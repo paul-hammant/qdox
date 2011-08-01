@@ -123,15 +123,17 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         
         boolean iAmJavaLangObject = OBJECT_JAVACLASS.equals(this);
         
-        if (anEnum) {
+        if ( anEnum )
+        {
             result = ENUM_JAVACLASS;
-        } else if (!anInterface && !anAnnotation && (superClass == null) && !iAmJavaLangObject) {
+        }
+        else if ( !anInterface && !anAnnotation && ( superClass == null ) && !iAmJavaLangObject )
+        {
             result = OBJECT_JAVACLASS;
         }
-        else if(superClass != null) {
-            result = superClass.getJavaClass();
-        } else {
-            result = null;
+        else
+        {
+            result = superClass;
         }
         return result;
     }
@@ -147,13 +149,9 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /**
      * @since 1.3
      */
-    public List<JavaClass> getImplementedInterfaces() {
-        List<JavaClass> result = new LinkedList<JavaClass>();
-        for ( Type implType : getImplements() ) 
-        {
-            result.add( implType.getJavaClass() );
-        }
-        return result;
+    public List<JavaClass> getImplementedInterfaces() 
+    {
+        return new LinkedList<JavaClass>( getImplements() );
     }
 
     /* (non-Javadoc)
@@ -320,17 +318,23 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
      */
     public String resolveType( String typeName )
     {
-        // Maybe it's an inner class?
-        for ( JavaClass innerClass : getNestedClasses() )
+        String result;
+        JavaClass resolvedClass = getNestedClassByName( typeName );
+        if ( resolvedClass != null )
         {
-            if ( innerClass.getName().equals( typeName ) )
-            {
-                return innerClass.getFullyQualifiedName();
-            }
+            result = resolvedClass.getFullyQualifiedName();
         }
-        return getParent().resolveType( typeName );
+        else
+        {
+            result = getParent().resolveType( typeName );
+        }
+        return result;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#resolveCanonicalName(java.lang.String)
+     */
     public String resolveCanonicalName( String name )
     {
         // Maybe it's an inner class?
@@ -344,6 +348,10 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         return getParent().resolveCanonicalName( name );
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#resolveFullyQualifiedName(java.lang.String)
+     */
     public String resolveFullyQualifiedName( String name )
     {
         // Maybe it's an inner class?

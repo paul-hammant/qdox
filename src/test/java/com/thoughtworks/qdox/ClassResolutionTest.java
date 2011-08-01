@@ -91,6 +91,7 @@ public class ClassResolutionTest extends TestCase {
     	builder.addSource(new StringReader(source));
     	JavaMethod method = builder.getClassByName("some.pack.Test").getMethods().get(0);
     	JavaParameter parameter = method.getParameters().get(0);
-    	assertEquals("some.pack.Test$Inner$Inner2", parameter.getType().getJavaClass().getFullyQualifiedName());
+    	assertEquals( "some.pack.Test$Inner$Inner2", parameter.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getFullyQualifiedName() );
     }
 }

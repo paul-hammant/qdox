@@ -197,7 +197,8 @@ public class AnnotationsTest extends TestCase {
     	JavaClass clazz = builder.getClassByName("Foo");
     	JavaMethod mth = clazz.getMethods().get(0);
     	assertEquals("Foo", clazz.getName());
-    	assertEquals("X", mth.getAnnotations().get(0).getType().getJavaClass().getName());
+        assertEquals("X", mth.getAnnotations().get(0).getType().getJavaClass().getName());
+    	assertEquals("X", mth.getAnnotations().get(0).getType().getName());
     }
 
     // from QDOX-142

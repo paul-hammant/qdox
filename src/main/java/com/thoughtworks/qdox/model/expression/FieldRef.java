@@ -141,9 +141,7 @@ public class FieldRef implements AnnotationValue {
                     String typeName = classParent.resolveType( className );
 
                     if( typeName != null ) {
-                        Type type = Type.createUnresolved( typeName, 0, classParent );
-                        JavaClass javaClass = type.getJavaClass();
-
+                        JavaClass javaClass = Type.createUnresolved( typeName, 0, classParent );
                         if( javaClass != null ) {
                             fieldIndex = i + 1;
                             field = resolveField( javaClass, i + 1, parts.length - 1 );

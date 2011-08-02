@@ -136,6 +136,10 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return resolveFullyQualifiedName( typeName );
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClassParent#resolveFullyQualifiedName(java.lang.String)
+     */
     public String resolveFullyQualifiedName( String name )
     {
         String result = resolvedTypeCache.get( name );
@@ -150,6 +154,10 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return result;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClassParent#resolveCanonicalName(java.lang.String)
+     */
     public String resolveCanonicalName( String name )
     {
         String className = resolveFullyQualifiedName( name );
@@ -211,7 +219,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
             
             // check for class in the same package
             if (getPackage() != null) {
-                resolvedName = resolveFullyQualifiedType( getPackageName() + "." + typeName );
+                resolvedName = resolveFullyQualifiedType( getPackageName() + '.' + typeName );
                 
                 if(resolvedName != null) {
                     break lookup;
@@ -283,7 +291,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         if (indexOfLastDot >= 0) {
             String root = typeName.substring(0,indexOfLastDot);
             String leaf = typeName.substring(indexOfLastDot+1);
-            String resolvedTypeName = resolveFullyQualifiedType(root + "$" + leaf);
+            String resolvedTypeName = resolveFullyQualifiedType(root + '$' + leaf);
             
             if(resolvedTypeName != null) {
                 return resolvedTypeName;
@@ -301,7 +309,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
      * @see com.thoughtworks.qdox.model.JavaSource#getClassNamePrefix()
      */
     public String getClassNamePrefix() {
-        return ( pkg == null ? "" : pkg.getName() + "." ); 
+        return ( pkg == null ? "" : pkg.getName() + '.' ); 
     }
 
     public JavaSource getParentSource() {

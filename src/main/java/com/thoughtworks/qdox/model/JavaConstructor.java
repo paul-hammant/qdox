@@ -80,6 +80,7 @@ public interface JavaConstructor
     
     /**
      * Retrieve the complete codeblock of the constructor, including the sourcecode.
+     * 
      * @return the code block
      */
     String getCodeBlock();
@@ -98,7 +99,7 @@ public interface JavaConstructor
      * Returns <code>true</code> if this constructor matches the parameterTypes and matches the varArg argument.
      * 
      * @param parameterTypes
-     * @param varArgs
+     * @param varArgs 
      * @return <code>true</code> if signature matches, otherwise <code>false</code>
      */
     boolean signatureMatches( List<Type> parameterTypes, boolean varArgs );

@@ -21,7 +21,7 @@ package com.thoughtworks.qdox.parser.structs;
 
 public class PackageDef extends LocatedDef {
 
-	private String name = "";
+	private String name;
 	
 	public PackageDef(String name) {
 		this.name = name;

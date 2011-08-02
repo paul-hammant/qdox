@@ -38,6 +38,16 @@ public class TagDef
         this( name, text, -1 );
     }
 
+    public String getName()
+    {
+        return name;
+    }
+
+    public String getText()
+    {
+        return text;
+    }
+
     @Override
     public String toString()
     {
@@ -50,25 +60,4 @@ public class TagDef
         result.append( getLineNumber() );
         return result.toString();
     }
-
-    public void setName( String name )
-    {
-        this.name = name;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setText( String text )
-    {
-        this.text = text;
-    }
-
-    public String getText()
-    {
-        return text;
-    }
-
 }

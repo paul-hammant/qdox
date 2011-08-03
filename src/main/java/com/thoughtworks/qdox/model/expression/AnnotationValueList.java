@@ -23,28 +23,34 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-
-public class AnnotationValueList implements AnnotationValue {
+public class AnnotationValueList
+    implements AnnotationValue
+{
 
     private final List<AnnotationValue> valueList;
 
-    public AnnotationValueList( List<AnnotationValue> valueList ) {
+    public AnnotationValueList( List<AnnotationValue> valueList )
+    {
         this.valueList = valueList;
     }
 
-    public List<AnnotationValue> getValueList() {
+    public List<AnnotationValue> getValueList()
+    {
         return valueList;
     }
 
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer();
 
         buf.append( "{" );
 
-        for( ListIterator<AnnotationValue> i = valueList.listIterator(); i.hasNext(); ) {
+        for ( ListIterator<AnnotationValue> i = valueList.listIterator(); i.hasNext(); )
+        {
             buf.append( i.next().toString() );
-            
-            if(i.hasNext()) {
+
+            if ( i.hasNext() )
+            {
                 buf.append( ", " );
             }
         }
@@ -54,15 +60,26 @@ public class AnnotationValueList implements AnnotationValue {
         return buf.toString();
     }
 
-    public Object accept( AnnotationVisitor visitor ) {
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.expression.AnnotationValue#accept(com.thoughtworks.qdox.model.expression.AnnotationVisitor)
+     */
+    public Object accept( AnnotationVisitor visitor )
+    {
         return visitor.visit( this );
     }
 
-    public List<Object> getParameterValue() {
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.expression.AnnotationValue#getParameterValue()
+     */
+    public List<Object> getParameterValue()
+    {
         List<Object> list = new LinkedList<Object>();
 
-        for( ListIterator<AnnotationValue> i = valueList.listIterator(); i.hasNext(); ) {
-            list.add( i.next().getParameterValue() );
+        for ( AnnotationValue value : valueList )
+        {
+            list.add( value.getParameterValue() );
         }
 
         return list;

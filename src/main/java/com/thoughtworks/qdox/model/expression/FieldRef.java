@@ -39,7 +39,12 @@ public class FieldRef implements AnnotationValue {
 
     private int fieldIndex = -1;
 
-    public FieldRef( String name ) {
+    /**
+     * 
+     * @param name the field name, not <code>null</code>
+     */
+    public FieldRef( String name ) 
+    {
         this.name = name;
 
         int length = new StringTokenizer( name, "." ).countTokens();

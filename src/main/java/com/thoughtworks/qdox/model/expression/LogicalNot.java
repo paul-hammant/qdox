@@ -35,6 +35,6 @@ public class LogicalNot extends UnaryOperator {
     }
 
     public String getParameterValue() {
-        return "!" + getValue().toString();
+        return "!" + getValue().getParameterValue();
     }
 }

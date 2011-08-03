@@ -44,10 +44,10 @@ public class Cast implements AnnotationValue {
     }
 
     public String getParameterValue() {
-        return "(" + type.getValue() + ") " + value.getParameterValue();
+        return "(" + type.getCanonicalName() + ") " + value.getParameterValue();
     }
 
     public String toString() {
-        return "(" + type.getValue() + ") " + value.toString();
+        return "(" + type.toString() + ") " + value.toString();
     }
 }

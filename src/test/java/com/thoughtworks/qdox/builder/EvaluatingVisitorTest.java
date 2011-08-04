@@ -7,6 +7,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -318,27 +319,24 @@ public class EvaluatingVisitorTest
     public void testVisitCast()
     {
         AnnotationValue value = mock( AnnotationValue.class );
-
         when( value.accept( visitor ) ).thenReturn( 7 );
+
         assertEquals( (byte) 7, visitor.visit( new Cast( new Type( "byte" ), value ) ) );
-
-        when( value.accept( visitor ) ).thenReturn( 7 );
         assertEquals( (char) 7, visitor.visit( new Cast( new Type( "char" ), value ) ) );
-
-        when( value.accept( visitor ) ).thenReturn( 7 );
         assertEquals( (short) 7, visitor.visit( new Cast( new Type( "short" ), value ) ) );
-        
-        when( value.accept( visitor ) ).thenReturn( 7 );
         assertEquals( (int) 7, visitor.visit( new Cast( new Type( "int" ), value ) ) );
-
-        when( value.accept( visitor ) ).thenReturn( 7 );
         assertEquals( (long) 7, visitor.visit( new Cast( new Type( "long" ), value ) ) );
-
-        when( value.accept( visitor ) ).thenReturn( 7 );
         assertEquals( (float) 7, visitor.visit( new Cast( new Type( "float" ), value ) ) );
-        
-        when( value.accept( visitor ) ).thenReturn( 7 );
         assertEquals( (double) 7, visitor.visit( new Cast( new Type( "double" ), value ) ) );
+
+        try
+        {
+            visitor.visit( new Cast( new Type( "void" ), value ) );
+            fail("Although 'void' is a primitive, you can't cast to it");
+        }
+        catch( IllegalArgumentException iae) 
+        {            
+        }
         
         when( value.accept( visitor ) ).thenReturn( "hello world" );
         assertEquals( (String) "hello world", visitor.visit( new Cast( new Type( "java.lang.String" ), value ) ) );

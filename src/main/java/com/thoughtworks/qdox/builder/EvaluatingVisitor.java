@@ -26,6 +26,7 @@ import java.util.List;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
@@ -890,38 +891,39 @@ public abstract class EvaluatingVisitor
     public Object visit( Cast annotationCast )
     {
         Object value = annotationCast.getValue().accept( this );
-        String type = annotationCast.getType().getFullyQualifiedName();
+        Type type = annotationCast.getType();
         Object result;
 
-        if ( value instanceof Number )
+        if ( type.isPrimitive() && value instanceof Number )
         {
             Number n = (Number) value;
+            String typeName = type.getName();
 
-            if ( type.equals( "byte" ) )
+            if ( typeName.equals( "byte" ) )
             {
                 result = Byte.valueOf( n.byteValue() );
             }
-            else if ( type.equals( "char" ) )
+            else if ( typeName.equals( "char" ) )
             {
                 result = Character.valueOf( (char) n.intValue() );
             }
-            else if ( type.equals( "short" ) )
+            else if ( typeName.equals( "short" ) )
             {
                 result = Short.valueOf( n.shortValue() );
             }
-            else if ( type.equals( "int" ) )
+            else if ( typeName.equals( "int" ) )
             {
                 result = Integer.valueOf( n.intValue() );
             }
-            else if ( type.equals( "long" ) )
+            else if ( typeName.equals( "long" ) )
             {
                 result = Long.valueOf( n.longValue() );
             }
-            else if ( type.equals( "float" ) )
+            else if ( typeName.equals( "float" ) )
             {
                 result = Float.valueOf( n.floatValue() );
             }
-            else if ( type.equals( "double" ) )
+            else if ( typeName.equals( "double" ) )
             {
                 result = Double.valueOf( n.doubleValue() );
             }
@@ -934,7 +936,7 @@ public abstract class EvaluatingVisitor
         {
             try
             {
-                result = Class.forName( type ).cast( value );
+                result = Class.forName( type.getFullyQualifiedName() ).cast( value );
             }
             catch ( ClassNotFoundException e )
             {

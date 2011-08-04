@@ -212,7 +212,7 @@ public abstract class EvaluatingVisitor
         return type;
     }
 
-    public Object visit( Annotation annotation )
+    public Object visit( Annotation annotation ) throws UnsupportedOperationException
     {
         throw new UnsupportedOperationException( "Illegal annotation value '" + annotation + "'." );
     }
@@ -865,7 +865,7 @@ public abstract class EvaluatingVisitor
         }
         else
         {
-            result = ( left == right );
+            result = ( left != right );
         }
 
         return result ? Boolean.TRUE : Boolean.FALSE;
@@ -930,20 +930,16 @@ public abstract class EvaluatingVisitor
                 throw new IllegalArgumentException( "Cannot evaluate '" + annotationCast + "'." );
             }
         }
-        else if ( value instanceof String )
+        else 
         {
-            if ( type.equals( "java.lang.String" ) )
+            try
             {
-                result = value;
+                result = Class.forName( type ).cast( value );
             }
-            else
+            catch ( ClassNotFoundException e )
             {
                 throw new IllegalArgumentException( "Cannot evaluate '" + annotationCast + "'." );
             }
-        }
-        else
-        {
-            throw new IllegalArgumentException( "Cannot evaluate '" + annotationCast + "'." );
         }
 
         return result;

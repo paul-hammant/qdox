@@ -77,6 +77,15 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @since 1.3
      */
     List<JavaClass> getImplementedInterfaces();
+    
+    /**
+     * Equivalent of {@link java.lang.Class#getInterfaces()}
+     *  Determines the interfaces implemented by the class or interface represented by this object.     * 
+     * 
+     * @return a list of interfaces, never <code>null</code>
+     * @since 2.0
+     */
+    List<JavaClass> getInterfaces();
 
     String getCodeBlock();
 

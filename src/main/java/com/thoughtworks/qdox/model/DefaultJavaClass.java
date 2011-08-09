@@ -137,7 +137,6 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         }
         return result;
     }
-    
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getImplements()
@@ -146,12 +145,23 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         return implementz;
     }
 
-    /**
-     * @since 1.3
+
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getImplementedInterfaces()
      */
     public List<JavaClass> getImplementedInterfaces() 
     {
-        return new LinkedList<JavaClass>( getImplements() );
+        return new LinkedList<JavaClass>( implementz );
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getInterfaces()
+     */
+    public List<JavaClass> getInterfaces()
+    {
+        return new LinkedList<JavaClass>( implementz );
     }
 
     /* (non-Javadoc)

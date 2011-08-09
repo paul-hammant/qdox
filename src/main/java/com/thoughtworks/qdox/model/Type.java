@@ -20,6 +20,7 @@ package com.thoughtworks.qdox.model;
  */
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -143,47 +144,58 @@ public class Type implements JavaClass, Serializable {
      * @since 1.8
      * @return generic type representation for code usage 
      */
-    public String getGenericValue() {
-    	StringBuffer result = new StringBuffer(getValue());
-    	if(actualArgumentTypes != null && actualArgumentTypes.size() > 0) {
-    		result.append("<");
-    		for(Iterator<Type> iter = actualArgumentTypes.iterator();iter.hasNext();) {
-    			result.append(iter.next().getGenericValue());
-    			if(iter.hasNext()) {
-    				result.append(",");
-    			}
-    		}
-    		result.append(">");
-    	}
-    	for (int i = 0; i < dimensions; i++) 
-    	{
-    	    result.append("[]");
-    	}
+    public String getGenericValue()
+    {
+        StringBuffer result = new StringBuffer( getValue() );
+        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        {
+            result.append( "<" );
+            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            {
+                result.append( iter.next().getGenericValue() );
+                if ( iter.hasNext() )
+                {
+                    result.append( "," );
+                }
+            }
+            result.append( ">" );
+        }
+        for ( int i = 0; i < dimensions; i++ )
+        {
+            result.append( "[]" );
+        }
         return result.toString();
     }
     
-    protected String getGenericValue(List<TypeVariable> typeVariableList) {
-    	StringBuffer result = new StringBuffer(getResolvedValue(typeVariableList));
-    	if(actualArgumentTypes != null && actualArgumentTypes.size() > 0) {
-    		for(int index = 0;index < actualArgumentTypes.size(); index++) {
-    			result.append(actualArgumentTypes.get(index).resolve(typeVariableList));   			
-    			if(index + 1 != actualArgumentTypes.size()) {
-    				result.append(",");
-    			}
-    		}
-    	}
+    protected String getGenericValue( List<TypeVariable> typeVariableList )
+    {
+        StringBuffer result = new StringBuffer( getResolvedValue( typeVariableList ) );
+        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        {
+            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            {
+                result.append( iter.next().resolve( typeVariableList ) );
+                if ( iter.hasNext() )
+                {
+                    result.append( "," );
+                }
+            }
+        }
         return result.toString();
     }
     
-    protected String getResolvedValue(List<TypeVariable> typeParameters) {
-    	String result = getValue();
-    	for(TypeVariable typeParameter : typeParameters) {
-			if(typeParameter.getName().equals(getValue())) {
-				result = typeParameter.getBounds().get( 0 ).getValue();
-				break;
-			}
-		}
-    	return result;
+    protected String getResolvedValue( List<TypeVariable> typeParameters )
+    {
+        String result = getValue();
+        for ( TypeVariable typeParameter : typeParameters )
+        {
+            if ( typeParameter.getName().equals( getValue() ) )
+            {
+                result = typeParameter.getBounds().get( 0 ).getValue();
+                break;
+            }
+        }
+        return result;
     }
     
     protected TypeVariable resolve( List<TypeVariable> typeParameters )
@@ -369,8 +381,10 @@ public class Type implements JavaClass, Serializable {
         Type result = this;
 
         int typeIndex = -1;
-        for(ListIterator<TypeVariable> iter = parentClass.getTypeParameters().listIterator();iter.hasNext();) {
-            if(iter.next().getFullyQualifiedName().equals( getFullyQualifiedName())) {
+        for ( ListIterator<TypeVariable> iter = parentClass.getTypeParameters().listIterator(); iter.hasNext(); )
+        {
+            if ( iter.next().getFullyQualifiedName().equals( getFullyQualifiedName() ) )
+            {
                 typeIndex = iter.previousIndex();
                 break;
             }
@@ -379,21 +393,22 @@ public class Type implements JavaClass, Serializable {
         if ( typeIndex >= 0 )
         {
             String fqn = parentClass.getFullyQualifiedName();
-            if ( subclass.getSuperClass() != null && fqn.equals( subclass.getSuperClass().getFullyQualifiedName() ) ) {
-                result = subclass.getSuperClass().getActualTypeArguments().get(typeIndex);    
+            if ( subclass.getSuperClass() != null && fqn.equals( subclass.getSuperClass().getFullyQualifiedName() ) )
+            {
+                result = subclass.getSuperClass().getActualTypeArguments().get( typeIndex );
             }
             else if ( subclass.getImplementedInterfaces() != null )
             {
-                for ( int i = 0; i < subclass.getImplementedInterfaces().size(); i++ )
+                for ( Type implement : subclass.getImplements() )
                 {
-                    if ( fqn.equals( subclass.getImplements().get(i).getFullyQualifiedName() ) ) 
+                    if ( fqn.equals( implement.getFullyQualifiedName() ) )
                     {
-                        JavaClass argument = subclass.getImplementedInterfaces().get(i);
-                        result = subclass.getImplements().get(i).getActualTypeArguments().get(typeIndex).resolve(argument,argument);
+                        JavaClass argument = implement.getJavaClass();
+                        result = implement.getActualTypeArguments().get( typeIndex ).resolve( argument, argument );
                         break;
                     }
                 }
-                //no direct interface available, try indirect
+                // no direct interface available, try indirect
             }
         }
         
@@ -559,6 +574,11 @@ public class Type implements JavaClass, Serializable {
     }
 
     public List<JavaClass> getImplementedInterfaces()
+    {
+        return resolveRealClass().getImplementedInterfaces();
+    }
+    
+    public List<JavaClass> getInterfaces()
     {
         return resolveRealClass().getImplementedInterfaces();
     }

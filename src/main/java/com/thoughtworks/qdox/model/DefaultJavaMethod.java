@@ -162,20 +162,12 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
 
         JavaMethod other = (JavaMethod) obj;
         //use 'this' from here to make it better readable
-        if ( other.getName() != null && !other.getName().equals( this.getName() ) )
-        {
-            return false;
-        }
-        if ( this.getName() != null && !this.getName().equals( other.getName() ) )
+        if ( other.getName() != null ? !other.getName().equals( this.getName() ) :  this.getName() != null )
         {
             return false;
         }
 
-        if ( other.getReturns() != null && !other.getReturns().equals( this.getReturns() ) )
-        {
-            return false;
-        }
-        if ( this.getReturns() != null && !this.getReturns().equals( other.getReturns() ) )
+        if ( other.getReturnType() != null ? !other.getReturnType().equals( this.getReturns() ) : this.getReturns() != null )
         {
             return false;
         }

@@ -94,6 +94,23 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     {
         return anAnnotation;
     }
+    
+    /* (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isArray()
+     */
+    public boolean isArray()
+    {
+        return false;
+    }
+    
+
+    /* (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getDimensions()
+     */
+    public int getDimensions()
+    {
+        return 0;
+    }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getSuperClass()
@@ -285,6 +302,11 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         return ( getParentClass() != null  ? ( getParentClass().getClassNamePrefix() )
                         : getPackage() != null ? ( getPackage().getName() + "." ) : "" )
             + getName();
+    }
+    
+    public String getGenericFullyQualifiedName()
+    {
+        return getFullyQualifiedName();
     }
     
     /*

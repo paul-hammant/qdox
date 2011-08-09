@@ -33,7 +33,7 @@ public interface JavaField extends JavaAnnotatedElement, JavaMember, JavaModel
      * 
      * @return the type of this field, should never be <code>null</code>.
      */
-    Type getType();
+    JavaClass getType();
     
     // Source methods
 

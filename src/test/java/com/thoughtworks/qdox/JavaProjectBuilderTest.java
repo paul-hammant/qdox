@@ -662,8 +662,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals("foo.Outer$Inner", inner.getFullyQualifiedName());
 
         JavaField field1 = outer.getFieldByName("field1");
-        Type type = field1.getType();
-        assertEquals("foo.Outer$Inner", type.getJavaClass().getFullyQualifiedName());
+        JavaClass type = field1.getType();
         assertEquals("foo.Outer$Inner", type.getFullyQualifiedName());
     }
 
@@ -886,7 +885,6 @@ public class JavaProjectBuilderTest extends TestCase
             builder.getClassByName("p1.A").getNestedClassByName("Inner");
         JavaField innerField = 
             builder.getClassByName("p2.B").getFieldByName("innerField");
-        assertEquals(innerClass, innerField.getType().getJavaClass() );
         assertEquals(innerClass, innerField.getType() );
         assertEquals("p1.A$Inner", innerField.getType().getFullyQualifiedName());
     }

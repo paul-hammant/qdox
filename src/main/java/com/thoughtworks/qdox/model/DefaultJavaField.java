@@ -49,7 +49,7 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
      * 
      * @return the Type of this field
      */
-    public Type getType() {
+    public JavaClass getType() {
         return type;
     }
     

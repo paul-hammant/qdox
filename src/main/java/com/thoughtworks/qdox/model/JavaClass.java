@@ -278,6 +278,14 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     boolean isA( JavaClass javaClass );
 
     /**
+     * 
+     * @return 
+     */
+    int getDimensions();
+    
+    boolean isArray();
+
+    /**
      * Gets bean properties without looking in superclasses or interfaces.
      *
      * @since 1.3
@@ -447,4 +455,6 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      */
     @Override
     String toString();
+
+    String getGenericFullyQualifiedName();
 }

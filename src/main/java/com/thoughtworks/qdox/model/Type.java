@@ -36,7 +36,7 @@ public class Type implements JavaClass, Serializable {
     private JavaClassParent context;
     private String fullName;
     private int dimensions;
-    private List<Type> actualArgumentTypes;
+    private List<Type> actualArgumentTypes = Collections.emptyList();
     
     public Type(String fullName, String name, int dimensions, JavaClassParent context) {
         this.fullName = fullName;
@@ -147,7 +147,7 @@ public class Type implements JavaClass, Serializable {
     public String getGenericValue()
     {
         StringBuffer result = new StringBuffer( getValue() );
-        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );
             for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
@@ -170,15 +170,12 @@ public class Type implements JavaClass, Serializable {
     protected String getGenericValue( List<TypeVariable> typeVariableList )
     {
         StringBuffer result = new StringBuffer( getResolvedValue( typeVariableList ) );
-        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
         {
-            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            result.append( iter.next().resolve( typeVariableList ) );
+            if ( iter.hasNext() )
             {
-                result.append( iter.next().resolve( typeVariableList ) );
-                if ( iter.hasNext() )
-                {
-                    result.append( "," );
-                }
+                result.append( "," );
             }
         }
         return result.toString();
@@ -397,14 +394,13 @@ public class Type implements JavaClass, Serializable {
             {
                 result = subclass.getSuperClass().getActualTypeArguments().get( typeIndex );
             }
-            else if ( subclass.getImplementedInterfaces() != null )
+            else
             {
                 for ( Type implement : subclass.getImplements() )
                 {
                     if ( fqn.equals( implement.getFullyQualifiedName() ) )
                     {
-                        JavaClass argument = implement.getJavaClass();
-                        result = implement.getActualTypeArguments().get( typeIndex ).resolve( argument, argument );
+                        result = implement.getActualTypeArguments().get( typeIndex ).resolve( implement, implement );
                         break;
                     }
                 }
@@ -412,7 +408,7 @@ public class Type implements JavaClass, Serializable {
             }
         }
         
-        if ( this.actualArgumentTypes != null ) {
+        if ( !this.actualArgumentTypes.isEmpty() ) {
             result = new Type( this.fullName, this.name, this.dimensions, this.context );
             
             result.actualArgumentTypes = new LinkedList<Type>();
@@ -431,7 +427,7 @@ public class Type implements JavaClass, Serializable {
     public String getGenericFullyQualifiedName()
     {
         StringBuffer result = new StringBuffer( isResolved() ? fullName : name );
-        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );
             for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
@@ -456,7 +452,7 @@ public class Type implements JavaClass, Serializable {
         StringBuffer result = new StringBuffer();
         TypeVariable variable = resolve( typeParameters );
         result.append( variable == null ? getValue() : variable.getBounds().get(0).getValue() );
-        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );
             for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
@@ -481,7 +477,7 @@ public class Type implements JavaClass, Serializable {
         StringBuffer result = new StringBuffer();
         TypeVariable variable = resolve( typeParameters );
         result.append( variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
-        if ( actualArgumentTypes != null && actualArgumentTypes.size() > 0 )
+        if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );
             for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )

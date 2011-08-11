@@ -93,6 +93,10 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
 
     JavaSource getParentSource();
 
+    /**
+     * Equivalent of {@link java.lang.Class#getPackage()}
+     * @return
+     */
     JavaPackage getPackage();
 
     JavaClassParent getParent();
@@ -125,6 +129,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * </ul> 
      * 
      * @return the resolved name, otherwise <code>null</code>.
+     * @deprecated use {@link #resolveCanonicalName(String)} or {@link #resolveFullyQualifiedName(String)} instead
      */
     String resolveType( String name );
     
@@ -154,12 +159,22 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      */
     String getClassNamePrefix();
 
-    @Deprecated
+    /**
+     * 
+     * 
+     * @deprecated the JavaClass should have the same methods
+     */
     Type asType();
 
+    /**
+     * Equivalent of {@link java.lang.Class#getMethods()}
+     * 
+     * @return the methods declared or overridden in this class
+     */
     List<JavaMethod> getMethods();
     
     /**
+     * Equivalent of {@link java.lang.Class#getConstructors()}
      * 
      * @return the list of constructors
      * @since 2.0
@@ -247,8 +262,19 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses,
                                                    boolean varArg );
 
+    /**
+     * Equivalent of {@link java.lang.Class#getFields()}
+     * 
+     * @return a list of fiels, never <code>null</code>
+     */
     List<JavaField> getFields();
 
+    /**
+     * Equivalent of {@link java.lang.Class#getField(String)}, where this method can resolve every field
+     * 
+     * @param name
+     * @return
+     */
     JavaField getFieldByName( String name );
 
     /**
@@ -269,7 +295,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
     /**
      * @since 1.3
      */
-    boolean isA( String fullClassName );
+    boolean isA( String fullyQualifiedName );
 
     /**
      * @param javaClass 
@@ -279,10 +305,16 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
 
     /**
      * 
-     * @return 
+     * @return the number of dimensions, at least 0
+     * @since 2.0
      */
     int getDimensions();
     
+    /**
+     * 
+     * @return <code>true</code> if this JavaClass is an array, otherwise <code>false</code>
+     * @since 2.0
+     */
     boolean isArray();
 
     /**
@@ -441,6 +473,11 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      */
     boolean isAbstract();
     
+    /**
+     *  Equivalent of  {@link java.lang.Class#isPrimitive()}
+     *  
+     * @return <code>true</code> if this class represents a primitive, otherwise <code>false</code>
+     */
     boolean isPrimitive();
     
     /**

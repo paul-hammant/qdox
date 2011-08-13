@@ -373,30 +373,70 @@ public class Type implements JavaClass, Serializable {
         return "void".equals(getValue());
     }
 
-    protected Type resolve( JavaClass parentClass, JavaClass subclass )
+//    String superSource = "public abstract class Test<T> {\n" + 
+//    "        private T me;\n" + 
+//    "        public Test(T me) {\n" + 
+//    "            this.me = me;\n" + 
+//    "        }\n" + 
+//    "        public T getValue() {\n" + 
+//    "            return me;\n" + 
+//    "        }\n" + 
+//    "    }";
+//String subSource = "public class StringTest extends Test<String> {\n" + 
+//    "        public StringTest(String s) {\n" + 
+//    "            super(s);\n" + 
+//    "        }\n" + 
+//    "    }";
+    
+    /**
+     *  Consider the following example
+     *  
+     *  <pre>
+     *  public abstract class AbstractClass&lt;T&gt; 
+     *  {
+     *    private T value;
+     *    
+     *    public AbstractClass( T value ) { this.value = value; }
+     *    
+     *    public T getValue() { return value; }
+     *  }
+     *  
+     *  public class ConcreteClass extends AbstractClass&lt;String&gt;
+     *  {
+     *    public ConcreteClass( String s ) { super( s ); }
+     *  }
+     *  </pre>
+     *  <p>
+     *  We want to know the resolved returnType when calling <code>ConcreteClass.getValue()</code>.
+     *  The expected type is String.
+     *  </p>
+     *  
+     *  <ul>
+     *   <li>{@code this} would be T</li>
+     *   <li>{@code declaringClass} would be AbstractClass</li>
+     *   <li>{@code callingClass}  would be ConcreteClass</li>
+     *  </ul>
+     * 
+     * @param declaringClass
+     * @param callingClass
+     * @return
+     */
+    protected Type resolve( JavaClass declaringClass, JavaClass callingClass )
     {
         Type result = this;
 
-        int typeIndex = -1;
-        for ( ListIterator<TypeVariable> iter = parentClass.getTypeParameters().listIterator(); iter.hasNext(); )
-        {
-            if ( iter.next().getFullyQualifiedName().equals( getFullyQualifiedName() ) )
-            {
-                typeIndex = iter.previousIndex();
-                break;
-            }
-        }
+        int typeIndex = getTypeVariableIndex( declaringClass, this.getFullyQualifiedName() );
 
         if ( typeIndex >= 0 )
         {
-            String fqn = parentClass.getFullyQualifiedName();
-            if ( subclass.getSuperClass() != null && fqn.equals( subclass.getSuperClass().getFullyQualifiedName() ) )
+            String fqn = declaringClass.getFullyQualifiedName();
+            if ( callingClass.getSuperClass() != null && fqn.equals( callingClass.getSuperClass().getFullyQualifiedName() ) )
             {
-                result = subclass.getSuperClass().getActualTypeArguments().get( typeIndex );
+                result = callingClass.getSuperClass().getActualTypeArguments().get( typeIndex );
             }
             else
             {
-                for ( Type implement : subclass.getImplements() )
+                for ( Type implement : callingClass.getImplements() )
                 {
                     if ( fqn.equals( implement.getFullyQualifiedName() ) )
                     {
@@ -414,10 +454,24 @@ public class Type implements JavaClass, Serializable {
             result.actualArgumentTypes = new LinkedList<Type>();
             for (Type actualArgType : getActualTypeArguments())
             {
-                result.actualArgumentTypes.add(actualArgType.resolve( parentClass, subclass ));
+                result.actualArgumentTypes.add(actualArgType.resolve( declaringClass, callingClass ));
             }
         }
         return result;
+    }
+
+    private static int getTypeVariableIndex( JavaClass declaringClass, String fqn )
+    {
+        int typeIndex = -1;
+        for ( TypeVariable typeVariable : declaringClass.getTypeParameters() )
+        {
+            typeIndex++;
+            if ( typeVariable.getFullyQualifiedName().equals( fqn ) )
+            {
+                return typeIndex;
+            }
+        }
+        return -1;
     }
 
     /**

@@ -243,6 +243,8 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
     }
 
     public void testHashCode() throws Exception {
+        assertTrue( "hashCode should never resolve to 0", newJavaMethod( Type.VOID, "" ).hashCode() != 0 );
+        
         setName(mth, "thing");
         setParameters(mth, Arrays.asList( newJavaParameter(newType("int", 1), "blah"), newJavaParameter(newType("java.lang.String", 2), "thing"), newJavaParameter(newType("X", 3), "") ));
         setReturns(mth, newType("void"));

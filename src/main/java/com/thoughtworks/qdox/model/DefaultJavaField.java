@@ -161,6 +161,15 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
     @Override
     public int hashCode()
     {
-        return getDeclaringClass().hashCode() * getName().hashCode();
+        int hashCode = 5;
+        if ( getDeclaringClass() != null )
+        {
+            hashCode *=31 + getDeclaringClass().hashCode();
+        }
+        if( getName() != null )
+        {
+            hashCode *= 37 + getName().hashCode();    
+        }
+        return hashCode;
     }
 }

@@ -70,6 +70,8 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     
     @Test
     public void testHashCode() throws Exception {
+        assertTrue( "hashCode should never resolve to 0", newJavaConstructor( "" ).hashCode() != 0 );
+        
         D c1 = newJavaConstructor( "Thong" );
         D c2 = newJavaConstructor( "Thong" );
         

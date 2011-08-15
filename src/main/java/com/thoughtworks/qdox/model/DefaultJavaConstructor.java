@@ -72,11 +72,12 @@ public class DefaultJavaConstructor
         }
         return result.toString();
     }
-    
+
     @Override
-    public int hashCode() {
-        int hashCode = getName().hashCode();
-        hashCode *= getParameters().size();
+    public int hashCode()
+    {
+        int hashCode = 3 + getName().hashCode();
+        hashCode *= 31 + getParameters().hashCode();
         return hashCode;
     }
 

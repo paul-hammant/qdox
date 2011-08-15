@@ -123,7 +123,7 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
 
     @Override
     public int hashCode() {
-        return getType().hashCode();
+        return 13 + getType().hashCode();
     }
 
     @Override

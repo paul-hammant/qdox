@@ -46,6 +46,10 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
         return result;
     }
     
+    public void testHashCode()
+    {
+        assertTrue( "hashCode should never resolve to 0", newJavaField().hashCode() != 0 );
+    }
     
     public void testGetCodeBlock() throws Exception {
         F fld = newJavaField();

@@ -118,7 +118,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
     }
 
     public int hashCode() {
-        return name.hashCode();
+        return 11 + name.hashCode();
     }
     
     /**

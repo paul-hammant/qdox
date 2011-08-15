@@ -35,6 +35,12 @@ public abstract class JavaPackageTest<P extends JavaPackage>
         assertTrue( pckg.equals( mockPckg ) );
     }
     
+    public void testHashCode() 
+    {
+        assertTrue( "hashCode should never resolve to 0", newJavaPackage( "" ).hashCode() != 0 );
+    }
+    
+    
     @Test
     public void testListAccessors() throws Exception {
         P pckg = newJavaPackage( "com.foo.bar" );

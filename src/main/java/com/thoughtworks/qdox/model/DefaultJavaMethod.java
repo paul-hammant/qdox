@@ -190,13 +190,22 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     }
 
     @Override
-    public int hashCode() {
-        int hashCode = getName().hashCode();
-        if (returns != null) 
+    public int hashCode()
+    {
+        int hashCode = 7;
+        if ( getDeclaringClass() != null )
         {
-            hashCode *= returns.hashCode();
+            hashCode *= 31 + getDeclaringClass().hashCode();
         }
-        hashCode *= getParameters().size();
+        if ( getName() != null )
+        {
+            hashCode *= 37 + getName().hashCode();
+        }
+        hashCode *= 41 + getParameters().hashCode();
+        if ( returns != null )
+        {
+            hashCode *= 43 + returns.hashCode();
+        }
         return hashCode;
     }
 

@@ -413,7 +413,7 @@ public class Type implements JavaClass, Serializable {
      *  
      *  <ul>
      *   <li>{@code this} would be T</li>
-     *   <li>{@code declaringClass} would be AbstractClass</li>
+     *   <li>{@code declaringClass} would be AbstractClass, since that's where T is used</li>
      *   <li>{@code callingClass}  would be ConcreteClass</li>
      *  </ul>
      * 
@@ -430,7 +430,8 @@ public class Type implements JavaClass, Serializable {
         if ( typeIndex >= 0 )
         {
             String fqn = declaringClass.getFullyQualifiedName();
-            if ( callingClass.getSuperClass() != null && fqn.equals( callingClass.getSuperClass().getFullyQualifiedName() ) )
+            if ( callingClass.getSuperClass() != null
+                && fqn.equals( callingClass.getSuperClass().getFullyQualifiedName() ) )
             {
                 result = callingClass.getSuperClass().getActualTypeArguments().get( typeIndex );
             }
@@ -447,15 +448,19 @@ public class Type implements JavaClass, Serializable {
                 // no direct interface available, try indirect
             }
         }
-        
-        if ( !this.actualArgumentTypes.isEmpty() ) {
-            result = new Type( this.fullName, this.name, this.dimensions, this.context );
-            
-            result.actualArgumentTypes = new LinkedList<Type>();
-            for (Type actualArgType : getActualTypeArguments())
+
+        if ( !this.getActualTypeArguments().isEmpty() )
+        {
+            result =
+                new Type( this.getFullyQualifiedName(), this.getValue(), this.getDimensions(),
+                          this.getJavaClassParent() );
+
+            List<Type> actualTypes = new LinkedList<Type>();
+            for ( Type actualArgType : getActualTypeArguments() )
             {
-                result.actualArgumentTypes.add(actualArgType.resolve( declaringClass, callingClass ));
+                actualTypes.add( actualArgType.resolve( declaringClass, callingClass ) );
             }
+            result.setActualArgumentTypes( actualTypes );
         }
         return result;
     }

@@ -94,6 +94,12 @@ public class DefaultJavaConstructor
         }
 
         JavaConstructor c = (JavaConstructor) obj;
+        
+        if ( c.getDeclaringClass() != null ? !c.getDeclaringClass().equals( this.getDeclaringClass() ) : this.getDeclaringClass() != null )
+        {
+            return false;
+        }
+        
         if ( !c.getName().equals( getName() ) )
         {
             return false;

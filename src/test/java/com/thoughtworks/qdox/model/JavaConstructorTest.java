@@ -79,16 +79,23 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     }
     
     @Test
-    public void testEquals() throws Exception {
+    public void testEquals()
+        throws Exception
+    {
         D c1 = newJavaConstructor( "thing" );
         D c2 = newJavaConstructor( "Thong" );
         D c3 = newJavaConstructor( "Thong" );
-        
-        assertNotEquals(c1, c2);
-        assertEquals(c2, c3);
+
+        D c4 = newJavaConstructor( "Thong" );
+        setParentClass( c4, mock( JavaClass.class ) );
+
+        assertNotEquals( c1, c2 );
+        assertEquals( c2, c3 );
+        assertNotEquals( c3, c4 );
     }
-    
-    private void assertNotEquals(Object o1, Object o2) {
-        assertTrue(o1.toString() + " should not equals " + o2.toString(), !o1.equals(o2));
+
+    private void assertNotEquals( Object o1, Object o2 )
+    {
+        assertTrue( o1.toString() + " should not equals " + o2.toString(), !o1.equals( o2 ) );
     }
 }

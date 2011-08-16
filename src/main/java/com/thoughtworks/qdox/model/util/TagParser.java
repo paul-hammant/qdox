@@ -28,7 +28,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class TagParser {
+public final class TagParser {
+    
+    private TagParser()
+    {
+        // hide utility class constructor
+    }
     
     /**
      * Create a StreamTokenizer suitable for parsing the tag text. 

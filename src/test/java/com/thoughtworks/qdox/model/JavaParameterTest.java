@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.model;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import junit.framework.TestCase;
 
 public abstract class JavaParameterTest<P extends JavaParameter> extends TestCase {
@@ -10,15 +10,30 @@ public abstract class JavaParameterTest<P extends JavaParameter> extends TestCas
         super(s);
     }
     
-    //constructors
-    protected abstract P newJavaParameter(Type type, String name);
-    
-    //setters
-    protected abstract void setMethod(P parameter, JavaMethod method);
+    // constructors
+    protected abstract P newJavaParameter( Type type, String name );
+
+    protected abstract P newJavaParameter( Type type, String name, boolean varArgs );
+
+    // setters
+    protected abstract void setMethod( P parameter, JavaMethod method );
     
     public void testHashCode()
     {
         assertTrue( "hashCode should never resolve to 0", newJavaParameter( Type.VOID, "" ).hashCode() != 0 );
+        
+        P simpleParameter = newJavaParameter( Type.VOID, "", false );
+        P varArgParameter = newJavaParameter( Type.VOID, "", true );
+        
+        assertTrue( simpleParameter.hashCode() != varArgParameter.hashCode() );        
+    }
+    
+    public void testEquals()
+    {
+        P simpleParameter = newJavaParameter( Type.VOID, "", false );
+        P varArgParameter = newJavaParameter( Type.VOID, "", true );
+        
+        assertTrue( !simpleParameter.equals( varArgParameter ) );        
     }
     
     protected Type newType(String typeName) {

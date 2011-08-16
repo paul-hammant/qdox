@@ -11,7 +11,13 @@ public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParam
     @Override
     protected DefaultJavaParameter newJavaParameter( Type type, String name )
     {
-        return new DefaultJavaParameter(type, name);
+        return new DefaultJavaParameter( type, name );
+    }
+
+    @Override
+    protected DefaultJavaParameter newJavaParameter( Type type, String name, boolean varArgs )
+    {
+        return new DefaultJavaParameter( type, name, varArgs );
     }
 
     @Override
@@ -19,4 +25,5 @@ public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParam
     {
         parameter.setParentMethod( method );
     }
+
 }

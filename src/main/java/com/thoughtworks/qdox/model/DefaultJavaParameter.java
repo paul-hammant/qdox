@@ -123,7 +123,7 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
 
     @Override
     public int hashCode() {
-        return 13 + getType().hashCode();
+        return 13 + ( isVarArgs() ? 1 : 0 ) + getType().hashCode();
     }
 
     @Override
@@ -138,8 +138,8 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
             return false;
         }
         JavaParameter p = (JavaParameter) obj;
-        // name isn't used in equality check.
-        return getType().equals( p.getType() );
+        // name should not be used in equality check.
+        return getType().equals( p.getType() ) && isVarArgs() == p.isVarArgs();
     }
 	
     @Override

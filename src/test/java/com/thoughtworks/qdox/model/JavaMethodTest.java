@@ -196,6 +196,12 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         
         M m7 = newJavaMethod();
         setReturns(m7, newType("int"));
+        
+        M m8 = newJavaMethod();
+        setReturns(m8, newType("int"));
+//        JavaClass declaringClass = mock( JavaClass.class );
+//        when( declaringClass.getFullyQualifiedName() ).thenReturn( "com.foo.bar" );
+        setParentClass( m8, mock( JavaClass.class ) );
 
         assertEquals(mth, m2);
         assertEquals(m2, mth);
@@ -206,6 +212,8 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         assertNotEquals( m5, m4 );
         assertEquals( m5, m6 );
         assertNotEquals( m5, m7 );
+        
+        assertNotEquals( m7, m8 );
     }
 
     public void testEqualsWithParameters() throws Exception {

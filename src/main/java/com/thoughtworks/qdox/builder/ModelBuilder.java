@@ -302,7 +302,7 @@ public class ModelBuilder implements Builder {
         currentMethod.setSourceCode(def.getBody());
     }
 
-    private TypeVariable<?> createTypeVariable( TypeVariableDef typeVariableDef, JavaGenericDeclaration<?> genericDeclaration )
+    private TypeVariable<?> createTypeVariable( TypeVariableDef typeVariableDef, JavaGenericDeclaration genericDeclaration )
     {
         if ( typeVariableDef == null )
         {

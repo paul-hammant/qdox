@@ -11,6 +11,8 @@ import java.util.List;
 public class DefaultJavaConstructor
     extends AbstractBaseMethod implements JavaConstructor
 {
+    
+    
 
     public boolean signatureMatches( List<Type> parameterTypes )
     {

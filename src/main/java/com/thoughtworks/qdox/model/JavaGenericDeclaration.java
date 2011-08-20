@@ -28,7 +28,7 @@ import java.util.List;
  * @author Robert Scholte
  * @since 2.0
  */
-public interface JavaGenericDeclaration<D>
+public interface JavaGenericDeclaration
 {
     /**
      * Equivalent of {@link java.lang.reflect.GenericDeclaration#getTypeParameters()}

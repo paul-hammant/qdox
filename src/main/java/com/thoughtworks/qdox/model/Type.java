@@ -167,7 +167,7 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
     
-    protected String getGenericValue( List<TypeVariable> typeVariableList )
+    protected String getGenericValue( List<TypeVariable<?>> typeVariableList )
     {
         StringBuffer result = new StringBuffer( getResolvedValue( typeVariableList ) );
         for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
@@ -181,10 +181,10 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
     
-    protected String getResolvedValue( List<TypeVariable> typeParameters )
+    protected String getResolvedValue( List<TypeVariable<?>> typeParameters )
     {
         String result = getValue();
-        for ( TypeVariable typeParameter : typeParameters )
+        for ( TypeVariable<?> typeParameter : typeParameters )
         {
             if ( typeParameter.getName().equals( getValue() ) )
             {
@@ -195,11 +195,11 @@ public class Type implements JavaClass, Serializable {
         return result;
     }
     
-    protected TypeVariable resolve( List<TypeVariable> typeParameters )
+    protected TypeVariable<?> resolve( List<TypeVariable<?>> typeParameters )
     {
-        TypeVariable result = null;
+        TypeVariable<?> result = null;
         // String result = getGenericValue(typeParameters);
-        for ( TypeVariable typeParameter : typeParameters )
+        for ( TypeVariable<?> typeParameter : typeParameters )
         {
             if ( typeParameter.getName().equals( getValue() ) )
             {
@@ -468,10 +468,10 @@ public class Type implements JavaClass, Serializable {
     private static int getTypeVariableIndex( JavaClass declaringClass, String fqn )
     {
         int typeIndex = -1;
-        for ( TypeVariable typeVariable : declaringClass.getTypeParameters() )
+        for ( Object typeVariable : declaringClass.getTypeParameters() )
         {
             typeIndex++;
-            if ( typeVariable.getFullyQualifiedName().equals( fqn ) )
+            if ( ((TypeVariable<?>) typeVariable).getFullyQualifiedName().equals( fqn ) )
             {
                 return typeIndex;
             }
@@ -506,10 +506,10 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    public String getResolvedGenericValue( List<TypeVariable> typeParameters )
+    public String getResolvedGenericValue( List<TypeVariable<?>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
-        TypeVariable variable = resolve( typeParameters );
+        TypeVariable<?> variable = resolve( typeParameters );
         result.append( variable == null ? getValue() : variable.getBounds().get(0).getValue() );
         if ( !actualArgumentTypes.isEmpty() )
         {
@@ -531,10 +531,10 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    protected String getResolvedGenericFullyQualifiedName( List<TypeVariable> typeParameters )
+    protected String getResolvedGenericFullyQualifiedName( List<TypeVariable<?>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
-        TypeVariable variable = resolve( typeParameters );
+        TypeVariable<?> variable = resolve( typeParameters );
         result.append( variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
         if ( !actualArgumentTypes.isEmpty() )
         {
@@ -556,9 +556,9 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    protected String getResolvedFullyQualifiedName( List<TypeVariable> typeParameters )
+    protected String getResolvedFullyQualifiedName( List<TypeVariable<?>> typeParameters )
     {
-        TypeVariable variable = resolve( typeParameters );
+        TypeVariable<?> variable = resolve( typeParameters );
         return (variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
     }
 
@@ -648,7 +648,7 @@ public class Type implements JavaClass, Serializable {
         return resolveRealClass().getCodeBlock();
     }
 
-    public List<TypeVariable> getTypeParameters()
+    public List<TypeVariable<?>> getTypeParameters()
     {
         return resolveRealClass().getTypeParameters();
     }
@@ -817,6 +817,11 @@ public class Type implements JavaClass, Serializable {
     public List<JavaClass> getDerivedClasses()
     {
         return resolveRealClass().getDerivedClasses();
+    }
+    
+    public JavaClass getDeclaringClass()
+    {
+        return resolveRealClass().getDeclaringClass();
     }
 
     public List<DocletTag> getTagsByName( String name, boolean superclasses )

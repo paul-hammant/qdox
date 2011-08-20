@@ -28,12 +28,14 @@ import java.util.List;
  * @author Robert Scholte
  * @since 2.0
  */
-public interface JavaGenericDeclaration
+public interface JavaGenericDeclaration<D>
 {
     /**
      * Equivalent of {@link java.lang.reflect.GenericDeclaration#getTypeParameters()}
      * 
      * @return a list of typeParameters, never <code>null</code> 
      */
-    List<TypeVariable> getTypeParameters();
+    List<TypeVariable<?>> getTypeParameters();
+    
+    JavaClass getDeclaringClass();
 }

@@ -89,8 +89,6 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
 
     String getCodeBlock();
 
-    List<TypeVariable> getTypeParameters();
-
     JavaSource getParentSource();
 
     /**

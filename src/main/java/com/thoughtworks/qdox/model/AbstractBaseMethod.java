@@ -14,7 +14,7 @@ public abstract class AbstractBaseMethod
     extends AbstractInheritableJavaEntity
 {
 
-    private List<TypeVariable> typeParameters = Collections.emptyList();
+    private List<TypeVariable<?>> typeParameters = Collections.emptyList();
     private List<JavaParameter> parameters = Collections.emptyList();
     private List<Type> exceptions = Collections.emptyList();
     private boolean varArgs;
@@ -111,12 +111,12 @@ public abstract class AbstractBaseMethod
         return result;
     }
 
-    public void setTypeParameters( List<TypeVariable> typeParameters )
+    public void setTypeParameters( List<TypeVariable<?>> typeParameters )
     {
     	this.typeParameters = typeParameters;
     }
 
-    public List<TypeVariable> getTypeParameters()
+    public List<TypeVariable<?>> getTypeParameters()
     {
     	return typeParameters;
     }

@@ -45,7 +45,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
 
     private Type superClass;
     private List<Type> implementz = new LinkedList<Type>();
-    private List<TypeVariable> typeParameters = new LinkedList<TypeVariable>(); 
+    private List<TypeVariable<?>> typeParameters = new LinkedList<TypeVariable<?>>(); 
     
     //sourceless class can use this property
 	private JavaPackage javaPackage;
@@ -225,12 +225,12 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getTypeParameters()
      */
-    public List<TypeVariable> getTypeParameters()
+    public List<TypeVariable<?>> getTypeParameters()
     {
         return typeParameters;
     }
     
-    public void setTypeParameters( List<TypeVariable> typeParameters )
+    public void setTypeParameters( List<TypeVariable<?>> typeParameters )
     {
         this.typeParameters = typeParameters;
     }
@@ -807,6 +807,11 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
             }
         }
         return result;
+    }
+    
+    public JavaClass getDeclaringClass()
+    {
+        return getParentClass();
     }
 
     /* (non-Javadoc)

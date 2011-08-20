@@ -129,7 +129,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      */
     String getSourceCode();
 
-    List<TypeVariable> getTypeParameters();
+    List<TypeVariable<?>> getTypeParameters();
 
     /**
      * Equivalent of java.lang.reflect.Method.getGenericReturnType()

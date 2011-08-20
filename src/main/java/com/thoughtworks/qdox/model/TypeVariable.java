@@ -26,15 +26,18 @@ import java.util.List;
  * @author Robert Scholte
  * @since 1.10
  */
-public class TypeVariable
+public class TypeVariable<D extends JavaGenericDeclaration>
     extends Type
 {
 
     private List<Type> bounds;
+    
+    private D genericDeclaration;
 
-    public TypeVariable( String fullName, String name, JavaClassParent context )
+    public TypeVariable( String fullName, String name, D genericDeclaration )
     {
-        super( fullName, name, 0, context );
+        super( fullName, name, 0, genericDeclaration.getDeclaringClass() );
+        this.genericDeclaration = genericDeclaration;
     }
 
     /**
@@ -51,6 +54,11 @@ public class TypeVariable
     public void setBounds( List<Type> bounds )
     {
         this.bounds = bounds;
+    }
+    
+    public D getGenericDeclaration()
+    {
+        return genericDeclaration;
     }
 
     @Override

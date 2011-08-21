@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,9 +12,19 @@ import java.util.List;
 public class DefaultJavaConstructor
     extends AbstractBaseMethod implements JavaConstructor
 {
-    
-    
 
+    private List<TypeVariable<?>> typeParameters = Collections.emptyList();
+
+    public void setTypeParameters( List<TypeVariable<?>> typeParameters )
+    {
+        this.typeParameters = typeParameters;
+    }
+
+    public List<TypeVariable<?>> getTypeParameters()
+    {
+        return typeParameters;
+    }
+    
     public boolean signatureMatches( List<Type> parameterTypes )
     {
         return signatureMatches( parameterTypes, false );

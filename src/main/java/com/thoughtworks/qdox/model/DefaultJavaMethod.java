@@ -20,6 +20,7 @@ package com.thoughtworks.qdox.model;
  */
 
 import java.beans.Introspector;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -27,6 +28,7 @@ import java.util.ListIterator;
 public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod {
 
 	private Type returns = Type.VOID;
+    private List<TypeVariable<?>> typeParameters = Collections.emptyList();
 	
     /**
      * The default constructor
@@ -59,6 +61,16 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
      */
     public Type getReturns() {
         return returns;
+    }
+    
+    public void setTypeParameters( List<TypeVariable<?>> typeParameters )
+    {
+        this.typeParameters = typeParameters;
+    }
+
+    public List<TypeVariable<?>> getTypeParameters()
+    {
+        return typeParameters;
     }
 
     /* (non-Javadoc)
@@ -399,5 +411,4 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         } 
         return signatureMatches( parameterTypes, varArg );
     }
-    
 }

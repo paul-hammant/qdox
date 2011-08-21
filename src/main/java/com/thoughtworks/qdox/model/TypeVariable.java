@@ -36,8 +36,30 @@ public class TypeVariable<D extends JavaGenericDeclaration>
 
     public TypeVariable( String fullName, String name, D genericDeclaration )
     {
-        super( fullName, name, 0, genericDeclaration.getDeclaringClass() );
+        super( fullName, name, 0, getContext( genericDeclaration ) );
         this.genericDeclaration = genericDeclaration;
+    }
+
+    private static JavaClass getContext( JavaGenericDeclaration genericDeclaration )
+    {
+        JavaClass result;
+        if ( genericDeclaration instanceof JavaClass )
+        {
+            result = (JavaClass) genericDeclaration;
+        }
+        else if ( genericDeclaration instanceof JavaMethod )
+        {
+            result = ( (JavaMethod) genericDeclaration ).getDeclaringClass();
+        }
+        else if ( genericDeclaration instanceof JavaConstructor )
+        {
+            result = ( (JavaConstructor) genericDeclaration ).getDeclaringClass();
+        }
+        else
+        {
+            throw new IllegalArgumentException( "Unknown GenericDeclatation implementation" );
+        }
+        return result;
     }
 
     /**

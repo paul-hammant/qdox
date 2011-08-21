@@ -37,8 +37,6 @@ import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -302,13 +300,13 @@ public class ModelBuilder implements Builder {
         currentMethod.setSourceCode(def.getBody());
     }
 
-    private TypeVariable<?> createTypeVariable( TypeVariableDef typeVariableDef, JavaGenericDeclaration genericDeclaration )
+    private <G extends JavaGenericDeclaration> TypeVariable<G> createTypeVariable( TypeVariableDef typeVariableDef, G genericDeclaration)
     {
         if ( typeVariableDef == null )
         {
             return null;
         }
-        TypeVariable<?> result = new TypeVariable( null, typeVariableDef.getName(), genericDeclaration );
+        TypeVariable<G> result = new TypeVariable<G>( null, typeVariableDef.getName(), genericDeclaration );
 
         if ( typeVariableDef.getBounds() != null && !typeVariableDef.getBounds().isEmpty() )
         {

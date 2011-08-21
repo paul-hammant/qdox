@@ -819,11 +819,6 @@ public class Type implements JavaClass, Serializable {
         return resolveRealClass().getDerivedClasses();
     }
     
-    public JavaClass getDeclaringClass()
-    {
-        return resolveRealClass().getDeclaringClass();
-    }
-
     public List<DocletTag> getTagsByName( String name, boolean superclasses )
     {
         return resolveRealClass().getTagsByName( name, superclasses );

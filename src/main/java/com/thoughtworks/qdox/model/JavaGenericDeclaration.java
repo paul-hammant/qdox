@@ -36,6 +36,4 @@ public interface JavaGenericDeclaration
      * @return a list of typeParameters, never <code>null</code> 
      */
     List<TypeVariable<?>> getTypeParameters();
-    
-    JavaClass getDeclaringClass();
 }

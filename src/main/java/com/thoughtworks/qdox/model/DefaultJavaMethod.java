@@ -28,7 +28,7 @@ import java.util.ListIterator;
 public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod {
 
 	private Type returns = Type.VOID;
-    private List<TypeVariable<?>> typeParameters = Collections.emptyList();
+    private List<TypeVariable<JavaMethod>> typeParameters = Collections.emptyList();
 	
     /**
      * The default constructor
@@ -63,12 +63,12 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         return returns;
     }
     
-    public void setTypeParameters( List<TypeVariable<?>> typeParameters )
+    public void setTypeParameters( List<TypeVariable<JavaMethod>> typeParameters )
     {
         this.typeParameters = typeParameters;
     }
 
-    public List<TypeVariable<?>> getTypeParameters()
+    public List<TypeVariable<JavaMethod>> getTypeParameters()
     {
         return typeParameters;
     }

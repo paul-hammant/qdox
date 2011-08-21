@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 
@@ -167,7 +166,7 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
     
-    protected String getGenericValue( List<TypeVariable<?>> typeVariableList )
+    protected <D extends JavaGenericDeclaration> String getGenericValue( List<TypeVariable<D>> typeVariableList )
     {
         StringBuffer result = new StringBuffer( getResolvedValue( typeVariableList ) );
         for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
@@ -181,7 +180,7 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
     
-    protected String getResolvedValue( List<TypeVariable<?>> typeParameters )
+    protected <D extends JavaGenericDeclaration> String getResolvedValue( List<TypeVariable<D>> typeParameters )
     {
         String result = getValue();
         for ( TypeVariable<?> typeParameter : typeParameters )
@@ -195,11 +194,11 @@ public class Type implements JavaClass, Serializable {
         return result;
     }
     
-    protected TypeVariable<?> resolve( List<TypeVariable<?>> typeParameters )
+    protected <D extends JavaGenericDeclaration> TypeVariable<D> resolve( List<TypeVariable<D>> typeParameters )
     {
-        TypeVariable<?> result = null;
+        TypeVariable<D> result = null;
         // String result = getGenericValue(typeParameters);
-        for ( TypeVariable<?> typeParameter : typeParameters )
+        for ( TypeVariable<D> typeParameter : typeParameters )
         {
             if ( typeParameter.getName().equals( getValue() ) )
             {
@@ -506,7 +505,7 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    public String getResolvedGenericValue( List<TypeVariable<?>> typeParameters )
+    public <D extends JavaGenericDeclaration> String getResolvedGenericValue( List<TypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
         TypeVariable<?> variable = resolve( typeParameters );
@@ -531,10 +530,10 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    protected String getResolvedGenericFullyQualifiedName( List<TypeVariable<?>> typeParameters )
+    protected <D extends JavaGenericDeclaration> String getResolvedGenericFullyQualifiedName( List<TypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
-        TypeVariable<?> variable = resolve( typeParameters );
+        TypeVariable<D> variable = resolve( typeParameters );
         result.append( variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
         if ( !actualArgumentTypes.isEmpty() )
         {
@@ -556,9 +555,9 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    protected String getResolvedFullyQualifiedName( List<TypeVariable<?>> typeParameters )
+    protected <D extends JavaGenericDeclaration> String getResolvedFullyQualifiedName( List<TypeVariable<D>> typeParameters )
     {
-        TypeVariable<?> variable = resolve( typeParameters );
+        TypeVariable<D> variable = resolve( typeParameters );
         return (variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
     }
 
@@ -648,7 +647,7 @@ public class Type implements JavaClass, Serializable {
         return resolveRealClass().getCodeBlock();
     }
 
-    public List<TypeVariable<?>> getTypeParameters()
+    public <D extends JavaGenericDeclaration> List<TypeVariable<D>> getTypeParameters()
     {
         return resolveRealClass().getTypeParameters();
     }

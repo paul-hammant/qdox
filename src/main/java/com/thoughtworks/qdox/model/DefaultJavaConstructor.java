@@ -13,14 +13,14 @@ public class DefaultJavaConstructor
     extends AbstractBaseMethod implements JavaConstructor
 {
 
-    private List<TypeVariable<?>> typeParameters = Collections.emptyList();
+    private List<TypeVariable<JavaConstructor>> typeParameters = Collections.emptyList();
 
-    public void setTypeParameters( List<TypeVariable<?>> typeParameters )
+    public void setTypeParameters( List<TypeVariable<JavaConstructor>> typeParameters )
     {
         this.typeParameters = typeParameters;
     }
 
-    public List<TypeVariable<?>> getTypeParameters()
+    public List<TypeVariable<JavaConstructor>> getTypeParameters()
     {
         return typeParameters;
     }

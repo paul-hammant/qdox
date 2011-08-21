@@ -37,7 +37,10 @@ import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
+import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
@@ -138,9 +141,9 @@ public class ModelBuilder implements Builder {
         
         // typeParameters
         if (def.getTypeParameters() != null) {
-            List<TypeVariable<?>> typeParams = new LinkedList<TypeVariable<?>>();
+            List<TypeVariable<JavaClass>> typeParams = new LinkedList<TypeVariable<JavaClass>>();
             for(TypeVariableDef typeVariableDef : def.getTypeParameters()) {
-                typeParams.add(createTypeVariable(typeVariableDef, newClass));
+                typeParams.add(createTypeVariable(typeVariableDef, (JavaClass) newClass));
             }
             newClass.setTypeParameters(typeParams);
         }
@@ -227,9 +230,9 @@ public class ModelBuilder implements Builder {
 
         // typeParameters
         if (def.getTypeParams() != null) {
-            List<TypeVariable<?>> typeParams = new LinkedList<TypeVariable<?>>();
+            List<TypeVariable<JavaConstructor>> typeParams = new LinkedList<TypeVariable<JavaConstructor>>();
             for(TypeVariableDef typeVariableDef : def.getTypeParams()) {
-                typeParams.add(createTypeVariable(typeVariableDef, currentConstructor));
+                typeParams.add(createTypeVariable(typeVariableDef, (JavaConstructor) currentConstructor));
             }
             currentConstructor.setTypeParameters(typeParams);
         }
@@ -275,9 +278,9 @@ public class ModelBuilder implements Builder {
 
         // typeParameters
         if (def.getTypeParams() != null) {
-        	List<TypeVariable<?>> typeParams = new LinkedList<TypeVariable<?>>();
+        	List<TypeVariable<JavaMethod>> typeParams = new LinkedList<TypeVariable<JavaMethod>>();
         	for(TypeVariableDef typeVariableDef : def.getTypeParams()) {
-        		typeParams.add(createTypeVariable(typeVariableDef, currentMethod));
+        		typeParams.add(createTypeVariable(typeVariableDef, (JavaMethod) currentMethod));
         	}
             currentMethod.setTypeParameters(typeParams);
         }

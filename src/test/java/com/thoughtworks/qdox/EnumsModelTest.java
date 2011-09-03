@@ -90,15 +90,11 @@ public class EnumsModelTest extends TestCase {
         assertTrue(cls.isA("java.io.Serializable"));
     }
 
-/*
-	//
-	// Annotations on enums are not supported as of QDox 1.7 (2008-11-12)
-	//
     public void testAddEnumWithAnnotationToModel() {
         String source = ""
                 + "public enum Enum1 implements java.io.Serializable { a, @Deprecated b }";
 
-        JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("Enum1");
@@ -107,22 +103,21 @@ public class EnumsModelTest extends TestCase {
         
         //---
 
-        JavaField fields[] = cls.getFields();
+        List<JavaField> fields = cls.getFields();
 //      printFields( fields );
-        assertEquals(2, fields.length);
+        assertEquals(2, fields.size());
         
-        JavaField enum1b = fields[1];
+        JavaField enum1b = fields.get(1);
         assertNull( enum1b.getComment() );
-        assertEquals( 1, enum1b.getModifiers().length );
-        assertEquals( "public", enum1b.getModifiers()[0] );
-        assertEquals( 1, enum1b.getAnnotations().length );
-        assertEquals( "@java.lang.Deprecated()", enum1b.getAnnotations()[0].toString() );
+        assertEquals( 1, enum1b.getModifiers().size() );
+        assertEquals( "public", enum1b.getModifiers().get(0) );
+        assertEquals( 1, enum1b.getAnnotations().size() );
+        assertEquals( "@java.lang.Deprecated()", enum1b.getAnnotations().get(0).toString() );
         assertEquals( "Enum1", enum1b.getType().toString() );
         assertEquals( "b", enum1b.getName() );
 
         //---
     }
-*/
     
     public void testAddEnumWithFieldAndConstructorsToModel() {
 

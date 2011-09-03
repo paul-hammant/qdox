@@ -23,6 +23,7 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
 
     private Type type;
     private String initializationExpression;
+    private boolean enumConstant;
     	
     public DefaultJavaField() {
     }
@@ -101,6 +102,18 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
     public void setInitializationExpression(String initializationExpression){
     	this.initializationExpression = initializationExpression;
     }
+
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaField#isEnumConstant()
+     */
+    public boolean isEnumConstant() {
+		return enumConstant;
+	}
+    
+    public void setEnumConstant(boolean enumConstant) {
+		this.enumConstant = enumConstant;
+	}
 
     /**
      * @see java.lang.reflect.Field#toString()

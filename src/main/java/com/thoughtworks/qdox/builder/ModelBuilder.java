@@ -331,6 +331,7 @@ public class ModelBuilder implements Builder {
 
         currentField.setName(def.getName());
         currentField.setType(createType(def.getType(), def.getDimensions()));
+        currentField.setEnumConstant( def.isEnumConstant() );
 
         // modifiers
         {

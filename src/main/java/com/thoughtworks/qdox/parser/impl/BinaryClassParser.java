@@ -125,6 +125,7 @@ public class BinaryClassParser
         Class<?> fieldType = field.getType();
         fieldDef.setType( getTypeDef(fieldType) );
         fieldDef.setDimensions( getDimension(fieldType) );
+        fieldDef.setEnumConstant( field.isEnumConstant() );
         addModifiers( fieldDef.getModifiers(), field.getModifiers());
         binaryBuilder.addField(fieldDef);
     }

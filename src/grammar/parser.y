@@ -455,7 +455,7 @@ static_block:
 FieldDeclaration: 
     AnyModifiers_opt Type VariableDeclaratorId {
         fieldType = $2;
-        makeField($3, lexer.getCodeBody());
+        makeField($3, lexer.getCodeBody(), false);
     }
     extrafields SEMI {
         modifiers.clear();
@@ -463,7 +463,7 @@ FieldDeclaration:
   
 extrafields: | 
     extrafields COMMA { line = lexer.getLine(); } VariableDeclaratorId {
-        makeField($4, lexer.getCodeBody());
+        makeField($4, lexer.getCodeBody(), false);
     }; 
 
 // 8.3 Field Declarations...
@@ -612,7 +612,8 @@ EnumDeclaration: AnyModifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Inter
    For that reason the adjusted options of EnumConstants_opt, which will accept all cases 
 */
 EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
-          { builder.endClass();
+          { 
+            builder.endClass();
             fieldType = null;
             modifiers.clear();
           };
@@ -623,7 +624,7 @@ EnumConstants_opt:
                  
 EnumConstant: Annotations_opt IDENTIFIER Arguments_opt ClassBody_opt
               { 
-                makeField(new TypeDef($2, 0), ""); 
+                makeField(new TypeDef($2, 0), "", true); 
               };
 
          
@@ -902,12 +903,13 @@ private class Value {
 }
 
 
-private void makeField(TypeDef field, String body) {
+private void makeField(TypeDef field, String body, boolean enumConstant) {
     FieldDef fd = new FieldDef( field.getName() );
     fd.setLineNumber(line);
     fd.getModifiers().addAll(modifiers); 
     fd.setType( fieldType );
     fd.setDimensions(field.getDimensions());
+    fd.setEnumConstant(enumConstant);
     fd.setBody(body);
     builder.addField(fd);
 }

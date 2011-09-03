@@ -54,5 +54,13 @@ public interface JavaField extends JavaAnnotatedElement, JavaMember, JavaModel
      * @return initialization as string.
      */
     String getInitializationExpression();
+    
+    /**
+     * Equivalent of {@link java.lang.reflect.Field#isEnumConstant()}
+     * 
+     * @return <code>true</code> if this field is an enum constant, otherwise <code>false</code>
+     * @since 2.0
+     */
+    boolean isEnumConstant();
 
 }

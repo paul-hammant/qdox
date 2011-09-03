@@ -85,7 +85,12 @@ public class EnumsTest extends TestCase {
 
         JavaClass cls = javaDocBuilder.getClassByName("X$EnumWithConstructors");
         assertTrue(cls.isEnum());
+        assertEquals( 3, cls.getFields().size() );
+        assertEquals( 2, cls.getConstructors().size() );
         assertEquals("int", cls.getFieldByName("someField").getType().getValue()); // sanity check
+        assertTrue( "c should be recognized as a enumConstant", cls.getFieldByName( "c" ).isEnumConstant() );
+        assertTrue( "d should be recognized as a enumConstant", cls.getFieldByName( "d" ).isEnumConstant() );
+        assertFalse( cls.getFieldByName( "someField" ).isEnumConstant() );
     }
 
     public void testAddEnumsWithMethodsToModel() throws Exception {

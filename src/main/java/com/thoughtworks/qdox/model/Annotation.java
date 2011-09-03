@@ -142,7 +142,7 @@ public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
     {
         StringBuffer result = new StringBuffer();
         result.append( '@' );
-        result.append( type.getValue() );
+        result.append( type.getFullyQualifiedName() );
         result.append( '(' );
         if ( !namedParameters.isEmpty() )
         {

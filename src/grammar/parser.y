@@ -456,6 +456,8 @@ FieldDeclaration:
     AnyModifiers_opt Type VariableDeclaratorId {
         fieldType = $2;
         makeField($3, lexer.getCodeBody(), false);
+        builder.beginField(fd);
+        builder.endField();
     }
     extrafields SEMI {
         modifiers.clear();
@@ -464,6 +466,8 @@ FieldDeclaration:
 extrafields: | 
     extrafields COMMA { line = lexer.getLine(); } VariableDeclaratorId {
         makeField($4, lexer.getCodeBody(), false);
+        builder.beginField(fd);
+        builder.endField();
     }; 
 
 // 8.3 Field Declarations...
@@ -622,17 +626,21 @@ EnumConstants_opt:
                  | EnumConstants_opt COMMA
                  | EnumConstants_opt EnumConstant;
                  
-EnumConstant: Annotations_opt IDENTIFIER Arguments_opt ClassBody_opt
+EnumConstant: Annotations_opt IDENTIFIER Arguments_opt
               { 
                 makeField(new TypeDef($2, 0), "", true); 
+                builder.beginField(fd);
+              }
+              ClassBody_opt
+              {
+                builder.endField();
               };
-
          
 Arguments_opt:
              | PARENBLOCK /* =Arguments */;
 
 ClassBody_opt:
-             | CODEBLOCK /* =ClassBody */;
+             | ClassBody;
 
 EnumBodyDeclarations_opt:
                         | SEMI ClassBodyDeclarations_opt;      
@@ -823,6 +831,7 @@ private Builder builder;
 private StringBuffer textBuffer = new StringBuffer();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
+private FieldDef fd;
 private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>(); //for both JavaClass and JavaMethod
 private LinkedList<AnnoDef> annotationStack = new LinkedList<AnnoDef>(); // Use LinkedList instead of Stack because it is unsynchronized 
 private List<List<ElemValueDef>> annoValueListStack = new LinkedList<List<ElemValueDef>>(); // Use LinkedList instead of Stack because it is unsynchronized
@@ -904,15 +913,14 @@ private class Value {
 
 
 private void makeField(TypeDef field, String body, boolean enumConstant) {
-    FieldDef fd = new FieldDef( field.getName() );
+    fd = new FieldDef( field.getName() );
+    fd.setName(field.getName());
     fd.setLineNumber(line);
     fd.getModifiers().addAll(modifiers); 
     fd.setType( fieldType );
     fd.setDimensions(field.getDimensions());
     fd.setEnumConstant(enumConstant);
     fd.setBody(body);
-    builder.beginField(fd);
-    builder.endField();
 }
 
 public void onComment( String comment, int line, int column ) {

@@ -490,8 +490,18 @@ public class LexerTest extends TestCase {
         assertLex(Parser.IDENTIFIER, "Animal", lexer);
         assertLex(Parser.BRACEOPEN, lexer);
         assertLex(Parser.IDENTIFIER, "DUCK", lexer);
-        assertLex(Parser.CODEBLOCK, lexer);
+        //assertLex(Parser.CODEBLOCK, lexer);
+        assertLex( Parser.BRACEOPEN, lexer );
+        assertLex(Parser.PUBLIC, lexer);
+        assertLex(Parser.IDENTIFIER, "void", lexer);
+        assertLex( Parser.IDENTIFIER, "speak", lexer );
+        assertLex( Parser.PARENOPEN, lexer );
+        assertLex( Parser.PARENCLOSE, lexer );
+        assertLex( Parser.CODEBLOCK, lexer );
+        assertLex( Parser.BRACECLOSE, lexer );
+        
         assertLex(Parser.BRACECLOSE, lexer);
+        assertLex( 0, lexer );
     }
 
     private void assertSingleLex(String in, short expectedLex) throws Exception {

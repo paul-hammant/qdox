@@ -1376,4 +1376,29 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( "com.foo.Outer$Inner$Core", cls.getFullyQualifiedName() );
         assertEquals( "com.foo.Outer.Inner.Core", cls.getCanonicalName() );
     }
+    
+    public void testEnumConstantMethods() {
+        String source = "public enum MethodLocationOfEnumMethod\n" + 
+        		"{\n" + 
+        		"  A()\n" + 
+        		"  {\n" + 
+        		"    @Override\n" + 
+        		"    private void method()\n" + 
+        		"    {\n" + 
+        		"    };\n" + 
+        		"  };\n" + 
+        		"  public abstract void method();\n" + 
+        		"  private void test()\n" + 
+        		"  {\n" + 
+        		"  };\n" + 
+        		"  \n" + 
+        		"  String name = \"x\";" + 
+        		"}";
+        builder.addSource( new StringReader( source ) );
+        JavaClass cls = builder.getClassByName( "MethodLocationOfEnumMethod" );
+        assertEquals( 2, cls.getMethods().size() );
+        assertEquals( "method", cls.getMethods().get( 0 ).getName() );
+        assertEquals( true, cls.getMethods().get( 0 ).isAbstract() );
+        assertEquals( "test", cls.getMethods().get( 1 ).getName() );
+    }
 }

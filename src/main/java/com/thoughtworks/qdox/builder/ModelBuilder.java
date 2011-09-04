@@ -66,6 +66,7 @@ public class ModelBuilder implements Builder {
     private List<DefaultJavaParameter> parameterList = new LinkedList<DefaultJavaParameter>();
     private DefaultJavaConstructor currentConstructor;
     private DefaultJavaMethod currentMethod;
+    private DefaultJavaField currentField;
     private List<AnnoDef> currentAnnoDefs;
     private String lastComment;
     private List<TagDef> lastTagSet = new LinkedList<TagDef>();
@@ -256,17 +257,18 @@ public class ModelBuilder implements Builder {
         currentConstructor.setSourceCode(def.getBody());
     }
 
-    public void beginMethod() {
-    	currentMethod = new DefaultJavaMethod();
-    	currentMethod.setParentClass(classStack.getFirst());
-        classStack.getFirst().addMethod(currentMethod);
+    public void beginMethod()
+    {
+        currentMethod = new DefaultJavaMethod();
+        if ( currentField == null )
+        {
+            currentMethod.setParentClass( classStack.getFirst() );
+            classStack.getFirst().addMethod( currentMethod );
+        }
+        currentMethod.setModelWriterFactory( modelWriterFactory );
 
-        currentMethod.setModelWriterFactory(modelWriterFactory);
-    	
-        // javadoc
-        addJavaDoc(currentMethod);
-
-    	setAnnotations(currentMethod);
+        addJavaDoc( currentMethod );
+        setAnnotations( currentMethod );
     }
     
     public void endMethod(MethodDef def) {
@@ -324,7 +326,7 @@ public class ModelBuilder implements Builder {
     }
 
 	public void beginField(FieldDef def) {
-        DefaultJavaField currentField = new DefaultJavaField();
+        currentField = new DefaultJavaField();
         currentField.setParentClass(classStack.getFirst());
         currentField.setLineNumber(def.getLineNumber());
         currentField.setModelWriterFactory(modelWriterFactory);
@@ -347,12 +349,12 @@ public class ModelBuilder implements Builder {
         // annotations
         setAnnotations( currentField );
 
-        classStack.getFirst().addField(currentField);
     }
 	
 	public void endField() 
 	{
-	    
+        classStack.getFirst().addField(currentField);
+        currentField = null;
 	}
 	
 	public void addParameter(FieldDef fieldDef) {

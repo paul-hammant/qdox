@@ -221,7 +221,14 @@ JavadocEnd                      = "*"+ "/"
         }
         else {
           nestingDepth++;
-          braceMode = CODEBLOCK;
+          if (enumConstantMode && yystate() == ENUM)
+          {
+            braceMode = YYINITIAL;
+          }
+          else 
+          {
+            braceMode = CODEBLOCK;
+          }
           return Parser.BRACEOPEN;
         }
     }
@@ -229,7 +236,14 @@ JavadocEnd                      = "*"+ "/"
         nestingDepth--;
         classDepth--;
         popState();
-        braceMode = CODEBLOCK;
+        if ( yystate() == ENUM && enumConstantMode)
+        {
+          braceMode = YYINITIAL;
+        }
+        else
+        {
+          braceMode = CODEBLOCK;
+        }
         return Parser.BRACECLOSE; 
     }
 
@@ -267,7 +281,11 @@ JavadocEnd                      = "*"+ "/"
           }
 }
 <ENUM> {
-    ";"  { enumConstantMode = false; return Parser.SEMI; }
+    ";"  { 
+    		enumConstantMode = false; 
+    		braceMode = CODEBLOCK; 
+    		return Parser.SEMI;
+    	 }
     "("  {
             nestingDepth++;
             if(parenMode >= 0) {
@@ -276,17 +294,15 @@ JavadocEnd                      = "*"+ "/"
               parenMode = -1;
               return Parser.PARENOPEN;
             }
-            else {
-              if(enumConstantMode) {
+            else if(enumConstantMode) {
                 parenDepth = classDepth;
                 pushState(PARENBLOCK);
                 return Parser.PARENBLOCK;
-              }
-              else {
-                return Parser.PARENOPEN;
-              }
             }
-          }
+            else {
+                return Parser.PARENOPEN;
+            }
+         }
 }
 <CODEBLOCK> {
      "{"  { 

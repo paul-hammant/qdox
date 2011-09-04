@@ -51,8 +51,8 @@ import java.util.*;
     private boolean newMode;
     private boolean bracketMode;
     private boolean anonymousMode;
+    private boolean enumConstantMode;
     private boolean appendingToCodeBody;
-    private boolean isConstructor;
 
 	private void write() {
 		write( text() );
@@ -210,7 +210,7 @@ JavadocEnd                      = "*"+ "/"
     "{"                 {
         if(braceMode >= 0) {
           if(braceMode == ENUM) {
-            isConstructor = true;
+            enumConstantMode = true;
           } else if (braceMode == CODEBLOCK) {
               getCodeBody(); /* reset codebody */
               appendingToCodeBody = true;
@@ -267,7 +267,7 @@ JavadocEnd                      = "*"+ "/"
           }
 }
 <ENUM> {
-    ";"  { isConstructor = false; return Parser.SEMI; }
+    ";"  { enumConstantMode = false; return Parser.SEMI; }
     "("  {
             nestingDepth++;
             if(parenMode >= 0) {
@@ -277,7 +277,7 @@ JavadocEnd                      = "*"+ "/"
               return Parser.PARENOPEN;
             }
             else {
-              if(isConstructor) {
+              if(enumConstantMode) {
                 parenDepth = classDepth;
                 pushState(PARENBLOCK);
                 return Parser.PARENBLOCK;

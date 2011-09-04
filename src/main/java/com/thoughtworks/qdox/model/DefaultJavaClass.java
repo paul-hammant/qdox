@@ -605,7 +605,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     public List<JavaField> getFields() {
         return fields;
     }
-
+    
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getFieldByName(java.lang.String)
      */
@@ -619,6 +619,28 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
             }
         }
         return null;
+    }
+    
+    public List<JavaField> getEnumConstants()
+    {
+        List<JavaField> result = isEnum() ? new LinkedList<JavaField>() : null; 
+        if ( isEnum() )
+        {
+            for ( JavaField field : getFields() )
+            {
+                if ( field.isEnumConstant() )
+                {
+                    result.add( field );
+                }
+            }
+        }
+        return result;
+    }
+    
+    public JavaField getEnumConstantByName( String name )
+    {
+        JavaField field = getFieldByName( name );
+        return field.isEnumConstant() ? field : null;
     }
 
     public void addClass(JavaClass cls) {

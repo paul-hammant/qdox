@@ -274,6 +274,21 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      * @return
      */
     JavaField getFieldByName( String name );
+    
+    /**
+     * Based on {@link java.lang.Class#getEnumConstants()}.
+     *  
+     * 
+     * @return a List of enum constants if this class is an <code>enum</code>, otherwise <code>null</code>
+     */
+    List<JavaField> getEnumConstants();
+
+    /**
+     * 
+     * 
+     * @return the enumConstant matching the {@code name}, otherwise <code>null</code>
+     */
+    JavaField getEnumConstantByName( String name );
 
     /**
      * @deprecated Use {@link #getNestedClasses()} instead.

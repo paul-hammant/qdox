@@ -479,6 +479,46 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
             assertEquals("enums cannot extend other classes", e.getMessage());
         }
     }
+    
+    public void testGetEnumConstants() {
+        setName( cls, "MyEnum" );
+        assertNull( cls.getEnumConstants() );
+        
+        setEnum( cls, true );
+        assertNotNull( cls.getEnumConstants() );
+        assertEquals( 0, cls.getEnumConstants().size() );
+        
+        List<JavaField> fields = new ArrayList<JavaField>();
+        JavaField nonEnumConstantField = mock(JavaField.class);
+        fields.add( nonEnumConstantField );
+        setFields( cls, fields );
+        assertEquals( 0, cls.getEnumConstants().size() );
+        
+        JavaField enumConstantField = mock(JavaField.class);
+        when ( enumConstantField.isEnumConstant() ).thenReturn( true );
+        fields.add( enumConstantField );
+        setFields( cls, fields );
+        assertEquals( 1, cls.getEnumConstants().size() );
+    }
+    
+    public void testGetEnumConstantByName() {
+        setName( cls, "MyEnum" );
+        
+        List<JavaField> fields = new ArrayList<JavaField>();
+        JavaField nonEnumConstantField = mock(JavaField.class);
+        when ( nonEnumConstantField.getName() ).thenReturn( "nonEnumField" );
+        fields.add( nonEnumConstantField );
+        setFields( cls, fields );
+        assertEquals( null, cls.getEnumConstantByName( "nonEnumField" ) );
+        
+        JavaField enumConstantField = mock(JavaField.class);
+        when ( enumConstantField.isEnumConstant() ).thenReturn( true );
+        when ( enumConstantField.getName() ).thenReturn( "enumField" );
+        fields.add( enumConstantField );
+        setFields( cls, fields );
+        assertEquals( enumConstantField, cls.getEnumConstantByName( "enumField" ) );
+    }
+    
 
     public void testCanGetFieldByName() throws Exception {
         JavaField fredField = mock(JavaField.class);

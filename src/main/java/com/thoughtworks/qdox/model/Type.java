@@ -767,7 +767,17 @@ public class Type implements JavaClass, Serializable {
     {
         return resolveRealClass().getFieldByName( name );
     }
-
+    
+    public List<JavaField> getEnumConstants()
+    {
+        return resolveRealClass().getEnumConstants();
+    }
+    
+    public JavaField getEnumConstantByName( String name )
+    {
+        return resolveRealClass().getEnumConstantByName( name );
+    }
+    
     public List<JavaClass> getClasses()
     {
         return resolveRealClass().getClasses();

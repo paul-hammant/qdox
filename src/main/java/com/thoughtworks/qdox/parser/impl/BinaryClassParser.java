@@ -37,48 +37,57 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
 public class BinaryClassParser
 {
     private Class<?> clazz;
+
     private ModelBuilder binaryBuilder;
-    
-    public BinaryClassParser(Class<?> clazz, ModelBuilder modelBuilder)
+
+    public BinaryClassParser( Class<?> clazz, ModelBuilder modelBuilder )
     {
         this.clazz = clazz;
         this.binaryBuilder = modelBuilder;
     }
-    
-    public boolean parse() {
-        try {
+
+    public boolean parse()
+    {
+        try
+        {
             String name = clazz.getName();
 
             // Set the package name and class name
-            String packageName = getPackageName(name);
-            binaryBuilder.addPackage(new PackageDef(packageName));
+            String packageName = getPackageName( name );
+            binaryBuilder.addPackage( new PackageDef( packageName ) );
 
-            ClassDef classDef = new ClassDef( getClassName(name) );
+            ClassDef classDef = new ClassDef( getClassName( name ) );
 
             // Set the extended class and interfaces.
             Class<?>[] interfaces = clazz.getInterfaces();
-            if (clazz.isInterface()) {
+            if ( clazz.isInterface() )
+            {
                 // It's an interface
                 classDef.setType( ClassDef.INTERFACE );
-                for (int i = 0; i < interfaces.length; i++) {
+                for ( int i = 0; i < interfaces.length; i++ )
+                {
                     Class<?> anInterface = interfaces[i];
-                    classDef.getExtends().add(new TypeDef(anInterface.getName()));
+                    classDef.getExtends().add( new TypeDef( anInterface.getName() ) );
                 }
-            } else {
+            }
+            else
+            {
                 // It's a class
-                for (int i = 0; i < interfaces.length; i++) {
+                for ( int i = 0; i < interfaces.length; i++ )
+                {
                     Class<?> anInterface = interfaces[i];
-                    classDef.getImplements().add(new TypeDef(anInterface.getName()));
+                    classDef.getImplements().add( new TypeDef( anInterface.getName() ) );
                 }
                 Class<?> superclass = clazz.getSuperclass();
-                if (superclass != null) {
-                    classDef.getExtends().add(new TypeDef(superclass.getName()));
+                if ( superclass != null )
+                {
+                    classDef.getExtends().add( new TypeDef( superclass.getName() ) );
                 }
             }
 
-            addModifiers(classDef.getModifiers(), clazz.getModifiers());
+            addModifiers( classDef.getModifiers(), clazz.getModifiers() );
 
-            binaryBuilder.beginClass(classDef);
+            binaryBuilder.beginClass( classDef );
 
             // add the constructors
             //
@@ -86,112 +95,131 @@ public class BinaryClassParser
             // to the source code as that does not create a default constructor
             // if no constructor exists.
             Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-            for (int i = 0; i < constructors.length; i++) {
+            for ( int i = 0; i < constructors.length; i++ )
+            {
                 binaryBuilder.beginConstructor();
-                MethodDef methodDef = createMethodDef(constructors[i], binaryBuilder);
+                MethodDef methodDef = createMethodDef( constructors[i], binaryBuilder );
                 binaryBuilder.endConstructor( methodDef );
             }
 
             // add the methods
             Method[] methods = clazz.getDeclaredMethods();
-            for (int i = 0; i < methods.length; i++) {
+            for ( int i = 0; i < methods.length; i++ )
+            {
                 binaryBuilder.beginMethod();
-                MethodDef methodDef = createMethodDef(methods[i], binaryBuilder);
+                MethodDef methodDef = createMethodDef( methods[i], binaryBuilder );
                 binaryBuilder.endMethod( methodDef );
             }
 
             Field[] fields = clazz.getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                addField(fields[i], binaryBuilder);
+            for ( int i = 0; i < fields.length; i++ )
+            {
+                addField( fields[i], binaryBuilder );
             }
 
             binaryBuilder.endClass();
-            
+
             return true;
-        } catch (NoClassDefFoundError e) {
+        }
+        catch ( NoClassDefFoundError e )
+        {
             return false;
         }
     }
-    
-    private void addModifiers(Set<String> set, int modifier) {
-        String modifierString = Modifier.toString(modifier);
-        for (StringTokenizer stringTokenizer = new StringTokenizer(modifierString); stringTokenizer.hasMoreTokens();) {
-            set.add(stringTokenizer.nextToken());
+
+    private void addModifiers( Set<String> set, int modifier )
+    {
+        String modifierString = Modifier.toString( modifier );
+        for ( StringTokenizer stringTokenizer = new StringTokenizer( modifierString ); stringTokenizer.hasMoreTokens(); )
+        {
+            set.add( stringTokenizer.nextToken() );
         }
     }
 
-    private void addField(Field field, ModelBuilder binaryBuilder) {
+    private void addField( Field field, ModelBuilder binaryBuilder )
+    {
         FieldDef fieldDef = new FieldDef( field.getName() );
         Class<?> fieldType = field.getType();
-        fieldDef.setType( getTypeDef(fieldType) );
-        fieldDef.setDimensions( getDimension(fieldType) );
+        fieldDef.setType( getTypeDef( fieldType ) );
+        fieldDef.setDimensions( getDimension( fieldType ) );
         fieldDef.setEnumConstant( field.isEnumConstant() );
-        addModifiers( fieldDef.getModifiers(), field.getModifiers());
-        binaryBuilder.addField(fieldDef);
+        addModifiers( fieldDef.getModifiers(), field.getModifiers() );
+        binaryBuilder.beginField( fieldDef );
+        binaryBuilder.endField();
     }
 
-    private MethodDef createMethodDef(Member member, ModelBuilder binaryBuilder) {
+    private MethodDef createMethodDef( Member member, ModelBuilder binaryBuilder )
+    {
         MethodDef methodDef = new MethodDef();
         // The name of constructors are qualified. Need to strip it.
         // This will work for regular methods too, since -1 + 1 = 0
-        int lastDot = member.getName().lastIndexOf('.');
-        methodDef.setName(member.getName().substring(lastDot + 1));
+        int lastDot = member.getName().lastIndexOf( '.' );
+        methodDef.setName( member.getName().substring( lastDot + 1 ) );
 
-        addModifiers(methodDef.getModifiers(), member.getModifiers());
+        addModifiers( methodDef.getModifiers(), member.getModifiers() );
         Class<?>[] exceptions;
         Class<?>[] parameterTypes;
-        if (member instanceof Method) {
-            methodDef.setConstructor(false);
+        if ( member instanceof Method )
+        {
+            methodDef.setConstructor( false );
 
             // For some stupid reason, these methods are not defined in Member,
             // but in both Method and Construcotr.
-            exceptions = ((Method) member).getExceptionTypes();
-            parameterTypes = ((Method) member).getParameterTypes();
+            exceptions = ( (Method) member ).getExceptionTypes();
+            parameterTypes = ( (Method) member ).getParameterTypes();
 
-            Class<?> returnType = ((Method) member).getReturnType();
-            methodDef.setReturnType(getTypeDef(returnType));
-            methodDef.setDimensions(getDimension(returnType));
+            Class<?> returnType = ( (Method) member ).getReturnType();
+            methodDef.setReturnType( getTypeDef( returnType ) );
+            methodDef.setDimensions( getDimension( returnType ) );
 
-        } else {
-            methodDef.setConstructor(true);
-
-            exceptions = ((Constructor<?>) member).getExceptionTypes();
-            parameterTypes = ((Constructor<?>) member).getParameterTypes();
         }
-        for (int j = 0; j < exceptions.length; j++) {
+        else
+        {
+            methodDef.setConstructor( true );
+
+            exceptions = ( (Constructor<?>) member ).getExceptionTypes();
+            parameterTypes = ( (Constructor<?>) member ).getParameterTypes();
+        }
+        for ( int j = 0; j < exceptions.length; j++ )
+        {
             Class<?> exception = exceptions[j];
-            methodDef.getExceptions().add(getTypeDef(exception));
+            methodDef.getExceptions().add( getTypeDef( exception ) );
         }
-        for (int j = 0; j < parameterTypes.length; j++) {
+        for ( int j = 0; j < parameterTypes.length; j++ )
+        {
             FieldDef param = new FieldDef( "p" + j );
             Class<?> parameterType = parameterTypes[j];
-            param.setType( getTypeDef(parameterType) );
-            param.setDimensions( getDimension(parameterType) );
+            param.setType( getTypeDef( parameterType ) );
+            param.setDimensions( getDimension( parameterType ) );
             binaryBuilder.addParameter( param );
         }
         return methodDef;
     }
 
-    private static int getDimension(Class<?> c) {
-        return c.getName().lastIndexOf('[') + 1;
+    private static int getDimension( Class<?> c )
+    {
+        return c.getName().lastIndexOf( '[' ) + 1;
     }
 
-    private static String getTypeName(Class<?> c) {
+    private static String getTypeName( Class<?> c )
+    {
         return c.getComponentType() != null ? c.getComponentType().getName() : c.getName();
     }
-    
-    private static TypeDef getTypeDef(Class<?> c) {
-        return new TypeDef(getTypeName(c));
-    }
-    
 
-    private String getPackageName(String fullClassName) {
-        int lastDot = fullClassName.lastIndexOf('.');
-        return lastDot == -1 ? "" : fullClassName.substring(0, lastDot);
+    private static TypeDef getTypeDef( Class<?> c )
+    {
+        return new TypeDef( getTypeName( c ) );
     }
 
-    private String getClassName(String fullClassName) {
-        int lastDot = fullClassName.lastIndexOf('.');
-        return lastDot == -1 ? fullClassName : fullClassName.substring(lastDot + 1);
+    private String getPackageName( String fullClassName )
+    {
+        int lastDot = fullClassName.lastIndexOf( '.' );
+        return lastDot == -1 ? "" : fullClassName.substring( 0, lastDot );
+    }
+
+    private String getClassName( String fullClassName )
+    {
+        int lastDot = fullClassName.lastIndexOf( '.' );
+        return lastDot == -1 ? fullClassName : fullClassName.substring( lastDot + 1 );
     }
 }

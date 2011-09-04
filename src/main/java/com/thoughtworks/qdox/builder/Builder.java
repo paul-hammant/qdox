@@ -48,9 +48,10 @@ public interface Builder {
     void beginMethod();
     void endMethod(MethodDef def);
 
+    void beginField(FieldDef def);
+    void endField();
+
     void addParameter(FieldDef def);
-    
-    void addField(FieldDef def);
 
     void addAnnotation(AnnoDef annotation);
 }

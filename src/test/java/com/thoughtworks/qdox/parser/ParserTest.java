@@ -1706,7 +1706,8 @@ public class ParserTest extends TestCase {
 
         // verify
         verify(builder).beginClass( classCaptor.capture() );
-        verify(builder).addField( fieldCaptor.capture() );
+        verify(builder).beginField( fieldCaptor.capture() );
+        verify(builder).endField();
         verify(builder).endClass();
         
         ClassDef cls = classCaptor.getValue();
@@ -1745,7 +1746,8 @@ public class ParserTest extends TestCase {
 
         // verify
         verify( builder ).beginClass( classCaptor.capture() );
-        verify( builder ).addField( fieldCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).endField();
         verify( builder ).endClass();
 
         ClassDef cls = classCaptor.getValue();
@@ -1785,9 +1787,10 @@ public class ParserTest extends TestCase {
         ArgumentCaptor<FieldDef> fieldCaptor = ArgumentCaptor.forClass(FieldDef.class);
         
         // verify
-        verify(builder).beginClass( classCaptor.capture() );
-        verify(builder).addField( fieldCaptor.capture() );
-        verify(builder).endClass();
+        verify( builder ).beginClass( classCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).endField();
+        verify( builder ).endClass();
         ClassDef cls = classCaptor.getValue();
         assertEquals( "MyClass", cls.getName() );
         FieldDef fld = fieldCaptor.getValue();
@@ -1822,9 +1825,10 @@ public class ParserTest extends TestCase {
         ArgumentCaptor<FieldDef> fieldCaptor = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
-        verify(builder).beginClass( classCaptor.capture() );
-        verify(builder, times(2)).addField( fieldCaptor.capture() );
-        verify(builder).endClass();
+        verify( builder ).beginClass( classCaptor.capture() );
+        verify( builder, times( 2 ) ).beginField( fieldCaptor.capture() );
+        verify( builder, times( 2 ) ).endField();
+        verify( builder ).endClass();
         
         ClassDef cls = classCaptor.getValue();
         assertEquals( "MyClass", cls.getName() );
@@ -1864,7 +1868,8 @@ public class ParserTest extends TestCase {
 
         // verify
         verify( builder ).beginClass( classCaptor.capture() );
-        verify( builder ).addField( fieldCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).endField();
         verify( builder ).endClass();
 
         ClassDef cls = classCaptor.getValue();
@@ -1906,7 +1911,8 @@ public class ParserTest extends TestCase {
 
         // verify
         verify( builder ).beginClass( classCaptor.capture() );
-        verify( builder ).addField( fieldCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).endField();
         verify( builder ).endClass();
 
         ClassDef cls = classCaptor.getValue();
@@ -2047,9 +2053,10 @@ public class ParserTest extends TestCase {
         ArgumentCaptor<FieldDef> fieldCaptor = ArgumentCaptor.forClass(FieldDef.class);
         
         // verify
-        verify(builder).beginClass( classCaptor.capture() );
-        verify(builder).addField( fieldCaptor.capture() );
-        verify(builder).endClass();
+        verify( builder ).beginClass( classCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).endField();
+        verify( builder ).endClass();
         
         ClassDef cls = classCaptor.getValue();
         assertEquals( "x", cls.getName() );
@@ -2085,7 +2092,8 @@ public class ParserTest extends TestCase {
 
         // verify
         verify( builder ).beginClass( classCaptor.capture() );
-        verify( builder ).addField( fieldCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).endField();
         verify( builder ).endClass();
 
         ClassDef cls = classCaptor.getValue();
@@ -2125,7 +2133,8 @@ public class ParserTest extends TestCase {
 
         // verify
         verify( builder ).beginClass( classCaptor.capture() );
-        verify( builder ).addField( fieldCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).endField();
         verify( builder ).endClass();
 
         ClassDef cls = classCaptor.getValue();
@@ -2163,7 +2172,8 @@ public class ParserTest extends TestCase {
 
         // verify
         verify( builder ).beginClass( classCaptor.capture() );
-        verify( builder ).addField( fieldCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).endField();
         verify( builder ).endClass();
 
         ClassDef cls = classCaptor.getValue();
@@ -2202,9 +2212,10 @@ public class ParserTest extends TestCase {
         ArgumentCaptor<FieldDef> fieldCaptor = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
-        verify(builder).beginClass( classCaptor.capture() );
-        verify(builder).addField( fieldCaptor.capture() );
-        verify(builder).endClass();
+        verify( builder ).beginClass( classCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).endField();
+        verify( builder ).endClass();
 
         ClassDef cls = classCaptor.getValue();
         assertEquals( "x", cls.getName() );
@@ -2245,7 +2256,8 @@ public class ParserTest extends TestCase {
 
         // verify
         verify( builder ).beginClass( classCaptor.capture() );
-        verify( builder, times( 2 ) ).addField( fieldCaptor.capture() );
+        verify( builder, times( 2 ) ).beginField( fieldCaptor.capture() );
+        verify( builder, times( 2 ) ).endField();
         verify( builder ).endClass();
 
         ClassDef cls = classCaptor.getValue();
@@ -2617,7 +2629,8 @@ public class ParserTest extends TestCase {
         verify( builder ).beginClass( classCaptor.capture() );
         // verify(mockBuilder).beginConstructor();
         // verify(mockBuilder).endConstructor(mth);
-        verify( builder, times( 2 ) ).addField( f.capture() );
+        verify( builder, times( 2 ) ).beginField( f.capture() );
+        verify( builder, times( 2 ) ).endField();
         verify( builder ).endClass();
 
         ClassDef cls = classCaptor.getValue();
@@ -2655,11 +2668,12 @@ public class ParserTest extends TestCase {
         ArgumentCaptor<FieldDef> f = ArgumentCaptor.forClass(FieldDef.class);
 
         // verify
-        verify(builder).beginClass( classCaptor.capture() );
-//      verify(mockBuilder).beginConstructor();
-//      verify(mockBuilder).endConstructor(mth);
-        verify(builder).addField( f.capture() );
-        verify(builder).endClass();
+        verify( builder ).beginClass( classCaptor.capture() );
+        // verify(mockBuilder).beginConstructor();
+        // verify(mockBuilder).endConstructor(mth);
+        verify( builder ).beginField( f.capture() );
+        verify( builder ).endField();
+        verify( builder ).endClass();
         
         ClassDef cls = classCaptor.getValue();
         assertEquals( "x", cls.getName() );

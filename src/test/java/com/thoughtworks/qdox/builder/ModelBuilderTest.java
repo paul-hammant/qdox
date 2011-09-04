@@ -478,7 +478,8 @@ public class ModelBuilderTest extends TestCase {
         FieldDef fld = new FieldDef();
         fld.setName( "count" );
         fld.setType( new TypeDef("int") );
-        builder.addField(fld);
+        builder.beginField(fld);
+        builder.endField();
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -496,7 +497,8 @@ public class ModelBuilderTest extends TestCase {
         FieldDef fld = new FieldDef();
         fld.getModifiers().add("blah2");
         fld.getModifiers().add("blah");
-        builder.addField(fld);
+        builder.beginField(fld);
+        builder.endField();
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -515,7 +517,8 @@ public class ModelBuilderTest extends TestCase {
         fld.setName( "count" );
         fld.setType( new TypeDef("int") );
         fld.setDimensions( 0 );
-        builder.addField(fld);
+        builder.beginField(fld);
+        builder.endField();
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -533,7 +536,8 @@ public class ModelBuilderTest extends TestCase {
         fld.setType( new TypeDef("int") );
         fld.setDimensions( 1 );
         
-        builder.addField(fld);
+        builder.beginField(fld);
+        builder.endField();
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -550,7 +554,8 @@ public class ModelBuilderTest extends TestCase {
         fld.setName( "count" );
         fld.setType( new TypeDef("int") );
         fld.setDimensions( 2 );
-        builder.addField(fld);
+        builder.beginField(fld);
+        builder.endField();
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -631,7 +636,8 @@ public class ModelBuilderTest extends TestCase {
         builder.beginClass(new ClassDef());
 
         builder.addJavaDoc("Hello");
-        builder.addField(new FieldDef());
+        builder.beginField(new FieldDef());
+        builder.endField();
         builder.endClass();
 
         JavaSource source = builder.getSource();
@@ -644,14 +650,16 @@ public class ModelBuilderTest extends TestCase {
         builder.addJavaDoc("Thing");
         builder.beginClass(new ClassDef());
 
-        builder.addField(new FieldDef());// f0
+        builder.beginField(new FieldDef());// f0
+        builder.endField();
 
         builder.addJavaDoc("Hello");
         builder.beginMethod();
         builder.endMethod(new MethodDef());//m0
 
         builder.addJavaDoc("Hello field");
-        builder.addField(new FieldDef());//f1
+        builder.beginField(new FieldDef());//f1
+        builder.endField();
 
         builder.beginMethod();
         builder.endMethod(new MethodDef());//m1
@@ -735,7 +743,8 @@ public class ModelBuilderTest extends TestCase {
 
         builder.addJavaDoc("");
         builder.addJavaDocTag(new TagDef("chairs", "are boring"));
-        builder.addField(new FieldDef());
+        builder.beginField(new FieldDef());
+        builder.endField();
         builder.endClass();
 
         JavaSource source = builder.getSource();

@@ -911,7 +911,8 @@ private void makeField(TypeDef field, String body, boolean enumConstant) {
     fd.setDimensions(field.getDimensions());
     fd.setEnumConstant(enumConstant);
     fd.setBody(body);
-    builder.addField(fd);
+    builder.beginField(fd);
+    builder.endField();
 }
 
 public void onComment( String comment, int line, int column ) {

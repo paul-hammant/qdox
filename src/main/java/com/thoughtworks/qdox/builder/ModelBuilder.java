@@ -323,7 +323,7 @@ public class ModelBuilder implements Builder {
         return result;
     }
 
-	public void addField(FieldDef def) {
+	public void beginField(FieldDef def) {
         DefaultJavaField currentField = new DefaultJavaField();
         currentField.setParentClass(classStack.getFirst());
         currentField.setLineNumber(def.getLineNumber());
@@ -349,6 +349,11 @@ public class ModelBuilder implements Builder {
 
         classStack.getFirst().addField(currentField);
     }
+	
+	public void endField() 
+	{
+	    
+	}
 	
 	public void addParameter(FieldDef fieldDef) {
 	    DefaultJavaParameter jParam = new DefaultJavaParameter(createType(fieldDef.getType(), fieldDef.getDimensions()), fieldDef.getName(), fieldDef.isVarArgs());

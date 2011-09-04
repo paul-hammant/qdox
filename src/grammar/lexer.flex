@@ -421,11 +421,9 @@ JavadocEnd                      = "*"+ "/"
     }
     "}"                 {
 		codeBody.append('}');
-        if (anonymousMode) {
-            nestingDepth--;
-        	if (nestingDepth==assignmentDepth) { 
-                anonymousMode=false;
-            }
+        nestingDepth--;
+    	if (nestingDepth==assignmentDepth) { 
+            anonymousMode=false;
         }
     }
 

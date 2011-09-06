@@ -130,7 +130,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         result.append(')');
         if (isDeclaration  && !getExceptions().isEmpty() ) {
                 result.append(" throws ");
-                for(Iterator<Type> excIter = getExceptions().iterator();excIter.hasNext();) {
+                for(Iterator<JavaClass> excIter = getExceptions().iterator();excIter.hasNext();) {
                     result.append(excIter.next().getValue());
                     if(excIter.hasNext()) {
                         result.append(", ");
@@ -363,7 +363,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         if ( getExceptions().size() > 0 )
         {
             result.append( " throws " );
-            for ( Iterator<Type> excIter = getExceptions().iterator(); excIter.hasNext(); )
+            for ( Iterator<JavaClass> excIter = getExceptions().iterator(); excIter.hasNext(); )
             {
                 result.append( excIter.next().getFullyQualifiedName() );
                 if ( excIter.hasNext() )

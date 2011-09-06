@@ -35,7 +35,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
 
     JavaParameter getParameterByName( String name );
 
-    List<Type> getExceptions();
+    List<JavaClass> getExceptions();
 
     /**
      * Equivalent of {@link java.lang.reflect.Method#isVarArgs()}

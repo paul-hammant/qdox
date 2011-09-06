@@ -111,7 +111,7 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.getDeclarationSignature( withModifiers );
     }
 
-    public List<Type> getExceptions()
+    public List<JavaClass> getExceptions()
     {
         return originalMethod.getExceptions();
     }

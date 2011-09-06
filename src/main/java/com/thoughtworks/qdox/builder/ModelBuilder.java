@@ -239,7 +239,7 @@ public class ModelBuilder implements Builder {
         }
         
         // exceptions
-        List<Type> exceptions = new LinkedList<Type>();
+        List<JavaClass> exceptions = new LinkedList<JavaClass>();
         for (TypeDef type : def.getExceptions()) {
             exceptions.add(createType(type, 0));
         }
@@ -288,7 +288,7 @@ public class ModelBuilder implements Builder {
         }
         
         // exceptions
-        List<Type> exceptions = new LinkedList<Type>();
+        List<JavaClass> exceptions = new LinkedList<JavaClass>();
         for (TypeDef type : def.getExceptions()) {
             exceptions.add(createType(type, 0));
         }

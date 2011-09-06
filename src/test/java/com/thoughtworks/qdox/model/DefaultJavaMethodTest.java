@@ -41,7 +41,7 @@ public class DefaultJavaMethodTest
         return new Type( fullname, dimensions );
     }
 
-    public void setExceptions( DefaultJavaMethod method, List<Type> exceptions )
+    public void setExceptions( DefaultJavaMethod method, List<JavaClass> exceptions )
     {
         method.setExceptions( exceptions );
     }

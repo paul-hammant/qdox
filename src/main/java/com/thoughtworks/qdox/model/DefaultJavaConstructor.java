@@ -74,7 +74,7 @@ public class DefaultJavaConstructor
         if ( getExceptions().size() > 0 )
         {
             result.append( " throws " );
-            for ( Iterator<Type> excIter = getExceptions().iterator(); excIter.hasNext(); )
+            for ( Iterator<JavaClass> excIter = getExceptions().iterator(); excIter.hasNext(); )
             {
                 result.append( excIter.next().getValue() );
                 if ( excIter.hasNext() )

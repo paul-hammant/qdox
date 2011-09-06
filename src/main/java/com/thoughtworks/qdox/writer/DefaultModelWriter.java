@@ -214,7 +214,7 @@ public class DefaultModelWriter
         if ( constructor.getExceptions().size() > 0 )
         {
             buffer.write( " throws " );
-            for ( Iterator<Type> excIter = constructor.getExceptions().iterator(); excIter.hasNext(); )
+            for ( Iterator<JavaClass> excIter = constructor.getExceptions().iterator(); excIter.hasNext(); )
             {
                 buffer.write( excIter.next().getValue() );
                 if ( excIter.hasNext() )
@@ -269,7 +269,7 @@ public class DefaultModelWriter
         if ( method.getExceptions().size() > 0 )
         {
             buffer.write( " throws " );
-            for ( Iterator<Type> excIter = method.getExceptions().iterator(); excIter.hasNext(); )
+            for ( Iterator<JavaClass> excIter = method.getExceptions().iterator(); excIter.hasNext(); )
             {
                 buffer.write( excIter.next().getValue() );
                 if ( excIter.hasNext() )

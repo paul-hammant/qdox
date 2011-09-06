@@ -15,7 +15,7 @@ public abstract class AbstractBaseMethod
 {
 
     private List<JavaParameter> parameters = Collections.emptyList();
-    private List<Type> exceptions = Collections.emptyList();
+    private List<JavaClass> exceptions = Collections.emptyList();
     private boolean varArgs;
     private String sourceCode;
 
@@ -34,7 +34,7 @@ public abstract class AbstractBaseMethod
         return null;
     }
 
-    public List<Type> getExceptions()
+    public List<JavaClass> getExceptions()
     {
         return exceptions;
     }
@@ -55,7 +55,7 @@ public abstract class AbstractBaseMethod
         this.varArgs = javaParameters.get( javaParameters.size() -1 ).isVarArgs();
     }
 
-    public void setExceptions( List<Type> exceptions )
+    public void setExceptions( List<JavaClass> exceptions )
     {
         this.exceptions = exceptions;
     }

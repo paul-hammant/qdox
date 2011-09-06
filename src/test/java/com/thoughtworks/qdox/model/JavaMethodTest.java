@@ -22,7 +22,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
     public abstract M newJavaMethod(Type returns, String name);
 
     //setters
-    public abstract void setExceptions(M method, List<Type> exceptions);
+    public abstract void setExceptions(M method, List<JavaClass> exceptions);
     public abstract void setComment(M method, String comment);
     public abstract void setName(M method, String name);
     public abstract void setModifiers(M method, List<String> modifiers);
@@ -63,7 +63,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         setName(mth, "blah");
         setModifiers(mth, Arrays.asList(new String[]{"protected", "final"}));
         setReturns(mth, newType("void"));
-        setExceptions(mth, Arrays.asList( new Type[] {
+        setExceptions(mth, Arrays.asList( new JavaClass[] {
             newType("FishException"),
             newType("FruitException"),
         } ));
@@ -113,21 +113,21 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
     public void testGetCodeBlockOneException() throws Exception {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
-        setExceptions(mth, Collections.singletonList( newType("RuntimeException") ));
+        setExceptions( mth, Arrays.asList( new JavaClass[] { newType( "RuntimeException" ) } ) );
         assertEquals("void blah() throws RuntimeException;\n", mth.getCodeBlock());
     }
 
     public void testGetCodeBlockTwoException() throws Exception {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
-        setExceptions(mth, Arrays.asList( new Type[]{newType("RuntimeException"), newType("java.lang.SheepException")}));
+        setExceptions(mth, Arrays.asList( new JavaClass[]{newType("RuntimeException"), newType("java.lang.SheepException")}));
         assertEquals("void blah() throws RuntimeException, java.lang.SheepException;\n", mth.getCodeBlock());
     }
 
     public void testGetCodeBlockThreeException() throws Exception {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
-        setExceptions(mth, Arrays.asList( new Type[]{newType("RuntimeException"), newType("java.lang.SheepException"), newType("CowException")}));
+        setExceptions(mth, Arrays.asList( new JavaClass[]{newType("RuntimeException"), newType("java.lang.SheepException"), newType("CowException")}));
         assertEquals("void blah() throws RuntimeException, java.lang.SheepException, CowException;\n", mth.getCodeBlock());
     }
 

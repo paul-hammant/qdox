@@ -19,6 +19,7 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaPackage#getClasses()
      */
-	public List<JavaClass> getClasses() {
+	public Collection<JavaClass> getClasses() {
 	    //avoid infinitive  recursion
 	    if (this == classLibrary.getJavaPackage( name )) {
 	        return classes;
@@ -81,6 +82,46 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 	        return classLibrary.getJavaPackage( name ).getClasses();
 	    }
 	}
+	
+	public JavaClass getClassByName(String name) 
+    {
+        JavaClass result = null;
+        
+        for ( JavaClass candidateCls : classes )
+        {
+            result = getClassByName( candidateCls, name );
+            if ( result != null ) 
+            {
+                result = candidateCls;
+                break;
+            }
+        }
+        return result;
+    }
+	
+	private static JavaClass getClassByName(JavaClass cls, String name) 
+    {
+        JavaClass result = null;
+        if ( cls.getFullyQualifiedName().equals( name ) ) 
+        {
+            result = cls;
+        }
+        else if ( cls.getName().equals(name)) 
+        {
+            result = cls;
+        }
+        else {
+            for ( JavaClass innerCls : cls.getClasses() )
+            {
+                result = getClassByName( innerCls, name );
+                if ( result != null ) 
+                {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 
     public JavaPackage getParentPackage()
     {

@@ -19,7 +19,7 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-import java.util.List;
+import java.util.Collection;
 
 public interface JavaPackage extends JavaModel, JavaAnnotatedElement
 {
@@ -29,7 +29,17 @@ public interface JavaPackage extends JavaModel, JavaAnnotatedElement
      *
      * @return all the classes found for the package, never <code>null</code>
      */
-    List<JavaClass> getClasses();
+    Collection<JavaClass> getClasses();
+    
+    /**
+     * Try to get any class of this package by name.
+     * The name can be both the fully qualified name or just the name of the class.
+     * 
+     * @param name the (fully qualified) name of the class 
+     * @return the matching class, otherwise <code>null</code>
+     * @since 2.0
+     */
+    JavaClass getClassByName( String name );
 
     /**
      * The parent of this package
@@ -45,7 +55,7 @@ public interface JavaPackage extends JavaModel, JavaAnnotatedElement
      * 
      * @return all the children of this package , never <code>null</code>
      */
-    List<JavaPackage> getSubPackages();
+    Collection<JavaPackage> getSubPackages();
 
     /**
      * The name of this package

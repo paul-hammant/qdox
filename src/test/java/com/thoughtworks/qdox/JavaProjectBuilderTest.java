@@ -135,20 +135,17 @@ public class JavaProjectBuilderTest extends TestCase
         JavaPackage comBlah = builder.getPackageByName( "com.blah" );
         JavaPackage comBlahSubpackage = builder.getPackageByName( "com.blah.subpackage" );
         assertEquals("com.blah.subpackage", comBlahSubpackage.getName());
-        List<JavaClass> classes = comBlahSubpackage.getClasses();
-        assertEquals(1, classes.size());
-        assertEquals("Cheese", classes.get(0).getName());
-        classes = comBlah.getClasses();
-        assertEquals(2, classes.size());
-        assertEquals("Another", classes.get(0).getName());
-        assertEquals("Thing", classes.get(1).getName());
+        assertEquals(1, comBlahSubpackage.getClasses().size());
+        assertNotNull("Cheese", comBlahSubpackage.getClassByName( "Cheese" ) );
+        assertEquals(2, comBlah.getClasses().size());
+        assertNotNull( comBlah.getClassByName( "Another" ));
+        assertNotNull( comBlah.getClassByName( "Thing" ));
         assertEquals(comBlah, comBlahSubpackage.getParentPackage());
         assertNull(comBlah.getParentPackage());
-        List<JavaPackage> comBlahSubpackages = comBlah.getSubPackages();
+        Collection<JavaPackage> comBlahSubpackages = comBlah.getSubPackages();
         assertEquals(1, comBlahSubpackages.size());
-        assertEquals(comBlahSubpackage, comBlahSubpackages.get(0));
-        List<JavaPackage> comBlahSubpackageSubpackages = comBlahSubpackage.getSubPackages();
-        assertEquals(0, comBlahSubpackageSubpackages.size());
+        assertEquals(comBlahSubpackage, comBlahSubpackages.iterator().next());
+        assertEquals(0, comBlahSubpackage.getSubPackages().size());
     }
 
     private String createOuter() {

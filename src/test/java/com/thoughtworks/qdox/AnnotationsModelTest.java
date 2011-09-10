@@ -216,8 +216,8 @@ public class AnnotationsModelTest extends TestCase {
     	String source = "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n" +
     			"package org.oasis_open.docs.wsn.br_2;\n" +
     			"public class Foo {}";
-    	builder.addSource(new StringReader(source));
-    	JavaPackage jPackage = builder.getClasses().get(0).getPackage();
+    	JavaClass cls = builder.addSource(new StringReader(source)).getClasses().get( 0 );
+    	JavaPackage jPackage = cls.getPackage();
     	assertEquals("org.oasis_open.docs.wsn.br_2", jPackage.getName());
     	assertEquals("javax.xml.bind.annotation.XmlSchema", jPackage.getAnnotations().get(0).getType().getValue());
     	assertEquals(2, jPackage.getLineNumber());

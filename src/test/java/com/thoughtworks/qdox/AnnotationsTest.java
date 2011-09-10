@@ -205,8 +205,8 @@ public class AnnotationsTest extends TestCase {
     public void testEmptyParameterListAnnotation() throws Exception {
     	String source = "@MyAnnotation()\n" +
     			"public class MyClass {}";
-    	builder.addSource(new StringReader(source));
-    	assertEquals("MyAnnotation", builder.getClasses().get(0).getAnnotations().get(0).getType().getValue());
+    	JavaClass  cls = builder.addSource(new StringReader(source)).getClasses().get(0);
+    	assertEquals("MyAnnotation", cls.getAnnotations().get(0).getType().getValue());
     }
     
     public void testMethodAnnotationBeforeComment() throws Exception {
@@ -217,9 +217,9 @@ public class AnnotationsTest extends TestCase {
     			" */" +
     			" public boolean isPostback() { return true;}\n" +
     			"}";
-    	builder.addSource(new StringReader(source));
-    	assertEquals("Override", builder.getClasses().get(0).getMethods().get(0).getAnnotations().get(0).getType().getValue());
-        assertEquals("java.lang.Override", builder.getClasses().get(0).getMethods().get(0).getAnnotations().get(0).getType().getFullyQualifiedName());
+    	JavaClass cls = builder.addSource(new StringReader(source)).getClasses().get(0);
+    	assertEquals("Override", cls.getMethods().get(0).getAnnotations().get(0).getType().getValue());
+        assertEquals("java.lang.Override", cls.getMethods().get(0).getAnnotations().get(0).getType().getFullyQualifiedName());
     }
     
     public void testEnumsWithAnnotations() throws Exception {
@@ -239,8 +239,8 @@ public class AnnotationsTest extends TestCase {
         		"  @NativeAccessible\n" + 
         		"  static void get_tmp_dir( String targetfilename, @ParamInfo( direction = ParamInfo.Direction.OUT ) byte[] tmpDirOutput ) throws IOException {}\n" + 
         		"}";
-        builder.addSource( new StringReader( source ) );
-        JavaMethod jMethod = builder.getClasses().get(0).getMethods().get(0);
+        JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get(0) ;
+        JavaMethod jMethod = cls.getMethods().get(0);
         assertEquals( "NativeAccessible", jMethod.getAnnotations().get(0).getType().getValue() );
         JavaAnnotation annotation = jMethod.getParameters().get(1).getAnnotations().get(0);
         assertEquals( "ParamInfo", annotation.getType().getValue() );
@@ -253,10 +253,10 @@ public class AnnotationsTest extends TestCase {
         		"  @SuppressWarnings( s )\n" +
         		"  public void testNothing() { }\n " +
         		"}";
-        builder.addSource( new StringReader( source ) );
-        JavaMethod method = builder.getClasses().get(0).getMethods().get(0);
+        JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get( 0 );
+        JavaMethod method = cls.getMethods().get(0);
         FieldRef suppressWarnings = (FieldRef) method.getAnnotations().get(0).getProperty( "value" );
-        assertEquals( builder.getClasses().get(0).getFields().get(0), suppressWarnings.getField());
+        assertEquals( cls.getFields().get(0), suppressWarnings.getField());
     }
     
     public void testDoubleEscapedString() throws Exception {

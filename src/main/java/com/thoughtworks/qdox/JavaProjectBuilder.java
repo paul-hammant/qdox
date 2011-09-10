@@ -257,7 +257,7 @@ public class JavaProjectBuilder
      * @see #addSourceFolder(File)
      * @see #addSourceTree(File)
      */
-    public List<JavaClass> getClasses()
+    public Collection<JavaClass> getClasses()
     {
         return classLibraryBuilder.getClassLibrary().getJavaClasses();
     }
@@ -282,7 +282,7 @@ public class JavaProjectBuilder
      * @see #addSourceFolder(File)
      * @see #addSourceTree(File)
      */
-    public List<JavaPackage> getPackages()
+    public Collection<JavaPackage> getPackages()
     {
         return classLibraryBuilder.getClassLibrary().getJavaPackages();
     }

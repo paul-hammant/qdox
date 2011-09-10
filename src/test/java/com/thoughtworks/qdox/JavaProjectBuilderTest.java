@@ -124,17 +124,16 @@ public class JavaProjectBuilderTest extends TestCase
 
     public void testGetClasses() {
         builder.addSource(new StringReader(createOuter()));
-        List<JavaClass> classes = builder.getClasses();
+        Collection<JavaClass> classes = builder.getClasses();
         assertEquals(2, classes.size());
     }
 
     public void testGetPackagesShowsOnePackageAndTwoClasses() {
         builder.addSourceTree(new File("target/test-source"));
-        List<JavaPackage> packages = builder.getPackages();
+        Collection<JavaPackage> packages = builder.getPackages();
         assertEquals(2, packages.size());
-        JavaPackage comBlah = packages.get(0);
-        assertEquals("com.blah", comBlah.getName());
-        JavaPackage comBlahSubpackage = packages.get(1);
+        JavaPackage comBlah = builder.getPackageByName( "com.blah" );
+        JavaPackage comBlahSubpackage = builder.getPackageByName( "com.blah.subpackage" );
         assertEquals("com.blah.subpackage", comBlahSubpackage.getName());
         List<JavaClass> classes = comBlahSubpackage.getClasses();
         assertEquals(1, classes.size());
@@ -1054,8 +1053,7 @@ public class JavaProjectBuilderTest extends TestCase
                 " b = 2,\n" +
                 " /** etc */\n" +
                 " c = 3; }";
-        builder.addSource(new StringReader(sourceCode));
-        JavaClass javaClass = builder.getClasses().get(0);
+        JavaClass javaClass = builder.addSource(new StringReader(sourceCode)).getClasses().get(0);
         JavaField fieldA = javaClass.getFieldByName("a");
         assertEquals("some doc", fieldA.getComment());
         JavaField fieldB = javaClass.getFields().get(1);
@@ -1119,8 +1117,7 @@ public class JavaProjectBuilderTest extends TestCase
                 "*/\n" + 
                 "public class TestClassImpl {\r\n" + 
                 "}";
-        builder.addSource(new StringReader(sourceCode));
-        JavaClass jClass = builder.getClasses().get(0);
+        JavaClass jClass = builder.addSource(new StringReader(sourceCode)).getClasses().get(0);
         assertEquals( Arrays.asList( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}), jClass.getTags().get(0).getParameters());
         //assertTrue( Arrays.equals( new String[] {"name=TestClass","attrs=Something1,Something2,Something3"}, jClass.getTags()[0].getParameters() ));
     }
@@ -1327,8 +1324,7 @@ public class JavaProjectBuilderTest extends TestCase
                 "   public void method1() { \n" +
                 "   }\n" +
                 "}";
-        builder.addSource( new StringReader( source ) );
-        JavaClass clazz = builder.getClasses().get(0);
+        JavaClass clazz = builder.addSource( new StringReader( source ) ).getClasses().get(0);
         assertEquals( 3, clazz.getMethods().get(0).getLineNumber() );
         assertEquals( 9, clazz.getMethods().get(1).getLineNumber() );
     }
@@ -1374,8 +1370,7 @@ public class JavaProjectBuilderTest extends TestCase
         String source =
             "package com.foo;\b" + "public class Outer {\n" + "public class Inner {\n" + "public class Core {}\n"
                 + "}\n" + "}\n";
-        builder.addSource( new StringReader( source ) );
-        JavaClass cls = builder.getClasses().get( 0 );
+        JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get( 0 );
         assertEquals( "com.foo.Outer", cls.getFullyQualifiedName() );
         assertEquals( "com.foo.Outer", cls.getCanonicalName() );
         cls = cls.getNestedClassByName( "Inner" );

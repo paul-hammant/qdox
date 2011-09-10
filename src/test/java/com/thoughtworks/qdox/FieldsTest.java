@@ -56,8 +56,8 @@ public class FieldsTest extends TestCase
     			"private String uDI =   null;\n" +
     			"}";
     	
-    	builder.addSource(new StringReader(source));
-    	JavaField field = builder.getClasses().get(0).getFields().get(0);
+    	JavaClass cls = builder.addSource(new StringReader(source)).getClasses().get(0);
+    	JavaField field = cls.getFields().get(0);
     	assertEquals("null", field.getInitializationExpression());
     }
     
@@ -69,8 +69,8 @@ public class FieldsTest extends TestCase
         		"     */\r\n" + 
         		"    private Bla bla;" +
         		"}";
-        builder.addSource( new StringReader( source ) );
-        JavaField field = builder.getClasses().get(0).getFields().get(0);
+        JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get(0);
+        JavaField field = cls.getFields().get(0);
         assertEquals( "", field.getComment() );
         assertEquals( 2, field.getTags().size() );
     }
@@ -84,8 +84,8 @@ public class FieldsTest extends TestCase
                 "     */\r\n" + 
                 "    private Bla bla;" +
                 "}";
-        builder.addSource( new StringReader( source ) );
-        JavaField field = builder.getClasses().get(0).getFields().get(0);
+        JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get(0);
+        JavaField field = cls.getFields().get(0);
         assertEquals( "Being Lazy Always", field.getComment() );
         assertEquals( 2, field.getTags().size() );
     }
@@ -102,8 +102,8 @@ public class FieldsTest extends TestCase
                 "     */\r\n" + 
                 "    private Bla bla;" +
                 "}";
-        builder.addSource( new StringReader( source ) );
-        JavaField field = builder.getClasses().get(0).getFields().get(0);
+        JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get(0);
+        JavaField field = cls.getFields().get(0);
         assertEquals( "Being\r\nLazy\r\nAlways", field.getComment() );
         assertEquals( 2, field.getTags().size() );
     }

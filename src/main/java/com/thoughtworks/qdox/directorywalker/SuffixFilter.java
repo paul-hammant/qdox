@@ -33,7 +33,7 @@ public class SuffixFilter
 
     /**
      * 
-     * @param suffixFilter the suffix which will be matched for every file.
+     * @param suffixFilter the suffix which will be matched for every file, must not be <code>null</code>
      */
     public SuffixFilter( String suffixFilter )
     {

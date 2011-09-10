@@ -265,6 +265,7 @@
                 <argument>-Jimplements=CommentHandler</argument>
                 <argument>-Jsemantic=Value</argument>
                 <argument>-Jpackage=com.thoughtworks.qdox.parser.impl</argument>
+                <argument>-Jstack=${qdox.javaparser.stack}</argument>
                 <argument>${basedir}/src/grammar/parser.y</argument>
               </arguments>
               <workingDirectory>${project.build.directory}/generated-sources/parser/com/thoughtworks/qdox/parser/impl</workingDirectory>
@@ -510,5 +511,6 @@
     <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <timestamp>${maven.build.timestamp}</timestamp>
+    <qdox.javaparser.stack>500</qdox.javaparser.stack>
   </properties>
 </project>

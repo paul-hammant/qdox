@@ -337,7 +337,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         
         for ( JavaClass candidateCls : classes )
         {
-            result = getClassByName( candidateCls, name );
+            result = JavaModelUtils.getClassByName( candidateCls, name );
             if ( result != null ) 
             {
                 result = candidateCls;
@@ -347,30 +347,6 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return result;
     }
     
-    private static JavaClass getClassByName(JavaClass cls, String name) 
-    {
-        JavaClass result = null;
-        if ( cls.getFullyQualifiedName().equals( name ) ) 
-        {
-            result = cls;
-        }
-        else if ( cls.getName().equals(name)) 
-        {
-            result = cls;
-        }
-        else {
-            for ( JavaClass innerCls : cls.getClasses() )
-            {
-                result = getClassByName( innerCls, name );
-                if ( result != null ) 
-                {
-                    break;
-                }
-            }
-        }
-        return result;
-    }
-
 	/* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaSource#getJavaClassLibrary()
      */

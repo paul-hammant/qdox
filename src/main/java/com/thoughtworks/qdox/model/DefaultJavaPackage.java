@@ -89,7 +89,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
         
         for ( JavaClass candidateCls : classes )
         {
-            result = getClassByName( candidateCls, name );
+            result = JavaModelUtils.getClassByName( candidateCls, name );
             if ( result != null ) 
             {
                 result = candidateCls;
@@ -99,30 +99,6 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
         return result;
     }
 	
-	private static JavaClass getClassByName(JavaClass cls, String name) 
-    {
-        JavaClass result = null;
-        if ( cls.getFullyQualifiedName().equals( name ) ) 
-        {
-            result = cls;
-        }
-        else if ( cls.getName().equals(name)) 
-        {
-            result = cls;
-        }
-        else {
-            for ( JavaClass innerCls : cls.getClasses() )
-            {
-                result = getClassByName( innerCls, name );
-                if ( result != null ) 
-                {
-                    break;
-                }
-            }
-        }
-        return result;
-    }
-
     public JavaPackage getParentPackage()
     {
         String parentName = name.substring( 0, name.lastIndexOf( '.' ) );

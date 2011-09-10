@@ -12,6 +12,7 @@ import java.io.NotSerializableException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -56,17 +57,17 @@ public class JavaProjectBuilderTest extends TestCase
     }
 
     public void testParsingMultipleJavaFiles() {
-        builder.addSource(new StringReader(createTestClassList()));
-        builder.addSource(new StringReader(createTestClass()));
-        List<JavaSource> sources = builder.getSources();
+        JavaSource source1 = builder.addSource(new StringReader(createTestClassList()));
+        JavaSource source2 = builder.addSource(new StringReader(createTestClass()));
+        Collection<JavaSource> sources = builder.getSources();
         assertEquals(2, sources.size());
 
-        JavaClass testClassList = sources.get(0).getClasses().get(0);
+        JavaClass testClassList = source1.getClasses().get(0);
         assertEquals("TestClassList", testClassList.getName());
         assertEquals("TestClass", testClassList.getSuperClass().getValue());
         assertEquals("com.thoughtworks.util.TestClass", testClassList.getSuperClass().getFullyQualifiedName());
 
-        JavaClass testClass = sources.get(1).getClasses().get(0);
+        JavaClass testClass = source2.getClasses().get(0);
         assertEquals("TestClass", testClass.getName());
 
         JavaClass testClassListByName = builder.getClassByName("com.thoughtworks.qdox.TestClassList");
@@ -98,11 +99,11 @@ public class JavaProjectBuilderTest extends TestCase
     }
 
     public void testParseWithInnerClass() {
-        builder.addSource(new StringReader(createOuter()));
-        List<JavaSource> sources = builder.getSources();
+        JavaSource source = builder.addSource(new StringReader(createOuter()));
+        Collection<JavaSource> sources = builder.getSources();
         assertEquals(1, sources.size());
 
-        JavaClass outer = sources.get(0).getClasses().get(0);
+        JavaClass outer = source.getClasses().get(0);
         assertEquals("Outer", outer.getName());
         assertEquals("foo.bar.Outer", outer.getFullyQualifiedName());
 
@@ -173,26 +174,37 @@ public class JavaProjectBuilderTest extends TestCase
     }
 
     public void testRecordFile() throws Exception {
-        builder.addSource(new File("target/test-source/com/blah/Thing.java"));
+        JavaSource source = builder.addSource(new File("target/test-source/com/blah/Thing.java"));
 
-        List<JavaSource> sources = builder.getSources();
+        Collection<JavaSource> sources = builder.getSources();
         assertEquals(1, sources.size());
         assertEquals(new File("target/test-source/com/blah/Thing.java").toURL(),
-                sources.get(0).getURL());
+                     source.getURL());
     }
 
-    public void testSearcher() throws Exception {
-        builder.addSourceTree(new File("target/test-source"));
+    public void testSearcher()
+        throws Exception
+    {
+        builder.addSourceTree( new File( "target/test-source" ) );
 
-        List<JavaClass> results = builder.search(new Searcher() {
-            public boolean eval(JavaClass cls) {
-                return cls.getPackage().getName().equals("com.blah");
+        Collection<JavaClass> results = builder.search( new Searcher()
+        {
+            public boolean eval( JavaClass cls )
+            {
+                return cls.getPackage().getName().equals( "com.blah" );
             }
-        });
+        } );
 
-        assertEquals(2, results.size());
-        assertEquals("Another", ((JavaClass) results.get(0)).getName());
-        assertEquals("Thing", ((JavaClass) results.get(1)).getName());
+        assertEquals( 2, results.size() );
+
+        List<String> classNames = new ArrayList<String>();
+        for ( JavaClass cls : results )
+        {
+            classNames.add( cls.getName() );
+        }
+        Collections.sort( classNames );
+        assertEquals( "Another", classNames.get( 0 ) );
+        assertEquals( "Thing", classNames.get( 1 ) );
     }
 
     private void createFile(String fileName, String packageName, String className) throws Exception {
@@ -525,15 +537,12 @@ public class JavaProjectBuilderTest extends TestCase
      */
     public void testSerializable() throws Exception {
         
-        builder.addSource(new StringReader("package test; public class X{}"));
-        assertEquals("X", builder.getSources().get(0).getClasses().get(0).getName());
+        JavaSource source = builder.addSource(new StringReader("package test; public class X{}"));
+        assertEquals("X", source.getClasses().get(0).getName());
         try {
-            JavaProjectBuilder newBuilder = (JavaProjectBuilder) SerializationUtils.serializedCopy(builder);
+            SerializationUtils.serializedCopy(builder);
 
-            //
-            fail("JavaProjectBuilder should not serializable, but its ClassLibraryBuilder");
-            
-            assertEquals("X", newBuilder.getSources().get(0).getClasses().get(0).getName());
+            fail("JavaProjectBuilder should not serializable");
         }
         catch(RuntimeException ex) {
             if ( !(ex.getCause() instanceof NotSerializableException)) {
@@ -853,7 +862,7 @@ public class JavaProjectBuilderTest extends TestCase
             "class Y implements SomeInterface { }")
         );
 
-        List<JavaClass> results = builder.search(new Searcher() {
+        Collection<JavaClass> results = builder.search(new Searcher() {
             public boolean eval(JavaClass javaClass) {
                 return javaClass.isA("SomeInterface");
             }

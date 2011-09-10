@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -242,7 +243,7 @@ public class JavaProjectBuilder
      * @see #addSourceFolder(File)
      * @see #addSourceTree(File)
      */
-    public List<JavaSource> getSources()
+    public Collection<JavaSource> getSources()
     {
         return classLibraryBuilder.getClassLibrary().getJavaSources();
     }
@@ -288,13 +289,12 @@ public class JavaProjectBuilder
 
     // Searcher
 
-    public List<JavaClass> search( Searcher searcher )
+    public Collection<JavaClass> search( Searcher searcher )
     {
-        List<JavaClass> result = new LinkedList<JavaClass>();
-        List<JavaClass> classArray = classLibraryBuilder.getClassLibrary().getJavaClasses();
-        for ( int classIndex = 0; classIndex < classArray.size(); classIndex++ )
+        Collection<JavaClass> result = new LinkedList<JavaClass>();
+        Collection<JavaClass> classArray = classLibraryBuilder.getClassLibrary().getJavaClasses();
+        for ( JavaClass cls : classArray )
         {
-            JavaClass cls = classArray.get( classIndex );
             if ( searcher.eval( cls ) )
             {
                 result.add( cls );

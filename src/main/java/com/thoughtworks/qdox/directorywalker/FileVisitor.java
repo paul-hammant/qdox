@@ -21,8 +21,16 @@ package com.thoughtworks.qdox.directorywalker;
 
 import java.io.File;
 
-public interface FileVisitor {
+/**
+ * A File visitor 
+ */
+public interface FileVisitor
+{
 
-    void visitFile(File file);
+    /**
+     * 
+     * @param file the file to visit
+     */
+    void visitFile( File file );
 
 }

@@ -21,14 +21,31 @@ package com.thoughtworks.qdox.directorywalker;
 
 import java.io.File;
 
-public class SuffixFilter implements Filter {
+/**
+ * 
+ * A file filter based on its suffix
+ *
+ */
+public class SuffixFilter
+    implements Filter
+{
     private String suffixFilter;
 
-    public SuffixFilter(String suffixFilter) {
+    /**
+     * 
+     * @param suffixFilter the suffix which will be matched for every file.
+     */
+    public SuffixFilter( String suffixFilter )
+    {
         this.suffixFilter = suffixFilter;
     }
 
-    public boolean filter(File file) {
-        return file.getName().endsWith(this.suffixFilter);
+    /**
+     * @param file the file to filter
+     * @return <code>true</code> if the file ends with the specified suffix, otherwise <code>false</code>
+     */
+    public boolean filter( File file )
+    {
+        return file.getName().endsWith( this.suffixFilter );
     }
 }

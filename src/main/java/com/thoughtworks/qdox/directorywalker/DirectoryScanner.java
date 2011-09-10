@@ -25,46 +25,82 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DirectoryScanner {
-    
+/**
+ * A directory scanner, which can scan files based on optional filters.
+ */
+public class DirectoryScanner
+{
+
     private File file;
+
     private Collection<Filter> filters = new HashSet<Filter>();
 
-    public DirectoryScanner(File file) {
+    /**
+     * 
+     * @param file the directory (or file) to scan
+     */
+    public DirectoryScanner( File file )
+    {
         this.file = file;
     }
 
-    public List<File> scan() {
+    /**
+     * Add a filter to this scanner.
+     * 
+     * @param filter the filter
+     */
+    public void addFilter( Filter filter )
+    {
+        this.filters.add( filter );
+    }
+
+    /**
+     * 
+     * @return a list of files matching the filters, never <code>null</code>
+     */
+    public List<File> scan()
+    {
         final List<File> result = new LinkedList<File>();
-        walk( new FileVisitor() {
-            public void visitFile(File file) {
-                result.add(file);
+        walk( new FileVisitor()
+        {
+            public void visitFile( File file )
+            {
+                result.add( file );
             }
-        }, this.file);
+        }, this.file );
         return result;
     }
 
-    private void walk(FileVisitor visitor, File current) {
-        if (current.isDirectory()) {
+    /**
+     * Scans the directory. Every file not filtered out by a filter fill be passed to the {@code fileVisitor}
+     * 
+     * @param fileVisitor handler for matching files.
+     */
+    public void scan( FileVisitor fileVisitor )
+    {
+        walk( fileVisitor, this.file );
+    }
+
+    private void walk( FileVisitor visitor, File current )
+    {
+        if ( current.isDirectory() )
+        {
             File[] currentFiles = current.listFiles();
-            for (int i = 0; i < currentFiles.length; i++) {
-                walk(visitor, currentFiles[i]);
+            for ( int i = 0; i < currentFiles.length; i++ )
+            {
+                walk( visitor, currentFiles[i] );
             }
-        } else {
-            for (Filter filter : this.filters) {
-                if (!filter.filter(current)) {
+        }
+        else
+        {
+            for ( Filter filter : this.filters )
+            {
+                if ( !filter.filter( current ) )
+                {
                     return;
                 }
             }
-            visitor.visitFile(current);
+            visitor.visitFile( current );
         }
-    }
-
-    public void addFilter(Filter filter) {
-        this.filters.add(filter);
-    }
-
-    public void scan(FileVisitor fileVisitor) {
-        walk(fileVisitor, this.file);
     }
 }

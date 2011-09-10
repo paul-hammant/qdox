@@ -21,8 +21,14 @@ package com.thoughtworks.qdox.directorywalker;
 
 import java.io.File;
 
-public interface Filter {
+public interface Filter
+{
 
-    boolean filter(File file);
+    /**
+     * 
+     * @param file the file to filter
+     * @return returns <code>true</code> if the file matches the filter expression, otherwise <code>false</code>
+     */
+    boolean filter( File file );
 
 }

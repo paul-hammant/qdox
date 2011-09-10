@@ -14,11 +14,11 @@ public class MissingAnnotationsTest {
         //package y, package-info not first file, deprecated annotation found
         JavaProjectBuilder builder = new JavaProjectBuilder();
         builder.addSourceTree(new File("./src/main/java/com/y"));
-        assertEquals(1, builder.getPackages().get(0).getAnnotations().size());
+        assertEquals(1, builder.getPackages().iterator().next().getAnnotations().size());
 
          //package x, package-info not first file, test fails, deprecated annotation not found
         builder = new JavaProjectBuilder();
         builder.addSourceTree(new File("./src/main/java/com/x"));
-        assertEquals(1, builder.getPackages().get(0).getAnnotations().size());
+        assertEquals(1, builder.getPackages().iterator().next().getAnnotations().size());
     }
 }

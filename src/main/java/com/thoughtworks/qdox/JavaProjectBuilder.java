@@ -28,7 +28,6 @@ import java.io.ObjectOutputStream;
 import java.io.Reader;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import com.thoughtworks.qdox.directorywalker.DirectoryScanner;
 import com.thoughtworks.qdox.directorywalker.FileVisitor;

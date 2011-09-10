@@ -44,10 +44,10 @@ public class JavaProjectBuilderTest extends TestCase
     protected void setUp() throws Exception {
         super.setUp();
         builder = new JavaProjectBuilder();
-        createFile("target/test-source/com/blah/Thing.java", "com.blah", "Thing");
         createFile("target/test-source/com/blah/Another.java", "com.blah", "Another");
-        createFile("target/test-source/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");
         createFile("target/test-source/com/blah/Ignore.notjava", "com.blah", "Ignore");
+        createFile("target/test-source/com/blah/Thing.java", "com.blah", "Thing");
+        createFile("target/test-source/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");
     }
 
     protected void tearDown() throws Exception {

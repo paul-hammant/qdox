@@ -1,0 +1,59 @@
+<faqs xmlns="http://maven.apache.org/FML/1.0.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
+  title="Frequently Asked Questions">
+  
+  <part id="general">
+    <title>General</title>
+    <faq id="Whats_the_object_type_of_an_interface">
+      <question>What's the objecttype of an interface?</question>
+      <answer>
+        <p>The <code><a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html">JavaClass</a></code> method is used to
+			represent both classes and interfaces.
+			The <code><a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#isInterface()">isInterface()</a></code>
+			method allows you to distinguish between the two.</p>
+
+			<p>When using a class, the <a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getSuperClass()">getSuperClass()</a>
+				return which class is extended. If this has not been defined in the input source code, <code>java.lang.Object</code> is
+				returned. When using an interface, this method ALWAYS returns null.</p>
+
+			<p>When using a class, the <a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getImplements()">getImplements()</a>
+			returns an array of the interfaces implemented by the class. If none are implemented, an empty array is returned. When
+			using an interface, this returns an array of interfaces the current interface EXTENDS.
+			</p>
+      </answer>
+    </faq>
+
+    <faq id="Can_I_have_full_control_over_the_classloader">
+      <question>Can I have full control over the classloader?</question>
+      <answer>
+        <p>
+			I some cases QDox is used to generate classes for another project with it's own dependencies. This could result in class-collission.
+			By default the JavadocBuilder will contain the classloader(s) of the current project, but by defining your own classLibrary you can have the required control.
+			
+			<source>
+    /* new ClassLibrary() will give you an empty classLoader
+     * Big chance you want at least the system classloader.
+     */	
+    ClassLibrary classLibrary = new ClassLibrary( ClassLoader.getSystemClassLoader() );
+    JavaDocBuilder builder = new JavaDocBuilder(classLibrary);
+    
+      </source>
+			</p>
+      </answer>
+    </faq>
+
+    <faq id="ArrayIndexOutOfBoundsException_500">
+      <question>I'm getting an ArrayIndexOutOfBoundsException: 500. What to do?</question>
+      <answer>
+        <p>During the parsing of java files the Parser needs to remember states, which are kept in a stack.
+        Due to recursive calls the stack can become very large. 
+        By default the size of this this stack is 500 and it can only be set during <em>compile-time</em> of QDox.
+        The only way to increase this number is by rebuilding it.
+        Download the <a href="./download.html">sources</a> and build it like <code>mvn install -Dqdox.javaparser.stack=750</code> if you want to change it to 750.  
+        </p>
+      </answer>
+    </faq>
+  </part>
+  
+</faqs>

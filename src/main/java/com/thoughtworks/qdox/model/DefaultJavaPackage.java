@@ -131,7 +131,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 
     public List<JavaPackage> getSubPackages() {
         String expected = name + ".";
-        List<JavaPackage> jPackages = classLibrary.getJavaPackages();
+        Collection<JavaPackage> jPackages = classLibrary.getJavaPackages();
         List<JavaPackage> retList = new LinkedList<JavaPackage>();
         for (JavaPackage jPackage : jPackages) {
             String pName = jPackage.getName();

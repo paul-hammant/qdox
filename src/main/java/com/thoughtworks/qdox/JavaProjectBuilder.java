@@ -72,6 +72,7 @@ public class JavaProjectBuilder
     public JavaProjectBuilder()
     {
         this.classLibraryBuilder = new SortedClassLibraryBuilder();
+        classLibraryBuilder.appendDefaultClassLoaders();
     }
 
     /**

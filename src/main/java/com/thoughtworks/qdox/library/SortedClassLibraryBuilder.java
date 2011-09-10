@@ -48,7 +48,6 @@ public class SortedClassLibraryBuilder
     {
         classNameLibrary = new ClassNameLibrary();
         classLoaderLibrary = new ClassLoaderLibrary( classNameLibrary );
-        classLoaderLibrary.addDefaultLoader();
         sourceFolderLibrary = new SourceFolderLibrary( classLoaderLibrary );
         sourceLibrary = new SourceLibrary( sourceFolderLibrary );
     }

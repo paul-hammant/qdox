@@ -28,16 +28,16 @@
       <question>Can I have full control over the classloader?</question>
       <answer>
         <p>
-			I some cases QDox is used to generate classes for another project with it's own dependencies. This could result in class-collission.
+			I some cases QDox is used to generate classes for another project with it's own dependencies. This could result in class-collision.
 			By default the JavadocBuilder will contain the classloader(s) of the current project, but by defining your own classLibrary you can have the required control.
 			
 			<source>
     /* new ClassLibrary() will give you an empty classLoader
      * Big chance you want at least the system classloader.
-     */	
-    ClassLibrary classLibrary = new ClassLibrary( ClassLoader.getSystemClassLoader() );
-    JavaDocBuilder builder = new JavaDocBuilder(classLibrary);
-    
+     */
+    ClassLibraryBuilder libraryBuilder = new SortedClassLibraryBuilder(); //or OrderedClassLibraryBuilder() 
+    libraryBuilder.addClassLoader( ClassLoader.getSystemClassLoader() );
+    JavaProjectBuilder builder = new JavaProjectBuilder( libraryBuilder );
       </source>
 			</p>
       </answer>

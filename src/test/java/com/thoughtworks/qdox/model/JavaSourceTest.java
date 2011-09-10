@@ -36,7 +36,7 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        source = newJavaSource(new SortedClassLibraryBuilder().getClassLibrary());
+        source = newJavaSource(new SortedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary());
     }
 
     public void testToStringOneClass() throws Exception {

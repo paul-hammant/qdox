@@ -47,8 +47,9 @@
       <question>I'm getting an ArrayIndexOutOfBoundsException: 500. What to do?</question>
       <answer>
         <p>During the parsing of java files the Parser needs to remember states, which are kept in a stack.
-        Due to recursive calls the stack can become very large. 
+        Due to recursive calls the stack can become very large.
         By default the size of this this stack is 500 and it can only be set during <em>compile-time</em> of QDox.
+        Normally 500 per sourcefile will do, but in very, very rare cases this might be too little.
         The only way to increase this number is by rebuilding it.
         Download the <a href="./download.html">sources</a> and build it like <code>mvn install -Dqdox.javaparser.stack=750</code> if you want to change it to 750.  
         </p>

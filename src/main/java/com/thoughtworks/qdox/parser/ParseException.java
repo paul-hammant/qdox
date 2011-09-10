@@ -67,7 +67,7 @@ public class ParseException
 
     public void setSourceInfo( String sourceInfo )
     {
-        sourceInfo += sourceInfo;
+        this.sourceInfo = sourceInfo;
     }
 
     
@@ -80,7 +80,7 @@ public class ParseException
             if( column >=0 ) {
                buffer.append( ',' ).append( column );  
             }
-            buffer.append( "]" );
+            buffer.append( ']' );
         }
         if ( sourceInfo != null ) {
             buffer.append( " in " ).append( sourceInfo );

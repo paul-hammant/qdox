@@ -46,7 +46,7 @@ public class JavaMethodDelegate implements JavaMethod
         Type result = originalMethod.getReturnType( resolve );
         
         if (result != null) {
-            result =  result.resolve( originalMethod.getParentClass(), callingClass );
+            result =  Type.resolve( result, originalMethod.getParentClass(), callingClass );
             
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
@@ -63,7 +63,7 @@ public class JavaMethodDelegate implements JavaMethod
         List<Type> result = new LinkedList<Type>();
         for (Type type: originalMethod.getParameterTypes( resolve ) )
         {
-            Type curType = type.resolve( originalMethod.getParentClass(), callingClass );
+            Type curType = Type.resolve( type, originalMethod.getParentClass(), callingClass );
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && !type.getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
             {

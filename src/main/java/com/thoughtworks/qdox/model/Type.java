@@ -420,11 +420,11 @@ public class Type implements JavaClass, Serializable {
      * @param callingClass
      * @return
      */
-    protected Type resolve( JavaClass declaringClass, JavaClass callingClass )
+    protected static Type resolve( Type base, JavaClass declaringClass, JavaClass callingClass )
     {
-        Type result = this;
+        Type result = base;
 
-        int typeIndex = getTypeVariableIndex( declaringClass, this.getFullyQualifiedName() );
+        int typeIndex = getTypeVariableIndex( declaringClass, base.getFullyQualifiedName() );
 
         if ( typeIndex >= 0 )
         {
@@ -440,7 +440,7 @@ public class Type implements JavaClass, Serializable {
                 {
                     if ( fqn.equals( implement.getFullyQualifiedName() ) )
                     {
-                        result = implement.getActualTypeArguments().get( typeIndex ).resolve( implement, implement );
+                        result = resolve( implement.getActualTypeArguments().get( typeIndex ), implement, implement );
                         break;
                     }
                 }
@@ -448,16 +448,16 @@ public class Type implements JavaClass, Serializable {
             }
         }
 
-        if ( !this.getActualTypeArguments().isEmpty() )
+        if ( !base.getActualTypeArguments().isEmpty() )
         {
             result =
-                new Type( this.getFullyQualifiedName(), this.getValue(), this.getDimensions(),
-                          this.getJavaClassParent() );
+                new Type( base.getFullyQualifiedName(), base.getValue(), base.getDimensions(),
+                          base.getJavaClassParent() );
 
             List<Type> actualTypes = new LinkedList<Type>();
-            for ( Type actualArgType : getActualTypeArguments() )
+            for ( Type actualArgType : base.getActualTypeArguments() )
             {
-                actualTypes.add( actualArgType.resolve( declaringClass, callingClass ) );
+                actualTypes.add( resolve( actualArgType, declaringClass, callingClass ) );
             }
             result.setActualArgumentTypes( actualTypes );
         }

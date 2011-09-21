@@ -268,9 +268,9 @@ public class Type implements JavaClass, Serializable {
      * <pre>
      * Object > java.lang.Object
      * Object[] > java.lang.Object[]
-     * List<Object> > java.lang.List<java.lang.Object>
-     * Outer.Inner > Outer.Inner 
-     * Outer.Inner<Object>[][] > Outer.Inner<java.lang.Object>[][] 
+     * List&lt;Object&gt; > java.lang.List<java.lang.Object>
+     * Outer.Inner > Outer$Inner
+     * Outer.Inner&lt;Object&gt;[][] > Outer$Inner<java.lang.Object>[][] 
      * </pre>
      * @return a generic string representation of this type.
      */
@@ -562,322 +562,579 @@ public class Type implements JavaClass, Serializable {
     }
 
     //Delegating methods
+
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaModel#getSource()
+     */
     public JavaSource getSource()
     {
         return resolveRealClass().getSource();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaModel#getLineNumber()
+     */
     public int getLineNumber()
     {
         return resolveRealClass().getLineNumber();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isInterface()
+     */
     public boolean isInterface()
     {
         return resolveRealClass().isInterface();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaAnnotatedElement#getAnnotations()
+     */
     public List<Annotation> getAnnotations()
     {
         return resolveRealClass().getAnnotations();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isEnum()
+     */
     public boolean isEnum()
     {
         return resolveRealClass().isEnum();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaAnnotatedElement#getComment()
+     */
     public String getComment()
     {
         return resolveRealClass().getComment();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaAnnotatedElement#getTags()
+     */
     public List<DocletTag> getTags()
     {
         return resolveRealClass().getTags();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isAnnotation()
+     */
     public boolean isAnnotation()
     {
         return resolveRealClass().isAnnotation();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaAnnotatedElement#getTagsByName(java.lang.String)
+     */
     public List<DocletTag> getTagsByName( String name )
     {
         return resolveRealClass().getTagsByName( name );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaAnnotatedElement#getTagByName(java.lang.String)
+     */
     public DocletTag getTagByName( String name )
     {
         return resolveRealClass().getTagByName( name );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getSuperClass()
+     */
     public Type getSuperClass()
     {
         return resolveRealClass().getSuperClass();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getSuperJavaClass()
+     */
     public JavaClass getSuperJavaClass()
     {
         return resolveRealClass().getSuperJavaClass();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getImplements()
+     */
     public List<Type> getImplements()
     {
         return resolveRealClass().getImplements();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getImplementedInterfaces()
+     */
     public List<JavaClass> getImplementedInterfaces()
     {
         return resolveRealClass().getImplementedInterfaces();
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getInterfaces()
+     */
     public List<JavaClass> getInterfaces()
     {
         return resolveRealClass().getImplementedInterfaces();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaAnnotatedElement#getNamedParameter(java.lang.String, java.lang.String)
+     */
     public String getNamedParameter( String tagName, String parameterName )
     {
         return resolveRealClass().getNamedParameter( tagName, parameterName );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getCodeBlock()
+     */
     public String getCodeBlock()
     {
         return resolveRealClass().getCodeBlock();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaGenericDeclaration#getTypeParameters()
+     */
     public <D extends JavaGenericDeclaration> List<TypeVariable<D>> getTypeParameters()
     {
         return resolveRealClass().getTypeParameters();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getParentSource()
+     */
     public JavaSource getParentSource()
     {
         return resolveRealClass().getParentSource();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getPackage()
+     */
     public JavaPackage getPackage()
     {
         return resolveRealClass().getPackage();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getParent()
+     */
     public JavaClassParent getParent()
     {
         return resolveRealClass().getParent();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getPackageName()
+     */
     public String getPackageName()
     {
         return resolveRealClass().getPackageName();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isInner()
+     */
     public boolean isInner()
     {
         return resolveRealClass().isInner();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#resolveType(java.lang.String)
+     */
     public String resolveType( String name )
     {
         return resolveRealClass().resolveType( name );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#resolveCanonicalName(java.lang.String)
+     */
     public String resolveCanonicalName( String name )
     {
         return resolveRealClass().resolveCanonicalName( name );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#resolveFullyQualifiedName(java.lang.String)
+     */
     public String resolveFullyQualifiedName( String name )
     {
         return resolveRealClass().resolveFullyQualifiedName( name );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getClassNamePrefix()
+     */
     public String getClassNamePrefix()
     {
         return resolveRealClass().getClassNamePrefix();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#asType()
+     */
     public Type asType()
     {
         return resolveRealClass().asType();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getMethods()
+     */
     public List<JavaMethod> getMethods()
     {
         return resolveRealClass().getMethods();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getConstructors()
+     */
     public List<JavaConstructor> getConstructors()
     {
         return resolveRealClass().getConstructors();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getConstructor(java.util.List)
+     */
     public JavaConstructor getConstructor( List<Type> parameterTypes )
     {
         return resolveRealClass().getConstructor( parameterTypes );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getConstructor(java.util.List, boolean)
+     */
     public JavaConstructor getConstructor( List<Type> parameterTypes, boolean varArg )
     {
         return resolveRealClass().getConstructor( parameterTypes, varArg );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getMethods(boolean)
+     */
     public List<JavaMethod> getMethods( boolean superclasses )
     {
         return resolveRealClass().getMethods( superclasses );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getMethodBySignature(java.lang.String, java.util.List)
+     */
     public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes )
     {
         return resolveRealClass().getMethodBySignature( name, parameterTypes );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getMethod(java.lang.String, java.util.List, boolean)
+     */
     public JavaMethod getMethod( String name, List<Type> parameterTypes, boolean varArgs )
     {
         return resolveRealClass().getMethod( name, parameterTypes, varArgs );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getMethodBySignature(java.lang.String, java.util.List, boolean)
+     */
     public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses )
     {
         return resolveRealClass().getMethodBySignature( name, parameterTypes, superclasses );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getMethodBySignature(java.lang.String, java.util.List, boolean, boolean)
+     */
     public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses, boolean varArg )
     {
         return resolveRealClass().getMethodBySignature( name, parameterTypes, superclasses, varArg );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getMethodsBySignature(java.lang.String, java.util.List, boolean)
+     */
     public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses )
     {
         return resolveRealClass().getMethodsBySignature( name, parameterTypes, superclasses );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getMethodsBySignature(java.lang.String, java.util.List, boolean, boolean)
+     */
     public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses,
                                                    boolean varArg )
     {
         return resolveRealClass().getMethodsBySignature( name, parameterTypes, superclasses, varArg );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getFields()
+     */
     public List<JavaField> getFields()
     {
         return resolveRealClass().getFields();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getFieldByName(java.lang.String)
+     */
     public JavaField getFieldByName( String name )
     {
         return resolveRealClass().getFieldByName( name );
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getEnumConstants()
+     */
     public List<JavaField> getEnumConstants()
     {
         return resolveRealClass().getEnumConstants();
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getEnumConstantByName(java.lang.String)
+     */
     public JavaField getEnumConstantByName( String name )
     {
         return resolveRealClass().getEnumConstantByName( name );
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getClasses()
+     */
     public List<JavaClass> getClasses()
     {
         return resolveRealClass().getClasses();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getNestedClasses()
+     */
     public List<JavaClass> getNestedClasses()
     {
         return resolveRealClass().getNestedClasses();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getNestedClassByName(java.lang.String)
+     */
     public JavaClass getNestedClassByName( String name )
     {
         return resolveRealClass().getNestedClassByName( name );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isA(java.lang.String)
+     */
     public boolean isA( String fullClassName )
     {
         return resolveRealClass().isA( fullClassName );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isA(com.thoughtworks.qdox.model.JavaClass)
+     */
     public boolean isA( JavaClass javaClass )
     {
         return resolveRealClass().isA( javaClass );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getBeanProperties()
+     */
     public List<BeanProperty> getBeanProperties()
     {
         return resolveRealClass().getBeanProperties();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getBeanProperties(boolean)
+     */
     public List<BeanProperty> getBeanProperties( boolean superclasses )
     {
         return resolveRealClass().getBeanProperties( superclasses );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getBeanProperty(java.lang.String)
+     */
     public BeanProperty getBeanProperty( String propertyName )
     {
         return resolveRealClass().getBeanProperty( propertyName );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getBeanProperty(java.lang.String, boolean)
+     */
     public BeanProperty getBeanProperty( String propertyName, boolean superclasses )
     {
         return resolveRealClass().getBeanProperty( propertyName, superclasses );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getDerivedClasses()
+     */
     public List<JavaClass> getDerivedClasses()
     {
         return resolveRealClass().getDerivedClasses();
     }
     
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getTagsByName(java.lang.String, boolean)
+     */
     public List<DocletTag> getTagsByName( String name, boolean superclasses )
     {
         return resolveRealClass().getTagsByName( name, superclasses );
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getJavaClassLibrary()
+     */
     public ClassLibrary getJavaClassLibrary()
     {
         return context.getJavaClassLibrary();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getName()
+     */
     public String getName()
     {
         return resolveRealClass().getName();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getCanonicalName()
+     */
     public String getCanonicalName()
     {
         return resolveRealClass().getCanonicalName();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#getModifiers()
+     */
     public List<String> getModifiers()
     {
         return resolveRealClass().getModifiers();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isPublic()
+     */
     public boolean isPublic()
     {
         return resolveRealClass().isPublic();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isProtected()
+     */
     public boolean isProtected()
     {
         return resolveRealClass().isProtected();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isPrivate()
+     */
     public boolean isPrivate()
     {
         return resolveRealClass().isPrivate();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isFinal()
+     */
     public boolean isFinal()
     {
         return resolveRealClass().isFinal();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isStatic()
+     */
     public boolean isStatic()
     {
         return resolveRealClass().isStatic();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see com.thoughtworks.qdox.model.JavaClass#isAbstract()
+     */
     public boolean isAbstract()
     {
         return resolveRealClass().isAbstract();

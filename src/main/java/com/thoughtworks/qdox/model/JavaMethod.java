@@ -135,7 +135,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return the generic return type
      * @since 1.12
      */
-    Type getGenericReturnType();
+    JavaClass getGenericReturnType();
 
     /**
      * Equivalent of java.lang.reflect.Method.getReturnType()
@@ -143,7 +143,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return the return type
      * @since 1.12
      */
-    Type getReturnType();
+    JavaClass getReturnType();
 
     /**
      * If a class inherits this method from a generic class or interface, you can use this method to get the resolved return type

@@ -378,7 +378,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
 	/* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getGenericReturnType()
      */
-    public Type getGenericReturnType()
+    public JavaClass getGenericReturnType()
     {
         return returns;
     }
@@ -386,7 +386,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getReturnType()
      */
-    public Type getReturnType() {
+    public JavaClass getReturnType() {
 	    return getReturnType( false );
 	}
 	

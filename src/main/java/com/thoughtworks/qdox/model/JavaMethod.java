@@ -111,7 +111,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * is not a property mutator or property accessor.
      * @since 1.3
      */
-    Type getPropertyType();
+    JavaClass getPropertyType();
 
     /**
      * @return the name of the property this method represents, or <code>null</code> if this method

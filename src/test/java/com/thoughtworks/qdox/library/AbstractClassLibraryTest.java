@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.library;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 
 import junit.framework.TestCase;
 
@@ -103,24 +104,25 @@ public class AbstractClassLibraryTest
         parentClassLibrary.getJavaClass( "ParentClass" );
         filledChildClassLibrary.getJavaClass( "ChildClass" );
         
-        List<JavaClass> parentClasses = parentClassLibrary.getJavaClasses( new AbstractClassLibrary.ClassLibraryFilter(){
+        Collection<JavaClass> parentClasses = parentClassLibrary.getJavaClasses( new AbstractClassLibrary.ClassLibraryFilter(){
             public boolean accept(AbstractClassLibrary classLibrary) { return true; };
         } ); 
         assertEquals(1, parentClasses.size());
-        assertEquals( "ParentClass", parentClasses.get(0).getFullyQualifiedName() );
+        assertEquals( "ParentClass", parentClasses.iterator().next().getFullyQualifiedName() );
         
-        List<JavaClass> filledClasses = filledChildClassLibrary.getJavaClasses(new AbstractClassLibrary.ClassLibraryFilter(){
+        Collection<JavaClass> filledClasses = filledChildClassLibrary.getJavaClasses(new AbstractClassLibrary.ClassLibraryFilter(){
             public boolean accept(AbstractClassLibrary classLibrary) { return true; };
         } ); 
         assertEquals(2, filledClasses.size() );
-        assertEquals( "ChildClass", filledClasses.get(0).getFullyQualifiedName() );
-        assertEquals( "ParentClass", filledClasses.get(1).getFullyQualifiedName() );
+        Iterator<JavaClass> iter = filledClasses.iterator();
+        assertEquals( "ChildClass", iter.next().getFullyQualifiedName() );
+        assertEquals( "ParentClass", iter.next().getFullyQualifiedName() );
         
-        List<JavaClass> emptyClasses = emptyChildClassLibrary.getJavaClasses(new AbstractClassLibrary.ClassLibraryFilter(){
+        Collection<JavaClass> emptyClasses = emptyChildClassLibrary.getJavaClasses(new AbstractClassLibrary.ClassLibraryFilter(){
             public boolean accept(AbstractClassLibrary classLibrary) { return true; };
         } ); 
         assertEquals(1, emptyClasses.size() );
-        assertEquals( "ParentClass", emptyClasses.get(0).getFullyQualifiedName() );
+        assertEquals( "ParentClass", emptyClasses.iterator().next().getFullyQualifiedName() );
     }
     
     

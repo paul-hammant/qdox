@@ -20,6 +20,7 @@ package com.thoughtworks.qdox.library;
  */
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -130,7 +131,7 @@ public abstract class AbstractClassLibrary
      */
     protected abstract JavaClass resolveJavaClass( String name );
     
-    public List<JavaSource> getJavaSources()
+    public Collection<JavaSource> getJavaSources()
     {
         return context.getSources();
     }
@@ -141,7 +142,7 @@ public abstract class AbstractClassLibrary
      * @param filter
      * @return JavaSources matching the filter
      */
-    protected final List<JavaSource> getJavaSources( ClassLibraryFilter filter) {
+    protected final Collection<JavaSource> getJavaSources( ClassLibraryFilter filter) {
         List<JavaSource> result = new LinkedList<JavaSource>(); 
         if(filter.accept(this)) {
             result.addAll( context.getSources() );
@@ -171,7 +172,7 @@ public abstract class AbstractClassLibrary
      * 
      * @return all JavaClasses of this ClassLibrary
      */
-    public List<JavaClass> getJavaClasses()
+    public Collection<JavaClass> getJavaClasses()
     {
         return context.getClasses();
     }
@@ -182,7 +183,7 @@ public abstract class AbstractClassLibrary
      * @param filter
      * @return JavaClasses matching the filter
      */
-    protected final List<JavaClass> getJavaClasses( ClassLibraryFilter filter) {
+    protected final Collection<JavaClass> getJavaClasses( ClassLibraryFilter filter) {
         List<JavaClass> result = new LinkedList<JavaClass>(); 
         if(filter.accept(this)) {
             result.addAll( context.getClasses() );
@@ -212,7 +213,7 @@ public abstract class AbstractClassLibrary
      * 
      * @return all JavaPackages of this ClassLibrary
      */
-    public List<JavaPackage> getJavaPackages()
+    public Collection<JavaPackage> getJavaPackages()
     {
         return context.getPackages();
     }
@@ -237,7 +238,7 @@ public abstract class AbstractClassLibrary
     
     protected abstract JavaPackage resolveJavaPackage(String name);
 
-	protected final List<JavaPackage> getJavaPackages( ClassLibraryFilter filter) {
+	protected final Collection<JavaPackage> getJavaPackages( ClassLibraryFilter filter) {
         List<JavaPackage> result = new LinkedList<JavaPackage>(); 
         if( filter.accept( this ) ) {
             result.addAll( context.getPackages() );

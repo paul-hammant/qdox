@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -312,11 +313,11 @@ public class SourceLibrary
      * Get all classes, including those from parent SourceLibraries
      */
     @Override
-    public List<JavaClass> getJavaClasses()
+    public Collection<JavaClass> getJavaClasses()
     {
         List<JavaClass> result = new LinkedList<JavaClass>();
         List<JavaClass> unusedClasses = context.getClasses();
-        List<JavaClass> usedClasses = getJavaClasses( new ClassLibraryFilter()
+        Collection<JavaClass> usedClasses = getJavaClasses( new ClassLibraryFilter()
         {
             public boolean accept( AbstractClassLibrary classLibrary )
             {
@@ -332,11 +333,11 @@ public class SourceLibrary
      * Get all packages, including those from parent SourceLibraries
      */
     @Override
-    public List<JavaPackage> getJavaPackages()
+    public Collection<JavaPackage> getJavaPackages()
     {
         List<JavaPackage> result = new LinkedList<JavaPackage>();
         List<JavaPackage> unusedPackages = context.getPackages();
-        List<JavaPackage> usedPackages = getJavaPackages( new ClassLibraryFilter()
+        Collection<JavaPackage> usedPackages = getJavaPackages( new ClassLibraryFilter()
         {
             public boolean accept( AbstractClassLibrary classLibrary )
             {
@@ -352,11 +353,11 @@ public class SourceLibrary
      * Get all sources, including those from parent SourceLibraries
      */
     @Override
-    public List<JavaSource> getJavaSources()
+    public Collection<JavaSource> getJavaSources()
     {
         List<JavaSource> result = new LinkedList<JavaSource>();
         List<JavaSource> unusedSources = context.getSources();
-        List<JavaSource> usedSources = getJavaSources( new ClassLibraryFilter()
+        Collection<JavaSource> usedSources = getJavaSources( new ClassLibraryFilter()
         {
             public boolean accept( AbstractClassLibrary classLibrary )
             {

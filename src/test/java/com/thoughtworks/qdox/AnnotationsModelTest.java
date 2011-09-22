@@ -58,7 +58,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         Annotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 8, annotation.getNamedParameterMap().size() );
 

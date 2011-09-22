@@ -34,7 +34,7 @@ import com.thoughtworks.qdox.model.expression.AnnotationVisitor;
  */
 public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
 {
-    private final Type type;
+    private final JavaClass type;
     private final int lineNumber;
 
     /**
@@ -52,7 +52,7 @@ public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
 
     private AbstractJavaModel context;
 
-    public Annotation(Type type,
+    public Annotation(JavaClass type,
             AbstractJavaModel context,
             Map<String, Object> namedParameters,
             int lineNumber)
@@ -84,7 +84,7 @@ public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
     /* (non-Javadoc)
 	 * @see com.thoughtworks.qdox.model.JavaAnnotation#getType()
 	 */
-    public Type getType() {
+    public JavaClass getType() {
     	return type;
     }
 

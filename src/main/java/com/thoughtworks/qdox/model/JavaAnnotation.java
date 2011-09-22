@@ -28,7 +28,7 @@ public interface JavaAnnotation {
 	/**
 	 * @return the annotation type
 	 */
-	Type getType();
+	JavaClass getType();
 
 	Map<String, AnnotationValue> getPropertyMap();
 

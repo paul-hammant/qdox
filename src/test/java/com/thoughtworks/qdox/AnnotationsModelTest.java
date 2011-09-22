@@ -32,7 +32,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         return annotation;
     }
@@ -94,7 +93,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 5, annotation.getPropertyMap().size() );
 
@@ -120,7 +118,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -139,7 +136,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -154,7 +150,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -169,7 +164,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -185,7 +179,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
@@ -200,7 +193,6 @@ public class AnnotationsModelTest extends TestCase {
         JavaClass clazz = builder.getClassByName( "Foo" );
         assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
         JavaAnnotation annotation = clazz.getAnnotations().get(0);
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getJavaClass().getFullyQualifiedName() );
         assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 

@@ -245,7 +245,7 @@ public class DefaultModelWriter
         commentHeader( method );
         writeAccessibilityModifier( method.getModifiers() );
         writeNonAccessibilityModifiers( method.getModifiers() );
-        buffer.write( method.getReturns().getCanonicalName() );
+        buffer.write( method.getReturnType().getCanonicalName() );
         buffer.write( ' ' );
         buffer.write( method.getName() );
         buffer.write( '(' );

@@ -308,8 +308,7 @@ public class Type implements JavaClass, Serializable {
         }
         else
         {
-            JavaClassParent javaClassParent = getJavaClassParent();
-            result = javaClassParent.getNestedClassByName( qualifiedName );
+            result = getJavaClassParent().getNestedClassByName( qualifiedName );
             if ( result == null )
             {
                 result = getJavaClassLibrary().getJavaClass( qualifiedName, true );

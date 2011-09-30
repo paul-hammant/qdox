@@ -31,16 +31,6 @@ public class DefaultJavaMethodTest
         return new DefaultJavaParameter( type, name, varArgs );
     }
 
-    public Type newType( String fullname )
-    {
-        return new Type( fullname );
-    }
-
-    public Type newType( String fullname, int dimensions )
-    {
-        return new Type( fullname, dimensions );
-    }
-
     public void setExceptions( DefaultJavaMethod method, List<JavaClass> exceptions )
     {
         method.setExceptions( exceptions );

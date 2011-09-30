@@ -50,9 +50,8 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
     {
         Type result = mock( Type.class );
         when( result.getFullyQualifiedName() ).thenReturn( fullname );
-        when( result.getValue() ).thenReturn( fullname );
-        //@todo fix
-        when( result.toString() ).thenReturn( fullname );
+        when( result.getValue() ).thenReturn( fullname.replace( '$', '.' ) );
+        when( result.getCanonicalName() ).thenReturn( fullname.replace( '$', '.' ) );
         return result;
     }
     

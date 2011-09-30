@@ -117,7 +117,7 @@ public class DefaultModelWriter
             if ( !"java.lang.Object".equals( className ) && !"java.lang.Enum".equals( className ) )
             {
                 buffer.write( " extends " );
-                buffer.write( cls.getSuperClass().getValue() );
+                buffer.write( cls.getSuperClass().getCanonicalName() );
             }
         }
 
@@ -128,7 +128,7 @@ public class DefaultModelWriter
 
             for ( ListIterator<Type> iter = cls.getImplements().listIterator(); iter.hasNext(); )
             {
-                buffer.write( iter.next().getValue() );
+                buffer.write( iter.next().getCanonicalName() );
                 if ( iter.hasNext() )
                 {
                     buffer.write( ", " );
@@ -177,7 +177,7 @@ public class DefaultModelWriter
         commentHeader( field );
 
         writeAllModifiers( field.getModifiers() );
-        buffer.write( field.getType().toString() );
+        buffer.write( field.getType().getCanonicalName() );
         buffer.write( ' ' );
         buffer.write( field.getName() );
         if ( field.getInitializationExpression() != null && field.getInitializationExpression().length() > 0 )
@@ -216,7 +216,7 @@ public class DefaultModelWriter
             buffer.write( " throws " );
             for ( Iterator<JavaClass> excIter = constructor.getExceptions().iterator(); excIter.hasNext(); )
             {
-                buffer.write( excIter.next().getValue() );
+                buffer.write( excIter.next().getCanonicalName() );
                 if ( excIter.hasNext() )
                 {
                     buffer.write( ", " );
@@ -245,14 +245,14 @@ public class DefaultModelWriter
         commentHeader( method );
         writeAccessibilityModifier( method.getModifiers() );
         writeNonAccessibilityModifiers( method.getModifiers() );
-        buffer.write( method.getReturns().toString() );
+        buffer.write( method.getReturns().getCanonicalName() );
         buffer.write( ' ' );
         buffer.write( method.getName() );
         buffer.write( '(' );
         for ( ListIterator<JavaParameter> iter = method.getParameters().listIterator(); iter.hasNext(); )
         {
             JavaParameter parameter = iter.next();
-            buffer.write( parameter.getType().toString() );
+            buffer.write( parameter.getType().getCanonicalName() );
             if ( parameter.isVarArgs() )
             {
                 buffer.write( "..." );
@@ -271,7 +271,7 @@ public class DefaultModelWriter
             buffer.write( " throws " );
             for ( Iterator<JavaClass> excIter = method.getExceptions().iterator(); excIter.hasNext(); )
             {
-                buffer.write( excIter.next().getValue() );
+                buffer.write( excIter.next().getCanonicalName() );
                 if ( excIter.hasNext() )
                 {
                     buffer.write( ", " );
@@ -365,7 +365,7 @@ public class DefaultModelWriter
     public ModelWriter writeParameter( JavaParameter parameter )
     {
         commentHeader( parameter );
-        buffer.write( parameter.getType().toString() );
+        buffer.write( parameter.getType().getCanonicalName() );
         if ( parameter.isVarArgs() )
         {
             buffer.write( "..." );

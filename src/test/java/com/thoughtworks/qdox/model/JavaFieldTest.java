@@ -34,15 +34,14 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
     {
         Type result = mock( Type.class );
         when( result.getFullyQualifiedName() ).thenReturn( fullname );
-        when( result.getValue() ).thenReturn( fullname );
-        //@todo fix
-        String toString = fullname;
+        String canonicalName = fullname.replace( '$', '.' );
+        when( result.getValue() ).thenReturn( canonicalName );
         when( result.getDimensions()).thenReturn( dimensions );
         for(int i = 0; i < dimensions; i++)
         {
-            toString += "[]";
+            canonicalName += "[]";
         }
-        when( result.toString() ).thenReturn( toString );
+        when( result.getCanonicalName() ).thenReturn( canonicalName );
         return result;
     }
     

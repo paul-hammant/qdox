@@ -202,7 +202,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         JavaMethod mth = mock(JavaMethod.class);
         when(mth.getName()).thenReturn( "doStuff" );
         Type voidType = newType("void");
-        when(mth.getReturns()).thenReturn( voidType );
+        when(mth.getReturnType()).thenReturn( voidType );
         
         setMethods(cls, Collections.singletonList( mth ));
         String expected = ""
@@ -221,7 +221,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
             JavaMethod mth = mock(JavaMethod.class);
             when(mth.getName()).thenReturn( "doStuff" );
             Type voidType = newType( "void" );
-            when(mth.getReturns()).thenReturn( voidType );
+            when(mth.getReturnType()).thenReturn( voidType );
             methods.add(mth);
         }
 
@@ -229,7 +229,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
             JavaMethod mth = mock(JavaMethod.class);
             when(mth.getName()).thenReturn( "somethingElse" );
             Type gooseType = newType("Goose");
-            when(mth.getReturns()).thenReturn( gooseType );
+            when(mth.getReturnType()).thenReturn( gooseType );
             methods.add(mth);
         }
 
@@ -237,7 +237,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
             JavaMethod mth = mock(JavaMethod.class);
             when(mth.getName()).thenReturn( "eat" );
             Type voidType = newType("void");
-            when(mth.getReturns()).thenReturn( voidType );
+            when(mth.getReturnType()).thenReturn( voidType );
             methods.add(mth);
         }
         setMethods( cls, methods );
@@ -364,7 +364,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         JavaMethod mth = mock(JavaMethod.class);
         when(mth.getName()).thenReturn( "thingy" );
         Type stringType = newType( "String" );
-        when(mth.getReturns()).thenReturn( stringType );
+        when(mth.getReturnType()).thenReturn( stringType );
         when(mth.getComment()).thenReturn( "Hello Method" );
         setMethods( cls, Collections.singletonList( mth ) );
         
@@ -596,7 +596,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
 
         JavaMethod getFooMethod = mock(JavaMethod.class);
         when(getFooMethod.getName()).thenReturn( "getFoo" );
-        when(getFooMethod.getReturns()).thenReturn( intType );
+        when(getFooMethod.getReturnType()).thenReturn( intType );
         when(getFooMethod.isPropertyAccessor()).thenReturn( true );
         when(getFooMethod.getPropertyName()).thenReturn( "foo" );
         when(getFooMethod.getPropertyType()).thenReturn( intType );
@@ -661,14 +661,14 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         JavaMethod getFooMethod = mock(JavaMethod.class);
         when(getFooMethod.getName()).thenReturn( "getFoo" );
         Type intType = newType("int");
-        when(getFooMethod.getReturns()).thenReturn( intType );
+        when(getFooMethod.getReturnType()).thenReturn( intType );
         when(getFooMethod.getPropertyName()).thenReturn( "foo" );
         when(getFooMethod.isPropertyAccessor()).thenReturn( true );
         methods.add( getFooMethod );
 
         JavaMethod getBarMethod = mock(JavaMethod.class);
         when(getBarMethod.getName()).thenReturn( "getBar" );
-        when(getBarMethod.getReturns()).thenReturn( intType );
+        when(getBarMethod.getReturnType()).thenReturn( intType );
         when(getBarMethod.getPropertyName()).thenReturn( "bar" );
         when(getBarMethod.isPropertyAccessor()).thenReturn( true );
         methods.add( getBarMethod );

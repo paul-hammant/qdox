@@ -32,8 +32,19 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
     public abstract void setSourceCode(M method, String code);
     
     
-    public abstract JavaParameter newJavaParameter(Type type, String name);
-    public abstract JavaParameter newJavaParameter(Type type, String name, boolean varArgs);
+    public JavaParameter newJavaParameter(Type type, String name)
+    {
+        return newJavaParameter( type, name, false );
+    }
+    
+    public JavaParameter newJavaParameter(Type type, String name, boolean varArgs) 
+    {
+        JavaParameter result = mock(JavaParameter.class);
+        when( result.getType() ).thenReturn( type );
+        when( result.getName() ).thenReturn( name );
+        when( result.isVarArgs() ).thenReturn( varArgs );
+        return result;
+    }
     
     public Type newType( String fullname )
     {
@@ -242,63 +253,67 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         Type stringArrayType = newType("java.lang.String", 2);
         Type xArrayType = newType("X", 3);
 
-        setName(mth, "thing");
-        setParameters(mth, Arrays.asList( newJavaParameter(intArrayType, "blah"), newJavaParameter(stringArrayType, "thing"), newJavaParameter(xArrayType, "") ));
-        setReturns(mth, voidType);
+        JavaParameter intArrayParam = newJavaParameter(intArrayType, "blah");
+        JavaParameter stringArrayParam = newJavaParameter(stringArrayType, "thing");
+        JavaParameter xArrayParameter = newJavaParameter(xArrayType, "blah");
+        
+        setName( mth, "thing" );
+        setParameters( mth, Arrays.asList( intArrayParam, stringArrayParam, xArrayParameter ) );
+        setReturns( mth, voidType );
 
         M m2 = newJavaMethod();
-        setName(m2, "thing");
-        setParameters(m2, Arrays.asList( newJavaParameter(intArrayType, "blah"), newJavaParameter(stringArrayType, "anotherName"), newJavaParameter(xArrayType, "blah") ));
-        setReturns(m2, voidType);
+        setName( m2, "thing" );
+        setParameters( m2, Arrays.asList( intArrayParam, stringArrayParam, xArrayParameter ) );
+        setReturns( m2, voidType );
 
         M m3 = newJavaMethod();
-        setName(m3, "thing");
-        setParameters(m3, Arrays.asList( newJavaParameter(intArrayType, "blah"), newJavaParameter(stringArrayType, "thing") ) );
-        setReturns(m3, voidType);
-
-        // name
-        M m4 = newJavaMethod(); 
-        setName(m4, "thing");
-        setParameters(m4, Arrays.asList( newJavaParameter(intArrayType, "blah"), newJavaParameter(stringArrayType, "thing"), newJavaParameter(newType("TTTTTTTT", 3), "blah") ));
-        setReturns(m4, voidType);
+        setName( m3, "thing" );
+        setParameters( m3, Arrays.asList( intArrayParam, stringArrayParam ) );
+        setReturns( m3, voidType );
 
         // dimension
         M m5 = newJavaMethod();
-        setName(m5, "thing");
-        setParameters(m5, Arrays.asList( newJavaParameter(intArrayType, "blah"), newJavaParameter(stringArrayType, "thing"), newJavaParameter(newType("X", 9), "blah") ));
-        setReturns(m5, voidType);
+        setName( m5, "thing" );
+        setParameters( m5,
+                       Arrays.asList( intArrayParam, stringArrayParam, newJavaParameter( newType( "X", 9 ), "blah" ) ) );
+        setReturns( m5, voidType );
 
-        assertEquals(mth, m2);
-        assertEquals(m2, mth);
-        assertNotEquals(mth, m3);
-        assertNotEquals(mth, m4);
-        assertNotEquals(mth, m5);
+        assertEquals( mth, m2 );
+        assertEquals( m2, mth );
+        assertNotEquals( mth, m3 );
+        assertNotEquals( mth, m5 );
     }
 
-    public void testHashCode() throws Exception {
+    public void testHashCode()
+        throws Exception
+    {
         assertTrue( "hashCode should never resolve to 0", newJavaMethod( Type.VOID, "" ).hashCode() != 0 );
 
-        Type voidType = newType("void");
-        Type intType = newType("int", 1);
-        Type stringArrayType = newType("java.lang.String", 2);
-        Type xArrayType = newType("X", 3);
-        
-        setName(mth, "thing");
-        setParameters(mth, Arrays.asList( newJavaParameter(intType, "blah"), newJavaParameter(stringArrayType, "thing"), newJavaParameter(xArrayType, "") ));
-        setReturns(mth, voidType);
+        Type voidType = newType( "void" );
+        Type intType = newType( "int", 1 );
+        Type stringArrayType = newType( "java.lang.String", 2 );
+        Type xArrayType = newType( "X", 3 );
+
+        JavaParameter intParam = newJavaParameter( intType, "blah" );
+        JavaParameter stringArrayParam = newJavaParameter( stringArrayType, "thing" );
+        JavaParameter xArrayParam = newJavaParameter( xArrayType, "blah" );
+
+        setName( mth, "thing" );
+        setParameters( mth, Arrays.asList( intParam, stringArrayParam, xArrayParam ) );
+        setReturns( mth, voidType );
 
         M m2 = newJavaMethod();
-        setName(m2, "thing");
-        setParameters(m2, Arrays.asList( newJavaParameter(intType, "blah"), newJavaParameter(stringArrayType, "anotherName"), newJavaParameter(xArrayType, "blah") ));
-        setReturns(m2, voidType);
+        setName( m2, "thing" );
+        setParameters( m2, Arrays.asList( intParam, stringArrayParam, xArrayParam ) );
+        setReturns( m2, voidType );
 
         M m3 = newJavaMethod();
-        setName(m3, "thing");
-        setParameters(m3, Arrays.asList( newJavaParameter(intType, "blah"), newJavaParameter(stringArrayType, "thing")));
-        setReturns(m3, voidType);
+        setName( m3, "thing" );
+        setParameters( m3, Arrays.asList( intParam, stringArrayParam ) );
+        setReturns( m3, voidType );
 
-        assertEquals(mth.hashCode(), m2.hashCode());
-        assertTrue(mth.hashCode() != m3.hashCode());
+        assertEquals( mth.hashCode(), m2.hashCode() );
+        assertTrue( mth.hashCode() != m3.hashCode() );
     }
 
     public void testSignatureMatches() throws Exception {

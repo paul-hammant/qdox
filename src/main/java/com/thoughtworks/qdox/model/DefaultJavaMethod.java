@@ -356,7 +356,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
                 result.append( "," );
             }
             Type originalType = getParameters().get( paramIndex ).getType();
-            TypeVariable typeVariable = originalType.resolve( getTypeParameters() ); 
+            TypeVariable typeVariable = Type.resolve( originalType, getTypeParameters() ); 
             result.append( typeVariable == null ? originalType.getFullyQualifiedName() : typeVariable.getResolvedFullyQualifiedName() );
         }
         result.append( ")" );

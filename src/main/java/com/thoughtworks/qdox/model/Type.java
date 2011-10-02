@@ -171,7 +171,7 @@ public class Type implements JavaClass, Serializable {
         StringBuffer result = new StringBuffer( getResolvedValue( typeVariableList ) );
         for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
         {
-            result.append( iter.next().resolve( typeVariableList ) );
+            result.append( iter.next().resolve( this, typeVariableList ) );
             if ( iter.hasNext() )
             {
                 result.append( "," );
@@ -194,13 +194,13 @@ public class Type implements JavaClass, Serializable {
         return result;
     }
     
-    protected <D extends JavaGenericDeclaration> TypeVariable<D> resolve( List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> TypeVariable<D> resolve( Type base, List<TypeVariable<D>> typeParameters )
     {
         TypeVariable<D> result = null;
         // String result = getGenericValue(typeParameters);
         for ( TypeVariable<D> typeParameter : typeParameters )
         {
-            if ( typeParameter.getName().equals( getValue() ) )
+            if ( typeParameter.getName().equals( base.getValue() ) )
             {
                 result = typeParameter;
                 break;
@@ -507,7 +507,7 @@ public class Type implements JavaClass, Serializable {
     public <D extends JavaGenericDeclaration> String getResolvedGenericValue( List<TypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
-        TypeVariable<?> variable = resolve( typeParameters );
+        TypeVariable<?> variable = resolve( this, typeParameters );
         result.append( variable == null ? getValue() : variable.getBounds().get(0).getValue() );
         if ( !actualArgumentTypes.isEmpty() )
         {
@@ -532,7 +532,7 @@ public class Type implements JavaClass, Serializable {
     protected <D extends JavaGenericDeclaration> String getResolvedGenericFullyQualifiedName( List<TypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
-        TypeVariable<D> variable = resolve( typeParameters );
+        TypeVariable<D> variable = resolve( this, typeParameters );
         result.append( variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
         if ( !actualArgumentTypes.isEmpty() )
         {
@@ -556,7 +556,7 @@ public class Type implements JavaClass, Serializable {
 
     protected <D extends JavaGenericDeclaration> String getResolvedFullyQualifiedName( List<TypeVariable<D>> typeParameters )
     {
-        TypeVariable<D> variable = resolve( typeParameters );
+        TypeVariable<D> variable = resolve( this, typeParameters );
         return (variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
     }
 

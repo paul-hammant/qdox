@@ -168,7 +168,7 @@ public class Type implements JavaClass, Serializable {
     
     protected <D extends JavaGenericDeclaration> String getGenericValue( List<TypeVariable<D>> typeVariableList )
     {
-        StringBuffer result = new StringBuffer( getResolvedValue( typeVariableList ) );
+        StringBuffer result = new StringBuffer( getResolvedValue( this, typeVariableList ) );
         for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
         {
             result.append( iter.next().resolve( this, typeVariableList ) );
@@ -180,12 +180,12 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
     
-    protected <D extends JavaGenericDeclaration> String getResolvedValue( List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedValue( Type base, List<TypeVariable<D>> typeParameters )
     {
-        String result = getValue();
+        String result = base.getValue();
         for ( TypeVariable<?> typeParameter : typeParameters )
         {
-            if ( typeParameter.getName().equals( getValue() ) )
+            if ( typeParameter.getName().equals( base.getValue() ) )
             {
                 result = typeParameter.getBounds().get( 0 ).getValue();
                 break;

@@ -63,7 +63,7 @@ public class DefaultJavaConstructor
         result.append( "(" );
         for ( Iterator<JavaParameter> paramIter = getParameters().iterator(); paramIter.hasNext();)
         {
-            String typeValue = paramIter.next().getType().getResolvedValue( getTypeParameters() );
+            String typeValue = Type.getResolvedValue( paramIter.next().getType(), getTypeParameters() );
             result.append( typeValue );
             if ( paramIter.hasNext() )
             {

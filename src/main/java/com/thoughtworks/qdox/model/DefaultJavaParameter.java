@@ -100,7 +100,7 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
      * @see com.thoughtworks.qdox.model.JavaParameter#getResolvedValue()
      */
     public String getResolvedValue() {
-        return type.getResolvedValue( getParentMethod().getTypeParameters() );
+        return Type.getResolvedValue( type, getParentMethod().getTypeParameters() );
     }
 
     public String getResolvedFullyQualifiedName() 

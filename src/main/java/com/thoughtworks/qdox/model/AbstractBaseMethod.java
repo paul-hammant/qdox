@@ -10,7 +10,7 @@ import java.util.List;
  * @author Robert Scholte
  *
  */
-public abstract class AbstractBaseMethod
+public abstract class AbstractBaseMethod<T extends JavaClass & JavaParameterizedType>
     extends AbstractInheritableJavaEntity
 {
 

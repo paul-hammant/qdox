@@ -9,8 +9,8 @@ import java.util.List;
  * @author Robert
  * @since 2.0
  */
-public class DefaultJavaConstructor
-    extends AbstractBaseMethod implements JavaConstructor
+public class DefaultJavaConstructor<T extends JavaClass & JavaParameterizedType>
+    extends AbstractBaseMethod<T> implements JavaConstructor
 {
 
     private List<TypeVariable<JavaConstructor>> typeParameters = Collections.emptyList();

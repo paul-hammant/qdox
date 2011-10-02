@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod {
+public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> extends AbstractBaseMethod<T> implements JavaMethod {
 
 	private Type returns = Type.VOID;
     private List<TypeVariable<JavaMethod>> typeParameters = Collections.emptyList();

@@ -115,6 +115,11 @@ public class JavaMethodDelegate implements JavaMethod
     {
         return originalMethod.getExceptions();
     }
+    
+    public List<JavaType> getExceptionTypes()
+    {
+        return originalMethod.getExceptionTypes();
+    }
 
     public JavaClass getGenericReturnType()
     {

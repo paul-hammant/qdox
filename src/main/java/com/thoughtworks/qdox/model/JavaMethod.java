@@ -37,6 +37,8 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
 
     List<JavaClass> getExceptions();
 
+    List<JavaType> getExceptionTypes();
+
     /**
      * Equivalent of {@link java.lang.reflect.Method#isVarArgs()}
      * 

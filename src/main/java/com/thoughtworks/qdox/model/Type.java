@@ -504,7 +504,7 @@ public class Type implements JavaClass, JavaType, Serializable {
         return result.toString();
     }
 
-    protected static <D extends JavaGenericDeclaration> String getResolvedGenericValue( Type base, List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedGenericValue( JavaType base, List<TypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
         TypeVariable<?> variable = resolve( base, typeParameters );
@@ -522,14 +522,17 @@ public class Type implements JavaClass, JavaType, Serializable {
             }
             result.append( ">" );
         }
-        for ( int i = 0; i < base.getDimensions(); i++ )
+        if( base instanceof JavaClass )
         {
-            result.append( "[]" );
+            for ( int i = 0; i < ( (JavaClass) base ).getDimensions(); i++ )
+            {
+                result.append( "[]" );
+            }
         }
         return result.toString();
     }
 
-    protected static <D extends JavaGenericDeclaration> String getResolvedGenericFullyQualifiedName( Type base, List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedGenericFullyQualifiedName( JavaType base, List<TypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
         TypeVariable<D> variable = resolve( base, typeParameters );
@@ -547,14 +550,17 @@ public class Type implements JavaClass, JavaType, Serializable {
             }
             result.append( ">" );
         }
-        for ( int i = 0; i < base.getDimensions(); i++ )
+        if ( base instanceof JavaClass )
         {
-            result.append( "[]" );
+            for ( int i = 0; i < ( (JavaClass) base ).getDimensions(); i++ )
+            {
+                result.append( "[]" );
+            }
         }
         return result.toString();
     }
 
-    protected static <D extends JavaGenericDeclaration> String getResolvedFullyQualifiedName( Type base, List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedFullyQualifiedName( JavaType base, List<TypeVariable<D>> typeParameters )
     {
         TypeVariable<D> variable = resolve( base, typeParameters );
         return (variable == null ? base.getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );

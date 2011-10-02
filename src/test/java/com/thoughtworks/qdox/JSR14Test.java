@@ -439,7 +439,7 @@ public class JSR14Test extends TestCase {
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaMethod javaMethod = javaClass.getMethods().get(0);
     	JavaParameter paramType = javaMethod.getParameters().get(0);
-    	Type returnType = javaMethod.getReturns();
+    	JavaType returnType = javaMethod.getReturns();
     	assertEquals("myMethod(request)", javaMethod.getCallSignature());
     	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer) throws java.lang.Exception", javaMethod.toString());
     	assertEquals("StringBuffer", paramType.getResolvedValue());

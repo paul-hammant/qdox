@@ -311,7 +311,7 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource(new StringReader(in));
 
         JavaClass cls = builder.getClassByName("x.X");
-        Type returnType = cls.getMethods().get(0).getReturns();
+        JavaType returnType = cls.getMethods().get(0).getReturns();
         JavaClass returnClass = builder.getClassByName(returnType.getFullyQualifiedName());
 
         assertEquals("java.util.ArrayList", returnClass.getFullyQualifiedName());

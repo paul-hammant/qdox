@@ -27,7 +27,7 @@ import java.util.ListIterator;
 
 public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> extends AbstractBaseMethod<T> implements JavaMethod {
 
-	private Type returns = Type.VOID;
+	private T returns = (T) Type.VOID;
     private List<TypeVariable<JavaMethod>> typeParameters = Collections.emptyList();
 	
     /**
@@ -51,7 +51,7 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
      * @param returns the return type
      * @param name the name of this method
      */
-    public DefaultJavaMethod(Type returns, String name) {
+    public DefaultJavaMethod(T returns, String name) {
         this.returns = returns;
         setName(name);
     }
@@ -59,7 +59,7 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getReturns()
      */
-    public Type getReturns() {
+    public JavaClass getReturns() {
         return returns;
     }
     
@@ -156,7 +156,7 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
      * 
      * @param returns the return type
      */
-    public void setReturns(Type returns) {
+    public void setReturns(T returns) {
         this.returns = returns;
     }
 
@@ -393,7 +393,7 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getReturnType(boolean)
      */
-    public Type getReturnType( boolean resolve )
+    public JavaType getReturnType( boolean resolve )
     {
         return returns;
     }

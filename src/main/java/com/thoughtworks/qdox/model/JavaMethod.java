@@ -27,9 +27,8 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     /**
      * 
      * @return the return type
-     * @deprecated it is recommended to use getReturnType()
      */
-    Type getReturns();
+    JavaClass getReturns();
 
     List<JavaParameter> getParameters();
 

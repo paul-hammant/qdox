@@ -143,7 +143,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return the return type
      * @since 1.12
      */
-    JavaClass getReturnType();
+    JavaType getReturnType();
 
     /**
      * If a class inherits this method from a generic class or interface, you can use this method to get the resolved return type
@@ -152,14 +152,14 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return the return type
      * @since 1.12
      */
-    Type getReturnType( boolean resolve );
+    JavaType getReturnType( boolean resolve );
 
     /**
      * 
      * @return the parameter types
      * @since 1.12
      */
-    List<Type> getParameterTypes();
+    List<JavaType> getParameterTypes();
 
     /**
      * If a class inherits this method from a generic class or interface, you can use this method to get the resolved parameter types
@@ -168,7 +168,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return the parameter types
      * @since 1.12
      */
-    List<Type> getParameterTypes( boolean resolve );
+    List<JavaType> getParameterTypes( boolean resolve );
 
     JavaClass getParentClass();
 

@@ -41,9 +41,9 @@ public class JavaMethodDelegate implements JavaMethod
         this.originalMethod = originalMethod;
     }
     
-    public Type getReturnType( boolean resolve )
+    public JavaType getReturnType( boolean resolve )
     {
-        Type result = originalMethod.getReturnType( resolve );
+        JavaType result = originalMethod.getReturnType( resolve );
         
         if (result != null) {
             result =  Type.resolve( result, originalMethod.getParentClass(), callingClass );
@@ -58,12 +58,12 @@ public class JavaMethodDelegate implements JavaMethod
         return result;
     }
 
-    public List<Type> getParameterTypes( boolean resolve )
+    public List<JavaType> getParameterTypes( boolean resolve )
     {
-        List<Type> result = new LinkedList<Type>();
-        for (Type type: originalMethod.getParameterTypes( resolve ) )
+        List<JavaType> result = new LinkedList<JavaType>();
+        for (JavaType type: originalMethod.getParameterTypes( resolve ) )
         {
-            Type curType = Type.resolve( type, originalMethod.getParentClass(), callingClass );
+            JavaType curType = Type.resolve( type, originalMethod.getParentClass(), callingClass );
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && !type.getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
             {
@@ -301,12 +301,12 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.toString();
     }
 
-    public Type getReturnType()
+    public JavaType getReturnType()
     {
         return getReturnType( false );
     }
 
-    public List<Type> getParameterTypes()
+    public List<JavaType> getParameterTypes()
     {
         return getParameterTypes( false );
     }

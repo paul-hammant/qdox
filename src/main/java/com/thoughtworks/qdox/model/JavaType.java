@@ -14,5 +14,5 @@ public interface JavaType
 
     String getGenericValue();
 
-    List<Type> getActualTypeArguments();
+    List<JavaType> getActualTypeArguments();
 }

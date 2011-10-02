@@ -35,7 +35,7 @@ public class Type implements JavaClass, JavaType, Serializable {
     private JavaClassParent context;
     private String fullName;
     private int dimensions;
-    private List<Type> actualArgumentTypes = Collections.emptyList();
+    private List<JavaType> actualArgumentTypes = Collections.emptyList();
     
     public Type(String fullName, String name, int dimensions, JavaClassParent context) {
         this.fullName = fullName;
@@ -149,7 +149,7 @@ public class Type implements JavaClass, JavaType, Serializable {
         if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );
-            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            for ( Iterator<JavaType> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
             {
                 result.append( iter.next().getGenericValue() );
                 if ( iter.hasNext() )
@@ -169,7 +169,7 @@ public class Type implements JavaClass, JavaType, Serializable {
     protected static <D extends JavaGenericDeclaration> String getGenericValue( JavaType base, List<TypeVariable<D>> typeVariableList )
     {
         StringBuffer result = new StringBuffer( getResolvedValue( base, typeVariableList ) );
-        for ( Iterator<Type> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
+        for ( Iterator<JavaType> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
         {
             result.append( Type.resolve( base, typeVariableList ) );
             if ( iter.hasNext() )
@@ -240,12 +240,12 @@ public class Type implements JavaClass, JavaType, Serializable {
      * 
      * @return the actualTypeArguments or null
      */
-    public List<Type> getActualTypeArguments()
+    public List<JavaType> getActualTypeArguments()
     {
         return actualArgumentTypes;
     }
     
-    public void setActualArgumentTypes( List<Type> actualArgumentTypes )
+    public void setActualArgumentTypes( List<JavaType> actualArgumentTypes )
     {
         this.actualArgumentTypes = actualArgumentTypes;
     }
@@ -419,9 +419,9 @@ public class Type implements JavaClass, JavaType, Serializable {
      * @param callingClass
      * @return
      */
-    protected static Type resolve( Type base, JavaClass declaringClass, JavaClass callingClass )
+    protected static JavaType resolve( JavaType base, JavaClass declaringClass, JavaClass callingClass )
     {
-        Type result = base;
+        JavaType result = base;
 
         int typeIndex = getTypeVariableIndex( declaringClass, base.getFullyQualifiedName() );
 
@@ -449,16 +449,17 @@ public class Type implements JavaClass, JavaType, Serializable {
 
         if ( !base.getActualTypeArguments().isEmpty() )
         {
-            result =
-                new Type( base.getFullyQualifiedName(), base.getValue(), base.getDimensions(),
-                          base.getJavaClassParent() );
+            Type typeResult =
+                new Type( base.getFullyQualifiedName(), base.getValue(), ((Type)base).getDimensions(),
+                          ((Type)base).getJavaClassParent() );
 
-            List<Type> actualTypes = new LinkedList<Type>();
-            for ( Type actualArgType : base.getActualTypeArguments() )
+            List<JavaType> actualTypes = new LinkedList<JavaType>();
+            for ( JavaType actualArgType : base.getActualTypeArguments() )
             {
                 actualTypes.add( resolve( actualArgType, declaringClass, callingClass ) );
             }
-            result.setActualArgumentTypes( actualTypes );
+            typeResult.setActualArgumentTypes( actualTypes );
+            result = typeResult;
         }
         return result;
     }
@@ -487,7 +488,7 @@ public class Type implements JavaClass, JavaType, Serializable {
         if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );
-            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            for ( Iterator<JavaType> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
             {
                 result.append( iter.next().getGenericFullyQualifiedName() );
                 if ( iter.hasNext() )
@@ -512,7 +513,7 @@ public class Type implements JavaClass, JavaType, Serializable {
         if ( !base.getActualTypeArguments().isEmpty() )
         {
             result.append( "<" );
-            for ( Iterator<Type> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
+            for ( Iterator<JavaType> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
             {
                 result.append( getGenericValue( iter.next(), typeParameters) );
                 if ( iter.hasNext() )
@@ -540,7 +541,7 @@ public class Type implements JavaClass, JavaType, Serializable {
         if ( !base.getActualTypeArguments().isEmpty() )
         {
             result.append( "<" );
-            for ( Iterator<Type> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
+            for ( Iterator<JavaType> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
             {
                 result.append( getResolvedFullyQualifiedName( iter.next(), typeParameters) );
                 if ( iter.hasNext() )

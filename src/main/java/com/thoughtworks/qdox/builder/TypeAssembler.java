@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClassParent;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.WildcardType;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
@@ -40,16 +41,17 @@ public final class TypeAssembler
         }
         else
         {
-            result = Type.createUnresolved( typeDef.getName(), typeDef.getDimensions() + dimensions, context );
+            Type typeResult = Type.createUnresolved( typeDef.getName(), typeDef.getDimensions() + dimensions, context );
             if ( typeDef.getActualArgumentTypes() != null && !typeDef.getActualArgumentTypes().isEmpty() )
             {
-                List<Type> actualArgumentTypes = new LinkedList<Type>();
+                List<JavaType> actualArgumentTypes = new LinkedList<JavaType>();
                 for ( TypeDef actualArgType : typeDef.getActualArgumentTypes() )
                 {
                     actualArgumentTypes.add( TypeAssembler.createUnresolved( actualArgType, context ) );
                 }
-                result.setActualArgumentTypes( actualArgumentTypes );
+                typeResult.setActualArgumentTypes( actualArgumentTypes );
             }
+            result = typeResult;
         }
         return result;
     }

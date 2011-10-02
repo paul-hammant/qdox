@@ -53,7 +53,7 @@ public interface JavaConstructor
      * 
      * @return a list of JavaParameters, never <code>null</code>
      */
-    List<Type> getParameterTypes();
+    List<JavaType> getParameterTypes();
     
     /**
      * Equivalent of {@link java.lang.reflect.Constructor#getExceptionTypes()}

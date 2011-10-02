@@ -105,7 +105,7 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
 
     public String getResolvedFullyQualifiedName() 
     {
-        return type.getResolvedFullyQualifiedName( getParentMethod().getTypeParameters() );
+        return Type.getResolvedFullyQualifiedName( type, getParentMethod().getTypeParameters() );
     }
     
 	/* (non-Javadoc)

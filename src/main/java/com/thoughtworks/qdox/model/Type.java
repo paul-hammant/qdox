@@ -539,7 +539,7 @@ public class Type implements JavaClass, Serializable {
             result.append( "<" );
             for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
             {
-                result.append( iter.next().getResolvedFullyQualifiedName( typeParameters) );
+                result.append( getResolvedFullyQualifiedName( iter.next(), typeParameters) );
                 if ( iter.hasNext() )
                 {
                     result.append( "," );
@@ -554,10 +554,10 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    protected <D extends JavaGenericDeclaration> String getResolvedFullyQualifiedName( List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedFullyQualifiedName( Type base, List<TypeVariable<D>> typeParameters )
     {
-        TypeVariable<D> variable = resolve( this, typeParameters );
-        return (variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
+        TypeVariable<D> variable = resolve( base, typeParameters );
+        return (variable == null ? base.getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
     }
 
     //Delegating methods

@@ -171,7 +171,7 @@ public class Type implements JavaClass, JavaType, Serializable {
         StringBuffer result = new StringBuffer( getResolvedValue( base, typeVariableList ) );
         for ( Iterator<Type> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
         {
-            result.append( iter.next().resolve( base, typeVariableList ) );
+            result.append( Type.resolve( base, typeVariableList ) );
             if ( iter.hasNext() )
             {
                 result.append( "," );

@@ -113,7 +113,7 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
      */
 	public String getResolvedGenericValue() 
 	{
-		return type.getResolvedGenericValue( getParentMethod().getTypeParameters() );
+		return Type.getResolvedGenericValue( type, getParentMethod().getTypeParameters() );
 	}
 	
 	public String getResolvedGenericFullyQualifiedName()

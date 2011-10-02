@@ -504,15 +504,15 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    public <D extends JavaGenericDeclaration> String getResolvedGenericValue( List<TypeVariable<D>> typeParameters )
+    public static <D extends JavaGenericDeclaration> String getResolvedGenericValue( Type base, List<TypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
-        TypeVariable<?> variable = resolve( this, typeParameters );
-        result.append( variable == null ? getValue() : variable.getBounds().get(0).getValue() );
-        if ( !actualArgumentTypes.isEmpty() )
+        TypeVariable<?> variable = resolve( base, typeParameters );
+        result.append( variable == null ? base.getValue() : variable.getBounds().get(0).getValue() );
+        if ( !base.getActualTypeArguments().isEmpty() )
         {
             result.append( "<" );
-            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            for ( Iterator<Type> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
             {
                 result.append( iter.next().getGenericValue(typeParameters) );
                 if ( iter.hasNext() )
@@ -522,7 +522,7 @@ public class Type implements JavaClass, Serializable {
             }
             result.append( ">" );
         }
-        for ( int i = 0; i < dimensions; i++ )
+        for ( int i = 0; i < base.getDimensions(); i++ )
         {
             result.append( "[]" );
         }

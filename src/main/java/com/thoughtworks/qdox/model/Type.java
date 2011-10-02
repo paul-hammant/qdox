@@ -748,7 +748,7 @@ public class Type implements JavaClass, JavaType, Serializable {
      */
     public JavaClassParent getParent()
     {
-        return resolveRealClass().getParent();
+        return context;
     }
 
     /*

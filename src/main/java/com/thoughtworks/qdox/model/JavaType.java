@@ -13,6 +13,4 @@ public interface JavaType
     String getValue();
 
     String getGenericValue();
-
-    List<JavaType> getActualTypeArguments();
 }

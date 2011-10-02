@@ -324,17 +324,17 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         setParameters(mth, Arrays.asList( newJavaParameter(intType, "x"), newJavaParameter(longArrayType, "y") ));
         setReturns(mth, newType("void"));
 
-        Type[] correctTypes = new Type[]{
+        JavaType[] correctTypes = new Type[]{
             intType,
             longArrayType
         };
 
-        Type[] wrongTypes1 = new Type[]{
+        JavaType[] wrongTypes1 = new Type[]{
             newType("int", 2),
             newType("long")
         };
 
-        Type[] wrongTypes2 = new Type[]{
+        JavaType[] wrongTypes2 = new Type[]{
             intType,
             longArrayType,
             newType("double")
@@ -354,17 +354,17 @@ public abstract class JavaMethodTest<M extends JavaMethod> extends TestCase {
         setParameters(mth, Arrays.asList( newJavaParameter(intType, "x"), newJavaParameter(longArrayType, "y", true) ));
         setReturns(mth, newType("void"));
 
-        Type[] correctTypes = new Type[]{
+        JavaType[] correctTypes = new Type[]{
             intType,
             longArrayType
         };
 
-        Type[] wrongTypes1 = new Type[]{
+        JavaType[] wrongTypes1 = new Type[]{
             newType("int", 2),
             newType("long")
         };
 
-        Type[] wrongTypes2 = new Type[]{
+        JavaType[] wrongTypes2 = new Type[]{
             intType,
             longArrayType,
             newType("double")

@@ -38,7 +38,9 @@ public interface JavaParameter extends JavaAnnotatedElement
      * 
      * @return the type of this parameter
      */
-    Type getType();
+    JavaType getType();
+    
+    JavaClass getJavaClass();
 
     /**
      * Returns the declaring method of this parameter

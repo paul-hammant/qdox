@@ -20,19 +20,19 @@ package com.thoughtworks.qdox.model;
  */
 
 
-public class DefaultJavaParameter extends AbstractBaseJavaEntity implements JavaParameter 
+public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> extends AbstractBaseJavaEntity implements JavaParameter 
 {
 
     private String name;
-    private Type type;
+    private T type;
     private JavaMethod parentMethod;
     private boolean varArgs;
 
-    public DefaultJavaParameter(Type type, String name) {
+    public DefaultJavaParameter(T type, String name) {
         this(type, name, false);
     }
 
-    public DefaultJavaParameter(Type type, String name, boolean varArgs) {
+    public DefaultJavaParameter(T type, String name, boolean varArgs) {
         this.name = name;
         this.type = type;
         this.varArgs = varArgs;
@@ -56,10 +56,14 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaParameter#getType()
      */
-    public Type getType() {
+    public JavaType getType() {
         return type;
     }
 
+    public JavaClass getJavaClass()
+    {
+        return type;
+    }
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaParameter#getParentMethod()
      */

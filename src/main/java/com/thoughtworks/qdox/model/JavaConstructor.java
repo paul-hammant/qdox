@@ -93,7 +93,7 @@ public interface JavaConstructor
      * @param parameterTypes
      * @return <code>true</code> if signature matches, otherwise <code>false</code>
      */
-    boolean signatureMatches( List<Type> parameterTypes );
+    boolean signatureMatches( List<JavaType> parameterTypes );
 
     /**
      * Returns <code>true</code> if this constructor matches the parameterTypes and matches the varArg argument.
@@ -102,6 +102,6 @@ public interface JavaConstructor
      * @param varArgs 
      * @return <code>true</code> if signature matches, otherwise <code>false</code>
      */
-    boolean signatureMatches( List<Type> parameterTypes, boolean varArgs );
+    boolean signatureMatches( List<JavaType> parameterTypes, boolean varArgs );
 
 }

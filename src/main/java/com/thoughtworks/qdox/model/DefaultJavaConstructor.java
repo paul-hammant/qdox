@@ -25,12 +25,12 @@ public class DefaultJavaConstructor
         return typeParameters;
     }
     
-    public boolean signatureMatches( List<Type> parameterTypes )
+    public boolean signatureMatches( List<JavaType> parameterTypes )
     {
         return signatureMatches( parameterTypes, false );
     }
     
-    public boolean signatureMatches( List<Type> parameterTypes, boolean varArgs )
+    public boolean signatureMatches( List<JavaType> parameterTypes, boolean varArgs )
     {
         return super.signatureMatches( parameterTypes, varArgs );
     }

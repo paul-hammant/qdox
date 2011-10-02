@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 
 public class ClassResolutionTest extends TestCase {
@@ -36,7 +37,7 @@ public class ClassResolutionTest extends TestCase {
         JavaClass class2 = builder.getClassByName("package2.Class2");
         JavaMethod method = class2.getMethods().get(0);
         JavaParameter parameter = method.getParameters().get(0);
-        Type type = parameter.getType();
+        JavaType type = parameter.getType();
 
         // verify
         assertEquals("Should include fully qualified name", "package1.Class1$NestedClass", type.getFullyQualifiedName());
@@ -91,7 +92,8 @@ public class ClassResolutionTest extends TestCase {
     	builder.addSource(new StringReader(source));
     	JavaMethod method = builder.getClassByName("some.pack.Test").getMethods().get(0);
     	JavaParameter parameter = method.getParameters().get(0);
-    	assertEquals( "some.pack.Test$Inner$Inner2", parameter.getType().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getJavaClass().getFullyQualifiedName() );
+    	assertEquals( "some.pack.Test$Inner$Inner2", parameter.getType().getFullyQualifiedName() );
         assertEquals( "some.pack.Test$Inner$Inner2", parameter.getFullyQualifiedName() );
     }
 }

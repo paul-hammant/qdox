@@ -860,7 +860,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getConstructor(java.util.List)
      */
-    public JavaConstructor getConstructor( List<Type> parameterTypes )
+    public JavaConstructor getConstructor( List<JavaType> parameterTypes )
     {
         return resolveRealClass().getConstructor( parameterTypes );
     }
@@ -869,7 +869,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getConstructor(java.util.List, boolean)
      */
-    public JavaConstructor getConstructor( List<Type> parameterTypes, boolean varArg )
+    public JavaConstructor getConstructor( List<JavaType> parameterTypes, boolean varArg )
     {
         return resolveRealClass().getConstructor( parameterTypes, varArg );
     }
@@ -887,7 +887,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodBySignature(java.lang.String, java.util.List)
      */
-    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes )
+    public JavaMethod getMethodBySignature( String name, List<JavaType> parameterTypes )
     {
         return resolveRealClass().getMethodBySignature( name, parameterTypes );
     }
@@ -896,7 +896,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethod(java.lang.String, java.util.List, boolean)
      */
-    public JavaMethod getMethod( String name, List<Type> parameterTypes, boolean varArgs )
+    public JavaMethod getMethod( String name, List<JavaType> parameterTypes, boolean varArgs )
     {
         return resolveRealClass().getMethod( name, parameterTypes, varArgs );
     }
@@ -905,7 +905,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodBySignature(java.lang.String, java.util.List, boolean)
      */
-    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses )
+    public JavaMethod getMethodBySignature( String name, List<JavaType> parameterTypes, boolean superclasses )
     {
         return resolveRealClass().getMethodBySignature( name, parameterTypes, superclasses );
     }
@@ -914,7 +914,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodBySignature(java.lang.String, java.util.List, boolean, boolean)
      */
-    public JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses, boolean varArg )
+    public JavaMethod getMethodBySignature( String name, List<JavaType> parameterTypes, boolean superclasses, boolean varArg )
     {
         return resolveRealClass().getMethodBySignature( name, parameterTypes, superclasses, varArg );
     }
@@ -923,7 +923,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodsBySignature(java.lang.String, java.util.List, boolean)
      */
-    public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses )
+    public List<JavaMethod> getMethodsBySignature( String name, List<JavaType> parameterTypes, boolean superclasses )
     {
         return resolveRealClass().getMethodsBySignature( name, parameterTypes, superclasses );
     }
@@ -932,7 +932,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodsBySignature(java.lang.String, java.util.List, boolean, boolean)
      */
-    public List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses,
+    public List<JavaMethod> getMethodsBySignature( String name, List<JavaType> parameterTypes, boolean superclasses,
                                                    boolean varArg )
     {
         return resolveRealClass().getMethodsBySignature( name, parameterTypes, superclasses, varArg );

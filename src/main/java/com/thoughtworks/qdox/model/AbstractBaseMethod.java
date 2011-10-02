@@ -60,9 +60,9 @@ public abstract class AbstractBaseMethod
         this.exceptions = exceptions;
     }
 
-    protected boolean signatureMatches( List<Type> parameterTypes, boolean varArgs )
+    protected boolean signatureMatches( List<JavaType> parameterTypes, boolean varArgs )
     {
-        List<Type> parameterTypeList;
+        List<JavaType> parameterTypeList;
         if( parameterTypes == null) {
             parameterTypeList = Collections.emptyList();
         }
@@ -92,7 +92,7 @@ public abstract class AbstractBaseMethod
     public List<DocletTag> getTagsByName( String name, boolean inherited )
     {
         JavaClass cls = getParentClass();
-        List<Type> types = new LinkedList<Type>();
+        List<JavaType> types = new LinkedList<JavaType>();
         for (JavaParameter parameter : getParameters()) {
             types.add(parameter.getType());
         }

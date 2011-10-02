@@ -425,7 +425,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getConstructor(java.util.List)
      */
-    public JavaConstructor getConstructor( List<Type> parameterTypes )
+    public JavaConstructor getConstructor( List<JavaType> parameterTypes )
     {
         return getConstructor( parameterTypes, false );
     }
@@ -434,7 +434,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getConstructor(java.util.List, boolean)
      */
-    public JavaConstructor getConstructor( List<Type> parameterTypes, boolean varArgs )
+    public JavaConstructor getConstructor( List<JavaType> parameterTypes, boolean varArgs )
     {
         for ( JavaConstructor constructor : getConstructors() )
         {
@@ -518,14 +518,14 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodBySignature(java.lang.String, java.util.List)
      */
-    public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes) {
+    public JavaMethod getMethodBySignature(String name, List<JavaType> parameterTypes) {
         return getMethod( name, parameterTypes, false );
     }
 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethod(java.lang.String, java.util.List, boolean)
      */
-    public JavaMethod getMethod(String name, List<Type> parameterTypes, boolean varArgs) {
+    public JavaMethod getMethod(String name, List<JavaType> parameterTypes, boolean varArgs) {
         for (JavaMethod method : getMethods()) {
             if (method.signatureMatches(name, parameterTypes, varArgs)) {
                 return method;
@@ -537,7 +537,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodBySignature(java.lang.String, java.util.List, boolean)
      */
-    public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes,
+    public JavaMethod getMethodBySignature(String name, List<JavaType> parameterTypes,
                                            boolean superclasses) {
         return getMethodBySignature( name, parameterTypes, superclasses, false );
     }
@@ -545,7 +545,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodBySignature(java.lang.String, java.util.List, boolean, boolean)
      */
-    public JavaMethod getMethodBySignature(String name, List<Type> parameterTypes,
+    public JavaMethod getMethodBySignature(String name, List<JavaType> parameterTypes,
                                            boolean superclasses, boolean varArg) {
         
         List<JavaMethod> result = getMethodsBySignature(name, parameterTypes,
@@ -558,7 +558,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodsBySignature(java.lang.String, java.util.List, boolean)
      */
     public List<JavaMethod> getMethodsBySignature(String name,
-                                              List<Type> parameterTypes, boolean superclasses) {
+                                              List<JavaType> parameterTypes, boolean superclasses) {
         return getMethodsBySignature( name, parameterTypes, superclasses, false );
     }
 
@@ -566,7 +566,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
      * @see com.thoughtworks.qdox.model.JavaClass#getMethodsBySignature(java.lang.String, java.util.List, boolean, boolean)
      */
     public List<JavaMethod> getMethodsBySignature(String name,
-                                              List<Type> parameterTypes, boolean superclasses, boolean varArg) {
+                                              List<JavaType> parameterTypes, boolean superclasses, boolean varArg) {
         List<JavaMethod> result = new LinkedList<JavaMethod>();
 
         JavaMethod methodInThisClass = getMethod(name, parameterTypes, varArg);
@@ -881,6 +881,11 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
             sb.append( getFullyQualifiedName() );
         }
         return sb.toString();
+    }
+    
+    public String toGenericString()
+    {
+        return toString();
     }
     
     @Override

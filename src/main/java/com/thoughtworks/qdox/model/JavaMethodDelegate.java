@@ -286,12 +286,12 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.isVolatile();
     }
 
-    public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg )
+    public boolean signatureMatches( String name, List<JavaType> parameterTypes, boolean varArg )
     {
         return originalMethod.signatureMatches( name, parameterTypes, varArg );
     }
 
-    public boolean signatureMatches( String name, List<Type> parameterTypes )
+    public boolean signatureMatches( String name, List<JavaType> parameterTypes )
     {
         return originalMethod.signatureMatches( name, parameterTypes );
     }

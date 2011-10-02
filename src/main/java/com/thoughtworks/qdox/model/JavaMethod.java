@@ -64,7 +64,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @param parameterTypes the parameter types of the method, can be <code>null</code>
      * @return <code>true</code> if this method matches the signature, otherwise <code>false</code>
      */
-    boolean signatureMatches( String name, List<Type> parameterTypes );
+    boolean signatureMatches( String name, List<JavaType> parameterTypes );
 
     /**
      * @param name the name of the method
@@ -72,7 +72,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @param varArg <code>true</code> is signature should match a varArg-method, otherwise <code>false</code>
      * @return <code>true</code> if this method matches the signature, otherwise <code>false</code>
      */
-    boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg );
+    boolean signatureMatches( String name, List<JavaType> parameterTypes, boolean varArg );
 
     /**
      * Returns <code>true</code> if this method follows the bean convention of being an accessor.

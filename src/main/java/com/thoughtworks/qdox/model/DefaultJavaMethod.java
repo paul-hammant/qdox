@@ -273,7 +273,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaMethod#getPropertyType()
      */
-    public Type getPropertyType() 
+    public JavaType getPropertyType() 
     {
         if ( isPropertyAccessor() ) 
         {
@@ -355,7 +355,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
             {
                 result.append( "," );
             }
-            Type originalType = getParameters().get( paramIndex ).getType();
+            JavaType originalType = getParameters().get( paramIndex ).getType();
             TypeVariable typeVariable = Type.resolve( originalType, getTypeParameters() ); 
             result.append( typeVariable == null ? originalType.getFullyQualifiedName() : typeVariable.getResolvedFullyQualifiedName() );
         }
@@ -398,12 +398,12 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         return returns;
     }
     
-    public boolean signatureMatches( String name, List<Type> parameterTypes )
+    public boolean signatureMatches( String name, List<JavaType> parameterTypes )
     {
         return signatureMatches( name, parameterTypes, false );
     }
     
-    public boolean signatureMatches( String name, List<Type> parameterTypes, boolean varArg )
+    public boolean signatureMatches( String name, List<JavaType> parameterTypes, boolean varArg )
     {
         if ( !name.equals( this.getName() ) ) 
         {

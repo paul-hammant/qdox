@@ -473,14 +473,14 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals(2, propertyClass.getConstructors().size());
 
         JavaConstructor ctor = propertyClass.getConstructor(null);
-        JavaConstructor ctor2 = propertyClass.getConstructor(Collections.singletonList(propertyClass.asType()));
+        JavaConstructor ctor2 = propertyClass.getConstructor(Collections.singletonList((JavaType) propertyClass.asType()));
         JavaMethod getFoo = propertyClass.getMethodBySignature("getFoo", null);
         JavaMethod isBar = propertyClass.getMethodBySignature("isBar", null);
         JavaMethod get = propertyClass.getMethodBySignature("get", null);
         Type intType = mock( Type.class );
         when( intType.getFullyQualifiedName() ).thenReturn( "int" );
         when( intType.getDimensions() ).thenReturn( 0 );
-        JavaMethod set = propertyClass.getMethodBySignature( "set", Collections.singletonList( intType ) );
+        JavaMethod set = propertyClass.getMethodBySignature( "set", Collections.singletonList( (JavaType) intType ) );
 
         JavaMethod protectedMethod = propertyClass.getMethodBySignature("protectedMethod", null);
         JavaMethod privateMethod = propertyClass.getMethodBySignature("privateMethod", null);

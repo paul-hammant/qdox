@@ -428,8 +428,8 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
         JavaMethod result = source.getClasses().get(0).getMethods().get(0);
-        assertEquals(1, result.getParameters().get(0).getType().getDimensions());
-        assertEquals(2, result.getParameters().get(1).getType().getDimensions());
+        assertEquals(1, result.getParameters().get(0).getJavaClass().getDimensions());
+        assertEquals(2, result.getParameters().get(1).getJavaClass().getDimensions());
     }
 
     public void testMethodExceptions() throws Exception {

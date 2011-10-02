@@ -186,7 +186,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @return the matching constructor, otherwise <code>null</code>
      * @since 2.0
      */
-    JavaConstructor getConstructor(List<Type> parameterTypes);
+    JavaConstructor getConstructor(List<JavaType> parameterTypes);
     
     /**
      * 
@@ -195,7 +195,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @return the matching constructor, otherwise <code>null</code>
      * @since 2.0
      */
-    JavaConstructor getConstructor(List<Type> parameterTypes, boolean varArg);
+    JavaConstructor getConstructor(List<JavaType> parameterTypes, boolean varArg);
     
 
     /**
@@ -209,7 +209,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @param parameterTypes the parameter types of the method, can be <code>null</code>.
      * @return the matching method, otherwise <code>null</code>
      */
-    JavaMethod getMethodBySignature( String name, List<Type> parameterTypes );
+    JavaMethod getMethodBySignature( String name, List<JavaType> parameterTypes );
 
     /**
      * This should be the signature for getMethodBySignature.
@@ -219,7 +219,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @param varArgs define if the method has varArgs
      * @return the matching method, otherwise <code>null</code>
      */
-    JavaMethod getMethod( String name, List<Type> parameterTypes, boolean varArgs );
+    JavaMethod getMethod( String name, List<JavaType> parameterTypes, boolean varArgs );
 
     /**
      * 
@@ -228,7 +228,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @param superclasses to define if superclasses should be included as well
      * @return the matching method, otherwise <code>null</code> 
      */
-    JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses );
+    JavaMethod getMethodBySignature( String name, List<JavaType> parameterTypes, boolean superclasses );
 
     /**
      * 
@@ -238,7 +238,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @param varArg define if the method has varArgs
      * @return the matching method, otherwise <code>null</code>
      */
-    JavaMethod getMethodBySignature( String name, List<Type> parameterTypes, boolean superclasses, boolean varArg );
+    JavaMethod getMethodBySignature( String name, List<JavaType> parameterTypes, boolean superclasses, boolean varArg );
 
     /**
      * 
@@ -247,7 +247,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @param superclasses to define if superclasses should be included as well
      * @return the matching methods, otherwise <code>null</code>
      */
-    List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses );
+    List<JavaMethod> getMethodsBySignature( String name, List<JavaType> parameterTypes, boolean superclasses );
 
     /**
      * 
@@ -257,7 +257,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @param varArg define if the method has varArgs
      * @return the matching methods, otherwise <code>null</code>
      */
-    List<JavaMethod> getMethodsBySignature( String name, List<Type> parameterTypes, boolean superclasses,
+    List<JavaMethod> getMethodsBySignature( String name, List<JavaType> parameterTypes, boolean superclasses,
                                                    boolean varArg );
 
     /**

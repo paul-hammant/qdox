@@ -8,6 +8,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 
 public class MethodsTest extends TestCase {
@@ -27,9 +28,9 @@ public class MethodsTest extends TestCase {
     public void testVarArgsParametersAreAlsoArrays() {
         JavaMethod javaMethod = buildMethod("void doStuff(AThing param1, BThing[] param2, CThing... param3);");
 
-        Type standardType = javaMethod.getParameterByName("param1").getType();
-        Type arrayType = javaMethod.getParameterByName("param2").getType();
-        Type varArgsType = javaMethod.getParameterByName("param3").getType();
+        JavaClass standardType = javaMethod.getParameterByName("param1").getJavaClass();
+        JavaClass arrayType = javaMethod.getParameterByName("param2").getJavaClass();
+        JavaClass varArgsType = javaMethod.getParameterByName("param3").getJavaClass();
 
         assertFalse("param1 should NOT be array", standardType.isArray());
         assertTrue("param2 should be array", arrayType.isArray());

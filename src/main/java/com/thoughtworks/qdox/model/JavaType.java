@@ -1,7 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import java.util.List;
-
 public interface JavaType
 {
     String getCanonicalName();
@@ -13,4 +11,6 @@ public interface JavaType
     String getValue();
 
     String getGenericValue();
+
+    String toGenericString();
 }

@@ -533,7 +533,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
 
     public void testCanGetMethodBySignature() {
         final String methodName = "doStuff";
-        final List<Type> parameterTypes = type(new String[]{"int", "double"});
+        final List<JavaType> parameterTypes = javaType(new String[]{"int", "double"});
         JavaMethod method = mock(JavaMethod.class);
         when(method.getName()).thenReturn(methodName);
         //both signatureMatches-methods are allowed
@@ -697,12 +697,17 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         return result;
     }
     
+    private List<JavaType> javaType(String[] typeNames)
+    {
+        return new LinkedList<JavaType>(type(typeNames));
+    }
+    
     // QDOX-201
     public void testGetVarArgMethodSignature() {
         List<JavaMethod> methods = new ArrayList<JavaMethod>();
         JavaMethod simpleMethod = mock(JavaMethod.class);
         
-        Type stringType = newType( "String" );
+        JavaType stringType = newType( "String" );
         //both signatureMatches-methods are allowed
         when(simpleMethod.signatureMatches( "doSomething", Collections.singletonList( stringType ) )).thenReturn( true );
         when(simpleMethod.signatureMatches( "doSomething", Collections.singletonList( stringType ), false )).thenReturn( true );

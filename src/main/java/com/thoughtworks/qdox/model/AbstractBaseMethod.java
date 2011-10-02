@@ -15,7 +15,7 @@ public abstract class AbstractBaseMethod<T extends JavaClass & JavaParameterized
 {
 
     private List<JavaParameter> parameters = Collections.emptyList();
-    private List<JavaClass> exceptions = Collections.emptyList();
+    private List<T> exceptions = Collections.emptyList();
     private boolean varArgs;
     private String sourceCode;
 
@@ -36,7 +36,12 @@ public abstract class AbstractBaseMethod<T extends JavaClass & JavaParameterized
 
     public List<JavaClass> getExceptions()
     {
-        return exceptions;
+        return new LinkedList<JavaClass>( exceptions );
+    }
+    
+    public List<JavaType> getExceptionTypes()
+    {
+        return new LinkedList<JavaType>( exceptions );
     }
 
     public boolean isVarArgs()
@@ -55,7 +60,7 @@ public abstract class AbstractBaseMethod<T extends JavaClass & JavaParameterized
         this.varArgs = javaParameters.get( javaParameters.size() -1 ).isVarArgs();
     }
 
-    public void setExceptions( List<JavaClass> exceptions )
+    public void setExceptions( List<T> exceptions )
     {
         this.exceptions = exceptions;
     }

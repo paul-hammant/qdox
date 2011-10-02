@@ -166,12 +166,12 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
     
-    protected <D extends JavaGenericDeclaration> String getGenericValue( List<TypeVariable<D>> typeVariableList )
+    protected static <D extends JavaGenericDeclaration> String getGenericValue( Type base, List<TypeVariable<D>> typeVariableList )
     {
-        StringBuffer result = new StringBuffer( getResolvedValue( this, typeVariableList ) );
-        for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+        StringBuffer result = new StringBuffer( getResolvedValue( base, typeVariableList ) );
+        for ( Iterator<Type> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
         {
-            result.append( iter.next().resolve( this, typeVariableList ) );
+            result.append( iter.next().resolve( base, typeVariableList ) );
             if ( iter.hasNext() )
             {
                 result.append( "," );
@@ -504,7 +504,7 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    public static <D extends JavaGenericDeclaration> String getResolvedGenericValue( Type base, List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedGenericValue( Type base, List<TypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
         TypeVariable<?> variable = resolve( base, typeParameters );
@@ -514,7 +514,7 @@ public class Type implements JavaClass, Serializable {
             result.append( "<" );
             for ( Iterator<Type> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
             {
-                result.append( iter.next().getGenericValue(typeParameters) );
+                result.append( getGenericValue( iter.next(), typeParameters) );
                 if ( iter.hasNext() )
                 {
                     result.append( "," );

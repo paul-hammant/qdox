@@ -19,9 +19,9 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
-public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
+public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> extends AbstractJavaEntity implements JavaField {
 
-    private Type type;
+    private T type;
     private String initializationExpression;
     private boolean enumConstant;
     	
@@ -32,7 +32,7 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
         setName(name);
     }
 
-    public DefaultJavaField(Type type, String name) {
+    public DefaultJavaField(T type, String name) {
         this( name );
         this.type = type;
     }
@@ -62,7 +62,7 @@ public class DefaultJavaField extends AbstractJavaEntity implements JavaField {
         return getModelWriter().writeField( this ).toString();
     }
 
-    public void setType(Type type) {
+    public void setType(T type) {
         this.type = type;
     }
 

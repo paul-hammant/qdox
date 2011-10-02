@@ -529,15 +529,15 @@ public class Type implements JavaClass, Serializable {
         return result.toString();
     }
 
-    protected <D extends JavaGenericDeclaration> String getResolvedGenericFullyQualifiedName( List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedGenericFullyQualifiedName( Type base, List<TypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
-        TypeVariable<D> variable = resolve( this, typeParameters );
-        result.append( variable == null ? getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
-        if ( !actualArgumentTypes.isEmpty() )
+        TypeVariable<D> variable = resolve( base, typeParameters );
+        result.append( variable == null ? base.getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
+        if ( !base.getActualTypeArguments().isEmpty() )
         {
             result.append( "<" );
-            for ( Iterator<Type> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            for ( Iterator<Type> iter = base.getActualTypeArguments().iterator(); iter.hasNext(); )
             {
                 result.append( getResolvedFullyQualifiedName( iter.next(), typeParameters) );
                 if ( iter.hasNext() )
@@ -547,7 +547,7 @@ public class Type implements JavaClass, Serializable {
             }
             result.append( ">" );
         }
-        for ( int i = 0; i < dimensions; i++ )
+        for ( int i = 0; i < base.getDimensions(); i++ )
         {
             result.append( "[]" );
         }

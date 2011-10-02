@@ -728,7 +728,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         //running this test alone make it fail, so it's not a proper test.
         //should be fixed if we can get rid of the Type-visibility
         JavaClass clazz = newJavaClass( "a.b.Sample" );
-        assertEquals( "java.lang.Object", clazz.getSuperClass().getJavaClass().getFullyQualifiedName() );
+        assertEquals( "java.lang.Object", clazz.getSuperJavaClass().getFullyQualifiedName() );
         assertEquals( "java.lang.Object", clazz.getSuperClass().getFullyQualifiedName() );
     }
     

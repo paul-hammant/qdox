@@ -11,6 +11,7 @@ import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.TypeVariable;
 /**
@@ -234,7 +235,7 @@ public class JSR14Test extends TestCase {
         String source = "public class Something extends java.util.List<String> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        Type superClass = javaClass.getSuperClass();
+        JavaType superClass = javaClass.getSuperClass();
         assertEquals("java.util.List", superClass.getFullyQualifiedName());
         assertEquals("java.util.List<java.lang.String>", superClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", superClass.getValue());
@@ -245,7 +246,7 @@ public class JSR14Test extends TestCase {
         String source = "public class Something extends java.util.Map<String, Object> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        Type superClass = javaClass.getSuperClass();
+        JavaType superClass = javaClass.getSuperClass();
         assertEquals("java.util.Map", superClass.getFullyQualifiedName());
         assertEquals("java.util.Map<java.lang.String,java.lang.Object>", superClass.getGenericFullyQualifiedName());
         assertEquals("java.util.Map", superClass.getValue());
@@ -256,7 +257,7 @@ public class JSR14Test extends TestCase {
     	String source = "public class Something extends java.util.List<?>{}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type superClass = javaClass.getSuperClass();
+    	JavaType superClass = javaClass.getSuperClass();
     	assertEquals("java.util.List<?>", superClass.getGenericValue());
     }
 
@@ -264,7 +265,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something extends java.util.List<? extends Number> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type superClass = javaClass.getSuperClass();
+    	JavaType superClass = javaClass.getSuperClass();
     	assertEquals("java.util.List", superClass.getFullyQualifiedName());
         assertEquals("java.util.List<? extends java.lang.Number>", superClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", superClass.getValue());
@@ -275,7 +276,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something extends java.util.List<? super Integer> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type superClass = javaClass.getSuperClass();
+    	JavaType superClass = javaClass.getSuperClass();
     	assertEquals("java.util.List", superClass.getFullyQualifiedName());
         assertEquals("java.util.List<? super java.lang.Integer>", superClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", superClass.getValue());
@@ -286,7 +287,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something extends java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type superClass = javaClass.getSuperClass();
+    	JavaType superClass = javaClass.getSuperClass();
     	assertEquals("java.util.List", superClass.getFullyQualifiedName());
         assertEquals("java.util.List<java.util.Set<java.lang.String>>", superClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", superClass.getValue());
@@ -297,7 +298,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something extends java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type superClass = javaClass.getSuperClass();
+    	JavaType superClass = javaClass.getSuperClass();
     	assertEquals("java.util.List", superClass.getFullyQualifiedName());
         assertEquals("java.util.List<java.util.Set<java.lang.String>>", superClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", superClass.getValue());

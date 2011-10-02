@@ -27,7 +27,7 @@ import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 
-public class Type implements JavaClass, Serializable {
+public class Type implements JavaClass, JavaType, Serializable {
 
     public static final Type VOID = new Type("void");
 
@@ -656,7 +656,7 @@ public class Type implements JavaClass, Serializable {
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getSuperClass()
      */
-    public Type getSuperClass()
+    public JavaType getSuperClass()
     {
         return resolveRealClass().getSuperClass();
     }

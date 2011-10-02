@@ -64,7 +64,7 @@ public interface JavaClass extends JavaModel, JavaClassParent, JavaAnnotatedElem
      */
     boolean isAnnotation();
 
-    Type getSuperClass();
+    JavaType getSuperClass();
 
     /**
      * Shorthand for getSuperClass().getJavaClass() with null checking.

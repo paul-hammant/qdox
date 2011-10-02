@@ -29,7 +29,7 @@ public class BeanProperty {
     private final String name;
     private JavaMethod accessor;
     private JavaMethod mutator;
-    private JavaClass type;
+    private JavaType type;
 
     public BeanProperty(String name) {
         this.name = name;
@@ -39,11 +39,11 @@ public class BeanProperty {
         return name;
     }
 
-    public void setType(JavaClass type) {
+    public void setType(JavaType type) {
         this.type = type;
     }
 
-    public JavaClass getType() {
+    public JavaType getType() {
         return type;
     }
 

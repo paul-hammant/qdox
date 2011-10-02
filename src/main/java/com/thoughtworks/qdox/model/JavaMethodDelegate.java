@@ -161,7 +161,7 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.getPropertyName();
     }
 
-    public JavaClass getPropertyType()
+    public JavaType getPropertyType()
     {
         return originalMethod.getPropertyType();
     }

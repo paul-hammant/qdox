@@ -34,6 +34,7 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 
@@ -126,7 +127,7 @@ public class DefaultModelWriter
         {
             buffer.write( cls.isInterface() ? " extends " : " implements " );
 
-            for ( ListIterator<Type> iter = cls.getImplements().listIterator(); iter.hasNext(); )
+            for ( ListIterator<JavaType> iter = cls.getImplements().listIterator(); iter.hasNext(); )
             {
                 buffer.write( iter.next().getCanonicalName() );
                 if ( iter.hasNext() )

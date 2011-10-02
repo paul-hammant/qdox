@@ -32,6 +32,7 @@ import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.util.SerializationUtils;
 import com.thoughtworks.qdox.parser.ParseException;
@@ -316,7 +317,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals("java.util.ArrayList", returnClass.getFullyQualifiedName());
 
         boolean foundList = false;
-        for (Type type : returnClass.getImplements()) {
+        for (JavaType type : returnClass.getImplements()) {
             if (type.getValue().equals("java.util.List")) {
                 foundList = true;
             }

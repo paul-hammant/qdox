@@ -449,7 +449,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
             }
             else
             {
-                for ( Type implement : callingClass.getImplements() )
+                for ( JavaClass implement : callingClass.getInterfaces() )
                 {
                     if ( fqn.equals( implement.getFullyQualifiedName() ) )
                     {
@@ -698,7 +698,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getImplements()
      */
-    public List<Type> getImplements()
+    public List<JavaType> getImplements()
     {
         return resolveRealClass().getImplements();
     }

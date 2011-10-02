@@ -309,7 +309,7 @@ public class JSR14Test extends TestCase {
         String source = "public class Something implements java.util.List<String> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        Type implementsClass = javaClass.getImplements().get(0);
+        JavaType implementsClass = javaClass.getImplements().get(0);
         assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
         assertEquals("java.util.List<java.lang.String>", implementsClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", implementsClass.getValue());
@@ -320,7 +320,7 @@ public class JSR14Test extends TestCase {
         String source = "public class Something implements java.util.Map<String, Object> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
-        Type implementsClass = javaClass.getImplements().get(0);
+        JavaType implementsClass = javaClass.getImplements().get(0);
         assertEquals("java.util.Map", implementsClass.getFullyQualifiedName());
         assertEquals("java.util.Map<java.lang.String,java.lang.Object>", implementsClass.getGenericFullyQualifiedName());
         assertEquals("java.util.Map", implementsClass.getValue());
@@ -331,7 +331,7 @@ public class JSR14Test extends TestCase {
     	String source = "public class Something implements java.util.List<?>{}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements().get(0);
+    	JavaType implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List<?>", implementsClass.getGenericValue());
     }
 
@@ -339,7 +339,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something implements java.util.List<? extends Number> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements().get(0);
+    	JavaType implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
         assertEquals("java.util.List<? extends java.lang.Number>", implementsClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", implementsClass.getValue());
@@ -350,7 +350,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something implements java.util.List<? super Integer> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements().get(0);
+    	JavaType implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
         assertEquals("java.util.List<? super java.lang.Integer>", implementsClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", implementsClass.getValue());
@@ -361,7 +361,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something implements java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements().get(0);
+    	JavaType implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
         assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", implementsClass.getValue());
@@ -372,7 +372,7 @@ public class JSR14Test extends TestCase {
 		String source = "public class Something implements java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
-    	Type implementsClass = javaClass.getImplements().get(0);
+    	JavaType implementsClass = javaClass.getImplements().get(0);
     	assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
         assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericFullyQualifiedName());
         assertEquals("java.util.List", implementsClass.getValue());

@@ -33,7 +33,7 @@ import com.thoughtworks.qdox.library.ClassLibrary;
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  */
-public class DefaultJavaClass extends AbstractInheritableJavaEntity implements JavaClass {
+public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> extends AbstractInheritableJavaEntity implements JavaClass {
 
     private List<JavaConstructor> constructors = new LinkedList<JavaConstructor>();
     private List<JavaMethod> methods = new LinkedList<JavaMethod>();
@@ -43,8 +43,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     private boolean anEnum;
     private boolean anAnnotation;
 
-    private Type superClass;
-    private List<Type> implementz = new LinkedList<Type>();
+    private T superClass;
+    private List<T> implementz = new LinkedList<T>();
     private List<TypeVariable<JavaClass>> typeParameters = new LinkedList<TypeVariable<JavaClass>>(); 
     
     //sourceless class can use this property
@@ -115,7 +115,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getSuperClass()
      */
-    public Type getSuperClass() {
+    public JavaType getSuperClass() {
         Type OBJECT_TYPE = getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
         Type ENUM_TYPE = getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
         
@@ -127,7 +127,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
             return OBJECT_TYPE;
         }
 
-        return superClass;
+        return (JavaType) superClass;
     }
     
     /**
@@ -158,8 +158,8 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getImplements()
      */
-    public List<Type> getImplements() {
-        return implementz;
+    public List<JavaType> getImplements() {
+        return new LinkedList<JavaType>( implementz );
     }
 
 
@@ -210,7 +210,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         methods.add(meth);
     }
 
-    public void setSuperClass(Type type) {
+    public void setSuperClass(T type) {
         if (anEnum) 
         {
             throw new IllegalArgumentException("enums cannot extend other classes");   
@@ -218,7 +218,7 @@ public class DefaultJavaClass extends AbstractInheritableJavaEntity implements J
         superClass = type;
     }
 
-    public void setImplementz(List<Type> implementz) {
+    public void setImplementz(List<T> implementz) {
         this.implementz = implementz;
     }
     

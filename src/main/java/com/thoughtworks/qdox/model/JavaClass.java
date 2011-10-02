@@ -71,7 +71,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      */
     JavaClass getSuperJavaClass();
 
-    List<Type> getImplements();
+    List<JavaType> getImplements();
 
     /**
      * @since 1.3

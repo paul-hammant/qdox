@@ -647,7 +647,7 @@ public class JavaProjectBuilderTest extends TestCase
         JavaField iField = fooClass.getFieldByName("i");
         assertEquals(5, iField.getLineNumber());
         JavaMethod getIMethod = 
-            fooClass.getMethodBySignature("getI", new ArrayList<Type>());
+            fooClass.getMethodBySignature("getI", Collections.EMPTY_LIST);
         assertEquals(6, getIMethod.getLineNumber());
     }
     

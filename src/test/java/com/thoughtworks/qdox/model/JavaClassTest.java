@@ -547,7 +547,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         );
         assertEquals(
                 null,
-                cls.getMethodBySignature("doStuff", new ArrayList<Type>())
+                cls.getMethodBySignature("doStuff", Collections.EMPTY_LIST)
         );
         assertEquals(
                 null,

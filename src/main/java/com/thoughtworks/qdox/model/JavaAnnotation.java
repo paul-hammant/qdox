@@ -33,5 +33,9 @@ public interface JavaAnnotation {
 	Map<String, AnnotationValue> getPropertyMap();
 
 	AnnotationValue getProperty(String name);
+	
+	Map<String, Object> getNamedParameterMap();
+	
+	Object getNamedParameter(String key);
 
 }

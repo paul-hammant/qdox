@@ -44,7 +44,7 @@ public interface JavaAnnotatedElement
 	 * 
 	 * @return a list of Annotations, never <code>null</code>
 	 */
-    List<Annotation> getAnnotations();
+    List<JavaAnnotation> getAnnotations();
     
     // JavaDoc specific methods
     

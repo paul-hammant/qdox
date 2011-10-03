@@ -26,6 +26,7 @@ import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.BeanProperty;
 import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
@@ -1339,7 +1340,7 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource(new StringReader( source ));
         JavaClass classByName = builder.getClassByName("Instruction");
         JavaField fieldByName = classByName.getFieldByName("testfield");
-        List<Annotation> annotations = fieldByName.getAnnotations();
+        List<JavaAnnotation> annotations = fieldByName.getAnnotations();
         
         // Now we do have the annotation "JoinColumn" in annotations[0]
         Map propertyMap = annotations.get(0).getNamedParameterMap();

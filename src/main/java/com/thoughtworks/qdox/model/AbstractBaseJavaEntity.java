@@ -26,7 +26,7 @@ import java.util.List;
 
 public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implements Serializable {
 
-	private List<Annotation> annotations = Collections.emptyList();
+	private List<JavaAnnotation> annotations = Collections.emptyList();
 	private String comment;
 	private List<DocletTag> tags = Collections.emptyList();
 
@@ -35,12 +35,12 @@ public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implement
         super();
     }
 
-    public List<Annotation> getAnnotations()
+    public List<JavaAnnotation> getAnnotations()
     {
         return annotations;
     }
 
-    public void setAnnotations( List<Annotation> annotations )
+    public void setAnnotations( List<JavaAnnotation> annotations )
     {
         this.annotations = annotations;
     }

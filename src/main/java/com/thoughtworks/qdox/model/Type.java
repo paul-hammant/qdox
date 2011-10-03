@@ -640,7 +640,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaAnnotatedElement#getAnnotations()
      */
-    public List<Annotation> getAnnotations()
+    public List<JavaAnnotation> getAnnotations()
     {
         return resolveRealClass().getAnnotations();
     }

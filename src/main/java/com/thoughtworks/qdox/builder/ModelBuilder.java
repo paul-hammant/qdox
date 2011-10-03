@@ -37,6 +37,7 @@ import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
@@ -371,7 +372,7 @@ public class ModelBuilder implements Builder {
         if( !currentAnnoDefs.isEmpty() ) {
         	DefaultAnnotationTransformer transformer = new DefaultAnnotationTransformer(entity);
 
-            List<Annotation> annotations = new LinkedList<Annotation>();
+            List<JavaAnnotation> annotations = new LinkedList<JavaAnnotation>();
             for( AnnoDef annoDef :  currentAnnoDefs) {
                 annotations.add( transformer.transform( annoDef ) );
             }

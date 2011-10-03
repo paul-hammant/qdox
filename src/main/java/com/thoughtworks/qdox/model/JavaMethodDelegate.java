@@ -82,7 +82,7 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.equals( obj );
     }
 
-    public List<Annotation> getAnnotations()
+    public List<JavaAnnotation> getAnnotations()
     {
         return originalMethod.getAnnotations();
     }

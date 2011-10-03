@@ -27,10 +27,10 @@ import java.util.List;
  * @since 1.10
  */
 public class TypeVariable<D extends JavaGenericDeclaration>
-    extends Type
+    extends Type implements JavaTypeVariable<D>
 {
 
-    private List<Type> bounds;
+    private List<JavaType> bounds;
     
     private D genericDeclaration;
 
@@ -65,7 +65,7 @@ public class TypeVariable<D extends JavaGenericDeclaration>
     /**
      * @return the bounds
      */
-    public List<Type> getBounds()
+    public List<JavaType> getBounds()
     {
         return bounds;
     }
@@ -73,7 +73,7 @@ public class TypeVariable<D extends JavaGenericDeclaration>
     /**
      * @param bounds the bounds to set
      */
-    public void setBounds( List<Type> bounds )
+    public void setBounds( List<JavaType> bounds )
     {
         this.bounds = bounds;
     }
@@ -96,7 +96,7 @@ public class TypeVariable<D extends JavaGenericDeclaration>
         if ( bounds != null && !bounds.isEmpty() )
         {
             result.append( " extends " );
-            for ( Iterator<Type> iter = bounds.iterator(); iter.hasNext(); )
+            for ( Iterator<JavaType> iter = bounds.iterator(); iter.hasNext(); )
             {
                 result.append( iter.next().getGenericFullyQualifiedName() );
                 if ( iter.hasNext() )
@@ -119,7 +119,7 @@ public class TypeVariable<D extends JavaGenericDeclaration>
         if ( bounds != null && !bounds.isEmpty() )
         {
             result.append( " extends " );
-            for ( Iterator<Type> iter = bounds.iterator(); iter.hasNext(); )
+            for ( Iterator<JavaType> iter = bounds.iterator(); iter.hasNext(); )
             {
                 result.append( iter.next().getGenericValue() );
                 if ( iter.hasNext() )
@@ -145,5 +145,4 @@ public class TypeVariable<D extends JavaGenericDeclaration>
     {
         return bounds.get( 0 ).getFullyQualifiedName();
     }
-
 }

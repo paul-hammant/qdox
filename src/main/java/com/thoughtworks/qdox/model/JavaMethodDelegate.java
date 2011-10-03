@@ -211,7 +211,7 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.getTagsByName( name );
     }
 
-    public List<TypeVariable<JavaMethod>> getTypeParameters()
+    public List<JavaTypeVariable<JavaMethod>> getTypeParameters()
     {
         return originalMethod.getTypeParameters();
     }

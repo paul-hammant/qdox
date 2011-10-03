@@ -43,6 +43,7 @@ import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.TypeVariable;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
@@ -315,7 +316,7 @@ public class ModelBuilder implements Builder {
 
         if ( typeVariableDef.getBounds() != null && !typeVariableDef.getBounds().isEmpty() )
         {
-            List<Type> bounds = new LinkedList<Type>();
+            List<JavaType> bounds = new LinkedList<JavaType>();
             for ( TypeDef typeDef : typeVariableDef.getBounds() )
             {
                 bounds.add( createType( typeDef, 0 ) );

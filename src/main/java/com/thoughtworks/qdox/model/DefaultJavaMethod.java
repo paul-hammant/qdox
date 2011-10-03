@@ -28,7 +28,7 @@ import java.util.ListIterator;
 public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> extends AbstractBaseMethod<T> implements JavaMethod {
 
 	private T returns = (T) Type.VOID;
-    private List<TypeVariable<JavaMethod>> typeParameters = Collections.emptyList();
+    private List<JavaTypeVariable<JavaMethod>> typeParameters = Collections.emptyList();
 	
     /**
      * The default constructor
@@ -63,12 +63,12 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
         return returns;
     }
     
-    public void setTypeParameters( List<TypeVariable<JavaMethod>> typeParameters )
+    public void setTypeParameters( List<JavaTypeVariable<JavaMethod>> typeParameters )
     {
         this.typeParameters = typeParameters;
     }
 
-    public List<TypeVariable<JavaMethod>> getTypeParameters()
+    public List<JavaTypeVariable<JavaMethod>> getTypeParameters()
     {
         return typeParameters;
     }
@@ -356,8 +356,8 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
                 result.append( "," );
             }
             JavaType originalType = getParameters().get( paramIndex ).getType();
-            TypeVariable typeVariable = Type.resolve( originalType, getTypeParameters() ); 
-            result.append( typeVariable == null ? originalType.getFullyQualifiedName() : typeVariable.getResolvedFullyQualifiedName() );
+            JavaTypeVariable<?> typeVariable = Type.resolve( originalType, getTypeParameters() );
+            result.append( typeVariable == null ? originalType.getFullyQualifiedName() : typeVariable.getBounds().get( 0 ).getFullyQualifiedName() );
         }
         result.append( ")" );
         if ( getExceptions().size() > 0 )

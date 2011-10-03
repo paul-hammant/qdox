@@ -166,7 +166,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         return result.toString();
     }
     
-    protected static <D extends JavaGenericDeclaration> String getGenericValue( JavaType base, List<TypeVariable<D>> typeVariableList )
+    protected static <D extends JavaGenericDeclaration> String getGenericValue( JavaType base, List<JavaTypeVariable<D>> typeVariableList )
     {
         StringBuffer result = new StringBuffer( getResolvedValue( base, typeVariableList ) );
         for ( Iterator<JavaType> iter = getActualTypeArguments( base ).iterator(); iter.hasNext(); )
@@ -194,10 +194,10 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         return result;
     }
 
-    protected static <D extends JavaGenericDeclaration> String getResolvedValue( JavaType base, List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedValue( JavaType base, List<JavaTypeVariable<D>> typeParameters )
     {
         String result = base.getValue();
-        for ( TypeVariable<?> typeParameter : typeParameters )
+        for ( JavaTypeVariable<?> typeParameter : typeParameters )
         {
             if ( typeParameter.getName().equals( base.getValue() ) )
             {
@@ -208,11 +208,11 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         return result;
     }
     
-    protected static <D extends JavaGenericDeclaration> TypeVariable<D> resolve( JavaType base, List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> JavaTypeVariable<D> resolve( JavaType base, List<JavaTypeVariable<D>> typeParameters )
     {
-        TypeVariable<D> result = null;
+        JavaTypeVariable<D> result = null;
         // String result = getGenericValue(typeParameters);
-        for ( TypeVariable<D> typeParameter : typeParameters )
+        for ( JavaTypeVariable<D> typeParameter : typeParameters )
         {
             if ( typeParameter.getName().equals( base.getValue() ) )
             {
@@ -543,10 +543,10 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         return result.toString();
     }
 
-    protected static <D extends JavaGenericDeclaration> String getResolvedGenericValue( JavaType base, List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedGenericValue( JavaType base, List<JavaTypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
-        TypeVariable<?> variable = resolve( base, typeParameters );
+        JavaTypeVariable<?> variable = resolve( base, typeParameters );
         result.append( variable == null ? base.getValue() : variable.getBounds().get(0).getValue() );
         List<JavaType> actualTypeArguments = getActualTypeArguments( base );
         if ( !actualTypeArguments.isEmpty() )
@@ -572,10 +572,10 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         return result.toString();
     }
 
-    protected static <D extends JavaGenericDeclaration> String getResolvedGenericFullyQualifiedName( JavaType base, List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedGenericFullyQualifiedName( JavaType base, List<JavaTypeVariable<D>> typeParameters )
     {
         StringBuffer result = new StringBuffer();
-        TypeVariable<D> variable = resolve( base, typeParameters );
+        JavaTypeVariable<D> variable = resolve( base, typeParameters );
         result.append( variable == null ? base.getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
         List<JavaType> actualTypeArguments = getActualTypeArguments( base );
         if ( !actualTypeArguments.isEmpty() )
@@ -601,9 +601,9 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         return result.toString();
     }
 
-    protected static <D extends JavaGenericDeclaration> String getResolvedFullyQualifiedName( JavaType base, List<TypeVariable<D>> typeParameters )
+    protected static <D extends JavaGenericDeclaration> String getResolvedFullyQualifiedName( JavaType base, List<JavaTypeVariable<D>> typeParameters )
     {
-        TypeVariable<D> variable = resolve( base, typeParameters );
+        JavaTypeVariable<D> variable = resolve( base, typeParameters );
         return (variable == null ? base.getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
     }
 
@@ -766,7 +766,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaGenericDeclaration#getTypeParameters()
      */
-    public <D extends JavaGenericDeclaration> List<TypeVariable<D>> getTypeParameters()
+    public <D extends JavaGenericDeclaration> List<JavaTypeVariable<D>> getTypeParameters()
     {
         return resolveRealClass().getTypeParameters();
     }

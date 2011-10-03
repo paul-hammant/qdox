@@ -762,7 +762,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
     private Map<String, BeanProperty> getBeanPropertyMap( boolean superclasses )
     {
         List<JavaMethod> superMethods = getMethods( superclasses );
-        Map<String, BeanProperty> beanPropertyMap = new LinkedHashMap<String, BeanProperty>();
+        Map<String, DefaultBeanProperty> beanPropertyMap = new LinkedHashMap<String, DefaultBeanProperty>();
 
         // loop over the methods.
         for ( JavaMethod superMethod : superMethods )
@@ -770,7 +770,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
             if ( superMethod.isPropertyAccessor() )
             {
                 String propertyName = superMethod.getPropertyName();
-                BeanProperty beanProperty = getOrCreateProperty( beanPropertyMap, propertyName );
+                DefaultBeanProperty beanProperty = getOrCreateProperty( beanPropertyMap, propertyName );
 
                 beanProperty.setAccessor( superMethod );
                 beanProperty.setType( superMethod.getPropertyType() );
@@ -778,23 +778,22 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
             else if ( superMethod.isPropertyMutator() )
             {
                 String propertyName = superMethod.getPropertyName();
-                BeanProperty beanProperty = getOrCreateProperty( beanPropertyMap, propertyName );
+                DefaultBeanProperty beanProperty = getOrCreateProperty( beanPropertyMap, propertyName );
 
                 beanProperty.setMutator( superMethod );
                 beanProperty.setType( superMethod.getPropertyType() );
             }
         }
-
-        return beanPropertyMap;
+        return new LinkedHashMap<String, BeanProperty>( beanPropertyMap );
     }
 
-    private BeanProperty getOrCreateProperty( Map<String, BeanProperty> beanPropertyMap, String propertyName )
+    private DefaultBeanProperty getOrCreateProperty( Map<String, DefaultBeanProperty> beanPropertyMap, String propertyName )
     {
-        BeanProperty result = beanPropertyMap.get( propertyName );
+        DefaultBeanProperty result = beanPropertyMap.get( propertyName );
 
         if ( result == null )
         {
-            result = new BeanProperty( propertyName );
+            result = new DefaultBeanProperty( propertyName );
             beanPropertyMap.put( propertyName, result );
         }
 

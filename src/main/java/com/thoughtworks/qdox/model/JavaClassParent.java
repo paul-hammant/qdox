@@ -20,7 +20,9 @@ import com.thoughtworks.qdox.library.ClassLibrary;
  * specific language governing permissions and limitations
  * under the License.
  */
-
+/**
+ * @deprecated this interface will be hidden for the model interfaces
+ */
 public interface JavaClassParent {
 
     /**

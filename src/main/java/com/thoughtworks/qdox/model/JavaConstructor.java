@@ -61,7 +61,9 @@ public interface JavaConstructor
      * @return a list of Exceptions, never <code>null</code>
      */
     List<JavaClass> getExceptions();
-
+    
+    List<JavaType> getExceptionTypes();
+ 
     /**
      * Equivalent of {@link java.lang.reflect.Constructor#isVarArgs()} 
      * 

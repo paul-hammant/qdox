@@ -519,6 +519,29 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         }
         return result.toString();
     }
+    
+    public String getGenericCanonicalName()
+    {
+        StringBuffer result = new StringBuffer( getCanonicalName() );
+        if ( !actualArgumentTypes.isEmpty() )
+        {
+            result.append( "<" );
+            for ( Iterator<JavaType> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
+            {
+                result.append( iter.next().getCanonicalName() );
+                if ( iter.hasNext() )
+                {
+                    result.append( "," );
+                }
+            }
+            result.append( ">" );
+        }
+        for ( int i = 0; i < dimensions; i++ )
+        {
+            result.append( "[]" );
+        }
+        return result.toString();
+    }
 
     protected static <D extends JavaGenericDeclaration> String getResolvedGenericValue( JavaType base, List<TypeVariable<D>> typeParameters )
     {

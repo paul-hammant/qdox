@@ -95,9 +95,24 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
         return type.getFullyQualifiedName();
     }
     
+    public String getCanonicalName()
+    {
+        return type.getCanonicalName();
+    }
+    
     public String getValue()
     {
         return type.getValue();
+    }
+    
+    public String getGenericCanonicalName()
+    {
+        return type.getGenericCanonicalName();
+    }
+    
+    public String getGenericFullyQualifiedName()
+    {
+        return type.getGenericFullyQualifiedName();
     }
     
     /* (non-Javadoc)
@@ -149,6 +164,16 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
     @Override
     public String toString() {
         return getResolvedValue() + " "+ name;
+    }
+
+    public String getGenericValue()
+    {
+        return type.getGenericValue();
+    }
+
+    public String toGenericString()
+    {
+        return type.toGenericString();
     }
 	
 }

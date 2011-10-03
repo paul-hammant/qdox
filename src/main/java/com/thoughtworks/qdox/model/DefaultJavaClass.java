@@ -317,6 +317,11 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
     {
         return getFullyQualifiedName().replace( '$', '.' );
     }
+    
+    public String getGenericCanonicalName()
+    {
+        return getCanonicalName();
+    }
 
     /*
      * (non-Javadoc)

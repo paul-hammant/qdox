@@ -25,7 +25,7 @@ package com.thoughtworks.qdox.model;
  * @author Robert Scholte
  *
  */
-public interface JavaParameter extends JavaAnnotatedElement
+public interface JavaParameter extends JavaAnnotatedElement, JavaType
 {
 
     /**
@@ -74,6 +74,8 @@ public interface JavaParameter extends JavaAnnotatedElement
      * @return the FQN of the type, never <code>null</code>
      */
     String getFullyQualifiedName();
+    
+    String getCanonicalName();
 
     /**
      * @return the resolved value of the type

@@ -4,6 +4,8 @@ public interface JavaType
 {
     String getCanonicalName();
 
+    String getGenericCanonicalName();
+
     String getFullyQualifiedName();
 
     String getGenericFullyQualifiedName();

@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model.expression;
 
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 
 /*
@@ -23,15 +24,15 @@ import com.thoughtworks.qdox.model.Type;
 
 public class Cast implements AnnotationValue {
 
-    private final Type type;
+    private final JavaType type;
     private final AnnotationValue value;
     
-    public Cast( Type type, AnnotationValue value ) {
+    public Cast( JavaType type, AnnotationValue value ) {
         this.type = type;
         this.value = value;
     }
 
-	public Type getType() {
+	public JavaType getType() {
         return this.type;
     }
 

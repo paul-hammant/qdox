@@ -19,9 +19,9 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class AnnotationValueList
     implements AnnotationValue
@@ -43,9 +43,9 @@ public class AnnotationValueList
     {
         StringBuffer buf = new StringBuffer();
 
-        buf.append( "{" );
+        buf.append( '{' );
 
-        for ( ListIterator<AnnotationValue> i = valueList.listIterator(); i.hasNext(); )
+        for ( Iterator<AnnotationValue> i = valueList.iterator(); i.hasNext(); )
         {
             buf.append( i.next().toString() );
 
@@ -55,7 +55,7 @@ public class AnnotationValueList
             }
         }
 
-        buf.append( "}" );
+        buf.append( '}' );
 
         return buf.toString();
     }

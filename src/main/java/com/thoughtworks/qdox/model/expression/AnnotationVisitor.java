@@ -20,7 +20,7 @@ package com.thoughtworks.qdox.model.expression;
  */
 
 
-import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 
 /**
  * Visitor class for the annotation model elements
@@ -41,7 +41,7 @@ public interface AnnotationVisitor {
 
     Object visit( LessThan lessThan );
 
-    Object visit( Annotation annotation );
+    Object visit( JavaAnnotation annotation );
 
     Object visit( Constant constant );
 

@@ -23,10 +23,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaAnnotation;
+import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
@@ -213,7 +213,7 @@ public abstract class EvaluatingVisitor
         return type;
     }
 
-    public Object visit( Annotation annotation ) throws UnsupportedOperationException
+    public Object visit( JavaAnnotation annotation ) throws UnsupportedOperationException
     {
         throw new UnsupportedOperationException( "Illegal annotation value '" + annotation + "'." );
     }
@@ -891,13 +891,13 @@ public abstract class EvaluatingVisitor
     public Object visit( Cast annotationCast )
     {
         Object value = annotationCast.getValue().accept( this );
-        Type type = annotationCast.getType();
+        JavaType type = annotationCast.getType();
         Object result;
 
-        if ( type.isPrimitive() && value instanceof Number )
+        if ( type instanceof JavaClass && ( (JavaClass) type ).isPrimitive() && value instanceof Number )
         {
             Number n = (Number) value;
-            String typeName = type.getName();
+            String typeName = type.getCanonicalName();
 
             if ( typeName.equals( "byte" ) )
             {

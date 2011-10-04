@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
+import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -146,6 +147,11 @@ public class JavaProjectBuilder
         throws IOException
     {
         return classLibraryBuilder.addSource( file );
+    }
+    
+    public JavaSource addSource( URL url ) throws IOException
+    {
+        return classLibraryBuilder.addSource( url );
     }
 
     // Resource adders

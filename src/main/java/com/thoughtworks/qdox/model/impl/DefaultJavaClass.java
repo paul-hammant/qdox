@@ -42,7 +42,6 @@ import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.model.TypeVariable;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -60,7 +59,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
 
     private T superClass;
     private List<T> implementz = new LinkedList<T>();
-    private List<TypeVariable<JavaClass>> typeParameters = new LinkedList<TypeVariable<JavaClass>>(); 
+    private List<DefaultJavaTypeVariable<JavaClass>> typeParameters = new LinkedList<DefaultJavaTypeVariable<JavaClass>>(); 
     
     //sourceless class can use this property
 	private JavaPackage javaPackage;
@@ -240,12 +239,12 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getTypeParameters()
      */
-    public List<TypeVariable<JavaClass>> getTypeParameters()
+    public List<DefaultJavaTypeVariable<JavaClass>> getTypeParameters()
     {
         return typeParameters;
     }
     
-    public void setTypeParameters( List<TypeVariable<JavaClass>> typeParameters )
+    public void setTypeParameters( List<DefaultJavaTypeVariable<JavaClass>> typeParameters )
     {
         this.typeParameters = typeParameters;
     }

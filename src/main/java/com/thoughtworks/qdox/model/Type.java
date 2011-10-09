@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
+import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
 
 public class Type implements JavaClass, JavaType, JavaParameterizedType, Serializable {
 
@@ -482,7 +483,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         for ( Object typeVariable : declaringClass.getTypeParameters() )
         {
             typeIndex++;
-            if ( ((TypeVariable<?>) typeVariable).getFullyQualifiedName().equals( fqn ) )
+            if ( ((DefaultJavaTypeVariable<?>) typeVariable).getFullyQualifiedName().equals( fqn ) )
             {
                 return typeIndex;
             }

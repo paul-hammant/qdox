@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,11 +22,19 @@ package com.thoughtworks.qdox.model;
 import java.util.Iterator;
 import java.util.List;
 
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
+import com.thoughtworks.qdox.model.JavaGenericDeclaration;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.JavaTypeVariable;
+import com.thoughtworks.qdox.model.Type;
+
 /**
  * @author Robert Scholte
  * @since 1.10
  */
-public class TypeVariable<D extends JavaGenericDeclaration>
+public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     extends Type implements JavaTypeVariable<D>
 {
 
@@ -34,7 +42,7 @@ public class TypeVariable<D extends JavaGenericDeclaration>
     
     private D genericDeclaration;
 
-    public TypeVariable( String fullName, String name, D genericDeclaration )
+    public DefaultJavaTypeVariable( String fullName, String name, D genericDeclaration )
     {
         super( fullName, name, 0, getContext( genericDeclaration ) );
         this.genericDeclaration = genericDeclaration;

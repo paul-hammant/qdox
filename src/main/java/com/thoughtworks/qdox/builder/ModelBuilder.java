@@ -42,12 +42,12 @@ import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.model.TypeVariable;
 import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 import com.thoughtworks.qdox.model.impl.DefaultJavaField;
 import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
+import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -145,7 +145,7 @@ public class ModelBuilder implements Builder {
         
         // typeParameters
         if (def.getTypeParameters() != null) {
-            List<TypeVariable<JavaClass>> typeParams = new LinkedList<TypeVariable<JavaClass>>();
+            List<DefaultJavaTypeVariable<JavaClass>> typeParams = new LinkedList<DefaultJavaTypeVariable<JavaClass>>();
             for(TypeVariableDef typeVariableDef : def.getTypeParameters()) {
                 typeParams.add(createTypeVariable(typeVariableDef, (JavaClass) newClass));
             }
@@ -234,7 +234,7 @@ public class ModelBuilder implements Builder {
 
         // typeParameters
         if (def.getTypeParams() != null) {
-            List<TypeVariable<JavaConstructor>> typeParams = new LinkedList<TypeVariable<JavaConstructor>>();
+            List<DefaultJavaTypeVariable<JavaConstructor>> typeParams = new LinkedList<DefaultJavaTypeVariable<JavaConstructor>>();
             for(TypeVariableDef typeVariableDef : def.getTypeParams()) {
                 typeParams.add(createTypeVariable(typeVariableDef, (JavaConstructor) currentConstructor));
             }
@@ -283,7 +283,7 @@ public class ModelBuilder implements Builder {
 
         // typeParameters
         if (def.getTypeParams() != null) {
-        	List<TypeVariable<JavaMethod>> typeParams = new LinkedList<TypeVariable<JavaMethod>>();
+        	List<DefaultJavaTypeVariable<JavaMethod>> typeParams = new LinkedList<DefaultJavaTypeVariable<JavaMethod>>();
         	for(TypeVariableDef typeVariableDef : def.getTypeParams()) {
         		typeParams.add(createTypeVariable(typeVariableDef, (JavaMethod) currentMethod));
         	}
@@ -308,13 +308,13 @@ public class ModelBuilder implements Builder {
         currentMethod.setSourceCode(def.getBody());
     }
 
-    private <G extends JavaGenericDeclaration> TypeVariable<G> createTypeVariable( TypeVariableDef typeVariableDef, G genericDeclaration)
+    private <G extends JavaGenericDeclaration> DefaultJavaTypeVariable<G> createTypeVariable( TypeVariableDef typeVariableDef, G genericDeclaration)
     {
         if ( typeVariableDef == null )
         {
             return null;
         }
-        TypeVariable<G> result = new TypeVariable<G>( null, typeVariableDef.getName(), genericDeclaration );
+        DefaultJavaTypeVariable<G> result = new DefaultJavaTypeVariable<G>( null, typeVariableDef.getName(), genericDeclaration );
 
         if ( typeVariableDef.getBounds() != null && !typeVariableDef.getBounds().isEmpty() )
         {

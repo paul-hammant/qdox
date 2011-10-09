@@ -31,18 +31,18 @@ import com.thoughtworks.qdox.model.Type;
  * @author Robert Scholte
  *
  */
-public class DefaultWildcardType extends Type implements JavaWildcardType {
+public class DefaultJavaWildcardType extends Type implements JavaWildcardType {
 
     /**
      * A wildcardExpression is either <code>super</code> or <code>extends</code> or <code>null</code>
      */
 	private String wildcardExpressionType = null;
 	
-	public DefaultWildcardType() {
+	public DefaultJavaWildcardType() {
 		super("?");
 	}
 	
-	public DefaultWildcardType(String name, String wildcardExpressionType, JavaClassParent context) {
+	public DefaultJavaWildcardType(String name, String wildcardExpressionType, JavaClassParent context) {
 		super(null, name, 0, context);
 		this.wildcardExpressionType = wildcardExpressionType;
 	}

@@ -6,7 +6,7 @@ import java.util.List;
 import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.model.WildcardType;
+import com.thoughtworks.qdox.model.impl.DefaultJavaWildcardType;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
@@ -37,7 +37,7 @@ public final class TypeAssembler
         if ( typeDef instanceof WildcardTypeDef )
         {
             WildcardTypeDef wildcard = (WildcardTypeDef) typeDef;
-            result = new WildcardType( wildcard.getName(), wildcard.getWildcardExpressionType(), context );
+            result = new DefaultJavaWildcardType( wildcard.getName(), wildcard.getWildcardExpressionType(), context );
         }
         else
         {

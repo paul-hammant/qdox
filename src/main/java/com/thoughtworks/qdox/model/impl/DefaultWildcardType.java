@@ -1,4 +1,8 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
+
+import com.thoughtworks.qdox.model.JavaClassParent;
+import com.thoughtworks.qdox.model.JavaWildcardType;
+import com.thoughtworks.qdox.model.Type;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -27,18 +31,18 @@ package com.thoughtworks.qdox.model;
  * @author Robert Scholte
  *
  */
-public class WildcardType extends Type {
+public class DefaultWildcardType extends Type implements JavaWildcardType {
 
     /**
      * A wildcardExpression is either <code>super</code> or <code>extends</code> or <code>null</code>
      */
 	private String wildcardExpressionType = null;
 	
-	public WildcardType() {
+	public DefaultWildcardType() {
 		super("?");
 	}
 	
-	public WildcardType(String name, String wildcardExpressionType, JavaClassParent context) {
+	public DefaultWildcardType(String name, String wildcardExpressionType, JavaClassParent context) {
 		super(null, name, 0, context);
 		this.wildcardExpressionType = wildcardExpressionType;
 	}

@@ -1,8 +1,16 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.thoughtworks.qdox.model.AbstractInheritableJavaEntity;
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.JavaParameterizedType;
+import com.thoughtworks.qdox.model.JavaType;
 
 /**
  * The BaseMethod contains all methods used by both JavaMethod and JavaConstructor 

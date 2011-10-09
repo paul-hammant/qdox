@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.thoughtworks.qdox.model.impl.AbstractBaseMethod;
+
 public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> extends AbstractBaseMethod<T> implements JavaMethod {
 
 	private T returns = (T) Type.VOID;

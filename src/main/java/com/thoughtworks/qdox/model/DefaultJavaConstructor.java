@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.thoughtworks.qdox.model.impl.AbstractBaseMethod;
+
 /**
  * 
  * @author Robert

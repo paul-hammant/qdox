@@ -27,7 +27,6 @@ import java.util.Set;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
-import com.thoughtworks.qdox.model.DefaultJavaClass;
 import com.thoughtworks.qdox.model.DefaultJavaConstructor;
 import com.thoughtworks.qdox.model.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.DefaultJavaParameter;
@@ -45,6 +44,7 @@ import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.TypeVariable;
 import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
+import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 import com.thoughtworks.qdox.model.impl.DefaultJavaField;
 import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;

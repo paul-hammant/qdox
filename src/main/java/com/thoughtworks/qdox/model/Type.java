@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 
 public class Type implements JavaClass, JavaType, JavaParameterizedType, Serializable {
 

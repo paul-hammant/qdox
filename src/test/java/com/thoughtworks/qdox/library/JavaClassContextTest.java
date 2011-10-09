@@ -3,11 +3,11 @@ package com.thoughtworks.qdox.library;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.DefaultJavaClass;
-import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 
 public class JavaClassContextTest
     extends TestCase

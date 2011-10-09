@@ -27,9 +27,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.builder.ModelBuilder;
-import com.thoughtworks.qdox.model.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 import com.thoughtworks.qdox.parser.JavaLexer;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.parser.impl.BinaryClassParser;

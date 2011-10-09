@@ -1,8 +1,9 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 import static org.mockito.Mockito.*;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.JavaPackageTest;
 
 public class DefaultJavaPackageTest extends JavaPackageTest<DefaultJavaPackage>
 {

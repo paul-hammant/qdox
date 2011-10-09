@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,6 +24,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaModelUtils;
+import com.thoughtworks.qdox.model.JavaPackage;
 
 /**
  * The default implementation of {@link JavaPackage}, representing a {@link Package}.

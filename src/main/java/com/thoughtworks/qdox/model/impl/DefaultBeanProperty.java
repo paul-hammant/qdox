@@ -1,4 +1,8 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
+
+import com.thoughtworks.qdox.model.BeanProperty;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaType;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

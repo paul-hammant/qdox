@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.impl.DefaultBeanProperty;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>

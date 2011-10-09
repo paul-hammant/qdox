@@ -33,6 +33,7 @@ import com.thoughtworks.qdox.model.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
@@ -201,7 +202,7 @@ public class ModelBuilder implements Builder {
             tagList.add( 
                 docletTagFactory.createDocletTag(
                     tagDef.getName(), tagDef.getText(), 
-                    entity, tagDef.getLineNumber()
+                    (JavaAnnotatedElement) entity, tagDef.getLineNumber()
                 )
             );
         }

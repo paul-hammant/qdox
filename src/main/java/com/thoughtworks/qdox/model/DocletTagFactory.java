@@ -34,7 +34,7 @@ public interface DocletTagFactory extends Serializable {
      */ 
     DocletTag createDocletTag(
         String tag, String text, 
-        AbstractJavaModel context, int lineNumber
+        JavaAnnotatedElement context, int lineNumber
     );
 
     DocletTag createDocletTag(String tag, String text);

@@ -23,8 +23,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import com.thoughtworks.qdox.model.impl.AbstractJavaModel;
-
 /**
  * @author Joe Walnes
  * @author Aslak Helles&oslash;y
@@ -67,6 +65,6 @@ public interface DocletTag extends Serializable {
      * @return the language element to which this tag applies
      * @since 1.4
      */
-    AbstractJavaModel getContext();
+    JavaAnnotatedElement getContext();
 
 }

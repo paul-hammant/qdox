@@ -30,7 +30,7 @@ public class DefaultDocletTagFactory implements DocletTagFactory {
 
     public DocletTag createDocletTag(
         String tag, String text, 
-        AbstractJavaModel context, int lineNumber
+        JavaAnnotatedElement context, int lineNumber
     ) {
         return new DefaultDocletTag(tag, text, context, lineNumber);
     }

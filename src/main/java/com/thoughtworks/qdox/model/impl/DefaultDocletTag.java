@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.util.TagParser;
 
 public class DefaultDocletTag implements DocletTag {
@@ -33,10 +34,10 @@ public class DefaultDocletTag implements DocletTag {
 
     private List<String> parameters;
     private Map<String, String> namedParameters;
-    private AbstractJavaModel context;
+    private JavaAnnotatedElement context;
 
     public DefaultDocletTag(String name, String value, 
-                            AbstractJavaModel context, 
+                            JavaAnnotatedElement context, 
                             int lineNumber) 
     {
         this.name = name;
@@ -75,7 +76,7 @@ public class DefaultDocletTag implements DocletTag {
         return (String) getNamedParameterMap().get(key);
     }
 
-    public final AbstractJavaModel getContext() {
+    public final JavaAnnotatedElement getContext() {
         return context;
     }
 

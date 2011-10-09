@@ -121,11 +121,6 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.getExceptionTypes();
     }
 
-    public JavaClass getGenericReturnType()
-    {
-        return originalMethod.getGenericReturnType();
-    }
-
     public int getLineNumber()
     {
         return originalMethod.getLineNumber();
@@ -156,11 +151,6 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.getParameters();
     }
     
-    public JavaClass getParentClass()
-    {
-        return originalMethod.getParentClass();
-    }
-
     public String getPropertyName()
     {
         return originalMethod.getPropertyName();
@@ -315,4 +305,19 @@ public class JavaMethodDelegate implements JavaMethod
     {
         return getParameterTypes( false );
     }
+    
+    // deprecated methods
+    // will be removed with QDox-2.0
+    public JavaClass getParentClass()
+    {
+        return originalMethod.getParentClass();
+    }
+
+    public JavaClass getGenericReturnType()
+    {
+        return originalMethod.getGenericReturnType();
+    }
+
+
+
 }

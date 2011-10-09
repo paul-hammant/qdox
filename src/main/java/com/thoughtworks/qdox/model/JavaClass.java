@@ -31,6 +31,39 @@ import com.thoughtworks.qdox.library.ClassLibrary;
  */
 public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnnotatedElement, JavaGenericDeclaration
 {
+    
+    // deprecated methods
+    // will be removed with QDox-2.0
+    
+    /**
+     * @deprecated the JavaClass should have the same methods
+     */
+    Type asType();
+
+    /**
+     * @deprecated Use {@link #getNestedClasses()} instead.
+     */
+    List<JavaClass> getClasses();
+
+    /**
+     * @deprecated use {@link #getNestedClassByName(String)} instead
+     */
+    JavaClass getInnerClassByName(String name);
+    
+    /**
+     * @deprecated use {@link #getNestedClasses()} instead
+     */
+    List<JavaClass> getInnerClasses();
+
+    /**
+     * @deprecated use {@link #getParentSource()} or {@link #getDeclaringClass()}
+     */
+    JavaClassParent getParent();
+
+    /**
+     * @deprecated use {@link #resolveCanonicalName(String)} or {@link #resolveFullyQualifiedName(String)} instead
+     */
+    String resolveType( String name );
 
     /**
      * (API description of {@link java.lang.Class#isInterface()})
@@ -63,6 +96,8 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @since 2.0 
      */
     boolean isAnnotation();
+    
+    JavaClass getDeclaringClass();
 
     JavaType getSuperClass();
 
@@ -97,8 +132,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      */
     JavaPackage getPackage();
 
-    JavaClassParent getParent();
-
     /**
      * If this class has a package, the packagename will be returned.
      * Otherwise an empty String.
@@ -114,8 +147,10 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @return <code>true</code> if this class is an inner class, otherwise <code>false</code>
      */
     boolean isInner();
-
+    
     /**
+     * The name can be both absolute (including the package) or relative (matching a subclass or an import).
+     * 
      * Tries to return the fully qualified name based on the name.
      * The name tries to match the following:
      * <ul>
@@ -126,14 +161,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      *   <li>implicit imports</li>
      * </ul> 
      * 
-     * @return the resolved name, otherwise <code>null</code>.
-     * @deprecated use {@link #resolveCanonicalName(String)} or {@link #resolveFullyQualifiedName(String)} instead
-     */
-    String resolveType( String name );
-    
-    /**
-     * The name can be both absolute (including the package) or relative (matching a subclass or an import).
-     * 
      * @param name the name to resolve
      * @return the resolved canonical name, otherwise <code>null</code>
      * @since 2.0
@@ -142,6 +169,16 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
     
     /**
      * The name can be both absolute (including the package) or relative (matching a subclass or an import).
+     * 
+     * Tries to return the fully qualified name based on the name.
+     * The name tries to match the following:
+     * <ul>
+     *   <li>primitives or void</li>
+     *   <li>java.lang.*</li>
+     *   <li>inner classes</li>
+     *   <li>explicit imports</li>
+     *   <li>implicit imports</li>
+     * </ul> 
      * 
      * @param name the name to resolve
      * @return the resolved fully qualified name, otherwise <code>null</code>
@@ -156,13 +193,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @return the package name plus a dot if there's a package, otherwise an empty String
      */
     String getClassNamePrefix();
-
-    /**
-     * 
-     * 
-     * @deprecated the JavaClass should have the same methods
-     */
-    Type asType();
 
     /**
      * Equivalent of {@link java.lang.Class#getMethods()}
@@ -289,11 +319,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @return the enumConstant matching the {@code name}, otherwise <code>null</code>
      */
     JavaField getEnumConstantByName( String name );
-
-    /**
-     * @deprecated Use {@link #getNestedClasses()} instead.
-     */
-    List<JavaClass> getClasses();
 
     /**
      * Equivalent of {@link Class#getDeclaredClasses()}

@@ -665,6 +665,15 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
     public List<JavaClass> getNestedClasses() {
         return classes;
     }
+    
+    public JavaClass getInnerClassByName( String name )
+    {
+        return getNestedClassByName( name );
+    }
+    public List<JavaClass> getInnerClasses()
+    {
+        return getNestedClasses();
+    }
 
     public JavaClass getNestedClassByName(String name) {
         int separatorIndex = name.indexOf('.');

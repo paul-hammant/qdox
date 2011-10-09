@@ -66,10 +66,6 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         return new Type(null, name, dimensions, context);
     }
     
-	public JavaClassParent getJavaClassParent() {
-        return context;
-    }
-
     /**
      * Returns the FQN of an Object or the handler of a Type.
      * If the name of the can't be resolved based on the imports and the classes on the classpath the name will be returned.
@@ -791,15 +787,6 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
 
     /*
      * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaClass#getParent()
-     */
-    public JavaClassParent getParent()
-    {
-        return context;
-    }
-
-    /*
-     * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getPackageName()
      */
     public String getPackageName()
@@ -814,15 +801,6 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
     public boolean isInner()
     {
         return resolveRealClass().isInner();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaClass#resolveType(java.lang.String)
-     */
-    public String resolveType( String name )
-    {
-        return resolveRealClass().resolveType( name );
     }
 
     /*
@@ -850,15 +828,6 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
     public String getClassNamePrefix()
     {
         return resolveRealClass().getClassNamePrefix();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaClass#asType()
-     */
-    public Type asType()
-    {
-        return resolveRealClass().asType();
     }
 
     /*
@@ -997,15 +966,6 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         return resolveRealClass().getEnumConstantByName( name );
     }
     
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaClass#getClasses()
-     */
-    public List<JavaClass> getClasses()
-    {
-        return resolveRealClass().getClasses();
-    }
-
     /*
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#getNestedClasses()
@@ -1186,4 +1146,42 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         return resolveRealClass().isAbstract();
     }
 
+    public JavaClass getDeclaringClass()
+    {
+        return resolveRealClass().getDeclaringClass();
+    } 
+    
+    // deprecated
+    public Type asType()    {
+        return resolveRealClass().asType();
+    }
+
+    public List<JavaClass> getClasses()
+    {
+        return resolveRealClass().getClasses();
+    }
+
+    public JavaClass getInnerClassByName( String name )
+    {
+        return resolveRealClass().getInnerClassByName( name );
+    }
+    
+    public List<JavaClass> getInnerClasses()
+    {
+        return resolveRealClass().getInnerClasses();
+    }
+    
+    public JavaClassParent getParent()
+    {
+        return context;
+    }
+
+    public String resolveType( String name )
+    {
+        return resolveRealClass().resolveType( name );
+    }
+    
+    public JavaClassParent getJavaClassParent() {
+        return context;
+    }
 }

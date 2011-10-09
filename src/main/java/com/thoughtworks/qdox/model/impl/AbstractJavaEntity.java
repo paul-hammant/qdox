@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,6 +21,10 @@ package com.thoughtworks.qdox.model;
 
 import java.util.Collections;
 import java.util.List;
+
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaModel;
 
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements JavaModel {
 

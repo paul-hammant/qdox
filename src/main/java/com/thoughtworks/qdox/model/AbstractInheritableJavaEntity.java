@@ -21,6 +21,8 @@ package com.thoughtworks.qdox.model;
 
 import java.util.List;
 
+import com.thoughtworks.qdox.model.impl.AbstractJavaEntity;
+
 /**
  * @author Aslak Helles&oslash;y
  * @version $Revision$

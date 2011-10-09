@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -12,6 +12,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
+
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
+import com.thoughtworks.qdox.model.DocletTag;
 
 public class AbstractJavaEntityTest {
 

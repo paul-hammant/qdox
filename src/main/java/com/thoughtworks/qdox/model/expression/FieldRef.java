@@ -21,11 +21,11 @@ package com.thoughtworks.qdox.model.expression;
 
 import java.util.StringTokenizer;
 
-import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.impl.AbstractBaseJavaEntity;
 
 public class FieldRef implements AnnotationValue {
 

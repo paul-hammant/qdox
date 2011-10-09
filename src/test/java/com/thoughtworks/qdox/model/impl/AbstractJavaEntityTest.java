@@ -13,7 +13,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.DocletTag;
 
 public class AbstractJavaEntityTest {

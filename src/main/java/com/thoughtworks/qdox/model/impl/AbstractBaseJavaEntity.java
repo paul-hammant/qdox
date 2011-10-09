@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,7 +24,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.thoughtworks.qdox.model.impl.AbstractJavaModel;
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaAnnotation;
+import com.thoughtworks.qdox.model.JavaClass;
 
 public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implements Serializable {
 

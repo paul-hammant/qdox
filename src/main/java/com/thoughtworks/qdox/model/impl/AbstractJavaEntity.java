@@ -22,7 +22,6 @@ package com.thoughtworks.qdox.model.impl;
 import java.util.Collections;
 import java.util.List;
 
-import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaModel;
 

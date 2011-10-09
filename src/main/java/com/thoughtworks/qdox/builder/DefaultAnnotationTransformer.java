@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
@@ -56,6 +55,7 @@ import com.thoughtworks.qdox.model.expression.ShiftRight;
 import com.thoughtworks.qdox.model.expression.Subtract;
 import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
+import com.thoughtworks.qdox.model.impl.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 import com.thoughtworks.qdox.parser.expression.AnnotationAdd;
 import com.thoughtworks.qdox.parser.expression.AnnotationAnd;

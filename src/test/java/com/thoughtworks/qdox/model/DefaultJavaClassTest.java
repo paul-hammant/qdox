@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.model;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
+import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
 
 public class DefaultJavaClassTest
     extends JavaClassTest<DefaultJavaClass>

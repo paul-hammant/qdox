@@ -1,8 +1,11 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.JavaSourceTest;
 
 public class DefaultJavaSourceTest extends JavaSourceTest<DefaultJavaSource>
 {

@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
 
 
 public class DefaultTypeTest extends TypeTest

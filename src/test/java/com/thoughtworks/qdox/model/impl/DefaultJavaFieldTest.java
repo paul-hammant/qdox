@@ -3,7 +3,6 @@ package com.thoughtworks.qdox.model.impl;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.DefaultJavaClass;
-import com.thoughtworks.qdox.model.DefaultJavaSource;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaFieldTest;
 import com.thoughtworks.qdox.model.JavaSource;

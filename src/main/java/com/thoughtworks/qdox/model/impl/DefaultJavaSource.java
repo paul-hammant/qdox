@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -30,6 +30,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaModelUtils;
+import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.writer.DefaultModelWriter;
 import com.thoughtworks.qdox.writer.ModelWriter;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;

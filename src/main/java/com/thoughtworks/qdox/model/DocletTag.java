@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.thoughtworks.qdox.model.impl.AbstractJavaModel;
+
 /**
  * @author Joe Walnes
  * @author Aslak Helles&oslash;y

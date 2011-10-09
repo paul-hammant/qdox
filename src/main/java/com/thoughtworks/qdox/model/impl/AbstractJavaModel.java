@@ -1,5 +1,7 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
+import com.thoughtworks.qdox.model.JavaModel;
+import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.writer.DefaultModelWriter;
 import com.thoughtworks.qdox.writer.ModelWriter;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;

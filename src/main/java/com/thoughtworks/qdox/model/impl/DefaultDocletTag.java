@@ -22,7 +22,6 @@ package com.thoughtworks.qdox.model.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.thoughtworks.qdox.model.AbstractJavaModel;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.util.TagParser;
 

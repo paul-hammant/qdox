@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.AnnotationVisitor;
+import com.thoughtworks.qdox.model.impl.AbstractJavaModel;
 
 /**
  * 

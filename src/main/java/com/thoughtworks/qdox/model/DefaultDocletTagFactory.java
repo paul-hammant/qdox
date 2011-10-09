@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model;
 
+import com.thoughtworks.qdox.model.impl.AbstractJavaModel;
 import com.thoughtworks.qdox.model.impl.DefaultDocletTag;
 
 /*

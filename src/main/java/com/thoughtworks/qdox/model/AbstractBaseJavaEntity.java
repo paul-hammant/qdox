@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.qdox.model.impl.AbstractJavaModel;
+
 public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implements Serializable {
 
 	private List<JavaAnnotation> annotations = Collections.emptyList();

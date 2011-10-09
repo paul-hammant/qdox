@@ -9,9 +9,9 @@ import java.util.List;
 
 import org.junit.Before;
 
-import com.thoughtworks.qdox.model.DefaultDocletTag;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
+import com.thoughtworks.qdox.model.impl.DefaultDocletTag;
 import com.thoughtworks.qdox.writer.DefaultModelWriter;
 
 public class DefaultModelWriterTest {

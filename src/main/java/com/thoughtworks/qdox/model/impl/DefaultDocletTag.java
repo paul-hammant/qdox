@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,6 +22,8 @@ package com.thoughtworks.qdox.model;
 import java.util.List;
 import java.util.Map;
 
+import com.thoughtworks.qdox.model.AbstractJavaModel;
+import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.util.TagParser;
 
 public class DefaultDocletTag implements DocletTag {

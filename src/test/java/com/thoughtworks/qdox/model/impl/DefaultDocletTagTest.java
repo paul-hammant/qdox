@@ -1,7 +1,10 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 import java.util.Map;
 
+import com.thoughtworks.qdox.model.AbstractDocletTagTest;
+import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
+import com.thoughtworks.qdox.model.DocletTagFactory;
 import com.thoughtworks.qdox.model.util.SerializationUtils;
 
 /**

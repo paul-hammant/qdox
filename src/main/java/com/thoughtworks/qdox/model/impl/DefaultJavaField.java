@@ -1,4 +1,9 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
+
+import com.thoughtworks.qdox.model.AbstractJavaEntity;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaParameterizedType;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

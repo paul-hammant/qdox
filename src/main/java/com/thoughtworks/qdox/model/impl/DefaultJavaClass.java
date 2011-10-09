@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.model.AbstractInheritableJavaEntity;
 import com.thoughtworks.qdox.model.BeanProperty;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;

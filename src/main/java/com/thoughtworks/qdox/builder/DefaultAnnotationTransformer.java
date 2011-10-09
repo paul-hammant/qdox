@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
-import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
@@ -57,6 +56,7 @@ import com.thoughtworks.qdox.model.expression.ShiftRight;
 import com.thoughtworks.qdox.model.expression.Subtract;
 import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
+import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 import com.thoughtworks.qdox.parser.expression.AnnotationAdd;
 import com.thoughtworks.qdox.parser.expression.AnnotationAnd;
 import com.thoughtworks.qdox.parser.expression.AnnotationCast;
@@ -103,8 +103,8 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	/* (non-Javadoc)
 	 * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.structs.AnnoDef)
 	 */
-	public Annotation transform(AnnoDef annoDef) {
-    	Annotation annotation = new Annotation(createType(annoDef.getTypeDef(), 0), annoDef.getLineNumber());
+	public DefaultJavaAnnotation transform(AnnoDef annoDef) {
+    	DefaultJavaAnnotation annotation = new DefaultJavaAnnotation(createType(annoDef.getTypeDef(), 0), annoDef.getLineNumber());
     	for(Map.Entry<String, ElemValueDef> annoVal : annoDef.getArgs().entrySet()) {
     		annotation.setProperty(annoVal.getKey(), annoVal.getValue().transform(this));
     	}

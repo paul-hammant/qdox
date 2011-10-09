@@ -5,7 +5,6 @@ import java.util.ListIterator;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -16,6 +15,7 @@ import com.thoughtworks.qdox.model.expression.AnnotationValueList;
 import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.FieldRef;
 import com.thoughtworks.qdox.model.expression.TypeRef;
+import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 import com.thoughtworks.qdox.parser.expression.AnnotationTypeRef;
 
 public class AnnotationsModelTest extends TestCase {

@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -25,15 +25,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.thoughtworks.qdox.model.JavaAnnotation;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.AnnotationVisitor;
-import com.thoughtworks.qdox.model.impl.AbstractJavaModel;
 
 /**
  * 
  * @author Eric Redmond
  */
-public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
+public class DefaultJavaAnnotation implements AnnotationValue, Serializable, JavaAnnotation
 {
     private final JavaClass type;
     private final int lineNumber;
@@ -53,7 +55,7 @@ public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
 
     private AbstractJavaModel context;
 
-    public Annotation(JavaClass type,
+    public DefaultJavaAnnotation(JavaClass type,
             AbstractJavaModel context,
             Map<String, Object> namedParameters,
             int lineNumber)
@@ -73,7 +75,7 @@ public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
         }
 	}
 
-    public Annotation( Type type, int line ) {
+    public DefaultJavaAnnotation( Type type, int line ) {
         this(type, null, null, line);
     }
 
@@ -117,7 +119,7 @@ public class Annotation implements AnnotationValue, Serializable, JavaAnnotation
         return visitor.visit( this );
     }
 
-    public Annotation getParameterValue() {
+    public DefaultJavaAnnotation getParameterValue() {
         return this;
     }
     

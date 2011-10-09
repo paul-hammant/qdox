@@ -13,7 +13,6 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.Add;
@@ -43,6 +42,7 @@ import com.thoughtworks.qdox.model.expression.ShiftLeft;
 import com.thoughtworks.qdox.model.expression.ShiftRight;
 import com.thoughtworks.qdox.model.expression.Subtract;
 import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
+import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 
 public class EvaluatingVisitorTest
 {
@@ -302,7 +302,7 @@ public class EvaluatingVisitorTest
     public void testVisitAnnotation()
     {
         try{
-            visitor.visit( new Annotation( new Type("Ignore"), -1 ) );
+            visitor.visit( new DefaultJavaAnnotation( new Type("Ignore"), -1 ) );
             fail( "Visiting an annotation is not supported and should throw an UnsupportedOperationException" );
         }
         catch (UnsupportedOperationException e) {

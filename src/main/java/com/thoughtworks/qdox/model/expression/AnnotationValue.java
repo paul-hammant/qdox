@@ -19,7 +19,7 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 
 /**
  * Interface for all annotation model elements
@@ -37,7 +37,7 @@ public interface AnnotationValue {
     Object accept( AnnotationVisitor visitor );
 
     /**
-     * Get a parameter value for {@link Annotation#getNamedParameter(String)}.
+     * Get a parameter value for {@link DefaultJavaAnnotation#getNamedParameter(String)}.
      * 
      * @return Parameter value
      */

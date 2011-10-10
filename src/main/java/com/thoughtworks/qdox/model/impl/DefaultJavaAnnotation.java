@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.Type;
@@ -53,10 +54,10 @@ public class DefaultJavaAnnotation implements AnnotationValue, Serializable, Jav
      */
     private final Map<String, Object> namedParameters = new LinkedHashMap<String, Object>();
 
-    private AbstractJavaModel context;
+    private JavaAnnotatedElement context;
 
     public DefaultJavaAnnotation(JavaClass type,
-            AbstractJavaModel context,
+                                 JavaAnnotatedElement context,
             Map<String, Object> namedParameters,
             int lineNumber)
 	{
@@ -107,7 +108,7 @@ public class DefaultJavaAnnotation implements AnnotationValue, Serializable, Jav
     	return namedParameters;
     }
 
-    public final AbstractJavaModel getContext() {
+    public final JavaAnnotatedElement getContext() {
         return context;
     }
 
@@ -137,7 +138,7 @@ public class DefaultJavaAnnotation implements AnnotationValue, Serializable, Jav
         return properties.get( name );
     }
 
-    public void setContext( AbstractJavaModel context ) {
+    public void setContext( JavaAnnotatedElement context ) {
         this.context = context;
     }
 

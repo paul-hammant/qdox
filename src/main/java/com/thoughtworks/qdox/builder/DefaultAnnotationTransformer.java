@@ -23,6 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.thoughtworks.qdox.model.JavaAnnotatedElement;
+import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
@@ -97,7 +99,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 	private AbstractBaseJavaEntity parent;
 	
 	public DefaultAnnotationTransformer(AbstractBaseJavaEntity parent) {
-		this.parent = parent;
+		this.parent = (AbstractBaseJavaEntity) parent;
 	}
 
 	/* (non-Javadoc)
@@ -108,7 +110,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
     	for(Map.Entry<String, ElemValueDef> annoVal : annoDef.getArgs().entrySet()) {
     		annotation.setProperty(annoVal.getKey(), annoVal.getValue().transform(this));
     	}
-    	annotation.setContext(parent);
+    	annotation.setContext((JavaAnnotatedElement) parent);
     	return annotation;
 	}
 
@@ -116,7 +118,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
     	if(typeDef == null) {
     		return null;
     	}
-    	return TypeAssembler.createUnresolved(typeDef, dimensions, parent.getParentClass() != null ? parent.getParentClass() : parent.getSource());
+    	return TypeAssembler.createUnresolved(typeDef, dimensions, parent.getParentClass() != null ? parent.getParentClass() : parent.getSource() );
     }
     
     public AnnotationValue transform(ElemValueListDef elemValueListDef) {
@@ -346,7 +348,7 @@ public class DefaultAnnotationTransformer implements AnnotationTransformer<Annot
 		FieldRef result;
 		String name = annotationFieldRef.getName();
 		result = new FieldRef(name);
-		result.setContext(parent);
+		result.setContext((JavaAnnotatedElement) parent);
 		return result;
 	}
 

@@ -21,11 +21,14 @@ package com.thoughtworks.qdox.model.expression;
 
 import java.util.StringTokenizer;
 
+import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMember;
+import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.Type;
-import com.thoughtworks.qdox.model.impl.AbstractBaseJavaEntity;
 
 public class FieldRef implements AnnotationValue {
 
@@ -33,7 +36,7 @@ public class FieldRef implements AnnotationValue {
 
     private final String name;
 
-    private AbstractBaseJavaEntity context;
+    private JavaAnnotatedElement context;
 
     private JavaField field;
 
@@ -86,7 +89,7 @@ public class FieldRef implements AnnotationValue {
         return getName();
     }
 
-    public void setContext( AbstractBaseJavaEntity context ) {
+    public void setContext( JavaAnnotatedElement context ) {
         this.context = context;
     }
 
@@ -125,29 +128,37 @@ public class FieldRef implements AnnotationValue {
         return field;
     }
 
-    public JavaField getField() {
-        if( fieldIndex < 0 ) {
-            if( context.getParentClass() != null ) {
-                JavaClass cls = context.getParentClass();
-                field = resolveField( cls, 0, parts.length -1 );
+    public JavaField getField()
+    {
+        if ( fieldIndex < 0 )
+        {
+            JavaClass declaringClass = getDeclaringClass();
+            if ( declaringClass != null )
+            {
+                field = resolveField( declaringClass, 0, parts.length - 1 );
                 fieldIndex = 0;
             }
 
-            if( field == null ) {
-                JavaClassParent classParent = context.getParentClass();
+            if ( field == null )
+            {
+                JavaClass baseClass = declaringClass;
 
-                //assume context is a JavaClass itself
-                if(classParent == null) {
-                    classParent = (JavaClass) context;
+                // assume context is a JavaClass itself
+                if ( declaringClass == null )
+                {
+                    baseClass = (JavaClass) context;
                 }
-                
-                for( int i = 0; i < parts.length - 1; ++i ) {
-                    String className = getNamePrefix( i );
-                    String typeName = classParent.resolveType( className );
 
-                    if( typeName != null ) {
-                        JavaClass javaClass = Type.createUnresolved( typeName, 0, classParent );
-                        if( javaClass != null ) {
+                for ( int i = 0; i < parts.length - 1; ++i )
+                {
+                    String className = getNamePrefix( i );
+                    String typeName = baseClass.resolveType( className );
+
+                    if ( typeName != null )
+                    {
+                        JavaClass javaClass = Type.createUnresolved( typeName, 0, baseClass );
+                        if ( javaClass != null )
+                        {
                             fieldIndex = i + 1;
                             field = resolveField( javaClass, i + 1, parts.length - 1 );
                             break;
@@ -156,7 +167,28 @@ public class FieldRef implements AnnotationValue {
                 }
             }
         }
-
         return field;
+    }
+    
+    private JavaClass getDeclaringClass()
+    {
+        JavaClass result = null;
+        if ( context instanceof JavaMember )
+        {
+            result = ( (JavaMember) context ).getDeclaringClass();
+        }
+        else  if ( context instanceof JavaClass )
+        {
+            result = ( (JavaClass) context ).getDeclaringClass();
+        }
+        else if ( context instanceof JavaParameter )
+        {
+            result = ( (JavaParameter) context ).getParentClass();
+        }
+        else if ( context instanceof JavaPackage )
+        {
+            //
+        }
+        return result;
     }
 }

@@ -69,6 +69,7 @@ public class JavaProjectBuilder
 
     /**
      * Default constructor, which will use the {@link SortedClassLibraryBuilder} implementation
+     * and add the default classloaders
      */
     public JavaProjectBuilder()
     {
@@ -137,7 +138,7 @@ public class JavaProjectBuilder
     }
 
     /**
-     * Add a java file to this JavaProjectBuilder
+     * Add a java source from a file to this JavaProjectBuilder
      * 
      * @param file a java file
      * @return the {@link JavaSource} of the parsed file
@@ -149,13 +150,24 @@ public class JavaProjectBuilder
         return classLibraryBuilder.addSource( file );
     }
     
+    /**
+     * Add a java source from a URL to this JavaProjectBuilder
+     * 
+     * @param url the url
+     * @return the {@link JavaSource} of the parsed file
+     * @throws IOException if the url can't be read
+     */
     public JavaSource addSource( URL url ) throws IOException
     {
         return classLibraryBuilder.addSource( url );
     }
 
-    // Resource adders
-
+    /**
+     * Add a java source from a Reader to this JavaProjectBuilder
+     * 
+     * @param reader the reader
+     * @return the {@link JavaSource} of the parsed reader content
+     */
     public JavaSource addSource( Reader reader )
     {
         return classLibraryBuilder.addSource( reader );

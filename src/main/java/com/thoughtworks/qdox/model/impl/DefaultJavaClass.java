@@ -129,8 +129,8 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
      * @see com.thoughtworks.qdox.model.JavaClass#getSuperClass()
      */
     public JavaType getSuperClass() {
-        Type OBJECT_TYPE = getJavaClassLibrary().getJavaClass( "java.lang.Object" ).asType();
-        Type ENUM_TYPE = getJavaClassLibrary().getJavaClass( "java.lang.Enum" ).asType();
+        JavaType OBJECT_TYPE = getJavaClassLibrary().getJavaClass( "java.lang.Object" );
+        JavaType ENUM_TYPE = getJavaClassLibrary().getJavaClass( "java.lang.Enum" );
         
         boolean iAmJavaLangObject = OBJECT_TYPE.equals(asType());
 
@@ -140,7 +140,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
             return OBJECT_TYPE;
         }
 
-        return (JavaType) superClass;
+        return superClass;
     }
     
     /**
@@ -426,7 +426,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.model.JavaClass#asType()
      */
-    public Type asType() {
+    public JavaType asType() {
         return new Type(getFullyQualifiedName(), 0, this);
     }
 

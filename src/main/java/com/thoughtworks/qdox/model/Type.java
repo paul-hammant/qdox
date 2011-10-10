@@ -1154,7 +1154,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
     } 
     
     // deprecated
-    public Type asType()    {
+    public JavaType asType()    {
         return resolveRealClass().asType();
     }
 

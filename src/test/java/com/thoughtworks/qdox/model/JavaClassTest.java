@@ -42,8 +42,20 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         when(result.getName()).thenReturn( name );
         return result;
     }
-    public abstract JavaParameter newJavaParameter(Type type, String name);
-    public abstract JavaParameter newJavaParameter(Type type, String name, boolean varArgs);
+    
+    public JavaParameter newJavaParameter(JavaType type, String name) {
+        return newJavaParameter( type, name, false );
+    }
+    
+    public JavaParameter newJavaParameter(JavaType type, String name, boolean varArgs)
+    {
+        JavaParameter result = mock(JavaParameter.class);
+        when( result.getType()).thenReturn( type );
+        when( result.getName()).thenReturn( name );
+        when( result.isVarArgs()).thenReturn( varArgs );
+        return result;
+    }
+    
     public abstract JavaSource newJavaSource();
 
     public Type newType( String fullname )
@@ -588,7 +600,8 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         JavaMethod setFooMethod = mock(JavaMethod.class);
         when(setFooMethod.getName()).thenReturn( "setFoo" );
         Type intType = newType("int");
-        when(setFooMethod.getParameters()).thenReturn( Collections.singletonList( newJavaParameter( intType, "foo" ) ) );
+        List<JavaParameter> parameters = Collections.singletonList( newJavaParameter( intType, "foo" ) );
+        when(setFooMethod.getParameters()).thenReturn( parameters );
         when(setFooMethod.isPropertyMutator()).thenReturn( true );
         when(setFooMethod.getPropertyName()).thenReturn( "foo" );
         when(setFooMethod.getPropertyType()).thenReturn( intType );

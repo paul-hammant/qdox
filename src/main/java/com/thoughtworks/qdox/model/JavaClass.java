@@ -38,7 +38,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
     /**
      * @deprecated the JavaClass should have the same methods
      */
-    Type asType();
+    JavaType asType();
 
     /**
      * @deprecated Use {@link #getNestedClasses()} instead.

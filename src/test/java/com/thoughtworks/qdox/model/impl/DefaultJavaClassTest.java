@@ -33,16 +33,6 @@ public class DefaultJavaClassTest
         return new DefaultJavaClass( name );
     }
 
-    public JavaParameter newJavaParameter( Type type, String name )
-    {
-        return new DefaultJavaParameter( type, name );
-    }
-
-    public JavaParameter newJavaParameter( Type type, String name, boolean varArgs )
-    {
-        return new DefaultJavaParameter( type, name, varArgs );
-    }
-
     public JavaSource newJavaSource()
     {
         return new DefaultJavaSource(new SortedClassLibraryBuilder().getClassLibrary());

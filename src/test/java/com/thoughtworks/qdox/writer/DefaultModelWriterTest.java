@@ -4,14 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
-import com.thoughtworks.qdox.model.impl.DefaultDocletTag;
 import com.thoughtworks.qdox.writer.DefaultModelWriter;
 
 public class DefaultModelWriterTest {
@@ -23,6 +24,7 @@ public class DefaultModelWriterTest {
 		modelWriter = new DefaultModelWriter();
 	}
 	
+	@Test
     public void testCommentToString() {
         // setup
     	JavaAnnotatedElement annotatedElement = mock(JavaAnnotatedElement.class);
@@ -41,6 +43,7 @@ public class DefaultModelWriterTest {
         assertEquals(expected, modelWriter.toString());
     }
     
+    @Test
     public void testMultilineCommentToString() {
     	JavaAnnotatedElement annotatedElement = mock(JavaAnnotatedElement.class);
     	when(annotatedElement.getComment()).thenReturn("Hello\nWorld");
@@ -60,10 +63,28 @@ public class DefaultModelWriterTest {
     	
     }
 
-    public void testNoCommentToString() {
+    @Test
+    public void testEmptyCommentToString() {
         // setup
     	JavaAnnotatedElement annotatedElement = mock(JavaAnnotatedElement.class);
     	when(annotatedElement.getComment()).thenReturn("");
+
+        // expectation
+        String expected = ""
+                + "/**\n"
+                + " */\n";
+
+        // run
+        modelWriter.commentHeader(annotatedElement);
+
+        // verify
+        assertEquals(expected, modelWriter.toString());
+    }
+
+    @Test
+    public void testNoCommentToString() {
+        // setup
+        JavaAnnotatedElement annotatedElement = mock(JavaAnnotatedElement.class);
 
         // expectation
         String expected = "";
@@ -75,13 +96,15 @@ public class DefaultModelWriterTest {
         assertEquals(expected, modelWriter.toString());
     }
 
+    @Test
     public void testCommentWithTagToString() {
         // setup
     	JavaAnnotatedElement annotatedElement = mock(JavaAnnotatedElement.class);
     	when(annotatedElement.getComment()).thenReturn("Hello");
-        List<DocletTag> tags = new LinkedList<DocletTag>();
-        tags.add(new DefaultDocletTag("monkey", "is in the tree"));
-    	when(annotatedElement.getTags()).thenReturn(tags);
+        DocletTag monkeyTag = mock(DocletTag.class);
+        when(monkeyTag.getName()).thenReturn( "monkey" );
+        when(monkeyTag.getValue()).thenReturn( "is in the tree" );
+    	when(annotatedElement.getTags()).thenReturn(Collections.singletonList( monkeyTag ));
 
         // expectation
         String expected = ""
@@ -98,13 +121,20 @@ public class DefaultModelWriterTest {
         assertEquals(expected, modelWriter.toString());
     }
 
+    @Test
     public void testCommentWithMultipleTagsToString() {
         // setup
     	JavaAnnotatedElement annotatedElement = mock(JavaAnnotatedElement.class);
     	when(annotatedElement.getComment()).thenReturn("Hello");
         List<DocletTag> tags = new LinkedList<DocletTag>();
-        tags.add(new DefaultDocletTag("monkey", "is in the tree"));
-        tags.add(new DefaultDocletTag("see", "the doctor"));
+        DocletTag monkeyTag = mock(DocletTag.class);
+        when(monkeyTag.getName()).thenReturn( "monkey" );
+        when(monkeyTag.getValue()).thenReturn( "is in the tree" );
+        tags.add( monkeyTag );
+        DocletTag seeTag = mock( DocletTag.class );
+        when(seeTag.getName()).thenReturn( "see" );
+        when(seeTag.getValue()).thenReturn("the doctor" );
+        tags.add(seeTag);
         when(annotatedElement.getTags()).thenReturn(tags);
 
         // expectation
@@ -123,12 +153,14 @@ public class DefaultModelWriterTest {
         assertEquals(expected, modelWriter.toString());
     }
 
+    @Test
     public void testTagButNoCommentToString() {
         // setup
     	JavaAnnotatedElement annotatedElement = mock(JavaAnnotatedElement.class);
-        List<DocletTag> tags = new LinkedList<DocletTag>();
-        tags.add(new DefaultDocletTag("monkey", "is in the tree"));
-        when(annotatedElement.getTags()).thenReturn(tags);
+        DocletTag monkeyTag = mock(DocletTag.class);
+        when(monkeyTag.getName()).thenReturn( "monkey" );
+        when(monkeyTag.getValue()).thenReturn( "is in the tree" );
+        when(annotatedElement.getTags()).thenReturn(Collections.singletonList( monkeyTag ));
 
         // expectation
         String expected = ""
@@ -143,12 +175,14 @@ public class DefaultModelWriterTest {
         assertEquals(expected, modelWriter.toString());
     }
 
+    @Test
     public void testTagWithNoValueToString() {
         // setup
     	JavaAnnotatedElement annotatedElement = mock(JavaAnnotatedElement.class);
-        List<DocletTag> tags = new LinkedList<DocletTag>();
-        tags.add(new DefaultDocletTag("monkey", ""));
-        when(annotatedElement.getTags()).thenReturn(tags);
+        DocletTag monkeyTag = mock(DocletTag.class);
+        when(monkeyTag.getName()).thenReturn( "monkey" );
+        when(monkeyTag.getValue()).thenReturn( "" );
+        when(annotatedElement.getTags()).thenReturn(Collections.singletonList( monkeyTag ));
 
         // expectation
         String expected = ""

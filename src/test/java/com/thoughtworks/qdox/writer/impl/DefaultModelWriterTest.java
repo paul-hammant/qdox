@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.writer;
+package com.thoughtworks.qdox.writer.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
-import com.thoughtworks.qdox.writer.DefaultModelWriter;
+import com.thoughtworks.qdox.writer.impl.DefaultModelWriter;
 
 public class DefaultModelWriterTest {
 

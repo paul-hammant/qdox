@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.writer;
+package com.thoughtworks.qdox.writer.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -37,6 +37,7 @@ import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
+import com.thoughtworks.qdox.writer.ModelWriter;
 
 public class DefaultModelWriter
     implements ModelWriter

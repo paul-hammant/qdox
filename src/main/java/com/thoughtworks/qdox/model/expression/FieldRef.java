@@ -30,7 +30,9 @@ import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.Type;
 
-public class FieldRef implements AnnotationValue {
+public class FieldRef
+    implements AnnotationValue
+{
 
     private final int[] parts;
 
@@ -43,10 +45,9 @@ public class FieldRef implements AnnotationValue {
     private int fieldIndex = -1;
 
     /**
-     * 
      * @param name the field name, not <code>null</code>
      */
-    public FieldRef( String name ) 
+    public FieldRef( String name )
     {
         this.name = name;
 
@@ -54,73 +55,94 @@ public class FieldRef implements AnnotationValue {
         this.parts = new int[length + 1];
         this.parts[0] = -1;
 
-        for( int i = 1; i < length; ++i ) {
+        for ( int i = 1; i < length; ++i )
+        {
             this.parts[i] = name.indexOf( '.', this.parts[i - 1] + 1 );
         }
 
         this.parts[length] = name.length();
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public String getNamePrefix( int end ) {
+    /** {@inheritDoc} */
+    public String getNamePrefix( int end )
+    {
         return name.substring( 0, parts[end + 1] );
     }
 
-    public String getNamePart( int index ) {
+    /** {@inheritDoc} */
+    public String getNamePart( int index )
+    {
         return name.substring( parts[index] + 1, parts[index + 1] );
     }
 
-    public int getPartCount() {
+    /** {@inheritDoc} */
+    public int getPartCount()
+    {
         return parts.length - 1;
     }
 
-    public Object accept( AnnotationVisitor visitor ) {
+    public Object accept( AnnotationVisitor visitor )
+    {
         return visitor.visit( this );
     }
 
-    public String getParameterValue() {
+    /** {@inheritDoc} */
+    public String getParameterValue()
+    {
         return getName();
     }
 
-    public String toString() {
+    public String toString()
+    {
         return getName();
     }
 
-    public void setContext( JavaAnnotatedElement context ) {
+    public void setContext( JavaAnnotatedElement context )
+    {
         this.context = context;
     }
 
-    public String getClassPart() {
+    /** {@inheritDoc} */
+    public String getClassPart()
+    {
         String result = null;
 
-        if( getField() != null ) {
+        if ( getField() != null )
+        {
             result = name.substring( 0, parts[fieldIndex] );
         }
 
         return result;
     }
 
-    public String getFieldPart() {
+    /** {@inheritDoc} */
+    public String getFieldPart()
+    {
         String result = null;
 
-        if( getField() != null ) {
+        if ( getField() != null )
+        {
             result = name.substring( parts[fieldIndex] + 1 );
         }
 
         return result;
     }
 
-    protected JavaField resolveField( JavaClass javaClass, int start, int end ) {
+    protected JavaField resolveField( JavaClass javaClass, int start, int end )
+    {
         JavaField field = null;
 
-        for( int i = start; i < end; ++i ) 
+        for ( int i = start; i < end; ++i )
         {
             field = javaClass.getFieldByName( getNamePart( i ) );
 
-            if( field == null ) {
+            if ( field == null )
+            {
                 break;
             }
         }
@@ -128,6 +150,7 @@ public class FieldRef implements AnnotationValue {
         return field;
     }
 
+    /** {@inheritDoc} */
     public JavaField getField()
     {
         if ( fieldIndex < 0 )
@@ -169,7 +192,7 @@ public class FieldRef implements AnnotationValue {
         }
         return field;
     }
-    
+
     private JavaClass getDeclaringClass()
     {
         JavaClass result = null;
@@ -177,7 +200,7 @@ public class FieldRef implements AnnotationValue {
         {
             result = ( (JavaMember) context ).getDeclaringClass();
         }
-        else  if ( context instanceof JavaClass )
+        else if ( context instanceof JavaClass )
         {
             result = ( (JavaClass) context ).getDeclaringClass();
         }

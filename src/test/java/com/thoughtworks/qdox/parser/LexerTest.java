@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.parser;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Field;
@@ -14,10 +13,10 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 
 public class LexerTest extends TestCase {
 
-    private static Map tokens;
+    private static Map<Integer, String> tokens;
 
     static {
-        tokens = new HashMap();
+        tokens = new HashMap<Integer, String>();
         Field[] tokenFlds = Parser.class.getDeclaredFields();
         for (int i = 0; i < tokenFlds.length; i++) {
             Field f = tokenFlds[i];

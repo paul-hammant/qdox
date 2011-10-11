@@ -16,7 +16,7 @@ public class TagParserTest extends TestCase {
     //---( Parse into named parameters )---
     
     public void testEmptyInputContainsNoNamedParameters() {
-        Map paramMap = TagParser.parseNamedParameters("");
+        Map<String, String> paramMap = TagParser.parseNamedParameters("");
         assertNotNull(paramMap);
         assertTrue(paramMap.isEmpty());
     }
@@ -48,14 +48,14 @@ public class TagParserTest extends TestCase {
     }
 
     public void testCanParseSimpleNamedParameters() {
-        Map paramMap = TagParser.parseNamedParameters("x=foo");
+        Map<String, String> paramMap = TagParser.parseNamedParameters("x=foo");
         assertNotNull(paramMap);
         assertEquals(1, paramMap.size());
         assertEquals("foo", paramMap.get("x"));
     }
 
     public void testCanParseMultipleNamedParameters() {
-        Map paramMap = TagParser.parseNamedParameters("x=foo y=bar");
+        Map<String, String> paramMap = TagParser.parseNamedParameters("x=foo y=bar");
         assertNotNull(paramMap);
         assertEquals(2, paramMap.size());
         assertEquals("foo", paramMap.get("x"));
@@ -63,11 +63,11 @@ public class TagParserTest extends TestCase {
     }
 
     public void testNamedParametersAreReturnedInOrderDeclared() {
-        Map paramMap = TagParser.parseNamedParameters(
+        Map<String, String> paramMap = TagParser.parseNamedParameters(
             "x=foo y=bar a=orses b=oney"
         );
         assertEquals(4, paramMap.size());
-        Iterator keyIterator = paramMap.keySet().iterator();
+        Iterator<String> keyIterator = paramMap.keySet().iterator();
         assertEquals("x", keyIterator.next());
         assertEquals("y", keyIterator.next());
         assertEquals("a", keyIterator.next());
@@ -75,7 +75,7 @@ public class TagParserTest extends TestCase {
     }
 
     public void testNamedParameterValuesCanBeSingleQuoted() {
-        Map paramMap = TagParser.parseNamedParameters("x='foo' y='bar fly'");
+        Map<String, String> paramMap = TagParser.parseNamedParameters("x='foo' y='bar fly'");
         assertNotNull(paramMap);
         assertEquals(2, paramMap.size());
         assertEquals("foo", paramMap.get("x"));
@@ -83,7 +83,7 @@ public class TagParserTest extends TestCase {
     }
 
     public void testNamedParameterValuesCanBeDoubleQuoted() {
-        Map paramMap = TagParser.parseNamedParameters("x=\"'foo'\" y=\"bar fly\"");
+        Map<String, String> paramMap = TagParser.parseNamedParameters("x=\"'foo'\" y=\"bar fly\"");
         assertNotNull(paramMap);
         assertEquals(2, paramMap.size());
         assertEquals("'foo'", paramMap.get("x"));
@@ -91,7 +91,7 @@ public class TagParserTest extends TestCase {
     }
 
     public void testNamedParametersCanHaveSpacesAroundEquals() {
-        Map paramMap = TagParser.parseNamedParameters("x = foo y = 'bar'");
+        Map<String, String> paramMap = TagParser.parseNamedParameters("x = foo y = 'bar'");
         assertNotNull(paramMap);
         assertEquals(2, paramMap.size());
         assertEquals("foo", paramMap.get("x"));
@@ -99,7 +99,7 @@ public class TagParserTest extends TestCase {
     }
 
     public void testNamedParameterNamesCanContainHypensEtc() {
-        Map paramMap = TagParser.parseNamedParameters("x.a = '1'  x-b = '2'  x_c = '3'");
+        Map<String, String> paramMap = TagParser.parseNamedParameters("x.a = '1'  x-b = '2'  x_c = '3'");
         assertNotNull(paramMap);
         assertEquals(3, paramMap.size());
         assertEquals("1", paramMap.get("x.a"));
@@ -108,7 +108,7 @@ public class TagParserTest extends TestCase {
     }
 
     public void testNamedParameterValuesCanBeNumeric() {
-        Map paramMap = TagParser.parseNamedParameters("x=1 y=2");
+        Map<String, String> paramMap = TagParser.parseNamedParameters("x=1 y=2");
         assertNotNull(paramMap);
         assertEquals(2, paramMap.size());
         assertEquals("1", paramMap.get("x"));
@@ -116,7 +116,7 @@ public class TagParserTest extends TestCase {
     }
 
     public void testNamedParameterValuesCanSpanLinesIfBackslashIsUsed() {
-        Map paramMap = TagParser.parseNamedParameters("x='multiline\\\nvalue'");
+        Map<String, String> paramMap = TagParser.parseNamedParameters("x='multiline\\\nvalue'");
         assertNotNull(paramMap);
         assertEquals(1, paramMap.size());
         assertEquals("multiline\nvalue", paramMap.get("x"));

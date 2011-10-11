@@ -35,7 +35,6 @@ import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.writer.ModelWriter;
 
@@ -179,16 +178,27 @@ public class DefaultModelWriter
         commentHeader( field );
 
         writeAllModifiers( field.getModifiers() );
-        buffer.write( field.getType().getCanonicalName() );
-        buffer.write( ' ' );
+        if ( !field.isEnumConstant() )
+        {
+            buffer.write( field.getType().getCanonicalName() );
+            buffer.write( ' ' );
+        }
         buffer.write( field.getName() );
         if ( field.getInitializationExpression() != null && field.getInitializationExpression().length() > 0 )
         {
-            buffer.write( " = " );
+            if ( !field.isEnumConstant() )
+            {
+                buffer.write( " = " );
+            }
+            // arguments? (arg0, arg1, arg..) 
+            // body?  { body of anonymous class } 
             buffer.write( field.getInitializationExpression() );
         }
-        buffer.write( ';' );
-        buffer.newline();
+        if ( !field.isEnumConstant() )
+        {
+            buffer.newline();
+            buffer.write( ';' );
+        }
         return this;
     }
 

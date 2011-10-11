@@ -357,6 +357,7 @@ public class ModelBuilder implements Builder {
 	public void endField() 
 	{
         classStack.getFirst().addField(currentField);
+        
         currentField = null;
 	}
 	

@@ -33,19 +33,20 @@ import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.AnnotationVisitor;
 
 /**
- * 
  * @author Eric Redmond
  */
-public class DefaultJavaAnnotation implements AnnotationValue, Serializable, JavaAnnotation
+public class DefaultJavaAnnotation
+    implements AnnotationValue, Serializable, JavaAnnotation
 {
     private final JavaClass type;
+
     private final int lineNumber;
 
     /**
      * Annotation properties as AnnotationValues
      * <p>
-     * This map contains the parsed AnnotationValue for each property and allows
-     * access to the full parse tree, including typerefs and expressions.
+     * This map contains the parsed AnnotationValue for each property and allows access to the full parse tree,
+     * including typerefs and expressions.
      */
     private final Map<String, AnnotationValue> properties = new LinkedHashMap<String, AnnotationValue>();
 
@@ -56,89 +57,92 @@ public class DefaultJavaAnnotation implements AnnotationValue, Serializable, Jav
 
     private JavaAnnotatedElement context;
 
-    public DefaultJavaAnnotation(JavaClass type,
-                                 JavaAnnotatedElement context,
-            Map<String, Object> namedParameters,
-            int lineNumber)
-	{
+    public DefaultJavaAnnotation( JavaClass type, JavaAnnotatedElement context, Map<String, Object> namedParameters,
+                                  int lineNumber )
+    {
         this.type = type;
         this.context = context;
         this.lineNumber = lineNumber;
-        
-        if(properties != null) {
-            for(Iterator<Entry<String, AnnotationValue>> i = this.properties.entrySet().iterator(); i.hasNext(); ) {
+
+        if ( properties != null )
+        {
+            for ( Iterator<Entry<String, AnnotationValue>> i = this.properties.entrySet().iterator(); i.hasNext(); )
+            {
                 Entry<String, AnnotationValue> entry = i.next();
                 String name = entry.getKey();
                 AnnotationValue value = entry.getValue();
-                
-                setProperty(name, value);
+
+                setProperty( name, value );
             }
         }
-	}
-
-    public DefaultJavaAnnotation( Type type, int line ) {
-        this(type, null, null, line);
     }
 
-    public final void setProperty(String name, AnnotationValue value) {
+    public DefaultJavaAnnotation( Type type, int line )
+    {
+        this( type, null, null, line );
+    }
+
+    public final void setProperty( String name, AnnotationValue value )
+    {
         properties.put( name, value );
         namedParameters.put( name, value.getParameterValue() );
     }
 
-    /* (non-Javadoc)
-	 * @see com.thoughtworks.qdox.model.JavaAnnotation#getType()
-	 */
-    public JavaClass getType() {
-    	return type;
+    /** {@inheritDoc} */
+    public JavaClass getType()
+    {
+        return type;
     }
 
-    /**
-     * @param key name of a named-parameter
-     * @return the corresponding value,
-     *   or null if no such named-parameter was present
-     */
-    public Object getNamedParameter(String key) {
-    	return namedParameters.get( key );
+    /** {@inheritDoc} */
+    public Object getNamedParameter( String key )
+    {
+        return namedParameters.get( key );
     }
 
-    /**
-     * @return a Map containing all the named-parameters
-     */
-    public Map<String, Object> getNamedParameterMap() {
-    	return namedParameters;
+    /** {@inheritDoc} */
+    public Map<String, Object> getNamedParameterMap()
+    {
+        return namedParameters;
     }
 
-    public final JavaAnnotatedElement getContext() {
+    /** {@inheritDoc} */
+    public final JavaAnnotatedElement getContext()
+    {
         return context;
     }
 
-    public int getLineNumber() {
+    /** {@inheritDoc} */
+    public int getLineNumber()
+    {
         return lineNumber;
     }
 
-    public Object accept( AnnotationVisitor visitor ) {
+    public Object accept( AnnotationVisitor visitor )
+    {
         return visitor.visit( this );
     }
 
-    public DefaultJavaAnnotation getParameterValue() {
+    /** {@inheritDoc} */
+    public DefaultJavaAnnotation getParameterValue()
+    {
         return this;
     }
-    
-    /* (non-Javadoc)
-	 * @see com.thoughtworks.qdox.model.JavaAnnotation#getPropertyMap()
-	 */
-    public Map<String, AnnotationValue> getPropertyMap() {
+
+    /** {@inheritDoc} */
+    public Map<String, AnnotationValue> getPropertyMap()
+    {
         return properties;
     }
-    
-    /* (non-Javadoc)
-	 * @see com.thoughtworks.qdox.model.JavaAnnotation#getProperty(java.lang.String)
-	 */
-    public AnnotationValue getProperty(String name) {
+
+    /** {@inheritDoc} */
+    public AnnotationValue getProperty( String name )
+    {
         return properties.get( name );
     }
 
-    public void setContext( JavaAnnotatedElement context ) {
+    public void setContext( JavaAnnotatedElement context )
+    {
         this.context = context;
     }
 

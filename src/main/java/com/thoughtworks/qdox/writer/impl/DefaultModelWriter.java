@@ -196,8 +196,8 @@ public class DefaultModelWriter
         }
         if ( !field.isEnumConstant() )
         {
-            buffer.newline();
             buffer.write( ';' );
+            buffer.newline();
         }
         return this;
     }

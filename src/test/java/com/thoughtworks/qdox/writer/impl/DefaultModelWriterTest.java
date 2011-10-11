@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
-import com.thoughtworks.qdox.writer.impl.DefaultModelWriter;
+import com.thoughtworks.qdox.model.JavaField;
 
 public class DefaultModelWriterTest {
 
@@ -195,5 +195,28 @@ public class DefaultModelWriterTest {
 
         // verify
         assertEquals(expected, modelWriter.toString());
+    }
+    
+    
+    //enum Eon { HADEAN, ARCHAEAN, PROTEROZOIC, PHANEROZOIC }
+
+    @Test
+    public void testEnumConstant()
+    {
+        //setup
+        JavaField enumConstant = mock(JavaField.class);
+        when(enumConstant.isEnumConstant()).thenReturn( true );
+        when(enumConstant.getName()).thenReturn( "HADEAN" );
+        
+        //expectation
+        String expected = ""
+            + "HADEAN";
+        
+        //run
+        modelWriter.writeField( enumConstant );
+        
+        //verify
+        assertEquals( expected, modelWriter.toString() );
+        
     }
 }

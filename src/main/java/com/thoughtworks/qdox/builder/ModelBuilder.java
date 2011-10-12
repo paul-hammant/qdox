@@ -372,7 +372,7 @@ public class ModelBuilder implements Builder {
 
     private void setAnnotations( final AbstractBaseJavaEntity entity ) {
         if( !currentAnnoDefs.isEmpty() ) {
-        	DefaultAnnotationTransformer transformer = new DefaultAnnotationTransformer(entity);
+        	DefaultAnnotationTransformer transformer = new DefaultAnnotationTransformer( (JavaAnnotatedElement) entity);
 
             List<JavaAnnotation> annotations = new LinkedList<JavaAnnotation>();
             for( AnnoDef annoDef :  currentAnnoDefs) {

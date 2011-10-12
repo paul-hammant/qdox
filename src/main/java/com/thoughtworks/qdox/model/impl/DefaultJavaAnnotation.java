@@ -77,7 +77,7 @@ public class DefaultJavaAnnotation
         }
     }
 
-    public DefaultJavaAnnotation( Type type, int line )
+    public DefaultJavaAnnotation( JavaClass type, int line )
     {
         this( type, null, null, line );
     }

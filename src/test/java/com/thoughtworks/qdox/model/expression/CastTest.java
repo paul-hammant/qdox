@@ -7,15 +7,14 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-import com.thoughtworks.qdox.model.Type;
-
+import com.thoughtworks.qdox.model.JavaType;
 
 public class CastTest
 {
     @Test
     public void testParameterValue()
     {
-        Type type = mock(Type.class);
+        JavaType type = mock(JavaType.class);
         AnnotationValue value = mock( AnnotationValue.class );
         when( type.getCanonicalName() ).thenReturn( "int" );
         when( value.getParameterValue() ).thenReturn( "3" );
@@ -26,7 +25,7 @@ public class CastTest
     @Test
     public void testToString()
     {
-        Type type = mock(Type.class);
+        JavaType type = mock(JavaType.class);
         AnnotationValue value = mock( AnnotationValue.class );
         Cast expr = new Cast( type, value );
         assertEquals( "(" +type+ ") " + value, expr.toString() );

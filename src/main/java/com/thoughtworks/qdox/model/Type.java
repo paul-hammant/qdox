@@ -297,12 +297,12 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         {
             return true;
         }
-        if ( !( obj instanceof Type ) )
+        if ( !( obj instanceof JavaType ) )
         {
             return false;
         }
-        Type t = (Type) obj;
-        return getFullyQualifiedName().equals( t.getFullyQualifiedName() ) && t.getDimensions() == getDimensions();
+        JavaType t = (JavaType) obj;
+        return getFullyQualifiedName().equals( t.getFullyQualifiedName() );
     }
 
     @Override

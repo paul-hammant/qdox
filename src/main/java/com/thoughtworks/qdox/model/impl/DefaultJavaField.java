@@ -171,6 +171,10 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
         {
             return false;
         }
+        if ( fld.isEnumConstant() == this.isEnumConstant() )
+        {
+            return false;
+        }
         //Don't see any reason to compare the Type. Otherwise it's already invalid
         return fld.getName().equals( this.getName() );
     }

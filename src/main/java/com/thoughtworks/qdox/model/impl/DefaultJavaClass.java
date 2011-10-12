@@ -427,7 +427,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
      * @see com.thoughtworks.qdox.model.JavaClass#asType()
      */
     public JavaType asType() {
-        return new Type(getFullyQualifiedName(), 0, this);
+        return this;
     }
 
     /*

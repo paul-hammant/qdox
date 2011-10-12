@@ -19,16 +19,16 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.JavaType;
 
 public class TypeRef implements AnnotationValue {
 
-    private Type type;
+    private JavaType type;
 
-    public TypeRef( Type type ) {
+    public TypeRef( JavaType type ) {
         this.type = type;
     }
-	public Type getType() {
+	public JavaType getType() {
         return type;
     }
 

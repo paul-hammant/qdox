@@ -28,6 +28,7 @@ import java.util.List;
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
+import com.thoughtworks.qdox.model.impl.JavaClassParent;
 
 public class Type implements JavaClass, JavaType, JavaParameterizedType, Serializable {
 

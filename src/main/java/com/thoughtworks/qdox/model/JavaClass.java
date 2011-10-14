@@ -22,6 +22,7 @@ package com.thoughtworks.qdox.model;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.impl.JavaClassParent;
 
 /**
  * Equivalent of {@link java.lang.Class}, providing the most important methods.

@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.impl;
 
-import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaWildcardType;
 import com.thoughtworks.qdox.model.Type;
 

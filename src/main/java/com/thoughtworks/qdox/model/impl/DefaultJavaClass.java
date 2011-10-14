@@ -31,7 +31,6 @@ import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.BeanProperty;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;

@@ -42,7 +42,6 @@ import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.impl.AbstractBaseJavaEntity;
-import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 import com.thoughtworks.qdox.model.impl.DefaultJavaField;
 import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
@@ -65,95 +64,120 @@ import com.thoughtworks.qdox.writer.ModelWriterFactory;
 public class ModelBuilder implements Builder {
 
     private final DefaultJavaSource source;
+
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
+
     private List<DefaultJavaParameter> parameterList = new LinkedList<DefaultJavaParameter>();
+
     private DefaultJavaConstructor currentConstructor;
+
     private DefaultJavaMethod currentMethod;
+
     private DefaultJavaField currentField;
+
     private List<AnnoDef> currentAnnoDefs;
+
     private String lastComment;
+
     private List<TagDef> lastTagSet = new LinkedList<TagDef>();
+
     private DocletTagFactory docletTagFactory;
+
     private ModelWriterFactory modelWriterFactory;
 
-    public ModelBuilder(ClassLibrary classLibrary, DocletTagFactory docletTagFactory) {
+    public ModelBuilder( ClassLibrary classLibrary, DocletTagFactory docletTagFactory )
+    {
         this.docletTagFactory = docletTagFactory;
-        this.source = new DefaultJavaSource(classLibrary);
+        this.source = new DefaultJavaSource( classLibrary );
         this.currentAnnoDefs = new LinkedList<AnnoDef>();
     }
     
+    /** {@inheritDoc} */
     public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )
     {
         this.modelWriterFactory = modelWriterFactory;
-        source.setModelWriterFactory(modelWriterFactory);
+        source.setModelWriterFactory( modelWriterFactory );
     }
 
-    public void addPackage(PackageDef packageDef) {
-        DefaultJavaPackage jPackage = new DefaultJavaPackage(packageDef.getName());
-        jPackage.setClassLibrary( source.getJavaClassLibrary());
-        jPackage.setLineNumber(packageDef.getLineNumber());
-        jPackage.setModelWriterFactory(modelWriterFactory);
-        addJavaDoc(jPackage);
-    	setAnnotations(jPackage);
-        source.setPackage(jPackage);
+    /** {@inheritDoc} */
+    public void addPackage( PackageDef packageDef )
+    {
+        DefaultJavaPackage jPackage = new DefaultJavaPackage( packageDef.getName() );
+        jPackage.setClassLibrary( source.getJavaClassLibrary() );
+        jPackage.setLineNumber( packageDef.getLineNumber() );
+        jPackage.setModelWriterFactory( modelWriterFactory );
+        addJavaDoc( jPackage );
+        setAnnotations( jPackage );
+        source.setPackage( jPackage );
     }
 
-    public void addImport(String importName) {
-        source.addImport(importName);
+    /** {@inheritDoc} */
+    public void addImport( String importName )
+    {
+        source.addImport( importName );
     }
 
-    public void addJavaDoc(String text) {
+    /** {@inheritDoc} */
+    public void addJavaDoc( String text )
+    {
         lastComment = text;
     }
 
-    public void addJavaDocTag(TagDef tagDef) {
-        lastTagSet.add(tagDef);
+    /** {@inheritDoc} */
+    public void addJavaDocTag( TagDef tagDef )
+    {
+        lastTagSet.add( tagDef );
     }
 
-    public void beginClass(ClassDef def) {
-        DefaultJavaClass newClass = new DefaultJavaClass(source);
-        newClass.setLineNumber(def.getLineNumber());
-        newClass.setModelWriterFactory(modelWriterFactory);
+    /** {@inheritDoc} */
+    public void beginClass(ClassDef def)
+    {
+        DefaultJavaClass newClass = new DefaultJavaClass( source );
+        newClass.setLineNumber( def.getLineNumber() );
+        newClass.setModelWriterFactory( modelWriterFactory );
 
         // basic details
-        newClass.setName(def.getName());
-        newClass.setInterface(ClassDef.INTERFACE.equals(def.getType()));
-        newClass.setEnum(ClassDef.ENUM.equals(def.getType()));
-        newClass.setAnnotation(ClassDef.ANNOTATION_TYPE.equals(def.getType()));
+        newClass.setName( def.getName() );
+        newClass.setInterface( ClassDef.INTERFACE.equals( def.getType() ) );
+        newClass.setEnum( ClassDef.ENUM.equals( def.getType() ) );
+        newClass.setAnnotation( ClassDef.ANNOTATION_TYPE.equals( def.getType() ) );
 
         // superclass
-        if (newClass.isInterface()) {
-            newClass.setSuperClass(null);
-        } else if (!newClass.isEnum()) {
-            newClass.setSuperClass(def.getExtends().size() > 0 ? createType((TypeDef) def.getExtends().toArray()[0], 0) : null);
+        if ( newClass.isInterface() )
+        {
+            newClass.setSuperClass( null );
+        }
+        else if ( !newClass.isEnum() )
+        {
+            newClass.setSuperClass( def.getExtends().size() > 0 ? createType( def.getExtends().iterator().next(), 0 )
+                            : null );
         }
 
         // implements
+        Set<TypeDef> implementSet = newClass.isInterface() ? def.getExtends() : def.getImplements();
+        List<JavaType> implementz = new LinkedList<JavaType>();
+        for ( TypeDef implementType : implementSet )
         {
-            Set<TypeDef> implementSet = newClass.isInterface() ? def.getExtends() : def.getImplements();
-            List<Type> implementz = new LinkedList<Type>();
-            for(TypeDef implementType:implementSet) {
-                implementz.add(createType(implementType, 0));
-            }
-            newClass.setImplementz(implementz);
+            implementz.add( createType( implementType, 0 ) );
         }
+        newClass.setImplementz( implementz );
 
         // modifiers
-        {
-            newClass.setModifiers(new LinkedList<String>(def.getModifiers()));
-        }
+        newClass.setModifiers( new LinkedList<String>( def.getModifiers() ) );
         
         // typeParameters
-        if (def.getTypeParameters() != null) {
+        if ( def.getTypeParameters() != null )
+        {
             List<DefaultJavaTypeVariable<JavaClass>> typeParams = new LinkedList<DefaultJavaTypeVariable<JavaClass>>();
-            for(TypeVariableDef typeVariableDef : def.getTypeParameters()) {
-                typeParams.add(createTypeVariable(typeVariableDef, (JavaClass) newClass));
+            for ( TypeVariableDef typeVariableDef : def.getTypeParameters() )
+            {
+                typeParams.add( createTypeVariable( typeVariableDef, (JavaClass) newClass ) );
             }
-            newClass.setTypeParameters(typeParams);
+            newClass.setTypeParameters( typeParams );
         }
 
         // javadoc
-        addJavaDoc(newClass);
+        addJavaDoc( newClass );
 
 //        // ignore annotation types (for now)
 //        if (ClassDef.ANNOTATION_TYPE.equals(def.type)) {
@@ -164,18 +188,22 @@ public class ModelBuilder implements Builder {
         // annotations
         setAnnotations( newClass );
         
-        if(!classStack.isEmpty()) {
+        if ( !classStack.isEmpty() )
+        {
             classStack.getFirst().addClass( newClass );
             newClass.setParentClass( classStack.getFirst() );
             
         }
-        else {
+        else
+        {
             source.addClass( newClass );
         }
         classStack.addFirst( newClass );
     }
 
-    public void endClass() {
+    /** {@inheritDoc} */
+    public void endClass()
+    {
         classStack.removeFirst();
     }
 
@@ -188,30 +216,32 @@ public class ModelBuilder implements Builder {
      * @param dimensions
      * @return the Type
      */
-    private Type createType(TypeDef typeDef, int dimensions) {
-    	if(typeDef == null) {
-    		return null;
-    	}
-    	return TypeAssembler.createUnresolved(typeDef, dimensions, classStack.isEmpty() ? source : classStack.getFirst());
+    private Type createType( TypeDef typeDef, int dimensions )
+    {
+        if ( typeDef == null )
+        {
+            return null;
+        }
+        return TypeAssembler.createUnresolved( typeDef, dimensions,
+                                               classStack.isEmpty() ? source : classStack.getFirst() );
     }
 
-    private void addJavaDoc(AbstractBaseJavaEntity entity) {
-        entity.setComment(lastComment);
+    private void addJavaDoc( AbstractBaseJavaEntity entity )
+    {
+        entity.setComment( lastComment );
         List<DocletTag> tagList = new LinkedList<DocletTag>();
-        for (TagDef tagDef : lastTagSet) {
-            tagList.add( 
-                docletTagFactory.createDocletTag(
-                    tagDef.getName(), tagDef.getText(), 
-                    (JavaAnnotatedElement) entity, tagDef.getLineNumber()
-                )
-            );
+        for ( TagDef tagDef : lastTagSet )
+        {
+            tagList.add( docletTagFactory.createDocletTag( tagDef.getName(), tagDef.getText(),
+                                                           (JavaAnnotatedElement) entity, tagDef.getLineNumber() ) );
         }
-        entity.setTags(tagList);
-        
+        entity.setTags( tagList );
+
         lastTagSet.clear();
         lastComment = null;
     }
     
+    /** {@inheritDoc} */
     public void beginConstructor()
     {
         currentConstructor = new DefaultJavaConstructor();
@@ -225,41 +255,47 @@ public class ModelBuilder implements Builder {
         setAnnotations( currentConstructor );
     }
 
+    /** {@inheritDoc} */
     public void endConstructor( MethodDef def )
     {
-        currentConstructor.setLineNumber(def.getLineNumber());
+        currentConstructor.setLineNumber( def.getLineNumber() );
 
         // basic details
-        currentConstructor.setName(def.getName());
+        currentConstructor.setName( def.getName() );
 
         // typeParameters
-        if (def.getTypeParams() != null) {
-            List<DefaultJavaTypeVariable<JavaConstructor>> typeParams = new LinkedList<DefaultJavaTypeVariable<JavaConstructor>>();
-            for(TypeVariableDef typeVariableDef : def.getTypeParams()) {
-                typeParams.add(createTypeVariable(typeVariableDef, (JavaConstructor) currentConstructor));
+        if ( def.getTypeParams() != null )
+        {
+            List<DefaultJavaTypeVariable<JavaConstructor>> typeParams =
+                new LinkedList<DefaultJavaTypeVariable<JavaConstructor>>();
+            for ( TypeVariableDef typeVariableDef : def.getTypeParams() )
+            {
+                typeParams.add( createTypeVariable( typeVariableDef, (JavaConstructor) currentConstructor ) );
             }
-            currentConstructor.setTypeParameters(typeParams);
+            currentConstructor.setTypeParameters( typeParams );
         }
-        
+
         // exceptions
         List<JavaClass> exceptions = new LinkedList<JavaClass>();
-        for (TypeDef type : def.getExceptions()) {
-            exceptions.add(createType(type, 0));
+        for ( TypeDef type : def.getExceptions() )
+        {
+            exceptions.add( createType( type, 0 ) );
         }
-        currentConstructor.setExceptions(exceptions);
+        currentConstructor.setExceptions( exceptions );
 
         // modifiers
         currentConstructor.setModifiers( new LinkedList<String>( def.getModifiers() ) );
 
-        if( !parameterList.isEmpty() ) 
+        if ( !parameterList.isEmpty() )
         {
             currentConstructor.setParameters( new ArrayList<JavaParameter>( parameterList ) );
             parameterList.clear();
         }
-        
-        currentConstructor.setSourceCode(def.getBody());
+
+        currentConstructor.setSourceCode( def.getBody() );
     }
 
+    /** {@inheritDoc} */
     public void beginMethod()
     {
         currentMethod = new DefaultJavaMethod();
@@ -274,38 +310,45 @@ public class ModelBuilder implements Builder {
         setAnnotations( currentMethod );
     }
     
-    public void endMethod(MethodDef def) {
-        currentMethod.setLineNumber(def.getLineNumber());
+    /** {@inheritDoc} */
+    public void endMethod( MethodDef def )
+    {
+        currentMethod.setLineNumber( def.getLineNumber() );
 
         // basic details
-        currentMethod.setName(def.getName());
-        currentMethod.setReturns(createType(def.getReturnType(), def.getDimensions()));
+        currentMethod.setName( def.getName() );
+        currentMethod.setReturns( createType( def.getReturnType(), def.getDimensions() ) );
 
         // typeParameters
-        if (def.getTypeParams() != null) {
-        	List<DefaultJavaTypeVariable<JavaMethod>> typeParams = new LinkedList<DefaultJavaTypeVariable<JavaMethod>>();
-        	for(TypeVariableDef typeVariableDef : def.getTypeParams()) {
-        		typeParams.add(createTypeVariable(typeVariableDef, (JavaMethod) currentMethod));
-        	}
-            currentMethod.setTypeParameters(typeParams);
+        if ( def.getTypeParams() != null )
+        {
+            List<DefaultJavaTypeVariable<JavaMethod>> typeParams =
+                new LinkedList<DefaultJavaTypeVariable<JavaMethod>>();
+            for ( TypeVariableDef typeVariableDef : def.getTypeParams() )
+            {
+                typeParams.add( createTypeVariable( typeVariableDef, (JavaMethod) currentMethod ) );
+            }
+            currentMethod.setTypeParameters( typeParams );
         }
-        
+
         // exceptions
         List<JavaClass> exceptions = new LinkedList<JavaClass>();
-        for (TypeDef type : def.getExceptions()) {
-            exceptions.add(createType(type, 0));
+        for ( TypeDef type : def.getExceptions() )
+        {
+            exceptions.add( createType( type, 0 ) );
         }
-        currentMethod.setExceptions(exceptions);
+        currentMethod.setExceptions( exceptions );
 
         // modifiers
-        currentMethod.setModifiers(new LinkedList<String>( def.getModifiers() ));
-        
-        if( !parameterList.isEmpty() ) {
+        currentMethod.setModifiers( new LinkedList<String>( def.getModifiers() ) );
+
+        if ( !parameterList.isEmpty() )
+        {
             currentMethod.setParameters( new ArrayList<JavaParameter>( parameterList ) );
             parameterList.clear();
         }
 
-        currentMethod.setSourceCode(def.getBody());
+        currentMethod.setSourceCode( def.getBody() );
     }
 
     private <G extends JavaGenericDeclaration> DefaultJavaTypeVariable<G> createTypeVariable( TypeVariableDef typeVariableDef, G genericDeclaration)
@@ -328,32 +371,34 @@ public class ModelBuilder implements Builder {
         return result;
     }
 
-	public void beginField(FieldDef def) {
+    /** {@inheritDoc} */
+    public void beginField( FieldDef def )
+    {
         currentField = new DefaultJavaField();
-        currentField.setParentClass(classStack.getFirst());
-        currentField.setLineNumber(def.getLineNumber());
-        currentField.setModelWriterFactory(modelWriterFactory);
+        currentField.setParentClass( classStack.getFirst() );
+        currentField.setLineNumber( def.getLineNumber() );
+        currentField.setModelWriterFactory( modelWriterFactory );
 
-        currentField.setName(def.getName());
-        currentField.setType(createType(def.getType(), def.getDimensions()));
+        currentField.setName( def.getName() );
+        currentField.setType( createType( def.getType(), def.getDimensions() ) );
         currentField.setEnumConstant( def.isEnumConstant() );
 
         // modifiers
         {
-            currentField.setModifiers(new LinkedList<String>(def.getModifiers()));
+            currentField.setModifiers( new LinkedList<String>( def.getModifiers() ) );
         }
-	
+
         // code body
-        currentField.setInitializationExpression(def.getBody());
-	
+        currentField.setInitializationExpression( def.getBody() );
+
         // javadoc
-        addJavaDoc(currentField);
+        addJavaDoc( currentField );
 
         // annotations
         setAnnotations( currentField );
-
     }
 	
+    /** {@inheritDoc} */
 	public void endField() 
 	{
         classStack.getFirst().addField(currentField);
@@ -361,21 +406,28 @@ public class ModelBuilder implements Builder {
         currentField = null;
 	}
 	
-	public void addParameter(FieldDef fieldDef) {
-	    DefaultJavaParameter jParam = new DefaultJavaParameter(createType(fieldDef.getType(), fieldDef.getDimensions()), fieldDef.getName(), fieldDef.isVarArgs());
+    /** {@inheritDoc} */
+    public void addParameter( FieldDef fieldDef )
+    {
+        DefaultJavaParameter jParam =
+            new DefaultJavaParameter( createType( fieldDef.getType(), fieldDef.getDimensions() ), fieldDef.getName(),
+                                      fieldDef.isVarArgs() );
         jParam.setParentMethod( currentMethod );
-        jParam.setModelWriterFactory(modelWriterFactory);
+        jParam.setModelWriterFactory( modelWriterFactory );
         addJavaDoc( jParam );
         setAnnotations( jParam );
         parameterList.add( jParam );
-	}
+    }
 
-    private void setAnnotations( final AbstractBaseJavaEntity entity ) {
-        if( !currentAnnoDefs.isEmpty() ) {
-        	DefaultAnnotationTransformer transformer = new DefaultAnnotationTransformer( (JavaAnnotatedElement) entity);
+    private void setAnnotations( final AbstractBaseJavaEntity entity )
+    {
+        if ( !currentAnnoDefs.isEmpty() )
+        {
+            DefaultAnnotationTransformer transformer = new DefaultAnnotationTransformer( (JavaAnnotatedElement) entity );
 
             List<JavaAnnotation> annotations = new LinkedList<JavaAnnotation>();
-            for( AnnoDef annoDef :  currentAnnoDefs) {
+            for ( AnnoDef annoDef : currentAnnoDefs )
+            {
                 annotations.add( transformer.transform( annoDef ) );
             }
             entity.setAnnotations( annotations );
@@ -384,11 +436,14 @@ public class ModelBuilder implements Builder {
     }
 
     // Don't resolve until we need it... class hasn't been defined yet.
-    public void addAnnotation( AnnoDef annotation ) {
+    /** {@inheritDoc} */
+    public void addAnnotation( AnnoDef annotation )
+    {
         currentAnnoDefs.add( annotation );
     }
 
-    public JavaSource getSource() {
+    public JavaSource getSource()
+    {
         return source;
     }
 
@@ -396,6 +451,4 @@ public class ModelBuilder implements Builder {
     {
         source.setURL( url );
     }
-
 }
-

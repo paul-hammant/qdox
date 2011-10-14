@@ -23,7 +23,6 @@ import java.util.StringTokenizer;
 
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMember;
 import com.thoughtworks.qdox.model.JavaPackage;
@@ -175,7 +174,7 @@ public class FieldRef
                 for ( int i = 0; i < parts.length - 1; ++i )
                 {
                     String className = getNamePrefix( i );
-                    String typeName = baseClass.resolveType( className );
+                    String typeName = baseClass.resolveCanonicalName( className );
 
                     if ( typeName != null )
                     {

@@ -444,7 +444,7 @@ public abstract class EvaluatingVisitor
         return typeRef.getType();
     }
 
-    public Object visit( AnnotationValueList valueList )
+    public List<?> visit( AnnotationValueList valueList )
     {
         List<Object> list = new LinkedList<Object>();
 

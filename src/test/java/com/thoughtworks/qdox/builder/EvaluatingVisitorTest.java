@@ -18,6 +18,7 @@ import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
+import com.thoughtworks.qdox.model.expression.AnnotationValueList;
 import com.thoughtworks.qdox.model.expression.Cast;
 import com.thoughtworks.qdox.model.expression.Divide;
 import com.thoughtworks.qdox.model.expression.Equals;
@@ -309,9 +310,22 @@ public class EvaluatingVisitorTest
         }
     }
     
-    @Ignore
     @Test
     public void testVisitAnnotationValueList() {
+        {
+            List<AnnotationValue> emptyList = Collections.emptyList();
+            List<?> visitedResult = visitor.visit( new AnnotationValueList( emptyList ) );
+            assertEquals( 0, visitedResult.size() );
+        }
+        
+        {
+            AnnotationValue annoVal = mock( AnnotationValue.class );
+            Object singleResult = new Object();
+            when( annoVal.accept( visitor ) ).thenReturn( singleResult );
+            List<?> visitedResult = visitor.visit( new AnnotationValueList( Collections.singletonList( annoVal ) ) );
+            assertEquals( 1, visitedResult.size() );
+            assertSame( singleResult, visitedResult.get( 0 )  );
+        }
     }
 
     @Test

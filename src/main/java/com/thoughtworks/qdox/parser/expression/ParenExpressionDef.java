@@ -1,4 +1,5 @@
-package com.thoughtworks.qdox.parser.structs;
+package com.thoughtworks.qdox.parser.expression;
+
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,37 +20,24 @@ package com.thoughtworks.qdox.parser.structs;
  * under the License.
  */
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+public class ParenExpressionDef implements ElemValueDef {
 
-import com.thoughtworks.qdox.parser.expression.TransformerDef;
-import com.thoughtworks.qdox.parser.expression.ElemValueDef;
+	private final ElemValueDef elemValueDef;
 
-public class AnnoDef extends LocatedDef implements ElemValueDef
-{
-    private TypeDef typeDef;
-    private final Map<String, ElemValueDef> args = new LinkedHashMap<String, ElemValueDef>();
-
-    public AnnoDef( TypeDef typeDef )
-    {
-        this.typeDef = typeDef;
-    }
-    
-    public AnnoDef getValue() {
-    	return this;
-    }
+    public ParenExpressionDef(ElemValueDef value) {
+    	this.elemValueDef = value;
+	}
     
     public <U> U transform(TransformerDef<U> transformer) {
     	return transformer.transform(this);
     }
 
-    public TypeDef getTypeDef()
+    /**
+     * @return the elemValueDef
+     */
+    public ElemValueDef getElemValueDef()
     {
-        return typeDef;
+        return elemValueDef;
     }
 
-    public Map<String, ElemValueDef> getArgs()
-    {
-        return args;
-    }
 }

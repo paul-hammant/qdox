@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.parser.structs;
+package com.thoughtworks.qdox.parser.expression;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,37 +19,29 @@ package com.thoughtworks.qdox.parser.structs;
  * under the License.
  */
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+public abstract class BinaryOperatorDef implements ElemValueDef {
+	
+	private final ElemValueDef lhs;
+    private final ElemValueDef rhs;
 
-import com.thoughtworks.qdox.parser.expression.TransformerDef;
-import com.thoughtworks.qdox.parser.expression.ElemValueDef;
+    public BinaryOperatorDef(ElemValueDef lhs, ElemValueDef rhs) {
+		this.lhs  = lhs;
+		this.rhs = rhs;
+	}
 
-public class AnnoDef extends LocatedDef implements ElemValueDef
-{
-    private TypeDef typeDef;
-    private final Map<String, ElemValueDef> args = new LinkedHashMap<String, ElemValueDef>();
-
-    public AnnoDef( TypeDef typeDef )
+    /**
+     * @return the lhs
+     */
+    public ElemValueDef getLeft()
     {
-        this.typeDef = typeDef;
-    }
-    
-    public AnnoDef getValue() {
-    	return this;
-    }
-    
-    public <U> U transform(TransformerDef<U> transformer) {
-    	return transformer.transform(this);
+        return lhs;
     }
 
-    public TypeDef getTypeDef()
+    /**
+     * @return the rhs
+     */
+    public ElemValueDef getRight()
     {
-        return typeDef;
-    }
-
-    public Map<String, ElemValueDef> getArgs()
-    {
-        return args;
+        return rhs;
     }
 }

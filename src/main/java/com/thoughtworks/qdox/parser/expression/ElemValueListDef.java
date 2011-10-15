@@ -11,7 +11,7 @@ public class ElemValueListDef implements ElemValueDef{
 		this.valueList = annoValueList;
 	}
 
-	public <U> U transform(AnnotationTransformer<U> transformer) {
+	public <U> U transform(TransformerDef<U> transformer) {
 		return transformer.transform(this);
 	}
 

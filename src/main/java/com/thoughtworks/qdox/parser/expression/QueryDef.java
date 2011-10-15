@@ -1,4 +1,5 @@
-package com.thoughtworks.qdox.parser.structs;
+package com.thoughtworks.qdox.parser.expression;
+
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,37 +20,45 @@ package com.thoughtworks.qdox.parser.structs;
  * under the License.
  */
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+public class QueryDef implements ElemValueDef {
 
-import com.thoughtworks.qdox.parser.expression.TransformerDef;
-import com.thoughtworks.qdox.parser.expression.ElemValueDef;
+	private final ElemValueDef cond;
+	private final ElemValueDef trueExpr;
+	private final ElemValueDef falseExpr;
 
-public class AnnoDef extends LocatedDef implements ElemValueDef
-{
-    private TypeDef typeDef;
-    private final Map<String, ElemValueDef> args = new LinkedHashMap<String, ElemValueDef>();
-
-    public AnnoDef( TypeDef typeDef )
-    {
-        this.typeDef = typeDef;
-    }
-    
-    public AnnoDef getValue() {
-    	return this;
-    }
+    public QueryDef(ElemValueDef cond, ElemValueDef trueExpr,
+			ElemValueDef falseExpr) {
+    	this.cond = cond;
+    	this.trueExpr = trueExpr;
+    	this.falseExpr = falseExpr;
+	}
     
     public <U> U transform(TransformerDef<U> transformer) {
     	return transformer.transform(this);
     }
 
-    public TypeDef getTypeDef()
+
+    /**
+     * @return the cond
+     */
+    public ElemValueDef getCondition()
     {
-        return typeDef;
+        return cond;
     }
 
-    public Map<String, ElemValueDef> getArgs()
+    /**
+     * @return the trueExpr
+     */
+    public ElemValueDef getTrueExpression()
     {
-        return args;
+        return trueExpr;
+    }
+
+    /**
+     * @return the falseExpr
+     */
+    public ElemValueDef getFalseExpression()
+    {
+        return falseExpr;
     }
 }

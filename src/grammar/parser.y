@@ -138,25 +138,25 @@ TypeDeclaration: ClassDeclaration
 // NOTE: LONG_LITERAL and DOUBLE_LITERAL are not part of 
 Literal: INTEGER_LITERAL
          { 
-           $$ = new AnnotationConstant($1, Integer.class); 
+           $$ = new ConstantDef($1, Integer.class); 
          } 
        | FLOAT_LITERAL 
          { 
-           $$ = new AnnotationConstant($1, Float.class); 
+           $$ = new ConstantDef($1, Float.class); 
          } 
        | BOOLEAN_LITERAL 
          { 
-           $$ = new AnnotationConstant($1, Boolean.class);
+           $$ = new ConstantDef($1, Boolean.class);
          } 
        | CHAR_LITERAL 
          {
            String s = lexer.getCodeBody(); 
-           $$ = new AnnotationConstant(s, Character.class); 
+           $$ = new ConstantDef(s, Character.class); 
          } 
        | STRING_LITERAL 
          { 
            String s = lexer.getCodeBody(); 
-           $$ = new AnnotationConstant(s, String.class); 
+           $$ = new ConstantDef(s, String.class); 
          };
 
 // 4 Types, Values, and Variables
@@ -329,11 +329,11 @@ AnyName: IDENTIFIER { $$ = $1; }
        
 primary:
     Literal |
-    PARENOPEN Expression PARENCLOSE { $$ = new AnnotationParenExpression($2); } |
-    PrimitiveType Dims_opt DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1.getName(), $2)); } |
-    AnyName DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, 0)); } |
-    AnyName dims DOT CLASS { $$ = new AnnotationTypeRef(new TypeDef($1, $2)); } |
-    AnyName { $$ = new AnnotationFieldRef($1); };
+    PARENOPEN Expression PARENCLOSE { $$ = new ParenExpressionDef($2); } |
+    PrimitiveType Dims_opt DOT CLASS { $$ = new TypeRefDef(new TypeDef($1.getName(), $2)); } |
+    AnyName DOT CLASS { $$ = new TypeRefDef(new TypeDef($1, 0)); } |
+    AnyName dims DOT CLASS { $$ = new TypeRefDef(new TypeDef($1, $2)); } |
+    AnyName { $$ = new FieldRefDef($1); };
 	
 Dims_opt:  { $$ = 0; }
 		| dims;	
@@ -716,105 +716,105 @@ PostfixExpression: /* ExpressionName | PostIncrementExpression | PostDecrementEx
 
 // 15.15 Unary Operators
 UnaryExpression: /* PreIncrementExpression | PreDecrementExpression | */
-                 PLUS UnaryExpression  { $$ = new AnnotationPlusSign($2); } 
-               | MINUS UnaryExpression { $$ = new AnnotationMinusSign($2); }
+                 PLUS UnaryExpression  { $$ = new PlusSignDef($2); } 
+               | MINUS UnaryExpression { $$ = new MinusSignDef($2); }
                | UnaryExpressionNotPlusMinus;
 
 UnaryExpressionNotPlusMinus: PostfixExpression 
-                           | TILDE UnaryExpression       { $$ = new AnnotationNot($2); } 
-                           | EXCLAMATION UnaryExpression { $$ = new AnnotationLogicalNot($2); } 
+                           | TILDE UnaryExpression       { $$ = new NotDef($2); } 
+                           | EXCLAMATION UnaryExpression { $$ = new LogicalNotDef($2); } 
                            | CastExpression;
 
 // 15.16 Cast Expressions	
-CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression   { $$ = new AnnotationCast(new TypeDef($2.getName(), $3), $5); } 
-              | PARENOPEN AnyName PARENCLOSE UnaryExpressionNotPlusMinus      { $$ = new AnnotationCast(new TypeDef($2, 0), $4); }
-              | PARENOPEN AnyName dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new AnnotationCast(new TypeDef($2, $3), $5); };
+CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression   { $$ = new CastDef(new TypeDef($2.getName(), $3), $5); } 
+              | PARENOPEN AnyName PARENCLOSE UnaryExpressionNotPlusMinus      { $$ = new CastDef(new TypeDef($2, 0), $4); }
+              | PARENOPEN AnyName dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new CastDef(new TypeDef($2, $3), $5); };
 
 // 15.17 Multiplicative Operators
 MultiplicativeExpression: UnaryExpression 
-                        | MultiplicativeExpression STAR UnaryExpression    { $$ = new AnnotationMultiply($1, $3); } 
-                        | MultiplicativeExpression SLASH UnaryExpression   { $$ = new AnnotationDivide($1, $3); } 
-                        | MultiplicativeExpression PERCENT UnaryExpression { $$ = new AnnotationRemainder($1, $3); };
+                        | MultiplicativeExpression STAR UnaryExpression    { $$ = new MultiplyDef($1, $3); } 
+                        | MultiplicativeExpression SLASH UnaryExpression   { $$ = new DivideDef($1, $3); } 
+                        | MultiplicativeExpression PERCENT UnaryExpression { $$ = new RemainderDef($1, $3); };
 
 // 15.18 Additive Operators
 AdditiveExpression:	MultiplicativeExpression 
-                  |	AdditiveExpression PLUS MultiplicativeExpression  { $$ = new AnnotationAdd($1, $3); } 
-                  |	AdditiveExpression MINUS MultiplicativeExpression { $$ = new AnnotationSubtract($1, $3); };
+                  |	AdditiveExpression PLUS MultiplicativeExpression  { $$ = new AddDef($1, $3); } 
+                  |	AdditiveExpression MINUS MultiplicativeExpression { $$ = new SubtractDef($1, $3); };
 
 // 15.19 Shift Operators
 ShiftExpression: AdditiveExpression 
-               | ShiftExpression LESSTHAN2 AdditiveExpression    { $$ = new AnnotationShiftLeft($1, $3); }
-               | ShiftExpression GREATERTHAN3 AdditiveExpression { $$ = new AnnotationUnsignedShiftRight($1, $3); } 
-               | ShiftExpression GREATERTHAN2 AdditiveExpression { $$ = new AnnotationShiftRight($1, $3); };
+               | ShiftExpression LESSTHAN2 AdditiveExpression    { $$ = new ShiftLeftDef($1, $3); }
+               | ShiftExpression GREATERTHAN3 AdditiveExpression { $$ = new UnsignedShiftRightDef($1, $3); } 
+               | ShiftExpression GREATERTHAN2 AdditiveExpression { $$ = new ShiftRightDef($1, $3); };
 
 // 15.20 Relational Operators
 RelationalExpression: ShiftExpression 
                     | RelationalExpression LESSEQUALS ShiftExpression    
                       { 
-                        $$ = new AnnotationLessEquals($1, $3);
+                        $$ = new LessEqualsDef($1, $3);
                       } 
                     | RelationalExpression GREATEREQUALS ShiftExpression 
                       { 
-                        $$ = new AnnotationGreaterEquals($1, $3); 
+                        $$ = new GreaterEqualsDef($1, $3); 
                       } 
                     | RelationalExpression LESSTHAN ShiftExpression      
                       { 
-                        $$ = new AnnotationLessThan($1, $3); 
+                        $$ = new LessThanDef($1, $3); 
                       } 
                     | RelationalExpression GREATERTHAN ShiftExpression   
                       { 
-                        $$ = new AnnotationGreaterThan($1, $3); 
+                        $$ = new GreaterThanDef($1, $3); 
                       };
 
 // 15.21 Equality Operators
 EqualityExpression: RelationalExpression 
                   | EqualityExpression EQUALS2 RelationalExpression   
                     { 
-                      $$ = new AnnotationEquals($1, $3);
+                      $$ = new EqualsDef($1, $3);
                     } 
                   | EqualityExpression NOTEQUALS RelationalExpression 
                     { 
-                      $$ = new AnnotationNotEquals($1, $3); 
+                      $$ = new NotEqualsDef($1, $3); 
                     };
 
 // 15.22 Bitwise and Logical Operators
 InclusiveOrExpression: ExclusiveOrExpression 
                      | InclusiveOrExpression VERTLINE ExclusiveOrExpression 
                        { 
-                         $$ = new AnnotationOr($1, $3); 
+                         $$ = new OrDef($1, $3); 
                        };
 
 ExclusiveOrExpression: AndExpression 
                      | ExclusiveOrExpression CIRCUMFLEX AndExpression 
                        { 
-                         $$ = new AnnotationExclusiveOr($1, $3);
+                         $$ = new ExclusiveOrDef($1, $3);
                        };
 
 AndExpression: EqualityExpression 
              | AndExpression AMPERSAND EqualityExpression 
                { 
-                 $$ = new AnnotationAnd($1, $3); 
+                 $$ = new AndDef($1, $3); 
                };
 
 // 15.23 Conditional-And Operator &&
 ConditionalAndExpression: InclusiveOrExpression 
                         | ConditionalAndExpression AMPERSAND2 InclusiveOrExpression 
                           { 
-                            $$ = new AnnotationLogicalAnd($1, $3); 
+                            $$ = new LogicalAndDef($1, $3); 
                           };
 
 // 15.24 Conditional-Or Operator ||
 ConditionalOrExpression: ConditionalAndExpression 
                        | ConditionalOrExpression VERTLINE2 ConditionalAndExpression 
                          { 
-                           $$ = new AnnotationLogicalOr($1, $3);
+                           $$ = new LogicalOrDef($1, $3);
                          };
 
 // 15.25 Conditional Operator ? :	
 ConditionalExpression: ConditionalOrExpression 
                      | ConditionalOrExpression QUERY Expression COLON ConditionalExpression 
                        { 
-                         $$ = new AnnotationQuery($1, $3, $5);
+                         $$ = new QueryDef($1, $3, $5);
                        };
                        
 // 15.26 Assignment Operators

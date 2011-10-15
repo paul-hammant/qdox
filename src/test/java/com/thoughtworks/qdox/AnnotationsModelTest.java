@@ -16,7 +16,7 @@ import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.FieldRef;
 import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
-import com.thoughtworks.qdox.parser.expression.AnnotationTypeRef;
+import com.thoughtworks.qdox.parser.expression.TypeRefDef;
 
 public class AnnotationsModelTest extends TestCase {
 

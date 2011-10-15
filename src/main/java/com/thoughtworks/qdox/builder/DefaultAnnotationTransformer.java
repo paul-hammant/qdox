@@ -59,43 +59,43 @@ import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
 import com.thoughtworks.qdox.model.impl.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
-import com.thoughtworks.qdox.parser.expression.AnnotationAdd;
-import com.thoughtworks.qdox.parser.expression.AnnotationAnd;
-import com.thoughtworks.qdox.parser.expression.AnnotationCast;
-import com.thoughtworks.qdox.parser.expression.AnnotationConstant;
-import com.thoughtworks.qdox.parser.expression.AnnotationDivide;
-import com.thoughtworks.qdox.parser.expression.AnnotationEquals;
-import com.thoughtworks.qdox.parser.expression.AnnotationExclusiveOr;
-import com.thoughtworks.qdox.parser.expression.AnnotationFieldRef;
-import com.thoughtworks.qdox.parser.expression.AnnotationGreaterEquals;
-import com.thoughtworks.qdox.parser.expression.AnnotationGreaterThan;
-import com.thoughtworks.qdox.parser.expression.AnnotationLessEquals;
-import com.thoughtworks.qdox.parser.expression.AnnotationLessThan;
-import com.thoughtworks.qdox.parser.expression.AnnotationLogicalAnd;
-import com.thoughtworks.qdox.parser.expression.AnnotationLogicalNot;
-import com.thoughtworks.qdox.parser.expression.AnnotationLogicalOr;
-import com.thoughtworks.qdox.parser.expression.AnnotationMinusSign;
-import com.thoughtworks.qdox.parser.expression.AnnotationMultiply;
-import com.thoughtworks.qdox.parser.expression.AnnotationNot;
-import com.thoughtworks.qdox.parser.expression.AnnotationNotEquals;
-import com.thoughtworks.qdox.parser.expression.AnnotationOr;
-import com.thoughtworks.qdox.parser.expression.AnnotationParenExpression;
-import com.thoughtworks.qdox.parser.expression.AnnotationPlusSign;
-import com.thoughtworks.qdox.parser.expression.AnnotationQuery;
-import com.thoughtworks.qdox.parser.expression.AnnotationRemainder;
-import com.thoughtworks.qdox.parser.expression.AnnotationShiftLeft;
-import com.thoughtworks.qdox.parser.expression.AnnotationShiftRight;
-import com.thoughtworks.qdox.parser.expression.AnnotationSubtract;
-import com.thoughtworks.qdox.parser.expression.AnnotationTransformer;
-import com.thoughtworks.qdox.parser.expression.AnnotationTypeRef;
-import com.thoughtworks.qdox.parser.expression.AnnotationUnsignedShiftRight;
+import com.thoughtworks.qdox.parser.expression.AddDef;
+import com.thoughtworks.qdox.parser.expression.AndDef;
+import com.thoughtworks.qdox.parser.expression.CastDef;
+import com.thoughtworks.qdox.parser.expression.ConstantDef;
+import com.thoughtworks.qdox.parser.expression.DivideDef;
+import com.thoughtworks.qdox.parser.expression.EqualsDef;
+import com.thoughtworks.qdox.parser.expression.ExclusiveOrDef;
+import com.thoughtworks.qdox.parser.expression.FieldRefDef;
+import com.thoughtworks.qdox.parser.expression.GreaterEqualsDef;
+import com.thoughtworks.qdox.parser.expression.GreaterThanDef;
+import com.thoughtworks.qdox.parser.expression.LessEqualsDef;
+import com.thoughtworks.qdox.parser.expression.LessThanDef;
+import com.thoughtworks.qdox.parser.expression.LogicalAndDef;
+import com.thoughtworks.qdox.parser.expression.LogicalNotDef;
+import com.thoughtworks.qdox.parser.expression.LogicalOrDef;
+import com.thoughtworks.qdox.parser.expression.MinusSignDef;
+import com.thoughtworks.qdox.parser.expression.MultiplyDef;
+import com.thoughtworks.qdox.parser.expression.NotDef;
+import com.thoughtworks.qdox.parser.expression.NotEqualsDef;
+import com.thoughtworks.qdox.parser.expression.OrDef;
+import com.thoughtworks.qdox.parser.expression.ParenExpressionDef;
+import com.thoughtworks.qdox.parser.expression.PlusSignDef;
+import com.thoughtworks.qdox.parser.expression.QueryDef;
+import com.thoughtworks.qdox.parser.expression.RemainderDef;
+import com.thoughtworks.qdox.parser.expression.ShiftLeftDef;
+import com.thoughtworks.qdox.parser.expression.ShiftRightDef;
+import com.thoughtworks.qdox.parser.expression.SubtractDef;
+import com.thoughtworks.qdox.parser.expression.TransformerDef;
+import com.thoughtworks.qdox.parser.expression.TypeRefDef;
+import com.thoughtworks.qdox.parser.expression.UnsignedShiftRightDef;
 import com.thoughtworks.qdox.parser.expression.ElemValueDef;
 import com.thoughtworks.qdox.parser.expression.ElemValueListDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 public class DefaultAnnotationTransformer
-    implements AnnotationTransformer<AnnotationValue>
+    implements TransformerDef<AnnotationValue>
 {
 
     private AbstractBaseJavaEntity parent;
@@ -145,7 +145,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationAdd annotationAdd )
+    public AnnotationValue transform( AddDef annotationAdd )
     {
         AnnotationValue left = annotationAdd.getLeft().transform( this );
         AnnotationValue right = annotationAdd.getRight().transform( this );
@@ -153,7 +153,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationAnd annotationAnd )
+    public AnnotationValue transform( AndDef annotationAnd )
     {
         AnnotationValue left = annotationAnd.getLeft().transform( this );
         AnnotationValue right = annotationAnd.getRight().transform( this );
@@ -161,7 +161,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationDivide annotationDivide )
+    public AnnotationValue transform( DivideDef annotationDivide )
     {
         AnnotationValue left = annotationDivide.getLeft().transform( this );
         AnnotationValue right = annotationDivide.getRight().transform( this );
@@ -169,7 +169,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationEquals annotationEquals )
+    public AnnotationValue transform( EqualsDef annotationEquals )
     {
         AnnotationValue left = annotationEquals.getLeft().transform( this );
         AnnotationValue right = annotationEquals.getRight().transform( this );
@@ -177,7 +177,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationExclusiveOr annotationExclusiveOr )
+    public AnnotationValue transform( ExclusiveOrDef annotationExclusiveOr )
     {
         AnnotationValue left = annotationExclusiveOr.getLeft().transform( this );
         AnnotationValue right = annotationExclusiveOr.getRight().transform( this );
@@ -185,7 +185,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationGreaterEquals annotationGreaterEquals )
+    public AnnotationValue transform( GreaterEqualsDef annotationGreaterEquals )
     {
         AnnotationValue left = annotationGreaterEquals.getLeft().transform( this );
         AnnotationValue right = annotationGreaterEquals.getRight().transform( this );
@@ -193,7 +193,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationGreaterThan annotationGreaterThan )
+    public AnnotationValue transform( GreaterThanDef annotationGreaterThan )
     {
         AnnotationValue left = annotationGreaterThan.getLeft().transform( this );
         AnnotationValue right = annotationGreaterThan.getRight().transform( this );
@@ -201,7 +201,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationLessEquals annotationLessEquals )
+    public AnnotationValue transform( LessEqualsDef annotationLessEquals )
     {
         AnnotationValue left = annotationLessEquals.getLeft().transform( this );
         AnnotationValue right = annotationLessEquals.getRight().transform( this );
@@ -209,7 +209,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationLessThan annotationLessThan )
+    public AnnotationValue transform( LessThanDef annotationLessThan )
     {
         AnnotationValue left = annotationLessThan.getLeft().transform( this );
         AnnotationValue right = annotationLessThan.getRight().transform( this );
@@ -217,7 +217,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationLogicalAnd annotationLogicalAnd )
+    public AnnotationValue transform( LogicalAndDef annotationLogicalAnd )
     {
         AnnotationValue left = annotationLogicalAnd.getLeft().transform( this );
         AnnotationValue right = annotationLogicalAnd.getRight().transform( this );
@@ -225,7 +225,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationLogicalOr annotationLogicalOr )
+    public AnnotationValue transform( LogicalOrDef annotationLogicalOr )
     {
         AnnotationValue left = annotationLogicalOr.getLeft().transform( this );
         AnnotationValue right = annotationLogicalOr.getRight().transform( this );
@@ -233,7 +233,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationMultiply annotationMultiply )
+    public AnnotationValue transform( MultiplyDef annotationMultiply )
     {
         AnnotationValue left = annotationMultiply.getLeft().transform( this );
         AnnotationValue right = annotationMultiply.getRight().transform( this );
@@ -241,7 +241,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationNotEquals annotationNotEquals )
+    public AnnotationValue transform( NotEqualsDef annotationNotEquals )
     {
         AnnotationValue left = annotationNotEquals.getLeft().transform( this );
         AnnotationValue right = annotationNotEquals.getRight().transform( this );
@@ -249,7 +249,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationOr annotationOr )
+    public AnnotationValue transform( OrDef annotationOr )
     {
         AnnotationValue left = annotationOr.getLeft().transform( this );
         AnnotationValue right = annotationOr.getRight().transform( this );
@@ -257,7 +257,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationRemainder annotationRemainder )
+    public AnnotationValue transform( RemainderDef annotationRemainder )
     {
         AnnotationValue left = annotationRemainder.getLeft().transform( this );
         AnnotationValue right = annotationRemainder.getRight().transform( this );
@@ -265,7 +265,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationShiftLeft annotationShiftLeft )
+    public AnnotationValue transform( ShiftLeftDef annotationShiftLeft )
     {
         AnnotationValue left = annotationShiftLeft.getLeft().transform( this );
         AnnotationValue right = annotationShiftLeft.getRight().transform( this );
@@ -273,7 +273,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationShiftRight annotationShiftRight )
+    public AnnotationValue transform( ShiftRightDef annotationShiftRight )
     {
         AnnotationValue left = annotationShiftRight.getLeft().transform( this );
         AnnotationValue right = annotationShiftRight.getRight().transform( this );
@@ -281,7 +281,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationSubtract annotationSubtract )
+    public AnnotationValue transform( SubtractDef annotationSubtract )
     {
         AnnotationValue left = annotationSubtract.getLeft().transform( this );
         AnnotationValue right = annotationSubtract.getRight().transform( this );
@@ -289,7 +289,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationUnsignedShiftRight annotationUnsignedShiftRight )
+    public AnnotationValue transform( UnsignedShiftRightDef annotationUnsignedShiftRight )
     {
         AnnotationValue left = annotationUnsignedShiftRight.getLeft().transform( this );
         AnnotationValue right = annotationUnsignedShiftRight.getRight().transform( this );
@@ -297,7 +297,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationCast annotationCast )
+    public AnnotationValue transform( CastDef annotationCast )
     {
         JavaType type = createType( annotationCast.getTypeDef(), annotationCast.getTypeDef().getDimensions() );
         AnnotationValue value = annotationCast.getElemDef().transform( this );
@@ -305,7 +305,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationConstant annotationConstant )
+    public AnnotationValue transform( ConstantDef annotationConstant )
     {
         AnnotationValue result;
         String image = annotationConstant.getValue();
@@ -338,7 +338,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationFieldRef annotationFieldRef )
+    public AnnotationValue transform( FieldRefDef annotationFieldRef )
     {
         FieldRef result;
         String name = annotationFieldRef.getName();
@@ -348,42 +348,42 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationLogicalNot annotationLogicalNot )
+    public AnnotationValue transform( LogicalNotDef annotationLogicalNot )
     {
         AnnotationValue value = annotationLogicalNot.getElemValueDef().transform( this );
         return new LogicalNot( value );
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationMinusSign annotationMinusSign )
+    public AnnotationValue transform( MinusSignDef annotationMinusSign )
     {
         AnnotationValue value = annotationMinusSign.getElemValueDef().transform( this );
         return new MinusSign( value );
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationNot annotationNot )
+    public AnnotationValue transform( NotDef annotationNot )
     {
         AnnotationValue value = annotationNot.getElemValueDef().transform( this );
         return new Not( value );
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationParenExpression annotationParenExpression )
+    public AnnotationValue transform( ParenExpressionDef annotationParenExpression )
     {
         AnnotationValue value = annotationParenExpression.getElemValueDef().transform( this );
         return new ParenExpression( value );
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationPlusSign annotationPlusSign )
+    public AnnotationValue transform( PlusSignDef annotationPlusSign )
     {
         AnnotationValue value = annotationPlusSign.getElemValueDef().transform( this );
         return new PlusSign( value );
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationQuery annotationQuery )
+    public AnnotationValue transform( QueryDef annotationQuery )
     {
         AnnotationValue condition = annotationQuery.getCondition().transform( this );
         AnnotationValue trueExpression = annotationQuery.getTrueExpression().transform( this );
@@ -392,7 +392,7 @@ public class DefaultAnnotationTransformer
     }
 
     /** {@inheritDoc} */
-    public AnnotationValue transform( AnnotationTypeRef annotationTypeRef )
+    public AnnotationValue transform( TypeRefDef annotationTypeRef )
     {
         JavaType type = createType( annotationTypeRef.getTypeDef(), annotationTypeRef.getTypeDef().getDimensions() );
         return new TypeRef( type );

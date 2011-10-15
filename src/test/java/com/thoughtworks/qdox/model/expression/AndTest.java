@@ -33,7 +33,7 @@ public class AndTest
     @Test
     public void testAccept()
     {
-        AnnotationVisitor visitor = mock( AnnotationVisitor.class );
+        ExpressionVisitor visitor = mock( ExpressionVisitor.class );
         And expr = new And( null, null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );

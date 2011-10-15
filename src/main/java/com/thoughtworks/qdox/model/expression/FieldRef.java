@@ -85,7 +85,7 @@ public class FieldRef
         return parts.length - 1;
     }
 
-    public Object accept( AnnotationVisitor visitor )
+    public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }

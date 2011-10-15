@@ -27,7 +27,7 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
  * 
  * @author Jochen Kuhnle
  */
-public interface AnnotationVisitor {
+public interface ExpressionVisitor {
 
     Object visit( Add add );
 

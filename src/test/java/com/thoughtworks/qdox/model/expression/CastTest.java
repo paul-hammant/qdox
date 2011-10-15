@@ -34,7 +34,7 @@ public class CastTest
     @Test
     public void testAccept()
     {
-        AnnotationVisitor visitor = mock( AnnotationVisitor.class );
+        ExpressionVisitor visitor = mock( ExpressionVisitor.class );
         Cast expr = new Cast( null, null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );

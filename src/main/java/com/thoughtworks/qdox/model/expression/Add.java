@@ -30,7 +30,7 @@ public class Add extends BinaryOperator {
         return getLeft().toString() + " + " + getRight().toString();
     }
 
-    public Object accept( AnnotationVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor ) {
         return visitor.visit( this );
     }
 

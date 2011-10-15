@@ -34,7 +34,7 @@ public class GreaterEqualsTest
     @Test
     public void testAccept()
     {
-        AnnotationVisitor visitor = mock( AnnotationVisitor.class );
+        ExpressionVisitor visitor = mock( ExpressionVisitor.class );
         GreaterEquals expr = new GreaterEquals( null, null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );

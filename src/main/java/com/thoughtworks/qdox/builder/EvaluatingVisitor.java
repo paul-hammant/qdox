@@ -31,7 +31,7 @@ import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.AnnotationValueList;
-import com.thoughtworks.qdox.model.expression.AnnotationVisitor;
+import com.thoughtworks.qdox.model.expression.ExpressionVisitor;
 import com.thoughtworks.qdox.model.expression.Cast;
 import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.Divide;
@@ -69,7 +69,7 @@ import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
  * @author Jochen Kuhnle
  */
 public abstract class EvaluatingVisitor
-    implements AnnotationVisitor
+    implements ExpressionVisitor
 {
 
     public Object getValue( JavaAnnotation annotation, String property )

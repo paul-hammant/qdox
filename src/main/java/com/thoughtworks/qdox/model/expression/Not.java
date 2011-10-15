@@ -30,7 +30,7 @@ public class Not extends UnaryOperator {
         return "~" + getValue().toString();
     }
 
-    public Object accept( AnnotationVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor ) {
         return visitor.visit( this );
     }
 

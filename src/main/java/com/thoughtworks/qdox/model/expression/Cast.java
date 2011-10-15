@@ -40,7 +40,7 @@ public class Cast implements AnnotationValue {
         return this.value;
     }
 
-    public Object accept( AnnotationVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor ) {
         return visitor.visit( this );
     }
 

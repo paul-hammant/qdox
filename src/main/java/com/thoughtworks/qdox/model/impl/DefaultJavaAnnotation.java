@@ -30,7 +30,7 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
-import com.thoughtworks.qdox.model.expression.AnnotationVisitor;
+import com.thoughtworks.qdox.model.expression.ExpressionVisitor;
 
 /**
  * @author Eric Redmond
@@ -118,7 +118,7 @@ public class DefaultJavaAnnotation
         return lineNumber;
     }
 
-    public Object accept( AnnotationVisitor visitor )
+    public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }

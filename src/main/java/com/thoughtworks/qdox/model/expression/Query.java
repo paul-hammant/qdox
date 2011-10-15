@@ -32,7 +32,7 @@ public class Query implements AnnotationValue {
         this.falseExpression = falseExpression;
     }
 
-	public Object accept( AnnotationVisitor visitor ) {
+	public Object accept( ExpressionVisitor visitor ) {
         return visitor.visit( this );
     }
 

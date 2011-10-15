@@ -34,7 +34,7 @@ public class LogicalOrTest
     @Test
     public void testAccept()
     {
-        AnnotationVisitor visitor = mock( AnnotationVisitor.class );
+        ExpressionVisitor visitor = mock( ExpressionVisitor.class );
         LogicalOr expr = new LogicalOr( null, null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );

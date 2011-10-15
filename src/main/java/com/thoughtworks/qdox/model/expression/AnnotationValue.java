@@ -34,7 +34,7 @@ public interface AnnotationValue {
      * @param visitor Visitor
      * @return Visitor result
      */
-    Object accept( AnnotationVisitor visitor );
+    Object accept( ExpressionVisitor visitor );
 
     /**
      * Get a parameter value for {@link DefaultJavaAnnotation#getNamedParameter(String)}.

@@ -34,7 +34,7 @@ public class LessEqualsTest
     @Test
     public void testAccept()
     {
-        AnnotationVisitor visitor = mock( AnnotationVisitor.class );
+        ExpressionVisitor visitor = mock( ExpressionVisitor.class );
         LessEquals expr = new LessEquals( null, null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );

@@ -28,7 +28,7 @@ public class FieldRefTest
     @Test
     public void testAccept()
     {
-        AnnotationVisitor visitor = mock( AnnotationVisitor.class );
+        ExpressionVisitor visitor = mock( ExpressionVisitor.class );
         FieldRef expr = new FieldRef( "" );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );

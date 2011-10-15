@@ -36,7 +36,7 @@ public class TypeRef implements AnnotationValue {
         return type.getValue() + ".class";
     }
 
-    public Object accept( AnnotationVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor ) {
         return visitor.visit( this );
     }
 

@@ -31,7 +31,7 @@ public class PlusSignTest
     @Test
     public void testAccept()
     {
-        AnnotationVisitor visitor = mock( AnnotationVisitor.class );
+        ExpressionVisitor visitor = mock( ExpressionVisitor.class );
         PlusSign expr = new PlusSign( null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );

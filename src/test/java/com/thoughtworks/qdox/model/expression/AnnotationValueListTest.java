@@ -84,7 +84,7 @@ public class AnnotationValueListTest
     @Test
     public void testAccept()
     {
-        AnnotationVisitor visitor = mock( AnnotationVisitor.class );
+        ExpressionVisitor visitor = mock( ExpressionVisitor.class );
         AnnotationValueList  expr = new AnnotationValueList ( null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );

@@ -31,7 +31,7 @@ public class LogicalNotTest
     @Test
     public void testAccept()
     {
-        AnnotationVisitor visitor = mock( AnnotationVisitor.class );
+        ExpressionVisitor visitor = mock( ExpressionVisitor.class );
         LogicalNot expr = new LogicalNot( null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );

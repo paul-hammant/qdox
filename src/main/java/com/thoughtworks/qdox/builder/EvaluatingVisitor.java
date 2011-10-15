@@ -439,7 +439,7 @@ public abstract class EvaluatingVisitor
         return result;
     }
 
-    public Object visit( TypeRef typeRef )
+    public JavaType visit( TypeRef typeRef )
     {
         return typeRef.getType();
     }

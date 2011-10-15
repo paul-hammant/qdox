@@ -14,6 +14,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
@@ -42,6 +43,7 @@ import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
 import com.thoughtworks.qdox.model.expression.ShiftRight;
 import com.thoughtworks.qdox.model.expression.Subtract;
+import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
 import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 
@@ -1203,10 +1205,11 @@ public class EvaluatingVisitorTest
         }
     }
     
-    @Ignore
     @Test
-    public void testVisitTypeRef() {
-        
+    public void testVisitTypeRef()
+    {
+        JavaType type = mock( JavaType.class );
+        assertSame( type, visitor.visit( new TypeRef( type ) ) );
     }
 
     @Test

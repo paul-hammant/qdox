@@ -897,7 +897,7 @@ public abstract class EvaluatingVisitor
         if ( type instanceof JavaClass && ( (JavaClass) type ).isPrimitive() && value instanceof Number )
         {
             Number n = (Number) value;
-            String typeName = type.getCanonicalName();
+            String typeName = type.getFullyQualifiedName();
 
             if ( typeName.equals( "byte" ) )
             {

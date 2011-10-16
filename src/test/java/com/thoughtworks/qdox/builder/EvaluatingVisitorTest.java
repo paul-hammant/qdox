@@ -13,9 +13,10 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.thoughtworks.qdox.model.JavaAnnotation;
+import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
@@ -305,7 +306,8 @@ public class EvaluatingVisitorTest
     public void testVisitAnnotation()
     {
         try{
-            visitor.visit( new DefaultJavaAnnotation( new Type("Ignore"), -1 ) );
+            JavaAnnotation annotation = mock(JavaAnnotation.class);
+            visitor.visit( annotation );
             fail( "Visiting an annotation is not supported and should throw an UnsupportedOperationException" );
         }
         catch (UnsupportedOperationException e) {
@@ -331,35 +333,50 @@ public class EvaluatingVisitorTest
     }
 
     @Test
-    public void testVisitCast()
+    public void testVisitCast() throws Exception
     {
         AnnotationValue value = mock( AnnotationValue.class );
         when( value.accept( visitor ) ).thenReturn( 7 );
 
-        assertEquals( (byte) 7, visitor.visit( new Cast( new Type( "byte" ), value ) ) );
-        assertEquals( (char) 7, visitor.visit( new Cast( new Type( "char" ), value ) ) );
-        assertEquals( (short) 7, visitor.visit( new Cast( new Type( "short" ), value ) ) );
-        assertEquals( (int) 7, visitor.visit( new Cast( new Type( "int" ), value ) ) );
-        assertEquals( (long) 7, visitor.visit( new Cast( new Type( "long" ), value ) ) );
-        assertEquals( (float) 7, visitor.visit( new Cast( new Type( "float" ), value ) ) );
-        assertEquals( (double) 7, visitor.visit( new Cast( new Type( "double" ), value ) ) );
+        JavaClass primitiveClass = mock( JavaClass.class );
+        when( primitiveClass.isPrimitive() ).thenReturn( true );
+
+        when( primitiveClass.getFullyQualifiedName() ).thenReturn( "byte" );
+        assertEquals( (byte) 7, visitor.visit( new Cast( primitiveClass, value ) ) );
+        when( primitiveClass.getFullyQualifiedName() ).thenReturn( "char" );
+        assertEquals( (char) 7, visitor.visit( new Cast( primitiveClass, value ) ) );
+        when( primitiveClass.getFullyQualifiedName() ).thenReturn( "short" );
+        assertEquals( (short) 7, visitor.visit( new Cast( primitiveClass, value ) ) );
+        when( primitiveClass.getFullyQualifiedName() ).thenReturn( "int" );
+        assertEquals( (int) 7, visitor.visit( new Cast( primitiveClass, value ) ) );
+        when( primitiveClass.getFullyQualifiedName() ).thenReturn( "long" );
+        assertEquals( (long) 7, visitor.visit( new Cast( primitiveClass, value ) ) );
+        when( primitiveClass.getFullyQualifiedName() ).thenReturn( "float" );
+        assertEquals( (float) 7, visitor.visit( new Cast( primitiveClass, value ) ) );
+        when( primitiveClass.getFullyQualifiedName() ).thenReturn( "double" );
+        assertEquals( (double) 7, visitor.visit( new Cast( primitiveClass, value ) ) );
 
         try
         {
-            visitor.visit( new Cast( new Type( "void" ), value ) );
-            fail("Although 'void' is a primitive, you can't cast to it");
-        }
-        catch( IllegalArgumentException iae) 
-        {            
-        }
-        
-        when( value.accept( visitor ) ).thenReturn( "hello world" );
-        assertEquals( (String) "hello world", visitor.visit( new Cast( new Type( "java.lang.String" ), value ) ) );
+            when( primitiveClass.getFullyQualifiedName() ).thenReturn( "void" );
+            visitor.visit( new Cast( primitiveClass, value ) );
 
+            fail( "Although 'void' is a primitive, you can't cast to it" );
+        }
+        catch ( IllegalArgumentException iae )
+        {
+        }
+
+        JavaClass stringClass = mock( JavaClass.class );
+        when( stringClass.getFullyQualifiedName() ).thenReturn( "java.lang.String" );
+        when( value.accept( visitor ) ).thenReturn( "hello world" );
+        assertEquals( (String) "hello world", visitor.visit( new Cast( stringClass, value ) ) );
+
+        JavaClass listClass = mock( JavaClass.class );
+        when( listClass.getFullyQualifiedName() ).thenReturn( "java.util.List" );
         Object list = Collections.EMPTY_LIST;
         when( value.accept( visitor ) ).thenReturn( list );
-        assertEquals( (List<?>) list, visitor.visit( new Cast( new Type( "java.util.List" ), value ) ) );
-
+        assertEquals( (List<?>) list, visitor.visit( new Cast( listClass, value ) ) );
     }
     
     @Test

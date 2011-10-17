@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -25,7 +25,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.thoughtworks.qdox.model.impl.AbstractBaseMethod;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.JavaParameterizedType;
+import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.JavaTypeVariable;
 
 public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> extends AbstractBaseMethod<T> implements JavaMethod {
 

@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.thoughtworks.qdox.model.impl.Type;
+
 public abstract class JavaConstructorTest<D extends JavaConstructor>
 {
     

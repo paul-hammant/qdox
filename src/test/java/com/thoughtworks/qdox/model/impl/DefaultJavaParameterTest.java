@@ -1,4 +1,9 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
+
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameterTest;
+import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
+import com.thoughtworks.qdox.model.impl.Type;
 
 public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParameter>
 {

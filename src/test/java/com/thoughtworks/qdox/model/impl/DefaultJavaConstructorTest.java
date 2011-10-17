@@ -1,7 +1,12 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 import static org.mockito.Mockito.*;
 import java.util.List;
+
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructorTest;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.impl.DefaultJavaConstructor;
 
 
 public class DefaultJavaConstructorTest extends JavaConstructorTest<DefaultJavaConstructor>

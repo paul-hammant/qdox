@@ -1,10 +1,15 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.thoughtworks.qdox.model.impl.AbstractBaseMethod;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.JavaParameterizedType;
+import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.JavaTypeVariable;
 
 /**
  * 

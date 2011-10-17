@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,9 +26,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
-import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
-import com.thoughtworks.qdox.model.impl.JavaClassParent;
+import com.thoughtworks.qdox.model.BeanProperty;
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaAnnotation;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
+import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaGenericDeclaration;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.JavaParameterizedType;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.JavaTypeVariable;
 
 public class Type implements JavaClass, JavaType, JavaParameterizedType, Serializable {
 

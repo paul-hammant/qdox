@@ -1,6 +1,12 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 import java.util.List;
+
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethodTest;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.impl.DefaultJavaMethod;
+import com.thoughtworks.qdox.model.impl.Type;
 
 public class DefaultJavaMethodTest
     extends JavaMethodTest<DefaultJavaMethod>

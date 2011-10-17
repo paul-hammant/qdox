@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.Type;
 import com.thoughtworks.qdox.model.impl.DefaultJavaWildcardType;
 import com.thoughtworks.qdox.model.impl.JavaClassParent;
+import com.thoughtworks.qdox.model.impl.Type;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 

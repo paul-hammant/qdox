@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.qdox.model.impl.Type;
+
 import junit.framework.TestCase;
 
 public abstract class JavaClassTest<C extends JavaClass> extends TestCase {

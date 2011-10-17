@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import static org.hamcrest.core.IsNot.*;
 import org.junit.Test;
 
+import com.thoughtworks.qdox.model.impl.Type;
+
 public abstract class JavaTypeTest<T extends JavaType>
 {
 

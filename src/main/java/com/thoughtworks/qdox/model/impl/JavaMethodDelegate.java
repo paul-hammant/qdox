@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,6 +21,15 @@ package com.thoughtworks.qdox.model;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaAnnotation;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.JavaTypeVariable;
 
 /**
  * This class can be used to access overridden methods while keeping a reference to the original class.

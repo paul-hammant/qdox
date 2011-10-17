@@ -5,7 +5,6 @@ import java.util.List;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaFieldTest;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.Type;
 
 public class DefaultJavaFieldTest
     extends JavaFieldTest<DefaultJavaField>

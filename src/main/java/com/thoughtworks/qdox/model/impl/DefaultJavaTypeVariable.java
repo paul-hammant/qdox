@@ -28,7 +28,6 @@ import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
-import com.thoughtworks.qdox.model.Type;
 
 /**
  * @author Robert Scholte

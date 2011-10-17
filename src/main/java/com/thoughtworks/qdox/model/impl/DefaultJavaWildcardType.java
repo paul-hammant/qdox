@@ -1,7 +1,6 @@
 package com.thoughtworks.qdox.model.impl;
 
 import com.thoughtworks.qdox.model.JavaWildcardType;
-import com.thoughtworks.qdox.model.Type;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

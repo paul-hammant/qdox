@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -12,7 +12,11 @@ import org.junit.Test;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.library.ClassLoaderLibrary;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.JavaTypeTest;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
+import com.thoughtworks.qdox.model.impl.Type;
 
 
 public class DefaultTypeTest extends JavaTypeTest<Type>

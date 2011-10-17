@@ -2,6 +2,9 @@ package com.thoughtworks.qdox.model;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import com.thoughtworks.qdox.model.impl.Type;
+
 import junit.framework.TestCase;
 
 public abstract class JavaParameterTest<P extends JavaParameter>

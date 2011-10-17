@@ -3,9 +3,9 @@ package com.thoughtworks.qdox.traversal;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.JavaProjectBuilder;
-import com.thoughtworks.qdox.model.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.impl.AbstractBaseMethod;
+import com.thoughtworks.qdox.model.impl.DefaultJavaMethod;
 
 public class TraversalTest extends TestCase {
 

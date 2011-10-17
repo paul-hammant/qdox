@@ -5,6 +5,8 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.thoughtworks.qdox.model.impl.Type;
+
 import junit.framework.TestCase;
 
 public abstract class JavaFieldTest<F extends JavaField> extends TestCase {

@@ -7,19 +7,15 @@ import java.util.Collections;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.library.ClassLoaderLibrary;
+public abstract class JavaTypeTest<T extends JavaType> extends TestCase {
 
-public abstract class TypeTest extends TestCase {
-
-    public TypeTest(String s) {
+    public JavaTypeTest(String s) {
         super(s);
     }
     
-    public abstract JavaSource newJavaSource( ClassLibrary library );
-    public abstract Type newType(String fullname);
-    public abstract Type newType(String fullname, int dimensions);
-    public abstract Type newType(String fullname, int dimensions, JavaSource source);
+    public abstract T newType(String fullname);
+    public abstract T newType(String fullname, int dimensions);
+    public abstract T newType(String fullname, int dimensions, JavaSource source);
     
     public void testResolving() throws Exception {
         JavaSource src = mock(JavaSource.class);
@@ -31,11 +27,6 @@ public abstract class TypeTest extends TestCase {
         assertEquals(true, type.isResolved());
         assertEquals("Bar", type.getValue());
         assertEquals("foo.Bar", type.getFullyQualifiedName());
-    }
-
-    public void testArrayType() throws Exception {
-        Type type = newType("int", 1);
-        assertTrue(type.isArray());
     }
 
     public void testToString() throws Exception {
@@ -50,12 +41,6 @@ public abstract class TypeTest extends TestCase {
         assertEquals("long[][][]", newType("long", 3).getFullyQualifiedName());
     }
 
-    public void testComponentType() throws Exception {
-        assertNull( newType("int").getComponentType());
-        assertEquals("int", newType("int", 1).getComponentType().getFullyQualifiedName());
-        assertEquals("long", newType("long", 3).getComponentType().getFullyQualifiedName());
-    }
-
     public void testEquals() throws Exception {
         assertEquals(newType("string"),
                 newType("string"));
@@ -66,15 +51,6 @@ public abstract class TypeTest extends TestCase {
         assertNotEquals(newType("long"),
                 newType("long", 2));
         assertFalse(newType("int").equals(null));
-    }
-
-    public void testTypeHasJavaClass() {
-        ClassLoaderLibrary library = new ClassLoaderLibrary( null );
-        library.addDefaultLoader();
-        JavaSource javaSource = newJavaSource(library);
-        JavaClass clazz = newType("java.util.HashSet", 0, javaSource);
-        JavaClass superClass = clazz.getSuperJavaClass();
-        assertEquals("java.util.AbstractSet", superClass.getFullyQualifiedName());
     }
 
     public void testToStringVoid() {

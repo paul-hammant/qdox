@@ -5,12 +5,12 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.library.ClassNameLibrary;
-import com.thoughtworks.qdox.model.DefaultDocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.impl.DefaultDocletTagFactory;
 import com.thoughtworks.qdox.model.impl.Type;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;

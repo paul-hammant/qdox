@@ -1,7 +1,8 @@
-package com.thoughtworks.qdox.model;
+package com.thoughtworks.qdox.model.impl;
 
-import com.thoughtworks.qdox.model.impl.AbstractJavaModel;
-import com.thoughtworks.qdox.model.impl.DefaultDocletTag;
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.DocletTagFactory;
+import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

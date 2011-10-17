@@ -809,14 +809,4 @@ public class ModelBuilderTest extends TestCase {
         assertEquals("java.util.List", result.getImports().get(1));
         assertEquals("org.apache.*", result.getImports().get(2));
     }
-
-    public void testType() {
-        Type type1 = new Type("fred", 1);
-        Type type2 = new Type("fred", 1);
-        Type type3 = new Type("wilma", 2);
-        assertTrue( type1.equals(type2) );
-        assertFalse( type1.equals(type3) );
-    }
-
-
 }

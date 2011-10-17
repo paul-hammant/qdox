@@ -12,11 +12,6 @@ public class DefaultJavaMethodTest
     extends JavaMethodTest<DefaultJavaMethod>
 {
 
-    public DefaultJavaMethodTest( String s )
-    {
-        super( s );
-    }
-
     public DefaultJavaMethod newJavaMethod()
     {
         return new DefaultJavaMethod();

@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model;
 
+import static org.hamcrest.core.IsNot.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -91,13 +92,8 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         D c4 = newJavaConstructor( "Thong" );
         setParentClass( c4, mock( JavaClass.class ) );
 
-        assertNotEquals( c1, c2 );
+        assertThat( c1, not(c2) );
         assertEquals( c2, c3 );
-        assertNotEquals( c3, c4 );
-    }
-
-    private void assertNotEquals( Object o1, Object o2 )
-    {
-        assertTrue( o1.toString() + " should not equals " + o2.toString(), !o1.equals( o2 ) );
+        assertThat( c3, not(c4) );
     }
 }

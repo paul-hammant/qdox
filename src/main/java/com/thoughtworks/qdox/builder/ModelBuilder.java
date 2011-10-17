@@ -357,7 +357,7 @@ public class ModelBuilder implements Builder {
         {
             return null;
         }
-        DefaultJavaTypeVariable<G> result = new DefaultJavaTypeVariable<G>( null, typeVariableDef.getName(), genericDeclaration );
+        DefaultJavaTypeVariable<G> result = new DefaultJavaTypeVariable<G>( typeVariableDef.getName(), genericDeclaration );
 
         if ( typeVariableDef.getBounds() != null && !typeVariableDef.getBounds().isEmpty() )
         {

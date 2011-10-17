@@ -42,9 +42,9 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     
     private D genericDeclaration;
 
-    public DefaultJavaTypeVariable( String fullName, String name, D genericDeclaration )
+    public DefaultJavaTypeVariable( String name, D genericDeclaration )
     {
-        super( fullName, name, 0, getContext( genericDeclaration ) );
+        super( name, getContext( genericDeclaration ) );
         this.genericDeclaration = genericDeclaration;
     }
 

@@ -41,10 +41,11 @@ public class DefaultJavaWildcardType extends Type implements JavaWildcardType {
 		super("?");
 	}
 	
-	public DefaultJavaWildcardType(String name, String wildcardExpressionType, JavaClassParent context) {
-		super(null, name, 0, context);
-		this.wildcardExpressionType = wildcardExpressionType;
-	}
+    public DefaultJavaWildcardType( String name, String wildcardExpressionType, JavaClassParent context )
+    {
+        super( name, context );
+        this.wildcardExpressionType = wildcardExpressionType;
+    }
 
 	public String getGenericValue() {
 		String result = "";

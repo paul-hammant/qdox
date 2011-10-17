@@ -40,6 +40,12 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
     private int dimensions;
     private List<JavaType> actualArgumentTypes = Collections.emptyList();
     
+    public Type( String name, JavaClassParent context )
+    {
+        this.name = name;
+        this.context = context;
+    }
+    
     public Type(String fullName, String name, int dimensions, JavaClassParent context) {
         this.fullName = fullName;
         this.name = name;

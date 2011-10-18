@@ -54,16 +54,6 @@ public class DefaultTypeTest extends JavaTypeTest<Type>
         assertEquals("int", newType("int", 1).getComponentType().getFullyQualifiedName());
         assertEquals("long", newType("long", 3).getComponentType().getFullyQualifiedName());
     }
-
-   @Test
-   public void testTypeHasJavaClass() {
-        ClassLoaderLibrary library = new ClassLoaderLibrary( null );
-        library.addDefaultLoader();
-        JavaSource javaSource = newJavaSource(library);
-        JavaClass clazz = newType("java.util.HashSet", 0, javaSource);
-        JavaClass superClass = clazz.getSuperJavaClass();
-        assertEquals("java.util.AbstractSet", superClass.getFullyQualifiedName());
-    }
     
     @Test
     public void testResolving() throws Exception {

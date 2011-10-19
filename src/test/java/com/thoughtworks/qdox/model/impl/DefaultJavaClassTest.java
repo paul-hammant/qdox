@@ -60,7 +60,7 @@ public class DefaultJavaClassTest
         clazz.setEnum( isEnum );
     }
 
-    public void setImplementz( DefaultJavaClass clazz, List<Type> implementz )
+    public void setImplementz( DefaultJavaClass clazz, List<DefaultJavaType> implementz )
     {
         clazz.setImplementz( implementz );
     }
@@ -90,7 +90,7 @@ public class DefaultJavaClassTest
         ((DefaultJavaSource) source).setPackage( pckg );
     }
 
-    public void setSuperClass( DefaultJavaClass clazz, Type type )
+    public void setSuperClass( DefaultJavaClass clazz, DefaultJavaType type )
     {
         clazz.setSuperClass( type );
     }

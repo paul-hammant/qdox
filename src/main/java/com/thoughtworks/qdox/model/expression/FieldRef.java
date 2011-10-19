@@ -27,7 +27,7 @@ import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMember;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 public class FieldRef
     implements AnnotationValue
@@ -178,7 +178,7 @@ public class FieldRef
 
                     if ( typeName != null )
                     {
-                        JavaClass javaClass = Type.createUnresolved( typeName, 0, baseClass );
+                        JavaClass javaClass = DefaultJavaType.createUnresolved( typeName, 0, baseClass );
                         if ( javaClass != null )
                         {
                             fieldIndex = i + 1;

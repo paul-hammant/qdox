@@ -34,7 +34,7 @@ import com.thoughtworks.qdox.model.JavaTypeVariable;
 
 public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> extends AbstractBaseMethod<T> implements JavaMethod {
 
-	private T returns = (T) Type.VOID;
+	private T returns = (T) DefaultJavaType.VOID;
     private List<JavaTypeVariable<JavaMethod>> typeParameters = Collections.emptyList();
 	
     /**
@@ -363,7 +363,7 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
                 result.append( "," );
             }
             JavaType originalType = getParameters().get( paramIndex ).getType();
-            JavaTypeVariable<?> typeVariable = Type.resolve( originalType, getTypeParameters() );
+            JavaTypeVariable<?> typeVariable = DefaultJavaType.resolve( originalType, getTypeParameters() );
             result.append( typeVariable == null ? originalType.getFullyQualifiedName() : typeVariable.getBounds().get( 0 ).getFullyQualifiedName() );
         }
         result.append( ")" );

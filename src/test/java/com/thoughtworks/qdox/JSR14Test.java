@@ -15,7 +15,7 @@ import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
 import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 /**
  * QDOX-54 Support for retrieval of generic type information (JSR 14)
  * 

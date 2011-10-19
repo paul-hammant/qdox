@@ -5,7 +5,7 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
 
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 import junit.framework.TestCase;
 
@@ -17,24 +17,24 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
     
     //constructors
     public abstract F newJavaField();
-    public abstract F newJavaField(Type type, String name);
+    public abstract F newJavaField(DefaultJavaType type, String name);
     
     //setters
     public abstract void setComment(F fld, String comment);
     public abstract void setInitializationExpression(F fld, String expression);
     public abstract void setModifiers(F fld, List<String> modifiers);
     public abstract void setName(F fld, String name);
-    public abstract void setType(F fld, Type type);
+    public abstract void setType(F fld, DefaultJavaType type);
     public abstract void setDeclaringClass(F fld, JavaClass cls);
     
-    public Type newType( String fullname )
+    public DefaultJavaType newType( String fullname )
     {
         return newType( fullname, 0 );
     }
 
-    public Type newType(String fullname, int dimensions) 
+    public DefaultJavaType newType(String fullname, int dimensions) 
     {
-        Type result = mock( Type.class );
+        DefaultJavaType result = mock( DefaultJavaType.class );
         when( result.getFullyQualifiedName() ).thenReturn( fullname );
         String canonicalName = fullname.replace( '$', '.' );
         when( result.getValue() ).thenReturn( canonicalName );

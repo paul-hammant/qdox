@@ -34,7 +34,7 @@ import com.thoughtworks.qdox.model.JavaTypeVariable;
  * @since 1.10
  */
 public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
-    extends Type implements JavaTypeVariable<D>
+    extends DefaultJavaType implements JavaTypeVariable<D>
 {
 
     private List<JavaType> bounds;

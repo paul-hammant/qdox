@@ -125,12 +125,12 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
      * @see com.thoughtworks.qdox.model.JavaParameter#getResolvedValue()
      */
     public String getResolvedValue() {
-        return Type.getResolvedValue( type, getParentMethod().getTypeParameters() );
+        return DefaultJavaType.getResolvedValue( type, getParentMethod().getTypeParameters() );
     }
 
     public String getResolvedFullyQualifiedName() 
     {
-        return Type.getResolvedFullyQualifiedName( type, getParentMethod().getTypeParameters() );
+        return DefaultJavaType.getResolvedFullyQualifiedName( type, getParentMethod().getTypeParameters() );
     }
     
 	/* (non-Javadoc)
@@ -138,12 +138,12 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
      */
 	public String getResolvedGenericValue() 
 	{
-		return Type.getResolvedGenericValue( type, getParentMethod().getTypeParameters() );
+		return DefaultJavaType.getResolvedGenericValue( type, getParentMethod().getTypeParameters() );
 	}
 	
 	public String getResolvedGenericFullyQualifiedName()
 	{
-	    return Type.getResolvedGenericFullyQualifiedName( type, getParentMethod().getTypeParameters() );
+	    return DefaultJavaType.getResolvedGenericFullyQualifiedName( type, getParentMethod().getTypeParameters() );
 	}
 
     @Override

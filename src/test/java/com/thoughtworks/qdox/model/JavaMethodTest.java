@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 import junit.framework.TestCase;
 
@@ -22,7 +22,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
 
     //constructors
     public abstract M newJavaMethod();
-    public abstract M newJavaMethod(Type returns, String name);
+    public abstract M newJavaMethod(DefaultJavaType returns, String name);
 
     //setters
     public abstract void setExceptions(M method, List<JavaClass> exceptions);
@@ -31,16 +31,16 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     public abstract void setModifiers(M method, List<String> modifiers);
     public abstract void setParameters(M method, List<JavaParameter> parameters);
     public abstract void setParentClass(M method, JavaClass clazz);
-    public abstract void setReturns(M method, Type type);
+    public abstract void setReturns(M method, DefaultJavaType type);
     public abstract void setSourceCode(M method, String code);
     
     
-    public JavaParameter newJavaParameter(Type type, String name)
+    public JavaParameter newJavaParameter(DefaultJavaType type, String name)
     {
         return newJavaParameter( type, name, false );
     }
     
-    public JavaParameter newJavaParameter(Type type, String name, boolean varArgs) 
+    public JavaParameter newJavaParameter(DefaultJavaType type, String name, boolean varArgs) 
     {
         JavaParameter result = mock(JavaParameter.class);
         when( result.getType() ).thenReturn( type );
@@ -49,14 +49,14 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         return result;
     }
     
-    public Type newType( String fullname )
+    public DefaultJavaType newType( String fullname )
     {
         return newType( fullname, 0 );
     }
 
-    public Type newType(String fullname, int dimensions) 
+    public DefaultJavaType newType(String fullname, int dimensions) 
     {
-        Type result = mock( Type.class );
+        DefaultJavaType result = mock( DefaultJavaType.class );
         when( result.getFullyQualifiedName() ).thenReturn( fullname );
         String canonicalName = fullname.replace( '$', '.' );
         when( result.getValue() ).thenReturn( canonicalName );
@@ -227,7 +227,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     
     @Test
     public void testEquals() throws Exception {
-        Type voidType = newType("void");
+        DefaultJavaType voidType = newType("void");
 
         setName(mth, "thing");
         setReturns(mth, voidType);
@@ -270,10 +270,10 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
 
     @Test
     public void testEqualsWithParameters() throws Exception {
-        Type voidType = newType("void");
-        Type intArrayType = newType("int", 1);
-        Type stringArrayType = newType("java.lang.String", 2);
-        Type xArrayType = newType("X", 3);
+        DefaultJavaType voidType = newType("void");
+        DefaultJavaType intArrayType = newType("int", 1);
+        DefaultJavaType stringArrayType = newType("java.lang.String", 2);
+        DefaultJavaType xArrayType = newType("X", 3);
 
         JavaParameter intArrayParam = newJavaParameter(intArrayType, "blah");
         JavaParameter stringArrayParam = newJavaParameter(stringArrayType, "thing");
@@ -310,12 +310,12 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     public void testHashCode()
         throws Exception
     {
-        assertTrue( "hashCode should never resolve to 0", newJavaMethod( Type.VOID, "" ).hashCode() != 0 );
+        assertTrue( "hashCode should never resolve to 0", newJavaMethod( DefaultJavaType.VOID, "" ).hashCode() != 0 );
 
-        Type voidType = newType( "void" );
-        Type intType = newType( "int", 1 );
-        Type stringArrayType = newType( "java.lang.String", 2 );
-        Type xArrayType = newType( "X", 3 );
+        DefaultJavaType voidType = newType( "void" );
+        DefaultJavaType intType = newType( "int", 1 );
+        DefaultJavaType stringArrayType = newType( "java.lang.String", 2 );
+        DefaultJavaType xArrayType = newType( "X", 3 );
 
         JavaParameter intParam = newJavaParameter( intType, "blah" );
         JavaParameter stringArrayParam = newJavaParameter( stringArrayType, "thing" );
@@ -341,24 +341,24 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
 
     @Test
    public void testSignatureMatches() throws Exception {
-        Type intType = newType("int");
-        Type longArrayType = newType("long", 2);
+        DefaultJavaType intType = newType("int");
+        DefaultJavaType longArrayType = newType("long", 2);
 
         setName(mth, "thing");
         setParameters(mth, Arrays.asList( newJavaParameter(intType, "x"), newJavaParameter(longArrayType, "y") ));
         setReturns(mth, newType("void"));
 
-        JavaType[] correctTypes = new Type[]{
+        JavaType[] correctTypes = new DefaultJavaType[]{
             intType,
             longArrayType
         };
 
-        JavaType[] wrongTypes1 = new Type[]{
+        JavaType[] wrongTypes1 = new DefaultJavaType[]{
             newType("int", 2),
             newType("long")
         };
 
-        JavaType[] wrongTypes2 = new Type[]{
+        JavaType[] wrongTypes2 = new DefaultJavaType[]{
             intType,
             longArrayType,
             newType("double")
@@ -372,24 +372,24 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     
     @Test
     public void testVarArgSignatureMatches() throws Exception {
-        Type intType = newType("int");
-        Type longArrayType = newType("long", 2);
+        DefaultJavaType intType = newType("int");
+        DefaultJavaType longArrayType = newType("long", 2);
 
         setName(mth, "thing");
         setParameters(mth, Arrays.asList( newJavaParameter(intType, "x"), newJavaParameter(longArrayType, "y", true) ));
         setReturns(mth, newType("void"));
 
-        JavaType[] correctTypes = new Type[]{
+        JavaType[] correctTypes = new DefaultJavaType[]{
             intType,
             longArrayType
         };
 
-        JavaType[] wrongTypes1 = new Type[]{
+        JavaType[] wrongTypes1 = new DefaultJavaType[]{
             newType("int", 2),
             newType("long")
         };
 
-        JavaType[] wrongTypes2 = new Type[]{
+        JavaType[] wrongTypes2 = new DefaultJavaType[]{
             intType,
             longArrayType,
             newType("double")

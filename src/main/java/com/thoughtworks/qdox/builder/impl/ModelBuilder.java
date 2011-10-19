@@ -48,7 +48,7 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
 import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -218,7 +218,7 @@ public class ModelBuilder implements Builder {
      * @param dimensions
      * @return the Type
      */
-    private Type createType( TypeDef typeDef, int dimensions )
+    private DefaultJavaType createType( TypeDef typeDef, int dimensions )
     {
         if ( typeDef == null )
         {

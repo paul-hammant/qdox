@@ -1,7 +1,7 @@
 package com.thoughtworks.qdox.model.expression;
 
 import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

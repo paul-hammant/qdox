@@ -70,7 +70,7 @@ public class DefaultJavaConstructor<T extends JavaClass & JavaParameterizedType>
         result.append( "(" );
         for ( Iterator<JavaParameter> paramIter = getParameters().iterator(); paramIter.hasNext();)
         {
-            String typeValue = Type.getResolvedValue( paramIter.next().getType(), getTypeParameters() );
+            String typeValue = DefaultJavaType.getResolvedValue( paramIter.next().getType(), getTypeParameters() );
             result.append( typeValue );
             if ( paramIter.hasNext() )
             {

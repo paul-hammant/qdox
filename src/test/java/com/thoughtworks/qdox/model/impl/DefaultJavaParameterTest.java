@@ -3,7 +3,7 @@ package com.thoughtworks.qdox.model.impl;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameterTest;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParameter>
 {
@@ -14,13 +14,13 @@ public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParam
     }
 
     @Override
-    protected DefaultJavaParameter newJavaParameter( Type type, String name )
+    protected DefaultJavaParameter newJavaParameter( DefaultJavaType type, String name )
     {
         return new DefaultJavaParameter( type, name );
     }
 
     @Override
-    protected DefaultJavaParameter newJavaParameter( Type type, String name, boolean varArgs )
+    protected DefaultJavaParameter newJavaParameter( DefaultJavaType type, String name, boolean varArgs )
     {
         return new DefaultJavaParameter( type, name, varArgs );
     }

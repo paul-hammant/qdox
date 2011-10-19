@@ -6,12 +6,12 @@ import java.util.List;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.impl.DefaultJavaWildcardType;
 import com.thoughtworks.qdox.model.impl.JavaClassParent;
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
 
 /**
- * An assembler to transform a {@link TypeDef} to a {@link Type}
+ * An assembler to transform a {@link TypeDef} to a {@link DefaultJavaType}
  * 
  * @author Robert Scholte
  * @since 2.0
@@ -31,9 +31,9 @@ public final class TypeAssembler
      * @param context
      * @return the Type
      */
-    public static Type createUnresolved( TypeDef typeDef, int dimensions, JavaClassParent context )
+    public static DefaultJavaType createUnresolved( TypeDef typeDef, int dimensions, JavaClassParent context )
     {
-        Type result;
+        DefaultJavaType result;
         if ( typeDef instanceof WildcardTypeDef )
         {
             WildcardTypeDef wildcard = (WildcardTypeDef) typeDef;
@@ -41,7 +41,7 @@ public final class TypeAssembler
         }
         else
         {
-            Type typeResult = Type.createUnresolved( typeDef.getName(), typeDef.getDimensions() + dimensions, context );
+            DefaultJavaType typeResult = DefaultJavaType.createUnresolved( typeDef.getName(), typeDef.getDimensions() + dimensions, context );
             if ( typeDef.getActualArgumentTypes() != null && !typeDef.getActualArgumentTypes().isEmpty() )
             {
                 List<JavaType> actualArgumentTypes = new LinkedList<JavaType>();
@@ -61,7 +61,7 @@ public final class TypeAssembler
      * @param context the context
      * @return the Type
      */
-    public static Type createUnresolved( TypeDef typeDef, JavaClassParent context )
+    public static DefaultJavaType createUnresolved( TypeDef typeDef, JavaClassParent context )
     {
         return createUnresolved( typeDef, 0, context );
     }

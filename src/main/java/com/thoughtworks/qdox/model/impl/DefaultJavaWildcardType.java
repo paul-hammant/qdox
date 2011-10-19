@@ -29,7 +29,7 @@ import com.thoughtworks.qdox.model.JavaWildcardType;
  * @author Robert Scholte
  *
  */
-public class DefaultJavaWildcardType extends Type implements JavaWildcardType {
+public class DefaultJavaWildcardType extends DefaultJavaType implements JavaWildcardType {
 
     /**
      * A wildcardExpression is either <code>super</code> or <code>extends</code> or <code>null</code>

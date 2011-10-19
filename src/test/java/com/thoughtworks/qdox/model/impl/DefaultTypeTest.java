@@ -16,10 +16,10 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaTypeTest;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 
-public class DefaultTypeTest extends JavaTypeTest<Type>
+public class DefaultTypeTest extends JavaTypeTest<DefaultJavaType>
 {
 
     public JavaSource newJavaSource( ClassLibrary library )
@@ -27,24 +27,24 @@ public class DefaultTypeTest extends JavaTypeTest<Type>
         return new DefaultJavaSource(library);
     }
 
-    public Type newType( String fullname )
+    public DefaultJavaType newType( String fullname )
     {
-        return new Type(fullname);
+        return new DefaultJavaType(fullname);
     }
 
-    public Type newType( String fullname, int dimensions )
+    public DefaultJavaType newType( String fullname, int dimensions )
     {
-        return new Type(fullname, dimensions);
+        return new DefaultJavaType(fullname, dimensions);
     }
 
-    public Type newType( String fullname, int dimensions, JavaSource source )
+    public DefaultJavaType newType( String fullname, int dimensions, JavaSource source )
     {
-        return new Type(fullname, dimensions, source);
+        return new DefaultJavaType(fullname, dimensions, source);
     }
     
     @Test
     public void testArrayType() throws Exception {
-        Type type = newType("int", 1);
+        DefaultJavaType type = newType("int", 1);
         assertTrue(type.isArray());
     }
 
@@ -59,7 +59,7 @@ public class DefaultTypeTest extends JavaTypeTest<Type>
     public void testResolving() throws Exception {
         JavaSource src = mock(JavaSource.class);
         when(src.getImports()).thenReturn( Collections.singletonList( "foo.*" ) );
-        Type type = Type.createUnresolved("Bar", 0, src);
+        DefaultJavaType type = DefaultJavaType.createUnresolved("Bar", 0, src);
         assertEquals(false, type.isResolved());
         
         when(src.resolveType( "Bar" )).thenReturn( "foo.Bar" );

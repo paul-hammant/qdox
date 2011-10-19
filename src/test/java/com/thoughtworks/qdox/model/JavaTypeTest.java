@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.core.IsNot.*;
 import org.junit.Test;
 
-import com.thoughtworks.qdox.model.impl.Type;
+import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 public abstract class JavaTypeTest<T extends JavaType>
 {
@@ -45,7 +45,7 @@ public abstract class JavaTypeTest<T extends JavaType>
     @Test
     public void testToStringVoid()
     {
-        assertEquals( "void", Type.VOID.toString() );
+        assertEquals( "void", DefaultJavaType.VOID.toString() );
     }
 
     @Test

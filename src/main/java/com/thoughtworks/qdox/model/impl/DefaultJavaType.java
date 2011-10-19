@@ -40,9 +40,9 @@ import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
 
-public class Type implements JavaClass, JavaType, JavaParameterizedType, Serializable {
+public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedType, Serializable {
 
-    public static final Type VOID = new Type("void");
+    public static final DefaultJavaType VOID = new DefaultJavaType("void");
 
     private String name;
     private JavaClassParent context;
@@ -50,24 +50,24 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
     private int dimensions;
     private List<JavaType> actualArgumentTypes = Collections.emptyList();
     
-    public Type( String name, JavaClassParent context )
+    public DefaultJavaType( String name, JavaClassParent context )
     {
         this.name = name;
         this.context = context;
     }
     
-    public Type(String fullName, String name, int dimensions, JavaClassParent context) {
+    public DefaultJavaType(String fullName, String name, int dimensions, JavaClassParent context) {
         this.fullName = fullName;
         this.name = name;
         this.dimensions = dimensions;
         this.context = context;
     }
     
-    public Type(String fullName, int dimensions, JavaClassParent context) {
+    public DefaultJavaType(String fullName, int dimensions, JavaClassParent context) {
         this(fullName, (String) null, dimensions, context);
     }
 
-    public Type(String fullName, int dimensions) {
+    public DefaultJavaType(String fullName, int dimensions) {
         this(fullName, dimensions, null);
     }
 
@@ -76,13 +76,13 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
      * 
      * @param fullName the name of the primitive
      */
-    public Type( String fullName ) 
+    public DefaultJavaType( String fullName ) 
     {
         this( fullName, 0 );
     }
     
-	public static Type createUnresolved(String name, int dimensions, JavaClassParent context) {
-        return new Type(null, name, dimensions, context);
+	public static DefaultJavaType createUnresolved(String name, int dimensions, JavaClassParent context) {
+        return new DefaultJavaType(null, name, dimensions, context);
     }
     
     /**
@@ -186,7 +186,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         StringBuffer result = new StringBuffer( getResolvedValue( base, typeVariableList ) );
         for ( Iterator<JavaType> iter = getActualTypeArguments( base ).iterator(); iter.hasNext(); )
         {
-            result.append( Type.resolve( base, typeVariableList ) );
+            result.append( DefaultJavaType.resolve( base, typeVariableList ) );
             if ( iter.hasNext() )
             {
                 result.append( "," );
@@ -360,7 +360,7 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
     /**
      * @since 1.3
      */
-    public boolean isA( Type type )
+    public boolean isA( DefaultJavaType type )
     {
         if ( this == type )
         {
@@ -479,9 +479,9 @@ public class Type implements JavaClass, JavaType, JavaParameterizedType, Seriali
         List<JavaType> actualTypeArguments = getActualTypeArguments(base); 
         if ( !actualTypeArguments.isEmpty() )
         {
-            Type typeResult =
-                new Type( base.getFullyQualifiedName(), base.getValue(), ((Type)base).getDimensions(),
-                          ((Type)base).getJavaClassParent() );
+            DefaultJavaType typeResult =
+                new DefaultJavaType( base.getFullyQualifiedName(), base.getValue(), ((DefaultJavaType)base).getDimensions(),
+                          ((DefaultJavaType)base).getJavaClassParent() );
 
             List<JavaType> actualTypes = new LinkedList<JavaType>();
             for ( JavaType actualArgType : actualTypeArguments )

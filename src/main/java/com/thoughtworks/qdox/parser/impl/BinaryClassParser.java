@@ -36,13 +36,13 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 public class BinaryClassParser
 {
-    private Class<?> clazz;
+    private Class<?> declaringClazz;
 
     private ModelBuilder binaryBuilder;
 
-    public BinaryClassParser( Class<?> clazz, ModelBuilder modelBuilder )
+    public BinaryClassParser( Class<?> declaringClazz, ModelBuilder modelBuilder )
     {
-        this.clazz = clazz;
+        this.declaringClazz = declaringClazz;
         this.binaryBuilder = modelBuilder;
     }
 
@@ -50,74 +50,13 @@ public class BinaryClassParser
     {
         try
         {
-            String name = clazz.getName();
+            String name = declaringClazz.getName();
 
             // Set the package name and class name
             String packageName = getPackageName( name );
             binaryBuilder.addPackage( new PackageDef( packageName ) );
 
-            ClassDef classDef = new ClassDef( getClassName( name ) );
-
-            // Set the extended class and interfaces.
-            Class<?>[] interfaces = clazz.getInterfaces();
-            if ( clazz.isInterface() )
-            {
-                // It's an interface
-                classDef.setType( ClassDef.INTERFACE );
-                for ( int i = 0; i < interfaces.length; i++ )
-                {
-                    Class<?> anInterface = interfaces[i];
-                    classDef.getExtends().add( new TypeDef( anInterface.getName() ) );
-                }
-            }
-            else
-            {
-                // It's a class
-                for ( int i = 0; i < interfaces.length; i++ )
-                {
-                    Class<?> anInterface = interfaces[i];
-                    classDef.getImplements().add( new TypeDef( anInterface.getName() ) );
-                }
-                Class<?> superclass = clazz.getSuperclass();
-                if ( superclass != null )
-                {
-                    classDef.getExtends().add( new TypeDef( superclass.getName() ) );
-                }
-            }
-
-            addModifiers( classDef.getModifiers(), clazz.getModifiers() );
-
-            binaryBuilder.beginClass( classDef );
-
-            // add the constructors
-            //
-            // This also adds the default constructor if any which is different
-            // to the source code as that does not create a default constructor
-            // if no constructor exists.
-            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-            for ( int i = 0; i < constructors.length; i++ )
-            {
-                binaryBuilder.beginConstructor();
-                MethodDef methodDef = createMethodDef( constructors[i], binaryBuilder );
-                binaryBuilder.endConstructor( methodDef );
-            }
-
-            // add the methods
-            Method[] methods = clazz.getDeclaredMethods();
-            for ( int i = 0; i < methods.length; i++ )
-            {
-                binaryBuilder.beginMethod();
-                MethodDef methodDef = createMethodDef( methods[i], binaryBuilder );
-                binaryBuilder.endMethod( methodDef );
-            }
-
-            Field[] fields = clazz.getDeclaredFields();
-            for ( int i = 0; i < fields.length; i++ )
-            {
-                addField( fields[i], binaryBuilder );
-            }
-
-            binaryBuilder.endClass();
+            addClass( declaringClazz );
 
             return true;
         }
@@ -127,7 +66,73 @@ public class BinaryClassParser
         }
     }
 
-    private void addModifiers( Set<String> set, int modifier )
+    private void addClass( Class<?> clazz )
+    {
+        ClassDef classDef = new ClassDef( getClassName( clazz.getName() ) );
+
+        // Set the extended class and interfaces.
+        Class<?>[] interfaces = clazz.getInterfaces();
+        if ( clazz.isInterface() )
+        {
+            // It's an interface
+            classDef.setType( ClassDef.INTERFACE );
+            for ( int i = 0; i < interfaces.length; i++ )
+            {
+                Class<?> anInterface = interfaces[i];
+                classDef.getExtends().add( new TypeDef( anInterface.getName() ) );
+            }
+        }
+        else
+        {
+            // It's a class
+            for ( int i = 0; i < interfaces.length; i++ )
+            {
+                Class<?> anInterface = interfaces[i];
+                classDef.getImplements().add( new TypeDef( anInterface.getName() ) );
+            }
+            Class<?> superclass = clazz.getSuperclass();
+            if ( superclass != null )
+            {
+                classDef.getExtends().add( new TypeDef( superclass.getName() ) );
+            }
+        }
+
+        addModifiers( classDef.getModifiers(), clazz.getModifiers() );
+
+        binaryBuilder.beginClass( classDef );
+
+        // add the constructors
+        //
+        // This also adds the default constructor if any which is different
+        // to the source code as that does not create a default constructor
+        // if no constructor exists.
+        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+        for ( int i = 0; i < constructors.length; i++ )
+        {
+            binaryBuilder.beginConstructor();
+            MethodDef methodDef = createMethodDef( constructors[i] );
+            binaryBuilder.endConstructor( methodDef );
+        }
+
+        // add the methods
+        Method[] methods = clazz.getDeclaredMethods();
+        for ( int i = 0; i < methods.length; i++ )
+        {
+            binaryBuilder.beginMethod();
+            MethodDef methodDef = createMethodDef( methods[i] );
+            binaryBuilder.endMethod( methodDef );
+        }
+
+        Field[] fields = clazz.getDeclaredFields();
+        for ( int i = 0; i < fields.length; i++ )
+        {
+            addField( fields[i] );
+        }
+
+        binaryBuilder.endClass();
+    }
+
+    private static void addModifiers( Set<String> set, int modifier )
     {
         String modifierString = Modifier.toString( modifier );
         for ( StringTokenizer stringTokenizer = new StringTokenizer( modifierString ); stringTokenizer.hasMoreTokens(); )
@@ -136,7 +141,7 @@ public class BinaryClassParser
         }
     }
 
-    private void addField( Field field, ModelBuilder binaryBuilder )
+    private void addField( Field field )
     {
         FieldDef fieldDef = new FieldDef( field.getName() );
         Class<?> fieldType = field.getType();
@@ -148,7 +153,7 @@ public class BinaryClassParser
         binaryBuilder.endField();
     }
 
-    private MethodDef createMethodDef( Member member, ModelBuilder binaryBuilder )
+    private MethodDef createMethodDef( Member member )
     {
         MethodDef methodDef = new MethodDef();
         // The name of constructors are qualified. Need to strip it.

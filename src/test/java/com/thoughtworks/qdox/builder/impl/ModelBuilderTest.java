@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.builder;
+package com.thoughtworks.qdox.builder.impl;
 
 import java.util.List;
 

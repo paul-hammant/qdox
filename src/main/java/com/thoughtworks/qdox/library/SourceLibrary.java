@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.thoughtworks.qdox.builder.ModelBuilder;
+import com.thoughtworks.qdox.builder.impl.ModelBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;

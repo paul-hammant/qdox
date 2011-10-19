@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.builder;
+package com.thoughtworks.qdox.builder.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;

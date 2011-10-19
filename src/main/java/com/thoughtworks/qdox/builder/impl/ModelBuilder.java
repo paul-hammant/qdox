@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.builder;
+package com.thoughtworks.qdox.builder.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -25,6 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.thoughtworks.qdox.builder.Builder;
+import com.thoughtworks.qdox.builder.TypeAssembler;
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.DocletTagFactory;

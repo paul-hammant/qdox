@@ -21,6 +21,7 @@ package com.thoughtworks.qdox.builder;
 
 import java.io.Serializable;
 
+import com.thoughtworks.qdox.builder.impl.ModelBuilder;
 import com.thoughtworks.qdox.library.ClassLibrary;
 
 /**

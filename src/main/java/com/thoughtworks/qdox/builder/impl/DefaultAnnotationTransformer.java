@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.builder;
+package com.thoughtworks.qdox.builder.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.thoughtworks.qdox.builder.TypeAssembler;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaType;

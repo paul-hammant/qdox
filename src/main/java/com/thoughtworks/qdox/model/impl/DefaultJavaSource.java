@@ -80,16 +80,12 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         this.url = url;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getURL()
-     */
+    /**  {@inheritDoc} */
     public URL getURL() {
         return url;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getPackage()
-     */
+    /**  {@inheritDoc} */
     public JavaPackage getPackage() {
         return pkg;
     }
@@ -102,9 +98,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         imports.add(imp);
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getImports()
-     */
+    /**  {@inheritDoc} */
     public List<String> getImports() {
         return imports;
     }
@@ -131,20 +125,14 @@ public class DefaultJavaSource implements JavaSource, Serializable {
     	return getCodeBlock();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#resolveType(java.lang.String)
-     */
+    /**  {@inheritDoc} */
     public String resolveType( String typeName )
     {
         return resolveFullyQualifiedName( typeName );
     }
     
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaClassParent#resolveFullyQualifiedName(java.lang.String)
-     */
-    public String resolveFullyQualifiedName( String name )
+    /**  {@inheritDoc} */
+   public String resolveFullyQualifiedName( String name )
     {
         String result = resolvedTypeCache.get( name );
         if ( result == null )
@@ -158,10 +146,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return result;
     }
     
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaClassParent#resolveCanonicalName(java.lang.String)
-     */
+    /**  {@inheritDoc} */
     public String resolveCanonicalName( String name )
     {
         String className = resolveFullyQualifiedName( name );
@@ -189,99 +174,116 @@ public class DefaultJavaSource implements JavaSource, Serializable {
      * @param typeName the name to resolve
      * @return the resolved type name, otherwise <code>null</code>
      */
-    private String resolveTypeInternal(String typeName) {
+    private String resolveTypeInternal( String typeName )
+    {
         String resolvedName = null;
 
-        lookup : {
+        lookup:
+        {
             // primitive types
-            if(PRIMITIVE_TYPES.contains( typeName )) {
+            if ( PRIMITIVE_TYPES.contains( typeName ) )
+            {
                 resolvedName = typeName;
                 break lookup;
             }
 
             String outerName = typeName;
-            String nestedName = typeName.replace('.', '$');
+            String nestedName = typeName.replace( '.', '$' );
             int dotpos = typeName.indexOf( '.' );
 
-            if(dotpos >= 0) {
+            if ( dotpos >= 0 )
+            {
                 outerName = typeName.substring( 0, dotpos );
             }
-            
+
             // Check single-type-import with fully qualified name
             resolvedName = resolveImportedType( typeName, nestedName, true );
-                    
-            if(resolvedName != null) {
+
+            if ( resolvedName != null )
+            {
                 break lookup;
             }
-            
+
             // Check single-type-import with outer name
             resolvedName = resolveImportedType( outerName, nestedName, false );
-            
-            if(resolvedName != null) {
+
+            if ( resolvedName != null )
+            {
                 break lookup;
             }
-            
+
             // check for class in the same package
-            if (getPackage() != null) {
+            if ( getPackage() != null )
+            {
                 resolvedName = resolveFullyQualifiedType( getPackageName() + '.' + typeName );
-                
-                if(resolvedName != null) {
+
+                if ( resolvedName != null )
+                {
                     break lookup;
                 }
             }
 
             // check for a class globally
             resolvedName = resolveFullyQualifiedType( typeName );
-            
-            if(resolvedName != null) {
+
+            if ( resolvedName != null )
+            {
                 break lookup;
             }
 
             // check for a class in the same package
             resolvedName = resolveFromLibrary( getClassNamePrefix() + nestedName );
-            if(resolvedName != null) {
+            if ( resolvedName != null )
+            {
                 break lookup;
             }
-            
+
             // try java.lang.*
             resolvedName = resolveFromLibrary( "java.lang." + nestedName );
-            if(resolvedName != null) {
+            if ( resolvedName != null )
+            {
                 break lookup;
             }
-            
+
             // Check type-import-on-demand
             resolvedName = resolveImportedType( "*", nestedName, false );
 
-            if(resolvedName != null) {
+            if ( resolvedName != null )
+            {
                 break lookup;
             }
         }
-        
+
         return resolvedName;
     }
     
-    private String resolveImportedType( String importSpec, String typeName, boolean fullMatch ) {
+    private String resolveImportedType( String importSpec, String typeName, boolean fullMatch )
+    {
         String resolvedName = null;
         String dotSuffix = "." + importSpec;
-            
-        for (String imprt : getImports()) {
-            //static imports can refer to inner classes
-            if( imprt.startsWith( "static " ) ) 
+
+        for ( String imprt : getImports() )
+        {
+            // static imports can refer to inner classes
+            if ( imprt.startsWith( "static " ) )
             {
                 imprt = imprt.substring( 7 );
             }
-            if (imprt.equals(importSpec) || (!fullMatch && imprt.endsWith(dotSuffix))) {
-                String candidateName = imprt.substring( 0, imprt.length() - importSpec.length()) + typeName;
+            if ( imprt.equals( importSpec ) || ( !fullMatch && imprt.endsWith( dotSuffix ) ) )
+            {
+                String candidateName = imprt.substring( 0, imprt.length() - importSpec.length() ) + typeName;
                 resolvedName = resolveFullyQualifiedType( candidateName );
-                if(resolvedName == null && !"*".equals(importSpec)) {
-                	resolvedName = candidateName;
+                if ( resolvedName == null && !"*".equals( importSpec ) )
+                {
+                    resolvedName = candidateName;
                 }
-                if(resolvedName != null) {
+                if ( resolvedName != null )
+                {
                     break;
                 }
-            } 
+            }
         }
-        
+
         return resolvedName;
     }
     
@@ -309,9 +311,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getClassNamePrefix()
-     */
+    /**  {@inheritDoc} */
     public String getClassNamePrefix() {
         return ( pkg == null ? "" : pkg.getName() + '.' ); 
     }
@@ -320,9 +320,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return this;
     }
     
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getNestedClassByName(java.lang.String)
-     */
+    /**  {@inheritDoc} */
     public JavaClass getNestedClassByName(String name) {
         JavaClass result = null;
         
@@ -335,6 +333,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return result;
     }
     
+    /**  {@inheritDoc} */
     public JavaClass getClassByName(String name) 
     {
         JavaClass result = null;
@@ -344,27 +343,22 @@ public class DefaultJavaSource implements JavaSource, Serializable {
             result = JavaModelUtils.getClassByName( candidateCls, name );
             if ( result != null ) 
             {
-                result = candidateCls;
                 break;
             }
         }
         return result;
     }
     
-	/* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getJavaClassLibrary()
-     */
+    /**  {@inheritDoc} */
 	public ClassLibrary getJavaClassLibrary()
 	{
 	    return classLibrary;
 	}
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getPackageName()
-     */
+    /**  {@inheritDoc} */
     public String getPackageName()
     {
-        return (pkg == null ? "" : pkg.getName());
+        return ( pkg == null ? "" : pkg.getName() );
     }
     
     /**
@@ -379,14 +373,15 @@ public class DefaultJavaSource implements JavaSource, Serializable {
     
     private ModelWriter getModelWriter()
     {
-        ModelWriter result; 
-        if (modelWriterFactory != null) {
+        ModelWriter result;
+        if ( modelWriterFactory != null )
+        {
             result = modelWriterFactory.newInstance();
         }
-        else {
+        else
+        {
             result = new DefaultModelWriter();
         }
         return result;
     }
-
 }

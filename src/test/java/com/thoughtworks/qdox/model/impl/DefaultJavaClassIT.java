@@ -27,8 +27,6 @@ public class DefaultJavaClassIT
         assertTrue( clazz instanceof DefaultJavaClass<?> );
         JavaClass superClass = clazz.getSuperJavaClass();
         assertEquals( "java.util.AbstractSet", superClass.getFullyQualifiedName() );
-        assertEquals( "java.util.AbstractSet", superClass.getCanonicalName() );
-        assertEquals( "java.util.AbstractSet", superClass.getValue() );
     }
 
     @Test
@@ -40,6 +38,19 @@ public class DefaultJavaClassIT
         JavaClass setClass = library.getJavaClass( "java.util.Set" );
         assertTrue( hashSetClass.isA( setClass ) );
         assertTrue( hashSetClass.isA( "java.util.Set" ) );
+    }
+    
+    @Test
+    public void testNames()
+    {
+        //subclass
+        JavaClass entryClass = library.getJavaClass( "java.util.Map$Entry" );
+        assertTrue( entryClass instanceof DefaultJavaClass<?> );
+        
+        assertEquals( "java.util.Map$Entry", entryClass.getFullyQualifiedName() );
+        assertEquals( "java.util.Map.Entry", entryClass.getCanonicalName() );
+        assertEquals( "Map.Entry", entryClass.getValue() );
+        
     }
 
 }

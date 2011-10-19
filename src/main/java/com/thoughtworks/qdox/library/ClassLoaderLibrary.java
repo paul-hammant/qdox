@@ -142,6 +142,10 @@ public class ClassLoaderLibrary
                 try
                 {
                     Class<?> clazz = classLoader.loadClass( name );
+                    if ( clazz.getDeclaringClass() != null )
+                    {
+                        clazz = clazz.getDeclaringClass();
+                    }
                     ModelBuilder builder = getModelBuilder();
                     BinaryClassParser parser = new BinaryClassParser( clazz, builder );
                     if ( parser.parse() )

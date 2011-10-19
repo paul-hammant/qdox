@@ -339,7 +339,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType> exten
      */
     public String getValue()
     {
-        return getName();
+        return getCanonicalName().substring( getSource().getClassNamePrefix().length() );
     }
     
     /*

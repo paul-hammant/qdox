@@ -68,7 +68,7 @@ public class BinaryClassParser
 
     private void addClass( Class<?> clazz )
     {
-        ClassDef classDef = new ClassDef( getClassName( clazz.getName() ) );
+        ClassDef classDef = new ClassDef( clazz.getSimpleName() );
 
         // Set the extended class and interfaces.
         Class<?>[] interfaces = clazz.getInterfaces();
@@ -128,6 +128,13 @@ public class BinaryClassParser
         {
             addField( fields[i] );
         }
+        
+        Class<?>[] classes = clazz.getDeclaredClasses();
+        for ( int i = 0; i < classes.length; i++ )
+        {
+            addClass( classes[i] );
+        }
+        
 
         binaryBuilder.endClass();
     }
@@ -220,11 +227,5 @@ public class BinaryClassParser
     {
         int lastDot = fullClassName.lastIndexOf( '.' );
         return lastDot == -1 ? "" : fullClassName.substring( 0, lastDot );
-    }
-
-    private String getClassName( String fullClassName )
-    {
-        int lastDot = fullClassName.lastIndexOf( '.' );
-        return lastDot == -1 ? fullClassName : fullClassName.substring( lastDot + 1 );
     }
 }

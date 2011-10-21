@@ -25,7 +25,6 @@ import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMember;
-import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
@@ -67,19 +66,16 @@ public class FieldRef
         return name;
     }
 
-    /** {@inheritDoc} */
     public String getNamePrefix( int end )
     {
         return name.substring( 0, parts[end + 1] );
     }
 
-    /** {@inheritDoc} */
     public String getNamePart( int index )
     {
         return name.substring( parts[index] + 1, parts[index + 1] );
     }
 
-    /** {@inheritDoc} */
     public int getPartCount()
     {
         return parts.length - 1;
@@ -106,7 +102,6 @@ public class FieldRef
         this.context = context;
     }
 
-    /** {@inheritDoc} */
     public String getClassPart()
     {
         String result = null;
@@ -119,7 +114,6 @@ public class FieldRef
         return result;
     }
 
-    /** {@inheritDoc} */
     public String getFieldPart()
     {
         String result = null;
@@ -149,7 +143,6 @@ public class FieldRef
         return field;
     }
 
-    /** {@inheritDoc} */
     public JavaField getField()
     {
         if ( fieldIndex < 0 )
@@ -207,10 +200,9 @@ public class FieldRef
         {
             result = ( (JavaParameter) context ).getParentClass();
         }
-        else if ( context instanceof JavaPackage )
-        {
-            //
-        }
+//        else if ( context instanceof JavaPackage )
+//        {
+//        }
         return result;
     }
 }

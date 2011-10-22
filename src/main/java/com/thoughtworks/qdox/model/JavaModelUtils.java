@@ -24,9 +24,17 @@ public final class JavaModelUtils
 
     private JavaModelUtils()
     {
-        // 
+        // hide constructor for utility class
     }
     
+    /**
+     * Try to resolve the class by the {@code name}, either relative from {@code cls} or
+     * absolute from the classlibrary of the {@code cls}.
+     * 
+     * @param cls 
+     * @param name 
+     * @return the matching class, otherwise <code>null</code>
+     */
     public static JavaClass getClassByName( JavaClass cls, String name )
     {
         JavaClass result = null;
@@ -48,6 +56,10 @@ public final class JavaModelUtils
                     break;
                 }
             }
+        }
+        if ( result == null )
+        {
+            result = cls.getSource().getJavaClassLibrary().getJavaClass( name, false );
         }
         return result;
     }

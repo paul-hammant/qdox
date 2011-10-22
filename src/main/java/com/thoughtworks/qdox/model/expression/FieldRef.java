@@ -167,17 +167,14 @@ public class FieldRef
                 for ( int i = 0; i < parts.length - 1; ++i )
                 {
                     String className = getNamePrefix( i );
-                    String typeName = baseClass.resolveCanonicalName( className );
+                    String typeName = baseClass.resolveFullyQualifiedName( className );
 
                     if ( typeName != null )
                     {
-                        JavaClass javaClass = DefaultJavaType.createUnresolved( typeName, 0, baseClass );
-                        if ( javaClass != null )
-                        {
-                            fieldIndex = i + 1;
-                            field = resolveField( javaClass, i + 1, parts.length - 1 );
-                            break;
-                        }
+                        JavaClass javaClass = baseClass.getJavaClassLibrary().getJavaClass( typeName );
+                        fieldIndex = i + 1;
+                        field = resolveField( javaClass, i + 1, parts.length - 1 );
+                        break;
                     }
                 }
             }

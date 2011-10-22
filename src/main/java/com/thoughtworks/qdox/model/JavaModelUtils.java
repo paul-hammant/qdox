@@ -28,12 +28,16 @@ public final class JavaModelUtils
     }
     
     /**
-     * Try to resolve the class by the {@code name}, either relative from {@code cls} or
-     * absolute from the classlibrary of the {@code cls}.
+     * <p>
+     * Try to resolve the class by the {@code name}, either relative from {@code cls} 
+     * as the fully qualified name.
+     * </p>
+     * <strong>Note:</strong>the name must match the {@code cls} itself or one of its nested classes.
      * 
      * @param cls 
      * @param name 
      * @return the matching class, otherwise <code>null</code>
+     * @see JavaClass#getJavaClassLibrary()
      */
     public static JavaClass getClassByName( JavaClass cls, String name )
     {
@@ -56,10 +60,6 @@ public final class JavaModelUtils
                     break;
                 }
             }
-        }
-        if ( result == null )
-        {
-            result = cls.getSource().getJavaClassLibrary().getJavaClass( name, false );
         }
         return result;
     }

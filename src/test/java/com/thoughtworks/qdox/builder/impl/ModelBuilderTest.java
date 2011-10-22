@@ -1,17 +1,18 @@
 package com.thoughtworks.qdox.builder.impl;
 
+import static org.mockito.Mockito.*;
+
 import java.util.List;
 
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.library.ClassNameLibrary;
+import com.thoughtworks.qdox.model.DocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.impl.DefaultDocletTagFactory;
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -22,14 +23,17 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
 public class ModelBuilderTest extends TestCase {
 
     private ModelBuilder builder;
+    private DocletTagFactory docletTagFactory;
 
     public ModelBuilderTest(String s) {
         super(s);
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-        builder = new ModelBuilder(new ClassNameLibrary(), new DefaultDocletTagFactory());
+    protected void setUp()
+        throws Exception
+    {
+        docletTagFactory = mock( DocletTagFactory.class );
+        builder = new ModelBuilder( new ClassNameLibrary(), docletTagFactory );
     }
 
     public void testNumberOfClassesGrows() throws Exception {
@@ -684,15 +688,18 @@ public class ModelBuilderTest extends TestCase {
         builder.addJavaDoc("Hello");
         builder.addJavaDocTag(new TagDef("cheese", "is good"));
         builder.beginClass(new ClassDef());
-
         builder.endClass();
 
         JavaSource source = builder.getSource();
 
         assertEquals("Hello", source.getClasses().get(0).getComment());
         assertEquals(1, source.getClasses().get(0).getTags().size());
-        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
-        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
+        
+        verify( docletTagFactory ).createDocletTag( eq("cheese"), eq("is good"), isA( JavaClass.class ), eq(-1) ); 
+        verifyNoMoreInteractions( docletTagFactory );
+        
+//        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
+//        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
     }
 
     public void testDocletTagWithNoComment() throws Exception {
@@ -706,8 +713,12 @@ public class ModelBuilderTest extends TestCase {
 
         assertEquals("", source.getClasses().get(0).getComment());
         assertEquals(1, source.getClasses().get(0).getTags().size());
-        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
-        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
+        
+        verify( docletTagFactory ).createDocletTag( eq("cheese"), eq("is good"), isA( JavaClass.class ), eq(-1) );
+        verifyNoMoreInteractions( docletTagFactory );
+
+//        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
+//        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
     }
 
     public void testMultipleDocletTags() throws Exception {
@@ -723,12 +734,18 @@ public class ModelBuilderTest extends TestCase {
 
         assertEquals("Hello", source.getClasses().get(0).getComment());
         assertEquals(3, source.getClasses().get(0).getTags().size());
-        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
-        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
-        assertEquals("food", source.getClasses().get(0).getTags().get(1).getName());
-        assertEquals("is great", source.getClasses().get(0).getTags().get(1).getValue());
-        assertEquals("chairs", source.getClasses().get(0).getTags().get(2).getName());
-        assertEquals("are boring", source.getClasses().get(0).getTags().get(2).getValue());
+        
+        verify( docletTagFactory ).createDocletTag( eq("cheese"), eq("is good"), isA( JavaClass.class ), eq(-1) );
+        verify( docletTagFactory ).createDocletTag( eq("food"), eq("is great"), isA( JavaClass.class ), eq(-1) );
+        verify( docletTagFactory ).createDocletTag( eq("chairs"), eq("are boring"), isA( JavaClass.class ), eq(-1) );
+        verifyNoMoreInteractions( docletTagFactory );
+        
+//        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
+//        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
+//        assertEquals("food", source.getClasses().get(0).getTags().get(1).getName());
+//        assertEquals("is great", source.getClasses().get(0).getTags().get(1).getValue());
+//        assertEquals("chairs", source.getClasses().get(0).getTags().get(2).getName());
+//        assertEquals("are boring", source.getClasses().get(0).getTags().get(2).getValue());
     }
 
     public void testDocletTagsOnMethodsAndFields() throws Exception {
@@ -747,14 +764,17 @@ public class ModelBuilderTest extends TestCase {
         builder.endField();
         builder.endClass();
 
-        JavaSource source = builder.getSource();
+        verify( docletTagFactory ).createDocletTag( eq("cheese"), eq("is good"), isA( JavaClass.class ), eq(-1) );
+        verify( docletTagFactory ).createDocletTag( eq("food"), eq("is great"), isA( JavaMethod.class ), eq(-1) );
+        verify( docletTagFactory ).createDocletTag( eq("chairs"), eq("are boring"), isA( JavaField.class ), eq(-1) );
+        verifyNoMoreInteractions( docletTagFactory );
 
-        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
-        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
-        assertEquals("food", source.getClasses().get(0).getMethods().get(0).getTags().get(0).getName());
-        assertEquals("is great", source.getClasses().get(0).getMethods().get(0).getTags().get(0).getValue());
-        assertEquals("chairs", source.getClasses().get(0).getFields().get(0).getTags().get(0).getName());
-        assertEquals("are boring", source.getClasses().get(0).getFields().get(0).getTags().get(0).getValue());
+//        assertEquals("cheese", source.getClasses().get(0).getTags().get(0).getName());
+//        assertEquals("is good", source.getClasses().get(0).getTags().get(0).getValue());
+//        assertEquals("food", source.getClasses().get(0).getMethods().get(0).getTags().get(0).getName());
+//        assertEquals("is great", source.getClasses().get(0).getMethods().get(0).getTags().get(0).getValue());
+//        assertEquals("chairs", source.getClasses().get(0).getFields().get(0).getTags().get(0).getName());
+//        assertEquals("are boring", source.getClasses().get(0).getFields().get(0).getTags().get(0).getValue());
     }
 
     public void testRetrieveJavaSource() throws Exception {

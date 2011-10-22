@@ -21,8 +21,6 @@ package com.thoughtworks.qdox.model;
 
 import java.io.Serializable;
 
-import com.thoughtworks.qdox.model.impl.AbstractJavaModel;
-
 /**
  * @author Aslak Helles&oslash;y
  * @version $Revision$

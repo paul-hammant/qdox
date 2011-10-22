@@ -28,20 +28,28 @@ import java.util.Map;
  * @author Aslak Helles&oslash;y
  * @version $Revision$
  */
-public interface DocletTag extends Serializable {
+public interface DocletTag
+    extends Serializable
+{
 
     /**
+     * The name of the doclet tag.
+     * 
      * @return the tag name
      */
     String getName();
 
     /**
+     * The full value of the doclet tag. 
+     * 
      * @return the full tag-value
      */
     String getValue();
 
     /**
-     * @return an array of whitespace-separatedtag parameters
+     * 
+     * 
+     * @return a list of whitespace-separated tag parameters
      */
     List<String> getParameters();
 
@@ -49,20 +57,24 @@ public interface DocletTag extends Serializable {
      * @param key name of a named-parameter
      * @return the matching value, otherwise <code>null</code>
      */
-    String getNamedParameter(String key);
+    String getNamedParameter( String key );
 
     /**
      * @return a Map containing all the named-parameters, never <code>null</code>
      */
     Map<String, String> getNamedParameterMap();
-    
+
     /**
-     * @return the line-number where the tag occurred
+     * The line number of the source where this tag occurred.
+     * 
+     * @return the line number where the tag occurred, otherwise <code>-1</code>
      */
     int getLineNumber();
 
     /**
-     * @return the language element to which this tag applies
+     * The element to which this tag applies.
+     * 
+     * @return the annotated element, should never be <code>null</code>
      * @since 1.4
      */
     JavaAnnotatedElement getContext();

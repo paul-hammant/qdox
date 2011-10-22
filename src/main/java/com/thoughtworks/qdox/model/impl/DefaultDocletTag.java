@@ -26,19 +26,23 @@ import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.util.TagParser;
 
-public class DefaultDocletTag implements DocletTag {
+public class DefaultDocletTag
+    implements DocletTag
+{
 
     private final String name;
+
     private final String value;
+
     private final int lineNumber;
 
     private List<String> parameters;
+
     private Map<String, String> namedParameters;
+
     private JavaAnnotatedElement context;
 
-    public DefaultDocletTag(String name, String value, 
-                            JavaAnnotatedElement context, 
-                            int lineNumber) 
+    public DefaultDocletTag( String name, String value, JavaAnnotatedElement context, int lineNumber )
     {
         this.name = name;
         this.value = value;
@@ -46,43 +50,58 @@ public class DefaultDocletTag implements DocletTag {
         this.lineNumber = lineNumber;
     }
 
-    public DefaultDocletTag(String name, String value) {
-        this(name, value, null, 0);
+    public DefaultDocletTag( String name, String value )
+    {
+        this( name, value, null, 0 );
     }
 
-    public String getName() {
+    /** {@inheritDoc} */
+    public String getName()
+    {
         return name;
     }
 
-    public String getValue() {
+    /** {@inheritDoc} */
+    public String getValue()
+    {
         return value;
     }
 
-    public List<String> getParameters() {
-        if (parameters == null) {
-            parameters = TagParser.parseParameters(value);
+    /** {@inheritDoc} */
+    public List<String> getParameters()
+    {
+        if ( parameters == null )
+        {
+            parameters = TagParser.parseParameters( value );
         }
         return parameters;
     }
 
-    public Map<String, String> getNamedParameterMap() {
-        if (namedParameters == null) {
-            namedParameters = TagParser.parseNamedParameters(value);
+    /** {@inheritDoc} */
+    public Map<String, String> getNamedParameterMap()
+    {
+        if ( namedParameters == null )
+        {
+            namedParameters = TagParser.parseNamedParameters( value );
         }
         return namedParameters;
     }
-    
-    public String getNamedParameter(String key) {
-        return (String) getNamedParameterMap().get(key);
+
+    /** {@inheritDoc} */
+    public String getNamedParameter( String key )
+    {
+        return (String) getNamedParameterMap().get( key );
     }
 
-    public final JavaAnnotatedElement getContext() {
+    /** {@inheritDoc} */
+    public final JavaAnnotatedElement getContext()
+    {
         return context;
     }
 
-    public int getLineNumber() {
+    /** {@inheritDoc} */
+    public int getLineNumber()
+    {
         return lineNumber;
     }
 }
-
-

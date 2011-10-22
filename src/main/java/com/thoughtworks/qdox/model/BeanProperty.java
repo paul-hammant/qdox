@@ -20,17 +20,38 @@ package com.thoughtworks.qdox.model;
  */
 
 /**
- *
  * @author Aslak Helles&oslash;y
  * @version $Revision$
  */
-public interface BeanProperty {
-    
+public interface BeanProperty
+{
+
+    /**
+     * The name of the bean, which is based on the name of the mutator or accessor, not on the field.
+     * 
+     * @return the name of the bean
+     */
     String getName();
-    
+
+    /**
+     * The type of the bean, either used as argument type of the mutator or return type of the accessor.
+     * 
+     * @return the type of the bean
+     */
     JavaType getType();
 
+    /**
+     * This can return both the <code>isProperty</code> if the property is of type {@link Boolean} or
+     * <code>getProperty</code> for any other type of {@link Object}.
+     * 
+     * @return the getter, otherwise <code>null</code>
+     */
     JavaMethod getAccessor();
 
+    /**
+     * The setter-method of the bean.
+     * 
+     * @return the setter, otherwise <code>null</code>
+     */
     JavaMethod getMutator();
 }

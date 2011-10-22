@@ -23,43 +23,59 @@ import com.thoughtworks.qdox.model.JavaType;
  * under the License.
  */
 
-public class DefaultBeanProperty implements BeanProperty
+public class DefaultBeanProperty
+    implements BeanProperty
 {
 
     private final String name;
+
     private JavaMethod accessor;
+
     private JavaMethod mutator;
+
     private JavaType type;
 
-    public DefaultBeanProperty(String name) {
+    public DefaultBeanProperty( String name )
+    {
         this.name = name;
     }
 
-    public String getName() {
+    /** {@inheritDoc} */
+    public String getName()
+    {
         return name;
     }
 
-    public void setType(JavaType type) {
+    public void setType( JavaType type )
+    {
         this.type = type;
     }
 
-    public JavaType getType() {
+    /** {@inheritDoc} */
+    public JavaType getType()
+    {
         return type;
     }
 
-    public JavaMethod getAccessor() {
+    /** {@inheritDoc} */
+    public JavaMethod getAccessor()
+    {
         return accessor;
     }
 
-    public void setAccessor(JavaMethod accessor) {
+    public void setAccessor( JavaMethod accessor )
+    {
         this.accessor = accessor;
     }
 
-    public JavaMethod getMutator() {
+    /** {@inheritDoc} */
+    public JavaMethod getMutator()
+    {
         return mutator;
     }
 
-    public void setMutator(JavaMethod mutator) {
+    public void setMutator( JavaMethod mutator )
+    {
         this.mutator = mutator;
     }
 }

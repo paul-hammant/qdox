@@ -21,6 +21,8 @@ package com.thoughtworks.qdox.model;
 
 import java.util.Collection;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
+
 public interface JavaPackage extends JavaModel, JavaAnnotatedElement
 {
 
@@ -63,5 +65,11 @@ public interface JavaPackage extends JavaModel, JavaAnnotatedElement
      * @return the name, should never be <code>null</code>
      */
     String getName();
-
+    
+    /**
+     * The {@link ClassLibrary} of this package. 
+     * 
+     * @return the classLibrary, should never be <code>null</code>
+     */
+    ClassLibrary getJavaClassLibrary();
 }

@@ -21,17 +21,17 @@ package com.thoughtworks.qdox.model.expression;
 
 import java.util.StringTokenizer;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMember;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 public class FieldRef
     implements AnnotationValue
 {
-
     private final int[] parts;
 
     private final String name;
@@ -156,25 +156,20 @@ public class FieldRef
 
             if ( field == null )
             {
-                JavaClass baseClass = declaringClass;
-
-                // assume context is a JavaClass itself
-                if ( declaringClass == null )
+                ClassLibrary classLibrary = getClassLibrary();
+                if( classLibrary != null )
                 {
-                    baseClass = (JavaClass) context;
-                }
-
-                for ( int i = 0; i < parts.length - 1; ++i )
-                {
-                    String className = getNamePrefix( i );
-                    String typeName = baseClass.resolveFullyQualifiedName( className );
-
-                    if ( typeName != null )
+                    for ( int i = 0; i < parts.length - 1; ++i )
                     {
-                        JavaClass javaClass = baseClass.getJavaClassLibrary().getJavaClass( typeName );
-                        fieldIndex = i + 1;
-                        field = resolveField( javaClass, i + 1, parts.length - 1 );
-                        break;
+                        String className = getNamePrefix( i );
+
+                        if ( classLibrary.hasClassReference( className ) )
+                        {
+                            JavaClass javaClass = classLibrary.getJavaClass( className );
+                            fieldIndex = i + 1;
+                            field = resolveField( javaClass, i + 1, parts.length - 1 );
+                            break;
+                        }
                     }
                 }
             }
@@ -200,6 +195,27 @@ public class FieldRef
 //        else if ( context instanceof JavaPackage )
 //        {
 //        }
+        return result;
+    }
+    
+    private ClassLibrary getClassLibrary() {
+        ClassLibrary result = null;
+        if ( context instanceof JavaPackage )
+        {
+            result =( (JavaPackage) context).getJavaClassLibrary();
+        }
+        else if ( context instanceof JavaClass )
+        {
+            result =( (JavaClass) context).getJavaClassLibrary();
+        }
+        else 
+        {
+            JavaClass declaringClass = getDeclaringClass();
+            if( declaringClass != null )
+            {
+                result = declaringClass.getJavaClassLibrary();
+            }
+        }
         return result;
     }
 }

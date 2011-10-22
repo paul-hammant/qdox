@@ -13,9 +13,14 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
@@ -25,6 +30,7 @@ import com.thoughtworks.qdox.model.expression.Cast;
 import com.thoughtworks.qdox.model.expression.Divide;
 import com.thoughtworks.qdox.model.expression.Equals;
 import com.thoughtworks.qdox.model.expression.ExclusiveOr;
+import com.thoughtworks.qdox.model.expression.FieldRef;
 import com.thoughtworks.qdox.model.expression.GreaterEquals;
 import com.thoughtworks.qdox.model.expression.GreaterThan;
 import com.thoughtworks.qdox.model.expression.LessEquals;
@@ -496,9 +502,68 @@ public class EvaluatingVisitorTest
         }
     }
     
-    @Ignore
     @Test
-    public void testVisitFieldRef() {
+    public void testVisitFieldRef() 
+    {
+        JavaAnnotatedElement annotatedElement = mock( JavaAnnotatedElement.class );
+        FieldRef ref = new FieldRef( "fieldname" );
+        ref.setContext( annotatedElement );
+        try {
+            visitor.visit( ref );
+            fail( "fieldname should be a unresolvable field" );
+        }
+        catch( IllegalArgumentException e )
+        {
+        }
+        
+        JavaField nonStaticNonFinalfield = mock( JavaField.class );
+        
+        JavaClass declaringClass = mock( JavaClass.class );
+        when( declaringClass.getFieldByName( "fieldname" ) ).thenReturn( nonStaticNonFinalfield );
+
+        JavaClass annotatedClass = mock( JavaClass.class );
+        try 
+        {
+            visitor.visit(  ref );
+            fail( "fieldname should fail, because it's not-static and non-final" );
+        }
+        catch( IllegalArgumentException e)
+        {
+        }
+        
+
+        JavaField staticFinalfield = mock( JavaField.class );
+        when( staticFinalfield.isStatic() ).thenReturn( true );
+        when( staticFinalfield.isFinal() ).thenReturn( true );
+        when( declaringClass.getFieldByName( "fieldname" ) ).thenReturn( staticFinalfield );
+
+        ref = new FieldRef( "fieldname" );
+        ref.setContext( annotatedClass );
+        when( annotatedClass.getDeclaringClass() ).thenReturn( declaringClass );
+        assertSame( EvaluatingVisitorStub.fieldReferenceValue, visitor.visit( ref ) );
+
+        JavaMethod annotatedMethod = mock( JavaMethod.class );
+        ref = new FieldRef( "fieldname" );
+        ref.setContext( annotatedMethod );
+        when( annotatedMethod.getDeclaringClass() ).thenReturn( declaringClass );
+        assertSame( EvaluatingVisitorStub.fieldReferenceValue, visitor.visit( ref ) );
+
+        JavaParameter annotatedParameter = mock( JavaParameter.class );
+        ref = new FieldRef( "fieldname" );
+        ref.setContext( annotatedParameter );
+        when( annotatedParameter.getParentClass() ).thenReturn( declaringClass );
+        assertSame( EvaluatingVisitorStub.fieldReferenceValue, visitor.visit( ref ) );
+        
+        JavaPackage annotatedPackage = mock( JavaPackage.class );
+        ref = new FieldRef( "a.B.fieldname" );
+        ref.setContext( annotatedPackage );
+        JavaClass b = mock( JavaClass.class );
+        when( b.getFieldByName( "fieldname" ) ).thenReturn( staticFinalfield );
+        ClassLibrary classLibrary = mock( ClassLibrary.class );
+        when( classLibrary.hasClassReference( "a.B" ) ).thenReturn( true );
+        when( classLibrary.getJavaClass( "a.B" ) ).thenReturn( b );
+        when( annotatedPackage.getJavaClassLibrary() ).thenReturn( classLibrary );
+        assertSame( EvaluatingVisitorStub.fieldReferenceValue, visitor.visit( ref ) );
     }
     
     
@@ -1258,12 +1323,14 @@ public class EvaluatingVisitorTest
         }
     }
     
-    private class EvaluatingVisitorStub extends EvaluatingVisitor {
+    private static class EvaluatingVisitorStub extends EvaluatingVisitor {
+        
+        static final Object fieldReferenceValue = new Object();
         
         @Override
         protected Object getFieldReferenceValue( JavaField javaField )
         {
-            return null;
+            return fieldReferenceValue;
         }
     }
 }

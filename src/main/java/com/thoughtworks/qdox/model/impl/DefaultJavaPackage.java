@@ -68,6 +68,11 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
     {
         this.classLibrary = classLibrary;
     }
+	
+	public ClassLibrary getJavaClassLibrary()
+    {
+        return classLibrary;
+    }
 
 	public void addClass(JavaClass clazz) {
 		classes.add(clazz);

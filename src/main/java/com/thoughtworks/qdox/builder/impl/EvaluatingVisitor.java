@@ -299,13 +299,12 @@ public abstract class EvaluatingVisitor
             throw new IllegalArgumentException( "Cannot resolve field reference '" + fieldRef + "'." );
         }
 
-        if ( !javaField.isFinal() || !javaField.isStatic() )
+        if ( !(javaField.isFinal() && javaField.isStatic() ) )
         {
             throw new IllegalArgumentException( "Field reference '" + fieldRef + "' must be static and final." );
         }
 
-        Object result = getFieldReferenceValue( javaField );
-        return result;
+        return getFieldReferenceValue( javaField );
     }
 
     protected abstract Object getFieldReferenceValue( JavaField javaField );

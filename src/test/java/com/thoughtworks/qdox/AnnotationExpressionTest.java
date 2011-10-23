@@ -148,14 +148,7 @@ public class AnnotationExpressionTest {
         assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
 
         AnnotationValue value = annotation.getProperty( "value" );
-        Object v = value.accept( evaluatingVisitor );
+        Object v = value.accept( new EvaluatingVisitor() );
         assertEquals( "Value", expected, v );
     }
-
-    private EvaluatingVisitor evaluatingVisitor = new EvaluatingVisitor() {
-        protected Object getFieldReferenceValue( JavaField javaField ) {
-            throw new UnsupportedOperationException();
-        }
-    };
-
 }

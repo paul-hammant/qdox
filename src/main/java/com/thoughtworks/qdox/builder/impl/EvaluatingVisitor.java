@@ -31,12 +31,12 @@ import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.AnnotationValueList;
-import com.thoughtworks.qdox.model.expression.ExpressionVisitor;
 import com.thoughtworks.qdox.model.expression.Cast;
 import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.Divide;
 import com.thoughtworks.qdox.model.expression.Equals;
 import com.thoughtworks.qdox.model.expression.ExclusiveOr;
+import com.thoughtworks.qdox.model.expression.ExpressionVisitor;
 import com.thoughtworks.qdox.model.expression.FieldRef;
 import com.thoughtworks.qdox.model.expression.GreaterEquals;
 import com.thoughtworks.qdox.model.expression.GreaterThan;
@@ -68,7 +68,7 @@ import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
  * 
  * @author Jochen Kuhnle
  */
-public abstract class EvaluatingVisitor
+public class EvaluatingVisitor
     implements ExpressionVisitor
 {
 
@@ -307,7 +307,9 @@ public abstract class EvaluatingVisitor
         return getFieldReferenceValue( javaField );
     }
 
-    protected abstract Object getFieldReferenceValue( JavaField javaField );
+    protected Object getFieldReferenceValue( JavaField javaField ) {
+        throw new UnsupportedOperationException("getFieldReferenceValue(JavaField) has not been implemented.");
+    }
 
     public Object visit( GreaterThan op )
     {

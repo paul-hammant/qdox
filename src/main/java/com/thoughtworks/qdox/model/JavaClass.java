@@ -141,8 +141,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      */
     String getPackageName();
 
-    String getFullyQualifiedName();
-    
     /**
      * @since 1.3
      * @return <code>true</code> if this class is an inner class, otherwise <code>false</code>
@@ -355,6 +353,14 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @since 2.0
      */
     boolean isArray();
+    
+    /**
+     * Equivalent of {@link Class#getComponentType()}
+     * If this type is an array, return its component type
+     * 
+     * @return the type of array if it's one, otherwise <code>null</code>
+     */
+    JavaClass getComponentType();
 
     /**
      * Gets bean properties without looking in superclasses or interfaces.
@@ -402,43 +408,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @return the fully qualified name of the class
      */
     String getName();
-    
-    /**
-     * Equivalent of (@link {@link java.lang.Class#getCanonicalName()}.
-     * 
-     * @return the canonical name of this class
-     */
-    String getCanonicalName();
-    
-    /**
-     * If there's a reference to this class, use the value used in the code. Otherwise return the simple name.
-     * When including all imports, you should be safe to use this method.
-     * This won't return generics, so it's java1.4 safe.
-     * 
-     * Examples:
-     * <pre>
-     *  private String fieldA;           // getValue() will return "String"
-     *  private java.lang.String fieldA; // getValue() will return "java.lang.String"
-     *  private List<String> aList;      // getValue() will return "List"
-     * </pre>
-     * 
-     * @return the name of the class as used in the source
-     */
-    String getValue();
-    
-    /**
-     * A java5+ representation of the class.
-     * When including all imports, you should be safe to use this method.
-     * 
-     * Examples:
-     * <pre>
-     *  private String fieldA;           // getValue() will return "String"
-     *  private java.lang.String fieldA; // getValue() will return "java.lang.String"
-     *  private List<String> aList;      // getValue() will return "List<String>"
-     * </pre>     * 
-     * @return the generic name of the class as used in the source
-     */
-    String getGenericValue();
     
     /**
      * Equivalent of {@link Class#getModifiers()}
@@ -531,6 +500,4 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      */
     @Override
     String toString();
-
-    String getGenericFullyQualifiedName();
 }

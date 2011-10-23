@@ -122,32 +122,40 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
     /**
      * @see java.lang.reflect.Field#toString()
      */
-    public String toString() {
-    	StringBuffer result = new StringBuffer();
-    	if(isPrivate()) {
-    		result.append("private ");
-    	}
-    	else if(isProtected()) {
-    		result.append("protected ");
-    	}
-    	else if(isPublic()) {
-    		result.append("public ");
-    	}
-    	if(isStatic()) {
-    		result.append("static ");
-    	}
-    	if(isFinal()) {
-    		result.append("final ");
-    	}
-    	if(isTransient()) {
-    		result.append("transient ");
-    	}
-    	if(isVolatile()) {
-    		result.append("volatile ");
-    	}
-    	result.append( type.getValue() ).append(' ');
-    	result.append( getDeclaringClass().getFullyQualifiedName() ).append( '.' ).append( getName() );
-    	return result.toString();
+    public String toString()
+    {
+        StringBuffer result = new StringBuffer();
+        if ( isPrivate() )
+        {
+            result.append( "private " );
+        }
+        else if ( isProtected() )
+        {
+            result.append( "protected " );
+        }
+        else if ( isPublic() )
+        {
+            result.append( "public " );
+        }
+        if ( isStatic() )
+        {
+            result.append( "static " );
+        }
+        if ( isFinal() )
+        {
+            result.append( "final " );
+        }
+        if ( isTransient() )
+        {
+            result.append( "transient " );
+        }
+        if ( isVolatile() )
+        {
+            result.append( "volatile " );
+        }
+        result.append( type.getValue() ).append( ' ' );
+        result.append( getDeclaringClass().getFullyQualifiedName() ).append( '.' ).append( getName() );
+        return result.toString();
     }
     
     /**

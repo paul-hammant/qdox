@@ -4,12 +4,15 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.*;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.NotSerializableException;
+import java.io.Reader;
 import java.io.StringReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,8 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hamcrest.core.IsSame;
+
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.library.ClassLibraryBuilder;
 import com.thoughtworks.qdox.library.ErrorHandler;
 import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.BeanProperty;
@@ -1402,5 +1408,120 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( "method", cls.getMethods().get( 0 ).getName() );
         assertEquals( true, cls.getMethods().get( 0 ).isAbstract() );
         assertEquals( "test", cls.getMethods().get( 1 ).getName() );
+    }
+    
+    public void testSetDebugLexer()
+    {
+        ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
+        boolean debugLexer = true;
+
+        builder = new JavaProjectBuilder( classLibraryBuilder );
+        JavaProjectBuilder projectBuilder = builder.setDebugLexer( debugLexer );
+
+        verify( classLibraryBuilder ).setDebugLexer( debugLexer );
+        assertSame( builder, projectBuilder );
+    }
+
+    public void testSetDebugParser()
+    {
+        ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
+        boolean debugParser = true;
+
+        builder = new JavaProjectBuilder( classLibraryBuilder );
+        JavaProjectBuilder projectBuilder = builder.setDebugParser( debugParser );
+        
+        verify( classLibraryBuilder ).setDebugParser( debugParser );
+        assertSame( builder, projectBuilder );
+    }
+
+    public void testSetEncoding()
+    {
+        ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
+        String encoding = "UTF-8";
+
+        builder = new JavaProjectBuilder( classLibraryBuilder );
+        JavaProjectBuilder projectBuilder = builder.setEncoding( encoding );
+
+        verify( classLibraryBuilder ).setEncoding( same( encoding ) );
+        assertSame( builder, projectBuilder );
+    }
+    
+    public void testSetErrorHandler()
+    {
+        ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
+        ErrorHandler errorHandler = mock( ErrorHandler.class );
+
+        builder = new JavaProjectBuilder( classLibraryBuilder );
+        JavaProjectBuilder projectBuilder = builder.setErrorHandler( errorHandler );
+        
+        verify( classLibraryBuilder ).setErrorHander( same( errorHandler ) );
+        assertSame( builder, projectBuilder );
+    }
+    
+    public void testAddClassLoader()
+    {
+        ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
+        ClassLoader classLoader = mock( ClassLoader.class );
+
+        builder = new JavaProjectBuilder( classLibraryBuilder );
+        builder.addClassLoader( classLoader );
+        
+        verify( classLibraryBuilder ).appendClassLoader( same( classLoader ) );
+    }
+    
+    public void testAddFileSource() throws Exception
+    {
+        ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
+        File file = mock( File.class );
+        JavaSource source  = mock( JavaSource.class );
+        
+        when( classLibraryBuilder.addSource( file ) ).thenReturn( source );
+
+        builder = new JavaProjectBuilder( classLibraryBuilder );
+        JavaSource addedSource = builder.addSource( file );
+        
+        verify( classLibraryBuilder ).addSource( same( file ) );
+        assertSame( addedSource, source );
+    }
+    
+    public void testAddReaderSource() throws Exception
+    {
+        ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
+        Reader reader = mock( Reader.class );
+        JavaSource source  = mock( JavaSource.class );
+        
+        when( classLibraryBuilder.addSource( reader ) ).thenReturn( source );
+
+        builder = new JavaProjectBuilder( classLibraryBuilder );
+        JavaSource addedSource = builder.addSource( reader );
+        
+        verify( classLibraryBuilder ).addSource( same( reader ) );
+        assertSame( addedSource, source );
+    }
+    
+    public void testAddURLSource() throws Exception
+    {
+        ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
+        URL url = new URL( "http://localhost" );
+        JavaSource source  = mock( JavaSource.class );
+        
+        when( classLibraryBuilder.addSource( url ) ).thenReturn( source );
+
+        builder = new JavaProjectBuilder( classLibraryBuilder );
+        JavaSource addedSource = builder.addSource( url );
+        
+        verify( classLibraryBuilder ).addSource( same( url ) );
+        assertSame( addedSource, source );
+    }
+    
+    public void testAddSourceFolder() 
+    {
+        ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
+        File file = mock( File.class );
+        
+        builder = new JavaProjectBuilder( classLibraryBuilder );
+        builder.addSourceFolder( file );
+        
+        verify( classLibraryBuilder ).appendSourceFolder( same( file ) );
     }
 }

@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox.model;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
@@ -145,5 +146,104 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
     	setModifiers(fld, Arrays.asList(new String[]{"private"}));
     	setDeclaringClass( fld, cls );
     	assertEquals("private int java.io.FileDescriptor.fd", fld.toString());
+    }
+    
+    public void testIsPublic()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isPublic() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "public" } ) );
+        assertTrue( fld.isPublic() );
+    }
+
+    public void testIsProtected()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isProtected() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "protected" } ) );
+        assertTrue( fld.isProtected() );
+    }
+    
+    public void testIsPrivate()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isPrivate() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "private" } ) );
+        assertTrue( fld.isPrivate() );
+    }
+
+    public void testIsAbstract()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isAbstract() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "abstract" } ) );
+        assertTrue( fld.isAbstract() );
+    }
+
+    public void testIsFinal()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isFinal() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "final" } ) );
+        assertTrue( fld.isFinal() );
+    }
+
+    public void testIsNavite()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isNative() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "native" } ) );
+        assertTrue( fld.isNative() );
+    }
+
+    public void testIsStatic()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isStatic() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "static" } ) );
+        assertTrue( fld.isStatic() );
+    }
+    
+    public void testIsStrict()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isStrictfp() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "strictfp" } ) );
+        assertTrue( fld.isStrictfp() );
+    }
+
+    public void testIsSynchronized()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isSynchronized() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "synchronized" } ) );
+        assertTrue( fld.isSynchronized() );
+    }
+    
+    public void testIsTransient()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isTransient() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "transient" } ) );
+        assertTrue( fld.isTransient() );
+    }
+    
+    public void testIsVolatile()
+    {
+        F fld = newJavaField();
+        assertTrue( !fld.isVolatile() );
+
+        setModifiers( fld, Arrays.asList( new String[] { "volatile" } ) );
+        assertTrue( fld.isVolatile() );
     }
 }

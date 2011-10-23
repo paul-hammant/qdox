@@ -409,12 +409,52 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         assertEquals(expected, cls.getCodeBlock());
     }
 
-    public void testIsPublic() {
-        setName(cls, "MyClass");
-        assertTrue(!cls.isPublic());
+    public void testIsPublic()
+    {
+        assertTrue( !cls.isPublic() );
 
-        setModifiers(cls, Arrays.asList(new String[]{"public"}));
-        assertTrue(cls.isPublic());
+        setModifiers( cls, Arrays.asList( new String[] { "public" } ) );
+        assertTrue( cls.isPublic() );
+    }
+
+    public void testIsProtected()
+    {
+        assertTrue( !cls.isProtected() );
+
+        setModifiers( cls, Arrays.asList( new String[] { "protected" } ) );
+        assertTrue( cls.isProtected() );
+    }
+    
+    public void testIsPrivate()
+    {
+        assertTrue( !cls.isPrivate() );
+
+        setModifiers( cls, Arrays.asList( new String[] { "private" } ) );
+        assertTrue( cls.isPrivate() );
+    }
+
+    public void testIsAbstract()
+    {
+        assertTrue( !cls.isAbstract() );
+
+        setModifiers( cls, Arrays.asList( new String[] { "abstract" } ) );
+        assertTrue( cls.isAbstract() );
+    }
+
+    public void testIsFinal()
+    {
+        assertTrue( !cls.isFinal() );
+
+        setModifiers( cls, Arrays.asList( new String[] { "final" } ) );
+        assertTrue( cls.isFinal() );
+    }
+
+    public void testIsStatic()
+    {
+        assertTrue( !cls.isStatic() );
+
+        setModifiers( cls, Arrays.asList( new String[] { "static" } ) );
+        assertTrue( cls.isStatic() );
     }
 
     public void testQualifiedType() throws Exception {

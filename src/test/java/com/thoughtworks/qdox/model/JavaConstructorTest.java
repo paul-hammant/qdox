@@ -96,4 +96,114 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         assertEquals( c2, c3 );
         assertThat( c3, not(c4) );
     }
+    
+    @Test
+    public void testIsPublic()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isPublic() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "public" } ) );
+        assertTrue( cstr.isPublic() );
+    }
+
+    @Test
+    public void testIsProtected()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isProtected() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "protected" } ) );
+        assertTrue( cstr.isProtected() );
+    }
+    
+    @Test
+    public void testIsPrivate()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isPrivate() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "private" } ) );
+        assertTrue( cstr.isPrivate() );
+    }
+
+    @Test
+    public void testIsAbstract()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isAbstract() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "abstract" } ) );
+        assertTrue( cstr.isAbstract() );
+    }
+
+    @Test
+    public void testIsFinal()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isFinal() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "final" } ) );
+        assertTrue( cstr.isFinal() );
+    }
+
+    @Test
+    public void testIsNavite()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isNative() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "native" } ) );
+        assertTrue( cstr.isNative() );
+    }
+
+    @Test
+    public void testIsStatic()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isStatic() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "static" } ) );
+        assertTrue( cstr.isStatic() );
+    }
+    
+    @Test
+    public void testIsStrict()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isStrictfp() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "strictfp" } ) );
+        assertTrue( cstr.isStrictfp() );
+    }
+
+    @Test
+    public void testIsSynchronized()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isSynchronized() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "synchronized" } ) );
+        assertTrue( cstr.isSynchronized() );
+    }
+    
+    @Test
+    public void testIsTransient()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isTransient() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "transient" } ) );
+        assertTrue( cstr.isTransient() );
+    }
+    
+    @Test
+    public void testIsVolatile()
+    {
+        D cstr = newJavaConstructor( "Constructor" );
+        assertTrue( !cstr.isVolatile() );
+
+        setModifiers( cstr, Arrays.asList( new String[] { "volatile" } ) );
+        assertTrue( cstr.isVolatile() );
+    }
 }

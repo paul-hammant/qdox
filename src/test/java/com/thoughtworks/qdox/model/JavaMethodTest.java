@@ -14,8 +14,6 @@ import org.junit.Test;
 
 import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
-import junit.framework.TestCase;
-
 public abstract class JavaMethodTest<M extends JavaMethod> {
 
     private M mth;
@@ -427,5 +425,104 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     	setModifiers(mthd, Arrays.asList(new String[]{"public"}));
     	setParameters(mthd, Collections.singletonList( newJavaParameter(newType("java.lang.Object"), null) ));
     	assertEquals("public boolean java.lang.Object.equals(java.lang.Object)", mthd.toString());
+    }
+    
+    @Test
+    public void testIsPublic()
+    {
+        assertTrue( !mth.isPublic() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "public" } ) );
+        assertTrue( mth.isPublic() );
+    }
+
+    @Test
+    public void testIsProtected()
+    {
+        assertTrue( !mth.isProtected() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "protected" } ) );
+        assertTrue( mth.isProtected() );
+    }
+    
+    @Test
+    public void testIsPrivate()
+    {
+        assertTrue( !mth.isPrivate() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "private" } ) );
+        assertTrue( mth.isPrivate() );
+    }
+
+    @Test
+    public void testIsAbstract()
+    {
+        assertTrue( !mth.isAbstract() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "abstract" } ) );
+        assertTrue( mth.isAbstract() );
+    }
+
+    @Test
+    public void testIsFinal()
+    {
+        assertTrue( !mth.isFinal() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "final" } ) );
+        assertTrue( mth.isFinal() );
+    }
+
+    @Test
+    public void testIsNavite()
+    {
+        assertTrue( !mth.isNative() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "native" } ) );
+        assertTrue( mth.isNative() );
+    }
+
+    @Test
+    public void testIsStatic()
+    {
+        assertTrue( !mth.isStatic() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "static" } ) );
+        assertTrue( mth.isStatic() );
+    }
+    
+    @Test
+    public void testIsStrict()
+    {
+        assertTrue( !mth.isStrictfp() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "strictfp" } ) );
+        assertTrue( mth.isStrictfp() );
+    }
+
+    @Test
+    public void testIsSynchronized()
+    {
+        assertTrue( !mth.isSynchronized() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "synchronized" } ) );
+        assertTrue( mth.isSynchronized() );
+    }
+    
+    @Test
+    public void testIsTransient()
+    {
+        assertTrue( !mth.isTransient() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "transient" } ) );
+        assertTrue( mth.isTransient() );
+    }
+    
+    @Test
+    public void testIsVolatile()
+    {
+        assertTrue( !mth.isVolatile() );
+
+        setModifiers( mth, Arrays.asList( new String[] { "volatile" } ) );
+        assertTrue( mth.isVolatile() );
     }
 }

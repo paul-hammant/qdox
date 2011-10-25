@@ -242,7 +242,7 @@ public class DefaultModelWriterTest {
         JavaParameter prm = mock( JavaParameter.class );
         JavaType type = mock( JavaType.class );
         
-        when( type.getCanonicalName() ).thenReturn( "java.lang.String" );
+        when( type.getGenericCanonicalName() ).thenReturn( "java.lang.String" );
         when( prm.getType() ).thenReturn( type );
         when( prm.getName() ).thenReturn( "argument" );
         when( prm.isVarArgs() ).thenReturn( true );

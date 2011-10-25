@@ -45,6 +45,7 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
             canonicalName += "[]";
         }
         when( result.getCanonicalName() ).thenReturn( canonicalName );
+        when( result.getGenericCanonicalName() ).thenReturn( canonicalName );
         return result;
     }
     

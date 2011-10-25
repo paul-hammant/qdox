@@ -64,6 +64,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
             canonicalName += "[]";
         }
         when( result.getCanonicalName() ).thenReturn( canonicalName );
+        when( result.getGenericCanonicalName() ).thenReturn( canonicalName );
         return result;
     }
     

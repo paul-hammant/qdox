@@ -66,6 +66,7 @@ public abstract class JavaClassTest<C extends JavaClass> extends TestCase {
         when( result.getFullyQualifiedName() ).thenReturn( fullname );
         when( result.getValue() ).thenReturn( fullname.replace( '$', '.' ) );
         when( result.getCanonicalName() ).thenReturn( fullname.replace( '$', '.' ) );
+        when( result.getGenericCanonicalName() ).thenReturn( fullname.replace( '$', '.' ) );
         return result;
     }
     

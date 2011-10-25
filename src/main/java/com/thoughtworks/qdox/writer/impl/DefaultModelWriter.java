@@ -42,11 +42,8 @@ public class DefaultModelWriter
     implements ModelWriter
 {
     private IndentBuffer buffer = new IndentBuffer();
-
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.writer.ModelWriter#writeSource(com.thoughtworks.qdox.model.JavaSource)
-     */
+    
+    /** {@inheritDoc} */
     public ModelWriter writeSource( JavaSource source )
     {
         // package statement
@@ -78,10 +75,7 @@ public class DefaultModelWriter
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.writer.ModelWriter#writePackage(com.thoughtworks.qdox.model.JavaPackage)
-     */
+    /** {@inheritDoc} */
     public ModelWriter writePackage( JavaPackage pckg )
     {
         if ( pckg != null )
@@ -96,10 +90,7 @@ public class DefaultModelWriter
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.writer.ModelWriter#writeClass(com.thoughtworks.qdox.model.JavaClass)
-     */
+    /** {@inheritDoc} */
     public ModelWriter writeClass( JavaClass cls )
     {
         commentHeader( cls );
@@ -118,7 +109,7 @@ public class DefaultModelWriter
             if ( !"java.lang.Object".equals( className ) && !"java.lang.Enum".equals( className ) )
             {
                 buffer.write( " extends " );
-                buffer.write( cls.getSuperClass().getCanonicalName() );
+                buffer.write( cls.getSuperClass().getGenericCanonicalName() );
             }
         }
 
@@ -129,7 +120,7 @@ public class DefaultModelWriter
 
             for ( ListIterator<JavaType> iter = cls.getImplements().listIterator(); iter.hasNext(); )
             {
-                buffer.write( iter.next().getCanonicalName() );
+                buffer.write( iter.next().getGenericCanonicalName() );
                 if ( iter.hasNext() )
                 {
                     buffer.write( ", " );
@@ -169,10 +160,7 @@ public class DefaultModelWriter
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.writer.ModelWriter#writeField(com.thoughtworks.qdox.model.JavaField)
-     */
+    /** {@inheritDoc} */
     public ModelWriter writeField( JavaField field )
     {
         commentHeader( field );
@@ -180,7 +168,7 @@ public class DefaultModelWriter
         writeAllModifiers( field.getModifiers() );
         if ( !field.isEnumConstant() )
         {
-            buffer.write( field.getType().getCanonicalName() );
+            buffer.write( field.getType().getGenericCanonicalName() );
             buffer.write( ' ' );
         }
         buffer.write( field.getName() );
@@ -202,10 +190,7 @@ public class DefaultModelWriter
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.writer.ModelWriter#writeConstructor(com.thoughtworks.qdox.model.JavaConstructor)
-     */
+    /** {@inheritDoc} */
     public ModelWriter writeConstructor( JavaConstructor constructor )
     {
         commentHeader( constructor );
@@ -228,7 +213,7 @@ public class DefaultModelWriter
             buffer.write( " throws " );
             for ( Iterator<JavaClass> excIter = constructor.getExceptions().iterator(); excIter.hasNext(); )
             {
-                buffer.write( excIter.next().getCanonicalName() );
+                buffer.write( excIter.next().getGenericCanonicalName() );
                 if ( excIter.hasNext() )
                 {
                     buffer.write( ", " );
@@ -248,23 +233,20 @@ public class DefaultModelWriter
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.writer.ModelWriter#writeMethod(com.thoughtworks.qdox.model.JavaMethod)
-     */
+    /** {@inheritDoc} */
     public ModelWriter writeMethod( JavaMethod method )
     {
         commentHeader( method );
         writeAccessibilityModifier( method.getModifiers() );
         writeNonAccessibilityModifiers( method.getModifiers() );
-        buffer.write( method.getReturnType().getCanonicalName() );
+        buffer.write( method.getReturnType().getGenericCanonicalName() );
         buffer.write( ' ' );
         buffer.write( method.getName() );
         buffer.write( '(' );
         for ( ListIterator<JavaParameter> iter = method.getParameters().listIterator(); iter.hasNext(); )
         {
             JavaParameter parameter = iter.next();
-            buffer.write( parameter.getType().getCanonicalName() );
+            buffer.write( parameter.getType().getGenericCanonicalName() );
             if ( parameter.isVarArgs() )
             {
                 buffer.write( "..." );
@@ -283,7 +265,7 @@ public class DefaultModelWriter
             buffer.write( " throws " );
             for ( Iterator<JavaClass> excIter = method.getExceptions().iterator(); excIter.hasNext(); )
             {
-                buffer.write( excIter.next().getCanonicalName() );
+                buffer.write( excIter.next().getGenericCanonicalName() );
                 if ( excIter.hasNext() )
                 {
                     buffer.write( ", " );
@@ -339,14 +321,11 @@ public class DefaultModelWriter
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.writer.ModelWriter#writeAnnotation(com.thoughtworks.qdox.model.JavaAnnotation)
-     */
+    /** {@inheritDoc} */
     public ModelWriter writeAnnotation( JavaAnnotation annotation )
     {
         buffer.write( '@' );
-        buffer.write( annotation.getType().getFullyQualifiedName() );
+        buffer.write( annotation.getType().getGenericCanonicalName() );
         if ( !annotation.getPropertyMap().isEmpty() )
         {
             buffer.indent();
@@ -370,14 +349,11 @@ public class DefaultModelWriter
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.writer.ModelWriter#writeParameter(com.thoughtworks.qdox.model.JavaParameter)
-     */
+    /** {@inheritDoc} */
     public ModelWriter writeParameter( JavaParameter parameter )
     {
         commentHeader( parameter );
-        buffer.write( parameter.getType().getCanonicalName() );
+        buffer.write( parameter.getType().getGenericCanonicalName() );
         if ( parameter.isVarArgs() )
         {
             buffer.write( "..." );
@@ -435,6 +411,7 @@ public class DefaultModelWriter
         }
     }
 
+    @Override
     public String toString()
     {
         return buffer.toString();

@@ -382,6 +382,8 @@ public class DefaultModelWriter
         {
             buffer.write( "..." );
         }
+        buffer.write( ' ' );
+        buffer.write(  parameter.getName() );
         return this;
     }
 

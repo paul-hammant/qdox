@@ -14,6 +14,8 @@ import org.junit.Test;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.JavaType;
 
 public class DefaultModelWriterTest {
 
@@ -217,6 +219,38 @@ public class DefaultModelWriterTest {
         
         //verify
         assertEquals( expected, modelWriter.toString() );
-        
     }
+    
+    public void testJavaParameter()
+    {
+        JavaParameter prm = mock( JavaParameter.class );
+        JavaType type = mock( JavaType.class );
+        
+        when( type.getCanonicalName() ).thenReturn( "java.lang.String" );
+        when( prm.getType() ).thenReturn( type );
+        when( prm.getName() ).thenReturn( "argument" );
+        
+        modelWriter.writeParameter( prm );
+        
+        String expected = "java.lang.String argument";
+        assertEquals( expected, modelWriter.toString() );
+    }
+    
+    @Test
+    public void testJavaParameterVarArgs()
+    {
+        JavaParameter prm = mock( JavaParameter.class );
+        JavaType type = mock( JavaType.class );
+        
+        when( type.getCanonicalName() ).thenReturn( "java.lang.String" );
+        when( prm.getType() ).thenReturn( type );
+        when( prm.getName() ).thenReturn( "argument" );
+        when( prm.isVarArgs() ).thenReturn( true );
+        
+        modelWriter.writeParameter( prm );
+        
+        String expected = "java.lang.String... argument";
+        assertEquals( expected, modelWriter.toString() );
+    }
+
 }

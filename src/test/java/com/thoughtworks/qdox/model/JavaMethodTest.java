@@ -36,7 +36,6 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     public abstract void setReturns(M method, DefaultJavaType type);
     public abstract void setSourceCode(M method, String code);
     
-    
     public JavaParameter newJavaParameter(DefaultJavaType type, String name)
     {
         return newJavaParameter( type, name, false );
@@ -533,5 +532,49 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
 
         setModifiers( mth, Arrays.asList( new String[] { "volatile" } ) );
         assertTrue( mth.isVolatile() );
+    }
+    
+    @Test
+    public void testIsPropertyAccessor() 
+    {
+        M getNameMethod = newJavaMethod( newType( "java.lang.String" ), "getName" );
+        assertTrue( getNameMethod.isPropertyAccessor() );
+
+        M isValidMethod = newJavaMethod( newType( "boolean" ), "isValid" );
+        assertTrue( isValidMethod.isPropertyAccessor() );
+
+        M getNameWithParamMethod = newJavaMethod( newType( "boolean" ), "getName" );
+        setParameters( getNameWithParamMethod, Collections.singletonList( mock(JavaParameter.class) ) );
+        assertFalse( getNameWithParamMethod.isPropertyAccessor() );
+
+        M gettingUpMethod = newJavaMethod( newType( "java.lang.String" ), "gettingUp" );
+        assertFalse( gettingUpMethod.isPropertyAccessor() );
+
+        M isolatedMethod = newJavaMethod( newType( "boolean" ), "isolated" );
+        assertFalse( isolatedMethod.isPropertyAccessor() );
+
+        M staticGetNameMethod = newJavaMethod( newType( "java.lang.String" ), "getName" );
+        setModifiers( staticGetNameMethod, Collections.singletonList( "static" ) );
+        assertFalse( staticGetNameMethod.isPropertyAccessor() );
+    }
+    
+    @Test
+    public void testIsPropertyMutator()
+    {
+        M setNameMethod = newJavaMethod( DefaultJavaType.VOID, "setName" );
+        setParameters( setNameMethod, Collections.singletonList( mock(JavaParameter.class) ) );
+        assertTrue( setNameMethod.isPropertyMutator() );
+
+        M setUpMethod = newJavaMethod( DefaultJavaType.VOID, "setUp" );
+        assertFalse( setUpMethod.isPropertyMutator() );
+
+        M settingUpMethod = newJavaMethod( DefaultJavaType.VOID, "settingUp" );
+        setParameters( settingUpMethod, Collections.singletonList( mock(JavaParameter.class) ) );
+        assertFalse( settingUpMethod.isPropertyMutator() );
+
+        M staticSetNameMethod = newJavaMethod( DefaultJavaType.VOID, "setName" );
+        setModifiers( staticSetNameMethod, Collections.singletonList( "static" ) );
+        setParameters( staticSetNameMethod, Collections.singletonList( mock(JavaParameter.class) ) );
+        assertFalse( staticSetNameMethod.isPropertyMutator() );
     }
 }

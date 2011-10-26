@@ -92,6 +92,8 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         D c4 = newJavaConstructor( "Thong" );
         setParentClass( c4, mock( JavaClass.class ) );
 
+        assertEquals( c1, c1 );
+        assertThat( c1, not( new Object() ) );
         assertThat( c1, not(c2) );
         assertEquals( c2, c3 );
         assertThat( c3, not(c4) );

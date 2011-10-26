@@ -16,11 +16,6 @@ public class DefaultJavaClassTest
     extends JavaClassTest<DefaultJavaClass>
 {
 
-    public DefaultJavaClassTest( String s )
-    {
-        super( s );
-    }
-
     public DefaultJavaClass newJavaClass()
     {
         return new DefaultJavaClass();
@@ -37,10 +32,12 @@ public class DefaultJavaClassTest
     }
 
     // Add-methods
-    public void addClass( JavaClass clazz, JavaClass innerClazz )
+    public void setClasses( DefaultJavaClass clazz, List<JavaClass> innerClasses )
     {
-        ((DefaultJavaClass) clazz).addClass( innerClazz );
-        ((DefaultJavaClass) innerClazz).setParentClass( clazz );
+        for( JavaClass innerClazz : innerClasses )
+        {
+            clazz.addClass( innerClazz );
+        }
     }
 
     public void addClass( JavaSource source, JavaClass clazz )
@@ -53,6 +50,13 @@ public class DefaultJavaClassTest
     public void setComment( DefaultJavaClass clazz, String comment )
     {
         clazz.setComment( comment );
+    }
+    
+    @Override
+    public void setDeclaringClass( DefaultJavaClass clazz, JavaClass declaringClazz )
+    {
+        clazz.setParentClass( declaringClazz );
+        
     }
 
     public void setEnum( DefaultJavaClass clazz, boolean isEnum )

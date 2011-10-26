@@ -107,20 +107,17 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         classes.add(cls);
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getClasses()
-     */
+    /** {@inheritDoc} */
     public List<JavaClass> getClasses() {
       return Collections.unmodifiableList( classes );
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaSource#getCodeBlock()
-     */
+    /** {@inheritDoc} */
     public String getCodeBlock() {
         return getModelWriter().writeSource( this ).toString();
     }
     
+    /** {@inheritDoc} */
     public String toString() {
     	return getCodeBlock();
     }

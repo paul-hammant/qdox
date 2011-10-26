@@ -65,9 +65,8 @@ public class DefaultJavaAnnotation
 
         if ( properties != null )
         {
-            for ( Iterator<Entry<String, AnnotationValue>> i = this.properties.entrySet().iterator(); i.hasNext(); )
+            for ( Entry<String, AnnotationValue> entry : properties.entrySet() )
             {
-                Entry<String, AnnotationValue> entry = i.next();
                 String name = entry.getKey();
                 AnnotationValue value = entry.getValue();
 

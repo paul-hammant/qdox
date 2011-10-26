@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.qdox.GenericsTest;
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.BeanProperty;
 import com.thoughtworks.qdox.model.DocletTag;
@@ -328,7 +329,7 @@ public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedTy
     /**
      * @since 1.3
      */
-    public boolean isA( DefaultJavaType type )
+    public boolean isA( JavaType type )
     {
         if ( this == type )
         {
@@ -448,7 +449,7 @@ public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedTy
         if ( !actualTypeArguments.isEmpty() )
         {
             DefaultJavaType typeResult =
-                new DefaultJavaType( base.getFullyQualifiedName(), base.getValue(), ((DefaultJavaType)base).getDimensions(),
+                new DefaultJavaType( base.getFullyQualifiedName(), base.getValue(), getDimensions( base ),
                           ((DefaultJavaType)base).getJavaClassParent() );
 
             List<JavaType> actualTypes = new LinkedList<JavaType>();
@@ -461,14 +462,24 @@ public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedTy
         }
         return result;
     }
+    
+    private static int getDimensions( JavaType type )
+    {
+        return type instanceof JavaClass ? ( (JavaClass) type ).getDimensions() : 0;
+    }
+    
+    private static JavaClass getDeclaringClass( JavaType type )
+    {
+        return type instanceof JavaClass ? ( (JavaClass) type ).getDeclaringClass() : null;
+    }
 
     private static int getTypeVariableIndex( JavaClass declaringClass, String fqn )
     {
         int typeIndex = -1;
-        for ( Object typeVariable : declaringClass.getTypeParameters() )
+        for ( JavaTypeVariable<?> typeVariable : declaringClass.getTypeParameters() )
         {
             typeIndex++;
-            if ( ((DefaultJavaTypeVariable<?>) typeVariable).getFullyQualifiedName().equals( fqn ) )
+            if ( typeVariable.getFullyQualifiedName().equals( fqn ) )
             {
                 return typeIndex;
             }

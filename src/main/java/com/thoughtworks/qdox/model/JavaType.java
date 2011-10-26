@@ -25,6 +25,46 @@ package com.thoughtworks.qdox.model;
  */
 public interface JavaType
 {
+    JavaType VOID = new JavaType() 
+    {
+        private final String value = "void";
+
+        public String getCanonicalName()
+        {
+            return value;
+        }
+
+        public String getGenericCanonicalName()
+        {
+            return value;
+        }
+
+        public String getFullyQualifiedName()
+        {
+            return value;
+        }
+
+        public String getGenericFullyQualifiedName()
+        {
+            return value;
+        }
+
+        public String getValue()
+        {
+            return value;
+        }
+
+        public String getGenericValue()
+        {
+            return value;
+        }
+
+        public String toGenericString()
+        {
+            return value;
+        }
+    };
+
     /**
      * Equivalent of (@link {@link java.lang.Class#getCanonicalName()}.
      * 

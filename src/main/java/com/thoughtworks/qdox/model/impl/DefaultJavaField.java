@@ -29,38 +29,33 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
     private String initializationExpression;
     private boolean enumConstant;
     	
-    public DefaultJavaField() {
+    public DefaultJavaField()
+    {
     }
 
-    public DefaultJavaField(String name) {
-        setName(name);
+    public DefaultJavaField( String name )
+    {
+        setName( name );
     }
 
-    public DefaultJavaField(T type, String name) {
+    public DefaultJavaField( T type, String name )
+    {
         this( name );
         this.type = type;
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMember#getDeclaringClass()
-     */
-    public JavaClass getDeclaringClass() {
-    	return getParentClass();
+
+    /** {@inheritDoc} */
+    public JavaClass getDeclaringClass()
+    {
+        return getParentClass();
     }
     
-    /**
-     * Retrieve the Type of this field
-     * 
-     * @return the Type of this field
-     */
+    /** {@inheritDoc} */
     public JavaClass getType() {
         return type;
     }
     
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaField#getCodeBlock()
-     */
+    /** {@inheritDoc} */
     public String getCodeBlock()
     {
         return getModelWriter().writeField( this ).toString();
@@ -70,10 +65,8 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
         this.type = type;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaField#getDeclarationSignature(boolean)
-     */
-    public String getDeclarationSignature(boolean withModifiers) {
+    /** {@inheritDoc} */
+   public String getDeclarationSignature(boolean withModifiers) {
         StringBuffer result = new StringBuffer();
         if (withModifiers) {
             for (String modifier  : getModifiers()) {
@@ -87,33 +80,28 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
         return result.toString();
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaField#getCallSignature()
-     */
-    public String getCallSignature() {
+    /** {@inheritDoc} */
+    public String getCallSignature()
+    {
         return getName();
     }
 
-
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaField#getInitializationExpression()
-     */
-    public String getInitializationExpression(){
-    	return initializationExpression;
-    }
-    
-    public void setInitializationExpression(String initializationExpression){
-    	this.initializationExpression = initializationExpression;
+    /** {@inheritDoc} */
+    public String getInitializationExpression()
+    {
+        return initializationExpression;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaField#isEnumConstant()
-     */
-    public boolean isEnumConstant() {
-		return enumConstant;
-	}
+    public void setInitializationExpression( String initializationExpression )
+    {
+        this.initializationExpression = initializationExpression;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isEnumConstant()
+    {
+        return enumConstant;
+    }
     
     public void setEnumConstant(boolean enumConstant) {
 		this.enumConstant = enumConstant;

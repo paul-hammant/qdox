@@ -27,6 +27,7 @@ public class DefaultJavaConstructor<T extends JavaClass & JavaParameterizedType>
         this.typeParameters = typeParameters;
     }
 
+    /** {@inheritDoc} */
     public List<JavaTypeVariable<JavaConstructor>> getTypeParameters()
     {
         return typeParameters;
@@ -42,6 +43,7 @@ public class DefaultJavaConstructor<T extends JavaClass & JavaParameterizedType>
         return super.signatureMatches( parameterTypes, varArgs );
     }
     
+    /** {@inheritDoc} */
     public String getCodeBlock()
     {
         return getModelWriter().writeConstructor( this ).toString();

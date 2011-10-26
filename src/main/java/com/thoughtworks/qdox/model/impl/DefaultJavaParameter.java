@@ -34,35 +34,38 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
     private JavaMethod parentMethod;
     private boolean varArgs;
 
-    public DefaultJavaParameter(T type, String name) {
-        this(type, name, false);
+    public DefaultJavaParameter( T type, String name )
+    {
+        this( type, name, false );
     }
 
-    public DefaultJavaParameter(T type, String name, boolean varArgs) {
+    public DefaultJavaParameter( T type, String name, boolean varArgs )
+    {
         this.name = name;
         this.type = type;
         this.varArgs = varArgs;
     }
 
-    public String getCodeBlock() {
-    	return getModelWriter().writeParameter(this).toString();
+    /** {@inheritDoc} */
+    public String getCodeBlock()
+    {
+        return getModelWriter().writeParameter( this ).toString();
     }
-    
-	public void setName(String name) {
-	    this.name = name;
-	}
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#getName()
-     */
-    public String getName() {
+    public void setName( String name )
+    {
+        this.name = name;
+    }
+
+	/** {@inheritDoc} */
+    public String getName()
+    {
         return name;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#getType()
-     */
-    public JavaType getType() {
+    /** {@inheritDoc} */
+    public JavaType getType()
+    {
         return type;
     }
 
@@ -70,84 +73,86 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
     {
         return type;
     }
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#getParentMethod()
-     */
-    public JavaMethod getParentMethod() {
+
+    /** {@inheritDoc} */
+    public JavaMethod getParentMethod()
+    {
         return parentMethod;
     }
 
-    public void setParentMethod(JavaMethod parentMethod) {
+    public void setParentMethod( JavaMethod parentMethod )
+    {
         this.parentMethod = parentMethod;
     }
     
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#getParentClass()
-     */
+    /** {@inheritDoc} */
     public JavaClass getParentClass()
     {
         return getParentMethod().getParentClass();
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#isVarArgs()
-     */
+    /** {@inheritDoc} */
     public boolean isVarArgs() {
         return varArgs;
     }
 
+    /** {@inheritDoc} */
     public String getFullyQualifiedName()
     {
         return type.getFullyQualifiedName();
     }
     
+    /** {@inheritDoc} */
     public String getCanonicalName()
     {
         return type.getCanonicalName();
     }
     
+    /** {@inheritDoc} */
     public String getValue()
     {
         return type.getValue();
     }
     
+    /** {@inheritDoc} */
     public String getGenericCanonicalName()
     {
         return type.getGenericCanonicalName();
     }
     
+    /** {@inheritDoc} */
     public String getGenericFullyQualifiedName()
     {
         return type.getGenericFullyQualifiedName();
     }
     
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#getResolvedValue()
-     */
-    public String getResolvedValue() {
+    /** {@inheritDoc} */
+    public String getResolvedValue()
+    {
         return DefaultJavaType.getResolvedValue( type, getParentMethod().getTypeParameters() );
     }
 
+    /** {@inheritDoc} */
     public String getResolvedFullyQualifiedName() 
     {
         return DefaultJavaType.getResolvedFullyQualifiedName( type, getParentMethod().getTypeParameters() );
     }
     
-	/* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaParameter#getResolvedGenericValue()
-     */
+    /** {@inheritDoc} */
 	public String getResolvedGenericValue() 
 	{
 		return DefaultJavaType.getResolvedGenericValue( type, getParentMethod().getTypeParameters() );
 	}
 	
+    /** {@inheritDoc} */
 	public String getResolvedGenericFullyQualifiedName()
 	{
 	    return DefaultJavaType.getResolvedGenericFullyQualifiedName( type, getParentMethod().getTypeParameters() );
 	}
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return 13 + ( isVarArgs() ? 1 : 0 ) + getType().hashCode();
     }
 
@@ -168,10 +173,12 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
     }
 	
     @Override
-    public String toString() {
+    public String toString()
+    {
         return getResolvedValue() + " "+ name;
     }
 
+    /** {@inheritDoc} */
     public String getGenericValue()
     {
         return type.getGenericValue();
@@ -181,5 +188,4 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
     {
         return type.toGenericString();
     }
-	
 }

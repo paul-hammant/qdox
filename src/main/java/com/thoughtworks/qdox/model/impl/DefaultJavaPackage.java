@@ -47,11 +47,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 		this.name= name;
     }
 
-    /**
-     * Equivalent of {@link Package#getName()}
-     * 
-     * @return the name of the package
-     */
+    /** {@inheritDoc} */
 	public String getName() {
 		return name;
 	}
@@ -60,6 +56,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 		this.name = name;
 	}
 
+    /** {@inheritDoc} */
 	public String getCodeBlock() {
 		return getModelWriter().writePackage(this).toString();
 	}
@@ -69,6 +66,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
         this.classLibrary = classLibrary;
     }
 	
+    /** {@inheritDoc} */
 	public ClassLibrary getJavaClassLibrary()
     {
         return classLibrary;
@@ -78,9 +76,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 		classes.add(clazz);
 	}
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaPackage#getClasses()
-     */
+    /** {@inheritDoc} */
 	public Collection<JavaClass> getClasses() {
 	    //avoid infinitive  recursion
 	    if (this == classLibrary.getJavaPackage( name )) {
@@ -91,6 +87,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
 	    }
 	}
 	
+    /** {@inheritDoc} */
 	public JavaClass getClassByName(String name) 
     {
         JavaClass result = null;
@@ -107,12 +104,14 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
         return result;
     }
 	
+    /** {@inheritDoc} */
     public JavaPackage getParentPackage()
     {
         String parentName = name.substring( 0, name.lastIndexOf( '.' ) );
         return classLibrary.getJavaPackage( parentName );
     }
 
+    /** {@inheritDoc} */
     public List<JavaPackage> getSubPackages() {
         String expected = name + ".";
         Collection<JavaPackage> jPackages = classLibrary.getJavaPackages();
@@ -126,6 +125,7 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
         return retList;
     }
 
+    @Override
     public boolean equals( Object o )
     {
         if ( this == o )
@@ -142,15 +142,12 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
         return ( name.equals( that.getName() ) );
     }
 
+    @Override
     public int hashCode() {
         return 11 + name.hashCode();
     }
-    
-    /**
-     * Equivalent of {@link Package#toString()}
-     * 
-     * @return the string representation of the package.
-     */
+
+    @Override
     public String toString() {
     	return "package " + name;
     }

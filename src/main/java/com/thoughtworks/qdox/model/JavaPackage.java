@@ -48,7 +48,7 @@ public interface JavaPackage extends JavaModel, JavaAnnotatedElement
      * 
      * For instance: the package of <code>java.lang.reflect</code> is <code>java.lang</code>
      * 
-     * @return the parent package
+     * @return the parent package, otherwise <code>null</code>
      */
     JavaPackage getParentPackage();
 
@@ -60,7 +60,7 @@ public interface JavaPackage extends JavaModel, JavaAnnotatedElement
     Collection<JavaPackage> getSubPackages();
 
     /**
-     * The name of this package
+     * Equivalent of {@link Package#getName()}
      * 
      * @return the name, should never be <code>null</code>
      */
@@ -72,4 +72,11 @@ public interface JavaPackage extends JavaModel, JavaAnnotatedElement
      * @return the classLibrary, should never be <code>null</code>
      */
     ClassLibrary getJavaClassLibrary();
+    
+    /**
+     * Equivalent of {@link Package#toString()}
+     * 
+     * @return the string representation of the package.
+     */
+    String toString();
 }

@@ -63,9 +63,7 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
         setName(name);
     }
     
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getReturns()
-     */
+    /** {@inheritDoc} */
     public JavaClass getReturns() {
         return returns;
     }
@@ -75,14 +73,13 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
         this.typeParameters = typeParameters;
     }
 
+    /** {@inheritDoc} */
     public List<JavaTypeVariable<JavaMethod>> getTypeParameters()
     {
         return typeParameters;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getCodeBlock()
-     */
+    /** {@inheritDoc} */
     public String getCodeBlock()
     {
         return getModelWriter().writeMethod( this ).toString();
@@ -94,65 +91,76 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
     private String getSignature( boolean withModifiers, boolean isDeclaration )
     {
         StringBuffer result = new StringBuffer();
-        if ( withModifiers ) {
-            for ( String modifier : getModifiers() ) 
+        if ( withModifiers )
+        {
+            for ( String modifier : getModifiers() )
             {
                 // check for public, protected and private
-                if ( modifier.startsWith( "p" ) ) {
+                if ( modifier.startsWith( "p" ) )
+                {
                     result.append( modifier ).append( ' ' );
                 }
             }
-            for ( String modifier : getModifiers() ) 
+            for ( String modifier : getModifiers() )
             {
                 // check for public, protected and private
-                if ( !modifier.startsWith( "p" ) ) 
+                if ( !modifier.startsWith( "p" ) )
                 {
                     result.append( modifier ).append( ' ' );
                 }
             }
         }
 
-        if(isDeclaration) {
-            result.append(returns.getCanonicalName());
-            result.append(' ');
+        if ( isDeclaration )
+        {
+            result.append( returns.getCanonicalName() );
+            result.append( ' ' );
         }
 
-        result.append(getName());
-        result.append('(');
-        for (ListIterator<JavaParameter> iter = getParameters().listIterator(); iter.hasNext();) {
+        result.append( getName() );
+        result.append( '(' );
+        for ( ListIterator<JavaParameter> iter = getParameters().listIterator(); iter.hasNext(); )
+        {
             JavaParameter parameter = iter.next();
-            if (isDeclaration) {
-                result.append(parameter.getType().getCanonicalName());
-                if (parameter.isVarArgs()) {
-                    result.append("...");
-                }
-                result.append(' ');
-            }
-            result.append(parameter.getName());
-            if (iter.hasNext()) 
+            if ( isDeclaration )
             {
-                result.append(", ");
+                result.append( parameter.getType().getCanonicalName() );
+                if ( parameter.isVarArgs() )
+                {
+                    result.append( "..." );
+                }
+                result.append( ' ' );
+            }
+            result.append( parameter.getName() );
+            if ( iter.hasNext() )
+            {
+                result.append( ", " );
             }
         }
-        result.append(')');
-        if (isDeclaration  && !getExceptions().isEmpty() ) {
-                result.append(" throws ");
-                for(Iterator<JavaClass> excIter = getExceptions().iterator();excIter.hasNext();) {
-                    result.append(excIter.next().getCanonicalName());
-                    if(excIter.hasNext()) {
-                        result.append(", ");
-                    }
+        result.append( ')' );
+        if ( isDeclaration && !getExceptions().isEmpty() )
+        {
+            result.append( " throws " );
+            for ( Iterator<JavaClass> excIter = getExceptions().iterator(); excIter.hasNext(); )
+            {
+                result.append( excIter.next().getCanonicalName() );
+                if ( excIter.hasNext() )
+                {
+                    result.append( ", " );
                 }
+            }
         }
         return result.toString();
     }
 
 
+    /** {@inheritDoc} */
     public String getDeclarationSignature( boolean withModifiers )
     {
         return getSignature(withModifiers, true);
     }
 
+    /** {@inheritDoc} */
     public String getCallSignature()
     {
         return getSignature(false, false);
@@ -163,7 +171,8 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
      * 
      * @param returns the return type
      */
-    public void setReturns(T returns) {
+    public void setReturns(T returns)
+    {
         this.returns = returns;
     }
 
@@ -233,33 +242,31 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
         return hashCode;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#isPropertyAccessor()
-     */
-    public boolean isPropertyAccessor() {
+    /** {@inheritDoc} */
+    public boolean isPropertyAccessor()
+    {
         if ( isStatic() ) 
         {
             return false;
         }
-        if ( getParameters().size() != 0 ) {
+        if ( getParameters().size() != 0 )
+        {
             return false;
         }
-        
-        if ( getName().startsWith( "is" ) ) 
+        if ( getName().startsWith( "is" ) )
         {
-            return ( getName().length() > 2 && Character.isUpperCase( getName().charAt(2) ) );
+            return ( getName().length() > 2 && Character.isUpperCase( getName().charAt( 2 ) ) );
         }
-        if ( getName().startsWith( "get" ) ) 
+        if ( getName().startsWith( "get" ) )
         {
-            return ( getName().length() > 3 && Character.isUpperCase( getName().charAt(3) ) );
+            return ( getName().length() > 3 && Character.isUpperCase( getName().charAt( 3 ) ) );
         }
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#isPropertyMutator()
-     */
-    public boolean isPropertyMutator() {
+    /** {@inheritDoc} */
+    public boolean isPropertyMutator()
+    {
         if ( isStatic() ) 
         {
             return false;
@@ -277,9 +284,7 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getPropertyType()
-     */
+    /** {@inheritDoc} */
     public JavaType getPropertyType() 
     {
         if ( isPropertyAccessor() ) 
@@ -293,26 +298,26 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getPropertyName()
-     */
-    public String getPropertyName() {
+    /** {@inheritDoc} */
+    public String getPropertyName()
+    {
         int start = -1;
-        if ( getName().startsWith( "get" ) || getName().startsWith( "set" ) ) 
+        if ( getName().startsWith( "get" ) || getName().startsWith( "set" ) )
         {
             start = 3;
-        } 
-        else if ( getName().startsWith( "is" ) ) 
+        }
+        else if ( getName().startsWith( "is" ) )
         {
             start = 2;
-        } 
-        else 
+        }
+        else
         {
             return null;
         }
-        return Introspector.decapitalize( getName().substring(start) );
+        return Introspector.decapitalize( getName().substring( start ) );
     }
 
+    /** {@inheritDoc} */
     public String toString()
     {
         StringBuffer result = new StringBuffer();
@@ -382,24 +387,19 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
         return result.toString();
     }
 
-	/* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getGenericReturnType()
-     */
+    /** {@inheritDoc} */
     public JavaClass getGenericReturnType()
     {
         return returns;
     }
 
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getReturnType()
-     */
-    public JavaType getReturnType() {
-	    return getReturnType( false );
-	}
+    /** {@inheritDoc} */
+    public JavaType getReturnType()
+    {
+        return getReturnType( false );
+    }
 	
-    /* (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.JavaMethod#getReturnType(boolean)
-     */
+    /** {@inheritDoc} */
     public JavaType getReturnType( boolean resolve )
     {
         return returns;

@@ -227,7 +227,7 @@ public class DefaultModelWriter
         {
             buffer.write( constructor.getSourceCode() );
         }
-        buffer.write( "}" );
+        buffer.write( '}' );
         buffer.newline();
 
         return this;
@@ -245,14 +245,7 @@ public class DefaultModelWriter
         buffer.write( '(' );
         for ( ListIterator<JavaParameter> iter = method.getParameters().listIterator(); iter.hasNext(); )
         {
-            JavaParameter parameter = iter.next();
-            buffer.write( parameter.getType().getGenericCanonicalName() );
-            if ( parameter.isVarArgs() )
-            {
-                buffer.write( "..." );
-            }
-            buffer.write( ' ' );
-            buffer.write( parameter.getName() );
+            writeParameter( iter.next() );
             if ( iter.hasNext() )
             {
                 buffer.write( ", " );
@@ -277,7 +270,7 @@ public class DefaultModelWriter
             buffer.write( " {" );
             buffer.newline();
             buffer.write( method.getSourceCode() );
-            buffer.write( "}" );
+            buffer.write( '}' );
             buffer.newline();
         }
         else
@@ -353,7 +346,7 @@ public class DefaultModelWriter
     public ModelWriter writeParameter( JavaParameter parameter )
     {
         commentHeader( parameter );
-        buffer.write( parameter.getType().getGenericCanonicalName() );
+        buffer.write( parameter.getGenericCanonicalName() );
         if ( parameter.isVarArgs() )
         {
             buffer.write( "..." );

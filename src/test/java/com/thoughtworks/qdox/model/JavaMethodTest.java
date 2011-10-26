@@ -1,7 +1,11 @@
 package com.thoughtworks.qdox.model;
 
-import static org.hamcrest.core.IsNot.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -42,6 +46,8 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     {
         JavaParameter result = mock(JavaParameter.class);
         when( result.getType() ).thenReturn( type );
+        String genericCanonicalName = type.getGenericCanonicalName();
+        when( result.getGenericCanonicalName() ).thenReturn( genericCanonicalName );
         when( result.getName() ).thenReturn( name );
         when( result.isVarArgs() ).thenReturn( varArgs );
         return result;
@@ -255,6 +261,8 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
 //        when( declaringClass.getFullyQualifiedName() ).thenReturn( "com.foo.bar" );
         setParentClass( m8, mock( JavaClass.class ) );
 
+        assertEquals(mth, mth);
+        assertThat(mth, not(new Object()));
         assertEquals(mth, m2);
         assertEquals(m2, mth);
         assertThat(mth, not(m3));

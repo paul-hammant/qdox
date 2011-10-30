@@ -1,6 +1,6 @@
 Migrating to QDox 2.0
  
-  QDox 2.0 is *not* 100% backwards compatible with previous versions. 
+  QDox 2.0 is *<<not>>* 100% backwards compatible with previous versions. 
   We've decided to move from java1.4 to java5, since support for java1.4 has ended ages ago.
   Nowadays most applications are moving to java5 and so should QDox.
   
@@ -8,10 +8,63 @@ Migrating to QDox 2.0
   
   * Replace <<com.thoughtworks.qdox.JavaDocBuilder>> with <<com.thoughtworks.qdox.JavaDocBuilder>>
   
-  * Refactor every javamodel array to generic <<List>> objects, for example: <<JavaClass[]>> will become <<List\<JavaClass\>>>
+  * Refactor every javamodel array to generic <<List>> or <<Collection>> objects, for example: <<JavaClass[]>> will become <<List\<JavaClass\>>>
   
   * Redefined getValue(). This would normally return the FQN, but now it'll return the value as used in the code(when available).
   
   * Redefined getFullyQualifiedName(). This used to return the classname, but according to the specs it should also return the array dimensions.
     To get the classname, use <<getComponentType()>>.
+    
+  []
   
+  Below is a table which maps the non-abstract classes to the refactored or suggested interface or class. The classes which are not mentioned have been removed or are implementations which should be called by their interfaces.   
+  
+*------------------------------------------------------*-----------------------------------------------------------------------*
+|| QDox-1.x                                            || QDox-2.x                                                             |
+*------------------------------------------------------+-----------------------------------------------------------------------+
+| c.t.q.JavaDocBuilder\                                | c.t.q.JavaProjectBuilder\                                             |
+| <c.t.q.JavaDocBuilder.ErrorHandler>\                 | <c.t.q.library.ErrorHandler>\                                         |
+*------------------------------------------------------+-----------------------------------------------------------------------+
+| c.t.q.model.Annotation\                              | <c.t.q.model.JavaAnnotation>\                                         |
+| c.t.q.model.ClassLibrary\                            | <c.t.q.library.ClassLibrary> and <c.t.q.library.ClassLibraryBuilder>\ |
+| <c.t.q.model.Member>\                                | <c.t.q.model.JavaMember>\                                             |
+| c.t.q.model.ModelBuilder\                            | <c.t.q.model.Builder> and c.t.q.builder.impl.ModelBuilder\            |
+| c.t.q.model.Type\                                    | <c.t.q.model.JavaType>\                                               |
+| c.t.q.model.TypeVariable\                            | <c.t.q.model.JavaTypeVariable>\                                       |
+| c.t.q.model.WildcardType\                            | <c.t.q.model.JavaWildcardType>\                                       |
+*------------------------------------------------------+-----------------------------------------------------------------------+
+| c.t.q.model.annotation.AnnotationAdd\                | c.t.q.model.expression.Add\                                           |
+| c.t.q.model.annotation.AnnotationAnd\                | c.t.q.model.expression.And\                                           |
+| c.t.q.model.annotation.AnnotationBinaryOperator\     | c.t.q.model.expression.BinaryOperator\                                |
+| c.t.q.model.annotation.AnnotationCast\               | c.t.q.model.expression.Cast\                                          |
+| c.t.q.model.annotation.AnnotationConstant\           | c.t.q.model.expression.Constant\                                      |
+| c.t.q.model.annotation.AnnotationDivide\             | c.t.q.model.expression.Divide\                                        |
+| c.t.q.model.annotation.AnnotationEquals\             | c.t.q.model.expression.Equals\                                        |
+| c.t.q.model.annotation.AnnotationExclusiveOr\        | c.t.q.model.expression.ExclusiveOr\                                   |
+| c.t.q.model.annotation.AnnotationFieldRef\           | c.t.q.model.expression.FieldRef\                                      |
+| c.t.q.model.annotation.AnnotationGreaterEquals\      | c.t.q.model.expression.GreaterEquals\                                 |
+| c.t.q.model.annotation.AnnotationGreaterThan\        | c.t.q.model.expression.GreaterThan\                                   |
+| c.t.q.model.annotation.AnnotationLessEquals\         | c.t.q.model.expression.LessEquals\                                    |
+| c.t.q.model.annotation.AnnotationLessThan\           | c.t.q.model.expression.LessThan\                                      |
+| c.t.q.model.annotation.AnnotationLogicalAnd\         | c.t.q.model.expression.LogicalAnd\                                    |
+| c.t.q.model.annotation.AnnotationLogicalNot\         | c.t.q.model.expression.LogicalNot\                                    |
+| c.t.q.model.annotation.AnnotationLogicalOr\          | c.t.q.model.expression.LogicalOr\                                     |
+| c.t.q.model.annotation.AnnotationMinusSign\          | c.t.q.model.expression.MinusSign\                                     |
+| c.t.q.model.annotation.AnnotationMultiply\           | c.t.q.model.expression.Multiply\                                      |
+| c.t.q.model.annotation.AnnotationNot\                | c.t.q.model.expression.Not\                                           |
+| c.t.q.model.annotation.AnnotationNotEquals\          | c.t.q.model.expression.NotEquals\                                     |
+| c.t.q.model.annotation.AnnotationOr\                 | c.t.q.model.expression.Or\                                            |
+| c.t.q.model.annotation.AnnotationParenExpression\    | c.t.q.model.expression.ParenExpression\                               |
+| c.t.q.model.annotation.AnnotationPlusSign\           | c.t.q.model.expression.PlusSign\                                      |
+| c.t.q.model.annotation.AnnotationQuery\              | c.t.q.model.expression.Query\                                         |
+| c.t.q.model.annotation.AnnotationRemainder\          | c.t.q.model.expression.Remainder\                                     |
+| c.t.q.model.annotation.AnnotationShiftLeft\          | c.t.q.model.expression.ShiftLeft\                                     |
+| c.t.q.model.annotation.AnnotationShiftRight\         | c.t.q.model.expression.ShiftRight\                                    |
+| c.t.q.model.annotation.AnnotationSubtract\           | c.t.q.model.expression.Subtract\                                      |
+| c.t.q.model.annotation.AnnotationTypeRef\            | c.t.q.model.expression.TypeRef\                                       |
+| c.t.q.model.annotation.AnnotationUnaryOperator\      | c.t.q.model.expression.UnaryOperator\                                 |
+| c.t.q.model.annotation.AnnotationUnsignedShiftRight\ | c.t.q.model.expression.UnsignedShiftRight\                            |
+| c.t.q.model.annotation.AnnotationValueList\          | c.t.q.model.expression.AnnotationValueList\                           |
+| c.t.q.model.annotation.EvaluatingVisitor\            | c.t.q.model.expression.ExpressionVisitor\                             | 
+| c.t.q.model.annotation.RecursiveAnnotationVisitor\   | <c.t.q.parser.expression.TransformerDef\<U\>>\                        | 
+*------------------------------------------------------+-----------------------------------------------------------------------+

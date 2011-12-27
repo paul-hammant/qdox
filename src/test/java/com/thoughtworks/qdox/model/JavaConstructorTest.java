@@ -11,8 +11,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
-
 public abstract class JavaConstructorTest<D extends JavaConstructor>
 {
     
@@ -22,21 +20,20 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     protected abstract void setParentClass( D constructor, JavaClass cls );
     protected abstract void setParameters( D constructor, List<JavaParameter> singletonList );
 
-    private DefaultJavaType newType( String name )
+    private JavaType newType( String name )
     {
         return newType( name, 0 );
     }
     
-    private DefaultJavaType newType( String name, int dimensions )
+    private JavaType newType( String name, int dimensions )
     {
-        DefaultJavaType result = mock(DefaultJavaType.class);
+        JavaType result = mock(JavaType.class);
         when(result.getFullyQualifiedName()).thenReturn( name );
-        when(result.getDimensions()).thenReturn( dimensions );
         return result;
         
     }
     
-    private JavaParameter newJavaParameter( DefaultJavaType type, String name )
+    private JavaParameter newJavaParameter( JavaType type, String name )
     {
         JavaParameter result = mock( JavaParameter.class );
         when( result.getType() ).thenReturn( type );

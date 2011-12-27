@@ -8,9 +8,8 @@ import com.thoughtworks.qdox.model.JavaClassTest;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
-import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
+import com.thoughtworks.qdox.model.JavaType;
 
 public class DefaultJavaClassTest
     extends JavaClassTest<DefaultJavaClass>
@@ -64,7 +63,7 @@ public class DefaultJavaClassTest
         clazz.setEnum( isEnum );
     }
 
-    public void setImplementz( DefaultJavaClass clazz, List<DefaultJavaType> implementz )
+    public void setImplementz( DefaultJavaClass clazz, List<JavaType> implementz )
     {
         clazz.setImplementz( implementz );
     }
@@ -94,7 +93,7 @@ public class DefaultJavaClassTest
         ((DefaultJavaSource) source).setPackage( pckg );
     }
 
-    public void setSuperClass( DefaultJavaClass clazz, DefaultJavaType type )
+    public void setSuperClass( DefaultJavaClass clazz, JavaType type )
     {
         clazz.setSuperClass( type );
     }

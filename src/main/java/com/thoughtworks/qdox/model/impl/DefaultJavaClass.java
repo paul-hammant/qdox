@@ -62,7 +62,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType>
 
     private boolean anAnnotation;
 
-    private T superClass;
+    private JavaType superClass;
 
     private List<T> implementz = new LinkedList<T>();
 
@@ -134,15 +134,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType>
     /** {@inheritDoc} */
     public JavaType getSuperClass()
     {
-        return getSuperJavaClass();
-    }
-
-    /**
-     * Shorthand for getSuperClass().getJavaClass() with null checking.
-     */
-    public JavaClass getSuperJavaClass()
-    {
-        JavaClass result;
+        JavaType result = null;
         JavaClass OBJECT_JAVACLASS = getJavaClassLibrary().getJavaClass( "java.lang.Object" );
         JavaClass ENUM_JAVACLASS = getJavaClassLibrary().getJavaClass( "java.lang.Enum" );
 
@@ -156,9 +148,23 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType>
         {
             result = OBJECT_JAVACLASS;
         }
-        else
+        else 
         {
             result = superClass;
+        }
+        return result;
+    }
+
+    /**
+     * Shorthand for getSuperClass().getJavaClass() with null checking.
+     */
+    public JavaClass getSuperJavaClass()
+    {
+        JavaClass result = null;
+        JavaType superType = getSuperClass();
+        if ( superType instanceof JavaClass )
+        {
+            result = ( JavaClass ) superType;
         }
         return result;
     }
@@ -212,7 +218,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType>
         methods.add( meth );
     }
 
-    public void setSuperClass( T type )
+    public void setSuperClass( JavaType type )
     {
         if ( anEnum )
         {

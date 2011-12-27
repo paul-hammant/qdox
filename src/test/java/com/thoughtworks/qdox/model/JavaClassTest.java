@@ -13,9 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 public abstract class JavaClassTest<C extends JavaClass> {
 
@@ -32,13 +31,13 @@ public abstract class JavaClassTest<C extends JavaClass> {
     public abstract void setDeclaringClass( C clazz, JavaClass declaringClazz );
     public abstract void setEnum(C clazz, boolean isEnum);
     public abstract void setFields(C clazz, List<JavaField> fields);
-    public abstract void setImplementz(C clazz, List<DefaultJavaType> implementz);
+    public abstract void setImplementz(C clazz, List<JavaType> implementz);
     public abstract void setInterface(C clazz, boolean isInterface);
     public abstract void setMethods(C clazz, List<JavaMethod> method);
     public abstract void setModifiers(C clazz, List<String> modifiers);
     public abstract void setName(C clazz, String name);
     public abstract void setPackage(C clazz, JavaPackage pckg);
-    public abstract void setSuperClass(C clazz, DefaultJavaType type);
+    public abstract void setSuperClass(C clazz, JavaType type);
     public abstract void setSource( C clazz, JavaSource source );
     
     public JavaPackage newJavaPackage(String name) {
@@ -62,9 +61,9 @@ public abstract class JavaClassTest<C extends JavaClass> {
     
     public abstract JavaSource newJavaSource();
 
-    public DefaultJavaType newType( String fullname )
+    public JavaType newType( String fullname )
     {
-        DefaultJavaType result = mock( DefaultJavaType.class );
+        JavaType result = mock( JavaType.class );
         when( result.getFullyQualifiedName() ).thenReturn( fullname );
         when( result.getValue() ).thenReturn( fullname.replace( '$', '.' ) );
         when( result.getCanonicalName() ).thenReturn( fullname.replace( '$', '.' ) );
@@ -230,7 +229,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         setName(cls, "MyClass");
         JavaMethod mth = mock(JavaMethod.class);
         when(mth.getName()).thenReturn( "doStuff" );
-        DefaultJavaType voidType = newType("void");
+        JavaType voidType = newType("void");
         when(mth.getReturnType()).thenReturn( voidType );
         
         setMethods(cls, Collections.singletonList( mth ));
@@ -250,7 +249,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         {
             JavaMethod mth = mock(JavaMethod.class);
             when(mth.getName()).thenReturn( "doStuff" );
-            DefaultJavaType voidType = newType( "void" );
+            JavaType voidType = newType( "void" );
             when(mth.getReturnType()).thenReturn( voidType );
             methods.add(mth);
         }
@@ -258,7 +257,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         {
             JavaMethod mth = mock(JavaMethod.class);
             when(mth.getName()).thenReturn( "somethingElse" );
-            DefaultJavaType gooseType = newType("Goose");
+            JavaType gooseType = newType("Goose");
             when(mth.getReturnType()).thenReturn( gooseType );
             methods.add(mth);
         }
@@ -266,7 +265,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         {
             JavaMethod mth = mock(JavaMethod.class);
             when(mth.getName()).thenReturn( "eat" );
-            DefaultJavaType voidType = newType("void");
+            JavaType voidType = newType("void");
             when(mth.getReturnType()).thenReturn( voidType );
             methods.add(mth);
         }
@@ -292,7 +291,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         {
             JavaField fld = mock( JavaField.class );
             when(fld.getName()).thenReturn( "count" );
-            DefaultJavaType intType = newType("int");
+            JavaClass intType = newJavaClass("int");
             when(fld.getType()).thenReturn( intType );
             when(fld.getDeclaringClass()).thenReturn( cls );
             fields.add( fld );
@@ -301,7 +300,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         {
             JavaField fld = mock( JavaField.class );
             when(fld.getName()).thenReturn( "thing" );
-            DefaultJavaType stringType = newType( "String" );
+            JavaClass stringType = newJavaClass( "String" );
             when(fld.getType()).thenReturn( stringType );
             when(fld.getModifiers()).thenReturn( Collections.singletonList( "public" ) );
             when(fld.getDeclaringClass()).thenReturn( cls );
@@ -398,7 +397,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
 
         JavaMethod mth = mock(JavaMethod.class);
         when(mth.getName()).thenReturn( "thingy" );
-        DefaultJavaType stringType = newType( "String" );
+        JavaClass stringType = newJavaClass( "String" );
         when(mth.getReturnType()).thenReturn( stringType );
         when(mth.getComment()).thenReturn( "Hello Method" );
         setMethods( cls, Collections.singletonList( mth ) );
@@ -620,7 +619,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     public void testCanGetFieldByName() throws Exception {
         JavaField fredField = mock(JavaField.class);
         when(fredField.getName()).thenReturn( "fred" );
-        DefaultJavaType intType = newType("int");
+        JavaClass intType = newJavaClass("int");
         when(fredField.getType()).thenReturn( intType );
         when(fredField.getDeclaringClass()).thenReturn( cls );
         setFields( cls, Collections.singletonList( fredField ) );
@@ -666,9 +665,13 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testResolveTypeDefaultsToParentScope() throws Exception {
-        setName(cls, "X");
-        assertEquals("int", cls.resolveType("int"));
+    public void testResolveTypeDefaultsToParentScope()
+        throws Exception
+    {
+        setName( cls, "X" );
+        assertEquals( "int", cls.resolveType( "int" ) );
+        assertEquals( "int", cls.resolveCanonicalName( "int" ) );
+        assertEquals( "int", cls.resolveFullyQualifiedName( "int" ) );
     }
     
     @Test
@@ -694,7 +697,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         List<JavaMethod> methods = new ArrayList<JavaMethod>();
         JavaMethod setFooMethod = mock(JavaMethod.class);
         when(setFooMethod.getName()).thenReturn( "setFoo" );
-        DefaultJavaType intType = newType("int");
+        JavaClass intType = newJavaClass("int");
         List<JavaParameter> parameters = Collections.singletonList( newJavaParameter( intType, "foo" ) );
         when(setFooMethod.getParameters()).thenReturn( parameters );
         when(setFooMethod.isPropertyMutator()).thenReturn( true );
@@ -788,7 +791,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         List<JavaMethod> methods = new ArrayList<JavaMethod>();
         JavaMethod getFooMethod = mock(JavaMethod.class);
         when(getFooMethod.getName()).thenReturn( "getFoo" );
-        DefaultJavaType intType = newType("int");
+        JavaClass intType = newJavaClass("int");
         when(getFooMethod.getReturnType()).thenReturn( intType );
         when(getFooMethod.getPropertyName()).thenReturn( "foo" );
         when(getFooMethod.isPropertyAccessor()).thenReturn( true );
@@ -803,7 +806,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         
         JavaMethod getMcFNordMethod = mock(JavaMethod.class);
         when(getMcFNordMethod.getName()).thenReturn( "getMcFnord" );
-        DefaultJavaType stringType = newType("String");
+        JavaClass stringType = newJavaClass("String");
         when(getMcFNordMethod.getReturnType()).thenReturn( stringType );
         when(getMcFNordMethod.getPropertyName()).thenReturn( "mcFnord" );
         when(getMcFNordMethod.isPropertyAccessor()).thenReturn( true );
@@ -817,8 +820,8 @@ public abstract class JavaClassTest<C extends JavaClass> {
         assertEquals("mcFnord", properties.get(2).getName());        
     }
     
-    private List<DefaultJavaType> type(String[] typeNames) {
-        List<DefaultJavaType> result = new LinkedList<DefaultJavaType>();
+    private List<JavaType> type(String[] typeNames) {
+        List<JavaType> result = new LinkedList<JavaType>();
         for (int i = 0; i < typeNames.length; i++) {
             result.add(newType(typeNames[i]));
         }
@@ -857,7 +860,8 @@ public abstract class JavaClassTest<C extends JavaClass> {
         assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), true, true ) );
     }
  
-    public void QDOX2_tofix_testJavaLangObjectAsDefaultSuperClass() throws Exception {
+    @Ignore
+    public void testJavaLangObjectAsDefaultSuperClass() throws Exception {
         //up untill now this succeeds, because other tests have already set the static value of OBJECT
         //running this test alone make it fail, so it's not a proper test.
         //should be fixed if we can get rid of the Type-visibility

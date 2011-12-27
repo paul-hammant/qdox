@@ -1,8 +1,6 @@
 package com.thoughtworks.qdox;
 
 import java.io.StringReader;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 
 import junit.framework.TestCase;
 
@@ -14,8 +12,6 @@ import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
-import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 /**
  * QDOX-54 Support for retrieval of generic type information (JSR 14)
  * 

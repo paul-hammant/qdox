@@ -1,10 +1,10 @@
 package com.thoughtworks.qdox;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hamcrest.core.IsSame;
-
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.library.ClassLibraryBuilder;
@@ -39,8 +37,6 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 import com.thoughtworks.qdox.model.util.SerializationUtils;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.testdata.PropertyClass;

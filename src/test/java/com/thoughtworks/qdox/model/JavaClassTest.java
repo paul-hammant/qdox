@@ -31,7 +31,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     public abstract void setDeclaringClass( C clazz, JavaClass declaringClazz );
     public abstract void setEnum(C clazz, boolean isEnum);
     public abstract void setFields(C clazz, List<JavaField> fields);
-    public abstract void setImplementz(C clazz, List<JavaType> implementz);
+    public abstract void setImplementz(C clazz, List<JavaClass> implementz);
     public abstract void setInterface(C clazz, boolean isInterface);
     public abstract void setMethods(C clazz, List<JavaMethod> method);
     public abstract void setModifiers(C clazz, List<String> modifiers);
@@ -820,10 +820,10 @@ public abstract class JavaClassTest<C extends JavaClass> {
         assertEquals("mcFnord", properties.get(2).getName());        
     }
     
-    private List<JavaType> type(String[] typeNames) {
-        List<JavaType> result = new LinkedList<JavaType>();
+    private List<JavaClass> type(String[] typeNames) {
+        List<JavaClass> result = new LinkedList<JavaClass>();
         for (int i = 0; i < typeNames.length; i++) {
-            result.add(newType(typeNames[i]));
+            result.add(newJavaClass(typeNames[i]));
         }
         return result;
     }

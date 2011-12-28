@@ -27,7 +27,7 @@ public class DefaultJavaClassIT
     public void testSuperJavaClass() throws Exception
     {
         JavaClass hashSetClass = library.getJavaClass( "java.util.HashSet" );
-        assertTrue( hashSetClass instanceof DefaultJavaClass<?> );
+        assertTrue( hashSetClass instanceof DefaultJavaClass );
         
         JavaClass superClass = hashSetClass.getSuperJavaClass();
         assertEquals( "java.util.AbstractSet", superClass.getFullyQualifiedName() );
@@ -38,7 +38,7 @@ public class DefaultJavaClassIT
     public void testIsAJavaClass() throws Exception
     {
         JavaClass hashSetClass = library.getJavaClass( "java.util.HashSet" );
-        assertTrue( hashSetClass instanceof DefaultJavaClass<?> );
+        assertTrue( hashSetClass instanceof DefaultJavaClass );
         
         JavaClass setClass = library.getJavaClass( "java.util.Set" );
         assertTrue( hashSetClass.isA( setClass ) );
@@ -51,7 +51,7 @@ public class DefaultJavaClassIT
     public void testDeclaringClass() throws Exception
     {
         JavaClass entryClass = library.getJavaClass( "java.util.Map$Entry" );
-        assertTrue( entryClass instanceof DefaultJavaClass<?> );
+        assertTrue( entryClass instanceof DefaultJavaClass );
         
         assertEquals( "java.util.Map", entryClass.getDeclaringClass().getFullyQualifiedName() );
         assertEquals( "java.util.Map", Class.forName( "java.util.Map$Entry" ).getDeclaringClass().getName() );
@@ -60,7 +60,7 @@ public class DefaultJavaClassIT
     @Test 
     public void testDeclaredClasses() throws Exception {
         JavaClass mapClass = library.getJavaClass( "java.util.Map" );
-        assertTrue( mapClass instanceof DefaultJavaClass<?> );
+        assertTrue( mapClass instanceof DefaultJavaClass );
         
         assertEquals( 1, mapClass.getNestedClasses().size() );
         assertEquals( "java.util.Map$Entry",  mapClass.getNestedClassByName( "Entry" ).getFullyQualifiedName() );
@@ -91,7 +91,7 @@ public class DefaultJavaClassIT
     {
         //subclass
         JavaClass entryClass = library.getJavaClass( "java.util.Map$Entry" );
-        assertTrue( entryClass instanceof DefaultJavaClass<?> );
+        assertTrue( entryClass instanceof DefaultJavaClass );
         
         assertEquals( "java.util.Map$Entry", entryClass.getFullyQualifiedName() );
         assertEquals( "java.util.Map$Entry", Class.forName( "java.util.Map$Entry" ).getName() );

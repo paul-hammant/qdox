@@ -43,7 +43,7 @@ import com.thoughtworks.qdox.model.JavaType;
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  */
-public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType>
+public class DefaultJavaClass
     extends AbstractInheritableJavaEntity
     implements JavaClass
 {
@@ -64,7 +64,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType>
 
     private JavaType superClass;
 
-    private List<T> implementz = new LinkedList<T>();
+    private List<JavaClass> implementz = new LinkedList<JavaClass>();
 
     private List<DefaultJavaTypeVariable<JavaClass>> typeParameters =
         new LinkedList<DefaultJavaTypeVariable<JavaClass>>();
@@ -227,7 +227,7 @@ public class DefaultJavaClass<T extends JavaClass & JavaParameterizedType>
         superClass = type;
     }
 
-    public void setImplementz( List<T> implementz )
+    public void setImplementz( List<JavaClass> implementz )
     {
         this.implementz = implementz;
     }

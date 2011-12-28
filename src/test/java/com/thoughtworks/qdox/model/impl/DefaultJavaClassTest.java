@@ -63,7 +63,7 @@ public class DefaultJavaClassTest
         clazz.setEnum( isEnum );
     }
 
-    public void setImplementz( DefaultJavaClass clazz, List<JavaType> implementz )
+    public void setImplementz( DefaultJavaClass clazz, List<JavaClass> implementz )
     {
         clazz.setImplementz( implementz );
     }

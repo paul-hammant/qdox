@@ -26,7 +26,7 @@ public class DefaultJavaTypeIT
     public void testSuperClass()
     {
         JavaClass hashSetClass = library.getJavaClass( "java.util.HashSet" );
-        assertTrue( hashSetClass instanceof DefaultJavaClass<?> );
+        assertTrue( hashSetClass instanceof DefaultJavaClass );
         JavaType hashSetSuperClass = hashSetClass.getSuperClass();
         assertEquals( "java.util.AbstractSet", hashSetSuperClass.getFullyQualifiedName() );
         assertEquals( "java.util.AbstractSet", hashSetSuperClass.getCanonicalName() );

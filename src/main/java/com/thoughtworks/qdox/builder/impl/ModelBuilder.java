@@ -157,7 +157,7 @@ public class ModelBuilder implements Builder {
 
         // implements
         Set<TypeDef> implementSet = newClass.isInterface() ? def.getExtends() : def.getImplements();
-        List<JavaType> implementz = new LinkedList<JavaType>();
+        List<JavaClass> implementz = new LinkedList<JavaClass>();
         for ( TypeDef implementType : implementSet )
         {
             implementz.add( createType( implementType, 0 ) );

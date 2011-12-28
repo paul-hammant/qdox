@@ -8,7 +8,6 @@ import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaType;
 
 /**
@@ -17,12 +16,12 @@ import com.thoughtworks.qdox.model.JavaType;
  * @author Robert Scholte
  *
  */
-public abstract class AbstractBaseMethod<T extends JavaClass & JavaParameterizedType>
+public abstract class AbstractBaseMethod
     extends AbstractInheritableJavaEntity
 {
 
     private List<JavaParameter> parameters = Collections.emptyList();
-    private List<T> exceptions = Collections.emptyList();
+    private List<JavaClass> exceptions = Collections.emptyList();
     private boolean varArgs;
     private String sourceCode;
 
@@ -67,7 +66,7 @@ public abstract class AbstractBaseMethod<T extends JavaClass & JavaParameterized
         this.varArgs = javaParameters.get( javaParameters.size() -1 ).isVarArgs();
     }
 
-    public void setExceptions( List<T> exceptions )
+    public void setExceptions( List<JavaClass> exceptions )
     {
         this.exceptions = exceptions;
     }

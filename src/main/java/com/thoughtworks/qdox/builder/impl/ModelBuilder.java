@@ -39,6 +39,7 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.JavaTypeVariable;
 import com.thoughtworks.qdox.model.impl.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 import com.thoughtworks.qdox.model.impl.DefaultJavaConstructor;
@@ -47,8 +48,8 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
-import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
 import com.thoughtworks.qdox.model.impl.DefaultJavaType;
+import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -268,8 +269,8 @@ public class ModelBuilder implements Builder {
         // typeParameters
         if ( def.getTypeParams() != null )
         {
-            List<DefaultJavaTypeVariable<JavaConstructor>> typeParams =
-                new LinkedList<DefaultJavaTypeVariable<JavaConstructor>>();
+            List<JavaTypeVariable<JavaConstructor>> typeParams =
+                new LinkedList<JavaTypeVariable<JavaConstructor>>();
             for ( TypeVariableDef typeVariableDef : def.getTypeParams() )
             {
                 typeParams.add( createTypeVariable( typeVariableDef, (JavaConstructor) currentConstructor ) );
@@ -324,8 +325,8 @@ public class ModelBuilder implements Builder {
         // typeParameters
         if ( def.getTypeParams() != null )
         {
-            List<DefaultJavaTypeVariable<JavaMethod>> typeParams =
-                new LinkedList<DefaultJavaTypeVariable<JavaMethod>>();
+            List<JavaTypeVariable<JavaMethod>> typeParams =
+                new LinkedList<JavaTypeVariable<JavaMethod>>();
             for ( TypeVariableDef typeVariableDef : def.getTypeParams() )
             {
                 typeParams.add( createTypeVariable( typeVariableDef, (JavaMethod) currentMethod ) );

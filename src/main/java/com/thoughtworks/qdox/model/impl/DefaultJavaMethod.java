@@ -32,9 +32,9 @@ import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
 
-public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> extends AbstractBaseMethod<T> implements JavaMethod {
+public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod {
 
-	private T returns = (T) DefaultJavaType.VOID;
+	private JavaClass returns = DefaultJavaType.VOID;
     private List<JavaTypeVariable<JavaMethod>> typeParameters = Collections.emptyList();
 	
     /**
@@ -58,7 +58,7 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
      * @param returns the return type
      * @param name the name of this method
      */
-    public DefaultJavaMethod(T returns, String name) {
+    public DefaultJavaMethod(JavaClass returns, String name) {
         this.returns = returns;
         setName(name);
     }
@@ -171,7 +171,7 @@ public class DefaultJavaMethod<T extends JavaClass & JavaParameterizedType> exte
      * 
      * @param returns the return type
      */
-    public void setReturns(T returns)
+    public void setReturns(JavaClass returns)
     {
         this.returns = returns;
     }

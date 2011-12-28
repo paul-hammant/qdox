@@ -7,7 +7,6 @@ import java.util.List;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
 
@@ -16,8 +15,8 @@ import com.thoughtworks.qdox.model.JavaTypeVariable;
  * @author Robert
  * @since 2.0
  */
-public class DefaultJavaConstructor<T extends JavaClass & JavaParameterizedType>
-    extends AbstractBaseMethod<T> implements JavaConstructor
+public class DefaultJavaConstructor
+    extends AbstractBaseMethod implements JavaConstructor
 {
 
     private List<JavaTypeVariable<JavaConstructor>> typeParameters = Collections.emptyList();

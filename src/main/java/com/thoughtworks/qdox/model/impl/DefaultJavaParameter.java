@@ -3,7 +3,6 @@ package com.thoughtworks.qdox.model.impl;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaType;
 
 /*
@@ -26,20 +25,20 @@ import com.thoughtworks.qdox.model.JavaType;
  */
 
 
-public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> extends AbstractBaseJavaEntity implements JavaParameter 
+public class DefaultJavaParameter extends AbstractBaseJavaEntity implements JavaParameter 
 {
 
     private String name;
-    private T type;
+    private JavaClass type;
     private JavaMethod parentMethod;
     private boolean varArgs;
 
-    public DefaultJavaParameter( T type, String name )
+    public DefaultJavaParameter( JavaClass type, String name )
     {
         this( type, name, false );
     }
 
-    public DefaultJavaParameter( T type, String name, boolean varArgs )
+    public DefaultJavaParameter( JavaClass type, String name, boolean varArgs )
     {
         this.name = name;
         this.type = type;
@@ -69,6 +68,7 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
         return type;
     }
 
+    /** {@inheritDoc} */
     public JavaClass getJavaClass()
     {
         return type;
@@ -184,6 +184,7 @@ public class DefaultJavaParameter<T extends JavaClass & JavaParameterizedType> e
         return type.getGenericValue();
     }
 
+    /** {@inheritDoc} */
     public String toGenericString()
     {
         return type.toGenericString();

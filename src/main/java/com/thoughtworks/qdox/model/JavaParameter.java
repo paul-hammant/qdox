@@ -75,6 +75,10 @@ public interface JavaParameter extends JavaAnnotatedElement, JavaType
      */
     String getFullyQualifiedName();
     
+    /**
+     * @return the canonical name of the type, never <code>null</code>
+     * @since 2.0
+     */
     String getCanonicalName();
 
     /**

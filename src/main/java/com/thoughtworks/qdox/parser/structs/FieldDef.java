@@ -24,23 +24,29 @@ import java.util.Set;
 
 /**
  * Used for both fields and parameters
- * 
- *
  */
-public class FieldDef extends LocatedDef {
-    
-    private String name = "";
+public class FieldDef
+    extends LocatedDef
+{
+
+    private String name;
+
     private TypeDef type;
+
     private Set<String> modifiers = new LinkedHashSet<String>();
+
     private int dimensions;
+
     private boolean isVarArgs;
+
     private boolean isEnumConstant;
-    private String body = "";
-    
+
+    private String body;
+
     public FieldDef()
     {
     }
-    
+
     public FieldDef( String name )
     {
         this.name = name;
@@ -141,20 +147,20 @@ public class FieldDef extends LocatedDef {
     {
         return modifiers;
     }
-    
+
     /**
-     * 
      * @return <code>true</code> if this field is an enum constant, otherwise <code>false</code>
      */
-    public boolean isEnumConstant() {
-		return isEnumConstant;
-	}
-    
+    public boolean isEnumConstant()
+    {
+        return isEnumConstant;
+    }
+
     /**
-     * 
      * @param isEnumConstant value to specify if this field is an enum constant or not
      */
-    public void setEnumConstant(boolean isEnumConstant) {
-		this.isEnumConstant = isEnumConstant;
-	}
+    public void setEnumConstant( boolean isEnumConstant )
+    {
+        this.isEnumConstant = isEnumConstant;
+    }
 }

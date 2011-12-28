@@ -30,6 +30,8 @@ import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
 
 /**
+ * Equivalent of {@link java.lang.reflect.TypeVariable}
+ * 
  * @author Robert Scholte
  * @since 1.10
  */
@@ -64,7 +66,7 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
         }
         else
         {
-            throw new IllegalArgumentException( "Unknown GenericDeclatation implementation" );
+            throw new IllegalArgumentException( "Unknown JavaGenericDeclaration implementation" );
         }
         return result;
     }
@@ -93,7 +95,7 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     @Override
     public String getFullyQualifiedName()
     {
-        return super.getValue();
+        return getValue();
     }
 
     @Override
@@ -115,14 +117,10 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
         return result.toString();
     }
 
-    public String getValue()
-    {
-        return super.getValue();
-    }
-
+    @Override
     public String getGenericValue()
     {
-        StringBuffer result = new StringBuffer( super.getValue() );
+        StringBuffer result = new StringBuffer( getValue() );
         if ( bounds != null && !bounds.isEmpty() )
         {
             result.append( " extends " );
@@ -138,9 +136,10 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
         return result.toString();
     }
 
+    @Override
     public String getName()
     {
-        return super.getValue();
+        return getValue();
     }
 
     public String getResolvedValue()

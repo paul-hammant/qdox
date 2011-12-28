@@ -21,56 +21,59 @@ import com.thoughtworks.qdox.model.JavaWildcardType;
  * under the License.
  */
 
-
 /**
- * This class supports both the 'super' and 'extends' wildcards.
- * For &lt;?&gt; you must use the normal Type, because ? itself can't be generic 
+ * Equivalent of {@link java.lang.reflect.WildcardType}
+ * This class supports both the 'super' and 'extends' wildcards. For &lt;?&gt; you must use the normal Type, because ?
+ * itself can't be generic
  * 
  * @author Robert Scholte
- *
  */
-public class DefaultJavaWildcardType extends DefaultJavaType implements JavaWildcardType {
+public class DefaultJavaWildcardType
+    extends DefaultJavaType
+    implements JavaWildcardType
+{
 
     /**
      * A wildcardExpression is either <code>super</code> or <code>extends</code> or <code>null</code>
      */
-	private String wildcardExpressionType = null;
-	
-	public DefaultJavaWildcardType() {
-		super("?");
-	}
-	
+    private String wildcardExpressionType = null;
+
+    public DefaultJavaWildcardType()
+    {
+        super( "?" );
+    }
+
     public DefaultJavaWildcardType( String name, String wildcardExpressionType, JavaClassParent context )
     {
         super( name, context );
         this.wildcardExpressionType = wildcardExpressionType;
     }
 
-	public String getGenericValue() {
-		String result = "";
-		if( wildcardExpressionType != null ) 
-		{
-			result += "? " + wildcardExpressionType+ " ";
-		}
-		result += super.getGenericValue();
-		return result;
-	}
-	
-	@Override
-	public String getFullyQualifiedName()
-	{
-	    return "?";
-	}
-	
-	@Override
-	public String getGenericFullyQualifiedName()
-	{
-	    String result = "";
-        if( wildcardExpressionType != null ) 
+    @Override
+    public String getGenericValue()
+    {
+        String result = "";
+        if ( wildcardExpressionType != null )
         {
-            result += "? " + wildcardExpressionType+ " ";
+            result += "? " + wildcardExpressionType + " ";
         }
-        result += super.getFullyQualifiedName();
-        return result; 
-	}
+        return result + super.getGenericValue();
+    }
+
+    @Override
+    public String getFullyQualifiedName()
+    {
+        return "?";
+    }
+
+    @Override
+    public String getGenericFullyQualifiedName()
+    {
+        String result = "";
+        if ( wildcardExpressionType != null )
+        {
+            result += "? " + wildcardExpressionType + " ";
+        }
+        return result + super.getFullyQualifiedName();
+    }
 }

@@ -26,9 +26,9 @@ public class DefaultJavaFieldTest
     }
 
     @Override
-    public DefaultJavaField newJavaField( DefaultJavaType type, String name )
+    public DefaultJavaField newJavaField( JavaClass type, String name )
     {
-        return new DefaultJavaField(type, name);
+        return new DefaultJavaField( type, name );
     }
 
     @Override
@@ -56,7 +56,7 @@ public class DefaultJavaFieldTest
     }
 
     @Override
-    public void setType( DefaultJavaField fld, DefaultJavaType type )
+    public void setType( DefaultJavaField fld, JavaClass type )
     {
         fld.setType( type );
     }
@@ -66,5 +66,4 @@ public class DefaultJavaFieldTest
     {
         fld.setParentClass( cls );
     }
-
 }

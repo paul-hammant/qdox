@@ -64,5 +64,11 @@ public interface JavaField extends JavaAnnotatedElement, JavaMember, JavaModel
      * @since 2.0
      */
     boolean isEnumConstant();
-
+    
+    /**
+     *  
+     * @return the classBody of the enum constant
+     * @since 2.0 
+     */
+    JavaClass getEnumConstantClass();
 }

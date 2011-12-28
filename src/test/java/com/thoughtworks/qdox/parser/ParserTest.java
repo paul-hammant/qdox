@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -17,6 +18,7 @@ import org.mockito.stubbing.answers.ReturnsElementsOf;
 
 import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.parser.impl.Parser;
+import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -2632,6 +2634,7 @@ public class ParserTest extends TestCase {
         verify( builder, times( 2 ) ).beginField( f.capture() );
         verify( builder, times( 2 ) ).endField();
         verify( builder ).endClass();
+        verifyNoMoreInteractions( builder );
 
         ClassDef cls = classCaptor.getValue();
         assertEquals( "x", cls.getName() );
@@ -2683,6 +2686,77 @@ public class ParserTest extends TestCase {
         assertEquals( new TypeDef( "x" ), fld.getType() ); //bug @todo fixme
         assertEquals( null , fld.getBody() );
     }
+    
+    // QDOX-266
+    public void testEnumConstantWithClassBody() throws Exception 
+    {
+        setupLex(Parser.PUBLIC);
+        setupLex(Parser.ENUM);
+        setupLex(Parser.IDENTIFIER, "MethodLocationOfEnumMethod");
+        setupLex(Parser.BRACEOPEN);
+
+        setupLex(Parser.IDENTIFIER, "A");
+        setupLex(Parser.PARENBLOCK);
+
+        setupLex(Parser.BRACEOPEN);
+        
+        setupLex(Parser.AT);
+        setupLex(Parser.IDENTIFIER, "Override");
+        setupLex(Parser.PUBLIC);
+        setupLex(Parser.IDENTIFIER, "void" );
+        setupLex(Parser.IDENTIFIER, "method" );
+        setupLex(Parser.PARENOPEN);
+        setupLex(Parser.PARENCLOSE);
+        setupLex(Parser.CODEBLOCK);
+        setupLex(Parser.SEMI);
+        
+        setupLex(Parser.BRACECLOSE);
+
+        setupLex(Parser.BRACECLOSE);
+        setupLex(0);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+        
+        // expectations
+        ArgumentCaptor<ClassDef> classCaptor = ArgumentCaptor.forClass( ClassDef.class );
+        ArgumentCaptor<FieldDef> f = ArgumentCaptor.forClass(FieldDef.class);
+        ArgumentCaptor<ClassDef> enumConstantClassCaptor = ArgumentCaptor.forClass( ClassDef.class );
+        ArgumentCaptor<AnnoDef> annoCaptor = ArgumentCaptor.forClass( AnnoDef.class );
+        ArgumentCaptor<MethodDef> methodClassCaptor = ArgumentCaptor.forClass( MethodDef.class );
+
+        // verify
+        verify( builder ).beginClass( classCaptor.capture() );
+        verify( builder ).beginField( f.capture() );
+        verify( builder ).beginClass( enumConstantClassCaptor.capture() );
+        verify( builder ).addAnnotation( annoCaptor.capture() );
+        verify( builder ).beginMethod();
+        verify( builder ).endMethod( methodClassCaptor.capture() );
+        verify( builder ).endClass();
+        verify( builder ).endField();
+        verify( builder ).endClass();
+        
+        ClassDef cls = classCaptor.getValue();
+        assertEquals( true, cls.getModifiers().contains( "public" ) );
+        assertEquals( ClassDef.ENUM, cls.getType() );
+        assertEquals( "MethodLocationOfEnumMethod", cls.getName() );
+        FieldDef fld = f.getValue();
+        assertEquals( "A", fld.getName() );
+        assertEquals( new TypeDef( "MethodLocationOfEnumMethod" ), fld.getType() );
+        //ClassDef ecCls = enumConstantClassCaptor.getValue();
+        AnnoDef ann = annoCaptor.getValue();
+        assertEquals( "Override", ann.getTypeDef().getName() );
+        MethodDef mth = methodClassCaptor.getValue();
+        assertEquals( "method", mth.getName() );
+        
+//        Class methodLocationOfEnumMethod = MethodLocationOfEnumMethod.class;
+//        Field a = methodLocationOfEnumMethod.getField( "A" );
+//        assertNotNull( a );
+//        assertSame( methodLocationOfEnumMethod, a.getDeclaringClass() );
+//        assertSame( methodLocationOfEnumMethod, a.getType() );
+//        assertEquals( 2, methodLocationOfEnumMethod.getDeclaredMethods().length);
+    }
 
     private void setupLex(int token, String value) {
         lexValues.add( token );
@@ -2700,4 +2774,24 @@ public class ParserTest extends TestCase {
         }
     }
 
+    private enum MethodLocationOfEnumMethod
+    {
+      A()
+      {
+        @Override
+        public void method()
+        {
+        };
+        
+        public String doThis() { return null; }
+      };
+
+      public abstract void method();
+
+      private void test()
+      {
+      };
+      
+      String name = "x";
+    }
 }

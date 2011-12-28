@@ -33,6 +33,8 @@ public class DefaultJavaField
 
     private boolean enumConstant;
 
+    private JavaClass enumConstantClass;
+
     public DefaultJavaField()
     {
     }
@@ -115,6 +117,17 @@ public class DefaultJavaField
     public void setEnumConstant( boolean enumConstant )
     {
         this.enumConstant = enumConstant;
+    }
+    
+    /** {@inheritDoc} */
+    public JavaClass getEnumConstantClass()
+    {
+        return enumConstantClass;
+    }
+    
+    public void setEnumConstantClass( JavaClass enumConstantClass )
+    {
+        this.enumConstantClass = enumConstantClass;
     }
 
     /**

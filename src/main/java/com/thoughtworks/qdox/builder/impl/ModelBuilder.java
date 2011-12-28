@@ -191,11 +191,15 @@ public class ModelBuilder implements Builder {
         // annotations
         setAnnotations( newClass );
         
-        if ( !classStack.isEmpty() )
+        if ( currentField != null )
+        {
+            classStack.getFirst().addClass( newClass );
+            currentField.setEnumConstantClass( newClass );
+        }
+        else if ( !classStack.isEmpty() )
         {
             classStack.getFirst().addClass( newClass );
             newClass.setParentClass( classStack.getFirst() );
-            
         }
         else
         {

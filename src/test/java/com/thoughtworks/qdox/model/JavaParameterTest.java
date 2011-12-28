@@ -17,16 +17,16 @@ public abstract class JavaParameterTest<P extends JavaParameter>
     }
 
     // constructors
-    protected abstract P newJavaParameter( DefaultJavaType type, String name );
+    protected abstract P newJavaParameter( JavaClass type, String name );
 
-    protected abstract P newJavaParameter( DefaultJavaType type, String name, boolean varArgs );
+    protected abstract P newJavaParameter( JavaClass type, String name, boolean varArgs );
 
     // setters
     protected abstract void setMethod( P parameter, JavaMethod method );
 
-    protected DefaultJavaType newType( String typeName )
+    protected JavaClass newType( String typeName )
     {
-        DefaultJavaType result = mock( DefaultJavaType.class );
+        JavaClass result = mock( JavaClass.class );
         when( result.getFullyQualifiedName() ).thenReturn( typeName );
         return result;
     }

@@ -1,9 +1,9 @@
 package com.thoughtworks.qdox.model.impl;
 
+import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameterTest;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParameter>
 {
@@ -14,13 +14,13 @@ public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParam
     }
 
     @Override
-    protected DefaultJavaParameter newJavaParameter( DefaultJavaType type, String name )
+    protected DefaultJavaParameter newJavaParameter( JavaClass type, String name )
     {
         return new DefaultJavaParameter( type, name );
     }
 
     @Override
-    protected DefaultJavaParameter newJavaParameter( DefaultJavaType type, String name, boolean varArgs )
+    protected DefaultJavaParameter newJavaParameter( JavaClass type, String name, boolean varArgs )
     {
         return new DefaultJavaParameter( type, name, varArgs );
     }
@@ -30,5 +30,4 @@ public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParam
     {
         parameter.setParentMethod( method );
     }
-
 }

@@ -6,7 +6,6 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethodTest;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.impl.DefaultJavaMethod;
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 public class DefaultJavaMethodTest
     extends JavaMethodTest<DefaultJavaMethod>
@@ -17,7 +16,7 @@ public class DefaultJavaMethodTest
         return new DefaultJavaMethod();
     }
 
-    public DefaultJavaMethod newJavaMethod( DefaultJavaType returns, String name )
+    public DefaultJavaMethod newJavaMethod( JavaClass returns, String name )
     {
         return new DefaultJavaMethod( returns, name );
     }
@@ -42,7 +41,7 @@ public class DefaultJavaMethodTest
         method.setModifiers( modifiers );
     }
 
-    public void setReturns( DefaultJavaMethod method, DefaultJavaType type )
+    public void setReturns( DefaultJavaMethod method, JavaClass type )
     {
         method.setReturns( type );
     }

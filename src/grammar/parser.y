@@ -65,6 +65,7 @@ import java.util.Stack;
 
 %%
 // Source: Java Language Specification - Third Edition
+//         The Java(TM) Language Specification - Java SE 7 Edition
 
 // 7 Packages
 
@@ -628,11 +629,12 @@ EnumConstants_opt:
                  
 EnumConstant: Annotations_opt IDENTIFIER Arguments_opt
               { 
-                makeField(new TypeDef($2, 0), "", true); 
-                builder.beginField(fd);
+                makeField( new TypeDef($2, 0), "", true ); 
+                builder.beginField( fd );
               }
               ClassBody_opt
               {
+                fd.setBody( lexer.getCodeBody() );
                 builder.endField();
               };
          

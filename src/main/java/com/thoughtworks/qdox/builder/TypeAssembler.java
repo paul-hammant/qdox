@@ -1,9 +1,29 @@
 package com.thoughtworks.qdox.builder;
 
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.impl.DefaultJavaParameterizedType;
 import com.thoughtworks.qdox.model.impl.DefaultJavaWildcardType;
 import com.thoughtworks.qdox.model.impl.JavaClassParent;
 import com.thoughtworks.qdox.model.impl.DefaultJavaType;
@@ -41,7 +61,7 @@ public final class TypeAssembler
         }
         else
         {
-            DefaultJavaType typeResult = DefaultJavaType.createUnresolved( typeDef.getName(), typeDef.getDimensions() + dimensions, context );
+            DefaultJavaParameterizedType typeResult = new DefaultJavaParameterizedType( null, typeDef.getName(), typeDef.getDimensions() + dimensions, context );
             if ( typeDef.getActualArgumentTypes() != null && !typeDef.getActualArgumentTypes().isEmpty() )
             {
                 List<JavaType> actualArgumentTypes = new LinkedList<JavaType>();

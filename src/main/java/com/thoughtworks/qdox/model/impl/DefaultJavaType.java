@@ -40,15 +40,14 @@ import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
 
-public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedType, Serializable {
+public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 
     public static final DefaultJavaType VOID = new DefaultJavaType("void");
 
-    private String name;
+    protected final String name;
     private JavaClassParent context;
-    private String fullName;
+    protected String fullName;
     private int dimensions;
-    private List<JavaType> actualArgumentTypes = Collections.emptyList();
     
     public DefaultJavaType( String name, JavaClassParent context )
     {
@@ -129,19 +128,6 @@ public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedTy
     public String getGenericValue()
     {
         StringBuffer result = new StringBuffer( getValue() );
-        if ( !actualArgumentTypes.isEmpty() )
-        {
-            result.append( "<" );
-            for ( Iterator<JavaType> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
-            {
-                result.append( iter.next().getGenericValue() );
-                if ( iter.hasNext() )
-                {
-                    result.append( "," );
-                }
-            }
-            result.append( ">" );
-        }
         for ( int i = 0; i < dimensions; i++ )
         {
             result.append( "[]" );
@@ -233,20 +219,6 @@ public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedTy
         return dimensions;
     }
 
-    /**
-     * 
-     * @return the actualTypeArguments or null
-     */
-    public List<JavaType> getActualTypeArguments()
-    {
-        return actualArgumentTypes;
-    }
-    
-    public void setActualArgumentTypes( List<JavaType> actualArgumentTypes )
-    {
-        this.actualArgumentTypes = actualArgumentTypes;
-    }
-    
     /**
      * Equivalent of {@link Class#toString()}. 
      * Converts the object to a string.
@@ -447,8 +419,8 @@ public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedTy
         List<JavaType> actualTypeArguments = getActualTypeArguments(base); 
         if ( !actualTypeArguments.isEmpty() )
         {
-            DefaultJavaType typeResult =
-                new DefaultJavaType( base.getFullyQualifiedName(), base.getValue(), getDimensions( base ),
+            DefaultJavaParameterizedType typeResult =
+                new DefaultJavaParameterizedType( base.getFullyQualifiedName(), base.getValue(), getDimensions( base ),
                           ((DefaultJavaType)base).getJavaClassParent() );
 
             List<JavaType> actualTypes = new LinkedList<JavaType>();
@@ -490,19 +462,6 @@ public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedTy
     public String getGenericFullyQualifiedName()
     {
         StringBuffer result = new StringBuffer( isResolved() ? fullName : name );
-        if ( !actualArgumentTypes.isEmpty() )
-        {
-            result.append( "<" );
-            for ( Iterator<JavaType> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
-            {
-                result.append( iter.next().getGenericFullyQualifiedName() );
-                if ( iter.hasNext() )
-                {
-                    result.append( "," );
-                }
-            }
-            result.append( ">" );
-        }
         for ( int i = 0; i < dimensions; i++ )
         {
             result.append( "[]" );
@@ -514,19 +473,6 @@ public class DefaultJavaType implements JavaClass, JavaType, JavaParameterizedTy
     public String getGenericCanonicalName()
     {
         StringBuffer result = new StringBuffer( getCanonicalName() );
-        if ( !actualArgumentTypes.isEmpty() )
-        {
-            result.append( "<" );
-            for ( Iterator<JavaType> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
-            {
-                result.append( iter.next().getCanonicalName() );
-                if ( iter.hasNext() )
-                {
-                    result.append( "," );
-                }
-            }
-            result.append( ">" );
-        }
         for ( int i = 0; i < dimensions; i++ )
         {
             result.append( "[]" );

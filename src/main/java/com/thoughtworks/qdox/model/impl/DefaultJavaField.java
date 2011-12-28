@@ -2,7 +2,6 @@ package com.thoughtworks.qdox.model.impl;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaParameterizedType;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,12 +22,17 @@ import com.thoughtworks.qdox.model.JavaParameterizedType;
  * under the License.
  */
 
-public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> extends AbstractJavaEntity implements JavaField {
+public class DefaultJavaField
+    extends AbstractJavaEntity
+    implements JavaField
+{
 
-    private T type;
+    private JavaClass type;
+
     private String initializationExpression;
+
     private boolean enumConstant;
-    	
+
     public DefaultJavaField()
     {
     }
@@ -38,7 +42,7 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
         setName( name );
     }
 
-    public DefaultJavaField( T type, String name )
+    public DefaultJavaField( JavaClass type, String name )
     {
         this( name );
         this.type = type;
@@ -49,34 +53,39 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
     {
         return getParentClass();
     }
-    
+
     /** {@inheritDoc} */
-    public JavaClass getType() {
+    public JavaClass getType()
+    {
         return type;
     }
-    
+
     /** {@inheritDoc} */
     public String getCodeBlock()
     {
         return getModelWriter().writeField( this ).toString();
     }
 
-    public void setType(T type) {
+    public void setType( JavaClass type )
+    {
         this.type = type;
     }
 
     /** {@inheritDoc} */
-   public String getDeclarationSignature(boolean withModifiers) {
+    public String getDeclarationSignature( boolean withModifiers )
+    {
         StringBuffer result = new StringBuffer();
-        if (withModifiers) {
-            for (String modifier  : getModifiers()) {
-                result.append(modifier);
-                result.append(' ');
+        if ( withModifiers )
+        {
+            for ( String modifier : getModifiers() )
+            {
+                result.append( modifier );
+                result.append( ' ' );
             }
         }
-        result.append(type.getCanonicalName());
-        result.append(' ');
-        result.append(getName());
+        result.append( type.getCanonicalName() );
+        result.append( ' ' );
+        result.append( getName() );
         return result.toString();
     }
 
@@ -102,10 +111,11 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
     {
         return enumConstant;
     }
-    
-    public void setEnumConstant(boolean enumConstant) {
-		this.enumConstant = enumConstant;
-	}
+
+    public void setEnumConstant( boolean enumConstant )
+    {
+        this.enumConstant = enumConstant;
+    }
 
     /**
      * @see java.lang.reflect.Field#toString()
@@ -145,25 +155,24 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
         result.append( getDeclaringClass().getFullyQualifiedName() ).append( '.' ).append( getName() );
         return result.toString();
     }
-    
+
     /**
-     * Compares this Field against the specified object. 
-     * Returns <code>true</code> if the objects are the same. 
-     * Two Field objects are the same if they were declared by the same class and have the same name and type.  
+     * Compares this Field against the specified object. Returns <code>true</code> if the objects are the same. Two
+     * Field objects are the same if they were declared by the same class and have the same name and type.
      */
     @Override
     public boolean equals( Object obj )
     {
-        if(this == obj) 
+        if ( this == obj )
         {
             return true;
         }
-        if ( !(obj instanceof JavaField) )
+        if ( !( obj instanceof JavaField ) )
         {
             return false;
         }
         JavaField fld = (JavaField) obj;
-        if ( fld.getDeclaringClass().equals( this.getDeclaringClass() ) ) 
+        if ( fld.getDeclaringClass().equals( this.getDeclaringClass() ) )
         {
             return false;
         }
@@ -171,21 +180,21 @@ public class DefaultJavaField<T extends JavaClass & JavaParameterizedType> exten
         {
             return false;
         }
-        //Don't see any reason to compare the Type. Otherwise it's already invalid
+        // Don't see any reason to compare the Type. Otherwise it's already invalid
         return fld.getName().equals( this.getName() );
     }
-    
+
     @Override
     public int hashCode()
     {
         int hashCode = 5;
         if ( getDeclaringClass() != null )
         {
-            hashCode *=31 + getDeclaringClass().hashCode();
+            hashCode *= 31 + getDeclaringClass().hashCode();
         }
-        if( getName() != null )
+        if ( getName() != null )
         {
-            hashCode *= 37 + getName().hashCode();    
+            hashCode *= 37 + getName().hashCode();
         }
         return hashCode;
     }

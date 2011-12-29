@@ -2606,7 +2606,8 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACEOPEN);
 
         setupLex(Parser.IDENTIFIER, "a");
-        setupLex(Parser.PARENBLOCK);
+        setupLex(Parser.PARENOPEN);
+        setupLex(Parser.PARENCLOSE);
         setupLex(Parser.SEMI);
 
         setupLex(Parser.IDENTIFIER, "int");
@@ -2696,8 +2697,9 @@ public class ParserTest extends TestCase {
         setupLex(Parser.BRACEOPEN);
 
         setupLex(Parser.IDENTIFIER, "A");
-        setupLex(Parser.PARENBLOCK);
-
+        setupLex(Parser.PARENOPEN);
+        setupLex(Parser.PARENCLOSE);
+        
         setupLex(Parser.BRACEOPEN);
         
         setupLex(Parser.AT);

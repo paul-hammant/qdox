@@ -623,13 +623,15 @@ EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE
             modifiers.clear();
           };
 
+// 8.9 Enums Constants
+/* See EnumBody for this slightly different code */
 EnumConstants_opt:
                  | EnumConstants_opt COMMA
                  | EnumConstants_opt EnumConstant;
                  
 EnumConstant: Annotations_opt IDENTIFIER Arguments_opt
               { 
-                makeField( new TypeDef($2, 0), "", true ); 
+                makeField( new TypeDef($2, 0), "", true );
                 builder.beginField( fd );
               }
               ClassBody_opt
@@ -639,7 +641,7 @@ EnumConstant: Annotations_opt IDENTIFIER Arguments_opt
               };
          
 Arguments_opt:
-             | PARENBLOCK /* =Arguments */;
+             | PARENOPEN ArgumentList_opt PARENCLOSE; //PARENBLOCK
 
 ClassBody_opt:
              | ClassBody;
@@ -710,11 +712,19 @@ ElementValues_opt:
     
 ElementValue: ConditionalExpression 
             | Annotation 
-            | ElementValueArrayInitializer ;
+            | ElementValueArrayInitializer;
+
+// 15.9 Class Instance Creation Expressions
+ArgumentList_opt:
+                | ArgumentList;
+
+ArgumentList: Expression
+            | ArgumentList COMMA Expression;
+
 
 // 15.14 Postfix Expressions
 PostfixExpression: /* ExpressionName | PostIncrementExpression | PostDecrementExpression | */
-                   primary ;
+                   primary;
 
 // 15.15 Unary Operators
 UnaryExpression: /* PreIncrementExpression | PreDecrementExpression | */

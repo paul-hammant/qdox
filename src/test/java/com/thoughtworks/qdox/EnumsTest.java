@@ -120,6 +120,8 @@ public class EnumsTest extends TestCase {
                 + "}";
 
         JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.setDebugLexer( true );
+        javaDocBuilder.setDebugParser( true );
         javaDocBuilder.addSource(new StringReader(source));
 
         assertTrue(javaDocBuilder.getClassByName("AccountType").isEnum());

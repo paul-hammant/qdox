@@ -139,7 +139,7 @@ Id						        = ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 Annotation                      = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
 JavadocEnd                      = "*"+ "/"
 
-%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ENUM
+%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ENUM ARGUMENTS
 
 %%
 
@@ -294,10 +294,11 @@ JavadocEnd                      = "*"+ "/"
               parenMode = -1;
               return Parser.PARENOPEN;
             }
-            else if(enumConstantMode) {
-                parenDepth = classDepth;
-                pushState(PARENBLOCK);
-                return Parser.PARENBLOCK;
+            else if(enumConstantMode) 
+            {  
+              annotationDepth = nestingDepth;
+              pushState(ARGUMENTS);
+              return Parser.PARENOPEN;
             }
             else {
                 return Parser.PARENOPEN;
@@ -322,7 +323,7 @@ JavadocEnd                      = "*"+ "/"
     }
 }
 
-<ANNOTATION> {
+<ANNOTATION,ARGUMENTS> {
 	"("                 { ++ nestingDepth; return Parser.PARENOPEN; }
     ")"                 { if( nestingDepth-- == annotationDepth) { popState(); } return Parser.PARENCLOSE; }
 
@@ -493,7 +494,7 @@ JavadocEnd                      = "*"+ "/"
     \'                  { if (appendingToCodeBody) { codeBody.append('\''); } pushState(CHAR); }
 }
 
-<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATION> {
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATION, ARGUMENTS> {
   "//"                { if (appendingToCodeBody) { codeBody.append("//"); } pushState(SINGLELINECOMMENT); }
   "/*"                { if (appendingToCodeBody) { codeBody.append("/*"); } pushState(MULTILINECOMMENT); }
   "/**/"              { if (appendingToCodeBody) { codeBody.append("/**/"); } }

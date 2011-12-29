@@ -471,7 +471,10 @@ public class LexerTest extends TestCase {
         assertLex(Parser.IDENTIFIER, "Foo", lexer);
         assertLex(Parser.BRACEOPEN, lexer);
         assertLex(Parser.IDENTIFIER, "a", lexer);
-        assertLex(Parser.PARENBLOCK, lexer);
+        assertLex(Parser.PARENOPEN, lexer);
+        assertLex(Parser.STRING_LITERAL, "\"", lexer);
+        assertEquals( "\"hello\"", lexer.getCodeBody() );
+        assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.SEMI, lexer);
         assertLex(Parser.IDENTIFIER, "int", lexer);
         assertLex(Parser.IDENTIFIER, "someField", lexer);
@@ -614,7 +617,10 @@ public class LexerTest extends TestCase {
     	assertEquals( "\"text\"", lexer.getCodeBody() );
     	assertLex(Parser.PARENCLOSE, lexer);
     	assertLex(Parser.IDENTIFIER, "VALUE", lexer);
-    	assertLex(Parser.PARENBLOCK, lexer);
+        assertLex(Parser.PARENOPEN, lexer);
+        assertLex(Parser.STRING_LITERAL, lexer);
+        assertEquals( "\"value\"", lexer.getCodeBody() );
+        assertLex(Parser.PARENCLOSE, lexer);
     	assertLex(Parser.SEMI, lexer);
     }
 }

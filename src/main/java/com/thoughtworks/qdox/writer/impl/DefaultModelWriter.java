@@ -36,6 +36,7 @@ import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
+import com.thoughtworks.qdox.model.expression.Expression;
 import com.thoughtworks.qdox.writer.ModelWriter;
 
 public class DefaultModelWriter
@@ -128,6 +129,11 @@ public class DefaultModelWriter
             }
         }
 
+        return writeClassBody( cls );
+    }
+
+    private ModelWriter writeClassBody( JavaClass cls )
+    {
         buffer.write( " {" );
         buffer.newline();
         buffer.indent();
@@ -172,21 +178,39 @@ public class DefaultModelWriter
             buffer.write( ' ' );
         }
         buffer.write( field.getName() );
-        if ( field.getInitializationExpression() != null && field.getInitializationExpression().length() > 0 )
+        
+        if ( field.isEnumConstant() )
         {
-            if ( !field.isEnumConstant() )
+            if ( !field.getEnumConstantArguments().isEmpty() )
             {
-                buffer.write( " = " );
+                buffer.write( "( " );
+                for( Iterator<Expression> iter = field.getEnumConstantArguments().listIterator(); iter.hasNext(); )
+                {
+                    buffer.write( iter.next().getParameterValue().toString() );
+                    if( iter.hasNext() )
+                    {
+                        buffer.write( ", " );
+                    }
+                }
+                buffer.write( " )" );
             }
-            // arguments? (arg0, arg1, arg..) 
-            // body?  { body of anonymous class } 
-            buffer.write( field.getInitializationExpression() );
+            if ( field.getEnumConstantClass() != null )
+            {
+                writeClassBody( field.getEnumConstantClass() );
+            }
         }
-        if ( !field.isEnumConstant() )
+        else
         {
-            buffer.write( ';' );
-            buffer.newline();
+            if ( field.getInitializationExpression() != null && field.getInitializationExpression().length() > 0 )
+            {
+                {
+                    buffer.write( " = " );
+                }
+                buffer.write( field.getInitializationExpression() );
+            }
         }
+        buffer.write( ';' );
+        buffer.newline();
         return this;
     }
 

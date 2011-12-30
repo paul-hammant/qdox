@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,9 +14,12 @@ import org.junit.Test;
 
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
+import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.expression.Expression;
 
 public class DefaultModelWriterTest {
 
@@ -211,8 +215,55 @@ public class DefaultModelWriterTest {
         when(enumConstant.getName()).thenReturn( "HADEAN" );
         
         //expectation
-        String expected = ""
-            + "HADEAN";
+        String expected = "HADEAN;\n";
+        
+        //run
+        modelWriter.writeField( enumConstant );
+        
+        //verify
+        assertEquals( expected, modelWriter.toString() );
+    }
+
+    @Test
+    public void testEnumConstantWithArgument()
+    {
+        // setup
+        JavaField enumConstant = mock( JavaField.class );
+        when( enumConstant.isEnumConstant() ).thenReturn( true );
+        when( enumConstant.getName() ).thenReturn( "PENNY" );
+        Expression arg = mock( Expression.class );
+        when( arg.getParameterValue()).thenReturn( "1" );
+        when( enumConstant.getEnumConstantArguments() ).thenReturn( Collections.singletonList( arg ) );
+        
+        //expectation
+        String expected = "PENNY( 1 );\n";
+        
+        //run
+        modelWriter.writeField( enumConstant );
+        
+        //verify
+        assertEquals( expected, modelWriter.toString() );
+    }
+
+    @Test
+    public void testEnumConstantWithArguments()
+    {
+        // setup
+        JavaField enumConstant = mock( JavaField.class );
+        when( enumConstant.isEnumConstant() ).thenReturn( true );
+        when( enumConstant.getName() ).thenReturn( "EARTH" );
+
+        List<Expression> args = new ArrayList<Expression>();
+        Expression mass = mock( Expression.class );
+        when( mass.getParameterValue()).thenReturn( "5.976e+24" );
+        args.add( mass );
+        Expression radius = mock( Expression.class );
+        when( radius.getParameterValue()).thenReturn( "6.37814e6" );
+        args.add( radius );
+        when( enumConstant.getEnumConstantArguments() ).thenReturn( args );
+        
+        //expectation
+        String expected = "EARTH( 5.976e+24, 6.37814e6 );\n";
         
         //run
         modelWriter.writeField( enumConstant );
@@ -221,13 +272,54 @@ public class DefaultModelWriterTest {
         assertEquals( expected, modelWriter.toString() );
     }
     
+    @Test
+    public void testEnumConstantClass()
+    {
+        // setup
+        JavaField enumConstant = mock( JavaField.class );
+        when( enumConstant.isEnumConstant() ).thenReturn( true );
+        when( enumConstant.getName() ).thenReturn( "PLUS" );
+        
+        JavaClass cls = mock( JavaClass.class );
+        JavaMethod eval = mock( JavaMethod.class );
+        JavaType doubleType = mock( JavaType.class );
+        when( doubleType.getGenericCanonicalName() ).thenReturn( "double" );
+        when( eval.getReturnType() ).thenReturn( doubleType );
+        when( eval.getName() ).thenReturn( "eval" );
+        List<JavaParameter> params = new ArrayList<JavaParameter>();
+        JavaParameter x = mock( JavaParameter.class );
+        when( x.getGenericCanonicalName() ).thenReturn( "double" );
+        when( x.getName() ).thenReturn( "x" );
+        params.add( x );
+        JavaParameter y = mock( JavaParameter.class );
+        when( y.getGenericCanonicalName() ).thenReturn( "double" );
+        when( y.getName() ).thenReturn( "y" );
+        params.add( y );
+        when( eval.getParameters() ).thenReturn( params );
+        when( cls.getMethods() ).thenReturn( Collections.singletonList( eval ) );
+        when( enumConstant.getEnumConstantClass() ).thenReturn( cls );
+        
+        //expectation
+        String expected = "PLUS {\n" + 
+        		"\n" + 
+        		"\tdouble eval(double x, double y);\n" + 
+        		"\n" + 
+        		"}\n" + 
+        		";\n";
+        
+        //run
+        modelWriter.writeField( enumConstant );
+        
+        //verify
+        assertEquals( expected, modelWriter.toString() );
+    }
+    
+    @Test
     public void testJavaParameter()
     {
         JavaParameter prm = mock( JavaParameter.class );
-        JavaType type = mock( JavaType.class );
         
-        when( type.getCanonicalName() ).thenReturn( "java.lang.String" );
-        when( prm.getType() ).thenReturn( type );
+        when( prm.getGenericCanonicalName() ).thenReturn( "java.lang.String" );
         when( prm.getName() ).thenReturn( "argument" );
         
         modelWriter.writeParameter( prm );

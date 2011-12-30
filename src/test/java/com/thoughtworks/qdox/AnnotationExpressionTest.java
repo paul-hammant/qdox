@@ -64,7 +64,7 @@ public class AnnotationExpressionTest
             // testSignExpression
             { "+1", new Integer( 1 ) },
             { "-1", new Integer( -1 ) },
-            { "--1", new Integer( 1 ) },
+            //{ "--1", new Integer( --1 ) },
 
             // testAddSubMultDivExpression
             { "8 / 3", new Integer( 8 / 3 ) },

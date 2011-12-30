@@ -26,6 +26,8 @@ public class AnnotationsModelTest
         throws Exception
     {
         builder = new JavaProjectBuilder();
+        //builder.setDebugLexer( true );
+        //builder.setDebugParser( true );
     }
 
     protected JavaAnnotation checkClassAnnotation( String source )

@@ -62,6 +62,7 @@ import com.thoughtworks.qdox.model.impl.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 import com.thoughtworks.qdox.parser.expression.AddDef;
 import com.thoughtworks.qdox.parser.expression.AndDef;
+import com.thoughtworks.qdox.parser.expression.AssignmentDef;
 import com.thoughtworks.qdox.parser.expression.CastDef;
 import com.thoughtworks.qdox.parser.expression.ConstantDef;
 import com.thoughtworks.qdox.parser.expression.DivideDef;
@@ -397,5 +398,11 @@ public class DefaultAnnotationTransformer
     {
         JavaType type = createType( annotationTypeRef.getTypeDef(), annotationTypeRef.getTypeDef().getDimensions() );
         return new TypeRef( type );
+    }
+
+    public AnnotationValue transform( AssignmentDef assignmentDef )
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

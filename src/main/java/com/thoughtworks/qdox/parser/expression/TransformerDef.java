@@ -67,4 +67,5 @@ public interface TransformerDef<U>
 
     U transform( ElemValueListDef elemValueListDef );
 
+    U transform( AssignmentDef assignmentDef );
 }

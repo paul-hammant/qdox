@@ -1353,6 +1353,25 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
     
+    public void testEnumConstantArguments() throws Exception
+    {
+        String source = "public enum AssignmentOperators {" +
+        		" EQ    ( a = b )," +
+        		" TMSEQ ( a *= b )," +
+        		" DVDEQ ( a /= b )," +
+        		" MODEQ ( a %= b )," +
+        		" PLEQ  ( a += b )," +
+        		" MNEQ  ( a -= b )," +
+        		" LT2EQ ( a <<= b )," +
+                " GT2EQ ( a >>= b )," +
+                " GT3EQ ( a >>>= b )," +
+                " ANDEQ ( a &= b )," +
+                " XOREQ ( a ^= b )," +
+                " OREQ  ( a |= b )" +
+        		" }";
+        builder.addSource(new StringReader( source ));
+    }
+    
     // for QDOX-230
     public void testInterfaceAnnotations() throws Exception {
         String source = "@RemoteServiceRelativePath(\"greetings\")\r\n" + 

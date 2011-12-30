@@ -29,6 +29,7 @@ import java.util.Stack;
 %}
 
 %token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
+%token STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS 
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
 %token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
@@ -51,6 +52,7 @@ import java.util.Stack;
 %token <ival> VERTLINE2 AMPERSAND2 VERTLINE CIRCUMFLEX AMPERSAND EQUALS2 NOTEQUALS
 %token <ival> LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS LESSTHAN2 GREATERTHAN2 GREATERTHAN3
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
+%token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
 %type <type> PrimitiveType NumericType IntegralType FloatingPointType
 %type <type> InterfaceType
 %type <type> Wildcard
@@ -58,9 +60,9 @@ import java.util.Stack;
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus primary
-%type <annoval> PostfixExpression CastExpression AssignmentExpression
+%type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> dims Dims_opt
-%type <sval> AnyName TypeDeclSpecifier memberend
+%type <sval> AnyName TypeDeclSpecifier memberend AssignmentOperator
 %type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType ActualTypeArgument
 
 %%
@@ -830,8 +832,34 @@ ConditionalExpression: ConditionalOrExpression
                        };
                        
 // 15.26 Assignment Operators
-AssignmentExpression: ConditionalExpression;
-                    /* | Assignment */ 
+AssignmentExpression: ConditionalExpression
+                    | Assignment; 
+
+Assignment: LeftHandSide AssignmentOperator AssignmentExpression
+            {
+              $$ = new AssignmentDef($1, $2, $3);
+            };
+
+
+// ExpressionName | FieldAccess
+LeftHandSide: AnyName
+              {
+                $$ = new FieldRefDef($1);
+              };
+//            | ArrayAccess;
+            
+AssignmentOperator: EQUALS
+                  | STAREQUALS
+                  | SLASHEQUALS
+                  | PERCENTEQUALS
+                  | PLUSEQUALS
+                  | MINUSEQUALS
+                  | LESSTHAN2EQUALS
+                  | GREATERTHAN2EQUALS
+                  | GREATERTHAN3EQUALS
+                  | AMPERSANDEQUALS
+                  | CIRCUMFLEXEQUALS
+                  | VERTLINEEQUALS;
 
 // 15.27 Expression
 Expression: AssignmentExpression;

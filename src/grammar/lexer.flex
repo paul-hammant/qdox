@@ -329,6 +329,17 @@ JavadocEnd                      = "*"+ "/"
 
 	","                 { return Parser.COMMA; }
     "="                 { return Parser.EQUALS; }
+    "*="                { return Parser.STAREQUALS; }
+    "/="                { return Parser.SLASHEQUALS; }
+    "%="                { return Parser.PERCENTEQUALS; }
+    "+="                { return Parser.PLUSEQUALS; }
+    "-="                { return Parser.MINUSEQUALS; }
+    "<<="               { return Parser.LESSTHAN2EQUALS; }
+    ">>="               { return Parser.GREATERTHAN2EQUALS; }
+    ">>>="              { return Parser.GREATERTHAN3EQUALS; }
+    "&="                { return Parser.AMPERSANDEQUALS; }
+    "^="                { return Parser.CIRCUMFLEXEQUALS; }
+    "|="                { return Parser.VERTLINEEQUALS; }
 
 	"{"                 { nestingDepth++; return Parser.BRACEOPEN; }
     "}"                 { nestingDepth--; return Parser.BRACECLOSE; }

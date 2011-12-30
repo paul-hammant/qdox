@@ -19,7 +19,7 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-public class AssignmentDef implements ElemValueDef
+public class AssignmentDef extends ExpressionDef
 {
 
     private ElemValueDef letfHandSide;

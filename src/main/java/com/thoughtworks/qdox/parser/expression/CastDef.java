@@ -21,7 +21,7 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
  * under the License.
  */
 
-public class CastDef implements ElemValueDef
+public class CastDef extends ExpressionDef
 {
 
     private final TypeDef typeDef;

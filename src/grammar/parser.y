@@ -632,14 +632,13 @@ EnumConstants_opt:
                  | EnumConstants_opt COMMA
                  | EnumConstants_opt EnumConstant;
                  
-EnumConstant: Annotations_opt IDENTIFIER Arguments_opt
+EnumConstant: Annotations_opt IDENTIFIER 
               { 
                 makeField( new TypeDef($2, 0), "", true );
                 builder.beginField( fd );
               }
-              ClassBody_opt
+              Arguments_opt ClassBody_opt
               {
-                fd.setBody( lexer.getCodeBody() );
                 builder.endField();
               };
          
@@ -722,6 +721,9 @@ ArgumentList_opt:
                 | ArgumentList;
 
 ArgumentList: Expression
+              {
+                builder.addArgument( (ExpressionDef) $1);
+              }
             | ArgumentList COMMA Expression;
 
 

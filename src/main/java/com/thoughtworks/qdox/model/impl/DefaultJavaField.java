@@ -1,7 +1,10 @@
 package com.thoughtworks.qdox.model.impl;
 
+import java.util.List;
+
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.expression.Expression;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -34,6 +37,8 @@ public class DefaultJavaField
     private boolean enumConstant;
 
     private JavaClass enumConstantClass;
+    
+    private List<Expression> enumConstantArguments;
 
     public DefaultJavaField()
     {
@@ -117,6 +122,17 @@ public class DefaultJavaField
     public void setEnumConstant( boolean enumConstant )
     {
         this.enumConstant = enumConstant;
+    }
+
+    /** {@inheritDoc} */
+    public List<Expression> getEnumConstantArguments()
+    {
+        return enumConstantArguments;
+    }
+    
+    public void setEnumConstantArguments( List<Expression> enumConstantArguments )
+    {
+        this.enumConstantArguments = enumConstantArguments;
     }
     
     /** {@inheritDoc} */

@@ -20,7 +20,7 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-public class QueryDef implements ElemValueDef {
+public class QueryDef  extends ExpressionDef {
 
 	private final ElemValueDef cond;
 	private final ElemValueDef trueExpr;

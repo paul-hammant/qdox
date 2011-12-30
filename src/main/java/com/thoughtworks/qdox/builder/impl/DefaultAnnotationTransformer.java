@@ -36,6 +36,7 @@ import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.Divide;
 import com.thoughtworks.qdox.model.expression.Equals;
 import com.thoughtworks.qdox.model.expression.ExclusiveOr;
+import com.thoughtworks.qdox.model.expression.Expression;
 import com.thoughtworks.qdox.model.expression.FieldRef;
 import com.thoughtworks.qdox.model.expression.GreaterEquals;
 import com.thoughtworks.qdox.model.expression.GreaterThan;
@@ -51,7 +52,10 @@ import com.thoughtworks.qdox.model.expression.NotEquals;
 import com.thoughtworks.qdox.model.expression.Or;
 import com.thoughtworks.qdox.model.expression.ParenExpression;
 import com.thoughtworks.qdox.model.expression.PlusSign;
+import com.thoughtworks.qdox.model.expression.PostDecrement;
+import com.thoughtworks.qdox.model.expression.PostIncrement;
 import com.thoughtworks.qdox.model.expression.PreDecrement;
+import com.thoughtworks.qdox.model.expression.PreIncrement;
 import com.thoughtworks.qdox.model.expression.Query;
 import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
@@ -67,6 +71,8 @@ import com.thoughtworks.qdox.parser.expression.AssignmentDef;
 import com.thoughtworks.qdox.parser.expression.CastDef;
 import com.thoughtworks.qdox.parser.expression.ConstantDef;
 import com.thoughtworks.qdox.parser.expression.DivideDef;
+import com.thoughtworks.qdox.parser.expression.ElemValueDef;
+import com.thoughtworks.qdox.parser.expression.ElemValueListDef;
 import com.thoughtworks.qdox.parser.expression.EqualsDef;
 import com.thoughtworks.qdox.parser.expression.ExclusiveOrDef;
 import com.thoughtworks.qdox.parser.expression.FieldRefDef;
@@ -96,8 +102,6 @@ import com.thoughtworks.qdox.parser.expression.SubtractDef;
 import com.thoughtworks.qdox.parser.expression.TransformerDef;
 import com.thoughtworks.qdox.parser.expression.TypeRefDef;
 import com.thoughtworks.qdox.parser.expression.UnsignedShiftRightDef;
-import com.thoughtworks.qdox.parser.expression.ElemValueDef;
-import com.thoughtworks.qdox.parser.expression.ElemValueListDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
@@ -413,24 +417,26 @@ public class DefaultAnnotationTransformer
 
     public AnnotationValue transform( PreIncrementDef preIncrementDef )
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new PreIncrement( preIncrementDef.getElemValueDef().transform( this )  );
     }
     
     public AnnotationValue transform( PreDecrementDef preDecrementDef )
     {
-        return new PreDecrement( preDecrementDef.transform( this )  );
+        return new PreDecrement( preDecrementDef.getElemValueDef().transform( this )  );
     }
     
     public AnnotationValue transform( PostIncrementDef postIncrement )
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new PostIncrement( postIncrement.getElemValueDef().transform( this )  );
     }
     
     public AnnotationValue transform( PostDecrementDef postDecrementDef )
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new PostDecrement( postDecrementDef.getElemValueDef().transform( this )  );
+    }
+
+    public Expression transform( ElemValueDef annoDef )
+    {
+        return annoDef.transform( this );
     }
 }

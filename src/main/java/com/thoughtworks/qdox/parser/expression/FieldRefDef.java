@@ -20,7 +20,7 @@ package com.thoughtworks.qdox.parser.expression;
  */
 
 
-public class FieldRefDef implements ElemValueDef {
+public class FieldRefDef extends ExpressionDef {
 
     private final String name;
 

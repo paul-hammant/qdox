@@ -2643,7 +2643,7 @@ public class ParserTest extends TestCase {
         FieldDef fld0 = f.getAllValues().get( 0 );
         assertEquals( "a", fld0.getName() );
         assertEquals( new TypeDef( "x" ), fld0.getType() ); // bug @todo fixme
-        assertEquals( null, fld0.getBody() );
+        assertEquals( "", fld0.getBody() );
         FieldDef fld1 = f.getAllValues().get( 1 );
         assertEquals( "someField", fld1.getName() );
         assertEquals( new TypeDef( "int" ), fld1.getType() );
@@ -2685,7 +2685,7 @@ public class ParserTest extends TestCase {
         FieldDef fld = f.getValue();
         assertEquals( "a", fld.getName() );
         assertEquals( new TypeDef( "x" ), fld.getType() ); //bug @todo fixme
-        assertEquals( null , fld.getBody() );
+        assertEquals( "" , fld.getBody() );
     }
     
     // QDOX-266

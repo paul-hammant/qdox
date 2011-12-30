@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.parser.expression;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,7 +19,7 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-public class ParenExpressionDef implements ElemValueDef {
+public class ParenExpressionDef extends ExpressionDef {
 
 	private final ElemValueDef elemValueDef;
 
@@ -39,5 +38,4 @@ public class ParenExpressionDef implements ElemValueDef {
     {
         return elemValueDef;
     }
-
 }

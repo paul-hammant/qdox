@@ -20,7 +20,7 @@ package com.thoughtworks.qdox.parser.expression;
  */
 
 
-public class ConstantDef implements ElemValueDef {
+public class ConstantDef extends ExpressionDef {
 
     private final String value;
     private Class<?> type;

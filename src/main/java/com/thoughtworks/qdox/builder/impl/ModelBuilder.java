@@ -40,6 +40,7 @@ import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
+import com.thoughtworks.qdox.model.expression.Expression;
 import com.thoughtworks.qdox.model.impl.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 import com.thoughtworks.qdox.model.impl.DefaultJavaConstructor;
@@ -50,6 +51,8 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
 import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
+import com.thoughtworks.qdox.parser.expression.ElemValueDef;
+import com.thoughtworks.qdox.parser.expression.ExpressionDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -79,6 +82,8 @@ public class ModelBuilder implements Builder {
     private DefaultJavaField currentField;
 
     private List<AnnoDef> currentAnnoDefs;
+    
+    private List<ExpressionDef> currentArguments;
 
     private String lastComment;
 
@@ -93,6 +98,7 @@ public class ModelBuilder implements Builder {
         this.docletTagFactory = docletTagFactory;
         this.source = new DefaultJavaSource( classLibrary );
         this.currentAnnoDefs = new LinkedList<AnnoDef>();
+        this.currentArguments = new LinkedList<ExpressionDef>();
     }
     
     /** {@inheritDoc} */
@@ -388,6 +394,7 @@ public class ModelBuilder implements Builder {
 
         currentField.setName( def.getName() );
         currentField.setType( createType( def.getType(), def.getDimensions() ) );
+        
         currentField.setEnumConstant( def.isEnumConstant() );
 
         // modifiers
@@ -403,11 +410,27 @@ public class ModelBuilder implements Builder {
 
         // annotations
         setAnnotations( currentField );
+        
+        
     }
 	
     /** {@inheritDoc} */
 	public void endField() 
 	{
+	    if ( currentArguments != null && !currentArguments.isEmpty() )
+        {
+	        //DefaultExpressionTransformer?? 
+            DefaultAnnotationTransformer transformer = new DefaultAnnotationTransformer( currentField );
+
+            List<Expression> arguments = new LinkedList<Expression>();
+            for ( ExpressionDef annoDef : currentArguments )
+            {
+                arguments.add( transformer.transform( annoDef ) );
+            }
+            currentField.setEnumConstantArguments( arguments );
+            currentArguments.clear();
+        }
+	    
         classStack.getFirst().addField(currentField);
         
         currentField = null;
@@ -447,6 +470,11 @@ public class ModelBuilder implements Builder {
     public void addAnnotation( AnnoDef annotation )
     {
         currentAnnoDefs.add( annotation );
+    }
+    
+    public void addArgument( ExpressionDef argument )
+    {
+        currentArguments.add( argument );
     }
 
     public JavaSource getSource()

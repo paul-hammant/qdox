@@ -1,5 +1,9 @@
 package com.thoughtworks.qdox.model;
 
+import java.util.List;
+
+import com.thoughtworks.qdox.model.expression.Expression;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -71,4 +75,12 @@ public interface JavaField extends JavaAnnotatedElement, JavaMember, JavaModel
      * @since 2.0 
      */
     JavaClass getEnumConstantClass();
+
+    /**
+     * 
+     * 
+     * @return the arguments of the enum constant
+     * @since 2.0
+     */
+    List<Expression> getEnumConstantArguments();
 }

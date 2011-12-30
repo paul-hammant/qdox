@@ -21,7 +21,7 @@ package com.thoughtworks.qdox.parser.expression;
 
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
-public class TypeRefDef implements ElemValueDef {
+public class TypeRefDef  extends ExpressionDef {
 
 	private TypeDef typeDef;
 

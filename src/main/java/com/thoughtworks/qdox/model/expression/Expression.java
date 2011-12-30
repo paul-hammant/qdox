@@ -19,28 +19,12 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public class PostDecrement extends UnaryOperator
+public interface Expression
 {
-    public PostDecrement( AnnotationValue value )
-    {
-        super( value );
-    }
-
-    /** {@inheritDoc}} */
-    public Object accept( ExpressionVisitor visitor )
-    {
-        return visitor.visit( this );
-    }
-
-    /** {@inheritDoc}} */
-    public String getParameterValue()
-    {
-        return getValue().getParameterValue() + "--";
-    }
-    
-    @Override
-    public String toString()
-    {
-        return getValue().toString() + "--";
-    }
+    /**
+     * Get a parameter value for {@link JavaAnnotation#getNamedParameter(String)}.
+     * 
+     * @return Parameter value
+     */
+    Object getParameterValue();
 }

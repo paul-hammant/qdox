@@ -1374,13 +1374,16 @@ public class JavaProjectBuilderTest extends TestCase
     
     public void testIncrementAndDecrement() throws Exception
     {
-        String source = "public enum AssignmentOperators {" +
+        String source = "public enum Expression {" +
                 " POSTINC ( a++ )," +
                 " POSTDEC ( a-- )," +
                 " PREINC  ( ++a )," +
                 " PREDEC  ( --a )" +
                 " }";
-        builder.addSource(new StringReader( source ));
+        JavaClass cls = builder.addSource(new StringReader( source )).getClassByName( "Expression" );
+        JavaField postInc = cls.getFieldByName( "POSTINC" );
+        assertEquals( 1, postInc.getEnumConstantArguments().size() );
+        assertEquals( "a++", postInc.getEnumConstantArguments().get( 0 ).getParameterValue() );
     }
     
     // for QDOX-230

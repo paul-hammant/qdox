@@ -19,7 +19,7 @@ package com.thoughtworks.qdox.parser.expression;
  * under the License.
  */
 
-public abstract class BinaryOperatorDef implements ElemValueDef {
+public abstract class BinaryOperatorDef extends ExpressionDef {
 	
 	private final ElemValueDef lhs;
     private final ElemValueDef rhs;

@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model.expression;
+package com.thoughtworks.qdox.parser.expression;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,28 +19,7 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public class PostDecrement extends UnaryOperator
+public abstract class ExpressionDef implements ElemValueDef
 {
-    public PostDecrement( AnnotationValue value )
-    {
-        super( value );
-    }
 
-    /** {@inheritDoc}} */
-    public Object accept( ExpressionVisitor visitor )
-    {
-        return visitor.visit( this );
-    }
-
-    /** {@inheritDoc}} */
-    public String getParameterValue()
-    {
-        return getValue().getParameterValue() + "--";
-    }
-    
-    @Override
-    public String toString()
-    {
-        return getValue().toString() + "--";
-    }
 }

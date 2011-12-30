@@ -26,13 +26,21 @@ public class PreIncrement extends UnaryOperator
         super( value );
     }
 
+    /** {@inheritDoc}} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }
 
+    /** {@inheritDoc}} */
     public String getParameterValue()
     {
         return "++" + getValue().getParameterValue();
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "++" + getValue().toString();
     }
 }

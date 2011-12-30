@@ -19,14 +19,12 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
-
 /**
  * Interface for all annotation model elements
  * 
  * @author Jochen Kuhnle
  */
-public interface AnnotationValue {
+public interface AnnotationValue extends Expression {
 
     /**
      * Accept a visitor for this value.
@@ -35,12 +33,4 @@ public interface AnnotationValue {
      * @return Visitor result
      */
     Object accept( ExpressionVisitor visitor );
-
-    /**
-     * Get a parameter value for {@link DefaultJavaAnnotation#getNamedParameter(String)}.
-     * 
-     * @return Parameter value
-     */
-    Object getParameterValue();
-
 }

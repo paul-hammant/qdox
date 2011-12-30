@@ -19,6 +19,7 @@ package com.thoughtworks.qdox.builder;
  * under the License.
  */
 
+import com.thoughtworks.qdox.parser.expression.ExpressionDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
@@ -27,31 +28,32 @@ import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
-public interface Builder {
+public interface Builder
+{
+    void setModelWriterFactory( ModelWriterFactory writer );
 
-    void setModelWriterFactory(ModelWriterFactory writer);
-    
-    void addPackage(PackageDef packageDef);
+    void addPackage( PackageDef packageDef );
 
-    void addImport(String importName);
+    void addImport( String importName );
 
-    void addJavaDoc(String text);
+    void addJavaDoc( String text );
+    void addJavaDocTag( TagDef def );
 
-    void addJavaDocTag(TagDef def);
-
-    void beginClass(ClassDef def);
+    void beginClass( ClassDef def );
     void endClass();
 
     void beginConstructor();
-    void endConstructor(MethodDef def);
+    void endConstructor( MethodDef def );
 
     void beginMethod();
-    void endMethod(MethodDef def);
+    void endMethod( MethodDef def );
 
-    void beginField(FieldDef def);
+    void beginField( FieldDef def );
     void endField();
 
-    void addParameter(FieldDef def);
+    void addParameter( FieldDef def );
 
-    void addAnnotation(AnnoDef annotation);
+    void addAnnotation( AnnoDef annotation );
+
+    void addArgument(  ExpressionDef argument );
 }

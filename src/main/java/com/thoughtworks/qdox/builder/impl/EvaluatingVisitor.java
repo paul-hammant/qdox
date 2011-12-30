@@ -31,6 +31,7 @@ import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.AnnotationValueList;
+import com.thoughtworks.qdox.model.expression.Assignment;
 import com.thoughtworks.qdox.model.expression.Cast;
 import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.Divide;
@@ -970,5 +971,10 @@ public class EvaluatingVisitor
     public Object visit( PostIncrement postIncrement )
     {
         throw new IllegalArgumentException( "Cannot evaluate '" + postIncrement + "'." );
+    }
+
+    public Object visit( Assignment assignment )
+    {
+        throw new IllegalArgumentException( "Cannot evaluate '" + assignment + "'." );
     }
 }

@@ -19,7 +19,6 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-
 import com.thoughtworks.qdox.model.JavaAnnotation;
 
 /**
@@ -98,5 +97,7 @@ public interface ExpressionVisitor {
     Object visit( PostDecrement postDecrement );
 
     Object visit( PostIncrement postIncrement );
+
+    Object visit( Assignment assignment );
 
 }

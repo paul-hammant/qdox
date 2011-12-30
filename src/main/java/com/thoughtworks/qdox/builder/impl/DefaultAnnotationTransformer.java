@@ -31,6 +31,7 @@ import com.thoughtworks.qdox.model.expression.Add;
 import com.thoughtworks.qdox.model.expression.And;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.AnnotationValueList;
+import com.thoughtworks.qdox.model.expression.Assignment;
 import com.thoughtworks.qdox.model.expression.Cast;
 import com.thoughtworks.qdox.model.expression.Constant;
 import com.thoughtworks.qdox.model.expression.Divide;
@@ -411,8 +412,10 @@ public class DefaultAnnotationTransformer
 
     public AnnotationValue transform( AssignmentDef assignmentDef )
     {
-        
-        return null;
+        Expression leftHandSide = assignmentDef.getLetfHandSide().transform( this );
+        String operator = assignmentDef.getOperator();
+        Expression assignmentExpression = assignmentDef.getAssignmentExpression().transform( this );
+        return new Assignment( leftHandSide, operator, assignmentExpression );
     }
 
     public AnnotationValue transform( PreIncrementDef preIncrementDef )

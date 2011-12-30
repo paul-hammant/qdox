@@ -1369,7 +1369,10 @@ public class JavaProjectBuilderTest extends TestCase
                 " XOREQ ( a ^= b )," +
                 " OREQ  ( a |= b )" +
         		" }";
-        builder.addSource(new StringReader( source ));
+        JavaClass cls = builder.addSource(new StringReader( source )).getClassByName( "AssignmentOperators" );
+        JavaField xoreq = cls.getFieldByName( "XOREQ" );
+        assertEquals( 1, xoreq.getEnumConstantArguments().size() );
+        assertEquals( "a ^= b", xoreq.getEnumConstantArguments().get(0).getParameterValue() );
     }
     
     public void testIncrementAndDecrement() throws Exception

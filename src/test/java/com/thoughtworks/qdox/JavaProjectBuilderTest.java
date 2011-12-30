@@ -1372,6 +1372,17 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource(new StringReader( source ));
     }
     
+    public void testIncrementAndDecrement() throws Exception
+    {
+        String source = "public enum AssignmentOperators {" +
+                " POSTINC ( a++ )," +
+                " POSTDEC ( a-- )," +
+                " PREINC  ( ++a )," +
+                " PREDEC  ( --a )" +
+                " }";
+        builder.addSource(new StringReader( source ));
+    }
+    
     // for QDOX-230
     public void testInterfaceAnnotations() throws Exception {
         String source = "@RemoteServiceRelativePath(\"greetings\")\r\n" + 

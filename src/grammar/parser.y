@@ -52,6 +52,7 @@ import java.util.Stack;
 %token <ival> VERTLINE2 AMPERSAND2 VERTLINE CIRCUMFLEX AMPERSAND EQUALS2 NOTEQUALS
 %token <ival> LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS LESSTHAN2 GREATERTHAN2 GREATERTHAN3
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
+%token <ival> PLUSPLUS MINUSMINUS
 %token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
 %type <type> PrimitiveType NumericType IntegralType FloatingPointType
 %type <type> InterfaceType
@@ -725,13 +726,16 @@ ArgumentList: Expression
 
 
 // 15.14 Postfix Expressions
-PostfixExpression: /* ExpressionName | PostIncrementExpression | PostDecrementExpression | */
-                   primary;
+PostfixExpression: /* ExpressionName | */
+                   primary
+				 | PostfixExpression PLUSPLUS   { $$ = new PostIncrementDef($1); } 
+				 | PostfixExpression MINUSMINUS { $$ = new PostDecrementDef($1); };
 
 // 15.15 Unary Operators
-UnaryExpression: /* PreIncrementExpression | PreDecrementExpression | */
-                 PLUS UnaryExpression  { $$ = new PlusSignDef($2); } 
-               | MINUS UnaryExpression { $$ = new MinusSignDef($2); }
+UnaryExpression: PLUSPLUS UnaryExpression   { $$ = new PreIncrementDef($2);  }
+               | MINUSMINUS UnaryExpression { $$ = new PreDecrementDef($2);  }
+               | PLUS UnaryExpression       { $$ = new PlusSignDef($2); } 
+               | MINUS UnaryExpression      { $$ = new MinusSignDef($2); }
                | UnaryExpressionNotPlusMinus;
 
 UnaryExpressionNotPlusMinus: PostfixExpression 

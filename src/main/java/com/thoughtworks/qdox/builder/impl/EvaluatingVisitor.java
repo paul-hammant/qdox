@@ -52,6 +52,10 @@ import com.thoughtworks.qdox.model.expression.NotEquals;
 import com.thoughtworks.qdox.model.expression.Or;
 import com.thoughtworks.qdox.model.expression.ParenExpression;
 import com.thoughtworks.qdox.model.expression.PlusSign;
+import com.thoughtworks.qdox.model.expression.PostDecrement;
+import com.thoughtworks.qdox.model.expression.PostIncrement;
+import com.thoughtworks.qdox.model.expression.PreDecrement;
+import com.thoughtworks.qdox.model.expression.PreIncrement;
 import com.thoughtworks.qdox.model.expression.Query;
 import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
@@ -948,4 +952,23 @@ public class EvaluatingVisitor
         return result;
     }
 
+    public Object visit( PreDecrement preDecrement )
+    {
+        throw new IllegalArgumentException( "Cannot evaluate '" + preDecrement + "'." );
+    }
+    
+    public Object visit( PreIncrement preIncrement )
+    {
+        throw new IllegalArgumentException( "Cannot evaluate '" + preIncrement + "'." );
+    }
+    
+    public Object visit( PostDecrement postDecrement )
+    {
+        throw new IllegalArgumentException( "Cannot evaluate '" + postDecrement + "'." );
+    }
+    
+    public Object visit( PostIncrement postIncrement )
+    {
+        throw new IllegalArgumentException( "Cannot evaluate '" + postIncrement + "'." );
+    }
 }

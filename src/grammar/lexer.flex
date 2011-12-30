@@ -340,7 +340,10 @@ JavadocEnd                      = "*"+ "/"
     "&="                { return Parser.AMPERSANDEQUALS; }
     "^="                { return Parser.CIRCUMFLEXEQUALS; }
     "|="                { return Parser.VERTLINEEQUALS; }
-
+    
+    "++"                { return Parser.PLUSPLUS; }
+    "--"                { return Parser.MINUSMINUS; }
+    
 	"{"                 { nestingDepth++; return Parser.BRACEOPEN; }
     "}"                 { nestingDepth--; return Parser.BRACECLOSE; }
 

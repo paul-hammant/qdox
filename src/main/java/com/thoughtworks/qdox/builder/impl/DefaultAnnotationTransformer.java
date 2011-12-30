@@ -51,6 +51,7 @@ import com.thoughtworks.qdox.model.expression.NotEquals;
 import com.thoughtworks.qdox.model.expression.Or;
 import com.thoughtworks.qdox.model.expression.ParenExpression;
 import com.thoughtworks.qdox.model.expression.PlusSign;
+import com.thoughtworks.qdox.model.expression.PreDecrement;
 import com.thoughtworks.qdox.model.expression.Query;
 import com.thoughtworks.qdox.model.expression.Remainder;
 import com.thoughtworks.qdox.model.expression.ShiftLeft;
@@ -83,6 +84,10 @@ import com.thoughtworks.qdox.parser.expression.NotEqualsDef;
 import com.thoughtworks.qdox.parser.expression.OrDef;
 import com.thoughtworks.qdox.parser.expression.ParenExpressionDef;
 import com.thoughtworks.qdox.parser.expression.PlusSignDef;
+import com.thoughtworks.qdox.parser.expression.PostDecrementDef;
+import com.thoughtworks.qdox.parser.expression.PostIncrementDef;
+import com.thoughtworks.qdox.parser.expression.PreDecrementDef;
+import com.thoughtworks.qdox.parser.expression.PreIncrementDef;
 import com.thoughtworks.qdox.parser.expression.QueryDef;
 import com.thoughtworks.qdox.parser.expression.RemainderDef;
 import com.thoughtworks.qdox.parser.expression.ShiftLeftDef;
@@ -401,6 +406,29 @@ public class DefaultAnnotationTransformer
     }
 
     public AnnotationValue transform( AssignmentDef assignmentDef )
+    {
+        
+        return null;
+    }
+
+    public AnnotationValue transform( PreIncrementDef preIncrementDef )
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public AnnotationValue transform( PreDecrementDef preDecrementDef )
+    {
+        return new PreDecrement( preDecrementDef.transform( this )  );
+    }
+    
+    public AnnotationValue transform( PostIncrementDef postIncrement )
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public AnnotationValue transform( PostDecrementDef postDecrementDef )
     {
         // TODO Auto-generated method stub
         return null;

@@ -91,4 +91,12 @@ public interface ExpressionVisitor {
 
     Object visit( Cast annotationCast );
 
+    Object visit( PreDecrement preDecrement );
+
+    Object visit( PreIncrement preIncrement );
+
+    Object visit( PostDecrement postDecrement );
+
+    Object visit( PostIncrement postIncrement );
+
 }

@@ -68,4 +68,12 @@ public interface TransformerDef<U>
     U transform( ElemValueListDef elemValueListDef );
 
     U transform( AssignmentDef assignmentDef );
+
+    U transform( PostIncrementDef postIncrement );
+
+    U transform( PostDecrementDef postDecrementDef );
+
+    U transform( PreDecrementDef preDecrementDef );
+
+    U transform( PreIncrementDef preIncrementDef );
 }

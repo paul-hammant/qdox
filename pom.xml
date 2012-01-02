@@ -355,18 +355,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.2.1</version>
-        <configuration>
-          <goals>deploy</goals>
-          <tagBase>https://svn.codehaus.org/qdox/tags</tagBase>
-          <arguments>-P!release-site
-            -Dproject.rel.org.thoughtworks.qdox:qdox=${project.rel.org.thoughtworks.qdox:qdox}
-            -Dproject.dev.org.thoughtworks.qdox:qdox=${project.dev.org.thoughtworks.qdox:qdox}</arguments>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
@@ -386,10 +374,6 @@
   </dependencies>
 
   <distributionManagement>
-    <!-- <repository> <id>codehaus.org</id> <name>QDox Central Repository</name> 
-      <url>dav:https://dav.codehaus.org/repository/qdox/</url> </repository> <snapshotRepository> 
-      <id>codehaus.org</id> <name>QDox Central Development Repository</name> <url>dav:https://dav.codehaus.org/snapshots.repository/qdox/</url> 
-      </snapshotRepository> -->
     <site>
       <id>codehaus.org</id>
       <name>QDox Site</name>

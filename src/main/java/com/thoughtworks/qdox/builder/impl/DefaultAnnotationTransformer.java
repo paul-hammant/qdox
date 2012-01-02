@@ -100,14 +100,14 @@ import com.thoughtworks.qdox.parser.expression.RemainderDef;
 import com.thoughtworks.qdox.parser.expression.ShiftLeftDef;
 import com.thoughtworks.qdox.parser.expression.ShiftRightDef;
 import com.thoughtworks.qdox.parser.expression.SubtractDef;
-import com.thoughtworks.qdox.parser.expression.TransformerDef;
+import com.thoughtworks.qdox.parser.expression.ElemValueTransformer;
 import com.thoughtworks.qdox.parser.expression.TypeRefDef;
 import com.thoughtworks.qdox.parser.expression.UnsignedShiftRightDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
 public class DefaultAnnotationTransformer
-    implements TransformerDef<AnnotationValue>
+    implements ElemValueTransformer<AnnotationValue>
 {
 
     private AbstractBaseJavaEntity parent;

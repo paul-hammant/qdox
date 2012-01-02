@@ -43,7 +43,7 @@ public class ConstantDef extends ExpressionDef {
         return value;
     }
 
-    public <U> U transform(TransformerDef<U> transformer) {
+    public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }
 }

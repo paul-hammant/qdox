@@ -22,7 +22,7 @@ package com.thoughtworks.qdox.parser.structs;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.thoughtworks.qdox.parser.expression.TransformerDef;
+import com.thoughtworks.qdox.parser.expression.ElemValueTransformer;
 import com.thoughtworks.qdox.parser.expression.ElemValueDef;
 
 public class AnnoDef extends LocatedDef implements ElemValueDef
@@ -39,7 +39,7 @@ public class AnnoDef extends LocatedDef implements ElemValueDef
     	return this;
     }
     
-    public <U> U transform(TransformerDef<U> transformer) {
+    public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }
 

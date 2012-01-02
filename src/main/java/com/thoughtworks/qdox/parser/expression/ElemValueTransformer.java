@@ -21,7 +21,7 @@ package com.thoughtworks.qdox.parser.expression;
 
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 
-public interface TransformerDef<U>
+public interface ElemValueTransformer<U>
 {
     U transform( AnnoDef annoDef );
 

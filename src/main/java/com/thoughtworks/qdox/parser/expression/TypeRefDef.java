@@ -29,7 +29,7 @@ public class TypeRefDef  extends ExpressionDef {
 		this.typeDef = typeDef;
 	}
     
-    public <U> U transform(TransformerDef<U> transformer) {
+    public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }
     

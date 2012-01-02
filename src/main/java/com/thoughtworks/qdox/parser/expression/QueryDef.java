@@ -33,7 +33,7 @@ public class QueryDef  extends ExpressionDef {
     	this.falseExpr = falseExpr;
 	}
     
-    public <U> U transform(TransformerDef<U> transformer) {
+    public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }
 

@@ -420,12 +420,12 @@ public class ModelBuilder implements Builder {
 	    if ( currentArguments != null && !currentArguments.isEmpty() )
         {
 	        //DefaultExpressionTransformer?? 
-            DefaultAnnotationTransformer transformer = new DefaultAnnotationTransformer( currentField );
+            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( currentField );
 
             List<Expression> arguments = new LinkedList<Expression>();
             for ( ExpressionDef annoDef : currentArguments )
             {
-                arguments.add( transformer.transform( annoDef ) );
+                arguments.add( assembler.assemble( annoDef ) );
             }
             currentField.setEnumConstantArguments( arguments );
             currentArguments.clear();
@@ -453,12 +453,12 @@ public class ModelBuilder implements Builder {
     {
         if ( !currentAnnoDefs.isEmpty() )
         {
-            DefaultAnnotationTransformer transformer = new DefaultAnnotationTransformer( (JavaAnnotatedElement) entity );
+            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( (JavaAnnotatedElement) entity );
 
             List<JavaAnnotation> annotations = new LinkedList<JavaAnnotation>();
             for ( AnnoDef annoDef : currentAnnoDefs )
             {
-                annotations.add( transformer.transform( annoDef ) );
+                annotations.add( assembler.assemble( annoDef ) );
             }
             entity.setAnnotations( annotations );
             currentAnnoDefs.clear();

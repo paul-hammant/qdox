@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.thoughtworks.qdox.builder.TypeAssembler;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.expression.Add;
@@ -106,23 +107,18 @@ import com.thoughtworks.qdox.parser.expression.UnsignedShiftRightDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 
-public class DefaultAnnotationTransformer
+public class DefaultJavaAnnotationAssembler
     implements ElemValueTransformer<AnnotationValue>
 {
 
     private AbstractBaseJavaEntity parent;
 
-    public DefaultAnnotationTransformer( JavaAnnotatedElement parent )
+    public DefaultJavaAnnotationAssembler( JavaAnnotatedElement parent )
     {
         this.parent = (AbstractBaseJavaEntity) parent;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.builder.AnnotationTransformer#transform(com.thoughtworks.qdox.parser.structs.AnnoDef)
-     */
-    public DefaultJavaAnnotation transform( AnnoDef annoDef )
-    {
+    public DefaultJavaAnnotation assemble( AnnoDef annoDef ) {
         DefaultJavaAnnotation annotation =
             new DefaultJavaAnnotation( createType( annoDef.getTypeDef(), 0 ), annoDef.getLineNumber() );
         for ( Map.Entry<String, ElemValueDef> annoVal : annoDef.getArgs().entrySet() )
@@ -132,6 +128,12 @@ public class DefaultAnnotationTransformer
         annotation.setContext( (JavaAnnotatedElement) parent );
         return annotation;
     }
+    
+    public Expression assemble( ElemValueDef annoDef )
+    {
+        return annoDef.transform( this );
+    }
+    
 
     private JavaClass createType( TypeDef typeDef, int dimensions )
     {
@@ -144,7 +146,13 @@ public class DefaultAnnotationTransformer
                                                parent.getParentClass() != null ? parent.getParentClass()
                                                                : parent.getSource() );
     }
-
+    
+    /** {@inheritDoc} */
+    public AnnotationValue transform( AnnoDef annoDef )
+    {
+        return assemble( annoDef);
+    }
+    
     /** {@inheritDoc} */
     public AnnotationValue transform( ElemValueListDef elemValueListDef )
     {
@@ -436,10 +444,5 @@ public class DefaultAnnotationTransformer
     public AnnotationValue transform( PostDecrementDef postDecrementDef )
     {
         return new PostDecrement( postDecrementDef.getElemValueDef().transform( this )  );
-    }
-
-    public Expression transform( ElemValueDef annoDef )
-    {
-        return annoDef.transform( this );
     }
 }

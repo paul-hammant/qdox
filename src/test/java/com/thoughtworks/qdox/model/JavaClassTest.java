@@ -482,6 +482,16 @@ public abstract class JavaClassTest<C extends JavaClass> {
         setModifiers( cls, Arrays.asList( new String[] { "static" } ) );
         assertTrue( cls.isStatic() );
     }
+    
+    @Test
+    public void testIsVoid()
+    {
+        setName( cls, "void" );
+        assertTrue( cls.isVoid() );
+        
+        setName( cls, "Void" );
+        assertFalse( cls.isVoid() );
+    }
 
     @Test
     public void testQualifiedType() throws Exception {

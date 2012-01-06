@@ -99,6 +99,12 @@ public class DefaultJavaClass
             || "short".equals( name ) || "int".equals( name ) || "long".equals( name ) || "float".equals( name )
             || "double".equals( name );
     }
+    
+    /** {@inheritDoc} */
+    public boolean isVoid()
+    {
+        return "void".equals( getName() );
+    }
 
     /** {@inheritDoc} */
     public boolean isEnum()

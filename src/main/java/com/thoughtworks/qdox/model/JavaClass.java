@@ -355,6 +355,13 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
     boolean isArray();
     
     /**
+     * 
+     * @return <code>true</code> if this JavaClass is a void, otherwise <code>false</code>
+     * @since 2.0 (was part of Type since 1.6)
+     */
+    boolean isVoid();
+    
+    /**
      * Equivalent of {@link Class#getComponentType()}
      * If this type is an array, return its component type
      * 

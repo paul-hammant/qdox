@@ -126,15 +126,18 @@ public abstract class AbstractBaseMethod
         return getParameterTypes( false );
     }
 
+    /** {@inheritDoc} */
     public List<JavaType> getParameterTypes( boolean resolve )
     {
         List<JavaType> result = new LinkedList<JavaType>();
-        for (JavaParameter parameter : this.getParameters()) {
+        for ( JavaParameter parameter : this.getParameters() )
+        {
             result.add( parameter.getType() );
         }
         return result;
     }
 
+    /** {@inheritDoc} */
     public String getSourceCode()
     {
     	return sourceCode;

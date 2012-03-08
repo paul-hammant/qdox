@@ -391,8 +391,19 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     protected static JavaType resolve( JavaType base, JavaClass declaringClass, JavaClass callingClass )
     {
         JavaType result = base;
+        
+        String concreteClassName;
+        if ( base instanceof JavaClass )
+        {
+            JavaClass baseClass = (JavaClass) base;
+            concreteClassName = ( baseClass.isArray() ?  baseClass.getComponentType().getFullyQualifiedName() : baseClass.getFullyQualifiedName() );
+        }
+        else
+        {
+            concreteClassName = base.getFullyQualifiedName();
+        }
 
-        int typeIndex = getTypeVariableIndex( declaringClass, base.getFullyQualifiedName() );
+        int typeIndex = getTypeVariableIndex( declaringClass, concreteClassName );
 
         if ( typeIndex >= 0 )
         {
@@ -408,7 +419,9 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
                 {
                     if ( fqn.equals( implement.getFullyQualifiedName() ) )
                     {
-                        result = resolve( getActualTypeArguments( implement ).get( typeIndex ), implement, implement );
+                        JavaType actualType = getActualTypeArguments( implement ).get( typeIndex );
+                        JavaType resolvedType = new DefaultJavaType( actualType.getFullyQualifiedName(), actualType.getValue(), getDimensions( base ), implement.getParent() ); 
+                        result = resolve( resolvedType , implement, implement );
                         break;
                     }
                 }
@@ -419,8 +432,13 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         List<JavaType> actualTypeArguments = getActualTypeArguments(base); 
         if ( !actualTypeArguments.isEmpty() )
         {
+            String value = base.getValue();
+            if( value.indexOf( '[' ) > 0 )
+            {
+                value = value.substring( 0, value.indexOf( '[' ) );
+            }
             DefaultJavaParameterizedType typeResult =
-                new DefaultJavaParameterizedType( base.getFullyQualifiedName(), base.getValue(), getDimensions( base ),
+                new DefaultJavaParameterizedType( concreteClassName, value, getDimensions( base ),
                           ((DefaultJavaType)base).getJavaClassParent() );
 
             List<JavaType> actualTypes = new LinkedList<JavaType>();

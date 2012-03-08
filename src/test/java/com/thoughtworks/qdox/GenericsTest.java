@@ -1,12 +1,16 @@
 package com.thoughtworks.qdox;
 
+import static org.mockito.Mockito.*;
+
 import java.io.StringReader;
+import java.util.Collections;
 
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaType;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -279,6 +283,7 @@ public class GenericsTest extends TestCase {
         assertEquals( "java.lang.String", method.getReturnType( true ).getFullyQualifiedName() );
     }
     
+    //GWT-186
     public void testMethodReturnTypeImplements() throws Exception {
         String source1="public interface GenericDao<TEntity, TKey> {\n" + 
         		"public List<TEntity> getAll();\n" + 
@@ -319,6 +324,12 @@ public class GenericsTest extends TestCase {
         method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "asMap", null, true );
         assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericFullyQualifiedName() );
         assertEquals( "Map<Long,Subject>", method.getReturnType( true ).getGenericValue() );
+        
+        JavaType tEntity = mock( JavaType.class );
+        when( tEntity.getFullyQualifiedName() ).thenReturn( "TEntity[]" );
+        method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "persist", Collections.singletonList( tEntity ), true );
+        assertNotNull( method );
+        assertEquals( "Subject[]", method.getParameterTypes( true ).get( 0 ).getGenericFullyQualifiedName() );
     }
     
     //for QDOX-210

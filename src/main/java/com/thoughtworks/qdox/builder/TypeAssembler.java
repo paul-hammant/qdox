@@ -25,6 +25,7 @@ import java.util.List;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameterizedType;
 import com.thoughtworks.qdox.model.impl.DefaultJavaWildcardType;
+import com.thoughtworks.qdox.model.impl.DefaultJavaWildcardType.BoundType;
 import com.thoughtworks.qdox.model.impl.JavaClassParent;
 import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
@@ -57,7 +58,24 @@ public final class TypeAssembler
         if ( typeDef instanceof WildcardTypeDef )
         {
             WildcardTypeDef wildcard = (WildcardTypeDef) typeDef;
-            result = new DefaultJavaWildcardType( wildcard.getName(), wildcard.getWildcardExpressionType(), context );
+            if( wildcard.getTypeDef() != null )
+            {
+                JavaType type = createUnresolved( wildcard.getTypeDef(), context );
+                DefaultJavaWildcardType.BoundType boundType = null;
+                if( "extends".equals( wildcard.getWildcardExpressionType() ) )
+                {
+                    boundType = BoundType.EXTENDS;
+                }
+                else if( "super".equals( wildcard.getWildcardExpressionType() ) )
+                {
+                    boundType = BoundType.SUPER;
+                }
+                result = new DefaultJavaWildcardType( type , boundType );
+            }
+            else
+            {
+                result = new DefaultJavaWildcardType();
+            }
         }
         else
         {

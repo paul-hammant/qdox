@@ -1,5 +1,9 @@
 package com.thoughtworks.qdox.model.impl;
 
+import java.util.Collections;
+import java.util.List;
+
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaWildcardType;
 
 /*
@@ -28,52 +32,110 @@ import com.thoughtworks.qdox.model.JavaWildcardType;
  * 
  * @author Robert Scholte
  */
-public class DefaultJavaWildcardType
-    extends DefaultJavaType
+public class DefaultJavaWildcardType extends DefaultJavaType
     implements JavaWildcardType
 {
-
-    /**
-     * A wildcardExpression is either <code>super</code> or <code>extends</code> or <code>null</code>
-     */
-    private String wildcardExpressionType = null;
+    public static enum BoundType { EXTENDS, SUPER }
+    
+    private BoundType boundType;
+    
+    private List<JavaType> bounds;
 
     public DefaultJavaWildcardType()
     {
         super( "?" );
+        bounds = Collections.emptyList();
     }
-
-    public DefaultJavaWildcardType( String name, String wildcardExpressionType, JavaClassParent context )
+    
+    public DefaultJavaWildcardType( JavaType type, BoundType boundType )
     {
-        super( name, context );
-        this.wildcardExpressionType = wildcardExpressionType;
+        this();
+        bounds = Collections.singletonList( type );
+        this.boundType = boundType;
     }
 
-    @Override
-    public String getGenericValue()
-    {
-        String result = "";
-        if ( wildcardExpressionType != null )
-        {
-            result += "? " + wildcardExpressionType + " ";
-        }
-        return result + super.getGenericValue();
-    }
-
-    @Override
     public String getFullyQualifiedName()
     {
-        return "?";
+        StringBuilder builder = getPreparedStringBuilder();
+        for( JavaType type : bounds )
+        {
+            builder.append( type.getFullyQualifiedName() );
+        }
+        return builder.toString();
     }
 
-    @Override
+    public String getGenericValue()
+    {
+        StringBuilder builder = getPreparedStringBuilder();
+        for( JavaType type : bounds )
+        {
+            builder.append( type.getGenericValue() );
+        }
+        return builder.toString();
+    }
+
     public String getGenericFullyQualifiedName()
     {
-        String result = "";
-        if ( wildcardExpressionType != null )
+        StringBuilder builder = getPreparedStringBuilder();
+        for( JavaType type : bounds )
         {
-            result += "? " + wildcardExpressionType + " ";
+            builder.append( type.getGenericFullyQualifiedName() );
         }
-        return result + super.getFullyQualifiedName();
+        return builder.toString();
+    }
+    
+    public String getCanonicalName()
+    {
+        StringBuilder builder = getPreparedStringBuilder();
+        for( JavaType type : bounds )
+        {
+            builder.append( type.getCanonicalName() );
+        }
+        return builder.toString();
+    }
+    
+    public String getGenericCanonicalName()
+    {
+        StringBuilder builder = getPreparedStringBuilder();
+        for( JavaType type : bounds )
+        {
+            builder.append( type.getGenericCanonicalName() );
+        }
+        return builder.toString();
+    }
+
+    public String getValue()
+    {
+        StringBuilder builder = getPreparedStringBuilder();
+        for( JavaType type : bounds )
+        {
+            builder.append( type.getValue() );
+        }
+        return builder.toString();
+
+    }
+
+    public String toGenericString()
+    {
+        StringBuilder builder = getPreparedStringBuilder();
+        for( JavaType type : bounds )
+        {
+            builder.append( type.toGenericString() );
+        }
+        return builder.toString();
+    }
+    
+    private StringBuilder getPreparedStringBuilder()
+    {
+        StringBuilder builder = new StringBuilder( "?" );
+        if( BoundType.EXTENDS.equals( boundType ) )
+        {
+            builder.append( " extends " );
+        }
+        else if( BoundType.SUPER.equals( boundType ) )
+        {
+            builder.append( " super " );
+        }
+        return builder;
     }
 }

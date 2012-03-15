@@ -10,7 +10,9 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.JavaWildcardType;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
@@ -365,6 +367,22 @@ public class GenericsTest extends TestCase {
         assertEquals( "Long", method.getParameterTypes( true ).get(0).getGenericValue() );
     }
     
-    
+    // for QDOX-239
+    public void testFieldWithWildcardType()
+    {
+       StringBuilder b = new StringBuilder("package test;\n");
+       b.append("import java.util.ArrayList;\n");
+       b.append("import java.util.Map;\n");
+       b.append("public class TestClass<E>{\n");
+       b.append("public ArrayList<? extends Map<String, E>> list;\n}");
+       builder.addSource(new StringReader(b.toString()));
+       JavaClass javaClass = builder.getClassByName( "test.TestClass" );
+       JavaField field = javaClass.getFields().get( 0 );
+       assertTrue( field.getType() instanceof JavaParameterizedType );
+       JavaParameterizedType paramType = (JavaParameterizedType) field.getType();
+       assertTrue( paramType.getActualTypeArguments().get( 0 ) instanceof JavaWildcardType);
+       JavaWildcardType wildcardType = (JavaWildcardType) paramType.getActualTypeArguments().get( 0 );
+       assertEquals("? extends java.util.Map<java.lang.String,E>", wildcardType.getGenericFullyQualifiedName() );
+    }
 
 }

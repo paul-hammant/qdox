@@ -100,4 +100,6 @@ public interface ExpressionVisitor {
 
     Object visit( Assignment assignment );
 
+    Object visit( MethodInvocation methodInvocation );
+
 }

@@ -85,6 +85,7 @@ import com.thoughtworks.qdox.parser.expression.LessThanDef;
 import com.thoughtworks.qdox.parser.expression.LogicalAndDef;
 import com.thoughtworks.qdox.parser.expression.LogicalNotDef;
 import com.thoughtworks.qdox.parser.expression.LogicalOrDef;
+import com.thoughtworks.qdox.parser.expression.MethodInvocationDef;
 import com.thoughtworks.qdox.parser.expression.MinusSignDef;
 import com.thoughtworks.qdox.parser.expression.MultiplyDef;
 import com.thoughtworks.qdox.parser.expression.NotDef;
@@ -444,5 +445,10 @@ public class DefaultJavaAnnotationAssembler
     public AnnotationValue transform( PostDecrementDef postDecrementDef )
     {
         return new PostDecrement( postDecrementDef.getElemValueDef().transform( this )  );
+    }
+    
+    public AnnotationValue transform( MethodInvocationDef methodInvocationDef )
+    {
+        return null;
     }
 }

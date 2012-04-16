@@ -46,6 +46,7 @@ import com.thoughtworks.qdox.model.expression.LessThan;
 import com.thoughtworks.qdox.model.expression.LogicalAnd;
 import com.thoughtworks.qdox.model.expression.LogicalNot;
 import com.thoughtworks.qdox.model.expression.LogicalOr;
+import com.thoughtworks.qdox.model.expression.MethodInvocation;
 import com.thoughtworks.qdox.model.expression.MinusSign;
 import com.thoughtworks.qdox.model.expression.Multiply;
 import com.thoughtworks.qdox.model.expression.Not;
@@ -976,5 +977,10 @@ public class EvaluatingVisitor
     public Object visit( Assignment assignment )
     {
         throw new IllegalArgumentException( "Cannot evaluate '" + assignment + "'." );
+    }
+    
+    public Object visit( MethodInvocation methodInvocation )
+    {
+        throw new IllegalArgumentException( "Cannot evaluate '" + methodInvocation + "'." );
     }
 }

@@ -60,9 +60,9 @@ import java.util.Stack;
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
-%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus primary
+%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus primary MethodInvocation
 %type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
-%type <ival> dims Dims_opt
+%type <ival> Dims Dims_opt
 %type <sval> AnyName TypeDeclSpecifier memberend AssignmentOperator
 %type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType ActualTypeArgument
 
@@ -314,37 +314,7 @@ Wildcard: QUERY
 // PackageName | TypeName | ExpressionName | MethodName | PackageOrTypeName | AmbiguousName 
 AnyName: IDENTIFIER { $$ = $1; } 
        | AnyName DOT IDENTIFIER { $$ = $1 + '.' + $3; };
-
-
-// 15.8 Primary Expressions
-//Primary: PrimaryNoNewArray
-//       | ArrayCreationExpression;
-       
-//PrimaryNoNewArray: Literal
-//                 | Type DOT CLASS
-//                 | VOID DOT CLASS
-//                 | THIS
-//        ClassName.this
-//        ( Expression )
-//        ClassInstanceCreationExpression
-//        FieldAccess
-//        MethodInvocation
-//        ArrayAccess
-       
-primary:
-    Literal |
-    PARENOPEN Expression PARENCLOSE { $$ = new ParenExpressionDef($2); } |
-    PrimitiveType Dims_opt DOT CLASS { $$ = new TypeRefDef(new TypeDef($1.getName(), $2)); } |
-    AnyName DOT CLASS { $$ = new TypeRefDef(new TypeDef($1, 0)); } |
-    AnyName dims DOT CLASS { $$ = new TypeRefDef(new TypeDef($1, $2)); } |
-    AnyName { $$ = new FieldRefDef($1); };
 	
-Dims_opt:  { $$ = 0; }
-		| dims;	
-dims:
-    SQUAREOPEN SQUARECLOSE { $$ = 1; } |
-    dims SQUAREOPEN SQUARECLOSE { $$ = $1 + 1; };
-
 // 8 Classes
 
 // 8.1.1 ClassModifier: Annotation public protected private abstract static final strictfp 
@@ -715,6 +685,48 @@ ElementValues_opt:
 ElementValue: ConditionalExpression 
             | Annotation 
             | ElementValueArrayInitializer;
+            
+// 15.8 Primary Expressions
+//Primary: PrimaryNoNewArray
+//       | ArrayCreationExpression;
+       
+//PrimaryNoNewArray: Literal
+//                 | Type DOT CLASS
+//                 | VOID DOT CLASS
+//                 | THIS
+//        ClassName.this
+//        ( Expression )
+//        ClassInstanceCreationExpression
+//        FieldAccess
+//        MethodInvocation
+//        ArrayAccess
+       
+primary: Literal 
+       | PARENOPEN Expression PARENCLOSE 
+         { 
+           $$ = new ParenExpressionDef($2); 
+         }
+       | PrimitiveType Dims_opt DOT CLASS 
+         { 
+           $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
+         }
+       | AnyName DOT CLASS 
+         { 
+           $$ = new TypeRefDef(new TypeDef($1, 0));
+         }
+       | AnyName Dims DOT CLASS
+         {
+           $$ = new TypeRefDef(new TypeDef($1, $2));
+         } 
+       | AnyName 
+         { 
+           $$ = new FieldRefDef($1); 
+         }
+       | MethodInvocation 
+         {
+           $$ = $1;
+         };
+            
 
 // 15.9 Class Instance Creation Expressions
 ArgumentList_opt:
@@ -726,6 +738,30 @@ ArgumentList: Expression
               }
             | ArgumentList COMMA Expression;
 
+// 15.10 Array Creation Expressions 
+Dims_opt: { 
+            $$ = 0; 
+          }
+		| Dims;
+
+Dims: SQUAREOPEN SQUARECLOSE 
+      { 
+        $$ = 1;
+      } 
+    | Dims SQUAREOPEN SQUARECLOSE 
+      { 
+        $$ = $1 + 1;
+      };
+            
+// 15.12 Method Invocation Expressions
+MethodInvocation: IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                  {
+                    $$ = new MethodInvocationDef($1, null);
+                  }
+                | AnyName DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                  {
+                    $$ = new MethodInvocationDef($1, null);
+                  };
 
 // 15.14 Postfix Expressions
 PostfixExpression: /* ExpressionName | */
@@ -748,7 +784,7 @@ UnaryExpressionNotPlusMinus: PostfixExpression
 // 15.16 Cast Expressions	
 CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression   { $$ = new CastDef(new TypeDef($2.getName(), $3), $5); } 
               | PARENOPEN AnyName PARENCLOSE UnaryExpressionNotPlusMinus      { $$ = new CastDef(new TypeDef($2, 0), $4); }
-              | PARENOPEN AnyName dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new CastDef(new TypeDef($2, $3), $5); };
+              | PARENOPEN AnyName Dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new CastDef(new TypeDef($2, $3), $5); };
 
 // 15.17 Multiplicative Operators
 MultiplicativeExpression: UnaryExpression 

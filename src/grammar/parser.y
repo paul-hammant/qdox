@@ -54,7 +54,7 @@ import java.util.Stack;
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
 %token <ival> PLUSPLUS MINUSMINUS
 %token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
-%type <type> PrimitiveType NumericType IntegralType FloatingPointType
+%type <type> BasicType
 %type <type> InterfaceType
 %type <type> Wildcard
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
@@ -68,7 +68,7 @@ import java.util.Stack;
 
 %%
 // Source: Java Language Specification - Third Edition
-//         The Java(TM) Language Specification - Java SE 7 Edition
+//         The Java(TM) Language Specification - Java SE 7 Edition ( Chapter 18. Syntax )
 
 // 7 Packages
 
@@ -166,49 +166,46 @@ Literal: INTEGER_LITERAL
 // 4 Types, Values, and Variables
 
 // 4.1 The Kinds of Types and Values
-Type: PrimitiveType
-    | ReferenceType;
-    
-// 4.2 Primitive Types and Values        
-PrimitiveType: NumericType
-             | BOOLEAN 
-               { 
-                 $$ = new TypeDef("boolean"); 
-               };
 
-NumericType: IntegralType
-           | FloatingPointType;
-	
-IntegralType: BYTE 
-              { 
-                $$ = new TypeDef("byte"); 
-              } 
-            | SHORT 
-              { 
-                $$ = new TypeDef("short"); 
-              } 
-            | INT 
-              { 
-                $$ = new TypeDef("int"); 
-              } 
-            | LONG 
-              { 
-                $$ = new TypeDef("long"); 
-              } 
-            | CHAR 
-              { 
-                $$ = new TypeDef("char");
-              };
+//---------------------------------------------------------
+Type: BasicType
+    | ReferenceType
+    ;
 
-FloatingPointType: FLOAT 
-                   {
-                     $$ = new TypeDef("float");
-                   }
-                 | DOUBLE 
-                   { 
-                     $$ = new TypeDef("double");
-                   };
-                   
+BasicType: BYTE 
+           { 
+             $$ = new TypeDef("byte"); 
+           } 
+         | SHORT 
+           { 
+             $$ = new TypeDef("short"); 
+           } 
+         | CHAR 
+           { 
+             $$ = new TypeDef("char");
+           }
+         | INT 
+           { 
+             $$ = new TypeDef("int"); 
+           } 
+         | LONG 
+           { 
+             $$ = new TypeDef("long"); 
+           } 
+		 | FLOAT 
+           {
+             $$ = new TypeDef("float");
+           }
+         | DOUBLE 
+           { 
+             $$ = new TypeDef("double");
+           }
+         | BOOLEAN 
+           { 
+             $$ = new TypeDef("boolean"); 
+           }  
+         ;
+
 // 4.3 Reference Types and Values
 // Actually
 // ReferenceType: ClassOrInterfaceType | TypeVariable | ArrayType
@@ -727,7 +724,7 @@ PrimaryNoNewArray: Literal
 			       { 
 			         $$ = new ParenExpressionDef($2); 
 			       }
-			     | PrimitiveType Dims_opt DOT CLASS 
+			     | BasicType Dims_opt DOT CLASS 
 			       { 
 			         $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
 			       }
@@ -839,7 +836,7 @@ UnaryExpressionNotPlusMinus: PostfixExpression
                            | CastExpression;
 
 // 15.16 Cast Expressions	
-CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression   { $$ = new CastDef(new TypeDef($2.getName(), $3), $5); } 
+CastExpression: PARENOPEN BasicType Dims_opt PARENCLOSE UnaryExpression   { $$ = new CastDef(new TypeDef($2.getName(), $3), $5); } 
               | PARENOPEN QualifiedIdentifier PARENCLOSE UnaryExpressionNotPlusMinus      { $$ = new CastDef(new TypeDef($2, 0), $4); }
               | PARENOPEN QualifiedIdentifier Dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new CastDef(new TypeDef($2, $3), $5); };
 

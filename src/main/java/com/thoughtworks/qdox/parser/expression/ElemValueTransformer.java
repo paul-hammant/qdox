@@ -96,4 +96,6 @@ public interface ElemValueTransformer<U>
     U transform( PreIncrementDef preIncrementDef );
 
     U transform( MethodInvocationDef methodInvocationDef );
+
+    U transform( NewCreator newCreator );
 }

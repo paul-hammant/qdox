@@ -182,20 +182,17 @@ public class EnumsTest extends TestCase {
     public void testObjectCreation()
     {
         String source="package simpleenum;\r\n" + 
-        		"\r\n" + 
         		"import java.util.Date;\r\n" + 
-        		"\r\n" + 
         		"public enum MinimalEnumExampleConstructor\r\n" + 
         		"{\r\n" + 
         		"  D_CONSTRUCTOR(new Date());         // FAILS to be parsed\r\n" + 
-        		"\r\n" + 
         		"  private final Date date;\r\n" + 
-        		"\r\n" + 
         		"  private MinimalEnumExampleConstructor(final Date date)\r\n" + 
         		"  {\r\n" + 
         		"    this.date = date;\r\n" + 
         		"  }\r\n" + 
         		"}";
+        new JavaProjectBuilder().setDebugParser( true ).setDebugLexer( true ).addSource(new StringReader(source));
     }
     
     // QDOX-240

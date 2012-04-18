@@ -31,7 +31,7 @@ import java.util.Stack;
 %token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
 %token STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS 
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE
-%token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT
+%token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT NEW
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
 %token LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS
 %token LESSTHAN2 GREATERTHAN2 GREATERTHAN3
@@ -60,10 +60,10 @@ import java.util.Stack;
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
-%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus primary MethodInvocation
+%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus Primary ArrayCreationExpression PrimaryNoNewArray MethodInvocation Creator
 %type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
-%type <sval> AnyName TypeDeclSpecifier memberend AssignmentOperator
+%type <sval> QualifiedIdentifier TypeDeclSpecifier memberend AssignmentOperator
 %type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType ActualTypeArgument
 
 %%
@@ -86,7 +86,7 @@ package: PACKAGE
          { 
            line = lexer.getLine(); 
          } 
-         AnyName /* =PackageName */SEMI 
+         QualifiedIdentifier /* =PackageName */SEMI 
          { 
            builder.addPackage(new PackageDef($3, line)); 
          };
@@ -101,25 +101,25 @@ ImportDeclaration: SingleTypeImportDeclaration
                  | StaticImportOnDemandDeclaration;
 
 // 7.5.1 Single-Type-Import Declaration
-SingleTypeImportDeclaration: IMPORT AnyName /* =TypeName */ SEMI 
+SingleTypeImportDeclaration: IMPORT QualifiedIdentifier /* =TypeName */ SEMI 
                              { 
                                builder.addImport( $2 ); 
                              };
 
 // 7.5.2 Type-Import-on-Demand Declaration
-TypeImportOnDemandDeclaration: IMPORT AnyName /* =PackageOrTypeName */ DOT STAR SEMI 
+TypeImportOnDemandDeclaration: IMPORT QualifiedIdentifier /* =PackageOrTypeName */ DOT STAR SEMI 
                                { 
                                  builder.addImport( $2 + ".*" ); 
                                };
 
 // 7.5.3 Single Static Import Declaration
-SingleStaticImportDeclaration: IMPORT STATIC AnyName /* =TypeName . Identifier */ SEMI 
+SingleStaticImportDeclaration: IMPORT STATIC QualifiedIdentifier /* =TypeName . Identifier */ SEMI 
                                { 
                                  builder.addImport( "static " + $3);
                                };
 
 // 7.5.4 Static-Import-on-Demand Declaration             
-StaticImportOnDemandDeclaration: IMPORT STATIC AnyName /* =TypeName */ DOT STAR SEMI 
+StaticImportOnDemandDeclaration: IMPORT STATIC QualifiedIdentifier /* =TypeName */ DOT STAR SEMI 
                                  { 
                                    builder.addImport( "static " + $3 + ".*" ); 
                                  };
@@ -237,7 +237,7 @@ ClassOrInterfaceType: TypeDeclSpecifier
 // Actually
 // TypeDeclSpecifier: TypeName | ClassOrInterfaceType . Identifier
 // TypeName:          Identifier | TypeName . Identifier
-TypeDeclSpecifier: AnyName
+TypeDeclSpecifier: QualifiedIdentifier
                  | ClassOrInterfaceType DOT IDENTIFIER 
                    { 
                      $$ = $1.getName() + '.' + $3;
@@ -312,8 +312,8 @@ Wildcard: QUERY
 
 // 6.5 Determining the Meaning of a Name
 // PackageName | TypeName | ExpressionName | MethodName | PackageOrTypeName | AmbiguousName 
-AnyName: IDENTIFIER { $$ = $1; } 
-       | AnyName DOT IDENTIFIER { $$ = $1 + '.' + $3; };
+QualifiedIdentifier: IDENTIFIER { $$ = $1; } 
+       | QualifiedIdentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; };
 	
 // 8 Classes
 
@@ -323,28 +323,28 @@ AnyName: IDENTIFIER { $$ = $1; }
 // 8.4.3 MethodModifier: Annotation public protected private abstract static final synchronized native strictfp
 // 8.8.3 ConstructorModifier: Annotation public protected private
 
-AnyModifiers_opt:
-                | AnyModifiers_opt AnyModifier;
+Modifiers_opt:
+             | Modifiers_opt Modifier;
 
-AnyModifier: Annotation 
-           | PUBLIC          { modifiers.add("public"); }
-           | PROTECTED       { modifiers.add("protected"); } 
-           | PRIVATE         { modifiers.add("private"); }
-           | STATIC          { modifiers.add("static"); }
-           | FINAL           { modifiers.add("final"); }
-           | ABSTRACT        { modifiers.add("abstract"); }
-           | NATIVE          { modifiers.add("native"); }
-           | SYNCHRONIZED    { modifiers.add("synchronized"); }
-           | VOLATILE        { modifiers.add("volatile"); }
-           | TRANSIENT       { modifiers.add("transient"); }
-           | STRICTFP        { modifiers.add("strictfp"); } ;
+Modifier: Annotation 
+        | PUBLIC          { modifiers.add("public"); }
+        | PROTECTED       { modifiers.add("protected"); } 
+        | PRIVATE         { modifiers.add("private"); }
+        | STATIC          { modifiers.add("static"); }
+        | FINAL           { modifiers.add("final"); }
+        | ABSTRACT        { modifiers.add("abstract"); }
+        | NATIVE          { modifiers.add("native"); }
+        | SYNCHRONIZED    { modifiers.add("synchronized"); }
+        | VOLATILE        { modifiers.add("volatile"); }
+        | TRANSIENT       { modifiers.add("transient"); }
+        | STRICTFP        { modifiers.add("strictfp"); } ;
 
 // 8.1 Class Declaration
 ClassDeclaration: NormalClassDeclaration	
                 | EnumDeclaration;
 
 NormalClassDeclaration: 
-    AnyModifiers_opt /* =ClassModifiers_opt */ classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
+    Modifiers_opt /* =ClassModifiers_opt */ classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
         cls.setLineNumber(line);
         cls.getModifiers().addAll(modifiers); modifiers.clear(); 
         cls.setName( $3 );
@@ -358,9 +358,14 @@ NormalClassDeclaration:
     };    
 
 // 8.1.1 Class Modifiers
-// See: AnyModifiers
+// See: Modifiers
 
 // 8.1.2 Generic Classes and Type Parameters
+NonWildcardTypeArguments: LESSTHAN TypeList GREATERTHAN;
+
+TypeList: ReferenceType
+        | TypeList COMMA ReferenceType;
+
 TypeParameters_opt: 
                   | TypeParameters;
 
@@ -422,34 +427,40 @@ extendslist:
     extendslist COMMA ClassOrInterfaceType { cls.getExtends().add($3); };
 
 static_block:
-    AnyModifiers_opt CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
+    Modifiers_opt CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
 
 // ----- FIELD
 
-FieldDeclaration: 
-    AnyModifiers_opt Type VariableDeclaratorId {
-        fieldType = $2;
-        makeField($3, lexer.getCodeBody(), false);
-        builder.beginField(fd);
-        builder.endField();
-    }
-    extrafields SEMI {
-        modifiers.clear();
-    };
+FieldDeclaration: Modifiers_opt Type VariableDeclaratorId
+                  {
+                    fieldType = $2;
+                    makeField($3, lexer.getCodeBody(), false);
+                    builder.beginField(fd);
+                    builder.endField();
+                  }
+                  extrafields SEMI
+                  {
+                    modifiers.clear();
+                  };
   
-extrafields: | 
-    extrafields COMMA { line = lexer.getLine(); } VariableDeclaratorId {
-        makeField($4, lexer.getCodeBody(), false);
-        builder.beginField(fd);
-        builder.endField();
-    }; 
+extrafields: 
+           | extrafields COMMA 
+             { 
+               line = lexer.getLine();
+             } 
+             VariableDeclaratorId
+             {
+               makeField($4, lexer.getCodeBody(), false);
+               builder.beginField(fd);
+               builder.endField();
+             }; 
 
-// 8.3 Field Declarations...
+// 8.3 Field Declarations
 VariableDeclaratorId: IDENTIFIER Dims_opt 
                       {
                         $$ = new TypeDef($1,$2);
                       };
-
+                      
 // 8.4 Method Declarations
 MethodDeclaration: MethodHeader memberend /* =MethodBody*/ 
                    {
@@ -458,7 +469,7 @@ MethodDeclaration: MethodHeader memberend /* =MethodBody*/
                      mth = new MethodDef();
                    };
 
-MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
+MethodHeader: Modifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
               {
                 builder.beginMethod();
                 mth.setLineNumber(lexer.getLine());
@@ -471,7 +482,7 @@ MethodHeader: AnyModifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER 
               {
                 mth.setDimensions($9);
               } 
-            | AnyModifiers_opt Type /* =ResultType */ IDENTIFIER PARENOPEN 
+            | Modifiers_opt Type /* =ResultType */ IDENTIFIER PARENOPEN 
               {
                 builder.beginMethod();
                 mth.setLineNumber(lexer.getLine());
@@ -494,7 +505,7 @@ FormalParameterList: LastFormalParameter
 FormalParameters: FormalParameter
                 | FormalParameters COMMA FormalParameter;
                 
-FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ Type VariableDeclaratorId
+FormalParameter:  Modifiers_opt /* =VariableModifiers_opt */ Type VariableDeclaratorId
                   {
                     param.setName($3.getName());
                     param.setType($2);
@@ -505,7 +516,7 @@ FormalParameter:  AnyModifiers_opt /* =VariableModifiers_opt */ Type VariableDec
                     param = new FieldDef();
                   };
 
-LastFormalParameter: AnyModifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
+LastFormalParameter: Modifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
                      {
                        param.setName($4.getName()); 
                        param.setType($2);
@@ -542,7 +553,7 @@ memberend: CODEBLOCK
            };
 
 // 8.8 Constructor Declarations
-constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOPEN 
+constructor: Modifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOPEN 
              {
                builder.beginConstructor();
                mth.setLineNumber(lexer.getLine());
@@ -556,7 +567,7 @@ constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOP
                builder.endConstructor(mth);
                mth = new MethodDef(); 
              }
-           | AnyModifiers_opt /* =ConstructorModifiers_opt */ TypeParameters IDENTIFIER PARENOPEN 
+           | Modifiers_opt /* =ConstructorModifiers_opt */ TypeParameters IDENTIFIER PARENOPEN 
              {
                builder.beginConstructor();
                mth.setLineNumber(lexer.getLine());
@@ -573,7 +584,7 @@ constructor: AnyModifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOP
              };
              
 // 8.9 Enums
-EnumDeclaration: AnyModifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Interfaces_opt 
+EnumDeclaration: Modifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Interfaces_opt 
                  { 
                    cls.setLineNumber(line);
                    cls.getModifiers().addAll(modifiers);
@@ -626,7 +637,7 @@ EnumBodyDeclarations_opt:
 Annotations_opt: 
                | Annotations_opt Annotation;
 
-Annotation /* = NormalAnnotation*/: AT AnyName /* =TypeName */ 
+Annotation /* = NormalAnnotation*/: AT QualifiedIdentifier /* =TypeName */ 
                                     {
                                       AnnoDef annotation = new AnnoDef( new TypeDef($2) );
                                       annotation.setLineNumber(lexer.getLine());
@@ -686,9 +697,19 @@ ElementValue: ConditionalExpression
             | Annotation 
             | ElementValueArrayInitializer;
             
+// 10.6. Array Initializers 
+VariableInitializer: ArrayInitializer
+                   | Expression
+
+ArrayInitializer: BRACEOPEN VariableInitializers_opt BRACECLOSE
+
+VariableInitializers_opt:
+                        | VariableInitializers_opt VariableInitializer
+                        | VariableInitializers_opt COMMA;
+            
 // 15.8 Primary Expressions
-//Primary: PrimaryNoNewArray
-//       | ArrayCreationExpression;
+Primary: PrimaryNoNewArray
+       | ArrayCreationExpression;
        
 //PrimaryNoNewArray: Literal
 //                 | Type DOT CLASS
@@ -701,34 +722,56 @@ ElementValue: ConditionalExpression
 //        MethodInvocation
 //        ArrayAccess
        
-primary: Literal 
-       | PARENOPEN Expression PARENCLOSE 
-         { 
-           $$ = new ParenExpressionDef($2); 
-         }
-       | PrimitiveType Dims_opt DOT CLASS 
-         { 
-           $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
-         }
-       | AnyName DOT CLASS 
-         { 
-           $$ = new TypeRefDef(new TypeDef($1, 0));
-         }
-       | AnyName Dims DOT CLASS
-         {
-           $$ = new TypeRefDef(new TypeDef($1, $2));
-         } 
-       | AnyName 
-         { 
-           $$ = new FieldRefDef($1); 
-         }
-       | MethodInvocation 
-         {
-           $$ = $1;
-         };
-            
+PrimaryNoNewArray: Literal 
+                 | PARENOPEN Expression PARENCLOSE /* ParExpression*/
+			       { 
+			         $$ = new ParenExpressionDef($2); 
+			       }
+			     | PrimitiveType Dims_opt DOT CLASS 
+			       { 
+			         $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
+			       }
+			     | QualifiedIdentifier DOT CLASS 
+			       { 
+			         $$ = new TypeRefDef(new TypeDef($1, 0));
+			       }
+			     | QualifiedIdentifier Dims DOT CLASS
+			       {
+			         $$ = new TypeRefDef(new TypeDef($1, $2));
+			       } 
+			     | QualifiedIdentifier 
+			       { 
+			         $$ = new FieldRefDef($1); 
+			       }
+			     | MethodInvocation 
+			       {
+			         $$ = $1;
+			       }
+			     | NEW Creator
+			       {
+			         $$ = new NewCreator();
+			       };
+
+Arguments: PARENOPEN ExpressionList_opt PARENCLOSE;
+
 
 // 15.9 Class Instance Creation Expressions
+Creator: NonWildcardTypeArguments CreatedName ClassCreatorRest { $$ = null; }
+       | CreatedName ClassCreatorRest { $$ = null; }
+       | CreatedName ArrayCreatorRest { $$ = null; }
+
+CreatedName: IDENTIFIER TypeArgumentsOrDiamond_opt
+           | IDENTIFIER TypeArgumentsOrDiamond_opt DOT CreatedName
+
+ClassCreatorRest: Arguments ClassBody_opt;
+
+ArrayCreatorRest: Dims ArrayInitializer
+                | DimExprs Dims_opt;  
+
+TypeArgumentsOrDiamond_opt:
+                          | TypeArguments
+                          | LESSTHAN GREATERTHAN;
+
 ArgumentList_opt:
                 | ArgumentList;
 
@@ -738,7 +781,21 @@ ArgumentList: Expression
               }
             | ArgumentList COMMA Expression;
 
-// 15.10 Array Creation Expressions 
+// 15.10 Array Creation Expressions
+ArrayCreationExpression: NEW QualifiedIdentifier DimExprs Dims_opt
+                         {
+                           $$ = null;
+                         }
+                       | NEW QualifiedIdentifier Dims ArrayInitializer
+                         {
+                           $$ = null;
+                         };
+
+DimExprs: DimExpr
+        | DimExprs DimExpr;
+
+DimExpr: SQUAREOPEN Expression SQUARECLOSE
+
 Dims_opt: { 
             $$ = 0; 
           }
@@ -758,14 +815,14 @@ MethodInvocation: IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
                   {
                     $$ = new MethodInvocationDef($1, null);
                   }
-                | AnyName DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                | QualifiedIdentifier DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
                   {
                     $$ = new MethodInvocationDef($1, null);
                   };
 
 // 15.14 Postfix Expressions
 PostfixExpression: /* ExpressionName | */
-                   primary
+                   Primary
 				 | PostfixExpression PLUSPLUS   { $$ = new PostIncrementDef($1); } 
 				 | PostfixExpression MINUSMINUS { $$ = new PostDecrementDef($1); };
 
@@ -783,8 +840,8 @@ UnaryExpressionNotPlusMinus: PostfixExpression
 
 // 15.16 Cast Expressions	
 CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression   { $$ = new CastDef(new TypeDef($2.getName(), $3), $5); } 
-              | PARENOPEN AnyName PARENCLOSE UnaryExpressionNotPlusMinus      { $$ = new CastDef(new TypeDef($2, 0), $4); }
-              | PARENOPEN AnyName Dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new CastDef(new TypeDef($2, $3), $5); };
+              | PARENOPEN QualifiedIdentifier PARENCLOSE UnaryExpressionNotPlusMinus      { $$ = new CastDef(new TypeDef($2, 0), $4); }
+              | PARENOPEN QualifiedIdentifier Dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new CastDef(new TypeDef($2, $3), $5); };
 
 // 15.17 Multiplicative Operators
 MultiplicativeExpression: UnaryExpression 
@@ -884,7 +941,7 @@ Assignment: LeftHandSide AssignmentOperator AssignmentExpression
 
 
 // ExpressionName | FieldAccess
-LeftHandSide: AnyName
+LeftHandSide: QualifiedIdentifier
               {
                 $$ = new FieldRefDef($1);
               };
@@ -905,6 +962,12 @@ AssignmentOperator: EQUALS
 
 // 15.27 Expression
 Expression: AssignmentExpression;
+
+ExpressionList_opt: 
+                  | ExpressionList;
+                  
+ExpressionList: Expression
+              | ExpressionList Expression;
 
 %%
 

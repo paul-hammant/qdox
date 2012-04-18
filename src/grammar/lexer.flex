@@ -166,6 +166,7 @@ JavadocEnd                      = "*"+ "/"
     "extends"           { return Parser.EXTENDS; }
     "implements"        { return Parser.IMPLEMENTS; }
     "super"             { return Parser.SUPER; }
+    "new"               { return Parser.NEW; }
 
     "["                 { nestingDepth++; return Parser.SQUAREOPEN; }
     "]"                 { nestingDepth--; return Parser.SQUARECLOSE; }
@@ -391,10 +392,10 @@ JavadocEnd                      = "*"+ "/"
 	"true" | "false"	{ return Parser.BOOLEAN_LITERAL; }
 	
 	"class"				{ return Parser.CLASS; }
+	
+	"new"               { return Parser.NEW; }
 
-	{Id} {
-        return Parser.IDENTIFIER;
-    }
+	{Id}                { return Parser.IDENTIFIER; }
 
 	"@" 				{ return Parser.AT; }
 }

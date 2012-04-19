@@ -296,7 +296,12 @@ TypeArgumentList: TypeArgument
                   }
                 ;
 
-TypeArgument: TypeArgument Dims_opt
+TypeArgument: ReferenceType Dims_opt
+              { 
+                TypeDef td = $1;
+                td.setDimensions($2);
+                $$ = td;
+              } 
             | QUERY              
               { 
                 $$ = new WildcardTypeDef(); 

@@ -56,7 +56,6 @@ import java.util.Stack;
 %token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
 %type <type> BasicType
 %type <type> InterfaceType
-%type <type> Wildcard
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
@@ -64,7 +63,7 @@ import java.util.Stack;
 %type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier memberend AssignmentOperator
-%type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType ActualTypeArgument
+%type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType TypeArgument
 
 %%
 // Source: Java Language Specification - Third Edition
@@ -168,8 +167,18 @@ Literal: INTEGER_LITERAL
 // 4.1 The Kinds of Types and Values
 
 //---------------------------------------------------------
-Type: BasicType
-    | ReferenceType
+Type: BasicType Dims_opt
+      {
+        TypeDef td = $1;
+    	td.setDimensions($2);
+        $$ = td;
+      }
+    | ReferenceType Dims_opt
+      {
+        TypeDef td = $1;
+    	td.setDimensions($2);
+        $$ = td;
+      }
     ;
 
 BasicType: BYTE 
@@ -211,12 +220,8 @@ BasicType: BYTE
 // ReferenceType: ClassOrInterfaceType | TypeVariable | ArrayType
 // TypeVariable:  Identifier
 // ArrayType:     Type [ ]
-ReferenceType: ClassOrInterfaceType Dims_opt 
-               {
-                 TypeDef td = $1;
-    	         td.setDimensions($2);
-                 $$ = td;
-               };
+ReferenceType: ClassOrInterfaceType 
+
 // Actually
 // ClassOrInterfaceType: ClassType | InterfaceType;
 // ClassType:            TypeDeclSpecifier TypeArguments_opt
@@ -278,34 +283,33 @@ TypeArguments: LESSTHAN
                {
                  typeStack.peek().setActualArgumentTypes(new LinkedList<TypeDef>());
                }
-               ActualTypeArgumentList GREATERTHAN;
+               TypeArgumentList GREATERTHAN
+               ;
 
-ActualTypeArgumentList: ActualTypeArgument 
-                        { 
-                          (typeStack.peek()).getActualArgumentTypes().add($1);
-                        }
-                      | ActualTypeArgumentList COMMA ActualTypeArgument 
-                        { 
-                          (typeStack.peek()).getActualArgumentTypes().add($3);
-                        };
+TypeArgumentList: TypeArgument 
+                  { 
+                    (typeStack.peek()).getActualArgumentTypes().add($1);
+                  }
+                | TypeArgumentList COMMA TypeArgument 
+                  { 
+                    (typeStack.peek()).getActualArgumentTypes().add($3);
+                  }
+                ;
 
-ActualTypeArgument: ReferenceType 
-                  | Wildcard;
-                  
-// Actually Wildcard: ? WildcardBounds_Opt
-// but it's weird to let an optional bound return a value
-Wildcard: QUERY              
-          { 
-            $$ = new WildcardTypeDef(); 
-          } 
-        | QUERY EXTENDS ReferenceType 
-          { 
-            $$ = new WildcardTypeDef($3, "extends" ); 
-          }
-        | QUERY SUPER ReferenceType
-          { 
-            $$ = new WildcardTypeDef($3, "super" ); 
-          };
+TypeArgument: TypeArgument Dims_opt
+            | QUERY              
+              { 
+                $$ = new WildcardTypeDef(); 
+              } 
+            | QUERY EXTENDS Type // actually ( BasicType [] {[]} | ReferenceType {[]} )
+              { 
+                $$ = new WildcardTypeDef($3, "extends" ); 
+              }
+            | QUERY SUPER Type   // actually ( BasicType [] {[]} | ReferenceType {[]} )
+              { 
+                $$ = new WildcardTypeDef($3, "super" ); 
+              }
+            ;
 
 // 6.5 Determining the Meaning of a Name
 // PackageName | TypeName | ExpressionName | MethodName | PackageOrTypeName | AmbiguousName 

@@ -167,6 +167,9 @@ Literal: INTEGER_LITERAL
 // 4.1 The Kinds of Types and Values
 
 //---------------------------------------------------------
+// Type:
+//     BasicType {[]}
+//     ReferenceType  {[]}
 Type: BasicType Dims_opt
       {
         TypeDef td = $1;
@@ -181,6 +184,15 @@ Type: BasicType Dims_opt
       }
     ;
 
+// BasicType: 
+//     byte
+//     short
+//     char
+//     int
+//     long
+//     float
+//     double
+//     boolean
 BasicType: BYTE 
            { 
              $$ = new TypeDef("byte"); 
@@ -275,10 +287,11 @@ AdditionalBound: AMPERSAND ClassOrInterfaceType
                    typeVariable.getBounds().add($2); 
                  };
 
-// 4.5.1 Type Arguments and Wildcards
 TypeArguments_opt:
                  | TypeArguments;
 
+// TypeArguments: 
+//     < TypeArgument { , TypeArgument } >
 TypeArguments: LESSTHAN 
                {
                  typeStack.peek().setActualArgumentTypes(new LinkedList<TypeDef>());
@@ -296,6 +309,10 @@ TypeArgumentList: TypeArgument
                   }
                 ;
 
+
+// TypeArgument:  
+//    ReferenceType {[]}
+//    ? [ ( extends | super ) ( BasicType [] {[]} | ReferenceType {[]} ) ]
 TypeArgument: ReferenceType Dims_opt
               { 
                 TypeDef td = $1;
@@ -363,12 +380,14 @@ NormalClassDeclaration:
       builder.endClass(); 
     };    
 
-// 8.1.1 Class Modifiers
-// See: Modifiers
+//---------------------------------------------------------
 
-// 8.1.2 Generic Classes and Type Parameters
+// NonWildcardTypeArguments:
+//     < TypeList >
 NonWildcardTypeArguments: LESSTHAN TypeList GREATERTHAN;
 
+// TypeList:  
+//     ReferenceType { , ReferenceType }
 TypeList: ReferenceType
         | TypeList COMMA ReferenceType;
 

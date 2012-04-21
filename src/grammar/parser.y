@@ -269,36 +269,6 @@ TypeDeclSpecifier: QualifiedIdentifier
                    { 
                      $$ = $1.getName() + '.' + $3;
                    };
-               
-// 4.4 Type Variables
-TypeParameter: IDENTIFIER 
-               { 
-                 typeVariable = new TypeVariableDef($1);
-                 typeVariable.setBounds(new LinkedList<TypeDef>());
-               }
-               TypeBound_opt
-               {
-                 typeParams.add(typeVariable);
-                 typeVariable = null;
-               };
-
-TypeBound_opt:
-             | TypeBound;
-
-TypeBound: EXTENDS ClassOrInterfaceType
-		   {
-		     typeVariable.setBounds(new LinkedList<TypeDef>());
-		     typeVariable.getBounds().add($2);
-		   }
-		   AdditionalBoundList_opt;
-		   
-AdditionalBoundList_opt:
-                       | AdditionalBoundList_opt AdditionalBound;		   
-
-AdditionalBound: AMPERSAND ClassOrInterfaceType
-                 { 
-                   typeVariable.getBounds().add($2); 
-                 };
 
 TypeArguments_opt:
                  | TypeArguments;
@@ -352,7 +322,66 @@ QualifiedIdentifier: IDENTIFIER
                        $$ = $1 + '.' + $3;
                      }
                    ;
+//---------------------------------------------------------
 
+// NonWildcardTypeArguments:
+//     < TypeList >
+NonWildcardTypeArguments: LESSTHAN TypeList GREATERTHAN;
+
+// TypeList:  
+//     ReferenceType { , ReferenceType }
+TypeList: ReferenceType
+        | TypeList COMMA ReferenceType
+        ;
+
+TypeParameters_opt: 
+                  | TypeParameters
+                  ;
+
+// TypeParameters:
+//     < TypeParameter { , TypeParameter } >
+TypeParameters: LESSTHAN 
+                { 
+                  typeParams = new LinkedList<TypeVariableDef>(); 
+                } 
+                TypeParameterList GREATERTHAN
+              ;
+TypeParameterList: TypeParameter 
+                 | TypeParameterList COMMA TypeParameter
+                 ;
+
+// TypeParameter:
+//     Identifier [extends Bound]
+TypeParameter: IDENTIFIER 
+               { 
+                 typeVariable = new TypeVariableDef($1);
+                 typeVariable.setBounds(new LinkedList<TypeDef>());
+               }
+               extendsBound_opt
+               {
+                 typeParams.add(typeVariable);
+                 typeVariable = null;
+               };
+extendsBound_opt:
+                | EXTENDS
+                  {
+                    typeVariable.setBounds(new LinkedList<TypeDef>());
+                  } 
+                  Bound
+                ;
+             
+// Bound:
+//     ReferenceType { & ReferenceType }
+Bound: ReferenceType
+       {
+         typeVariable.getBounds().add($1);
+       }
+     | Bound AMPERSAND ReferenceType
+       {
+         typeVariable.getBounds().add($3);
+       }
+     ;  
+//---------------------------------------------------------
 Modifiers_opt:
              | Modifiers_opt Modifier;
 
@@ -415,30 +444,7 @@ Modifier: Annotation
             modifiers.add("strictfp");
           }
         ;
-
-//---------------------------------------------------------
-
-// NonWildcardTypeArguments:
-//     < TypeList >
-NonWildcardTypeArguments: LESSTHAN TypeList GREATERTHAN;
-
-// TypeList:  
-//     ReferenceType { , ReferenceType }
-TypeList: ReferenceType
-        | TypeList COMMA ReferenceType;
-
-TypeParameters_opt: 
-                  | TypeParameters;
-
-TypeParameters: LESSTHAN 
-                { 
-                  typeParams = new LinkedList<TypeVariableDef>(); 
-                } 
-                TypeParameterList GREATERTHAN;
-
-TypeParameterList: TypeParameter 
-                 | TypeParameterList COMMA TypeParameter;
-                 
+        
 // 8.1.5 Superinterfaces
 Interfaces_opt:
               | Interfaces;
@@ -720,33 +726,38 @@ EnumBodyDeclarations_opt:
 Annotations_opt: 
                | Annotations_opt Annotation;
 
-Annotation /* = NormalAnnotation*/: AT QualifiedIdentifier /* =TypeName */ 
-                                    {
-                                      AnnoDef annotation = new AnnoDef( new TypeDef($2) );
-                                      annotation.setLineNumber(lexer.getLine());
-                                      annotationStack.addFirst(annotation);
-                                    }
-                                    annotationParensOpt
-                                    {
-                                      AnnoDef annotation = annotationStack.removeFirst();
-                                      if(annotationStack.isEmpty()) 
-                                      {
-                                        builder.addAnnotation(annotation);
-                                      }
-                                      $$ = annotation;
-                                    };
-    
-annotationParensOpt:
-	               | PARENOPEN ElementValue PARENCLOSE 
-	                 { 
-	                   annotationStack.getFirst().getArgs().put("value", $2);
-                     }
-	               | PARENOPEN ElementValuePairs_opt PARENCLOSE;
-  
-ElementValuePairs_opt:
-                     | ElementValuePairs;   
+// Annotation:
+//     @ QualifiedIdentifier [ ( [AnnotationElement] ) ]
+Annotation: AT QualifiedIdentifier 
+	        {
+	          AnnoDef annotation = new AnnoDef( new TypeDef($2) );
+	          annotation.setLineNumber(lexer.getLine());
+	          annotationStack.addFirst(annotation);
+	        }
+	        annotationParensOpt
+	        {
+	          AnnoDef annotation = annotationStack.removeFirst();
+	          if(annotationStack.isEmpty()) 
+	          {
+	            builder.addAnnotation(annotation);
+	          }
+	          $$ = annotation;
+	        };
+ annotationParensOpt:
+	               | PARENOPEN AnnotationElement_opt PARENCLOSE 
+	               ;
 
-    
+// AnnotationElement:
+//     ElementValuePairs
+//     ElementValue
+AnnotationElement_opt: 
+                     | ElementValuePairs
+                     | ElementValue
+                       { 
+	                     annotationStack.getFirst().getArgs().put("value", $1);
+                       }
+                     ;
+                   
 ElementValuePairs: ElementValuePair 
                  | ElementValuePairs COMMA ElementValuePair;
     

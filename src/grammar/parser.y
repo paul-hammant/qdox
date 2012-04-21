@@ -137,31 +137,6 @@ TypeDeclaration: ClassDeclaration
 
 // 3 Lexical Structure
 
-// 3.10 Literals
-// NOTE: LONG_LITERAL and DOUBLE_LITERAL are not part of 
-Literal: INTEGER_LITERAL
-         { 
-           $$ = new ConstantDef($1, Integer.class); 
-         } 
-       | FLOAT_LITERAL 
-         { 
-           $$ = new ConstantDef($1, Float.class); 
-         } 
-       | BOOLEAN_LITERAL 
-         { 
-           $$ = new ConstantDef($1, Boolean.class);
-         } 
-       | CHAR_LITERAL 
-         {
-           String s = lexer.getCodeBody(); 
-           $$ = new ConstantDef(s, Character.class); 
-         } 
-       | STRING_LITERAL 
-         { 
-           String s = lexer.getCodeBody(); 
-           $$ = new ConstantDef(s, String.class); 
-         };
-
 // 4 Types, Values, and Variables
 
 // 4.1 The Kinds of Types and Values
@@ -362,9 +337,12 @@ Modifier: Annotation
         | TRANSIENT       { modifiers.add("transient"); }
         | STRICTFP        { modifiers.add("strictfp"); } ;
 
-// 8.1 Class Declaration
+// ClassDeclaration: 
+//     NormalClassDeclaration
+//     EnumDeclaration
 ClassDeclaration: NormalClassDeclaration	
-                | EnumDeclaration;
+                | EnumDeclaration
+                ;
 
 NormalClassDeclaration: 
     Modifiers_opt /* =ClassModifiers_opt */ classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
@@ -415,30 +393,43 @@ InterfaceTypeList: InterfaceType { cls.getImplements().add($1); }
 // See ClassOrInterfaceType why like this
 InterfaceType: ClassOrInterfaceType;
 
-// 8.1.6 Class Body and Member Declarations
-ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE; 
-
-// this is slighly different so we can get the correct linenumber
+// ClassBody: 
+//     { { ClassBodyDeclaration } }
+ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE
+         ; 
 ClassBodyDeclarations_opt:
                          | ClassBodyDeclarations_opt
                            { 
                              line = lexer.getLine(); 
                            }
-                           ClassBodyDeclaration;
+                           ClassBodyDeclaration
+                         ;
 
-ClassBodyDeclaration: ClassMemberDeclaration
-/*                    | InstanceInitializer */
+// ClassBodyDeclaration:
+//     ; 
+//     {Modifier} MemberDecl
+//     [static] Block
+ClassBodyDeclaration: SEMI
+                    | Modifiers_opt MemberDecl
                     | StaticInitializer
-                    | ConstructorDeclaration;
+                    ;
 
 ConstructorDeclaration: constructor;
 StaticInitializer: static_block;
 
-ClassMemberDeclaration:	FieldDeclaration
-                      | MethodDeclaration
-                      | ClassDeclaration
-/*                      | InterfaceDeclaration*/
-                      |	SEMI;
+// MemberDecl:
+//     MethodOrFieldDecl
+//     void Identifier VoidMethodDeclaratorRest
+//     Identifier ConstructorDeclaratorRest
+//     GenericMethodOrConstructorDecl
+//     ClassDeclaration
+//     InterfaceDeclaration
+MemberDecl:	FieldDeclaration
+                    | MethodDeclaration
+                    | ConstructorDeclaration;
+                    | ClassDeclaration
+/*                  | InterfaceDeclaration*/
+                      ;
 
 classorinterface: 
     CLASS { cls.setType(ClassDef.CLASS); } | 
@@ -456,10 +447,10 @@ static_block:
 
 // ----- FIELD
 
-FieldDeclaration: Modifiers_opt Type VariableDeclaratorId
+FieldDeclaration: Type VariableDeclaratorId
                   {
-                    fieldType = $2;
-                    makeField($3, lexer.getCodeBody(), false);
+                    fieldType = $1;
+                    makeField($2, lexer.getCodeBody(), false);
                     builder.beginField(fd);
                     builder.endField();
                   }
@@ -480,11 +471,13 @@ extrafields:
                builder.endField();
              }; 
 
-// 8.3 Field Declarations
+// VariableDeclaratorId:
+//     Identifier {[]}
 VariableDeclaratorId: IDENTIFIER Dims_opt 
                       {
                         $$ = new TypeDef($1,$2);
-                      };
+                      }
+                    ;
                       
 // 8.4 Method Declarations
 MethodDeclaration: MethodHeader memberend /* =MethodBody*/ 
@@ -494,30 +487,30 @@ MethodDeclaration: MethodHeader memberend /* =MethodBody*/
                      mth = new MethodDef();
                    };
 
-MethodHeader: Modifiers_opt TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
+MethodHeader: TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
               {
                 builder.beginMethod();
                 mth.setLineNumber(lexer.getLine());
                 mth.getModifiers().addAll(modifiers); modifiers.clear();
                 mth.setTypeParams(typeParams);
-                mth.setReturnType($3);
-                mth.setName($4);
+                mth.setReturnType($2);
+                mth.setName($3);
               } 
               FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt
               {
-                mth.setDimensions($9);
+                mth.setDimensions($8);
               } 
-            | Modifiers_opt Type /* =ResultType */ IDENTIFIER PARENOPEN 
+            | Type /* =ResultType */ IDENTIFIER PARENOPEN 
               {
                 builder.beginMethod();
                 mth.setLineNumber(lexer.getLine());
                 mth.getModifiers().addAll(modifiers); modifiers.clear();
-                mth.setReturnType($2);
-                mth.setName($3);
+                mth.setReturnType($1);
+                mth.setName($2);
               } 
               FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt 
               {
-                mth.setDimensions($8);
+                mth.setDimensions($7);
               };
 
 // 8.4.1 Formal Parameters
@@ -578,32 +571,32 @@ memberend: CODEBLOCK
            };
 
 // 8.8 Constructor Declarations
-constructor: Modifiers_opt /* =ConstructorModifiers_opt */ IDENTIFIER PARENOPEN 
+constructor: IDENTIFIER PARENOPEN 
              {
                builder.beginConstructor();
                mth.setLineNumber(lexer.getLine());
                mth.getModifiers().addAll(modifiers); modifiers.clear();
                mth.setConstructor(true); 
-               mth.setName($2);
+               mth.setName($1);
              }
              FormalParameterList_opt PARENCLOSE Throws_opt memberend /* =MethodBody */ 
              {
-               mth.setBody($8);
+               mth.setBody($7);
                builder.endConstructor(mth);
                mth = new MethodDef(); 
              }
-           | Modifiers_opt /* =ConstructorModifiers_opt */ TypeParameters IDENTIFIER PARENOPEN 
+           |  TypeParameters IDENTIFIER PARENOPEN 
              {
                builder.beginConstructor();
                mth.setLineNumber(lexer.getLine());
                mth.setTypeParams(typeParams);
                mth.getModifiers().addAll(modifiers); modifiers.clear();
                mth.setConstructor(true); 
-               mth.setName($3);
+               mth.setName($2);
              } 
              FormalParameterList_opt PARENCLOSE Throws_opt memberend /* =MethodBody */ 
              {
-               mth.setBody($9);
+               mth.setBody($8);
                builder.endConstructor(mth);
                mth = new MethodDef(); 
              };
@@ -722,15 +715,23 @@ ElementValue: ConditionalExpression
             | Annotation 
             | ElementValueArrayInitializer;
             
-// 10.6. Array Initializers 
+// VariableInitializer:
+//     ArrayInitializer
+//     Expression
 VariableInitializer: ArrayInitializer
                    | Expression
-
+                   ;
+                   
+// ArrayInitializer:
+//     { [ VariableInitializer { , VariableInitializer } [,] ] }
 ArrayInitializer: BRACEOPEN VariableInitializers_opt BRACECLOSE
-
+                ;
 VariableInitializers_opt:
                         | VariableInitializers_opt VariableInitializer
-                        | VariableInitializers_opt COMMA;
+                        | VariableInitializers_opt COMMA
+                        ;
+                        
+//----------------------------------------------------------------------                        
             
 // 15.8 Primary Expressions
 Primary: PrimaryNoNewArray
@@ -775,20 +776,72 @@ PrimaryNoNewArray: Literal
 			     | NEW Creator
 			       {
 			         $$ = new NewCreator();
-			       };
+			       }
+			     ;
+			       
+// Literal:
+//     IntegerLiteral
+//     FloatingPointLiteral
+//     CharacterLiteral  
+//     StringLiteral  
+//     BooleanLiteral
+//     NullLiteral
+Literal: INTEGER_LITERAL
+         { 
+           $$ = new ConstantDef($1, Integer.class); 
+         } 
+       | FLOAT_LITERAL 
+         { 
+           $$ = new ConstantDef($1, Float.class); 
+         } 
+       | CHAR_LITERAL 
+         {
+           String s = lexer.getCodeBody(); 
+           $$ = new ConstantDef(s, Character.class); 
+         } 
+       | STRING_LITERAL 
+         { 
+           String s = lexer.getCodeBody(); 
+           $$ = new ConstantDef(s, String.class); 
+         }
+       | BOOLEAN_LITERAL 
+         { 
+           $$ = new ConstantDef($1, Boolean.class);
+         }
+       ; 
 
-Arguments: PARENOPEN ExpressionList_opt PARENCLOSE;
+// Arguments:
+//     ( [ Expression { , Expression } ] )
+Arguments: PARENOPEN ExpressionList_opt PARENCLOSE
+         ;
 
+// Creator:  
+//     NonWildcardTypeArguments CreatedName ClassCreatorRest
+//     CreatedName ( ClassCreatorRest | ArrayCreatorRest )
+Creator: NonWildcardTypeArguments CreatedName ClassCreatorRest 
+         { 
+           $$ = null; 
+         }
+       | CreatedName ClassCreatorRest
+         {
+           $$ = null; 
+         }
+       | CreatedName ArrayCreatorRest 
+         {
+           $$ = null;
+         }
+       ;
 
-// 15.9 Class Instance Creation Expressions
-Creator: NonWildcardTypeArguments CreatedName ClassCreatorRest { $$ = null; }
-       | CreatedName ClassCreatorRest { $$ = null; }
-       | CreatedName ArrayCreatorRest { $$ = null; }
-
+// CreatedName:   
+//     Identifier [TypeArgumentsOrDiamond] { . Identifier [TypeArgumentsOrDiamond] }
 CreatedName: IDENTIFIER TypeArgumentsOrDiamond_opt
-           | IDENTIFIER TypeArgumentsOrDiamond_opt DOT CreatedName
+           | CreatedName DOT IDENTIFIER TypeArgumentsOrDiamond_opt
+           ; 
 
-ClassCreatorRest: Arguments ClassBody_opt;
+// ClassCreatorRest: 
+//     Arguments [ClassBody]
+ClassCreatorRest: Arguments ClassBody_opt
+                ;
 
 ArrayCreatorRest: Dims ArrayInitializer
                 | DimExprs Dims_opt;  

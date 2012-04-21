@@ -123,7 +123,6 @@ StaticImportOnDemandDeclaration: IMPORT STATIC QualifiedIdentifier /* =TypeName 
                                    builder.addImport( "static " + $3 + ".*" ); 
                                  };
 
-// 7.6 Top Level Type Declarations
 TypeDeclarations_opt: 
                     | TypeDeclarations_opt 
                       { 
@@ -138,11 +137,47 @@ TypeDeclaration: ClassOrInterfaceDeclaration
                | SEMI
                ;
 
-// 3 Lexical Structure
+// ClassOrInterfaceDeclaration: 
+//     {Modifier} (ClassDeclaration | InterfaceDeclaration)
+ClassOrInterfaceDeclaration: Modifiers_opt ClassDeclaration
+                           ; 
 
-// 4 Types, Values, and Variables
+// ClassDeclaration: 
+//     NormalClassDeclaration
+//     EnumDeclaration
+ClassDeclaration: NormalClassDeclaration	
+                | EnumDeclaration
+                ;
+// NormalClassDeclaration: 
+//     class Identifier [TypeParameters] [extends Type] [implements TypeList] ClassBody
+NormalClassDeclaration: classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  
+                        {
+                          cls.setLineNumber(line);
+                          cls.getModifiers().addAll(modifiers); modifiers.clear(); 
+                          cls.setName( $2 );
+                          cls.setTypeParameters(typeParams);
+                          builder.beginClass(cls); 
+                          cls = new ClassDef(); 
+                        }
+                        ClassBody
+                        {
+                          builder.endClass(); 
+                        }
+                      ;  
 
-// 4.1 The Kinds of Types and Values
+// EnumDeclaration:
+//     enum Identifier [implements TypeList] EnumBody                      
+EnumDeclaration: ENUM IDENTIFIER Interfaces_opt 
+                 { 
+                   cls.setLineNumber(line);
+                   cls.getModifiers().addAll(modifiers);
+                   cls.setName( $2 );
+                   cls.setType(ClassDef.ENUM);
+                   builder.beginClass(cls);
+                   cls = new ClassDef();
+                   fieldType = new TypeDef($2, 0);
+                 } 
+                 EnumBody;                      
 
 //---------------------------------------------------------
 // Type:
@@ -311,60 +346,75 @@ TypeArgument: ReferenceType Dims_opt
               }
             ;
 
-// 6.5 Determining the Meaning of a Name
-// PackageName | TypeName | ExpressionName | MethodName | PackageOrTypeName | AmbiguousName 
-QualifiedIdentifier: IDENTIFIER { $$ = $1; } 
-       | QualifiedIdentifier DOT IDENTIFIER { $$ = $1 + '.' + $3; };
-	
-// 8 Classes
-
-// 8.1.1 ClassModifier: Annotation public protected private abstract static final strictfp 
-// 8.3.1 FieldModifier: Annotation public protected private static final transient volatile
-// 8.4.1 VariableModifier: final Annotation
-// 8.4.3 MethodModifier: Annotation public protected private abstract static final synchronized native strictfp
-// 8.8.3 ConstructorModifier: Annotation public protected private
+QualifiedIdentifier: IDENTIFIER
+                   | QualifiedIdentifier DOT IDENTIFIER
+                     {
+                       $$ = $1 + '.' + $3;
+                     }
+                   ;
 
 Modifiers_opt:
              | Modifiers_opt Modifier;
 
+// Modifier: 
+//     Annotation
+//     public
+//     protected
+//     private
+//     static 
+//     abstract
+//     final
+//     native
+//     synchronized
+//     transient
+//     volatile
+//     strictfp
 Modifier: Annotation 
-        | PUBLIC          { modifiers.add("public"); }
-        | PROTECTED       { modifiers.add("protected"); } 
-        | PRIVATE         { modifiers.add("private"); }
-        | STATIC          { modifiers.add("static"); }
-        | FINAL           { modifiers.add("final"); }
-        | ABSTRACT        { modifiers.add("abstract"); }
-        | NATIVE          { modifiers.add("native"); }
-        | SYNCHRONIZED    { modifiers.add("synchronized"); }
-        | VOLATILE        { modifiers.add("volatile"); }
-        | TRANSIENT       { modifiers.add("transient"); }
-        | STRICTFP        { modifiers.add("strictfp"); } ;
-
-// ClassOrInterfaceDeclaration: 
-//     {Modifier} (ClassDeclaration | InterfaceDeclaration)
-ClassOrInterfaceDeclaration: Modifiers_opt ClassDeclaration
-                           ; 
-
-// ClassDeclaration: 
-//     NormalClassDeclaration
-//     EnumDeclaration
-ClassDeclaration: NormalClassDeclaration	
-                | EnumDeclaration
-                ;
-
-NormalClassDeclaration: 
-    classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
-        cls.setLineNumber(line);
-        cls.getModifiers().addAll(modifiers); modifiers.clear(); 
-        cls.setName( $2 );
-        cls.setTypeParameters(typeParams);
-        builder.beginClass(cls); 
-        cls = new ClassDef(); 
-    }
-    ClassBody
-    {
-      builder.endClass(); 
-    };    
+        | PUBLIC
+          {
+            modifiers.add("public");
+          }
+        | PROTECTED
+          {
+            modifiers.add("protected");
+          } 
+        | PRIVATE
+          {
+            modifiers.add("private");
+          }
+        | STATIC
+          {
+            modifiers.add("static");
+          }
+        | FINAL
+          {
+            modifiers.add("final");
+          }
+        | ABSTRACT
+          {
+            modifiers.add("abstract");
+          }
+        | NATIVE
+          {
+            modifiers.add("native");
+          }
+        | SYNCHRONIZED
+          {
+            modifiers.add("synchronized");
+          }
+        | VOLATILE
+          {
+            modifiers.add("volatile");
+          }
+        | TRANSIENT
+          {
+            modifiers.add("transient");
+          }
+        | STRICTFP
+          {
+            modifiers.add("strictfp");
+          }
+        ;
 
 //---------------------------------------------------------
 
@@ -434,7 +484,7 @@ StaticInitializer: static_block;
 //     InterfaceDeclaration
 MemberDecl:	FieldDeclaration
                     | MethodDeclaration
-                    | ConstructorDeclaration;
+                    | ConstructorDeclaration
                     | ClassDeclaration
 /*                  | InterfaceDeclaration*/
                       ;
@@ -528,10 +578,14 @@ FormalParameterList_opt:
 FormalParameterList: LastFormalParameter
                    | FormalParameters COMMA LastFormalParameter;
 
-FormalParameters: FormalParameter
-                | FormalParameters COMMA FormalParameter;
-                
-FormalParameter:  Modifiers_opt /* =VariableModifiers_opt */ Type VariableDeclaratorId
+// FormalParameters: 
+//     ( [FormalParameterDecls] )
+FormalParameters: FormalParameterDecls
+                | FormalParameters COMMA FormalParameterDecls;
+ 
+// FormalParameterDecls: 
+//     {VariableModifier}  Type FormalParameterDeclsRest                
+FormalParameterDecls:  Modifiers_opt Type VariableDeclaratorId
                   {
                     param.setName($3.getName());
                     param.setType($2);
@@ -540,7 +594,13 @@ FormalParameter:  Modifiers_opt /* =VariableModifiers_opt */ Type VariableDeclar
                     param.getModifiers().addAll(modifiers); modifiers.clear();
                     builder.addParameter(param);
                     param = new FieldDef();
-                  };
+                  }
+                ;
+
+// FormalParameterDeclsRest: 
+//     VariableDeclaratorId [ , FormalParameterDecls ]
+//     ... VariableDeclaratorId
+
 
 LastFormalParameter: Modifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
                      {
@@ -552,7 +612,7 @@ LastFormalParameter: Modifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT V
                        builder.addParameter(param);
                        param = new FieldDef();
                      };
-                   | FormalParameter;
+                   | FormalParameterDecls;
 
 // 8.4.6 Method Throws
 Throws_opt:
@@ -609,21 +669,10 @@ constructor: IDENTIFIER PARENOPEN
                mth = new MethodDef(); 
              };
              
-// 8.9 Enums
-EnumDeclaration: ENUM IDENTIFIER Interfaces_opt 
-                 { 
-                   cls.setLineNumber(line);
-                   cls.getModifiers().addAll(modifiers);
-                   cls.setName( $2 );
-                   cls.setType(ClassDef.ENUM);
-                   builder.beginClass(cls);
-                   cls = new ClassDef();
-                   fieldType = new TypeDef($2, 0);
-                 } 
-                 EnumBody;
 
-/* Specs say: { EnumConstants_opt ,_opt EnumBodyDeclarations_opt }
-   The optional COMMA causes trouble for the parser
+// EnumBody:
+//     { [EnumConstants] [,] [EnumBodyDeclarations] }
+/* The optional COMMA causes trouble for the parser
    For that reason the adjusted options of EnumConstants_opt, which will accept all cases 
 */
 EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
@@ -631,14 +680,19 @@ EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE
             builder.endClass();
             fieldType = null;
             modifiers.clear();
-          };
+          }
+        ;
 
-// 8.9 Enums Constants
-/* See EnumBody for this slightly different code */
+// EnumConstants:
+//     EnumConstant
+//     EnumConstants , EnumConstant
 EnumConstants_opt:
                  | EnumConstants_opt COMMA
-                 | EnumConstants_opt EnumConstant;
+                 | EnumConstants_opt EnumConstant
+                 ;
                  
+// EnumConstant:
+//     [Annotations] Identifier [Arguments] [ClassBody]                 
 EnumConstant: Annotations_opt IDENTIFIER 
               { 
                 makeField( new TypeDef($2, 0), "", true );
@@ -647,14 +701,17 @@ EnumConstant: Annotations_opt IDENTIFIER
               Arguments_opt ClassBody_opt
               {
                 builder.endField();
-              };
+              }
+            ;
          
 Arguments_opt:
              | PARENOPEN ArgumentList_opt PARENCLOSE; //PARENBLOCK
 
 ClassBody_opt:
              | ClassBody;
-
+             
+// EnumBodyDeclarations:
+//     ; {ClassBodyDeclaration}
 EnumBodyDeclarations_opt:
                         | SEMI ClassBodyDeclarations_opt;      
                         
@@ -854,6 +911,9 @@ ClassCreatorRest: Arguments ClassBody_opt
 ArrayCreatorRest: Dims ArrayInitializer
                 | DimExprs Dims_opt;  
 
+// TypeArgumentsOrDiamond:
+//     < > 
+//     TypeArguments
 TypeArgumentsOrDiamond_opt:
                           | TypeArguments
                           | LESSTHAN GREATERTHAN;
@@ -1032,19 +1092,33 @@ LeftHandSide: QualifiedIdentifier
                 $$ = new FieldRefDef($1);
               };
 //            | ArrayAccess;
-            
+
+// AssignmentOperator: 
+//      = 
+//      +=
+//      -= 
+//      *=
+//      /=
+//      &=
+//      |=
+//      ^=
+//      %=
+//      <<=
+//      >>=
+//      >>>=            
 AssignmentOperator: EQUALS
-                  | STAREQUALS
-                  | SLASHEQUALS
-                  | PERCENTEQUALS
                   | PLUSEQUALS
                   | MINUSEQUALS
+                  | STAREQUALS
+                  | SLASHEQUALS
+                  | AMPERSANDEQUALS
+                  | VERTLINEEQUALS
+                  | CIRCUMFLEXEQUALS
+                  | PERCENTEQUALS
                   | LESSTHAN2EQUALS
                   | GREATERTHAN2EQUALS
                   | GREATERTHAN3EQUALS
-                  | AMPERSANDEQUALS
-                  | CIRCUMFLEXEQUALS
-                  | VERTLINEEQUALS;
+                  ;
 
 // 15.27 Expression
 Expression: AssignmentExpression;

@@ -131,9 +131,12 @@ TypeDeclarations_opt:
                       } 
                       TypeDeclaration;
 
-TypeDeclaration: ClassDeclaration
-/*               | InterfaceDeclaration */
-               | SEMI;
+// TypeDeclaration: 
+//     ClassOrInterfaceDeclaration
+//     ;
+TypeDeclaration: ClassOrInterfaceDeclaration
+               | SEMI
+               ;
 
 // 3 Lexical Structure
 
@@ -337,6 +340,11 @@ Modifier: Annotation
         | TRANSIENT       { modifiers.add("transient"); }
         | STRICTFP        { modifiers.add("strictfp"); } ;
 
+// ClassOrInterfaceDeclaration: 
+//     {Modifier} (ClassDeclaration | InterfaceDeclaration)
+ClassOrInterfaceDeclaration: Modifiers_opt ClassDeclaration
+                           ; 
+
 // ClassDeclaration: 
 //     NormalClassDeclaration
 //     EnumDeclaration
@@ -345,10 +353,10 @@ ClassDeclaration: NormalClassDeclaration
                 ;
 
 NormalClassDeclaration: 
-    Modifiers_opt /* =ClassModifiers_opt */ classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
+    classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  {
         cls.setLineNumber(line);
         cls.getModifiers().addAll(modifiers); modifiers.clear(); 
-        cls.setName( $3 );
+        cls.setName( $2 );
         cls.setTypeParameters(typeParams);
         builder.beginClass(cls); 
         cls = new ClassDef(); 
@@ -602,15 +610,15 @@ constructor: IDENTIFIER PARENOPEN
              };
              
 // 8.9 Enums
-EnumDeclaration: Modifiers_opt /* =ClassModifiers_opt*/ ENUM IDENTIFIER Interfaces_opt 
+EnumDeclaration: ENUM IDENTIFIER Interfaces_opt 
                  { 
                    cls.setLineNumber(line);
                    cls.getModifiers().addAll(modifiers);
-                   cls.setName( $3 );
+                   cls.setName( $2 );
                    cls.setType(ClassDef.ENUM);
                    builder.beginClass(cls);
                    cls = new ClassDef();
-                   fieldType = new TypeDef($3, 0);
+                   fieldType = new TypeDef($2, 0);
                  } 
                  EnumBody;
 

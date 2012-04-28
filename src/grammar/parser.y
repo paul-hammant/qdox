@@ -61,7 +61,7 @@ import java.util.Stack;
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus Primary ArrayCreationExpression PrimaryNoNewArray MethodInvocation Creator
 %type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
-%type <sval> QualifiedIdentifier TypeDeclSpecifier memberend AssignmentOperator
+%type <sval> QualifiedIdentifier TypeDeclSpecifier _MemberEnd AssignmentOperator
 %type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType TypeArgument
 
 %%
@@ -126,7 +126,8 @@ TypeDeclarations_opt:
                       { 
                         line = lexer.getLine(); 
                       } 
-                      TypeDeclaration;
+                      TypeDeclaration
+                    ;
 
 // TypeDeclaration: 
 //     ClassOrInterfaceDeclaration
@@ -157,7 +158,7 @@ InterfaceDeclaration: NormalInterfaceDeclaration
                 
 // NormalClassDeclaration: 
 //     class Identifier [TypeParameters] [extends Type] [implements TypeList] ClassBody
-NormalClassDeclaration: CLASS IDENTIFIER TypeParameters_opt _ExtendsType_opt Interfaces_opt  
+NormalClassDeclaration: CLASS IDENTIFIER TypeParameters_opt _ExtendsType_opt _ImplementsTypeList_opt  
                         {
                           cls.setType(ClassDef.CLASS);
                           cls.setLineNumber(line);
@@ -175,7 +176,7 @@ NormalClassDeclaration: CLASS IDENTIFIER TypeParameters_opt _ExtendsType_opt Int
 
 // EnumDeclaration:
 //     enum Identifier [implements TypeList] EnumBody                      
-EnumDeclaration: ENUM IDENTIFIER Interfaces_opt 
+EnumDeclaration: ENUM IDENTIFIER _ImplementsTypeList_opt 
                  { 
                    cls.setLineNumber(line);
                    cls.getModifiers().addAll(modifiers);
@@ -190,7 +191,7 @@ EnumDeclaration: ENUM IDENTIFIER Interfaces_opt
                
 // NormalInterfaceDeclaration: 
 //     interface Identifier [TypeParameters] [extends TypeList] InterfaceBody
-NormalInterfaceDeclaration: INTERFACE IDENTIFIER TypeParameters_opt opt_extends  
+NormalInterfaceDeclaration: INTERFACE IDENTIFIER TypeParameters_opt _ExtendsTypelist_opt  
                             {
                               cls.setType(ClassDef.INTERFACE);
                               cls.setLineNumber(line);
@@ -209,19 +210,20 @@ NormalInterfaceDeclaration: INTERFACE IDENTIFIER TypeParameters_opt opt_extends
 // AnnotationTypeDeclaration:
 //     @ interface Identifier AnnotationTypeBody
 AnnotationTypeDeclaration: ANNOINTERFACE IDENTIFIER 
-                          {
-                            cls.setType(ClassDef.ANNOTATION_TYPE);
-                            cls.setLineNumber(line);
-                            cls.getModifiers().addAll(modifiers); modifiers.clear(); 
-                            cls.setName( $2 );
-                            builder.beginClass(cls); 
-                            cls = new ClassDef();
-                          }
-                          ClassBody
-                          {
-                            builder.endClass(); 
-                          }
-
+                           {
+                             cls.setType(ClassDef.ANNOTATION_TYPE);
+                             cls.setLineNumber(line);
+                             cls.getModifiers().addAll(modifiers); modifiers.clear(); 
+                             cls.setName( $2 );
+                             builder.beginClass(cls); 
+                             cls = new ClassDef();
+                           }
+                           ClassBody
+                           {
+                             builder.endClass(); 
+                           }
+                         ;
+//---------------------------------------------------------
 _ExtendsType_opt:
                 | EXTENDS ReferenceType
                   {
@@ -229,28 +231,30 @@ _ExtendsType_opt:
                   }
                 ;
 
-opt_extends: | EXTENDS extendslist;
-
-extendslist:
-    ClassOrInterfaceType { cls.getExtends().add($1); } |
-    extendslist COMMA ClassOrInterfaceType { cls.getExtends().add($3); };
+_ExtendsTypelist_opt: 
+                    | EXTENDS TypeList
+                      {
+                        cls.getExtends().addAll( typeList );
+                        typeList.clear();
+                      }
+                    ;
     
-Interfaces_opt:
-              | Interfaces;
-              
-Interfaces:	IMPLEMENTS InterfaceTypeList;
-
-InterfaceTypeList: Type { cls.getImplements().add($1); }
-                 | InterfaceTypeList COMMA Type { cls.getImplements().add($3); };    
-
-//---------------------------------------------------------
+_ImplementsTypeList_opt:
+                       | IMPLEMENTS TypeList
+                         {
+                           cls.getImplements().addAll( typeList );
+                         }
+                       ;
+//========================================================
+// QualifiedIdentifier:
+//     Identifier { . Identifier }
 QualifiedIdentifier: IDENTIFIER
                    | QualifiedIdentifier DOT IDENTIFIER
                      {
                        $$ = $1 + '.' + $3;
                      }
                    ;
-//---------------------------------------------------------
+//========================================================
 // Type:
 //     BasicType {[]}
 //     ReferenceType  {[]}
@@ -311,12 +315,10 @@ BasicType: BYTE
            }  
          ;
 
-// 4.3 Reference Types and Values
-// Actually
-// ReferenceType: ClassOrInterfaceType | TypeVariable | ArrayType
-// TypeVariable:  Identifier
-// ArrayType:     Type [ ]
-ReferenceType: ClassOrInterfaceType 
+// ReferenceType:
+//     Identifier [TypeArguments] { . Identifier [TypeArguments] }
+ReferenceType: ClassOrInterfaceType
+             ; 
 
 // Actually
 // ClassOrInterfaceType: ClassType | InterfaceType;
@@ -387,7 +389,7 @@ TypeArgument: ReferenceType Dims_opt
                 $$ = new WildcardTypeDef($3, "super" ); 
               }
             ;
-//---------------------------------------------------------
+//========================================================
 
 // NonWildcardTypeArguments:
 //     < TypeList >
@@ -397,7 +399,13 @@ NonWildcardTypeArguments: LESSTHAN TypeList GREATERTHAN
 // TypeList:  
 //     ReferenceType { , ReferenceType }
 TypeList: ReferenceType
+          {
+            typeList.add( $1 );
+          }
         | TypeList COMMA ReferenceType
+          {
+            typeList.add( $3 );
+          }
         ;
 
 TypeParameters_opt: 
@@ -428,13 +436,6 @@ TypeParameter: IDENTIFIER
                  typeParams.add(typeVariable);
                  typeVariable = null;
                };
-_ExtendsBound_opt:
-                | EXTENDS
-                  {
-                    typeVariable.setBounds(new LinkedList<TypeDef>());
-                  } 
-                  Bound
-                ;
              
 // Bound:
 //     ReferenceType { & ReferenceType }
@@ -447,7 +448,15 @@ Bound: ReferenceType
          typeVariable.getBounds().add($3);
        }
      ;  
-//---------------------------------------------------------
+//--------------------------------------------------------
+_ExtendsBound_opt:
+                | EXTENDS
+                  {
+                    typeVariable.setBounds(new LinkedList<TypeDef>());
+                  } 
+                  Bound
+                ;
+//========================================================
 Modifiers_opt:
              | Modifiers_opt Modifier;
 
@@ -511,6 +520,85 @@ Modifier: Annotation
           }
         ;
 
+Annotations_opt: 
+               | Annotations_opt Annotation;
+
+// Annotation:
+//     @ QualifiedIdentifier [ ( [AnnotationElement] ) ]
+Annotation: AT QualifiedIdentifier 
+	        {
+	          AnnoDef annotation = new AnnoDef( new TypeDef($2) );
+	          annotation.setLineNumber(lexer.getLine());
+	          annotationStack.addFirst(annotation);
+	        }
+	        _AnnotationParens_opt
+	        {
+	          AnnoDef annotation = annotationStack.removeFirst();
+	          if(annotationStack.isEmpty()) 
+	          {
+	            builder.addAnnotation(annotation);
+	          }
+	          $$ = annotation;
+	        };
+
+// AnnotationElement:
+//     ElementValuePairs
+//     ElementValue
+AnnotationElement_opt: 
+                     | ElementValuePairs
+                     | ElementValue
+                       { 
+	                     annotationStack.getFirst().getArgs().put("value", $1);
+                       }
+                     ;
+
+// ElementValuePairs:
+//     ElementValuePair { , ElementValuePair }
+ElementValuePairs: ElementValuePair 
+                 | ElementValuePairs COMMA ElementValuePair
+                 ;
+
+// ElementValuePair:
+//     Identifier = ElementValue
+ElementValuePair: IDENTIFIER EQUALS ElementValue 
+                  {
+                    annotationStack.getFirst().getArgs().put($1, $3);
+                  }
+                ;
+
+/* Specs say: { ElementValues_opt COMMA_opt }
+   The optional COMMA causes trouble for the parser
+   For that reason the adjusted options of ElementValues_opt, which will accept all cases
+*/    
+ElementValueArrayInitializer: {
+                                annoValueListStack.add(annoValueList);
+                                annoValueList = new LinkedList<ElemValueDef>();
+                              }
+                              BRACEOPEN ElementValues_opt BRACECLOSE
+                              { 
+                                $$ = new ElemValueListDef(annoValueList);
+                                annoValueList = annoValueListStack.remove(annoValueListStack.size() - 1);
+                              };
+    
+ElementValues_opt:
+                 | ElementValues_opt ElementValue
+                   { 
+                     annoValueList.add($2); 
+                   } 
+                 | ElementValues_opt COMMA;    
+
+// ElementValue:
+//     Annotation
+//     Expression1 
+//     ElementValueArrayInitializer
+ElementValue: ConditionalExpression 
+            | Annotation 
+            | ElementValueArrayInitializer;
+//--------------------------------------------------------
+ _AnnotationParens_opt:
+	                  | PARENOPEN AnnotationElement_opt PARENCLOSE 
+	                  ;
+//========================================================
 // ClassBody: 
 //     { { ClassBodyDeclaration } }
 ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE
@@ -587,7 +675,7 @@ VariableDeclaratorId: IDENTIFIER Dims_opt
                     ;
                       
 // 8.4 Method Declarations
-MethodDeclaration: MethodHeader memberend /* =MethodBody*/ 
+MethodDeclaration: MethodHeader _MemberEnd /* =MethodBody*/ 
                    {
                      mth.setBody($2);
                      builder.endMethod(mth);
@@ -619,7 +707,7 @@ MethodHeader: TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
               {
                 mth.setDimensions($7);
               };
-
+//================================================================
 // 8.4.1 Formal Parameters
 FormalParameterList_opt:
                        | FormalParameterList;
@@ -645,7 +733,7 @@ FormalParameterDecls:  Modifiers_opt Type VariableDeclaratorId
                     param = new FieldDef();
                   }
                 ;
-
+                
 // FormalParameterDeclsRest: 
 //     VariableDeclaratorId [ , FormalParameterDecls ]
 //     ... VariableDeclaratorId
@@ -678,7 +766,7 @@ ExceptionTypeList: ClassOrInterfaceType /*ExceptionType*/
                    
 // 8.4.7 Method Body
 
-memberend: CODEBLOCK 
+_MemberEnd: CODEBLOCK 
            {
 	         $$ = lexer.getCodeBody();
            } 
@@ -696,7 +784,7 @@ constructor: IDENTIFIER PARENOPEN
                mth.setConstructor(true); 
                mth.setName($1);
              }
-             FormalParameterList_opt PARENCLOSE Throws_opt memberend /* =MethodBody */ 
+             FormalParameterList_opt PARENCLOSE Throws_opt _MemberEnd /* =MethodBody */ 
              {
                mth.setBody($7);
                builder.endConstructor(mth);
@@ -711,9 +799,9 @@ constructor: IDENTIFIER PARENOPEN
                mth.setConstructor(true); 
                mth.setName($2);
              } 
-             FormalParameterList_opt PARENCLOSE Throws_opt memberend /* =MethodBody */ 
+             FormalParameterList_opt PARENCLOSE Throws_opt CODEBLOCK 
              {
-               mth.setBody($8);
+               mth.setBody(lexer.getCodeBody());
                builder.endConstructor(mth);
                mth = new MethodDef(); 
              };
@@ -764,75 +852,7 @@ ClassBody_opt:
 EnumBodyDeclarations_opt:
                         | SEMI ClassBodyDeclarations_opt;      
                         
-// 9.7 Annotations
 
-Annotations_opt: 
-               | Annotations_opt Annotation;
-
-// Annotation:
-//     @ QualifiedIdentifier [ ( [AnnotationElement] ) ]
-Annotation: AT QualifiedIdentifier 
-	        {
-	          AnnoDef annotation = new AnnoDef( new TypeDef($2) );
-	          annotation.setLineNumber(lexer.getLine());
-	          annotationStack.addFirst(annotation);
-	        }
-	        annotationParensOpt
-	        {
-	          AnnoDef annotation = annotationStack.removeFirst();
-	          if(annotationStack.isEmpty()) 
-	          {
-	            builder.addAnnotation(annotation);
-	          }
-	          $$ = annotation;
-	        };
- annotationParensOpt:
-	               | PARENOPEN AnnotationElement_opt PARENCLOSE 
-	               ;
-
-// AnnotationElement:
-//     ElementValuePairs
-//     ElementValue
-AnnotationElement_opt: 
-                     | ElementValuePairs
-                     | ElementValue
-                       { 
-	                     annotationStack.getFirst().getArgs().put("value", $1);
-                       }
-                     ;
-                   
-ElementValuePairs: ElementValuePair 
-                 | ElementValuePairs COMMA ElementValuePair;
-    
-ElementValuePair: IDENTIFIER EQUALS ElementValue 
-                  {
-                    annotationStack.getFirst().getArgs().put($1, $3);
-                  };
-
-/* Specs say: { ElementValues_opt COMMA_opt }
-   The optional COMMA causes trouble for the parser
-   For that reason the adjusted options of ElementValues_opt, which will accept all cases
-*/    
-ElementValueArrayInitializer: {
-                                annoValueListStack.add(annoValueList);
-                                annoValueList = new LinkedList<ElemValueDef>();
-                              }
-                              BRACEOPEN ElementValues_opt BRACECLOSE
-                              { 
-                                $$ = new ElemValueListDef(annoValueList);
-                                annoValueList = annoValueListStack.remove(annoValueListStack.size() - 1);
-                              };
-    
-ElementValues_opt:
-                 | ElementValues_opt ElementValue
-                   { 
-                     annoValueList.add($2); 
-                   } 
-                 | ElementValues_opt COMMA;    
-    
-ElementValue: ConditionalExpression 
-            | Annotation 
-            | ElementValueArrayInitializer;
             
 // VariableInitializer:
 //     ArrayInitializer
@@ -850,7 +870,7 @@ VariableInitializers_opt:
                         | VariableInitializers_opt COMMA
                         ;
                         
-//----------------------------------------------------------------------                        
+//========================================================
             
 // 15.8 Primary Expressions
 Primary: PrimaryNoNewArray
@@ -972,8 +992,9 @@ ArrayCreatorRest: Dims ArrayInitializer
 //     < > 
 //     TypeArguments
 TypeArgumentsOrDiamond_opt:
+                          | LESSTHAN GREATERTHAN
                           | TypeArguments
-                          | LESSTHAN GREATERTHAN;
+                          ;
 
 ArgumentList_opt:
                 | ArgumentList;
@@ -982,7 +1003,11 @@ ArgumentList: Expression
               {
                 builder.addArgument( (ExpressionDef) $1);
               }
-            | ArgumentList COMMA Expression;
+            | ArgumentList COMMA Expression
+              {
+                builder.addArgument( (ExpressionDef) $3);
+              }
+            ;
 
 // 15.10 Array Creation Expressions
 ArrayCreationExpression: NEW QualifiedIdentifier DimExprs Dims_opt
@@ -1203,6 +1228,7 @@ private java.util.Set<String> modifiers = new java.util.LinkedHashSet<String>();
 private TypeDef fieldType;
 private TypeVariableDef typeVariable;
 private Stack<TypeDef> typeStack = new Stack<TypeDef>();
+private List<TypeDef> typeList = new LinkedList<TypeDef>();
 private int line;
 private int column;
 private boolean debugLexer;

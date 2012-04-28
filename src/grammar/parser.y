@@ -55,7 +55,6 @@ import java.util.Stack;
 %token <ival> PLUSPLUS MINUSMINUS
 %token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
 %type <type> BasicType
-%type <type> InterfaceType
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
@@ -158,7 +157,7 @@ InterfaceDeclaration: NormalInterfaceDeclaration
                 
 // NormalClassDeclaration: 
 //     class Identifier [TypeParameters] [extends Type] [implements TypeList] ClassBody
-NormalClassDeclaration: CLASS IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  
+NormalClassDeclaration: CLASS IDENTIFIER TypeParameters_opt _ExtendsType_opt Interfaces_opt  
                         {
                           cls.setType(ClassDef.CLASS);
                           cls.setLineNumber(line);
@@ -222,7 +221,28 @@ AnnotationTypeDeclaration: ANNOINTERFACE IDENTIFIER
                           {
                             builder.endClass(); 
                           }
-                    
+
+_ExtendsType_opt:
+                | EXTENDS ReferenceType
+                  {
+                    cls.getExtends().add($2);
+                  }
+                ;
+
+opt_extends: | EXTENDS extendslist;
+
+extendslist:
+    ClassOrInterfaceType { cls.getExtends().add($1); } |
+    extendslist COMMA ClassOrInterfaceType { cls.getExtends().add($3); };
+    
+Interfaces_opt:
+              | Interfaces;
+              
+Interfaces:	IMPLEMENTS InterfaceTypeList;
+
+InterfaceTypeList: Type { cls.getImplements().add($1); }
+                 | InterfaceTypeList COMMA Type { cls.getImplements().add($3); };    
+
 //---------------------------------------------------------
 QualifiedIdentifier: IDENTIFIER
                    | QualifiedIdentifier DOT IDENTIFIER
@@ -403,12 +423,12 @@ TypeParameter: IDENTIFIER
                  typeVariable = new TypeVariableDef($1);
                  typeVariable.setBounds(new LinkedList<TypeDef>());
                }
-               extendsBound_opt
+               _ExtendsBound_opt
                {
                  typeParams.add(typeVariable);
                  typeVariable = null;
                };
-extendsBound_opt:
+_ExtendsBound_opt:
                 | EXTENDS
                   {
                     typeVariable.setBounds(new LinkedList<TypeDef>());
@@ -490,18 +510,6 @@ Modifier: Annotation
             modifiers.add("strictfp");
           }
         ;
-        
-// 8.1.5 Superinterfaces
-Interfaces_opt:
-              | Interfaces;
-              
-Interfaces:	IMPLEMENTS InterfaceTypeList;
-
-InterfaceTypeList: InterfaceType { cls.getImplements().add($1); }
-                 | InterfaceTypeList COMMA InterfaceType { cls.getImplements().add($3); };
-
-// See ClassOrInterfaceType why like this
-InterfaceType: ClassOrInterfaceType;
 
 // ClassBody: 
 //     { { ClassBodyDeclaration } }
@@ -540,12 +548,6 @@ MemberDecl:	FieldDeclaration
           | ClassDeclaration
           | InterfaceDeclaration
           ;
-
-opt_extends: | EXTENDS extendslist;
-
-extendslist:
-    ClassOrInterfaceType { cls.getExtends().add($1); } |
-    extendslist COMMA ClassOrInterfaceType { cls.getExtends().add($3); };
 
 static_block:
     Modifiers_opt CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };

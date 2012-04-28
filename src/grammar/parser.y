@@ -69,12 +69,11 @@ import java.util.Stack;
 // Source: Java Language Specification - Third Edition
 //         The Java(TM) Language Specification - Java SE 7 Edition ( Chapter 18. Syntax )
 
-// 7 Packages
+// CompilationUnit: 
+//     [ [Annotations] package QualifiedIdentifier ; ] {ImportDeclaration} {TypeDeclaration}
+CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_opt
+               ;
 
-// 7.3 Compilation Units
-CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_opt;
-
-// 7.4 Package Declarations
 PackageDeclaration_opt:
                       | PackageDeclaration_opt PackageDeclaration;
 
@@ -88,40 +87,40 @@ package: PACKAGE
          QualifiedIdentifier /* =PackageName */SEMI 
          { 
            builder.addPackage(new PackageDef($3, line)); 
-         };
+         }
+         ;
 
-// 7.5 Import Declarations
 ImportDeclarations_opt: 
-				      | ImportDeclarations_opt ImportDeclaration;
+				      | ImportDeclarations_opt ImportDeclaration
+				      ;
 
+// ImportDeclaration: 
+//     import [static] Identifier { . Identifier } [. *] ;
 ImportDeclaration: SingleTypeImportDeclaration
                  | TypeImportOnDemandDeclaration
                  | SingleStaticImportDeclaration
-                 | StaticImportOnDemandDeclaration;
-
-// 7.5.1 Single-Type-Import Declaration
-SingleTypeImportDeclaration: IMPORT QualifiedIdentifier /* =TypeName */ SEMI 
+                 | StaticImportOnDemandDeclaration
+                 ;
+SingleTypeImportDeclaration: IMPORT QualifiedIdentifier SEMI 
                              { 
                                builder.addImport( $2 ); 
-                             };
-
-// 7.5.2 Type-Import-on-Demand Declaration
-TypeImportOnDemandDeclaration: IMPORT QualifiedIdentifier /* =PackageOrTypeName */ DOT STAR SEMI 
+                             }
+                           ;
+TypeImportOnDemandDeclaration: IMPORT QualifiedIdentifier DOT STAR SEMI 
                                { 
                                  builder.addImport( $2 + ".*" ); 
-                               };
-
-// 7.5.3 Single Static Import Declaration
-SingleStaticImportDeclaration: IMPORT STATIC QualifiedIdentifier /* =TypeName . Identifier */ SEMI 
+                               }
+                             ;
+SingleStaticImportDeclaration: IMPORT STATIC QualifiedIdentifier SEMI 
                                { 
                                  builder.addImport( "static " + $3);
-                               };
-
-// 7.5.4 Static-Import-on-Demand Declaration             
-StaticImportOnDemandDeclaration: IMPORT STATIC QualifiedIdentifier /* =TypeName */ DOT STAR SEMI 
+                               }
+                             ;
+StaticImportOnDemandDeclaration: IMPORT STATIC QualifiedIdentifier DOT STAR SEMI 
                                  { 
                                    builder.addImport( "static " + $3 + ".*" ); 
-                                 };
+                                 }
+                               ;
 
 TypeDeclarations_opt: 
                     | TypeDeclarations_opt 
@@ -140,7 +139,8 @@ TypeDeclaration: ClassOrInterfaceDeclaration
 // ClassOrInterfaceDeclaration: 
 //     {Modifier} (ClassDeclaration | InterfaceDeclaration)
 ClassOrInterfaceDeclaration: Modifiers_opt ClassDeclaration
-                           ; 
+                           | Modifiers_opt InterfaceDeclaration
+                           ;
 
 // ClassDeclaration: 
 //     NormalClassDeclaration
@@ -148,10 +148,19 @@ ClassOrInterfaceDeclaration: Modifiers_opt ClassDeclaration
 ClassDeclaration: NormalClassDeclaration	
                 | EnumDeclaration
                 ;
+                
+// InterfaceDeclaration: 
+//     NormalInterfaceDeclaration
+//     AnnotationTypeDeclaration
+InterfaceDeclaration: NormalInterfaceDeclaration
+                    | AnnotationTypeDeclaration
+                    ;
+                
 // NormalClassDeclaration: 
 //     class Identifier [TypeParameters] [extends Type] [implements TypeList] ClassBody
-NormalClassDeclaration: classorinterface /* =CLASS or =INTERFACE */ IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  
+NormalClassDeclaration: CLASS IDENTIFIER TypeParameters_opt opt_extends Interfaces_opt  
                         {
+                          cls.setType(ClassDef.CLASS);
                           cls.setLineNumber(line);
                           cls.getModifiers().addAll(modifiers); modifiers.clear(); 
                           cls.setName( $2 );
@@ -177,8 +186,50 @@ EnumDeclaration: ENUM IDENTIFIER Interfaces_opt
                    cls = new ClassDef();
                    fieldType = new TypeDef($2, 0);
                  } 
-                 EnumBody;                      
-
+                 EnumBody
+               ;
+               
+// NormalInterfaceDeclaration: 
+//     interface Identifier [TypeParameters] [extends TypeList] InterfaceBody
+NormalInterfaceDeclaration: INTERFACE IDENTIFIER TypeParameters_opt opt_extends  
+                            {
+                              cls.setType(ClassDef.INTERFACE);
+                              cls.setLineNumber(line);
+                              cls.getModifiers().addAll(modifiers); modifiers.clear(); 
+                              cls.setName( $2 );
+                              cls.setTypeParameters(typeParams);
+                              builder.beginClass(cls); 
+                              cls = new ClassDef(); 
+                            }
+                            ClassBody
+                            {
+                              builder.endClass(); 
+                            }
+                          ;
+                          
+// AnnotationTypeDeclaration:
+//     @ interface Identifier AnnotationTypeBody
+AnnotationTypeDeclaration: ANNOINTERFACE IDENTIFIER 
+                          {
+                            cls.setType(ClassDef.ANNOTATION_TYPE);
+                            cls.setLineNumber(line);
+                            cls.getModifiers().addAll(modifiers); modifiers.clear(); 
+                            cls.setName( $2 );
+                            builder.beginClass(cls); 
+                            cls = new ClassDef();
+                          }
+                          ClassBody
+                          {
+                            builder.endClass(); 
+                          }
+                    
+//---------------------------------------------------------
+QualifiedIdentifier: IDENTIFIER
+                   | QualifiedIdentifier DOT IDENTIFIER
+                     {
+                       $$ = $1 + '.' + $3;
+                     }
+                   ;
 //---------------------------------------------------------
 // Type:
 //     BasicType {[]}
@@ -271,7 +322,8 @@ TypeDeclSpecifier: QualifiedIdentifier
                    };
 
 TypeArguments_opt:
-                 | TypeArguments;
+                 | TypeArguments
+                 ;
 
 // TypeArguments: 
 //     < TypeArgument { , TypeArgument } >
@@ -315,18 +367,12 @@ TypeArgument: ReferenceType Dims_opt
                 $$ = new WildcardTypeDef($3, "super" ); 
               }
             ;
-
-QualifiedIdentifier: IDENTIFIER
-                   | QualifiedIdentifier DOT IDENTIFIER
-                     {
-                       $$ = $1 + '.' + $3;
-                     }
-                   ;
 //---------------------------------------------------------
 
 // NonWildcardTypeArguments:
 //     < TypeList >
-NonWildcardTypeArguments: LESSTHAN TypeList GREATERTHAN;
+NonWildcardTypeArguments: LESSTHAN TypeList GREATERTHAN
+                        ;
 
 // TypeList:  
 //     ReferenceType { , ReferenceType }
@@ -489,16 +535,11 @@ StaticInitializer: static_block;
 //     ClassDeclaration
 //     InterfaceDeclaration
 MemberDecl:	FieldDeclaration
-                    | MethodDeclaration
-                    | ConstructorDeclaration
-                    | ClassDeclaration
-/*                  | InterfaceDeclaration*/
-                      ;
-
-classorinterface: 
-    CLASS { cls.setType(ClassDef.CLASS); } | 
-    INTERFACE { cls.setType(ClassDef.INTERFACE); } |
-    ANNOINTERFACE { cls.setType(ClassDef.ANNOTATION_TYPE); };
+          | MethodDeclaration
+          | ConstructorDeclaration
+          | ClassDeclaration
+          | InterfaceDeclaration
+          ;
 
 opt_extends: | EXTENDS extendslist;
 
@@ -919,8 +960,11 @@ CreatedName: IDENTIFIER TypeArgumentsOrDiamond_opt
 ClassCreatorRest: Arguments ClassBody_opt
                 ;
 
+// ArrayCreatorRest:
+//     [ ( ] {[]} ArrayInitializer | Expression ] {[ Expression ]} {[]} )
 ArrayCreatorRest: Dims ArrayInitializer
-                | DimExprs Dims_opt;  
+                | DimExprs Dims_opt
+                ;  
 
 // TypeArgumentsOrDiamond:
 //     < > 

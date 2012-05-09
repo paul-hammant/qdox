@@ -38,7 +38,7 @@ builder.addSourceTree(new File("mysrcdir"));
 		<h2>Resolving Class Names</h2>
 
 			<p>In order to resolve classes that have been imported using a wildcard (e.g. <code>import java.util.*;</code>), the
-			<code><a href="apidocs/com/thoughtworks/qdox/model/ClassLibrary.html">ClassLibrary</a></code>
+			<code><a href="apidocs/com/thoughtworks/qdox/library/ClassLibrary.html">ClassLibrary</a></code>
 			must be aware of other classes used in the project.</p>
 
 			<p>ClassLibrary has 4 ways to resolve classes:</p>
@@ -53,25 +53,22 @@ builder.addSourceTree(new File("mysrcdir"));
 			<p>All sources and sourcetrees added to the JavaProjectBuilder will be parsed. This is often much more than required. 
 			To increase efficiency use the ClassLibrary to add sourcefolders. Consider these files as lazy parsed sources.</p>
 
-            <p>The current classpath is automaticly set by JavaProjectBuilder. In most cases this shall be sufficient, however in some
+            <p>The current classpath is automatically set by JavaProjectBuilder. In most cases this shall be sufficient, however in some
             situations you may want resolve the full classes in external libraries.</p>
-
-			<p>To resolve classes from different ClassLoaders (e.g. 3rd party Jar files), the
-			<code>addClassLoader()</code> method must be called on the ClassLibrary.</p>
 
 <div class="Source Java"><pre>
 // Get the ClassLibrary
-ClassLibrary lib = builder.getClassLibrary();
+JavaProjectBuilder builder = new JavaProjectBuilder();
 
 // Add a sourcefolder;
-lib.addSourceFolder( new File( "src/main/java" ) );
-lib.addSourceFolder( new File( "target/generated-sources/foobar" ) );
+builder.addSourceFolder( new File( "src/main/java" ) );
+builder.addSourceFolder( new File( "target/generated-sources/foobar" ) );
 
 // Add a custom ClassLoader
-lib.addClassLoader( myCustomClassLoader );
+builder.addClassLoader( myCustomClassLoader );
 
 // Ant example : add the &lt;classpath&gt; element's contents
-lib.addClassLoader( new AntClassLoader( getProject(), classpath ) );
+builder.addClassLoader( new AntClassLoader( getProject(), classpath ) );
 </pre></div>
 
 			<p>It is important that additional ClassLoaders are added before any source files are parsed.</p>

@@ -30,17 +30,15 @@
             <h3>Example Code</h3>
             <div class="Source Java"><pre>
     JavaProjectBuilder builder = new JavaProjectBuilder();
-    builder.addSource(myReader);
-    
-    JavaSource src = builder.getSources[](0);
+    JavaSource src = builder.addSource(myReader);
     
     JavaPackage pkg      = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getPackage()">getPackage</a>(); 
-    String[] imports     = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getImports()">getImports</a>(); // {"java.awt.*",
+    List&lt;String&gt; imports     = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getImports()">getImports</a>(); // {"java.awt.*",
                                          //  "java.util.List"}
     
-    JavaClass class1     = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getClasses()">getClasses</a>()[0];
-    JavaClass class2     = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getClasses()">getClasses</a>()[1];
-    JavaClass interface1 = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getClasses()">getClasses</a>()[2];
+    JavaClass class1     = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getClasses()">getClasses</a>().get(0);
+    JavaClass class2     = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getClasses()">getClasses</a>().get(1);
+    JavaClass interface1 = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getClasses()">getClasses</a>().get(2);
             </pre></div>
           <h2><a href="apidocs/com/thoughtworks/qdox/model/JavaPackage.html">JavaPackage</a></h2>
             <p>Represents the package of the class.</p>
@@ -57,13 +55,11 @@
   <h3>Example Code</h3>
   <div class="Source Java"><pre>
     JavaProjectBuilder builder = new JavaProjectBuilder();
-    builder.addSource(myReader);
-    
-    JavaSource src = builder.getSources[](0);
+    JavaSource src = builder.addSource(myReader);
     
     JavaPackage pkg      = src.<a href="apidocs/com/thoughtworks/qdox/model/JavaSource.html#getPackage()">getPackage</a>();
     
-    JavaClass[] classes  = pkg.<a href="apidocs/com/thoughtworks/qdox/model/JavaPackage.html#getClasses()">getClasses</a>()[0]; // BarClass
+    Collection&lt;JavaClass&gt; classes  = pkg.<a href="apidocs/com/thoughtworks/qdox/model/JavaPackage.html#getClasses()">getClasses</a>(); // BarClass
     String name          = pkg.<a href="apidocs/com/thoughtworks/qdox/model/JavaPackage.html#getName()">getName</a>(); // "com.blah.foo"
     String toString      = pkg.<a href="apidocs/com/thoughtworks/qdox/model/JavaPackage.html#toString()">toString</a>(); // "package com.blah.foo" conform javaAPI
     JavaPackage parent   = pkg.<a href="apidocs/com/thoughtworks/qdox/model/JavaPackage.html#getParentPackage()">getParentPackage</a>(); //
@@ -103,15 +99,16 @@
     
     String pkg      = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getPackage()">getPackage</a>();            // "com.blah.foo"
     String name     = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getName()">getName</a>();               // "MyClass"
-    String fullName = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getFullyQualifiedName()">getFullyQualifiedName</a>(); // "com.blah.foo.MyClass";
+    String fullName = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getCanonicalName()">getCanonicalName</a>(); // "com.blah.foo.MyClass";
+    String canonicalName = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getFullyQualifiedName()">getFullyQualifiedName</a>(); // "com.blah.foo.MyClass";
     boolean isInterface = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#isInterface()">isInterface</a>();       // false
     
     boolean isPublic   = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#isPublic()">isPublic</a>();   // true
     boolean isAbstract = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#isAbstract()">isAbstract</a>(); // true
     boolean isFinal    = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#isFinal()">isFinal</a>();    // false
     
-    Type superClass = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getSuperClass()">getSuperClass</a>(); // "com.base.SubClass";
-    Type[] imps     = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getImplements()">getImplements</a>(); // {"java.io.Serializable",
+    JavaType superClass = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getSuperClass()">getSuperClass</a>(); // "com.base.SubClass";
+    List&lt;JavaType&gt; imps     = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getImplements()">getImplements</a>(); // {"java.io.Serializable",
                                            //  "com.custom.CustomInterface"}
     
     String author = cls.<a href="apidocs/com/thoughtworks/qdox/model/JavaClass.html#getTagsByName(java.lang.String)">getTagsByName</a>("author").getValue(); // "joe"
@@ -145,18 +142,18 @@
             <div class="Source Java"><pre>
     JavaField e = cls.getFields()[0];
     
-    Type eType     = e.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>(); // "java.lang.String";
+    JavaType eType     = e.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>(); // "java.lang.String";
     String eName   = e.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getName()">getName</a>(); // "email";
     DocletTag eTag = e.<a href="apidocs/com/thoughtworks/qdox/model/AbstractJavaEntity.html#getTagByName(java.lang.String)">getTagsByName</a>("magic"); // @magic
-    boolean eArray = e.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>().<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // false;
+    boolean eArray = e.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>().<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#isArray()">isArray</a>(); // false;
     
     JavaField d = cls.getFields()[1];
     
-    Type dType     = d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>(); // "java.util.Date";
+    JavaType dType     = d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>(); // "java.util.Date";
     String dName   = d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getName()">getName</a>(); // "dates";
     DocletTag dTag = d.<a href="apidocs/com/thoughtworks/qdox/model/AbstractJavaEntity.html#getTagByName(java.lang.String)">getTagsByName</a>("magic"); // null
-    boolean dArray = d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>().<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // true;
-    int dDimensions= d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>().<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getDimensions()">getDimensions</a>(); // 2;
+    boolean dArray = d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>().<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#isArray()">isArray</a>(); // true;
+    int dDimensions= d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getType()">getType</a>().<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getDimensions()">getDimensions</a>(); // 2;
     boolean dStatic= d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#isStatic()">isStatic</a>(); // true;
     
     JavaClass javaClass = d.<a href="apidocs/com/thoughtworks/qdox/model/JavaField.html#getParentClass()">getParentClass</a>();
@@ -189,15 +186,15 @@
     JavaMethod m = cls.getMethods()[0];
     
     String mName = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getName()">getName</a>(); // "doStuff";
-    Type mReturns = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getReturns()">getReturns</a>(); // "java.util.Date";
-    boolean mArray = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getReturns()">getReturns</a>().<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // true
+    JavaType mReturns = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getReturns()">getReturns</a>(); // "java.util.Date";
+    boolean mArray = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getReturns()">getReturns</a>().<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#isArray()">isArray</a>(); // true
     boolean mStatic = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#isStatic()">isStatic</a>(); // true
     boolean mPublic = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#isPublic()">isPublic</a>(); // true
     
     String doc = m.getTagByName("returns").getValue();
       // "Lots of dates"
     
-    Type[] exceptions = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getExceptions()">getExceptions</a>();
+    List&lt;JavaType&gt; exceptions = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getExceptions()">getExceptions</a>();
       // {"java.lang.RuntimeException", "java.io.IOException"}
     
     JavaParameter numberParam = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getParameters()">getParameters</a>()[0];
@@ -227,17 +224,17 @@
     
     JavaParameter n = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getParameters()">getParameters</a>()[0];
     String nName = n.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getName()">getName</a>(); // "n"
-    Type nType   = n.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getType()">getType</a>(); // "int";
+    JavaType nType   = n.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getType()">getType</a>(); // "int";
     
     JavaParameter o = m.<a href="apidocs/com/thoughtworks/qdox/model/JavaMethod.html#getParameters()">getParameters</a>()[1];
     String oName   = o.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getName()">getName</a>(); // "objects"
-    Type oType     = o.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getType()">getType</a>(); // "java.lang.Object";
-    boolean oArray = o.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getType()">getType</a>().<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // true
+    JavaType oType     = o.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getType()">getType</a>(); // "java.lang.Object";
+    boolean oArray = o.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getType()">getType</a>().<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#isArray()">isArray</a>(); // true
     
     JavaMethod javaMethod = o.<a href="apidocs/com/thoughtworks/qdox/model/JavaParameter.html#getParentMethod()">getParentMethod</a>();
   </pre></div>
 
-  <h2><a href="apidocs/com/thoughtworks/qdox/model/Type.html">Type</a></h2>
+  <h2><a href="apidocs/com/thoughtworks/qdox/model/JavaType.html">JavaType</a></h2>
   <p>Represents a specific instance of a class used by another class (such as return value, superclass, etc).
      The value represents the name of the class. Array dimensions are also available. Since 1.8 it's also possible to get the generic value of the Type</p>
 
@@ -262,31 +259,31 @@
   <div class="Source Java"><pre>
     JavaMethod m = cls.getMethods()[0];
     
-    Type returns = m.getReturns();
+    JavaType returns = m.getReturns();
     returns.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getValue()">getValue</a>(); // "void"
-    returns.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // false
-    returns.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getDimensions()">getDimensions</a>(); // 0
+    returns.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#isArray()">isArray</a>(); // false
+    returns.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getDimensions()">getDimensions</a>(); // 0
     
-    Type n = m.getParameters()[0].getType();
-    n.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getValue()">getValue</a>(); // "int"
-    n.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // false
-    n.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getDimensions()">getDimensions</a>(); // 0
+    JavaType n = m.getParameters()[0].getType();
+    n.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getValue()">getValue</a>(); // "int"
+    n.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#isArray()">isArray</a>(); // false
+    n.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getDimensions()">getDimensions</a>(); // 0
     
-    Type objects = m.getParameters()[1].getType();
-    objects.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getValue()">getValue</a>(); // "java.lang.Object"
-    objects.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // true
-    objects.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getDimensions()">getDimensions</a>(); // 1
+    JavaType objects = m.getParameters()[1].getType();
+    objects.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getValue()">getValue</a>(); // "java.lang.Object"
+    objects.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#isArray()">isArray</a>(); // true
+    objects.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getDimensions()">getDimensions</a>(); // 1
     
-    Type dates = m.getParameters()[2].getType();
-    dates.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getValue()">getValue</a>(); // "java.util.Date"
-    dates.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // true
-    dates.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getDimensions()">getDimensions</a>(); // 2
+    JavaType dates = m.getParameters()[2].getType();
+    dates.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getValue()">getValue</a>(); // "java.util.Date"
+    dates.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#isArray()">isArray</a>(); // true
+    dates.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getDimensions()">getDimensions</a>(); // 2
     
-    Type stringList = m.getParameters()[3].getType();
-    stringList.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getValue()">getValue</a>(); // "java.util.List"
-    stringList.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getGenericValue()">getGenericValue</a>(); // <![CDATA["java.util.List<java.lang.String>"]]>
-    stringList.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#isArray()">isArray</a>(); // false
-    stringList.<a href="apidocs/com/thoughtworks/qdox/model/Type.html#getDimensions()">getDimensions</a>(); // 0
+    JavaType stringList = m.getParameters()[3].getType();
+    stringList.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getValue()">getValue</a>(); // "java.util.List"
+    stringList.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getGenericValue()">getGenericValue</a>(); // <![CDATA["java.util.List<java.lang.String>"]]>
+    stringList.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#isArray()">isArray</a>(); // false
+    stringList.<a href="apidocs/com/thoughtworks/qdox/model/JavaType.html#getDimensions()">getDimensions</a>(); // 0
           </pre></div>
           
 					<h2><a href="apidocs/com/thoughtworks/qdox/model/DocletTag.html">DocletTag</a></h2>

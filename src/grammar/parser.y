@@ -566,6 +566,14 @@ ElementValuePair: IDENTIFIER EQUALS ElementValue
                   }
                 ;
 
+// ElementValue:
+//     Annotation
+//     Expression1 
+//     ElementValueArrayInitializer
+ElementValue: ConditionalExpression 
+            | Annotation 
+            | ElementValueArrayInitializer;
+
 /* Specs say: { ElementValues_opt COMMA_opt }
    The optional COMMA causes trouble for the parser
    For that reason the adjusted options of ElementValues_opt, which will accept all cases
@@ -587,13 +595,6 @@ ElementValues_opt:
                    } 
                  | ElementValues_opt COMMA;    
 
-// ElementValue:
-//     Annotation
-//     Expression1 
-//     ElementValueArrayInitializer
-ElementValue: ConditionalExpression 
-            | Annotation 
-            | ElementValueArrayInitializer;
 //--------------------------------------------------------
  _AnnotationParens_opt:
 	                  | PARENOPEN AnnotationElement_opt PARENCLOSE 
@@ -773,7 +774,8 @@ _MemberEnd: CODEBLOCK
          | SEMI 
            {
              $$ = "";
-           };
+           }
+         ;
 
 // 8.8 Constructor Declarations
 constructor: IDENTIFIER PARENOPEN 
@@ -807,52 +809,14 @@ constructor: IDENTIFIER PARENOPEN
              };
              
 
-// EnumBody:
-//     { [EnumConstants] [,] [EnumBodyDeclarations] }
-/* The optional COMMA causes trouble for the parser
-   For that reason the adjusted options of EnumConstants_opt, which will accept all cases 
-*/
-EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
-          { 
-            builder.endClass();
-            fieldType = null;
-            modifiers.clear();
-          }
-        ;
-
-// EnumConstants:
-//     EnumConstant
-//     EnumConstants , EnumConstant
-EnumConstants_opt:
-                 | EnumConstants_opt COMMA
-                 | EnumConstants_opt EnumConstant
-                 ;
-                 
-// EnumConstant:
-//     [Annotations] Identifier [Arguments] [ClassBody]                 
-EnumConstant: Annotations_opt IDENTIFIER 
-              { 
-                makeField( new TypeDef($2, 0), "", true );
-                builder.beginField( fd );
-              }
-              Arguments_opt ClassBody_opt
-              {
-                builder.endField();
-              }
-            ;
          
 Arguments_opt:
-             | PARENOPEN ArgumentList_opt PARENCLOSE; //PARENBLOCK
+             | PARENOPEN ArgumentList_opt PARENCLOSE
+             ;
 
 ClassBody_opt:
-             | ClassBody;
-             
-// EnumBodyDeclarations:
-//     ; {ClassBodyDeclaration}
-EnumBodyDeclarations_opt:
-                        | SEMI ClassBodyDeclarations_opt;      
-                        
-
+             | ClassBody
+             ;
             
 // VariableInitializer:
 //     ArrayInitializer
@@ -953,6 +917,8 @@ Literal: INTEGER_LITERAL
 //     ( [ Expression { , Expression } ] )
 Arguments: PARENOPEN ExpressionList_opt PARENCLOSE
          ;
+         
+//========================================================
 
 // Creator:  
 //     NonWildcardTypeArguments CreatedName ClassCreatorRest
@@ -1210,6 +1176,49 @@ ExpressionList_opt:
                   
 ExpressionList: Expression
               | ExpressionList Expression;
+
+//========================================================
+              
+// EnumBody:
+//     { [EnumConstants] [,] [EnumBodyDeclarations] }
+/* The optional COMMA causes trouble for the parser
+   For that reason the adjusted options of EnumConstants_opt, which will accept all cases 
+*/
+EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
+          { 
+            builder.endClass();
+            fieldType = null;
+            modifiers.clear();
+          }
+        ;
+
+// EnumConstants:
+//     EnumConstant
+//     EnumConstants , EnumConstant
+EnumConstants_opt:
+                 | EnumConstants_opt COMMA
+                 | EnumConstants_opt EnumConstant
+                 ;
+                 
+// EnumConstant:
+//     [Annotations] Identifier [Arguments] [ClassBody]                 
+EnumConstant: Annotations_opt IDENTIFIER 
+              { 
+                makeField( new TypeDef($2, 0), "", true );
+                builder.beginField( fd );
+              }
+              Arguments_opt ClassBody_opt
+              {
+                builder.endField();
+              }
+            ;
+
+// EnumBodyDeclarations:
+//     ; {ClassBodyDeclaration}
+EnumBodyDeclarations_opt:
+                        | SEMI ClassBodyDeclarations_opt
+                        ;      
+                       
 
 %%
 

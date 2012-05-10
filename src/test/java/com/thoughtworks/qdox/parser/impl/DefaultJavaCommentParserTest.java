@@ -195,8 +195,6 @@ public class DefaultJavaCommentParserTest
 
         // execute
         DefaultJavaCommentParser parser = new DefaultJavaCommentParser(lexer, builder);
-        parser.setDebugLexer( true );
-        parser.setDebugParser( true );
         parser.parse();
 
         // verify

@@ -120,8 +120,6 @@ public class EnumsTest extends TestCase {
                 + "}";
 
         JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
-        javaDocBuilder.setDebugLexer( true );
-        javaDocBuilder.setDebugParser( true );
         javaDocBuilder.addSource(new StringReader(source));
 
         assertTrue(javaDocBuilder.getClassByName("AccountType").isEnum());
@@ -192,7 +190,7 @@ public class EnumsTest extends TestCase {
         		"    this.date = date;\r\n" + 
         		"  }\r\n" + 
         		"}";
-        new JavaProjectBuilder().setDebugParser( true ).setDebugLexer( true ).addSource(new StringReader(source));
+        new JavaProjectBuilder().addSource(new StringReader(source));
     }
     
     // QDOX-240

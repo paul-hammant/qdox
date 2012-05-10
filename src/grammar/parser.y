@@ -58,7 +58,7 @@ import java.util.Stack;
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
-%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus Primary ArrayCreationExpression PrimaryNoNewArray MethodInvocation Creator
+%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus Primary MethodInvocation Creator
 %type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier _MemberEnd AssignmentOperator
@@ -835,23 +835,18 @@ VariableInitializers_opt:
                         ;
                         
 //========================================================
-            
-// 15.8 Primary Expressions
-Primary: PrimaryNoNewArray
-       | ArrayCreationExpression;
-       
-//PrimaryNoNewArray: Literal
-//                 | Type DOT CLASS
-//                 | VOID DOT CLASS
-//                 | THIS
-//        ClassName.this
-//        ( Expression )
-//        ClassInstanceCreationExpression
-//        FieldAccess
-//        MethodInvocation
-//        ArrayAccess
-       
-PrimaryNoNewArray: Literal 
+
+// Primary: 
+//     Literal
+//     ParExpression
+//     this [Arguments]
+//     super SuperSuffix
+//     new Creator
+//     NonWildcardTypeArguments ( ExplicitGenericInvocationSuffix | this Arguments )
+//     Identifier { . Identifier } [IdentifierSuffix]
+//     BasicType {[]} . class
+//     void . class
+Primary: Literal 
                  | PARENOPEN Expression PARENCLOSE /* ParExpression*/
 			       { 
 			         $$ = new ParenExpressionDef($2); 
@@ -974,16 +969,6 @@ ArgumentList: Expression
                 builder.addArgument( (ExpressionDef) $3);
               }
             ;
-
-// 15.10 Array Creation Expressions
-ArrayCreationExpression: NEW QualifiedIdentifier DimExprs Dims_opt
-                         {
-                           $$ = null;
-                         }
-                       | NEW QualifiedIdentifier Dims ArrayInitializer
-                         {
-                           $$ = null;
-                         };
 
 DimExprs: DimExpr
         | DimExprs DimExpr;

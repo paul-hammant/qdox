@@ -61,7 +61,7 @@ import java.util.Stack;
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus Primary MethodInvocation Creator
 %type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
-%type <sval> QualifiedIdentifier TypeDeclSpecifier _MemberEnd AssignmentOperator
+%type <sval> QualifiedIdentifier TypeDeclSpecifier _MemberEnd AssignmentOperator CreatedName
 %type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType TypeArgument
 
 %%
@@ -73,11 +73,13 @@ import java.util.Stack;
 CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_opt
                ;
 
-PackageDeclaration_opt:
-                      | PackageDeclaration_opt PackageDeclaration;
 
 PackageDeclaration: package
-                  | Annotation;
+                  | Annotation
+                  ;
+PackageDeclaration_opt:
+                      | PackageDeclaration_opt PackageDeclaration
+                      ;
                       
 package: PACKAGE 
          { 
@@ -89,10 +91,6 @@ package: PACKAGE
          }
          ;
 
-ImportDeclarations_opt: 
-				      | ImportDeclarations_opt ImportDeclaration
-				      ;
-
 // ImportDeclaration: 
 //     import [static] Identifier { . Identifier } [. *] ;
 ImportDeclaration: SingleTypeImportDeclaration
@@ -100,6 +98,10 @@ ImportDeclaration: SingleTypeImportDeclaration
                  | SingleStaticImportDeclaration
                  | StaticImportOnDemandDeclaration
                  ;
+ImportDeclarations_opt: 
+          | ImportDeclarations_opt ImportDeclaration
+          ;
+
 SingleTypeImportDeclaration: IMPORT QualifiedIdentifier SEMI 
                              { 
                                builder.addImport( $2 ); 
@@ -145,7 +147,7 @@ ClassOrInterfaceDeclaration: Modifiers_opt ClassDeclaration
 // ClassDeclaration: 
 //     NormalClassDeclaration
 //     EnumDeclaration
-ClassDeclaration: NormalClassDeclaration	
+ClassDeclaration: NormalClassDeclaration 
                 | EnumDeclaration
                 ;
                 
@@ -261,13 +263,13 @@ QualifiedIdentifier: IDENTIFIER
 Type: BasicType Dims_opt
       {
         TypeDef td = $1;
-    	td.setDimensions($2);
+        td.setDimensions($2);
         $$ = td;
       }
     | ReferenceType Dims_opt
       {
         TypeDef td = $1;
-    	td.setDimensions($2);
+        td.setDimensions($2);
         $$ = td;
       }
     ;
@@ -301,7 +303,7 @@ BasicType: BYTE
            { 
              $$ = new TypeDef("long"); 
            } 
-		 | FLOAT 
+         | FLOAT 
            {
              $$ = new TypeDef("float");
            }
@@ -343,9 +345,6 @@ TypeDeclSpecifier: QualifiedIdentifier
                      $$ = $1.getName() + '.' + $3;
                    };
 
-TypeArguments_opt:
-                 | TypeArguments
-                 ;
 
 // TypeArguments: 
 //     < TypeArgument { , TypeArgument } >
@@ -354,7 +353,10 @@ TypeArguments: LESSTHAN
                  typeStack.peek().setActualArgumentTypes(new LinkedList<TypeDef>());
                }
                TypeArgumentList GREATERTHAN
-               ;
+             ;
+TypeArguments_opt:
+                 | TypeArguments
+                 ;
 
 TypeArgumentList: TypeArgument 
                   { 
@@ -408,9 +410,6 @@ TypeList: ReferenceType
           }
         ;
 
-TypeParameters_opt: 
-                  | TypeParameters
-                  ;
 
 // TypeParameters:
 //     < TypeParameter { , TypeParameter } >
@@ -420,6 +419,11 @@ TypeParameters: LESSTHAN
                 } 
                 TypeParameterList GREATERTHAN
               ;
+TypeParameters_opt: 
+                  | TypeParameters
+                  ;
+
+
 TypeParameterList: TypeParameter 
                  | TypeParameterList COMMA TypeParameter
                  ;
@@ -526,20 +530,20 @@ Annotations_opt:
 // Annotation:
 //     @ QualifiedIdentifier [ ( [AnnotationElement] ) ]
 Annotation: AT QualifiedIdentifier 
-	        {
-	          AnnoDef annotation = new AnnoDef( new TypeDef($2) );
-	          annotation.setLineNumber(lexer.getLine());
-	          annotationStack.addFirst(annotation);
-	        }
-	        _AnnotationParens_opt
-	        {
-	          AnnoDef annotation = annotationStack.removeFirst();
-	          if(annotationStack.isEmpty()) 
-	          {
-	            builder.addAnnotation(annotation);
-	          }
-	          $$ = annotation;
-	        };
+         {
+           AnnoDef annotation = new AnnoDef( new TypeDef($2) );
+           annotation.setLineNumber(lexer.getLine());
+           annotationStack.addFirst(annotation);
+         }
+         _AnnotationParens_opt
+         {
+           AnnoDef annotation = annotationStack.removeFirst();
+           if(annotationStack.isEmpty()) 
+           {
+             builder.addAnnotation(annotation);
+           }
+           $$ = annotation;
+         };
 
 // AnnotationElement:
 //     ElementValuePairs
@@ -548,7 +552,7 @@ AnnotationElement_opt:
                      | ElementValuePairs
                      | ElementValue
                        { 
-	                     annotationStack.getFirst().getArgs().put("value", $1);
+                      annotationStack.getFirst().getArgs().put("value", $1);
                        }
                      ;
 
@@ -597,20 +601,18 @@ ElementValues_opt:
 
 //--------------------------------------------------------
  _AnnotationParens_opt:
-	                  | PARENOPEN AnnotationElement_opt PARENCLOSE 
-	                  ;
+                   | PARENOPEN AnnotationElement_opt PARENCLOSE 
+                   ;
 //========================================================
+
+
 // ClassBody: 
 //     { { ClassBodyDeclaration } }
 ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE
          ; 
-ClassBodyDeclarations_opt:
-                         | ClassBodyDeclarations_opt
-                           { 
-                             line = lexer.getLine(); 
-                           }
-                           ClassBodyDeclaration
-                         ;
+ClassBody_opt:
+             | ClassBody
+             ;
 
 // ClassBodyDeclaration:
 //     ; 
@@ -620,6 +622,13 @@ ClassBodyDeclaration: SEMI
                     | Modifiers_opt MemberDecl
                     | StaticInitializer
                     ;
+ClassBodyDeclarations_opt:
+                         | ClassBodyDeclarations_opt
+                           { 
+                             line = lexer.getLine(); 
+                           }
+                           ClassBodyDeclaration
+                         ;
 
 ConstructorDeclaration: constructor;
 StaticInitializer: static_block;
@@ -631,7 +640,7 @@ StaticInitializer: static_block;
 //     GenericMethodOrConstructorDecl
 //     ClassDeclaration
 //     InterfaceDeclaration
-MemberDecl:	FieldDeclaration
+MemberDecl: FieldDeclaration
           | MethodDeclaration
           | ConstructorDeclaration
           | ClassDeclaration
@@ -719,7 +728,8 @@ FormalParameterList: LastFormalParameter
 // FormalParameters: 
 //     ( [FormalParameterDecls] )
 FormalParameters: FormalParameterDecls
-                | FormalParameters COMMA FormalParameterDecls;
+                | FormalParameters COMMA FormalParameterDecls
+                ;
  
 // FormalParameterDecls: 
 //     {VariableModifier}  Type FormalParameterDeclsRest                
@@ -769,7 +779,7 @@ ExceptionTypeList: ClassOrInterfaceType /*ExceptionType*/
 
 _MemberEnd: CODEBLOCK 
            {
-	         $$ = lexer.getCodeBody();
+          $$ = lexer.getCodeBody();
            } 
          | SEMI 
            {
@@ -814,10 +824,6 @@ Arguments_opt:
              | PARENOPEN ArgumentList_opt PARENCLOSE
              ;
 
-ClassBody_opt:
-             | ClassBody
-             ;
-            
 // VariableInitializer:
 //     ArrayInitializer
 //     Expression
@@ -847,36 +853,36 @@ VariableInitializers_opt:
 //     BasicType {[]} . class
 //     void . class
 Primary: Literal 
-                 | PARENOPEN Expression PARENCLOSE /* ParExpression*/
-			       { 
-			         $$ = new ParenExpressionDef($2); 
-			       }
-			     | BasicType Dims_opt DOT CLASS 
-			       { 
-			         $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
-			       }
-			     | QualifiedIdentifier DOT CLASS 
-			       { 
-			         $$ = new TypeRefDef(new TypeDef($1, 0));
-			       }
-			     | QualifiedIdentifier Dims DOT CLASS
-			       {
-			         $$ = new TypeRefDef(new TypeDef($1, $2));
-			       } 
-			     | QualifiedIdentifier 
-			       { 
-			         $$ = new FieldRefDef($1); 
-			       }
-			     | MethodInvocation 
-			       {
-			         $$ = $1;
-			       }
-			     | NEW Creator
-			       {
-			         $$ = new NewCreator();
-			       }
-			     ;
-			       
+       | PARENOPEN Expression PARENCLOSE /* ParExpression*/
+         { 
+           $$ = new ParenExpressionDef($2); 
+         }
+       | BasicType Dims_opt DOT CLASS 
+         { 
+           $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
+         }
+       | QualifiedIdentifier DOT CLASS 
+         { 
+            $$ = new TypeRefDef(new TypeDef($1, 0));
+         }
+       | QualifiedIdentifier Dims DOT CLASS
+         {
+           $$ = new TypeRefDef(new TypeDef($1, $2));
+         } 
+       | QualifiedIdentifier 
+         { 
+           $$ = new FieldRefDef($1); 
+         }
+       | MethodInvocation 
+         {
+           $$ = $1;
+         }
+       | NEW Creator
+         {
+           $$ = $2;
+         }
+       ;
+          
 // Literal:
 //     IntegerLiteral
 //     FloatingPointLiteral
@@ -920,22 +926,34 @@ Arguments: PARENOPEN ExpressionList_opt PARENCLOSE
 //     CreatedName ( ClassCreatorRest | ArrayCreatorRest )
 Creator: NonWildcardTypeArguments CreatedName ClassCreatorRest 
          { 
-           $$ = null; 
+           CreatorDef creator = new CreatorDef();
+           creator.setCreatedName( $2 );
+           $$ = creator; 
          }
        | CreatedName ClassCreatorRest
          {
-           $$ = null; 
+           CreatorDef creator = new CreatorDef();
+           creator.setCreatedName( $1 );
+           $$ = creator; 
          }
        | CreatedName ArrayCreatorRest 
          {
-           $$ = null;
+           CreatorDef creator = new CreatorDef();
+           creator.setCreatedName( $1 );
+           $$ = creator; 
          }
        ;
 
 // CreatedName:   
 //     Identifier [TypeArgumentsOrDiamond] { . Identifier [TypeArgumentsOrDiamond] }
 CreatedName: IDENTIFIER TypeArgumentsOrDiamond_opt
+             {
+               $$ = $1;
+             }
            | CreatedName DOT IDENTIFIER TypeArgumentsOrDiamond_opt
+             {
+               $$ = $1 + "." + $3;
+             }
            ; 
 
 // ClassCreatorRest: 
@@ -957,9 +975,6 @@ TypeArgumentsOrDiamond_opt:
                           | TypeArguments
                           ;
 
-ArgumentList_opt:
-                | ArgumentList;
-
 ArgumentList: Expression
               {
                 builder.addArgument( (ExpressionDef) $1);
@@ -969,16 +984,13 @@ ArgumentList: Expression
                 builder.addArgument( (ExpressionDef) $3);
               }
             ;
+ArgumentList_opt:
+                | ArgumentList;
 
 DimExprs: DimExpr
         | DimExprs DimExpr;
 
 DimExpr: SQUAREOPEN Expression SQUARECLOSE
-
-Dims_opt: { 
-            $$ = 0; 
-          }
-		| Dims;
 
 Dims: SQUAREOPEN SQUARECLOSE 
       { 
@@ -988,6 +1000,10 @@ Dims: SQUAREOPEN SQUARECLOSE
       { 
         $$ = $1 + 1;
       };
+Dims_opt: { 
+            $$ = 0; 
+          }
+  | Dims;
             
 // 15.12 Method Invocation Expressions
 MethodInvocation: IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
@@ -1002,8 +1018,8 @@ MethodInvocation: IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
 // 15.14 Postfix Expressions
 PostfixExpression: /* ExpressionName | */
                    Primary
-				 | PostfixExpression PLUSPLUS   { $$ = new PostIncrementDef($1); } 
-				 | PostfixExpression MINUSMINUS { $$ = new PostDecrementDef($1); };
+     | PostfixExpression PLUSPLUS   { $$ = new PostIncrementDef($1); } 
+     | PostfixExpression MINUSMINUS { $$ = new PostDecrementDef($1); };
 
 // 15.15 Unary Operators
 UnaryExpression: PLUSPLUS UnaryExpression   { $$ = new PreIncrementDef($2);  }
@@ -1017,7 +1033,7 @@ UnaryExpressionNotPlusMinus: PostfixExpression
                            | EXCLAMATION UnaryExpression { $$ = new LogicalNotDef($2); } 
                            | CastExpression;
 
-// 15.16 Cast Expressions	
+// 15.16 Cast Expressions 
 CastExpression: PARENOPEN BasicType Dims_opt PARENCLOSE UnaryExpression   { $$ = new CastDef(new TypeDef($2.getName(), $3), $5); } 
               | PARENOPEN QualifiedIdentifier PARENCLOSE UnaryExpressionNotPlusMinus      { $$ = new CastDef(new TypeDef($2, 0), $4); }
               | PARENOPEN QualifiedIdentifier Dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new CastDef(new TypeDef($2, $3), $5); };
@@ -1029,9 +1045,9 @@ MultiplicativeExpression: UnaryExpression
                         | MultiplicativeExpression PERCENT UnaryExpression { $$ = new RemainderDef($1, $3); };
 
 // 15.18 Additive Operators
-AdditiveExpression:	MultiplicativeExpression 
-                  |	AdditiveExpression PLUS MultiplicativeExpression  { $$ = new AddDef($1, $3); } 
-                  |	AdditiveExpression MINUS MultiplicativeExpression { $$ = new SubtractDef($1, $3); };
+AdditiveExpression: MultiplicativeExpression 
+                  | AdditiveExpression PLUS MultiplicativeExpression  { $$ = new AddDef($1, $3); } 
+                  | AdditiveExpression MINUS MultiplicativeExpression { $$ = new SubtractDef($1, $3); };
 
 // 15.19 Shift Operators
 ShiftExpression: AdditiveExpression 
@@ -1102,7 +1118,7 @@ ConditionalOrExpression: ConditionalAndExpression
                            $$ = new LogicalOrDef($1, $3);
                          };
 
-// 15.25 Conditional Operator ? :	
+// 15.25 Conditional Operator ? : 
 ConditionalExpression: ConditionalOrExpression 
                      | ConditionalOrExpression QUERY Expression COLON ConditionalExpression 
                        { 
@@ -1209,7 +1225,7 @@ EnumBodyDeclarations_opt:
 
 private JavaLexer lexer;
 private Builder builder;
-private StringBuffer textBuffer = new StringBuffer();
+private StringBuilder textBuffer = new StringBuilder();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
 private FieldDef fd;
@@ -1285,10 +1301,10 @@ private void yyerror(String msg) {
 }
 
 private class Value {
-	Object oval;
+    Object oval;
     String sval;
     int ival;
-	boolean bval;
+    boolean bval;
     TypeDef type;
     ElemValueDef annoval;
 }

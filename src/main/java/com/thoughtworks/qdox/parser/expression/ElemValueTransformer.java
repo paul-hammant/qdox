@@ -97,5 +97,5 @@ public interface ElemValueTransformer<U>
 
     U transform( MethodInvocationDef methodInvocationDef );
 
-    U transform( NewCreator newCreator );
+    U transform( CreatorDef newCreator );
 }

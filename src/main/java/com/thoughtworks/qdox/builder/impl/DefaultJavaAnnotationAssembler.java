@@ -88,7 +88,7 @@ import com.thoughtworks.qdox.parser.expression.LogicalOrDef;
 import com.thoughtworks.qdox.parser.expression.MethodInvocationDef;
 import com.thoughtworks.qdox.parser.expression.MinusSignDef;
 import com.thoughtworks.qdox.parser.expression.MultiplyDef;
-import com.thoughtworks.qdox.parser.expression.NewCreator;
+import com.thoughtworks.qdox.parser.expression.CreatorDef;
 import com.thoughtworks.qdox.parser.expression.NotDef;
 import com.thoughtworks.qdox.parser.expression.NotEqualsDef;
 import com.thoughtworks.qdox.parser.expression.OrDef;
@@ -453,7 +453,7 @@ public class DefaultJavaAnnotationAssembler
         return null;
     }
 
-    public AnnotationValue transform( NewCreator newCreator )
+    public AnnotationValue transform( CreatorDef newCreator )
     {
         return null;
     }

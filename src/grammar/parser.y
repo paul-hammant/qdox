@@ -99,8 +99,8 @@ ImportDeclaration: SingleTypeImportDeclaration
                  | StaticImportOnDemandDeclaration
                  ;
 ImportDeclarations_opt: 
-          | ImportDeclarations_opt ImportDeclaration
-          ;
+                      | ImportDeclarations_opt ImportDeclaration
+                      ;
 
 SingleTypeImportDeclaration: IMPORT QualifiedIdentifier SEMI 
                              { 
@@ -352,22 +352,11 @@ TypeArguments: LESSTHAN
                {
                  typeStack.peek().setActualArgumentTypes(new LinkedList<TypeDef>());
                }
-               TypeArgumentList GREATERTHAN
+               _TypeArgumentList GREATERTHAN
              ;
 TypeArguments_opt:
                  | TypeArguments
                  ;
-
-TypeArgumentList: TypeArgument 
-                  { 
-                    (typeStack.peek()).getActualArgumentTypes().add($1);
-                  }
-                | TypeArgumentList COMMA TypeArgument 
-                  { 
-                    (typeStack.peek()).getActualArgumentTypes().add($3);
-                  }
-                ;
-
 
 // TypeArgument:  
 //    ReferenceType {[]}
@@ -391,6 +380,16 @@ TypeArgument: ReferenceType Dims_opt
                 $$ = new WildcardTypeDef($3, "super" ); 
               }
             ;
+//---------------------------------------------------------
+_TypeArgumentList: TypeArgument 
+                  { 
+                    (typeStack.peek()).getActualArgumentTypes().add($1);
+                  }
+                | _TypeArgumentList COMMA TypeArgument 
+                  { 
+                    (typeStack.peek()).getActualArgumentTypes().add($3);
+                  }
+                ;
 //========================================================
 
 // NonWildcardTypeArguments:
@@ -692,7 +691,7 @@ MethodDeclaration: MethodHeader _MemberEnd /* =MethodBody*/
                      mth = new MethodDef();
                    };
 
-MethodHeader: TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
+MethodHeader: TypeParameters Type /* =ResultType */ IDENTIFIER
               {
                 builder.beginMethod();
                 mth.setLineNumber(lexer.getLine());
@@ -701,11 +700,11 @@ MethodHeader: TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
                 mth.setReturnType($2);
                 mth.setName($3);
               } 
-              FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt
+              FormalParameters Dims_opt Throws_opt
               {
-                mth.setDimensions($8);
+                mth.setDimensions($6);
               } 
-            | Type /* =ResultType */ IDENTIFIER PARENOPEN 
+            | Type /* =ResultType */ IDENTIFIER  
               {
                 builder.beginMethod();
                 mth.setLineNumber(lexer.getLine());
@@ -713,54 +712,56 @@ MethodHeader: TypeParameters Type /* =ResultType */ IDENTIFIER PARENOPEN
                 mth.setReturnType($1);
                 mth.setName($2);
               } 
-              FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt 
+              FormalParameters Dims_opt Throws_opt 
               {
-                mth.setDimensions($7);
+                mth.setDimensions($5);
               };
 //================================================================
-// 8.4.1 Formal Parameters
-FormalParameterList_opt:
-                       | FormalParameterList;
-                       
-FormalParameterList: LastFormalParameter
-                   | FormalParameters COMMA LastFormalParameter;
-
 // FormalParameters: 
 //     ( [FormalParameterDecls] )
-FormalParameters: FormalParameterDecls
-                | FormalParameters COMMA FormalParameterDecls
-                ;
+FormalParameters: PARENOPEN FormalParameterDecls_opts PARENCLOSE
  
 // FormalParameterDecls: 
 //     {VariableModifier}  Type FormalParameterDeclsRest                
-FormalParameterDecls:  Modifiers_opt Type VariableDeclaratorId
-                  {
-                    param.setName($3.getName());
-                    param.setType($2);
-                    param.setDimensions($3.getDimensions());
-                    param.setVarArgs(false);
-                    param.getModifiers().addAll(modifiers); modifiers.clear();
-                    builder.addParameter(param);
-                    param = new FieldDef();
-                  }
-                ;
+FormalParameterDecls: Modifiers_opt Type
+                      {
+                        param.setType($2);
+                        param.setVarArgs(false);
+                        param.getModifiers().addAll(modifiers); modifiers.clear();
+                      }
+                      FormalParameterDeclsRest
+                    ;
+FormalParameterDecls_opts:
+                         | FormalParameterDecls
+                         ;                
                 
 // FormalParameterDeclsRest: 
 //     VariableDeclaratorId [ , FormalParameterDecls ]
 //     ... VariableDeclaratorId
-
-
-LastFormalParameter: Modifiers_opt /* =VariableModifiers_opt */ Type DOTDOTDOT VariableDeclaratorId  /* =VariableDeclaratorId */
-                     {
-                       param.setName($4.getName()); 
-                       param.setType($2);
-                       param.setDimensions($4.getDimensions());
-                       param.setVarArgs(true);
-                       param.getModifiers().addAll(modifiers); modifiers.clear();
-                       builder.addParameter(param);
-                       param = new FieldDef();
-                     };
-                   | FormalParameterDecls;
+FormalParameterDeclsRest: VariableDeclaratorId
+                          {
+	                        param.setName($1.getName());
+                            param.setDimensions($1.getDimensions());
+                            builder.addParameter(param);
+                            param = new FieldDef();
+                          }
+                        | VariableDeclaratorId
+                          {
+	                        param.setName($1.getName());
+                            param.setDimensions($1.getDimensions());
+                            builder.addParameter(param);
+                            param = new FieldDef();
+                          }
+                          COMMA FormalParameterDecls
+                        | DOTDOTDOT VariableDeclaratorId
+                          {
+                            param.setVarArgs(true);
+	                        param.setName($2.getName());
+                            param.setDimensions($2.getDimensions());
+                            builder.addParameter(param);
+                            param = new FieldDef();
+                          }
+                        ;
 
 // 8.4.6 Method Throws
 Throws_opt:
@@ -788,7 +789,7 @@ _MemberEnd: CODEBLOCK
          ;
 
 // 8.8 Constructor Declarations
-constructor: IDENTIFIER PARENOPEN 
+constructor: IDENTIFIER 
              {
                builder.beginConstructor();
                mth.setLineNumber(lexer.getLine());
@@ -796,13 +797,13 @@ constructor: IDENTIFIER PARENOPEN
                mth.setConstructor(true); 
                mth.setName($1);
              }
-             FormalParameterList_opt PARENCLOSE Throws_opt _MemberEnd /* =MethodBody */ 
+             FormalParameters Throws_opt _MemberEnd /* =MethodBody */ 
              {
-               mth.setBody($7);
+               mth.setBody($5);
                builder.endConstructor(mth);
                mth = new MethodDef(); 
              }
-           |  TypeParameters IDENTIFIER PARENOPEN 
+           |  TypeParameters IDENTIFIER 
              {
                builder.beginConstructor();
                mth.setLineNumber(lexer.getLine());
@@ -811,7 +812,7 @@ constructor: IDENTIFIER PARENOPEN
                mth.setConstructor(true); 
                mth.setName($2);
              } 
-             FormalParameterList_opt PARENCLOSE Throws_opt CODEBLOCK 
+             FormalParameters Throws_opt CODEBLOCK 
              {
                mth.setBody(lexer.getCodeBody());
                builder.endConstructor(mth);

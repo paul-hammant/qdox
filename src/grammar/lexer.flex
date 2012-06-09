@@ -33,6 +33,34 @@ import java.util.*;
 %line
 %column
 
+%init{
+  java.io.InputStream qdoxProperties = this.getClass().getClassLoader().getResourceAsStream( "qdox.properties" );
+  if( qdoxProperties != null )
+  {
+     Properties props = new Properties();
+     try
+     {
+         props.load( qdoxProperties );
+         stateStack = new int[ parseValue( props.getProperty( "lexer.statestack.size" ), stateStack.length ) ];
+     }
+     catch ( java.io.IOException e )
+     {
+         // failed to load qdoxProperties
+     }
+     finally 
+     {
+        try
+        {
+          qdoxProperties.close();
+        }
+        catch( java.io.IOException e )
+        {
+          // noop, we did our best
+        }
+     }
+  }
+%init}
+
 %{
 	private java.io.Writer writer;
 	private List<CommentHandler> commentHandlers = new ArrayList<CommentHandler>();
@@ -101,6 +129,20 @@ import java.util.*;
     
     public void addCommentHandler(CommentHandler handler) {
       this.commentHandlers.add(handler);
+    }
+    
+    private int parseValue( String value, int defaultValue )
+    {
+      int result;
+      try 
+      {
+        result = Integer.parseInt( value );
+      }
+      catch( NumberFormatException e )
+      {
+        result = defaultValue;
+      }
+      return result;
     }
     
     public JFlexLexer( java.io.Reader reader, java.io.Writer writer ) {

@@ -111,7 +111,7 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
     
     public String getGenericCanonicalName()
     {
-        StringBuffer result = new StringBuffer( getCanonicalName() );
+        StringBuilder result = new StringBuilder( getCanonicalName() );
         if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );

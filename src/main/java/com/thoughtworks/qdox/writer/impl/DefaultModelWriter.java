@@ -188,7 +188,7 @@ public class DefaultModelWriter
         
         if ( field.isEnumConstant() )
         {
-            if ( field.getEnumConstantArguments() != null )
+            if ( field.getEnumConstantArguments() != null && !field.getEnumConstantArguments().isEmpty() )
             {
                 buffer.write( "( " );
                 for( Iterator<Expression> iter = field.getEnumConstantArguments().listIterator(); iter.hasNext(); )

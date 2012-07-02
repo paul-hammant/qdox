@@ -78,7 +78,7 @@ public class AnnotationsTest
     public void testShouldIgnoreArrayValuedSingleMemberClassAnnotations()
     {
         String source =
-            ""/** @hey=\"yo\" someval = \"yep\" */
+            "/** @hey=\"yo\" someval = \"yep\" */"
             + "@ Endorsers({(\"Children\"), \"Unscrupulous dentists\"})\n" + "public class Lollipop {\n"
                 + "  @Cheese( hey=@ano({\"Edam\", \"Gruyere\", 2}), t=5.5f, c=4)\n" + "  void doStuff() { }\n" + "}\n";
 

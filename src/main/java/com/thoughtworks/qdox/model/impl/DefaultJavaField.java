@@ -81,7 +81,7 @@ public class DefaultJavaField
     /** {@inheritDoc} */
     public String getDeclarationSignature( boolean withModifiers )
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if ( withModifiers )
         {
             for ( String modifier : getModifiers() )
@@ -151,7 +151,7 @@ public class DefaultJavaField
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if ( isPrivate() )
         {
             result.append( "private " );

@@ -117,7 +117,7 @@ public final class TagParser {
         List<String> wordList = new LinkedList<String>();
         try {
             while (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
-                StringBuffer param = new StringBuffer();
+                StringBuilder param = new StringBuilder();
                 if (tokenizer.sval != null) {
                     param.append( tokenizer.sval );
                 }

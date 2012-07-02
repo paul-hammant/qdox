@@ -35,20 +35,24 @@ public class MethodDef extends LocatedDef {
     private String body;
     
     @Override
-    public String toString() {
-        StringBuffer result = new StringBuffer();
-        result.append(getModifiers());
-        result.append(' ');
-        result.append((getReturnType() != null ? getReturnType().toString() : ""));
-        for (int i = 0; i < getDimensions(); i++) result.append("[]");
-        result.append(' ');
-        result.append(getName());
-        result.append('(');
-        result.append(getTypeParams());
-        result.append(')');
-        result.append(" throws ");
-        result.append(getExceptions());
-        result.append(getBody());
+    public String toString()
+    {
+        StringBuilder result = new StringBuilder();
+        result.append( getModifiers() );
+        result.append( ' ' );
+        result.append( ( getReturnType() != null ? getReturnType().toString() : "" ) );
+        for ( int i = 0; i < getDimensions(); i++ )
+        {
+            result.append( "[]" );
+        }
+        result.append( ' ' );
+        result.append( getName() );
+        result.append( '(' );
+        result.append( getTypeParams() );
+        result.append( ')' );
+        result.append( " throws " );
+        result.append( getExceptions() );
+        result.append( getBody() );
         return result.toString();
     }
 

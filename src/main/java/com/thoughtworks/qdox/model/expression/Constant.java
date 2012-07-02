@@ -118,7 +118,7 @@ public abstract class Constant
 
     protected static String convertString( String str )
     {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         boolean escaped = false;
         int unicode = 0;
         int value = 0;

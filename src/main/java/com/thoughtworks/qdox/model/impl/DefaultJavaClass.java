@@ -848,7 +848,7 @@ public class DefaultJavaClass
     @Override
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if ( isPrimitive() )
         {
             sb.append( getName() );

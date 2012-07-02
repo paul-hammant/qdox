@@ -51,7 +51,7 @@ public class DefaultJavaConstructor
     @Override
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if ( isPrivate() )
         {
             result.append( "private " );

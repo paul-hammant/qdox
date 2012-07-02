@@ -101,7 +101,7 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     @Override
     public String getGenericFullyQualifiedName()
     {
-        StringBuffer result = new StringBuffer( super.getFullyQualifiedName() );
+        StringBuilder result = new StringBuilder( super.getFullyQualifiedName() );
         if ( bounds != null && !bounds.isEmpty() )
         {
             result.append( " extends " );
@@ -120,7 +120,7 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     @Override
     public String getGenericValue()
     {
-        StringBuffer result = new StringBuffer( getValue() );
+        StringBuilder result = new StringBuilder( getValue() );
         if ( bounds != null && !bounds.isEmpty() )
         {
             result.append( " extends " );

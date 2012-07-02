@@ -86,7 +86,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     
     /** {@inheritDoc} */
     public String getFullyQualifiedName() {
-        StringBuffer result = new StringBuffer( isResolved() ? fullName : name );
+        StringBuilder result = new StringBuilder( isResolved() ? fullName : name );
         for (int i = 0; i < dimensions; i++) 
         {
             result.append("[]");
@@ -127,7 +127,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
      */
     public String getGenericValue()
     {
-        StringBuffer result = new StringBuffer( getValue() );
+        StringBuilder result = new StringBuilder( getValue() );
         for ( int i = 0; i < dimensions; i++ )
         {
             result.append( "[]" );
@@ -137,7 +137,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     
     protected static <D extends JavaGenericDeclaration> String getGenericValue( JavaType base, List<JavaTypeVariable<D>> typeVariableList )
     {
-        StringBuffer result = new StringBuffer( getResolvedValue( base, typeVariableList ) );
+        StringBuilder result = new StringBuilder( getResolvedValue( base, typeVariableList ) );
         for ( Iterator<JavaType> iter = getActualTypeArguments( base ).iterator(); iter.hasNext(); )
         {
             result.append( DefaultJavaType.resolve( base, typeVariableList ) );
@@ -479,7 +479,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     /** {@inheritDoc} */
     public String getGenericFullyQualifiedName()
     {
-        StringBuffer result = new StringBuffer( isResolved() ? fullName : name );
+        StringBuilder result = new StringBuilder( isResolved() ? fullName : name );
         for ( int i = 0; i < dimensions; i++ )
         {
             result.append( "[]" );
@@ -490,7 +490,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     /** {@inheritDoc} */
     public String getGenericCanonicalName()
     {
-        StringBuffer result = new StringBuffer( getCanonicalName() );
+        StringBuilder result = new StringBuilder( getCanonicalName() );
         for ( int i = 0; i < dimensions; i++ )
         {
             result.append( "[]" );
@@ -500,7 +500,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 
     protected static <D extends JavaGenericDeclaration> String getResolvedGenericValue( JavaType base, List<JavaTypeVariable<D>> typeParameters )
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         JavaTypeVariable<?> variable = resolve( base, typeParameters );
         result.append( variable == null ? base.getValue() : variable.getBounds().get(0).getValue() );
         List<JavaType> actualTypeArguments = getActualTypeArguments( base );
@@ -529,7 +529,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 
     protected static <D extends JavaGenericDeclaration> String getResolvedGenericFullyQualifiedName( JavaType base, List<JavaTypeVariable<D>> typeParameters )
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         JavaTypeVariable<D> variable = resolve( base, typeParameters );
         result.append( variable == null ? base.getFullyQualifiedName() : variable.getBounds().get(0).getFullyQualifiedName() );
         List<JavaType> actualTypeArguments = getActualTypeArguments( base );

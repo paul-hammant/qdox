@@ -146,7 +146,7 @@ public class DefaultJavaAnnotation
 
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         result.append( '@' );
         result.append( type.getFullyQualifiedName() );
         result.append( '(' );

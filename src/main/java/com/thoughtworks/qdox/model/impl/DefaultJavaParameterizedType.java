@@ -88,7 +88,7 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
      */
     public String getGenericValue()
     {
-        StringBuffer result = new StringBuffer( getValue() );
+        StringBuilder result = new StringBuilder( getValue() );
         if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );
@@ -134,7 +134,7 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
 
     public String getGenericFullyQualifiedName()
     {
-        StringBuffer result = new StringBuffer( isResolved() ? fullName : name );
+        StringBuilder result = new StringBuilder( isResolved() ? fullName : name );
         if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );

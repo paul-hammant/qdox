@@ -64,18 +64,19 @@ public class ClassDef extends LocatedDef {
     }
 
     @Override
-    public String toString() {
-        StringBuffer result = new StringBuffer();
-        result.append(getModifiers());
-        result.append(' ');
-        result.append(getType());
-        result.append(' ');
-        result.append(getName());
-        //typeParams
-        result.append(" extends ");
-        result.append(getExtends());
-        result.append(" implements ");
-        result.append(getImplements());
+    public String toString()
+    {
+        StringBuilder result = new StringBuilder();
+        result.append( getModifiers() );
+        result.append( ' ' );
+        result.append( getType() );
+        result.append( ' ' );
+        result.append( getName() );
+        // typeParams
+        result.append( " extends " );
+        result.append( getExtends() );
+        result.append( " implements " );
+        result.append( getImplements() );
         return result.toString();
     }
 

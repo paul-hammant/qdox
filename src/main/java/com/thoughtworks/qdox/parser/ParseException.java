@@ -70,19 +70,22 @@ public class ParseException
         this.sourceInfo = sourceInfo;
     }
 
-    
+    @Override
     public String getMessage()
     {
-        StringBuffer buffer = new StringBuffer( super.getMessage() );
-        if ( line >=0 ) {
+        StringBuilder buffer = new StringBuilder( super.getMessage() );
+        if ( line >= 0 )
+        {
             buffer.append( " @[" ).append( line );
-            
-            if( column >=0 ) {
-               buffer.append( ',' ).append( column );  
+
+            if ( column >= 0 )
+            {
+                buffer.append( ',' ).append( column );
             }
             buffer.append( ']' );
         }
-        if ( sourceInfo != null ) {
+        if ( sourceInfo != null )
+        {
             buffer.append( " in " ).append( sourceInfo );
         }
         return buffer.toString();

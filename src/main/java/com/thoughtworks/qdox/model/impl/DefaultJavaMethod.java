@@ -89,7 +89,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
      */
     private String getSignature( boolean withModifiers, boolean isDeclaration )
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if ( withModifiers )
         {
             for ( String modifier : getModifiers() )
@@ -319,7 +319,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     /** {@inheritDoc} */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if ( isPrivate() )
         {
             result.append( "private " );

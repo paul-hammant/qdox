@@ -1,7 +1,6 @@
 package com.thoughtworks.qdox.model.expression;
 
 import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,33 +21,42 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaType;
  * under the License.
  */
 
-public class Cast implements AnnotationValue {
+public class Cast
+    implements AnnotationValue
+{
 
     private final JavaType type;
+
     private final AnnotationValue value;
-    
-    public Cast( JavaType type, AnnotationValue value ) {
+
+    public Cast( JavaType type, AnnotationValue value )
+    {
         this.type = type;
         this.value = value;
     }
 
-	public JavaType getType() {
+    public JavaType getType()
+    {
         return this.type;
     }
 
-    public AnnotationValue getValue() {
+    public AnnotationValue getValue()
+    {
         return this.value;
     }
 
-    public Object accept( ExpressionVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor )
+    {
         return visitor.visit( this );
     }
 
-    public String getParameterValue() {
+    public String getParameterValue()
+    {
         return "(" + type.getCanonicalName() + ") " + value.getParameterValue();
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "(" + type.toString() + ") " + value.toString();
     }
 }

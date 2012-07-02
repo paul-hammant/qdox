@@ -24,7 +24,9 @@ package com.thoughtworks.qdox.model.expression;
  * 
  * @author Jochen Kuhnle
  */
-public interface AnnotationValue extends Expression {
+public interface AnnotationValue
+    extends Expression
+{
 
     /**
      * Accept a visitor for this value.

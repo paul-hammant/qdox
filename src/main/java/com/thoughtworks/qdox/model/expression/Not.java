@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.expression;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,21 +19,27 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public class Not extends UnaryOperator {
+public class Not
+    extends UnaryOperator
+{
 
-    public Not( AnnotationValue value ) {
+    public Not( AnnotationValue value )
+    {
         super( value );
     }
 
-	public String toString() {
+    public String toString()
+    {
         return "~" + getValue().toString();
     }
 
-    public Object accept( ExpressionVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor )
+    {
         return visitor.visit( this );
     }
 
-    public String getParameterValue() {
+    public String getParameterValue()
+    {
         return "~" + getValue().getParameterValue();
     }
 }

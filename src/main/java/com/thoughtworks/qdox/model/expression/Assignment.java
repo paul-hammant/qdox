@@ -19,10 +19,13 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public class Assignment implements AnnotationValue
+public class Assignment
+    implements AnnotationValue
 {
     private Expression leftHandSide;
+
     private String operator;
+
     private Expression assignmentExpression;
 
     public Assignment( Expression leftHandSide, String operator, Expression assignmentExpression )
@@ -47,6 +50,6 @@ public class Assignment implements AnnotationValue
     @Override
     public String toString()
     {
-        return leftHandSide.toString() + ' ' + operator+ ' ' + assignmentExpression.toString();
+        return leftHandSide.toString() + ' ' + operator + ' ' + assignmentExpression.toString();
     }
 }

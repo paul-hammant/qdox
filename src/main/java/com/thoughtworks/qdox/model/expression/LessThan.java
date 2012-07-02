@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.expression;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,21 +19,27 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public class LessThan extends BinaryOperator {
+public class LessThan
+    extends BinaryOperator
+{
 
-    public LessThan( AnnotationValue left, AnnotationValue right ) {
+    public LessThan( AnnotationValue left, AnnotationValue right )
+    {
         super( left, right );
     }
 
-	public String toString() {
+    public String toString()
+    {
         return getLeft().toString() + " < " + getRight().toString();
     }
 
-    public Object accept( ExpressionVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor )
+    {
         return visitor.visit( this );
     }
 
-    public String getParameterValue() {
+    public String getParameterValue()
+    {
         return getLeft().getParameterValue() + " < " + getRight().getParameterValue();
     }
 }

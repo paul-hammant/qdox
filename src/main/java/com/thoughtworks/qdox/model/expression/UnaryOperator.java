@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.expression;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,15 +19,19 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public abstract class UnaryOperator implements AnnotationValue {
+public abstract class UnaryOperator
+    implements AnnotationValue
+{
 
-	private AnnotationValue value;
+    private AnnotationValue value;
 
-	public UnaryOperator(AnnotationValue value) {
-		this.value = value;
-	}
+    public UnaryOperator( AnnotationValue value )
+    {
+        this.value = value;
+    }
 
-	public AnnotationValue getValue() {
-		return value;
-	}
+    public AnnotationValue getValue()
+    {
+        return value;
+    }
 }

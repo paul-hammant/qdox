@@ -21,26 +21,34 @@ package com.thoughtworks.qdox.model.expression;
 
 import com.thoughtworks.qdox.model.JavaType;
 
-public class TypeRef implements AnnotationValue {
+public class TypeRef
+    implements AnnotationValue
+{
 
     private JavaType type;
 
-    public TypeRef( JavaType type ) {
+    public TypeRef( JavaType type )
+    {
         this.type = type;
     }
-	public JavaType getType() {
+
+    public JavaType getType()
+    {
         return type;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return type.getValue() + ".class";
     }
 
-    public Object accept( ExpressionVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor )
+    {
         return visitor.visit( this );
     }
 
-    public String getParameterValue() {
+    public String getParameterValue()
+    {
         return type.getValue() + ".class";
     }
 }

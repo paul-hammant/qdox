@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.expression;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,40 +19,51 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public class Query implements AnnotationValue {
+public class Query
+    implements AnnotationValue
+{
 
     private final AnnotationValue condition;
+
     private final AnnotationValue trueExpression;
+
     private final AnnotationValue falseExpression;
 
-    public Query( AnnotationValue condition, AnnotationValue trueExpression, AnnotationValue falseExpression ) {
+    public Query( AnnotationValue condition, AnnotationValue trueExpression, AnnotationValue falseExpression )
+    {
         this.condition = condition;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
     }
 
-	public Object accept( ExpressionVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor )
+    {
         return visitor.visit( this );
     }
 
-    public AnnotationValue getCondition() {
+    public AnnotationValue getCondition()
+    {
         return this.condition;
     }
 
-    public AnnotationValue getTrueExpression() {
+    public AnnotationValue getTrueExpression()
+    {
         return this.trueExpression;
     }
 
-    public AnnotationValue getFalseExpression() {
+    public AnnotationValue getFalseExpression()
+    {
         return this.falseExpression;
     }
 
-    public String getParameterValue() {
+    public String getParameterValue()
+    {
         return condition.getParameterValue().toString() + " ? " + trueExpression.getParameterValue() + " : "
             + falseExpression.getParameterValue();
     }
 
-    public String toString() {
+    public String toString()
+    {
         return condition.toString() + " ? " + trueExpression.toString() + " : " + falseExpression.toString();
     }
 }

@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.expression;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,21 +19,27 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public class MinusSign extends UnaryOperator {
+public class MinusSign
+    extends UnaryOperator
+{
 
-	public MinusSign(AnnotationValue value) {
-		super(value);
-	}
+    public MinusSign( AnnotationValue value )
+    {
+        super( value );
+    }
 
-	public String toString() {
-		return "-" + getValue().toString();
-	}
+    public String toString()
+    {
+        return "-" + getValue().toString();
+    }
 
-	public Object accept(ExpressionVisitor visitor) {
-		return visitor.visit(this);
-	}
+    public Object accept( ExpressionVisitor visitor )
+    {
+        return visitor.visit( this );
+    }
 
-	public String getParameterValue() {
-		return "-" + getValue().getParameterValue();
-	}
+    public String getParameterValue()
+    {
+        return "-" + getValue().getParameterValue();
+    }
 }

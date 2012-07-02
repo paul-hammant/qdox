@@ -62,7 +62,8 @@ public class AnnotationValueList
 
     /*
      * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.expression.AnnotationValue#accept(com.thoughtworks.qdox.model.expression.AnnotationVisitor)
+     * @see com.thoughtworks.qdox.model.expression.AnnotationValue#accept(com.thoughtworks.qdox.model.expression.
+     * AnnotationVisitor)
      */
     public Object accept( ExpressionVisitor visitor )
     {

@@ -21,31 +21,33 @@ package com.thoughtworks.qdox.model.expression;
 
 import java.util.List;
 
-public class MethodInvocation implements AnnotationValue
+public class MethodInvocation
+    implements AnnotationValue
 {
     private String methodName;
+
     private List<AnnotationValue> arguments;
-    
+
     public MethodInvocation( String methodName, List<AnnotationValue> arguments )
     {
         this.methodName = methodName;
         this.arguments = arguments;
     }
-    
+
     public Object getParameterValue()
     {
         return null;
     }
-    
+
     public String getMethodName()
     {
         return methodName;
     }
-    
+
     public List<AnnotationValue> getArguments()
     {
         return arguments;
-    } 
+    }
 
     public Object accept( ExpressionVisitor visitor )
     {

@@ -157,7 +157,7 @@ public class FieldRef
             if ( field == null )
             {
                 ClassLibrary classLibrary = getClassLibrary();
-                if( classLibrary != null )
+                if ( classLibrary != null )
                 {
                     for ( int i = 0; i < parts.length - 1; ++i )
                     {
@@ -192,26 +192,27 @@ public class FieldRef
         {
             result = ( (JavaParameter) context ).getParentClass();
         }
-//        else if ( context instanceof JavaPackage )
-//        {
-//        }
+        // else if ( context instanceof JavaPackage )
+        // {
+        // }
         return result;
     }
-    
-    private ClassLibrary getClassLibrary() {
+
+    private ClassLibrary getClassLibrary()
+    {
         ClassLibrary result = null;
         if ( context instanceof JavaPackage )
         {
-            result =( (JavaPackage) context).getJavaClassLibrary();
+            result = ( (JavaPackage) context ).getJavaClassLibrary();
         }
         else if ( context instanceof JavaClass )
         {
-            result =( (JavaClass) context).getJavaClassLibrary();
+            result = ( (JavaClass) context ).getJavaClassLibrary();
         }
-        else 
+        else
         {
             JavaClass declaringClass = getDeclaringClass();
-            if( declaringClass != null )
+            if ( declaringClass != null )
             {
                 result = declaringClass.getJavaClassLibrary();
             }

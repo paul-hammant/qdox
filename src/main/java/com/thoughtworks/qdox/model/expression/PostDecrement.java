@@ -19,25 +19,26 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public class PostDecrement extends UnaryOperator
+public class PostDecrement
+    extends UnaryOperator
 {
     public PostDecrement( AnnotationValue value )
     {
         super( value );
     }
 
-    /** {@inheritDoc}} */
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }
 
-    /** {@inheritDoc}} */
+    /** {@inheritDoc} */
     public String getParameterValue()
     {
         return getValue().getParameterValue() + "--";
     }
-    
+
     @Override
     public String toString()
     {

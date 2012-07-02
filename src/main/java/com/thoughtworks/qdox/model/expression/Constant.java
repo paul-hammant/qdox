@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
  * under the License.
  */
 
-
 public abstract class Constant
     implements AnnotationValue
 {
@@ -281,7 +280,7 @@ public abstract class Constant
         {
             result = Double.valueOf( literal.substring( 0, literal.length() - 1 ) );
         }
-        else if ( Pattern.compile( "[fF]$" ).matcher( literal ).find()  )
+        else if ( Pattern.compile( "[fF]$" ).matcher( literal ).find() )
         {
             result = Float.valueOf( literal.substring( 0, literal.length() - 1 ) );
         }

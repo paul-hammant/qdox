@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.expression;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,21 +19,27 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public abstract class BinaryOperator implements AnnotationValue {
-	
+public abstract class BinaryOperator
+    implements AnnotationValue
+{
+
     private AnnotationValue left;
+
     private AnnotationValue right;
-    
-	public BinaryOperator( AnnotationValue left, AnnotationValue right ) {
+
+    public BinaryOperator( AnnotationValue left, AnnotationValue right )
+    {
         this.left = left;
         this.right = right;
     }
 
-    public AnnotationValue getLeft() {
+    public AnnotationValue getLeft()
+    {
         return left;
     }
 
-    public AnnotationValue getRight() {
+    public AnnotationValue getRight()
+    {
         return right;
     }
 

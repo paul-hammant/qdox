@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model.expression;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,27 +19,34 @@ package com.thoughtworks.qdox.model.expression;
  * under the License.
  */
 
-public class ParenExpression implements AnnotationValue {
+public class ParenExpression
+    implements AnnotationValue
+{
 
     private AnnotationValue value;
 
-    public ParenExpression( AnnotationValue value ) {
+    public ParenExpression( AnnotationValue value )
+    {
         this.value = value;
     }
 
-	public AnnotationValue getValue() {
+    public AnnotationValue getValue()
+    {
         return value;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "(" + value.toString() + ")";
     }
 
-    public Object accept( ExpressionVisitor visitor ) {
+    public Object accept( ExpressionVisitor visitor )
+    {
         return visitor.visit( this );
     }
 
-    public String getParameterValue() {
+    public String getParameterValue()
+    {
         return "(" + value.getParameterValue() + ")";
     }
 }

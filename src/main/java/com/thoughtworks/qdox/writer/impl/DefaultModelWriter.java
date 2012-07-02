@@ -106,7 +106,7 @@ public class DefaultModelWriter
         // subclass
         if ( cls.getSuperClass() != null )
         {
-            String className = cls.getSuperClass().getValue();
+            String className = cls.getSuperClass().getFullyQualifiedName();
             if ( !"java.lang.Object".equals( className ) && !"java.lang.Enum".equals( className ) )
             {
                 buffer.write( " extends " );
@@ -145,6 +145,13 @@ public class DefaultModelWriter
             writeField( javaField );
         }
 
+        // constructors
+        for ( JavaConstructor javaConstructor : cls.getConstructors() )
+        {
+            buffer.newline();
+            writeConstructor( javaConstructor );
+        }
+        
         // methods
         for ( JavaMethod javaMethod : cls.getMethods() )
         {
@@ -181,7 +188,7 @@ public class DefaultModelWriter
         
         if ( field.isEnumConstant() )
         {
-            if ( !field.getEnumConstantArguments().isEmpty() )
+            if ( field.getEnumConstantArguments() != null )
             {
                 buffer.write( "( " );
                 for( Iterator<Expression> iter = field.getEnumConstantArguments().listIterator(); iter.hasNext(); )

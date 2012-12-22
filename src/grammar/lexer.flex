@@ -161,6 +161,7 @@ Eol                             = \r|\n|\r\n
 WhiteSpace                      = {Eol} | [ \t\f]
 CommentChar                     = ( [^ \t\r\n*] | "*"+ [^ \t\r\n/*] )
 DecimalNumeral                  = ( [0-9] | [1-9] [_0-9]* [0-9] )
+Digits                          = ( [0-9] | [0-9] [_0-9]* [0-9]   )
 HexDigits                       = ( [0-9a-fA-F] | [0-9a-fA-F] [_0-9a-fA-F]* [0-9a-fA-F] )
 HexNumeral                      = ( "0" [xX] {HexDigits} )
 OctalNumeral                    = ( "0" [_0-7]* [0-7] )
@@ -168,10 +169,10 @@ BinaryNumeral                   = ( "0" [bB] ( [01] | [01] [_01]* [01] ) )
 IntegerLiteral			        = ( {DecimalNumeral} | {BinaryNumeral} | {HexNumeral} | {OctalNumeral} ) ([lL])?
 Exponent				        = [eE] [+-]? {DecimalNumeral}
 FloatingPointLiteral            = ( {DecimalFloatingPointLiteral} | {HexadecimalFloatingPointLiteral} )
-DecimalFloatingPointLiteral	    = ( {DecimalNumeral} ("." {DecimalNumeral})? ({Exponent})? ([dDfF])? ) |
-						          ( "." {DecimalNumeral} ({Exponent})? ([dDfF])?) |
-						          ( {DecimalNumeral} {Exponent} ([dDfF])?) |
-						          ( {DecimalNumeral} ({Exponent} )? ([dDfF]) )
+DecimalFloatingPointLiteral	    = ( {Digits} ("." {Digits})? ({Exponent})? ([dDfF])? ) |
+						          ( "." {Digits} ({Exponent})? ([dDfF])?) |
+						          ( {Digits} {Exponent} ([dDfF])?) |
+						          ( {Digits} ({Exponent} )? ([dDfF]) )
 BinaryExponent                  = [pP] [+-]? ({DecimalNumeral})+					          
 HexSignificand                  = ( {HexNumeral} "."? ) |
                                   ( "0" [xX] ( {HexDigits} )? "." ( {HexDigits} ) )

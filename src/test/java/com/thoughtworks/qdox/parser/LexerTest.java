@@ -623,4 +623,20 @@ public class LexerTest extends TestCase {
         assertLex(Parser.PARENCLOSE, lexer);
     	assertLex(Parser.SEMI, lexer);
     }
+    
+    // QDOX-242
+    public void testDoubleValueAnnotation()
+        throws Exception
+    {
+        String in = "@Rule( delta = 0.005 )";
+        Lexer lexer = new JFlexLexer( new StringReader( in ) );
+        assertLex( Parser.AT, lexer );
+        assertLex( Parser.IDENTIFIER, "Rule", lexer );
+        assertLex( Parser.PARENOPEN, lexer );
+        assertLex( Parser.IDENTIFIER, "delta", lexer );
+        assertLex( Parser.EQUALS, lexer );
+        assertLex( Parser.FLOAT_LITERAL, "0.005", lexer );
+        assertLex( Parser.PARENCLOSE, lexer );
+        assertLex( 0, lexer );
+    }
 }

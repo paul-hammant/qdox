@@ -1442,6 +1442,26 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( "<T extends java.lang.Number & java.lang.Iterable<java.lang.Integer>>", result.getGenericFullyQualifiedName() );
         assertEquals( "<T extends java.lang.Number & java.lang.Iterable<java.lang.Integer>>", result.getGenericCanonicalName() );
     }
+
+    // for QDOX-245
+    public void
+    testReadsGenerifiedParameterTypes() {
+        final String sourceCode = "" +
+                "package foo;\n" +
+                "public static class DummyOne {\n" +
+                "  public static String withGenerifiedParam(java.util.Collection<? extends Comparable<String>> things) { return null; }\n" +
+                "}\n";
+        
+        builder.addSource(new java.io.StringReader(sourceCode));
+        JavaClass qDoxClass = builder.getClassByName("foo.DummyOne");
+        JavaMethod qDoxMethod = qDoxClass.getMethods().get(0);
+        
+        JavaType result = qDoxMethod.getParameterTypes(true).get( 0 );
+        assertEquals("java.util.Collection<? extends java.lang.Comparable<java.lang.String>>", result.getGenericFullyQualifiedName());
+        assertEquals("java.util.Collection<? extends java.lang.Comparable<java.lang.String>>", result.getGenericCanonicalName());
+    }
+
+    
     
     public void testCanonicalName()
         throws Exception

@@ -387,7 +387,7 @@ public class JSR14Test extends TestCase {
     	JavaTypeVariable<JavaGenericDeclaration> typeVariable = javaMethod.getTypeParameters().get(0);
         assertEquals( "T", typeVariable.getName() );
         assertEquals( "T", typeVariable.getFullyQualifiedName());
-        assertEquals( "T extends java.lang.StringBuffer", typeVariable.getGenericFullyQualifiedName());
+        assertEquals( "<T extends java.lang.StringBuffer>", typeVariable.getGenericFullyQualifiedName());
         assertEquals( "T", typeVariable.getValue());
         assertEquals( "T extends StringBuffer", typeVariable.getGenericValue());
     }
@@ -401,14 +401,14 @@ public class JSR14Test extends TestCase {
     	JavaTypeVariable<JavaGenericDeclaration> typeVariable0 = javaMethod.getTypeParameters().get(0);
         assertEquals("T", typeVariable0.getName());
         assertEquals("T", typeVariable0.getFullyQualifiedName());
-        assertEquals("T", typeVariable0.getGenericFullyQualifiedName());
+        assertEquals("<T>", typeVariable0.getGenericFullyQualifiedName());
         assertEquals("T", typeVariable0.getValue());
         assertEquals("T", typeVariable0.getGenericValue());
 
         JavaTypeVariable<JavaGenericDeclaration> typeVariable1 = javaMethod.getTypeParameters().get(1);
         assertEquals("S", typeVariable1.getName());
         assertEquals("S", typeVariable1.getFullyQualifiedName());
-        assertEquals("S extends T", typeVariable1.getGenericFullyQualifiedName());
+        assertEquals("<S extends T>", typeVariable1.getGenericFullyQualifiedName());
         assertEquals("S", typeVariable1.getValue());
         assertEquals("S extends T", typeVariable1.getGenericValue());
 	}

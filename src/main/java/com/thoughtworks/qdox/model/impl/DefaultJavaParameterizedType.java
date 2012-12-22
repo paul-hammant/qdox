@@ -117,7 +117,7 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
             result.append( "<" );
             for ( Iterator<JavaType> iter = actualArgumentTypes.iterator(); iter.hasNext(); )
             {
-                result.append( iter.next().getCanonicalName() );
+                result.append( iter.next().getGenericCanonicalName() );
                 if ( iter.hasNext() )
                 {
                     result.append( "," );

@@ -35,6 +35,7 @@ import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.util.SerializationUtils;
@@ -1398,6 +1399,27 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource(new StringReader( source ));
         JavaClass cls = builder.getClassByName( "GreetingService" );
         assertEquals( 1, cls.getAnnotations().size() );
+    }
+    
+    // for QDOX-243
+    public void testReadsGenericsInGenericType()
+    {
+        final String sourceCode =
+            ""
+                + "package foo;\n"
+                + "public static class DummyOne {\n"
+                + "  public static java.util.list<java.util.Map<? extends java.util.Set<Long>, String>> crazyType() { return null; }\n"
+                + "}\n";
+
+        builder.addSource( new java.io.StringReader( sourceCode ) );
+        JavaClass qDoxClass = builder.getClassByName( "foo.DummyOne" );
+        JavaMethod qDoxMethod = qDoxClass.getMethodBySignature( "crazyType", null );
+
+        JavaParameterizedType returnType = (JavaParameterizedType) qDoxMethod.getReturnType();
+        assertEquals( "java.util.Map<? extends java.util.Set<java.lang.Long>,java.lang.String>",
+                      returnType.getActualTypeArguments().get( 0 ).getGenericFullyQualifiedName() );
+        assertEquals( "java.util.Map<? extends java.util.Set<java.lang.Long>,java.lang.String>",
+                      returnType.getActualTypeArguments().get( 0 ).getGenericCanonicalName() );
     }
     
     public void testCanonicalName()

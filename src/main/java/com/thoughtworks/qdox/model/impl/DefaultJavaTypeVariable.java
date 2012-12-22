@@ -38,7 +38,6 @@ import com.thoughtworks.qdox.model.JavaTypeVariable;
 public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     extends DefaultJavaType implements JavaTypeVariable<D>
 {
-
     private List<JavaType> bounds;
     
     private D genericDeclaration;
@@ -101,7 +100,9 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     @Override
     public String getGenericFullyQualifiedName()
     {
-        StringBuilder result = new StringBuilder( super.getFullyQualifiedName() );
+        StringBuilder result = new StringBuilder();
+        result.append( '<' );
+        result.append( super.getFullyQualifiedName() );
         if ( bounds != null && !bounds.isEmpty() )
         {
             result.append( " extends " );
@@ -110,10 +111,39 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
                 result.append( iter.next().getGenericFullyQualifiedName() );
                 if ( iter.hasNext() )
                 {
-                    result.append( "," );
+                    result.append( " & " );
                 }
             }
         }
+        result.append( '>' );
+        return result.toString();
+    }
+    
+    @Override
+    public String getCanonicalName()
+    {
+        return super.getValue();
+    }
+    
+    @Override
+    public String getGenericCanonicalName()
+    {
+        StringBuilder result = new StringBuilder();
+        result.append( '<' );
+        result.append( super.getGenericCanonicalName() );
+        if ( bounds != null && !bounds.isEmpty() )
+        {
+            result.append( " extends " );
+            for ( Iterator<JavaType> iter = bounds.iterator(); iter.hasNext(); )
+            {
+                result.append( iter.next().getGenericCanonicalName() );
+                if ( iter.hasNext() )
+                {
+                    result.append( " & " );
+                }
+            }
+        }
+        result.append( '>' );
         return result.toString();
     }
 

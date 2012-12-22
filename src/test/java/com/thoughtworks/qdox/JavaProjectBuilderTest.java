@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.Method;
+import java.lang.reflect.TypeVariable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,11 +35,13 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.JavaTypeVariable;
 import com.thoughtworks.qdox.model.util.SerializationUtils;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.testdata.PropertyClass;
@@ -1420,6 +1424,23 @@ public class JavaProjectBuilderTest extends TestCase
                       returnType.getActualTypeArguments().get( 0 ).getGenericFullyQualifiedName() );
         assertEquals( "java.util.Map<? extends java.util.Set<java.lang.Long>,java.lang.String>",
                       returnType.getActualTypeArguments().get( 0 ).getGenericCanonicalName() );
+    }
+    
+    // for QDOX-244
+    public void testReadsGenericTypeParameters()
+    {
+        final String sourceCode =
+            "" + "package foo;\n" + "public static class DummyOne {\n"
+                + "  public static <T extends Number & Iterable<Integer>> T genericTypeParam(T x) { return null; }\n"
+                + "}\n";
+
+        builder.addSource( new java.io.StringReader( sourceCode ) );
+        JavaClass qDoxClass = builder.getClassByName( "foo.DummyOne" );
+        JavaMethod qDoxMethod = qDoxClass.getMethods().get(0);
+
+        JavaTypeVariable<JavaGenericDeclaration> result = qDoxMethod.getTypeParameters().get( 0 );
+        assertEquals( "<T extends java.lang.Number & java.lang.Iterable<java.lang.Integer>>", result.getGenericFullyQualifiedName() );
+        assertEquals( "<T extends java.lang.Number & java.lang.Iterable<java.lang.Integer>>", result.getGenericCanonicalName() );
     }
     
     public void testCanonicalName()

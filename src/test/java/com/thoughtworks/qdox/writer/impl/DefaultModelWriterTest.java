@@ -16,6 +16,7 @@ import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
@@ -340,6 +341,38 @@ public class DefaultModelWriterTest {
         modelWriter.writeParameter( prm );
         
         String expected = "java.lang.String... argument";
+        assertEquals( expected, modelWriter.toString() );
+    }
+    
+    @Test
+    public void testStaticInitializer()
+    {
+        
+        JavaInitializer init = mock( JavaInitializer.class );
+        when( init.isStatic() ).thenReturn( true );
+        when( init.getBlockContent() ).thenReturn( "//test" );
+        
+        modelWriter.writeInitializer( init );
+        
+        String expected = "static {\n" +
+        		"\t//test\n" +
+        		"}\n";
+        assertEquals( expected, modelWriter.toString() );
+    }
+
+    @Test
+    public void testInstanceInitializer()
+    {
+        
+        JavaInitializer init = mock( JavaInitializer.class );
+        when( init.isStatic() ).thenReturn( false );
+        when( init.getBlockContent() ).thenReturn( "//test" );
+        
+        modelWriter.writeInitializer( init );
+        
+        String expected = "{\n" +
+                "\t//test\n" +
+                "}\n";
         assertEquals( expected, modelWriter.toString() );
     }
 

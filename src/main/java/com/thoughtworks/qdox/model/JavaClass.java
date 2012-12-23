@@ -408,6 +408,13 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
     List<DocletTag> getTagsByName( String name, boolean superclasses );
 
     ClassLibrary getJavaClassLibrary();
+    
+    /**
+     * A list if {@link JavaInitializer}, either static or instance initializers.  
+     * 
+     * @return a List of initializers
+     */
+    List<JavaInitializer> getInitializers();
 
     /**
      * Equivalent of {@link java.lang.Class#getName()}.

@@ -35,6 +35,7 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
+import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -45,6 +46,7 @@ import com.thoughtworks.qdox.model.impl.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 import com.thoughtworks.qdox.model.impl.DefaultJavaConstructor;
 import com.thoughtworks.qdox.model.impl.DefaultJavaField;
+import com.thoughtworks.qdox.model.impl.DefaultJavaInitializer;
 import com.thoughtworks.qdox.model.impl.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
@@ -56,6 +58,7 @@ import com.thoughtworks.qdox.parser.expression.ExpressionDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
@@ -252,6 +255,18 @@ public class ModelBuilder implements Builder {
 
         lastTagSet.clear();
         lastComment = null;
+    }
+    
+    public void addInitializer( InitDef def )
+    {
+        DefaultJavaInitializer initializer = new DefaultJavaInitializer();
+        initializer.setLineNumber( def.getLineNumber() );
+
+        initializer.setBlock( def.getBlockContent() );
+        initializer.setStatic( def.isStatic() );
+        
+        classStack.getFirst().addInitializer( initializer );
+        
     }
     
     /** {@inheritDoc} */

@@ -63,8 +63,6 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      */
     boolean isVarArgs();
 
-    String getCodeBlock();
-
     /**
      * @since 1.3
      */
@@ -146,7 +144,7 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @return Code as string.
      */
     String getSourceCode();
-
+    
     /**
      * Equivalent of java.lang.reflect.Method.getReturnType()
      * 

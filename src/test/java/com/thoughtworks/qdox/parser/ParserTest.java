@@ -6,7 +6,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -21,6 +20,7 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
@@ -30,6 +30,7 @@ public class ParserTest extends TestCase {
     
 	private Collection<Integer> lexValues = new LinkedList<Integer>();
     private Collection<String> textValues = new LinkedList<String>();
+    private Collection<String> codeBodyValues = new LinkedList<String>();
     
     private JavaLexer lexer;
     private Builder builder;
@@ -1952,10 +1953,12 @@ public class ParserTest extends TestCase {
 
         // expect no the method, and it shouldn't be static.
         ArgumentCaptor<ClassDef> classCaptor = ArgumentCaptor.forClass( ClassDef.class );
+        ArgumentCaptor<InitDef> initCaptor = ArgumentCaptor.forClass( InitDef.class );
         ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
 
         // verify
         verify(builder).beginClass( classCaptor.capture() );
+        verify(builder).addInitializer( initCaptor.capture() );
         verify(builder).beginMethod();
         verify(builder).endMethod( methodCaptor.capture() );
         verify(builder).endClass();
@@ -2759,10 +2762,81 @@ public class ParserTest extends TestCase {
 //        assertSame( methodLocationOfEnumMethod, a.getType() );
 //        assertEquals( 2, methodLocationOfEnumMethod.getDeclaredMethods().length);
     }
+    
+    public void testStaticInitializer()
+        throws Exception
+    {
+        // setup values
+        setupLex( Parser.CLASS );
+        setupLex( Parser.IDENTIFIER, "x" );
+        setupLex( Parser.BRACEOPEN );
+
+        setupLex( Parser.STATIC );
+        setupLex( Parser.CODEBLOCK, null, "//test" );
+
+        setupLex( Parser.BRACECLOSE );
+        setupLex( 0 );
+
+        // execute
+        Parser parser = new Parser( lexer, builder );
+        parser.parse();
+
+        // expectations
+        ArgumentCaptor<ClassDef> classCaptor = ArgumentCaptor.forClass( ClassDef.class );
+        ArgumentCaptor<InitDef> initCaptor = ArgumentCaptor.forClass( InitDef.class );
+
+        // verify
+        verify( builder ).beginClass( classCaptor.capture() );
+        verify( builder ).addInitializer( initCaptor.capture() );
+        verify( builder ).endClass();
+
+        ClassDef cls = classCaptor.getValue();
+        assertEquals( "x", cls.getName() );
+        InitDef init = initCaptor.getValue();
+        assertTrue( init.isStatic() );
+        assertEquals( "//test", init.getBlockContent() );
+    }
+    
+    public void testInstanceInitializer() throws Exception
+    {
+        // setup values
+        setupLex( Parser.CLASS );
+        setupLex( Parser.IDENTIFIER, "x" );
+        setupLex( Parser.BRACEOPEN );
+
+        setupLex( Parser.CODEBLOCK, null, "//test" );
+
+        setupLex( Parser.BRACECLOSE );
+        setupLex( 0 );
+
+        // execute
+        Parser parser = new Parser( lexer, builder );
+        parser.parse();
+
+        // expectations
+        ArgumentCaptor<ClassDef> classCaptor = ArgumentCaptor.forClass( ClassDef.class );
+        ArgumentCaptor<InitDef> initCaptor = ArgumentCaptor.forClass( InitDef.class );
+
+        // verify
+        verify( builder ).beginClass( classCaptor.capture() );
+        verify( builder ).addInitializer( initCaptor.capture() );
+        verify( builder ).endClass();
+
+        ClassDef cls = classCaptor.getValue();
+        assertEquals( "x", cls.getName() );
+        InitDef init = initCaptor.getValue();
+        assertFalse( init.isStatic() );
+        assertEquals( "//test", init.getBlockContent() );
+    }
 
     private void setupLex(int token, String value) {
         lexValues.add( token );
         textValues.add( value );
+    }
+
+    private void setupLex(int token, String value, String codeBody ) {
+        setupLex( token, value );
+        codeBodyValues.add( codeBody );
     }
 
     private void setupLex( int token ) throws Exception
@@ -2772,28 +2846,8 @@ public class ParserTest extends TestCase {
         {
             when( lexer.lex() ).thenAnswer( new ReturnsElementsOf( lexValues ) );
             when( lexer.text() ).thenAnswer( new ReturnsElementsOf( textValues ) );
+            when( lexer.getCodeBody() ).thenAnswer( new ReturnsElementsOf( codeBodyValues ) );
             when( lexer.getLine() ).thenReturn( -1 );
         }
-    }
-
-    private enum MethodLocationOfEnumMethod
-    {
-      A()
-      {
-        @Override
-        public void method()
-        {
-        };
-        
-        public String doThis() { return null; }
-      };
-
-      public abstract void method();
-
-      private void test()
-      {
-      };
-      
-      String name = "x";
     }
 }

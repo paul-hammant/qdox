@@ -23,6 +23,7 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
@@ -171,5 +172,13 @@ public interface ModelWriter
      * @return itself
      */
     ModelWriter writeConstructor( JavaConstructor cns );
+
+    /**
+     * Write the initializer.
+     * 
+     * @param init the initializer
+     * @return itself
+     */
+    ModelWriter writeInitializer( JavaInitializer init );
 
 }

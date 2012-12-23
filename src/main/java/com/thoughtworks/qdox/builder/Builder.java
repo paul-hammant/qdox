@@ -23,6 +23,7 @@ import com.thoughtworks.qdox.parser.expression.ExpressionDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
@@ -41,6 +42,8 @@ public interface Builder
 
     void beginClass( ClassDef def );
     void endClass();
+    
+    void addInitializer( InitDef def );
 
     void beginConstructor();
     void endConstructor( MethodDef def );

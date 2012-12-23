@@ -33,6 +33,7 @@ import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -64,6 +65,8 @@ public class DefaultJavaClass
     private JavaType superClass;
 
     private List<JavaClass> implementz = new LinkedList<JavaClass>();
+    
+    private List<JavaInitializer> initializers = new LinkedList<JavaInitializer>();
 
     private List<DefaultJavaTypeVariable<JavaClass>> typeParameters =
         new LinkedList<DefaultJavaTypeVariable<JavaClass>>();
@@ -398,6 +401,12 @@ public class DefaultJavaClass
     {
         return this;
     }
+    
+    /** {@inheritDoc} */
+    public List<JavaInitializer> getInitializers()
+    {
+        return initializers;
+    }
 
     /** {@inheritDoc} */
     public List<JavaConstructor> getConstructors()
@@ -611,6 +620,11 @@ public class DefaultJavaClass
     {
         JavaField field = getFieldByName( name );
         return field.isEnumConstant() ? field : null;
+    }
+    
+    public void addInitializer( JavaInitializer initializer )
+    {
+        initializers.add( initializer );
     }
 
     public void addClass( JavaClass cls )

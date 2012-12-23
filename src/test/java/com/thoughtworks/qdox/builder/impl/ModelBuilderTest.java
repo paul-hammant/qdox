@@ -15,6 +15,7 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
@@ -829,4 +830,33 @@ public class ModelBuilderTest extends TestCase {
         assertEquals("java.util.List", result.getImports().get(1));
         assertEquals("org.apache.*", result.getImports().get(2));
     }
+    
+    public void testStaticInitializers() throws Exception
+    {
+        builder.beginClass( new ClassDef( "Foo" ) );
+        builder.addInitializer( new InitDef( "//test", true ) );
+        builder.addInitializer( new InitDef( null, true ) );
+        builder.endClass();
+        JavaClass cls = builder.getSource().getClassByName( "Foo" );
+        assertEquals( 2, cls.getInitializers().size() );
+        assertEquals( "//test", cls.getInitializers().get( 0 ).getBlockContent() );
+        assertTrue( cls.getInitializers().get( 0 ).isStatic() );
+        assertEquals( null, cls.getInitializers().get( 1 ).getBlockContent() );
+        assertTrue(cls.getInitializers().get( 0 ).isStatic() );
+    }
+
+    public void testInstanceInitializers() throws Exception
+    {
+        builder.beginClass( new ClassDef( "Foo" ) );
+        builder.addInitializer( new InitDef( "//test", false ) );
+        builder.addInitializer( new InitDef( null, false ) );
+        builder.endClass();
+        JavaClass cls = builder.getSource().getClassByName( "Foo" );
+        assertEquals( 2, cls.getInitializers().size() );
+        assertEquals( "//test", cls.getInitializers().get( 0 ).getBlockContent() );
+        assertFalse( cls.getInitializers().get( 0 ).isStatic() );
+        assertEquals( null, cls.getInitializers().get( 1 ).getBlockContent() );
+        assertFalse( cls.getInitializers().get( 0 ).isStatic() );
+    }
+
 }

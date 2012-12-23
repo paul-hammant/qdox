@@ -33,6 +33,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
+import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameterizedType;
@@ -712,6 +713,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     public String getClassNamePrefix()
     {
         return resolveRealClass().getClassNamePrefix();
+    }
+
+    /** {@inheritDoc} */
+    public List<JavaInitializer> getInitializers()
+    {
+        return resolveRealClass().getInitializers();
     }
 
     /** {@inheritDoc} */

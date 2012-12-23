@@ -30,6 +30,7 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
@@ -166,6 +167,26 @@ public class DefaultModelWriter
             writeClass( innerCls );
         }
 
+        buffer.deindent();
+        buffer.newline();
+        buffer.write( '}' );
+        buffer.newline();
+        return this;
+    }
+    
+    /** {@inheritDoc} */
+    public ModelWriter writeInitializer( JavaInitializer init )
+    {
+        if ( init.isStatic() )
+        {
+            buffer.write( "static " );
+        }
+        buffer.write( '{' );
+        buffer.newline();
+        buffer.indent();
+
+        buffer.write( init.getBlockContent() );
+        
         buffer.deindent();
         buffer.newline();
         buffer.write( '}' );

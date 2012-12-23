@@ -409,6 +409,17 @@ TypeList: ReferenceType
           }
         ;
 
+// TypeArgumentsOrDiamond:
+//     < > 
+//     TypeArguments
+TypeArgumentsOrDiamond_opt:
+                          | LESSTHAN GREATERTHAN
+                          | TypeArguments
+                          ;
+
+// NonWildcardTypeArgumentsOrDiamond:
+//     < >
+//     NonWildcardTypeArguments
 
 // TypeParameters:
 //     < TypeParameter { , TypeParameter } >
@@ -551,7 +562,7 @@ AnnotationElement_opt:
                      | ElementValuePairs
                      | ElementValue
                        { 
-                      annotationStack.getFirst().getArgs().put("value", $1);
+                         annotationStack.getFirst().getArgs().put("value", $1);
                        }
                      ;
 
@@ -646,8 +657,14 @@ MemberDecl: FieldDeclaration
           | InterfaceDeclaration
           ;
 
-static_block:
-    Modifiers_opt CODEBLOCK { lexer.getCodeBody(); modifiers.clear(); };
+static_block: Modifiers_opt CODEBLOCK 
+              { 
+                InitDef def = new InitDef();
+                def.setStatic(modifiers.contains("static"));
+                def.setBlockContent(lexer.getCodeBody());
+                builder.addInitializer(def);
+                modifiers.clear(); 
+              };
 
 // ----- FIELD
 
@@ -967,14 +984,6 @@ ClassCreatorRest: Arguments ClassBody_opt
 ArrayCreatorRest: Dims ArrayInitializer
                 | DimExprs Dims_opt
                 ;  
-
-// TypeArgumentsOrDiamond:
-//     < > 
-//     TypeArguments
-TypeArgumentsOrDiamond_opt:
-                          | LESSTHAN GREATERTHAN
-                          | TypeArguments
-                          ;
 
 ArgumentList: Expression
               {

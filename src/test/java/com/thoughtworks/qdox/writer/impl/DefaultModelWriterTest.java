@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
+import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
@@ -373,6 +374,21 @@ public class DefaultModelWriterTest {
         String expected = "{\n" +
                 "\t//test\n" +
                 "}\n";
+        assertEquals( expected, modelWriter.toString() );
+    }
+    
+    @Test
+    public void testAnnotation()
+    {
+        
+        JavaClass annType = mock( JavaClass.class );
+        when( annType.getGenericCanonicalName() ).thenReturn( "Anno" );
+        JavaAnnotation ann = mock( JavaAnnotation.class );
+        when( ann.getType() ).thenReturn( annType );
+        
+        modelWriter.writeAnnotation( ann );
+        
+        String expected = "@Anno\n";
         assertEquals( expected, modelWriter.toString() );
     }
 

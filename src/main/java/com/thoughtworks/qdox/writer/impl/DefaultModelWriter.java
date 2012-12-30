@@ -402,6 +402,7 @@ public class DefaultModelWriter
             buffer.write( ')' );
             buffer.deindent();
         }
+        buffer.newline();
         return this;
     }
 

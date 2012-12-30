@@ -45,6 +45,17 @@ public class DefaultModelWriter
 {
     private IndentBuffer buffer = new IndentBuffer();
     
+    /**
+     * All information is written to this buffer.
+     * When extending this class you should write to this buffer
+     * 
+     * @return the buffer
+     */
+    protected final IndentBuffer getBuffer()
+    {
+        return buffer;
+    }
+    
     /** {@inheritDoc} */
     public ModelWriter writeSource( JavaSource source )
     {

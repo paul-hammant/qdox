@@ -81,7 +81,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         if ( !( classLibrary instanceof ClassLoaderLibrary ) )
         {
-            classLibrary = new ClassLoaderLibrary( classLibrary );
+            classLibrary = newClassLoaderLibrary( classLibrary );
         }
         ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
         classLoaderLibrary.addClassLoader( classLoader );
@@ -101,7 +101,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         if ( !( classLibrary instanceof ClassLoaderLibrary ) )
         {
-            classLibrary = new ClassLoaderLibrary( classLibrary );
+            classLibrary = newClassLoaderLibrary( classLibrary );
         }
         ClassLoaderLibrary classLoaderLibrary = (ClassLoaderLibrary) classLibrary;
         classLoaderLibrary.addDefaultLoader();
@@ -117,7 +117,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     {
         if ( !( classLibrary instanceof SourceFolderLibrary ) )
         {
-            classLibrary = new SourceFolderLibrary( classLibrary );
+            classLibrary = newSourceFolderLibrary( classLibrary );
         }
         SourceFolderLibrary sourceFolderLibrary = (SourceFolderLibrary) classLibrary;
         prepareSourceLibrary( sourceFolderLibrary );
@@ -287,11 +287,48 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     private SourceLibrary getSourceLibrary() {
         if ( !( classLibrary instanceof SourceLibrary ) )
         {
-            classLibrary = new SourceLibrary( classLibrary );
+            classLibrary = newSourceLibrary( classLibrary );
         }
         SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
         prepareSourceLibrary( sourceLibrary );
         return sourceLibrary;
     }
+    
+    /**
+     * Ability to override the implementation of ClassLoaderLibrary
+     * 
+     * @param parentLibrary the parent library
+     * @return a new ClassLoaderLibrary instance
+     * @since 2.0
+     */
+    protected ClassLoaderLibrary newClassLoaderLibrary( AbstractClassLibrary parentLibrary )
+    {
+        return new ClassLoaderLibrary( parentLibrary );
+    }
 
+    /**
+     * Ability to override the implementation of SourceLibrary
+     * 
+     * @param parentLibrary the parent library
+     * @return a new SourceLibrary instance
+     * @since 2.0
+     */
+    protected SourceLibrary newSourceLibrary( AbstractClassLibrary parentLibrary )
+    {
+        return new SourceLibrary( parentLibrary );
+    }
+    
+    /**
+     * Ability to override the implementation of SourceFolderLibrary
+     * 
+     * @param parentLibrary the parent library
+     * @return a new SourceFolderLibrary instance
+     * @since 2.0
+     */
+    protected SourceFolderLibrary newSourceFolderLibrary( AbstractClassLibrary parentLibrary )
+    {
+        return new SourceFolderLibrary( parentLibrary );
+    }
+
+    
 }

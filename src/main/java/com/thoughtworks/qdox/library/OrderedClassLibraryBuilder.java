@@ -284,7 +284,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         sourceLibrary.setErrorHandler( errorHandler );
     }
     
-    private SourceLibrary getSourceLibrary() {
+    protected final SourceLibrary getSourceLibrary() {
         if ( !( classLibrary instanceof SourceLibrary ) )
         {
             classLibrary = newSourceLibrary( classLibrary );

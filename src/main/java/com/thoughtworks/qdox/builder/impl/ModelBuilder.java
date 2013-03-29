@@ -198,6 +198,11 @@ public class ModelBuilder implements Builder {
         // annotations
         setAnnotations( newClass );
         
+        classStack.addFirst( bindClass( newClass ) );
+    }
+
+    protected DefaultJavaClass bindClass( DefaultJavaClass newClass )
+    {
         if ( currentField != null )
         {
             classStack.getFirst().addClass( newClass );
@@ -212,7 +217,7 @@ public class ModelBuilder implements Builder {
         {
             source.addClass( newClass );
         }
-        classStack.addFirst( newClass );
+        return newClass;
     }
 
     /** {@inheritDoc} */
@@ -273,12 +278,13 @@ public class ModelBuilder implements Builder {
         currentConstructor = new DefaultJavaConstructor();
 
         currentConstructor.setParentClass( classStack.getFirst() );
-        classStack.getFirst().addConstructor( currentConstructor );
 
         currentConstructor.setModelWriterFactory( modelWriterFactory );
 
         addJavaDoc( currentConstructor );
         setAnnotations( currentConstructor );
+
+        classStack.getFirst().addConstructor( currentConstructor );
     }
 
     /** {@inheritDoc} */
@@ -423,8 +429,6 @@ public class ModelBuilder implements Builder {
 
         // annotations
         setAnnotations( currentField );
-        
-        
     }
 	
     /** {@inheritDoc} */

@@ -297,6 +297,15 @@ public abstract class AbstractClassLibrary
         this.modelWriterFactory = factory;
     }
 
+    protected final ModelWriterFactory getModelWriterFactory()
+    {
+        return modelWriterFactory;
+    }
+    
+    protected final ModelBuilderFactory getModelBuilderFactory()
+    {
+        return modelBuilderFactory;
+    }
     
     /**
      * If there's a modelBuilderFactory available, ask it for a new instance.

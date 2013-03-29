@@ -242,12 +242,14 @@ public class SourceLibrary
      * 
      * @param source the source, might be <code>null</code>
      */
-    private void registerJavaSource(JavaSource source) {
+    protected final void registerJavaSource( JavaSource source )
+    {
         if ( source != null )
         {
             context.add( source );
             registerJavaPackage( source.getPackage() );
-            for( JavaClass cls : source.getClasses()) {
+            for ( JavaClass cls : source.getClasses() )
+            {
                 registerJavaClass( cls );
             }
         }
@@ -279,9 +281,14 @@ public class SourceLibrary
      * 
      * @param debugLexer 
      */
-    public void setDebugLexer( boolean debugLexer )
+    public final void setDebugLexer( boolean debugLexer )
     {
         this.debugLexer = debugLexer;
+    }
+    
+    public final boolean isDebugLexer()
+    {
+        return debugLexer;
     }
     
     /**
@@ -289,9 +296,14 @@ public class SourceLibrary
      * 
      * @param debugParser
      */
-    public void setDebugParser( boolean debugParser )
+    public final void setDebugParser( boolean debugParser )
     {
         this.debugParser = debugParser;
+    }
+    
+    public final boolean isDebugParser()
+    {
+        return debugParser;
     }
     
     /**
@@ -299,14 +311,24 @@ public class SourceLibrary
      * 
      * @param encoding
      */
-    public void setEncoding( String encoding )
+    public final void setEncoding( String encoding )
     {
         this.encoding = encoding;
     }
     
-    public void setErrorHandler( ErrorHandler errorHandler )
+    public final String getEncoding()
+    {
+        return encoding;
+    }
+    
+    public final void setErrorHandler( ErrorHandler errorHandler )
     {
         this.errorHandler = errorHandler;
+    }
+    
+    public final ErrorHandler getErrorHandler()
+    {
+        return errorHandler;
     }
     
     /**

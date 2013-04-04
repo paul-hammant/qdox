@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.builder.impl.ModelBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
@@ -111,7 +112,7 @@ public class ClassLoaderLibrary
             InputStream sourceStream = classLoader.getResourceAsStream( resource );
             if ( sourceStream != null )
             {
-                ModelBuilder builder = getModelBuilder();
+                Builder builder = getModelBuilder();
                 JavaLexer lexer = new JFlexLexer( sourceStream );
                 Parser parser = new Parser( lexer, builder );
                 parser.setDebugLexer( debugLexer );
@@ -146,7 +147,7 @@ public class ClassLoaderLibrary
                     {
                         clazz = clazz.getDeclaringClass();
                     }
-                    ModelBuilder builder = getModelBuilder();
+                    Builder builder = getModelBuilder();
                     BinaryClassParser parser = new BinaryClassParser( clazz, builder );
                     if ( parser.parse() )
                     {

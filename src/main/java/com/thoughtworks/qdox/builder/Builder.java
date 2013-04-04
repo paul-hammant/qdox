@@ -19,6 +19,9 @@ package com.thoughtworks.qdox.builder;
  * under the License.
  */
 
+import java.net.URL;
+
+import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.parser.expression.ExpressionDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
@@ -32,6 +35,8 @@ import com.thoughtworks.qdox.writer.ModelWriterFactory;
 public interface Builder
 {
     void setModelWriterFactory( ModelWriterFactory writer );
+    
+    void setUrl( URL url );
 
     void addPackage( PackageDef packageDef );
 
@@ -59,4 +64,6 @@ public interface Builder
     void addAnnotation( AnnoDef annotation );
 
     void addArgument(  ExpressionDef argument );
+
+    JavaSource getSource();
 }

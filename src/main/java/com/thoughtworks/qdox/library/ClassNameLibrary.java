@@ -19,7 +19,7 @@ package com.thoughtworks.qdox.library;
  * under the License.
  */
 
-import com.thoughtworks.qdox.builder.impl.ModelBuilder;
+import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -38,7 +38,7 @@ public class ClassNameLibrary
     @Override
     protected JavaClass resolveJavaClass( String name )
     {
-        ModelBuilder unknownBuilder = getModelBuilder();
+        Builder unknownBuilder = getModelBuilder();
         unknownBuilder.beginClass( new ClassDef( name ) );
         unknownBuilder.endClass();
         JavaSource unknownSource = unknownBuilder.getSource();

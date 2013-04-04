@@ -27,7 +27,7 @@ import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import com.thoughtworks.qdox.builder.impl.ModelBuilder;
+import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -38,9 +38,9 @@ public class BinaryClassParser
 {
     private Class<?> declaringClazz;
 
-    private ModelBuilder binaryBuilder;
+    private Builder binaryBuilder;
 
-    public BinaryClassParser( Class<?> declaringClazz, ModelBuilder modelBuilder )
+    public BinaryClassParser( Class<?> declaringClazz, Builder modelBuilder )
     {
         this.declaringClazz = declaringClazz;
         this.binaryBuilder = modelBuilder;

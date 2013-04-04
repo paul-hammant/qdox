@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.builder.impl.ModelBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -115,7 +116,7 @@ public abstract class AbstractClassLibrary
 
     private JavaClass createStub( String name )
     {
-        ModelBuilder unknownBuilder = getModelBuilder();
+        Builder unknownBuilder = getModelBuilder();
         unknownBuilder.beginClass( new ClassDef( name ) );
         unknownBuilder.endClass();
         JavaSource unknownSource = unknownBuilder.getSource();
@@ -314,7 +315,7 @@ public abstract class AbstractClassLibrary
      * 
      * @return a new instance of a ModelBuilder, never <code>null</code>
      */
-    protected ModelBuilder getModelBuilder()
+    protected Builder getModelBuilder()
     {
         ModelBuilder result;
         if ( modelBuilderFactory != null )
@@ -329,9 +330,9 @@ public abstract class AbstractClassLibrary
         return result;
     }
     
-    protected ModelBuilder getModelBuilder( URL url )
+    protected Builder getModelBuilder( URL url )
     {
-        ModelBuilder result = getModelBuilder();
+        Builder result = getModelBuilder();
         result.setUrl( url );
         return result;
     }

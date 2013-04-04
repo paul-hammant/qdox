@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.thoughtworks.qdox.builder.impl.ModelBuilder;
+import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -196,7 +196,7 @@ public class SourceLibrary
         throws ParseException
     {
         JavaSource result = null;
-        ModelBuilder builder = getModelBuilder();
+        Builder builder = getModelBuilder();
         builder.setUrl( url );
         Parser parser = new Parser( lexer, builder );
         parser.setDebugLexer( debugLexer );

@@ -242,9 +242,9 @@ ClassBody_opt:
 //     InstanceInitializer 
 //     StaticInitializer 
 //     ConstructorDeclaration 
-ClassBodyDeclaration: ClassMemberDeclaration
-                    | StaticInitializer
+ClassBodyDeclaration: StaticInitializer
 //                    | InstanceInitializer
+                    | ClassMemberDeclaration 
                     | ConstructorDeclaration
                     ;
 ClassBodyDeclarations_opt:

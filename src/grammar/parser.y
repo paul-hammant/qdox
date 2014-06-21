@@ -243,8 +243,8 @@ ClassBody_opt:
 //     StaticInitializer 
 //     ConstructorDeclaration 
 ClassBodyDeclaration: ClassMemberDeclaration
-                    | InstanceInitializer
                     | StaticInitializer
+//                    | InstanceInitializer
                     | ConstructorDeclaration
                     ;
 ClassBodyDeclarations_opt:
@@ -718,14 +718,14 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
                      ;
 
 
-InstanceInitializer: CODEBLOCK 
-                     { 
-                       InitDef def = new InitDef();
-                       def.setBlockContent(lexer.getCodeBody());
-                       builder.addInitializer(def);
-                     };
+// InstanceInitializer: CODEBLOCK 
+//                      { 
+//                        InitDef def = new InitDef();
+//                        def.setBlockContent(lexer.getCodeBody());
+//                        builder.addInitializer(def);
+//                      };
 
-StaticInitializer: STATIC CODEBLOCK 
+StaticInitializer: Modifiers_opt CODEBLOCK 
                    { 
                      InitDef def = new InitDef();
                      def.setStatic(true);

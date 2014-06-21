@@ -167,25 +167,18 @@ TypeDeclarations_opt:
 // ClassDeclaration: 
 //     NormalClassDeclaration
 //     EnumDeclaration
-ClassDeclaration: Modifiers_opt NormalClassDeclaration 
+ClassDeclaration: NormalClassDeclaration 
                 | Modifiers_opt EnumDeclaration
                 ;
-                
-// InterfaceDeclaration: 
-//     NormalInterfaceDeclaration
-//     AnnotationTypeDeclaration
-InterfaceDeclaration: Modifiers_opt NormalInterfaceDeclaration
-                    | Modifiers_opt AnnotationTypeDeclaration
-                    ;
-                
+
 // NormalClassDeclaration: 
-//     class Identifier [TypeParameters] [extends Type] [implements TypeList] ClassBody
-NormalClassDeclaration: CLASS IDENTIFIER TypeParameters_opt _ExtendsType_opt _ImplementsTypeList_opt  
+//     {ClassModifier} class Identifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
+NormalClassDeclaration: Modifiers_opt CLASS IDENTIFIER TypeParameters_opt Superclass_opt Superinterfaces_opt  
                         {
                           cls.setType(ClassDef.CLASS);
                           cls.setLineNumber(line);
                           cls.getModifiers().addAll(modifiers); modifiers.clear(); 
-                          cls.setName( $2 );
+                          cls.setName( $3 );
                           cls.setTypeParameters(typeParams);
                           builder.beginClass(cls); 
                           cls = new ClassDef(); 
@@ -196,9 +189,80 @@ NormalClassDeclaration: CLASS IDENTIFIER TypeParameters_opt _ExtendsType_opt _Im
                         }
                       ;  
 
+// TypeParameters:
+//     < TypeParameterList >
+TypeParameters: LESSTHAN 
+                { 
+                  typeParams = new LinkedList<TypeVariableDef>(); 
+                } 
+                TypeParameterList GREATERTHAN
+              ;
+TypeParameters_opt: 
+                  | TypeParameters
+                  ;
+
+// TypeParameterList:
+//     TypeParameter {, TypeParameter} 
+TypeParameterList: TypeParameter 
+                 | TypeParameterList COMMA TypeParameter
+                 ;
+                
+// Superclass:
+//     extends ClassType 
+Superclass_opt:
+              | EXTENDS ReferenceType
+                {
+                  cls.getExtends().add($2);
+                }
+              ;
+
+// Superinterfaces:
+//     implements InterfaceTypeList                
+Superinterfaces_opt:
+                   | IMPLEMENTS TypeList
+                     {
+                       cls.getImplements().addAll( typeList );
+                     }
+                   ;
+
+// InterfaceTypeList:
+//     InterfaceType {, InterfaceType} 
+//// -> InterfaceTypeList is for QDox the same as TypeList
+
+// ClassBody: 
+//     { { ClassBodyDeclaration } }
+ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE
+         ; 
+ClassBody_opt:
+             | ClassBody
+             ;
+
+// ClassBodyDeclaration:
+//     ; 
+//     {Modifier} MemberDecl
+//     [static] Block
+ClassBodyDeclaration: SEMI
+                    | Modifiers_opt MemberDecl
+                    | StaticInitializer
+                    ;
+ClassBodyDeclarations_opt:
+                         | ClassBodyDeclarations_opt
+                           { 
+                             line = lexer.getLine(); 
+                           }
+                           ClassBodyDeclaration
+                         ;
+
+// InterfaceDeclaration: 
+//     NormalInterfaceDeclaration
+//     AnnotationTypeDeclaration
+InterfaceDeclaration: Modifiers_opt NormalInterfaceDeclaration
+                    | Modifiers_opt AnnotationTypeDeclaration
+                    ;
+                
 // EnumDeclaration:
 //     enum Identifier [implements TypeList] EnumBody                      
-EnumDeclaration: ENUM IDENTIFIER _ImplementsTypeList_opt 
+EnumDeclaration: ENUM IDENTIFIER Superinterfaces_opt 
                  { 
                    cls.setLineNumber(line);
                    cls.getModifiers().addAll(modifiers);
@@ -246,13 +310,6 @@ AnnotationTypeDeclaration: ANNOINTERFACE IDENTIFIER
                            }
                          ;
 //---------------------------------------------------------
-_ExtendsType_opt:
-                | EXTENDS ReferenceType
-                  {
-                    cls.getExtends().add($2);
-                  }
-                ;
-
 _ExtendsTypelist_opt: 
                     | EXTENDS TypeList
                       {
@@ -260,13 +317,6 @@ _ExtendsTypelist_opt:
                         typeList.clear();
                       }
                     ;
-    
-_ImplementsTypeList_opt:
-                       | IMPLEMENTS TypeList
-                         {
-                           cls.getImplements().addAll( typeList );
-                         }
-                       ;
 //========================================================
 // QualifiedIdentifier:
 //     Identifier { . Identifier }
@@ -441,22 +491,8 @@ TypeArgumentsOrDiamond_opt:
 //     < >
 //     NonWildcardTypeArguments
 
-// TypeParameters:
-//     < TypeParameter { , TypeParameter } >
-TypeParameters: LESSTHAN 
-                { 
-                  typeParams = new LinkedList<TypeVariableDef>(); 
-                } 
-                TypeParameterList GREATERTHAN
-              ;
-TypeParameters_opt: 
-                  | TypeParameters
-                  ;
 
 
-TypeParameterList: TypeParameter 
-                 | TypeParameterList COMMA TypeParameter
-                 ;
 
 // TypeParameter:
 //     Identifier [extends Bound]
@@ -636,29 +672,7 @@ ElementValues_opt:
 //========================================================
 
 
-// ClassBody: 
-//     { { ClassBodyDeclaration } }
-ClassBody: BRACEOPEN ClassBodyDeclarations_opt BRACECLOSE
-         ; 
-ClassBody_opt:
-             | ClassBody
-             ;
 
-// ClassBodyDeclaration:
-//     ; 
-//     {Modifier} MemberDecl
-//     [static] Block
-ClassBodyDeclaration: SEMI
-                    | Modifiers_opt MemberDecl
-                    | StaticInitializer
-                    ;
-ClassBodyDeclarations_opt:
-                         | ClassBodyDeclarations_opt
-                           { 
-                             line = lexer.getLine(); 
-                           }
-                           ClassBodyDeclaration
-                         ;
 
 ConstructorDeclaration: constructor;
 StaticInitializer: static_block;

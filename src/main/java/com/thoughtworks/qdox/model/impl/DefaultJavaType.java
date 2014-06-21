@@ -425,8 +425,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
                         result = resolve( resolvedType , implement, implement );
                         break;
                     }
+                    else
+                    {
+                        // no direct interface available, try indirect
+                        result = resolve( base, implement, callingClass );
+                    }
                 }
-                // no direct interface available, try indirect
             }
         }
 

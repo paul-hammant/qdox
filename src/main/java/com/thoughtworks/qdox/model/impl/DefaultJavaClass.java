@@ -463,7 +463,8 @@ public class DefaultJavaClass
             if ( !method.isPrivate() )
             {
                 String signature = method.getDeclarationSignature( false );
-                result.put( signature, new JavaMethodDelegate( rootClass, method ) );
+                
+                result.put( signature, method );
             }
         }
 
@@ -476,7 +477,16 @@ public class DefaultJavaClass
             {
                 if ( !result.containsKey( methodEntry.getKey() ) )
                 {
-                    result.put( methodEntry.getKey(), new JavaMethodDelegate( superclass, methodEntry.getValue() ) );
+                    JavaMethod method;
+                    if ( superclass.equals( rootClass ) )
+                    {
+                        method = methodEntry.getValue();
+                    }
+                    else
+                    {
+                        method = new JavaMethodDelegate( callingClazz, methodEntry.getValue() );
+                    }
+                    result.put( methodEntry.getKey(), method );
                 }
             }
 
@@ -489,7 +499,16 @@ public class DefaultJavaClass
             {
                 if ( !result.containsKey( methodEntry.getKey() ) )
                 {
-                    result.put( methodEntry.getKey(), new JavaMethodDelegate( clazz, methodEntry.getValue() ) );
+                    JavaMethod method;
+                    if ( clazz.equals( rootClass ) )
+                    {
+                        method = methodEntry.getValue();
+                    }
+                    else
+                    {
+                        method = new JavaMethodDelegate( callingClazz, methodEntry.getValue() );
+                    }
+                    result.put( methodEntry.getKey(), method );
                 }
             }
 

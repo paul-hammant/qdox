@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -1504,6 +1505,25 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( true, cls.getMethods().get( 0 ).isAbstract() );
         assertEquals( "test", cls.getMethods().get( 1 ).getName() );
     }
+    
+    // QDOX-240
+    public void testComplexEnum() throws Exception
+    {
+        String source = "import java.util.HashMap;\r\n" + 
+            "\r\n" + 
+            "public enum MyEnum {\r\n" + 
+            "    MAP(new HashMap<String, Object>()); // Parser throws java.util.EmptyStackException\r\n" + 
+            "    \r\n" + 
+            "    public final Object defaultValue;\r\n" + 
+            "    \r\n" + 
+            "    private MyEnum(Object defaultValue) {\r\n" + 
+            "        this.defaultValue = defaultValue;\r\n" + 
+            "    }\r\n" + 
+            "}";
+        builder.addSource( new StringReader( source ) ); 
+    }
+    
+    
     
     public void testSetDebugLexer()
     {

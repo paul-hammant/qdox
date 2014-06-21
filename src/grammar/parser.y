@@ -1214,13 +1214,16 @@ EnumConstants_opt:
 // EnumConstant:
 //     [Annotations] Identifier [Arguments] [ClassBody]                 
 EnumConstant: Annotations_opt IDENTIFIER 
-              { 
-                makeField( new TypeDef($2, 0), "", true );
+              {
+                TypeDef td = new TypeDef($2, 0);
+                typeStack.push(td); 
+                makeField( td, "", true );
                 builder.beginField( fd );
               }
               Arguments_opt ClassBody_opt
               {
                 builder.endField();
+                typeStack.pop();
               }
             ;
 

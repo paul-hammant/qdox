@@ -66,21 +66,28 @@ import java.util.Stack;
 
 %%
 // Source: Java Language Specification - Third Edition
-//         The Java(TM) Language Specification - Java SE 7 Edition ( Chapter 18. Syntax )
+//         The Java(TM) Language Specification - Java SE 8 Edition ( Chapter 19. Syntax )
 
-// CompilationUnit: 
-//     [ [Annotations] package QualifiedIdentifier ; ] {ImportDeclaration} {TypeDeclaration}
+// ------------------------------
+// Productions from §7 (Packages)
+// ------------------------------
+
+// CompilationUnit:
+//     [PackageDeclaration] {ImportDeclaration} {TypeDeclaration}  
 CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_opt
                ;
 
-
+// PackageDeclaration:
+//     {PackageModifier} package Identifier {. Identifier} ;
+// PackageModifier:
+//      Annotation   
 PackageDeclaration: package
                   | Annotation
                   ;
 PackageDeclaration_opt:
                       | PackageDeclaration_opt PackageDeclaration
                       ;
-                      
+
 package: PACKAGE 
          { 
            line = lexer.getLine(); 
@@ -91,8 +98,11 @@ package: PACKAGE
          }
          ;
 
-// ImportDeclaration: 
-//     import [static] Identifier { . Identifier } [. *] ;
+// ImportDeclaration:
+//     SingleTypeImportDeclaration 
+//     TypeImportOnDemandDeclaration 
+//     SingleStaticImportDeclaration 
+//     StaticImportOnDemandDeclaration 
 ImportDeclaration: SingleTypeImportDeclaration
                  | TypeImportOnDemandDeclaration
                  | SingleStaticImportDeclaration
@@ -102,27 +112,45 @@ ImportDeclarations_opt:
                       | ImportDeclarations_opt ImportDeclaration
                       ;
 
+// SingleTypeImportDeclaration:
+//     import TypeName ; 
 SingleTypeImportDeclaration: IMPORT QualifiedIdentifier SEMI 
                              { 
                                builder.addImport( $2 ); 
                              }
                            ;
+
+// TypeImportOnDemandDeclaration:
+//     import PackageOrTypeName . * ; 
 TypeImportOnDemandDeclaration: IMPORT QualifiedIdentifier DOT STAR SEMI 
                                { 
                                  builder.addImport( $2 + ".*" ); 
                                }
                              ;
+
+// SingleStaticImportDeclaration:
+//     import static TypeName . Identifier ; 
 SingleStaticImportDeclaration: IMPORT STATIC QualifiedIdentifier SEMI 
                                { 
                                  builder.addImport( "static " + $3);
                                }
                              ;
+
+// StaticImportOnDemandDeclaration:
+//     import static TypeName . * ;
 StaticImportOnDemandDeclaration: IMPORT STATIC QualifiedIdentifier DOT STAR SEMI 
                                  { 
                                    builder.addImport( "static " + $3 + ".*" ); 
                                  }
                                ;
 
+// TypeDeclaration:
+//     ClassDeclaration 
+//     InterfaceDeclaration 
+//     ; 
+TypeDeclaration: ClassOrInterfaceDeclaration
+               | SEMI
+               ;
 TypeDeclarations_opt: 
                     | TypeDeclarations_opt 
                       { 
@@ -131,12 +159,9 @@ TypeDeclarations_opt:
                       TypeDeclaration
                     ;
 
-// TypeDeclaration: 
-//     ClassOrInterfaceDeclaration
-//     ;
-TypeDeclaration: ClassOrInterfaceDeclaration
-               | SEMI
-               ;
+// -----------------------------
+// Productions from §8 (Classes)
+// -----------------------------
 
 // ClassOrInterfaceDeclaration: 
 //     {Modifier} (ClassDeclaration | InterfaceDeclaration)

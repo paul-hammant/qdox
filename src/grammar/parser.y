@@ -168,7 +168,7 @@ TypeDeclarations_opt:
 //     NormalClassDeclaration
 //     EnumDeclaration
 ClassDeclaration: NormalClassDeclaration 
-                | Modifiers_opt EnumDeclaration
+                | EnumDeclaration
                 ;
 
 // NormalClassDeclaration: 
@@ -261,10 +261,10 @@ ClassBodyDeclarations_opt:
 //     ClassDeclaration 
 //     InterfaceDeclaration 
 //     ; 
-ClassMemberDeclaration: Modifiers_opt FieldDeclaration
-                      | Modifiers_opt MethodDeclaration
-                      | Modifiers_opt ClassDeclaration
-                      | Modifiers_opt InterfaceDeclaration
+ClassMemberDeclaration: FieldDeclaration
+                      | MethodDeclaration
+                      | ClassDeclaration
+                      | InterfaceDeclaration
                       | SEMI
                       ;
 
@@ -277,15 +277,15 @@ InterfaceDeclaration: Modifiers_opt NormalInterfaceDeclaration
                 
 // EnumDeclaration:
 //     enum Identifier [implements TypeList] EnumBody                      
-EnumDeclaration: ENUM IDENTIFIER Superinterfaces_opt 
+EnumDeclaration: Modifiers_opt ENUM IDENTIFIER Superinterfaces_opt 
                  { 
                    cls.setLineNumber(line);
                    cls.getModifiers().addAll(modifiers);
-                   cls.setName( $2 );
+                   cls.setName( $3 );
                    cls.setType(ClassDef.ENUM);
                    builder.beginClass(cls);
                    cls = new ClassDef();
-                   fieldType = new TypeDef($2, 0);
+                   fieldType = new TypeDef($3, 0);
                  } 
                  EnumBody
                ;
@@ -735,10 +735,10 @@ StaticInitializer: STATIC CODEBLOCK
 
 // ----- FIELD
 
-FieldDeclaration: Type VariableDeclaratorId
+FieldDeclaration: Modifiers_opt Type VariableDeclaratorId
                   {
-                    fieldType = $1;
-                    makeField($2, lexer.getCodeBody(), false);
+                    fieldType = $2;
+                    makeField($3, lexer.getCodeBody(), false);
                     builder.beginField(fd);
                     builder.endField();
                   }
@@ -768,9 +768,9 @@ VariableDeclaratorId: IDENTIFIER Dims_opt
                     ;
                       
 // 8.4 Method Declarations
-MethodDeclaration: MethodHeader _MemberEnd /* =MethodBody*/ 
+MethodDeclaration: Modifiers_opt MethodHeader _MemberEnd /* =MethodBody*/ 
                    {
-                     mth.setBody($2);
+                     mth.setBody($3);
                      builder.endMethod(mth);
                      mth = new MethodDef();
                    };

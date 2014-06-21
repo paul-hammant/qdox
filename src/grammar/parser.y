@@ -148,7 +148,8 @@ StaticImportOnDemandDeclaration: IMPORT STATIC QualifiedIdentifier DOT STAR SEMI
 //     ClassDeclaration 
 //     InterfaceDeclaration 
 //     ; 
-TypeDeclaration: ClassOrInterfaceDeclaration
+TypeDeclaration: ClassDeclaration
+               | InterfaceDeclaration
                | SEMI
                ;
 TypeDeclarations_opt: 
@@ -163,24 +164,18 @@ TypeDeclarations_opt:
 // Productions from §8 (Classes)
 // -----------------------------
 
-// ClassOrInterfaceDeclaration: 
-//     {Modifier} (ClassDeclaration | InterfaceDeclaration)
-ClassOrInterfaceDeclaration: Modifiers_opt ClassDeclaration
-                           | Modifiers_opt InterfaceDeclaration
-                           ;
-
 // ClassDeclaration: 
 //     NormalClassDeclaration
 //     EnumDeclaration
-ClassDeclaration: NormalClassDeclaration 
-                | EnumDeclaration
+ClassDeclaration: Modifiers_opt NormalClassDeclaration 
+                | Modifiers_opt EnumDeclaration
                 ;
                 
 // InterfaceDeclaration: 
 //     NormalInterfaceDeclaration
 //     AnnotationTypeDeclaration
-InterfaceDeclaration: NormalInterfaceDeclaration
-                    | AnnotationTypeDeclaration
+InterfaceDeclaration: Modifiers_opt NormalInterfaceDeclaration
+                    | Modifiers_opt AnnotationTypeDeclaration
                     ;
                 
 // NormalClassDeclaration: 

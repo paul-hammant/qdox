@@ -238,12 +238,14 @@ ClassBody_opt:
              ;
 
 // ClassBodyDeclaration:
-//     ; 
-//     {Modifier} MemberDecl
-//     [static] Block
-ClassBodyDeclaration: SEMI
-                    | Modifiers_opt MemberDecl
+//     ClassMemberDeclaration 
+//     InstanceInitializer 
+//     StaticInitializer 
+//     ConstructorDeclaration 
+ClassBodyDeclaration: ClassMemberDeclaration
+                    | InstanceInitializer
                     | StaticInitializer
+                    | ConstructorDeclaration
                     ;
 ClassBodyDeclarations_opt:
                          | ClassBodyDeclarations_opt
@@ -252,6 +254,19 @@ ClassBodyDeclarations_opt:
                            }
                            ClassBodyDeclaration
                          ;
+
+// ClassMemberDeclaration:
+//     FieldDeclaration 
+//     MethodDeclaration 
+//     ClassDeclaration 
+//     InterfaceDeclaration 
+//     ; 
+ClassMemberDeclaration: Modifiers_opt FieldDeclaration
+                      | Modifiers_opt MethodDeclaration
+                      | Modifiers_opt ClassDeclaration
+                      | Modifiers_opt InterfaceDeclaration
+                      | SEMI
+                      ;
 
 // InterfaceDeclaration: 
 //     NormalInterfaceDeclaration
@@ -671,34 +686,52 @@ ElementValues_opt:
                    ;
 //========================================================
 
+ConstructorDeclaration: Modifiers_opt IDENTIFIER 
+                        {
+                          builder.beginConstructor();
+                          mth.setLineNumber(lexer.getLine());
+                          mth.getModifiers().addAll(modifiers); modifiers.clear();
+                          mth.setConstructor(true); 
+                          mth.setName($2);
+                        }
+                        FormalParameters Throws_opt _MemberEnd /* =MethodBody */ 
+                        {
+                          mth.setBody($6);
+                          builder.endConstructor(mth);
+                          mth = new MethodDef(); 
+                        }
+                     |  Modifiers_opt TypeParameters IDENTIFIER 
+                        {
+                          builder.beginConstructor();
+                          mth.setLineNumber(lexer.getLine());
+                          mth.setTypeParams(typeParams);
+                          mth.getModifiers().addAll(modifiers); modifiers.clear();
+                          mth.setConstructor(true); 
+                          mth.setName($3);
+                        } 
+                        FormalParameters Throws_opt CODEBLOCK 
+                        {
+                          mth.setBody(lexer.getCodeBody());
+                          builder.endConstructor(mth);
+                          mth = new MethodDef(); 
+                        }
+                     ;
 
 
+InstanceInitializer: CODEBLOCK 
+                     { 
+                       InitDef def = new InitDef();
+                       def.setBlockContent(lexer.getCodeBody());
+                       builder.addInitializer(def);
+                     };
 
-ConstructorDeclaration: constructor;
-StaticInitializer: static_block;
-
-// MemberDecl:
-//     MethodOrFieldDecl
-//     void Identifier VoidMethodDeclaratorRest
-//     Identifier ConstructorDeclaratorRest
-//     GenericMethodOrConstructorDecl
-//     ClassDeclaration
-//     InterfaceDeclaration
-MemberDecl: FieldDeclaration
-          | MethodDeclaration
-          | ConstructorDeclaration
-          | ClassDeclaration
-          | InterfaceDeclaration
-          ;
-
-static_block: Modifiers_opt CODEBLOCK 
-              { 
-                InitDef def = new InitDef();
-                def.setStatic(modifiers.contains("static"));
-                def.setBlockContent(lexer.getCodeBody());
-                builder.addInitializer(def);
-                modifiers.clear(); 
-              };
+StaticInitializer: STATIC CODEBLOCK 
+                   { 
+                     InitDef def = new InitDef();
+                     def.setStatic(true);
+                     def.setBlockContent(lexer.getCodeBody());
+                     builder.addInitializer(def);
+                   };
 
 // ----- FIELD
 
@@ -840,37 +873,6 @@ _MemberEnd: CODEBLOCK
          ;
 
 // 8.8 Constructor Declarations
-constructor: IDENTIFIER 
-             {
-               builder.beginConstructor();
-               mth.setLineNumber(lexer.getLine());
-               mth.getModifiers().addAll(modifiers); modifiers.clear();
-               mth.setConstructor(true); 
-               mth.setName($1);
-             }
-             FormalParameters Throws_opt _MemberEnd /* =MethodBody */ 
-             {
-               mth.setBody($5);
-               builder.endConstructor(mth);
-               mth = new MethodDef(); 
-             }
-           |  TypeParameters IDENTIFIER 
-             {
-               builder.beginConstructor();
-               mth.setLineNumber(lexer.getLine());
-               mth.setTypeParams(typeParams);
-               mth.getModifiers().addAll(modifiers); modifiers.clear();
-               mth.setConstructor(true); 
-               mth.setName($2);
-             } 
-             FormalParameters Throws_opt CODEBLOCK 
-             {
-               mth.setBody(lexer.getCodeBody());
-               builder.endConstructor(mth);
-               mth = new MethodDef(); 
-             };
-             
-
          
 Arguments_opt:
              | PARENOPEN ArgumentList_opt PARENCLOSE

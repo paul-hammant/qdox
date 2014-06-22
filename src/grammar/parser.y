@@ -241,9 +241,9 @@ ClassBody_opt:
 //     ClassMemberDeclaration 
 //     InstanceInitializer 
 //     StaticInitializer 
-//     ConstructorDeclaration 
+//     ConstructorDeclaration
+// ## for now StaticInitializer includes InstanceInitializer due to parsing errors  
 ClassBodyDeclaration: StaticInitializer
-//                    | InstanceInitializer
                     | ClassMemberDeclaration 
                     | ConstructorDeclaration
                     ;
@@ -728,7 +728,7 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
 StaticInitializer: Modifiers_opt CODEBLOCK 
                    { 
                      InitDef def = new InitDef();
-                     def.setStatic(true);
+                     def.setStatic(modifiers.contains("static"));modifiers.clear();
                      def.setBlockContent(lexer.getCodeBody());
                      builder.addInitializer(def);
                    };

@@ -47,7 +47,7 @@ public interface JavaParameter extends JavaAnnotatedElement, JavaType
      * 
      * @return the declaring method or constructor
      */
-    ParameterDeclarator<?> getDeclarator();
+    ParameterDeclarator getDeclarator();
 
     /**
      * The declaring class of the declaring method of this parameter.

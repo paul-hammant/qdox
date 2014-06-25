@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -383,7 +384,7 @@ public class JSR14Test extends TestCase {
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods().get(0);
     	assertEquals( 1, javaMethod.getTypeParameters().size());
-    	JavaTypeVariable<JavaMethod> typeVariable = javaMethod.getTypeParameters().get(0);
+    	JavaTypeVariable<JavaGenericDeclaration> typeVariable = javaMethod.getTypeParameters().get(0);
         assertEquals( "T", typeVariable.getName() );
         assertEquals( "T", typeVariable.getFullyQualifiedName());
         assertEquals( "<T extends java.lang.StringBuffer>", typeVariable.getGenericFullyQualifiedName());
@@ -397,14 +398,14 @@ public class JSR14Test extends TestCase {
     			"}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods().get(0);
-    	JavaTypeVariable<JavaMethod> typeVariable0 = javaMethod.getTypeParameters().get(0);
+    	JavaTypeVariable<JavaGenericDeclaration> typeVariable0 = javaMethod.getTypeParameters().get(0);
         assertEquals("T", typeVariable0.getName());
         assertEquals("T", typeVariable0.getFullyQualifiedName());
         assertEquals("<T>", typeVariable0.getGenericFullyQualifiedName());
         assertEquals("T", typeVariable0.getValue());
         assertEquals("T", typeVariable0.getGenericValue());
 
-        JavaTypeVariable<JavaMethod> typeVariable1 = javaMethod.getTypeParameters().get(1);
+        JavaTypeVariable<JavaGenericDeclaration> typeVariable1 = javaMethod.getTypeParameters().get(1);
         assertEquals("S", typeVariable1.getName());
         assertEquals("S", typeVariable1.getFullyQualifiedName());
         assertEquals("<S extends T>", typeVariable1.getGenericFullyQualifiedName());

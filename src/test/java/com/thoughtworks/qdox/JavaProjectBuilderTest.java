@@ -1440,7 +1440,7 @@ public class JavaProjectBuilderTest extends TestCase
         JavaClass qDoxClass = builder.getClassByName( "foo.DummyOne" );
         JavaMethod qDoxMethod = qDoxClass.getMethods().get(0);
 
-        JavaTypeVariable<JavaMethod> result = qDoxMethod.getTypeParameters().get( 0 );
+        JavaTypeVariable<JavaGenericDeclaration> result = qDoxMethod.getTypeParameters().get( 0 );
         assertEquals( "<T extends java.lang.Number & java.lang.Iterable<java.lang.Integer>>", result.getGenericFullyQualifiedName() );
         assertEquals( "<T extends java.lang.Number & java.lang.Iterable<java.lang.Integer>>", result.getGenericCanonicalName() );
     }

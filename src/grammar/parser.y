@@ -273,6 +273,7 @@ ClassMemberDeclaration: FieldDeclaration
 FieldDeclaration: Modifiers_opt Type VariableDeclaratorId
                   {
                     fieldType = $2;
+                    // we're doing some lexer magic: lexer.getCodeBody() contains [= VariableInitializer]
                     makeField($3, lexer.getCodeBody(), false);
                     builder.beginField(fd);
                     builder.endField();
@@ -289,19 +290,107 @@ extrafields:
              } 
              VariableDeclaratorId
              {
+               // we're doing some lexer magic: lexer.getCodeBody() contains [= VariableInitializer]
                makeField($4, lexer.getCodeBody(), false);
                builder.beginField(fd);
                builder.endField();
              }; 
 
 // VariableDeclaratorId:
-//     Identifier {[]}
+//     Identifier [Dims]
 VariableDeclaratorId: IDENTIFIER Dims_opt 
                       {
                         $$ = new TypeDef($1,$2);
                       }
                     ;
 
+// MethodDeclaration:
+//     {MethodModifier} MethodHeader MethodBody
+MethodDeclaration: Modifiers_opt MethodHeader _MemberEnd /* =MethodBody */ 
+                   {
+                     mth.setBody($3);
+                     builder.endMethod(mth);
+                     mth = new MethodDef();
+                   };
+
+// MethodHeader:
+//     Result MethodDeclarator [Throws] 
+//     TypeParameters {Annotation} Result MethodDeclarator [Throws]
+MethodHeader: TypeParameters Type /* =Result */ IDENTIFIER
+              {
+                builder.beginMethod();
+                mth.setLineNumber(lexer.getLine());
+                mth.getModifiers().addAll(modifiers); modifiers.clear();
+                mth.setTypeParams(typeParams);
+                mth.setReturnType($2);
+                mth.setName($3);
+              } 
+              PARENOPEN FormalParameters PARENCLOSE Dims_opt Throws_opt
+              {
+                mth.setDimensions($8);
+              } 
+            | Type /* =Result */ IDENTIFIER  
+              {
+                builder.beginMethod();
+                mth.setLineNumber(lexer.getLine());
+                mth.getModifiers().addAll(modifiers); modifiers.clear();
+                mth.setReturnType($1);
+                mth.setName($2);
+              } 
+              PARENOPEN FormalParameters PARENCLOSE Dims_opt Throws_opt 
+              {
+                mth.setDimensions($7);
+              };
+              
+// MethodDeclarator:
+//     Identifier ( [FormalParameterList] ) [Dims]
+//## Must be part of MethodHeader so Parser recognizes this as a Method 
+
+// FormalParameters: 
+//     ( [FormalParameterDecls] )
+FormalParameters: FormalParameterDecls_opts
+ 
+// FormalParameterDecls: 
+//     {VariableModifier}  Type FormalParameterDeclsRest                
+FormalParameterDecls: Modifiers_opt Type
+                      {
+                        param.setType($2);
+                        param.setVarArgs(false);
+                        param.getModifiers().addAll(modifiers); modifiers.clear();
+                      }
+                      FormalParameterDeclsRest
+                    ;
+FormalParameterDecls_opts:
+                         | FormalParameterDecls
+                         ;                
+                
+// FormalParameterDeclsRest: 
+//     VariableDeclaratorId [ , FormalParameterDecls ]
+//     ... VariableDeclaratorId
+FormalParameterDeclsRest: VariableDeclaratorId
+                          {
+	                        param.setName($1.getName());
+                            param.setDimensions($1.getDimensions());
+                            builder.addParameter(param);
+                            param = new FieldDef();
+                          }
+                        | VariableDeclaratorId
+                          {
+	                        param.setName($1.getName());
+                            param.setDimensions($1.getDimensions());
+                            builder.addParameter(param);
+                            param = new FieldDef();
+                          }
+                          COMMA FormalParameterDecls
+                        | DOTDOTDOT VariableDeclaratorId
+                          {
+                            param.setVarArgs(true);
+	                        param.setName($2.getName());
+                            param.setDimensions($2.getDimensions());
+                            builder.addParameter(param);
+                            param = new FieldDef();
+                          }
+                        ;
 
 // InterfaceDeclaration: 
 //     NormalInterfaceDeclaration
@@ -729,9 +818,9 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
                           mth.setConstructor(true); 
                           mth.setName($2);
                         }
-                        FormalParameters Throws_opt _MemberEnd /* =MethodBody */ 
+                        PARENOPEN FormalParameters PARENCLOSE Throws_opt _MemberEnd /* =MethodBody */ 
                         {
-                          mth.setBody($6);
+                          mth.setBody($8);
                           builder.endConstructor(mth);
                           mth = new MethodDef(); 
                         }
@@ -744,7 +833,7 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
                           mth.setConstructor(true); 
                           mth.setName($3);
                         } 
-                        FormalParameters Throws_opt CODEBLOCK 
+                        PARENOPEN FormalParameters PARENCLOSE Throws_opt CODEBLOCK 
                         {
                           mth.setBody(lexer.getCodeBody());
                           builder.endConstructor(mth);
@@ -768,86 +857,7 @@ StaticInitializer: Modifiers_opt CODEBLOCK
                      builder.addInitializer(def);
                    };
 
-                      
-// 8.4 Method Declarations
-MethodDeclaration: Modifiers_opt MethodHeader _MemberEnd /* =MethodBody*/ 
-                   {
-                     mth.setBody($3);
-                     builder.endMethod(mth);
-                     mth = new MethodDef();
-                   };
-
-MethodHeader: TypeParameters Type /* =ResultType */ IDENTIFIER
-              {
-                builder.beginMethod();
-                mth.setLineNumber(lexer.getLine());
-                mth.getModifiers().addAll(modifiers); modifiers.clear();
-                mth.setTypeParams(typeParams);
-                mth.setReturnType($2);
-                mth.setName($3);
-              } 
-              FormalParameters Dims_opt Throws_opt
-              {
-                mth.setDimensions($6);
-              } 
-            | Type /* =ResultType */ IDENTIFIER  
-              {
-                builder.beginMethod();
-                mth.setLineNumber(lexer.getLine());
-                mth.getModifiers().addAll(modifiers); modifiers.clear();
-                mth.setReturnType($1);
-                mth.setName($2);
-              } 
-              FormalParameters Dims_opt Throws_opt 
-              {
-                mth.setDimensions($5);
-              };
 //================================================================
-// FormalParameters: 
-//     ( [FormalParameterDecls] )
-FormalParameters: PARENOPEN FormalParameterDecls_opts PARENCLOSE
- 
-// FormalParameterDecls: 
-//     {VariableModifier}  Type FormalParameterDeclsRest                
-FormalParameterDecls: Modifiers_opt Type
-                      {
-                        param.setType($2);
-                        param.setVarArgs(false);
-                        param.getModifiers().addAll(modifiers); modifiers.clear();
-                      }
-                      FormalParameterDeclsRest
-                    ;
-FormalParameterDecls_opts:
-                         | FormalParameterDecls
-                         ;                
-                
-// FormalParameterDeclsRest: 
-//     VariableDeclaratorId [ , FormalParameterDecls ]
-//     ... VariableDeclaratorId
-FormalParameterDeclsRest: VariableDeclaratorId
-                          {
-	                        param.setName($1.getName());
-                            param.setDimensions($1.getDimensions());
-                            builder.addParameter(param);
-                            param = new FieldDef();
-                          }
-                        | VariableDeclaratorId
-                          {
-	                        param.setName($1.getName());
-                            param.setDimensions($1.getDimensions());
-                            builder.addParameter(param);
-                            param = new FieldDef();
-                          }
-                          COMMA FormalParameterDecls
-                        | DOTDOTDOT VariableDeclaratorId
-                          {
-                            param.setVarArgs(true);
-	                        param.setName($2.getName());
-                            param.setDimensions($2.getDimensions());
-                            builder.addParameter(param);
-                            param = new FieldDef();
-                          }
-                        ;
 
 // 8.4.6 Method Throws
 Throws_opt:

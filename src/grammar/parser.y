@@ -268,6 +268,41 @@ ClassMemberDeclaration: FieldDeclaration
                       | SEMI
                       ;
 
+// FieldDeclaration:
+//     {FieldModifier} UnannType VariableDeclaratorList ;
+FieldDeclaration: Modifiers_opt Type VariableDeclaratorId
+                  {
+                    fieldType = $2;
+                    makeField($3, lexer.getCodeBody(), false);
+                    builder.beginField(fd);
+                    builder.endField();
+                  }
+                  extrafields SEMI
+                  {
+                    modifiers.clear();
+                  };
+
+extrafields: 
+           | extrafields COMMA 
+             { 
+               line = lexer.getLine();
+             } 
+             VariableDeclaratorId
+             {
+               makeField($4, lexer.getCodeBody(), false);
+               builder.beginField(fd);
+               builder.endField();
+             }; 
+
+// VariableDeclaratorId:
+//     Identifier {[]}
+VariableDeclaratorId: IDENTIFIER Dims_opt 
+                      {
+                        $$ = new TypeDef($1,$2);
+                      }
+                    ;
+
+
 // InterfaceDeclaration: 
 //     NormalInterfaceDeclaration
 //     AnnotationTypeDeclaration
@@ -733,39 +768,6 @@ StaticInitializer: Modifiers_opt CODEBLOCK
                      builder.addInitializer(def);
                    };
 
-// ----- FIELD
-
-FieldDeclaration: Modifiers_opt Type VariableDeclaratorId
-                  {
-                    fieldType = $2;
-                    makeField($3, lexer.getCodeBody(), false);
-                    builder.beginField(fd);
-                    builder.endField();
-                  }
-                  extrafields SEMI
-                  {
-                    modifiers.clear();
-                  };
-  
-extrafields: 
-           | extrafields COMMA 
-             { 
-               line = lexer.getLine();
-             } 
-             VariableDeclaratorId
-             {
-               makeField($4, lexer.getCodeBody(), false);
-               builder.beginField(fd);
-               builder.endField();
-             }; 
-
-// VariableDeclaratorId:
-//     Identifier {[]}
-VariableDeclaratorId: IDENTIFIER Dims_opt 
-                      {
-                        $$ = new TypeDef($1,$2);
-                      }
-                    ;
                       
 // 8.4 Method Declarations
 MethodDeclaration: Modifiers_opt MethodHeader _MemberEnd /* =MethodBody*/ 

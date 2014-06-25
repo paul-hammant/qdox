@@ -4,6 +4,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.ParameterDeclarator;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -30,7 +31,7 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
 
     private String name;
     private JavaClass type;
-    private JavaMethod parentMethod;
+    private ParameterDeclarator declarator;
     private boolean varArgs;
 
     public DefaultJavaParameter( JavaClass type, String name )
@@ -75,20 +76,20 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     }
 
     /** {@inheritDoc} */
-    public JavaMethod getParentMethod()
+    public ParameterDeclarator getDeclarator()
     {
-        return parentMethod;
+        return declarator;
     }
 
-    public void setParentMethod( JavaMethod parentMethod )
+    public void setDeclarator( ParameterDeclarator declarator )
     {
-        this.parentMethod = parentMethod;
+        this.declarator = declarator;
     }
     
     /** {@inheritDoc} */
     public JavaClass getParentClass()
     {
-        return getParentMethod().getParentClass();
+        return getDeclarator().getParentClass();
     }
 
     /** {@inheritDoc} */
@@ -129,25 +130,25 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     /** {@inheritDoc} */
     public String getResolvedValue()
     {
-        return DefaultJavaType.getResolvedValue( type, getParentMethod().getTypeParameters() );
+        return DefaultJavaType.getResolvedValue( type, getDeclarator().getTypeParameters() );
     }
 
     /** {@inheritDoc} */
     public String getResolvedFullyQualifiedName() 
     {
-        return DefaultJavaType.getResolvedFullyQualifiedName( type, getParentMethod().getTypeParameters() );
+        return DefaultJavaType.getResolvedFullyQualifiedName( type, getDeclarator().getTypeParameters() );
     }
     
     /** {@inheritDoc} */
 	public String getResolvedGenericValue() 
 	{
-		return DefaultJavaType.getResolvedGenericValue( type, getParentMethod().getTypeParameters() );
+		return DefaultJavaType.getResolvedGenericValue( type, getDeclarator().getTypeParameters() );
 	}
 	
     /** {@inheritDoc} */
 	public String getResolvedGenericFullyQualifiedName()
 	{
-	    return DefaultJavaType.getResolvedGenericFullyQualifiedName( type, getParentMethod().getTypeParameters() );
+	    return DefaultJavaType.getResolvedGenericFullyQualifiedName( type, getDeclarator().getTypeParameters() );
 	}
 
     @Override

@@ -30,7 +30,7 @@ import java.util.List;
  * @since 2.0
  */
 public interface JavaConstructor
-    extends JavaModel, JavaAnnotatedElement, JavaGenericDeclaration, JavaMember, Serializable
+    extends JavaModel, JavaAnnotatedElement, JavaGenericDeclaration, JavaMember, ParameterDeclarator, Serializable
 {
     // Methods from Constructor
       

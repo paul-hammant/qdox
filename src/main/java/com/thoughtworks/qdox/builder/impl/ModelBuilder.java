@@ -459,7 +459,14 @@ public class ModelBuilder implements Builder {
         DefaultJavaParameter jParam =
             new DefaultJavaParameter( createType( fieldDef.getType(), fieldDef.getDimensions() ), fieldDef.getName(),
                                       fieldDef.isVarArgs() );
-        jParam.setParentMethod( currentMethod );
+        if( currentMethod != null )
+        {
+            jParam.setDeclarator( currentMethod );
+        }
+        else
+        {
+            jParam.setDeclarator( currentConstructor );
+        }
         jParam.setModelWriterFactory( modelWriterFactory );
         addJavaDoc( jParam );
         setAnnotations( jParam );

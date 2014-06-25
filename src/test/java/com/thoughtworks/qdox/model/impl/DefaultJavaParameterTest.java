@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.model.impl;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameterTest;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
@@ -28,6 +29,12 @@ public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParam
     @Override
     protected void setMethod( DefaultJavaParameter parameter, JavaMethod method )
     {
-        parameter.setParentMethod( method );
+        parameter.setDeclarator( method );
+    }
+    
+    @Override
+    protected void setConstructor( DefaultJavaParameter parameter, JavaConstructor constructor )
+    {
+        parameter.setDeclarator( constructor );        
     }
 }

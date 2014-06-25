@@ -39,6 +39,7 @@ import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
+import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
@@ -1439,7 +1440,7 @@ public class JavaProjectBuilderTest extends TestCase
         JavaClass qDoxClass = builder.getClassByName( "foo.DummyOne" );
         JavaMethod qDoxMethod = qDoxClass.getMethods().get(0);
 
-        JavaTypeVariable<JavaGenericDeclaration> result = qDoxMethod.getTypeParameters().get( 0 );
+        JavaTypeVariable<JavaMethod> result = qDoxMethod.getTypeParameters().get( 0 );
         assertEquals( "<T extends java.lang.Number & java.lang.Iterable<java.lang.Integer>>", result.getGenericFullyQualifiedName() );
         assertEquals( "<T extends java.lang.Number & java.lang.Iterable<java.lang.Integer>>", result.getGenericCanonicalName() );
     }
@@ -1462,7 +1463,21 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals("java.util.Collection<? extends java.lang.Comparable<java.lang.String>>", result.getGenericCanonicalName());
     }
 
-    
+    // for QDOX-253
+    public void testConstructorHasAnnotation()
+        throws Exception
+    {
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        String source =
+            "public class Foo { private String apiPath; public Foo(@Value(\"${api.path}\") String apiPath) {this.apiPath = apiPath}}";
+        JavaClass qDoxClass = builder.addSource( new StringReader( source ) ).getClassByName( "Foo" );
+        assertEquals( 1, qDoxClass.getConstructors().size() );
+        JavaConstructor qDoxConstructor = qDoxClass.getConstructors().get( 0 );
+        assertEquals( 1, qDoxConstructor.getParameters().size() );
+        JavaParameter qDoxParameter = qDoxConstructor.getParameters().get( 0 );
+        assertEquals( "apiPath", qDoxParameter.getName() );
+        assertEquals( qDoxConstructor, qDoxParameter.getDeclarator() );
+    }
     
     public void testCanonicalName()
         throws Exception

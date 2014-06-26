@@ -316,6 +316,9 @@ MethodDeclaration: Modifiers_opt MethodHeader _MemberEnd /* =MethodBody */
 // MethodHeader:
 //     Result MethodDeclarator [Throws] 
 //     TypeParameters {Annotation} Result MethodDeclarator [Throws]
+// MethodDeclarator:
+//     Identifier ( [FormalParameterList] ) [Dims]
+//## MethodDeclarator must be part of MethodHeader so Parser recognizes this as a Method 
 MethodHeader: TypeParameters Type /* =Result */ IDENTIFIER
               {
                 builder.beginMethod();
@@ -325,7 +328,7 @@ MethodHeader: TypeParameters Type /* =Result */ IDENTIFIER
                 mth.setReturnType($2);
                 mth.setName($3);
               } 
-              PARENOPEN FormalParameters PARENCLOSE Dims_opt Throws_opt
+              PARENOPEN FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt
               {
                 mth.setDimensions($8);
               } 
@@ -337,60 +340,64 @@ MethodHeader: TypeParameters Type /* =Result */ IDENTIFIER
                 mth.setReturnType($1);
                 mth.setName($2);
               } 
-              PARENOPEN FormalParameters PARENCLOSE Dims_opt Throws_opt 
+              PARENOPEN FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt 
               {
                 mth.setDimensions($7);
               };
-              
-// MethodDeclarator:
-//     Identifier ( [FormalParameterList] ) [Dims]
-//## Must be part of MethodHeader so Parser recognizes this as a Method 
 
-// FormalParameters: 
-//     ( [FormalParameterDecls] )
-FormalParameters: FormalParameterDecls_opts
+// FormalParameterList:
+//     FormalParameters , LastFormalParameter 
+//     LastFormalParameter
+FormalParameterList: FormalParameters COMMA LastFormalParameter
+                   | LastFormalParameter
+                   ;
+FormalParameterList_opt: 
+                       | FormalParameterList
+                       ;
  
-// FormalParameterDecls: 
-//     {VariableModifier}  Type FormalParameterDeclsRest                
-FormalParameterDecls: Modifiers_opt Type
-                      {
-                        param.setType($2);
-                        param.setVarArgs(false);
-                        param.getModifiers().addAll(modifiers); modifiers.clear();
-                      }
-                      FormalParameterDeclsRest
-                    ;
-FormalParameterDecls_opts:
-                         | FormalParameterDecls
-                         ;                
-                
-// FormalParameterDeclsRest: 
-//     VariableDeclaratorId [ , FormalParameterDecls ]
-//     ... VariableDeclaratorId
-FormalParameterDeclsRest: VariableDeclaratorId
-                          {
-	                        param.setName($1.getName());
-                            param.setDimensions($1.getDimensions());
-                            builder.addParameter(param);
-                            param = new FieldDef();
-                          }
-                        | VariableDeclaratorId
-                          {
-	                        param.setName($1.getName());
-                            param.setDimensions($1.getDimensions());
-                            builder.addParameter(param);
-                            param = new FieldDef();
-                          }
-                          COMMA FormalParameterDecls
-                        | DOTDOTDOT VariableDeclaratorId
-                          {
-                            param.setVarArgs(true);
-	                        param.setName($2.getName());
-                            param.setDimensions($2.getDimensions());
-                            builder.addParameter(param);
-                            param = new FieldDef();
-                          }
-                        ;
+// FormalParameters:
+//     FormalParameter {, FormalParameter} 
+//     ReceiverParameter {, FormalParameter}
+FormalParameters: FormalParameter 
+                | FormalParameters COMMA FormalParameter
+//                | ReceiverParameter {, FormalParameter}
+//                | ReceiverParameter COMMA FormalParameter
+                ; 
+ 
+// FormalParameter:
+//     {VariableModifier} UnannType VariableDeclaratorId
+FormalParameter: Modifiers_opt Type VariableDeclaratorId
+                 {
+                    param.getModifiers().addAll(modifiers); modifiers.clear();
+                    param.setType($2);
+                    param.setName($3.getName());
+                    param.setDimensions($3.getDimensions());
+                    param.setVarArgs(false);
+                    builder.addParameter(param);
+                    param = new FieldDef();
+                 }
+               ;
+
+// LastFormalParameter:
+//     {VariableModifier} UnannType {Annotation} ... VariableDeclaratorId 
+//     FormalParameter
+LastFormalParameter: Modifiers_opt Type DOTDOTDOT VariableDeclaratorId
+                     {
+                       param.getModifiers().addAll(modifiers); modifiers.clear();
+                       param.setType($2);
+	                   param.setName($4.getName());
+                       param.setDimensions($4.getDimensions());
+                       param.setVarArgs(true);
+                       builder.addParameter(param);
+                       param = new FieldDef();
+                     }
+                   | FormalParameter
+                   ;
+ 
+// ReceiverParameter:
+//     {Annotation} UnannType [Identifier .] this
+// ## todo
+                 
 
 // InterfaceDeclaration: 
 //     NormalInterfaceDeclaration
@@ -818,7 +825,7 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
                           mth.setConstructor(true); 
                           mth.setName($2);
                         }
-                        PARENOPEN FormalParameters PARENCLOSE Throws_opt _MemberEnd /* =MethodBody */ 
+                        PARENOPEN FormalParameterList_opt PARENCLOSE Throws_opt _MemberEnd /* =MethodBody */ 
                         {
                           mth.setBody($8);
                           builder.endConstructor(mth);
@@ -833,7 +840,7 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
                           mth.setConstructor(true); 
                           mth.setName($3);
                         } 
-                        PARENOPEN FormalParameters PARENCLOSE Throws_opt CODEBLOCK 
+                        PARENOPEN FormalParameterList_opt PARENCLOSE Throws_opt CODEBLOCK 
                         {
                           mth.setBody(lexer.getCodeBody());
                           builder.endConstructor(mth);

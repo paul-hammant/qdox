@@ -61,7 +61,7 @@ import java.util.Stack;
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus Primary MethodInvocation Creator
 %type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
-%type <sval> QualifiedIdentifier TypeDeclSpecifier _MemberEnd AssignmentOperator CreatedName
+%type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator CreatedName
 %type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType TypeArgument
 
 %%
@@ -281,7 +281,8 @@ FieldDeclaration: Modifiers_opt Type VariableDeclaratorId
                   extrafields SEMI
                   {
                     modifiers.clear();
-                  };
+                  }
+                ;
 
 extrafields: 
            | extrafields COMMA 
@@ -294,7 +295,8 @@ extrafields:
                makeField($4, lexer.getCodeBody(), false);
                builder.beginField(fd);
                builder.endField();
-             }; 
+             }
+           ; 
 
 // VariableDeclaratorId:
 //     Identifier [Dims]
@@ -306,12 +308,13 @@ VariableDeclaratorId: IDENTIFIER Dims_opt
 
 // MethodDeclaration:
 //     {MethodModifier} MethodHeader MethodBody
-MethodDeclaration: Modifiers_opt MethodHeader _MemberEnd /* =MethodBody */ 
+MethodDeclaration: Modifiers_opt MethodHeader MethodBody
                    {
                      mth.setBody($3);
                      builder.endMethod(mth);
                      mth = new MethodDef();
-                   };
+                   }
+                 ;
 
 // MethodHeader:
 //     Result MethodDeclarator [Throws] 
@@ -397,7 +400,93 @@ LastFormalParameter: Modifiers_opt Type DOTDOTDOT VariableDeclaratorId
 // ReceiverParameter:
 //     {Annotation} UnannType [Identifier .] this
 // ## todo
-                 
+
+// Throws:
+//     throws ExceptionTypeList
+Throws_opt:
+          | THROWS ExceptionTypeList
+          ;
+
+// ExceptionTypeList:
+//     ExceptionType {, ExceptionType}
+ExceptionTypeList: ClassOrInterfaceType /* =ExceptionType */
+                   { 
+                     mth.getExceptions().add($1); 
+                   }
+                 | ExceptionTypeList COMMA ClassOrInterfaceType /* =ExceptionType */
+                   {
+                     mth.getExceptions().add($3);
+                   }
+                 ;
+
+// MethodBody:
+//     Block 
+//     ;
+MethodBody: CODEBLOCK 
+            {
+              $$ = lexer.getCodeBody();
+            } 
+          | SEMI 
+           {
+             $$ = "";
+           }
+         ;
+
+// InstanceInitializer:
+//     CODEBLOCK 
+//                      { 
+//                        InitDef def = new InitDef();
+//                        def.setBlockContent(lexer.getCodeBody());
+//                        builder.addInitializer(def);
+//                      };
+
+// StaticInitializer:
+//     static Block
+StaticInitializer: Modifiers_opt CODEBLOCK 
+                   { 
+                     InitDef def = new InitDef();
+                     def.setStatic(modifiers.contains("static"));modifiers.clear();
+                     def.setBlockContent(lexer.getCodeBody());
+                     builder.addInitializer(def);
+                   }
+                 ;
+
+// ConstructorDeclaration:
+//     {ConstructorModifier} ConstructorDeclarator [Throws] ConstructorBody
+ConstructorDeclaration: Modifiers_opt IDENTIFIER 
+                        {
+                          builder.beginConstructor();
+                          mth.setLineNumber(lexer.getLine());
+                          mth.getModifiers().addAll(modifiers); modifiers.clear();
+                          mth.setConstructor(true); 
+                          mth.setName($2);
+                        }
+                        PARENOPEN FormalParameterList_opt PARENCLOSE Throws_opt MethodBody /* =ConstructorBody */ 
+                        {
+                          mth.setBody($8);
+                          builder.endConstructor(mth);
+                          mth = new MethodDef(); 
+                        }
+                     |  Modifiers_opt TypeParameters IDENTIFIER 
+                        {
+                          builder.beginConstructor();
+                          mth.setLineNumber(lexer.getLine());
+                          mth.setTypeParams(typeParams);
+                          mth.getModifiers().addAll(modifiers); modifiers.clear();
+                          mth.setConstructor(true); 
+                          mth.setName($3);
+                        } 
+                        PARENOPEN FormalParameterList_opt PARENCLOSE Throws_opt CODEBLOCK 
+                        {
+                          mth.setBody(lexer.getCodeBody());
+                          builder.endConstructor(mth);
+                          mth = new MethodDef(); 
+                        }
+                     ;
+
+// ConstructorDeclarator:
+//     [TypeParameters] SimpleTypeName ( [FormalParameterList] )
+
 
 // InterfaceDeclaration: 
 //     NormalInterfaceDeclaration
@@ -815,83 +904,7 @@ ElementValues_opt:
  _AnnotationParens_opt:
                    | PARENOPEN AnnotationElement_opt PARENCLOSE 
                    ;
-//========================================================
 
-ConstructorDeclaration: Modifiers_opt IDENTIFIER 
-                        {
-                          builder.beginConstructor();
-                          mth.setLineNumber(lexer.getLine());
-                          mth.getModifiers().addAll(modifiers); modifiers.clear();
-                          mth.setConstructor(true); 
-                          mth.setName($2);
-                        }
-                        PARENOPEN FormalParameterList_opt PARENCLOSE Throws_opt _MemberEnd /* =MethodBody */ 
-                        {
-                          mth.setBody($8);
-                          builder.endConstructor(mth);
-                          mth = new MethodDef(); 
-                        }
-                     |  Modifiers_opt TypeParameters IDENTIFIER 
-                        {
-                          builder.beginConstructor();
-                          mth.setLineNumber(lexer.getLine());
-                          mth.setTypeParams(typeParams);
-                          mth.getModifiers().addAll(modifiers); modifiers.clear();
-                          mth.setConstructor(true); 
-                          mth.setName($3);
-                        } 
-                        PARENOPEN FormalParameterList_opt PARENCLOSE Throws_opt CODEBLOCK 
-                        {
-                          mth.setBody(lexer.getCodeBody());
-                          builder.endConstructor(mth);
-                          mth = new MethodDef(); 
-                        }
-                     ;
-
-
-// InstanceInitializer: CODEBLOCK 
-//                      { 
-//                        InitDef def = new InitDef();
-//                        def.setBlockContent(lexer.getCodeBody());
-//                        builder.addInitializer(def);
-//                      };
-
-StaticInitializer: Modifiers_opt CODEBLOCK 
-                   { 
-                     InitDef def = new InitDef();
-                     def.setStatic(modifiers.contains("static"));modifiers.clear();
-                     def.setBlockContent(lexer.getCodeBody());
-                     builder.addInitializer(def);
-                   };
-
-//================================================================
-
-// 8.4.6 Method Throws
-Throws_opt:
-          | THROWS ExceptionTypeList;
-
-ExceptionTypeList: ClassOrInterfaceType /*ExceptionType*/
-                   { 
-                     mth.getExceptions().add($1); 
-                   }
-                 | ExceptionTypeList COMMA ClassOrInterfaceType /* =ExceptionType */
-                   {
-                     mth.getExceptions().add($3);
-                   };
-                   
-// 8.4.7 Method Body
-
-_MemberEnd: CODEBLOCK 
-           {
-          $$ = lexer.getCodeBody();
-           } 
-         | SEMI 
-           {
-             $$ = "";
-           }
-         ;
-
-// 8.8 Constructor Declarations
          
 Arguments_opt:
              | PARENOPEN ArgumentList_opt PARENCLOSE

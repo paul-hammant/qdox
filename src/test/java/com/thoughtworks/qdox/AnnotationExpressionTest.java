@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.StringReader;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import com.thoughtworks.qdox.builder.impl.EvaluatingVisitor;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
+import com.thoughtworks.qdox.parser.ParseException;
 
 @RunWith( Parameterized.class )
 public class AnnotationExpressionTest
@@ -141,8 +143,15 @@ public class AnnotationExpressionTest
     protected void assertAnnotationExpression( String expression, Object expected )
     {
         String source = "@Annotation(\n" + expression + "\n) class Foo {}";
-        builder.addSource( new StringReader( source ) );
-        assertAnnotationValue( expected );
+        try
+        {
+            builder.addSource( new StringReader( source ) );
+            assertAnnotationValue( expected );
+        }
+        catch ( ParseException pe )
+        {
+            fail( pe.getMessage() + "Failed to parse '" + source + "'" );
+        }
     }
 
     protected void assertAnnotationValue( Object expected )

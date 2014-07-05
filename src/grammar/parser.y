@@ -486,17 +486,17 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
 
 // ConstructorDeclarator:
 //     [TypeParameters] SimpleTypeName ( [FormalParameterList] )
+// ** ConstructorBody, ExplicitConstructorInvocation not used by QDox, out of scope
+// ConstructorBody:
+//     { [ExplicitConstructorInvocation] [BlockStatements] }
+// ExplicitConstructorInvocation:
+//     [TypeArguments] this ( [ArgumentList] ) ; 
+//     [TypeArguments] super ( [ArgumentList] ) ; 
+//     ExpressionName . [TypeArguments] super ( [ArgumentList] ) ; 
+//     Primary . [TypeArguments] super ( [ArgumentList] ) ;
 
-
-// InterfaceDeclaration: 
-//     NormalInterfaceDeclaration
-//     AnnotationTypeDeclaration
-InterfaceDeclaration: Modifiers_opt NormalInterfaceDeclaration
-                    | Modifiers_opt AnnotationTypeDeclaration
-                    ;
-                
 // EnumDeclaration:
-//     enum Identifier [implements TypeList] EnumBody                      
+//     {ClassModifier} enum Identifier [Superinterfaces] EnumBody
 EnumDeclaration: Modifiers_opt ENUM IDENTIFIER Superinterfaces_opt 
                  { 
                    cls.setLineNumber(line);
@@ -509,6 +509,63 @@ EnumDeclaration: Modifiers_opt ENUM IDENTIFIER Superinterfaces_opt
                  } 
                  EnumBody
                ;
+
+// EnumBody:
+//     { [EnumConstantList] [,] [EnumBodyDeclarations] }
+/* The optional COMMA causes trouble for the parser
+   For that reason the adjusted options of EnumConstants_opt, which will accept all cases 
+*/
+EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
+          { 
+            builder.endClass();
+            fieldType = null;
+            modifiers.clear();
+          }
+        ;
+
+// EnumConstantList:
+//     EnumConstant {, EnumConstant}
+
+// EnumConstants:
+//     EnumConstant
+//     EnumConstants , EnumConstant
+EnumConstants_opt:
+                 | EnumConstants_opt COMMA
+                 | EnumConstants_opt EnumConstant
+                 ;
+                 
+// EnumConstant:
+//     {EnumConstantModifier} Identifier [( [ArgumentList] )] [ClassBody]             
+EnumConstant: Annotations_opt IDENTIFIER 
+              {
+                TypeDef td = new TypeDef($2, 0);
+                typeStack.push(td); 
+                makeField( td, "", true );
+                builder.beginField( fd );
+              }
+              Arguments_opt ClassBody_opt
+              {
+                builder.endField();
+                typeStack.pop();
+              }
+            ;
+
+// EnumBodyDeclarations:
+//     ; {ClassBodyDeclaration}
+EnumBodyDeclarations_opt:
+                        | SEMI ClassBodyDeclarations_opt
+                        ;      
+
+// -----------------------------
+// Productions from §9 (Interfaces)
+// -----------------------------
+
+// InterfaceDeclaration: 
+//     NormalInterfaceDeclaration
+//     AnnotationTypeDeclaration
+InterfaceDeclaration: Modifiers_opt NormalInterfaceDeclaration
+                    | Modifiers_opt AnnotationTypeDeclaration
+                    ;
                
 // NormalInterfaceDeclaration: 
 //     interface Identifier [TypeParameters] [extends TypeList] InterfaceBody
@@ -1257,50 +1314,6 @@ ExpressionList: Expression
               | ExpressionList Expression;
 
 //========================================================
-              
-// EnumBody:
-//     { [EnumConstants] [,] [EnumBodyDeclarations] }
-/* The optional COMMA causes trouble for the parser
-   For that reason the adjusted options of EnumConstants_opt, which will accept all cases 
-*/
-EnumBody: BRACEOPEN EnumConstants_opt EnumBodyDeclarations_opt BRACECLOSE 
-          { 
-            builder.endClass();
-            fieldType = null;
-            modifiers.clear();
-          }
-        ;
-
-// EnumConstants:
-//     EnumConstant
-//     EnumConstants , EnumConstant
-EnumConstants_opt:
-                 | EnumConstants_opt COMMA
-                 | EnumConstants_opt EnumConstant
-                 ;
-                 
-// EnumConstant:
-//     [Annotations] Identifier [Arguments] [ClassBody]                 
-EnumConstant: Annotations_opt IDENTIFIER 
-              {
-                TypeDef td = new TypeDef($2, 0);
-                typeStack.push(td); 
-                makeField( td, "", true );
-                builder.beginField( fd );
-              }
-              Arguments_opt ClassBody_opt
-              {
-                builder.endField();
-                typeStack.pop();
-              }
-            ;
-
-// EnumBodyDeclarations:
-//     ; {ClassBodyDeclaration}
-EnumBodyDeclarations_opt:
-                        | SEMI ClassBodyDeclarations_opt
-                        ;      
-                       
 
 %%
 

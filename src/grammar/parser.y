@@ -563,18 +563,18 @@ EnumBodyDeclarations_opt:
 // InterfaceDeclaration: 
 //     NormalInterfaceDeclaration
 //     AnnotationTypeDeclaration
-InterfaceDeclaration: Modifiers_opt NormalInterfaceDeclaration
-                    | Modifiers_opt AnnotationTypeDeclaration
+InterfaceDeclaration: NormalInterfaceDeclaration
+                    | AnnotationTypeDeclaration
                     ;
                
 // NormalInterfaceDeclaration: 
-//     interface Identifier [TypeParameters] [extends TypeList] InterfaceBody
-NormalInterfaceDeclaration: INTERFACE IDENTIFIER TypeParameters_opt _ExtendsTypelist_opt  
+//     {InterfaceModifier} interface Identifier [TypeParameters] [ExtendsInterfaces] InterfaceBody
+NormalInterfaceDeclaration: Modifiers_opt INTERFACE IDENTIFIER TypeParameters_opt ExtendsInterfaces_opt  
                             {
                               cls.setType(ClassDef.INTERFACE);
                               cls.setLineNumber(line);
                               cls.getModifiers().addAll(modifiers); modifiers.clear(); 
-                              cls.setName( $2 );
+                              cls.setName( $3 );
                               cls.setTypeParameters(typeParams);
                               builder.beginClass(cls); 
                               cls = new ClassDef(); 
@@ -584,15 +584,46 @@ NormalInterfaceDeclaration: INTERFACE IDENTIFIER TypeParameters_opt _ExtendsType
                               builder.endClass(); 
                             }
                           ;
-                          
+
+// ExtendsInterfaces:
+//     extends InterfaceTypeList
+ExtendsInterfaces: EXTENDS TypeList
+                   {
+                     cls.getExtends().addAll( typeList );
+                     typeList.clear();
+                   }
+                 ;
+ExtendsInterfaces_opt: 
+                     | ExtendsInterfaces
+                     ;
+
+// InterfaceBody:
+//     { {InterfaceMemberDeclaration} }
+// InterfaceMemberDeclaration:
+//     ConstantDeclaration 
+//     InterfaceMethodDeclaration 
+//     ClassDeclaration 
+//     InterfaceDeclaration 
+//     ;
+// ConstantDeclaration:
+//     {ConstantModifier} UnannType VariableDeclaratorList ; 
+// ConstantModifier:
+//     Annotation public 
+//     static final 
+// InterfaceMethodDeclaration:
+//     {InterfaceMethodModifier} MethodHeader MethodBody 
+// InterfaceMethodModifier:
+//     Annotation public 
+//     abstract default static strictfp
+
 // AnnotationTypeDeclaration:
-//     @ interface Identifier AnnotationTypeBody
-AnnotationTypeDeclaration: ANNOINTERFACE IDENTIFIER 
+//     {InterfaceModifier} @ interface Identifier AnnotationTypeBody
+AnnotationTypeDeclaration: Modifiers_opt ANNOINTERFACE IDENTIFIER 
                            {
                              cls.setType(ClassDef.ANNOTATION_TYPE);
                              cls.setLineNumber(line);
                              cls.getModifiers().addAll(modifiers); modifiers.clear(); 
-                             cls.setName( $2 );
+                             cls.setName( $3 );
                              builder.beginClass(cls); 
                              cls = new ClassDef();
                            }
@@ -601,14 +632,120 @@ AnnotationTypeDeclaration: ANNOINTERFACE IDENTIFIER
                              builder.endClass(); 
                            }
                          ;
-//---------------------------------------------------------
-_ExtendsTypelist_opt: 
-                    | EXTENDS TypeList
-                      {
-                        cls.getExtends().addAll( typeList );
-                        typeList.clear();
-                      }
+
+// AnnotationTypeBody:
+//     { {AnnotationTypeMemberDeclaration} }
+// AnnotationTypeMemberDeclaration:
+//     AnnotationTypeElementDeclaration 
+//     ConstantDeclaration 
+//     ClassDeclaration 
+//     InterfaceDeclaration 
+//     ;
+// AnnotationTypeElementDeclaration:
+//     {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
+// AnnotationTypeElementModifier:
+//     Annotation public 
+//     abstract
+// DefaultValue:
+//     default ElementValue
+
+// Annotation:
+//     NormalAnnotation 
+//     MarkerAnnotation 
+//     SingleElementAnnotation
+// NormalAnnotation:
+//     @ TypeName ( [ElementValuePairList] )
+// MarkerAnnotation:
+//     @ TypeName 
+// SingleElementAnnotation:
+//     @ TypeName ( ElementValue )
+Annotation: AT QualifiedIdentifier 
+            {
+              AnnoDef annotation = new AnnoDef( new TypeDef($2) );
+              annotation.setLineNumber(lexer.getLine());
+              annotationStack.addFirst(annotation);
+            }
+            _AnnotationParens_opt
+            {
+              AnnoDef annotation = annotationStack.removeFirst();
+              if(annotationStack.isEmpty()) 
+              {
+                builder.addAnnotation(annotation);
+              }
+              $$ = annotation;
+            }
+          ;
+
+// ElementValuePairList:
+//     ElementValuePair { , ElementValuePair }
+ElementValuePairList: ElementValuePair 
+                    | ElementValuePairList COMMA ElementValuePair
                     ;
+
+// ElementValuePair:
+//     Identifier = ElementValue
+ElementValuePair: IDENTIFIER EQUALS ElementValue 
+                  {
+                    annotationStack.getFirst().getArgs().put($1, $3);
+                  }
+                ;
+
+// ElementValue:
+//     ConditionalExpression 
+//     ElementValueArrayInitializer 
+//     Annotation
+ElementValue: ConditionalExpression 
+            | Annotation 
+            | ElementValueArrayInitializer
+            ;
+
+// ElementValueArrayInitializer:
+//     { [ElementValueList] [,] }
+/* Specs say: { ElementValueList_opt COMMA_opt }
+   The optional COMMA causes trouble for the parser
+   For that reason the adjusted options of ElementValueList_opt, which will accept all cases
+*/    
+ElementValueArrayInitializer: {
+                                annoValueListStack.add(annoValueList);
+                                annoValueList = new LinkedList<ElemValueDef>();
+                              }
+                              BRACEOPEN ElementValueList_opt BRACECLOSE
+                              { 
+                                $$ = new ElemValueListDef(annoValueList);
+                                annoValueList = annoValueListStack.remove(annoValueListStack.size() - 1);
+                              }
+                            ;
+
+
+// AnnotationElement:
+//     ElementValuePairList
+//     ElementValue
+AnnotationElement_opt: 
+                     | ElementValuePairList
+                     | ElementValue
+                       { 
+                         annotationStack.getFirst().getArgs().put("value", $1);
+                       }
+                     ;
+
+    
+ElementValueList_opt:
+                 | ElementValueList_opt ElementValue
+                   { 
+                     annoValueList.add($2); 
+                   } 
+                 | ElementValueList_opt COMMA;    
+
+//--------------------------------------------------------
+ _AnnotationParens_opt:
+                   | PARENOPEN AnnotationElement_opt PARENCLOSE 
+                   ;          
+          
+          
+Annotations_opt: 
+               | Annotations_opt Annotation;
+
+
 //========================================================
 // QualifiedIdentifier:
 //     Identifier { . Identifier }
@@ -618,6 +755,15 @@ QualifiedIdentifier: IDENTIFIER
                        $$ = $1 + '.' + $3;
                      }
                    ;
+                   
+// TypeName:
+//     Identifier
+//     PackageOrTypeName . Identifier
+
+// PackageOrTypeName:
+//     Identifier
+//     PackageOrTypeName . Identifier
+
 //========================================================
 // Type:
 //     BasicType {[]}
@@ -881,87 +1027,6 @@ Modifier: Annotation
             modifiers.add("strictfp");
           }
         ;
-
-Annotations_opt: 
-               | Annotations_opt Annotation;
-
-// Annotation:
-//     @ QualifiedIdentifier [ ( [AnnotationElement] ) ]
-Annotation: AT QualifiedIdentifier 
-         {
-           AnnoDef annotation = new AnnoDef( new TypeDef($2) );
-           annotation.setLineNumber(lexer.getLine());
-           annotationStack.addFirst(annotation);
-         }
-         _AnnotationParens_opt
-         {
-           AnnoDef annotation = annotationStack.removeFirst();
-           if(annotationStack.isEmpty()) 
-           {
-             builder.addAnnotation(annotation);
-           }
-           $$ = annotation;
-         };
-
-// AnnotationElement:
-//     ElementValuePairs
-//     ElementValue
-AnnotationElement_opt: 
-                     | ElementValuePairs
-                     | ElementValue
-                       { 
-                         annotationStack.getFirst().getArgs().put("value", $1);
-                       }
-                     ;
-
-// ElementValuePairs:
-//     ElementValuePair { , ElementValuePair }
-ElementValuePairs: ElementValuePair 
-                 | ElementValuePairs COMMA ElementValuePair
-                 ;
-
-// ElementValuePair:
-//     Identifier = ElementValue
-ElementValuePair: IDENTIFIER EQUALS ElementValue 
-                  {
-                    annotationStack.getFirst().getArgs().put($1, $3);
-                  }
-                ;
-
-// ElementValue:
-//     Annotation
-//     Expression1 
-//     ElementValueArrayInitializer
-ElementValue: ConditionalExpression 
-            | Annotation 
-            | ElementValueArrayInitializer;
-
-/* Specs say: { ElementValues_opt COMMA_opt }
-   The optional COMMA causes trouble for the parser
-   For that reason the adjusted options of ElementValues_opt, which will accept all cases
-*/    
-ElementValueArrayInitializer: {
-                                annoValueListStack.add(annoValueList);
-                                annoValueList = new LinkedList<ElemValueDef>();
-                              }
-                              BRACEOPEN ElementValues_opt BRACECLOSE
-                              { 
-                                $$ = new ElemValueListDef(annoValueList);
-                                annoValueList = annoValueListStack.remove(annoValueListStack.size() - 1);
-                              };
-    
-ElementValues_opt:
-                 | ElementValues_opt ElementValue
-                   { 
-                     annoValueList.add($2); 
-                   } 
-                 | ElementValues_opt COMMA;    
-
-//--------------------------------------------------------
- _AnnotationParens_opt:
-                   | PARENOPEN AnnotationElement_opt PARENCLOSE 
-                   ;
-
          
 Arguments_opt:
              | PARENOPEN ArgumentList_opt PARENCLOSE

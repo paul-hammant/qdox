@@ -701,15 +701,15 @@ ElementValue: ConditionalExpression
 
 // ElementValueArrayInitializer:
 //     { [ElementValueList] [,] }
-/* Specs say: { ElementValueList_opt COMMA_opt }
+/* Specs say: { ElementValues_opt COMMA_opt }
    The optional COMMA causes trouble for the parser
-   For that reason the adjusted options of ElementValueList_opt, which will accept all cases
+   For that reason the adjusted options of ElementValues_opt, which will accept all cases
 */    
 ElementValueArrayInitializer: {
                                 annoValueListStack.add(annoValueList);
                                 annoValueList = new LinkedList<ElemValueDef>();
                               }
-                              BRACEOPEN ElementValueList_opt BRACECLOSE
+                              BRACEOPEN ElementValues_opt BRACECLOSE
                               { 
                                 $$ = new ElemValueListDef(annoValueList);
                                 annoValueList = annoValueListStack.remove(annoValueListStack.size() - 1);
@@ -729,12 +729,12 @@ AnnotationElement_opt:
                      ;
 
     
-ElementValueList_opt:
-                 | ElementValueList_opt ElementValue
+ElementValues_opt:
+                 | ElementValues_opt ElementValue
                    { 
                      annoValueList.add($2); 
                    } 
-                 | ElementValueList_opt COMMA;    
+                 | ElementValues_opt COMMA;    
 
 //--------------------------------------------------------
  _AnnotationParens_opt:
@@ -745,6 +745,23 @@ ElementValueList_opt:
 Annotations_opt: 
                | Annotations_opt Annotation;
 
+// -----------------------------
+// Productions from §10 (Arrays)
+// -----------------------------
+
+// ArrayInitializer:
+//     { [VariableInitializerList] [,] }
+ArrayInitializer: BRACEOPEN VariableInitializerList_opt BRACECLOSE
+                ;
+ 
+// VariableInitializerList:
+//     VariableInitializer {, VariableInitializer}
+VariableInitializerList: VariableInitializerList VariableInitializer
+                       | VariableInitializerList COMMA
+                       ;
+VariableInitializerList_opt:
+                           | VariableInitializerList
+                           ;
 
 //========================================================
 // QualifiedIdentifier:
@@ -1039,14 +1056,8 @@ VariableInitializer: ArrayInitializer
                    | Expression
                    ;
                    
-// ArrayInitializer:
-//     { [ VariableInitializer { , VariableInitializer } [,] ] }
-ArrayInitializer: BRACEOPEN VariableInitializers_opt BRACECLOSE
-                ;
-VariableInitializers_opt:
-                        | VariableInitializers_opt VariableInitializer
-                        | VariableInitializers_opt COMMA
-                        ;
+
+
                         
 //========================================================
 

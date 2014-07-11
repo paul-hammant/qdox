@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.thoughtworks.qdox.it</groupId>
+  <artifactId>lambda-examples</artifactId>
+  <version>01</version>
+  <packaging>pom</packaging>
+
+  <url>http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/Lambda-QuickStart/index.html#section2</url>
+  
+  <dependencies>
+    <dependency>
+      <groupId>com.thoughtworks.qdox</groupId>
+      <artifactId>qdox</artifactId>
+      <version>@project.version@</version>
+    </dependency>
+  </dependencies>
+
+
+</project>

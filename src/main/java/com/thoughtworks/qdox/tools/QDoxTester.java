@@ -62,6 +62,10 @@ public class QDoxTester {
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
             ZipEntry zipEntry = entries.nextElement();
+            if( zipEntry.isDirectory() )
+            {
+                continue;
+            }
             InputStream inputStream = zipFile.getInputStream(zipEntry);
             try {
                 verify(file.getName() + "!" + zipEntry.getName(), inputStream);

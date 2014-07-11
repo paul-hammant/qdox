@@ -58,7 +58,7 @@ import java.util.Stack;
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
-%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus Primary MethodInvocation Creator
+%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus Primary PrimaryNoNewArray MethodInvocation Creator
 %type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator CreatedName
@@ -315,6 +315,13 @@ MethodDeclaration: Modifiers_opt MethodHeader MethodBody
                      mth = new MethodDef();
                    }
                  ;
+
+// VariableInitializer:
+//     Expression
+//     ArrayInitializer
+VariableInitializer: ArrayInitializer
+                   | Expression
+                   ;
 
 // MethodHeader:
 //     Result MethodDeclarator [Throws] 
@@ -762,6 +769,134 @@ VariableInitializerList: VariableInitializerList VariableInitializer
 VariableInitializerList_opt:
                            | VariableInitializerList
                            ;
+// ----------------------------------
+// Productions from §15 (Expressions)
+// ----------------------------------
+
+// Primary:
+//     PrimaryNoNewArray 
+//     ArrayCreationExpression
+Primary: PrimaryNoNewArray
+//     | ArrayCreationExpression
+       ;
+
+// PrimaryNoNewArray:
+//     Literal 
+//     TypeName {[ ]} . class 
+//     void . class 
+//     this 
+//     TypeName . this 
+//     ( Expression ) 
+//     ClassInstanceCreationExpression 
+//     FieldAccess 
+//     ArrayAccess 
+//     MethodInvocation 
+//     MethodReference
+PrimaryNoNewArray: Literal 
+                 | BasicType Dims_opt DOT CLASS 
+                   { 
+                     $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
+                   }
+                 | PARENOPEN Expression PARENCLOSE /* ParExpression*/
+                   { 
+                     $$ = new ParenExpressionDef($2); 
+                   }
+                 | QualifiedIdentifier DOT CLASS 
+                   { 
+                     $$ = new TypeRefDef(new TypeDef($1, 0));
+                   }
+                 | QualifiedIdentifier Dims DOT CLASS
+                   {
+                     $$ = new TypeRefDef(new TypeDef($1, $2));
+                   } 
+                 | QualifiedIdentifier 
+                   { 
+                     $$ = new FieldRefDef($1); 
+                   }
+                 | MethodInvocation 
+                   {
+                     $$ = $1;
+                   }
+                 | NEW Creator
+                   {
+                     $$ = $2;
+                   }
+                 ;
+
+// ClassInstanceCreationExpression:
+//     new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
+//     ExpressionName . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
+//     Primary . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody]
+
+// TypeArgumentsOrDiamond:
+//     TypeArguments 
+//     <>
+TypeArgumentsOrDiamond: TypeArguments
+                      | LESSTHAN GREATERTHAN
+                      ;
+TypeArgumentsOrDiamond_opt:
+                          | TypeArgumentsOrDiamond
+                          ;
+                          
+// FieldAccess:
+//     Primary . Identifier 
+//     super . Identifier 
+//     TypeName . super . Identifier
+// ArrayAccess:
+//     ExpressionName [ Expression ]
+//     PrimaryNoNewArray [ Expression ]
+
+// MethodInvocation:
+//     MethodName ( [ArgumentList] ) 
+//     TypeName . [TypeArguments] Identifier ( [ArgumentList] ) 
+//     ExpressionName . [TypeArguments] Identifier ( [ArgumentList] ) 
+//     Primary . [TypeArguments] Identifier ( [ArgumentList] ) 
+//     super . [TypeArguments] Identifier ( [ArgumentList] ) 
+//     TypeName . super . [TypeArguments] Identifier ( [ArgumentList] )
+MethodInvocation: IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                  {
+                    $$ = new MethodInvocationDef($1, null);
+                  }
+                | QualifiedIdentifier DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                  {
+                    $$ = new MethodInvocationDef($1, null);
+                  }
+                ;
+
+// ArgumentList:
+//     Expression {, Expression}
+ArgumentList: Expression
+              {
+                builder.addArgument( (ExpressionDef) $1);
+              }
+            | ArgumentList COMMA Expression
+              {
+                builder.addArgument( (ExpressionDef) $3);
+              }
+            ;
+ArgumentList_opt:
+                | ArgumentList
+                ;
+
+// MethodReference:
+//     ExpressionName :: [TypeArguments] Identifier 
+//     ReferenceType :: [TypeArguments] Identifier 
+//     Primary :: [TypeArguments] Identifier 
+//     super :: [TypeArguments] Identifier 
+//     TypeName . super :: [TypeArguments] Identifier 
+//     ClassType :: [TypeArguments] new 
+//     ArrayType :: new
+
+// ArrayCreationExpression:
+//     new PrimitiveType DimExprs [Dims] 
+//     new ClassOrInterfaceType DimExprs [Dims] 
+//     new PrimitiveType Dims ArrayInitializer 
+//     new ClassOrInterfaceType Dims ArrayInitializer
+
+// DimExprs:
+//     DimExpr {DimExpr} 
+// DimExpr:
+//     {Annotation} [ Expression ]
 
 //========================================================
 // QualifiedIdentifier:
@@ -934,14 +1069,6 @@ TypeList: ReferenceType
           }
         ;
 
-// TypeArgumentsOrDiamond:
-//     < > 
-//     TypeArguments
-TypeArgumentsOrDiamond_opt:
-                          | LESSTHAN GREATERTHAN
-                          | TypeArguments
-                          ;
-
 // NonWildcardTypeArgumentsOrDiamond:
 //     < >
 //     NonWildcardTypeArguments
@@ -1049,58 +1176,11 @@ Arguments_opt:
              | PARENOPEN ArgumentList_opt PARENCLOSE
              ;
 
-// VariableInitializer:
-//     ArrayInitializer
-//     Expression
-VariableInitializer: ArrayInitializer
-                   | Expression
-                   ;
-                   
-
 
                         
 //========================================================
 
-// Primary: 
-//     Literal
-//     ParExpression
-//     this [Arguments]
-//     super SuperSuffix
-//     new Creator
-//     NonWildcardTypeArguments ( ExplicitGenericInvocationSuffix | this Arguments )
-//     Identifier { . Identifier } [IdentifierSuffix]
-//     BasicType {[]} . class
-//     void . class
-Primary: Literal 
-       | PARENOPEN Expression PARENCLOSE /* ParExpression*/
-         { 
-           $$ = new ParenExpressionDef($2); 
-         }
-       | BasicType Dims_opt DOT CLASS 
-         { 
-           $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
-         }
-       | QualifiedIdentifier DOT CLASS 
-         { 
-            $$ = new TypeRefDef(new TypeDef($1, 0));
-         }
-       | QualifiedIdentifier Dims DOT CLASS
-         {
-           $$ = new TypeRefDef(new TypeDef($1, $2));
-         } 
-       | QualifiedIdentifier 
-         { 
-           $$ = new FieldRefDef($1); 
-         }
-       | MethodInvocation 
-         {
-           $$ = $1;
-         }
-       | NEW Creator
-         {
-           $$ = $2;
-         }
-       ;
+
           
 // Literal:
 //     IntegerLiteral
@@ -1186,18 +1266,6 @@ ArrayCreatorRest: Dims ArrayInitializer
                 | DimExprs Dims_opt
                 ;  
 
-ArgumentList: Expression
-              {
-                builder.addArgument( (ExpressionDef) $1);
-              }
-            | ArgumentList COMMA Expression
-              {
-                builder.addArgument( (ExpressionDef) $3);
-              }
-            ;
-ArgumentList_opt:
-                | ArgumentList;
-
 DimExprs: DimExpr
         | DimExprs DimExpr;
 
@@ -1216,16 +1284,6 @@ Dims_opt: {
           }
   | Dims;
             
-// 15.12 Method Invocation Expressions
-MethodInvocation: IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
-                  {
-                    $$ = new MethodInvocationDef($1, null);
-                  }
-                | QualifiedIdentifier DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
-                  {
-                    $$ = new MethodInvocationDef($1, null);
-                  };
-
 // 15.14 Postfix Expressions
 PostfixExpression: /* ExpressionName | */
                    Primary

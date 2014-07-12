@@ -54,7 +54,7 @@ import java.util.Stack;
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
 %token <ival> PLUSPLUS MINUSMINUS
 %token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
-%type <type> BasicType
+%type <type> PrimitiveType ReferenceType ArrayType ClassOrInterfaceType
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
@@ -793,7 +793,7 @@ Primary: PrimaryNoNewArray
 //     MethodInvocation 
 //     MethodReference
 PrimaryNoNewArray: Literal 
-                 | BasicType Dims_opt DOT CLASS 
+                 | PrimitiveType Dims_opt DOT CLASS 
                    { 
                      $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
                    }
@@ -1215,7 +1215,7 @@ PostDecrementExpression: PostfixExpression MINUSMINUS
 //     ( PrimitiveType ) UnaryExpression 
 //     ( ReferenceType {AdditionalBound} ) UnaryExpressionNotPlusMinus 
 //     ( ReferenceType {AdditionalBound} ) LambdaExpression
-CastExpression: PARENOPEN BasicType Dims_opt PARENCLOSE UnaryExpression
+CastExpression: PARENOPEN PrimitiveType Dims_opt PARENCLOSE UnaryExpression
                 {
                   $$ = new CastDef(new TypeDef($2.getName(), $3), $5);
                 } 
@@ -1229,6 +1229,65 @@ CastExpression: PARENOPEN BasicType Dims_opt PARENCLOSE UnaryExpression
                 }
               ;
 
+
+// --------------------------------------------------
+// Productions from §4 (Types, Values, and Variables)
+// --------------------------------------------------
+
+// Type:
+//     PrimitiveType 
+//     ReferenceType
+Type: PrimitiveType
+    | ReferenceType
+    ;
+
+// PrimitiveType:
+//     {Annotation} NumericType 
+//     {Annotation} boolean
+// NumericType:
+//     IntegralType 
+//     FloatingPointType 
+// IntegralType:
+//     byte short int long char 
+// FloatingPointType:
+//     float double 
+
+// ReferenceType:
+//     ClassOrInterfaceType 
+//     TypeVariable 
+//     ArrayType
+ReferenceType: ArrayType
+             | ClassOrInterfaceType
+             ; 
+
+// ClassOrInterfaceType:
+//     ClassType 
+//     InterfaceType 
+// ClassType:
+//     {Annotation} Identifier [TypeArguments] 
+//     ClassOrInterfaceType . {Annotation} Identifier [TypeArguments] 
+// InterfaceType:
+//     ClassType 
+// TypeVariable:
+//     {Annotation} Identifier 
+
+// ArrayType:
+//     PrimitiveType Dims 
+//     ClassOrInterfaceType Dims 
+//     TypeVariable Dims
+ArrayType: ClassOrInterfaceType Dims
+           {
+             TypeDef td = $1;
+             td.setDimensions($2);
+             $$ = td;
+           }
+         | PrimitiveType Dims
+           {
+             TypeDef td = $1;
+             td.setDimensions($2);
+             $$ = td;
+           }
+         ;
 
 
 //========================================================
@@ -1250,24 +1309,9 @@ QualifiedIdentifier: IDENTIFIER
 //     PackageOrTypeName . Identifier
 
 //========================================================
-// Type:
-//     BasicType {[]}
-//     ReferenceType  {[]}
-Type: BasicType Dims_opt
-      {
-        TypeDef td = $1;
-        td.setDimensions($2);
-        $$ = td;
-      }
-    | ReferenceType Dims_opt
-      {
-        TypeDef td = $1;
-        td.setDimensions($2);
-        $$ = td;
-      }
-    ;
 
-// BasicType: 
+
+// PrimitiveType: 
 //     byte
 //     short
 //     char
@@ -1276,7 +1320,7 @@ Type: BasicType Dims_opt
 //     float
 //     double
 //     boolean
-BasicType: BYTE 
+PrimitiveType: BYTE 
            { 
              $$ = new TypeDef("byte"); 
            } 
@@ -1309,11 +1353,6 @@ BasicType: BYTE
              $$ = new TypeDef("boolean"); 
            }  
          ;
-
-// ReferenceType:
-//     Identifier [TypeArguments] { . Identifier [TypeArguments] }
-ReferenceType: ClassOrInterfaceType
-             ; 
 
 // Actually
 // ClassOrInterfaceType: ClassType | InterfaceType;
@@ -1354,21 +1393,16 @@ TypeArguments_opt:
 // TypeArgument:  
 //    ReferenceType {[]}
 //    ? [ ( extends | super ) ( BasicType [] {[]} | ReferenceType {[]} ) ]
-TypeArgument: ReferenceType Dims_opt
-              { 
-                TypeDef td = $1;
-                td.setDimensions($2);
-                $$ = td;
-              } 
+TypeArgument: ReferenceType
             | QUERY              
               { 
                 $$ = new WildcardTypeDef(); 
               } 
-            | QUERY EXTENDS Type // actually ( BasicType [] {[]} | ReferenceType {[]} )
+            | QUERY EXTENDS Type // actually ( PrimitiveType [] {[]} | ReferenceType {[]} )
               { 
                 $$ = new WildcardTypeDef($3, "extends" ); 
               }
-            | QUERY SUPER Type   // actually ( BasicType [] {[]} | ReferenceType {[]} )
+            | QUERY SUPER Type   // actually ( PrimitiveType [] {[]} | ReferenceType {[]} )
               { 
                 $$ = new WildcardTypeDef($3, "super" ); 
               }

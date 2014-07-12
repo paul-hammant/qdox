@@ -182,11 +182,11 @@ Id						        = ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 Annotation                      = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
 JavadocEnd                      = "*"+ "/"
 
-%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ENUM ARGUMENTS
+%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATIONTYPE ANNOTATION ANNOSTRING ANNOCHAR ENUM ARGUMENTS
 
 %%
 
-<YYINITIAL, ENUM> {
+<YYINITIAL, ANNOTATIONTYPE, ENUM> {
     "."                 { return Parser.DOT; }
     "..."               { return Parser.DOTDOTDOT; }
     ","                 { return Parser.COMMA; }
@@ -221,7 +221,7 @@ JavadocEnd                      = "*"+ "/"
 
     "@" {WhiteSpace}* "interface" {
       	classDepth++;
-        braceMode = YYINITIAL;
+        braceMode = ANNOTATIONTYPE;
         return Parser.ANNOINTERFACE;
 	  }
 
@@ -303,16 +303,8 @@ JavadocEnd                      = "*"+ "/"
         appendingToCodeBody = true;
         pushState(ASSIGNMENT);
     }
-    "default"           { 
-        assignmentDepth = nestingDepth;
-        appendingToCodeBody = true;
-        pushState(ASSIGNMENT);
-    }
-    {Id} {
-        return Parser.IDENTIFIER;
-    }
 }
-<YYINITIAL> {
+<YYINITIAL, ANNOTATIONTYPE> {
     ";"  { return Parser.SEMI; }
     "("  {
             nestingDepth++;
@@ -348,6 +340,17 @@ JavadocEnd                      = "*"+ "/"
                 return Parser.PARENOPEN;
             }
          }
+}
+<YYINITIAL, ENUM> {
+    "default"           { return Parser.DEFAULT; }
+}
+<ANNOTATIONTYPE> {
+	"default"           { assignmentDepth = nestingDepth; appendingToCodeBody = true; pushState(ASSIGNMENT); }
+}
+<YYINITIAL, ANNOTATIONTYPE, ENUM> {
+    {Id} {
+        return Parser.IDENTIFIER;
+    }
 }
 <CODEBLOCK> {
      "{"  { 
@@ -547,12 +550,12 @@ JavadocEnd                      = "*"+ "/"
     }
 }
 
-<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM> {
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE> {
     "\""                { if (appendingToCodeBody) { codeBody.append('"');  } pushState(STRING); }
     \'                  { if (appendingToCodeBody) { codeBody.append('\''); } pushState(CHAR); }
 }
 
-<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATION, ARGUMENTS> {
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE, ANNOTATION, ARGUMENTS> {
   "//"                { if (appendingToCodeBody) { codeBody.append("//"); } pushState(SINGLELINECOMMENT); }
   "/*"                { if (appendingToCodeBody) { codeBody.append("/*"); } pushState(MULTILINECOMMENT); }
   "/**/"              { if (appendingToCodeBody) { codeBody.append("/**/"); } }

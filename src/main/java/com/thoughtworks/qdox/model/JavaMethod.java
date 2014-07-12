@@ -179,4 +179,12 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     List<JavaType> getParameterTypes( boolean resolve );
 
     DocletTag getTagByName( String string, boolean b );
+    
+    /**
+     * Equivalent {@link java.lang.reflect.Method#isDefault()}
+     * 
+     * @return {@code true} if this is a default method of an interface, otherwise {@code false}
+     * @since 2.0
+     */
+    boolean isDefault();    
 }

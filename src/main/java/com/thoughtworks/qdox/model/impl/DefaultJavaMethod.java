@@ -33,6 +33,7 @@ import com.thoughtworks.qdox.model.JavaTypeVariable;
 
 public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod {
 
+    private boolean defaultMethod;
 	private JavaClass returns = DefaultJavaType.VOID;
     private List<JavaTypeVariable<JavaMethod>> typeParameters = Collections.emptyList();
 	
@@ -60,6 +61,17 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     public DefaultJavaMethod(JavaClass returns, String name) {
         this.returns = returns;
         setName(name);
+    }
+    
+    /** {@inheritDoc} */
+    public boolean isDefault()
+    {
+        return defaultMethod;
+    }
+    
+    public void setDefault( boolean defaultMethod )
+    {
+        this.defaultMethod = defaultMethod;
     }
     
     /** {@inheritDoc} */

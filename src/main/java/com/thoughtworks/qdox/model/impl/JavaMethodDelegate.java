@@ -131,6 +131,11 @@ public class JavaMethodDelegate implements JavaMethod
     {
         return originalMethod.getExceptionTypes();
     }
+    
+    public boolean isDefault()
+    {
+        return originalMethod.isDefault();
+    }
 
     public int getLineNumber()
     {

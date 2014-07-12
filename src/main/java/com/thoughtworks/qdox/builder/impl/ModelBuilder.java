@@ -372,6 +372,7 @@ public class ModelBuilder implements Builder {
         currentMethod.setExceptions( exceptions );
 
         // modifiers
+        currentMethod.setDefault( def.getModifiers().remove( "default" ) );
         currentMethod.setModifiers( new LinkedList<String>( def.getModifiers() ) );
 
         if ( !parameterList.isEmpty() )

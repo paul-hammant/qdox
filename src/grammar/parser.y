@@ -62,7 +62,7 @@ import java.util.Stack;
 %type <annoval> PostfixExpression PostIncrementExpression PostDecrementExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator CreatedName
-%type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType TypeArgument
+%type <type> Type ReferenceType Wildcard WildcardBounds VariableDeclaratorId ClassOrInterfaceType TypeArgument
 
 %%
 // Source: Java Language Specification - Third Edition
@@ -1343,6 +1343,62 @@ AdditionalBound_opts:
                     | AdditionalBound AdditionalBound_opts
                     ;
 
+// TypeArguments:
+//     < TypeArgumentList >
+TypeArguments: LESSTHAN 
+               {
+                 typeStack.peek().setActualArgumentTypes(new LinkedList<TypeDef>());
+               }
+               TypeArgumentList GREATERTHAN
+             ;
+TypeArguments_opt:
+                 | TypeArguments
+                 ;
+
+// TypeArgumentList:
+//     TypeArgument {, TypeArgument}
+TypeArgumentList: TypeArgument 
+                  { 
+                    (typeStack.peek()).getActualArgumentTypes().add($1);
+                  }
+                | TypeArgumentList COMMA TypeArgument 
+                  { 
+                    (typeStack.peek()).getActualArgumentTypes().add($3);
+                  }
+                ;
+
+// TypeArgument:
+//     ReferenceType 
+//     Wildcard
+TypeArgument: ReferenceType
+            | Wildcard
+            ;
+
+// Wildcard:
+//     {Annotation} ? [WildcardBounds]
+Wildcard: QUERY WildcardBounds
+          {
+            $$ = $2;
+          }
+        | QUERY
+          {
+            $$ = new WildcardTypeDef();
+          }
+        ;
+ 
+// WildcardBounds:
+//     extends ReferenceType 
+//     super ReferenceType
+WildcardBounds: EXTENDS ReferenceType
+                {
+                  $$ = new WildcardTypeDef($2, "extends" );
+                }
+              | SUPER ReferenceType
+                {
+                  $$ = new WildcardTypeDef($2, "super" ); 
+                }
+              ;
+
 //========================================================
 // QualifiedIdentifier:
 //     Identifier { . Identifier }
@@ -1431,45 +1487,9 @@ TypeDeclSpecifier: QualifiedIdentifier
                    };
 
 
-// TypeArguments: 
-//     < TypeArgument { , TypeArgument } >
-TypeArguments: LESSTHAN 
-               {
-                 typeStack.peek().setActualArgumentTypes(new LinkedList<TypeDef>());
-               }
-               _TypeArgumentList GREATERTHAN
-             ;
-TypeArguments_opt:
-                 | TypeArguments
-                 ;
 
-// TypeArgument:  
-//    ReferenceType {[]}
-//    ? [ ( extends | super ) ( BasicType [] {[]} | ReferenceType {[]} ) ]
-TypeArgument: ReferenceType
-            | QUERY              
-              { 
-                $$ = new WildcardTypeDef(); 
-              } 
-            | QUERY EXTENDS Type // actually ( PrimitiveType [] {[]} | ReferenceType {[]} )
-              { 
-                $$ = new WildcardTypeDef($3, "extends" ); 
-              }
-            | QUERY SUPER Type   // actually ( PrimitiveType [] {[]} | ReferenceType {[]} )
-              { 
-                $$ = new WildcardTypeDef($3, "super" ); 
-              }
-            ;
-//---------------------------------------------------------
-_TypeArgumentList: TypeArgument 
-                  { 
-                    (typeStack.peek()).getActualArgumentTypes().add($1);
-                  }
-                | _TypeArgumentList COMMA TypeArgument 
-                  { 
-                    (typeStack.peek()).getActualArgumentTypes().add($3);
-                  }
-                ;
+
+
 //========================================================
 
 // NonWildcardTypeArguments:

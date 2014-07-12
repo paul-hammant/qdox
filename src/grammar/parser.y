@@ -1289,6 +1289,59 @@ ArrayType: ClassOrInterfaceType Dims
            }
          ;
 
+// Dims:
+//     {Annotation} [ ] {{Annotation} [ ]}
+Dims: SQUAREOPEN SQUARECLOSE 
+      { 
+        $$ = 1;
+      } 
+    | Dims SQUAREOPEN SQUARECLOSE 
+      { 
+        $$ = $1 + 1;
+      };
+Dims_opt: { 
+            $$ = 0; 
+          }
+        | Dims
+        ;
+
+// TypeParameter:
+//     {TypeParameterModifier} Identifier [TypeBound]
+TypeParameter: IDENTIFIER 
+               { 
+                 typeVariable = new TypeVariableDef($1);
+                 typeVariable.setBounds(new LinkedList<TypeDef>());
+               }
+               TypeBound_opt
+               {
+                 typeParams.add(typeVariable);
+                 typeVariable = null;
+               };
+
+// TypeBound:
+//     extends TypeVariable 
+//     extends ClassOrInterfaceType {AdditionalBound}
+TypeBound: EXTENDS ClassOrInterfaceType
+           {
+             typeVariable.setBounds(new LinkedList<TypeDef>());
+             typeVariable.getBounds().add($2);
+           } 
+           AdditionalBound_opts
+         ;
+TypeBound_opt:
+             | TypeBound 
+             ;
+
+// AdditionalBound:
+//     & InterfaceType
+AdditionalBound: AMPERSAND ClassOrInterfaceType
+                 {
+                   typeVariable.getBounds().add($2);
+                 }
+               ;
+AdditionalBound_opts:
+                    | AdditionalBound AdditionalBound_opts
+                    ;
 
 //========================================================
 // QualifiedIdentifier:
@@ -1439,42 +1492,7 @@ TypeList: ReferenceType
 // NonWildcardTypeArgumentsOrDiamond:
 //     < >
 //     NonWildcardTypeArguments
-
-
-
-
-// TypeParameter:
-//     Identifier [extends Bound]
-TypeParameter: IDENTIFIER 
-               { 
-                 typeVariable = new TypeVariableDef($1);
-                 typeVariable.setBounds(new LinkedList<TypeDef>());
-               }
-               _ExtendsBound_opt
-               {
-                 typeParams.add(typeVariable);
-                 typeVariable = null;
-               };
-             
-// Bound:
-//     ReferenceType { & ReferenceType }
-Bound: ReferenceType
-       {
-         typeVariable.getBounds().add($1);
-       }
-     | Bound AMPERSAND ReferenceType
-       {
-         typeVariable.getBounds().add($3);
-       }
-     ;  
-//--------------------------------------------------------
-_ExtendsBound_opt:
-                | EXTENDS
-                  {
-                    typeVariable.setBounds(new LinkedList<TypeDef>());
-                  } 
-                  Bound
-                ;
+ 
 //========================================================
 Modifiers_opt:
              | Modifiers_opt Modifier;
@@ -1636,19 +1654,6 @@ ClassCreatorRest: Arguments ClassBody_opt
 ArrayCreatorRest: Dims ArrayInitializer
                 | DimExprs Dims_opt
                 ;  
-
-Dims: SQUAREOPEN SQUARECLOSE 
-      { 
-        $$ = 1;
-      } 
-    | Dims SQUAREOPEN SQUARECLOSE 
-      { 
-        $$ = $1 + 1;
-      };
-Dims_opt: { 
-            $$ = 0; 
-          }
-  | Dims;
 
 ExpressionList_opt: 
                   | ExpressionList;

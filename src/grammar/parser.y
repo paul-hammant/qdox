@@ -58,8 +58,8 @@ import java.util.Stack;
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
-%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus Primary PrimaryNoNewArray MethodInvocation Creator
-%type <annoval> PostfixExpression CastExpression Assignment LeftHandSide AssignmentExpression
+%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray MethodInvocation Creator
+%type <annoval> PostfixExpression PostIncrementExpression PostDecrementExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator CreatedName
 %type <type> Type ReferenceType VariableDeclaratorId ClassOrInterfaceType TypeArgument
@@ -69,7 +69,7 @@ import java.util.Stack;
 //         The Java(TM) Language Specification - Java SE 8 Edition ( Chapter 19. Syntax )
 
 // ------------------------------
-// Productions from §7 (Packages)
+// Productions from ï¿½7 (Packages)
 // ------------------------------
 
 // CompilationUnit:
@@ -161,7 +161,7 @@ TypeDeclarations_opt:
                     ;
 
 // -----------------------------
-// Productions from §8 (Classes)
+// Productions from ï¿½8 (Classes)
 // -----------------------------
 
 // ClassDeclaration: 
@@ -564,7 +564,7 @@ EnumBodyDeclarations_opt:
                         ;      
 
 // -----------------------------
-// Productions from §9 (Interfaces)
+// Productions from ï¿½9 (Interfaces)
 // -----------------------------
 
 // InterfaceDeclaration: 
@@ -753,7 +753,7 @@ Annotations_opt:
                | Annotations_opt Annotation;
 
 // -----------------------------
-// Productions from §10 (Arrays)
+// Productions from ï¿½10 (Arrays)
 // -----------------------------
 
 // ArrayInitializer:
@@ -770,7 +770,7 @@ VariableInitializerList_opt:
                            | VariableInitializerList
                            ;
 // ----------------------------------
-// Productions from §15 (Expressions)
+// Productions from ï¿½15 (Expressions)
 // ----------------------------------
 
 // Primary:
@@ -797,7 +797,7 @@ PrimaryNoNewArray: Literal
                    { 
                      $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
                    }
-                 | PARENOPEN Expression PARENCLOSE /* ParExpression*/
+                 | PARENOPEN Expression PARENCLOSE
                    { 
                      $$ = new ParenExpressionDef($2); 
                    }
@@ -894,9 +894,342 @@ ArgumentList_opt:
 //     new ClassOrInterfaceType Dims ArrayInitializer
 
 // DimExprs:
-//     DimExpr {DimExpr} 
+//     DimExpr {DimExpr}
+DimExprs: DimExpr
+        | DimExprs DimExpr
+        ;
+ 
 // DimExpr:
 //     {Annotation} [ Expression ]
+DimExpr: SQUAREOPEN Expression SQUARECLOSE
+       ;
+
+// ConstantExpression:
+//     Expression
+
+// Expression:
+//     LambdaExpression 
+//     AssignmentExpression
+Expression: AssignmentExpression
+          ;
+
+// LambdaExpression:
+//     LambdaParameters -> LambdaBody 
+// LambdaParameters:
+//     Identifier 
+//     ( [FormalParameterList] ) 
+//     ( InferredFormalParameterList ) 
+// InferredFormalParameterList:
+//     Identifier {, Identifier} 
+// LambdaBody:
+//     Expression 
+//     Block
+
+// AssignmentExpression:
+//     ConditionalExpression 
+//     Assignment
+AssignmentExpression: ConditionalExpression
+                    | Assignment
+                    ; 
+
+// Assignment:
+//     LeftHandSide AssignmentOperator Expression
+Assignment: LeftHandSide AssignmentOperator Expression
+            {
+              $$ = new AssignmentDef($1, $2, $3);
+            }
+          ;
+
+// LeftHandSide:
+//     ExpressionName 
+//     FieldAccess 
+//     ArrayAccess
+LeftHandSide: QualifiedIdentifier
+              {
+                $$ = new FieldRefDef($1);
+              }
+            ;
+
+// AssignmentOperator:
+//     =
+//     *=
+//     /=
+//     %=
+//     +=
+//     -=
+//     <<=
+//     >>=
+//     >>>=
+//     &=
+//     ^=
+//     |=
+AssignmentOperator: EQUALS
+                  | STAREQUALS
+                  | SLASHEQUALS
+                  | PERCENTEQUALS
+                  | PLUSEQUALS
+                  | MINUSEQUALS
+                  | LESSTHAN2EQUALS
+                  | GREATERTHAN2EQUALS
+                  | GREATERTHAN3EQUALS
+                  | AMPERSANDEQUALS
+                  | CIRCUMFLEXEQUALS
+                  | VERTLINEEQUALS
+                  ;
+
+// ConditionalExpression:
+//     ConditionalOrExpression 
+//     ConditionalOrExpression ? Expression : ConditionalExpression
+ConditionalExpression: ConditionalOrExpression 
+                     | ConditionalOrExpression QUERY Expression COLON ConditionalExpression 
+                       { 
+                         $$ = new QueryDef($1, $3, $5);
+                       }
+                     ;
+
+// ConditionalOrExpression:
+//     ConditionalAndExpression 
+//     ConditionalOrExpression || ConditionalAndExpression
+ConditionalOrExpression: ConditionalAndExpression 
+                       | ConditionalOrExpression VERTLINE2 ConditionalAndExpression 
+                         { 
+                           $$ = new LogicalOrDef($1, $3);
+                         }
+                       ;
+
+// ConditionalAndExpression:
+//     InclusiveOrExpression 
+//     ConditionalAndExpression && InclusiveOrExpression
+ConditionalAndExpression: InclusiveOrExpression 
+                        | ConditionalAndExpression AMPERSAND2 InclusiveOrExpression 
+                          { 
+                            $$ = new LogicalAndDef($1, $3); 
+                          }
+                        ;
+
+// InclusiveOrExpression:
+//     ExclusiveOrExpression 
+//     InclusiveOrExpression | ExclusiveOrExpression
+InclusiveOrExpression: ExclusiveOrExpression 
+                     | InclusiveOrExpression VERTLINE ExclusiveOrExpression 
+                       { 
+                         $$ = new OrDef($1, $3); 
+                       }
+                     ;
+
+// ExclusiveOrExpression:
+//     AndExpression 
+//     ExclusiveOrExpression ^ AndExpression
+ExclusiveOrExpression: AndExpression 
+                     | ExclusiveOrExpression CIRCUMFLEX AndExpression 
+                       { 
+                         $$ = new ExclusiveOrDef($1, $3);
+                       }
+                     ;
+
+// AndExpression:
+//     EqualityExpression 
+//     AndExpression & EqualityExpression
+AndExpression: EqualityExpression 
+             | AndExpression AMPERSAND EqualityExpression 
+               { 
+                 $$ = new AndDef($1, $3); 
+               }
+             ;
+
+// EqualityExpression:
+//     RelationalExpression 
+//     EqualityExpression == RelationalExpression 
+//     EqualityExpression != RelationalExpression
+EqualityExpression: RelationalExpression 
+                  | EqualityExpression EQUALS2 RelationalExpression   
+                    { 
+                      $$ = new EqualsDef($1, $3);
+                    } 
+                  | EqualityExpression NOTEQUALS RelationalExpression 
+                    { 
+                      $$ = new NotEqualsDef($1, $3); 
+                    }
+                  ;
+
+// RelationalExpression:
+//     ShiftExpression 
+//     RelationalExpression < ShiftExpression 
+//     RelationalExpression > ShiftExpression 
+//     RelationalExpression <= ShiftExpression 
+//     RelationalExpression >= ShiftExpression 
+//     RelationalExpression instanceof ReferenceType
+RelationalExpression: ShiftExpression 
+                    | RelationalExpression LESSTHAN ShiftExpression      
+                      { 
+                        $$ = new LessThanDef($1, $3); 
+                      } 
+                    | RelationalExpression GREATERTHAN ShiftExpression   
+                      { 
+                        $$ = new GreaterThanDef($1, $3); 
+                      }
+                    | RelationalExpression LESSEQUALS ShiftExpression    
+                      { 
+                        $$ = new LessEqualsDef($1, $3);
+                      } 
+                    | RelationalExpression GREATEREQUALS ShiftExpression 
+                      { 
+                        $$ = new GreaterEqualsDef($1, $3); 
+                      } 
+                    ;
+
+// ShiftExpression:
+//     AdditiveExpression 
+//     ShiftExpression << AdditiveExpression 
+//     ShiftExpression >> AdditiveExpression 
+//     ShiftExpression >>> AdditiveExpression
+ShiftExpression: AdditiveExpression 
+               | ShiftExpression LESSTHAN2 AdditiveExpression
+                 { 
+                   $$ = new ShiftLeftDef($1, $3);
+                 }
+               | ShiftExpression GREATERTHAN2 AdditiveExpression
+                 {
+                   $$ = new ShiftRightDef($1, $3);
+                 }
+               | ShiftExpression GREATERTHAN3 AdditiveExpression
+                 {
+                   $$ = new UnsignedShiftRightDef($1, $3);
+                 } 
+               ;
+
+// AdditiveExpression:
+//     MultiplicativeExpression 
+//     AdditiveExpression + MultiplicativeExpression 
+//     AdditiveExpression - MultiplicativeExpression
+AdditiveExpression: MultiplicativeExpression 
+                  | AdditiveExpression PLUS MultiplicativeExpression
+                    {
+                      $$ = new AddDef($1, $3);
+                    } 
+                  | AdditiveExpression MINUS MultiplicativeExpression
+                    {
+                      $$ = new SubtractDef($1, $3);
+                    }
+                  ;
+
+// MultiplicativeExpression:
+//     UnaryExpression 
+//     MultiplicativeExpression * UnaryExpression 
+//     MultiplicativeExpression / UnaryExpression 
+//     MultiplicativeExpression % UnaryExpression
+MultiplicativeExpression: UnaryExpression 
+                        | MultiplicativeExpression STAR UnaryExpression
+                          {
+                            $$ = new MultiplyDef($1, $3);
+                          } 
+                        | MultiplicativeExpression SLASH UnaryExpression
+                          {
+                            $$ = new DivideDef($1, $3);
+                          } 
+                        | MultiplicativeExpression PERCENT UnaryExpression
+                          {
+                            $$ = new RemainderDef($1, $3);
+                          }
+                        ;
+
+// UnaryExpression:
+//     PreIncrementExpression 
+//     PreDecrementExpression 
+//     + UnaryExpression 
+//     - UnaryExpression 
+//     UnaryExpressionNotPlusMinus
+UnaryExpression: PreIncrementExpression
+               | PreDecrementExpression
+               | PLUS UnaryExpression
+                 {
+                   $$ = new PlusSignDef($2);
+                 } 
+               | MINUS UnaryExpression
+                 {
+                   $$ = new MinusSignDef($2);
+                 }
+               | UnaryExpressionNotPlusMinus
+               ;
+
+// PreIncrementExpression:
+//     ++ UnaryExpression
+PreIncrementExpression: PLUSPLUS UnaryExpression
+                        { 
+                          $$ = new PreIncrementDef($2);
+                        }
+                      ;
+
+// PreDecrementExpression:
+//     -- UnaryExpression
+PreDecrementExpression: MINUSMINUS UnaryExpression
+                        {
+                          $$ = new PreDecrementDef($2);
+                        }
+                      ;
+
+// UnaryExpressionNotPlusMinus:
+//     PostfixExpression 
+//     ~ UnaryExpression 
+//     ! UnaryExpression 
+//     CastExpression
+UnaryExpressionNotPlusMinus: PostfixExpression 
+                           | TILDE UnaryExpression
+                             {
+                               $$ = new NotDef($2);
+                             } 
+                           | EXCLAMATION UnaryExpression
+                             {
+                               $$ = new LogicalNotDef($2);
+                             } 
+                           | CastExpression
+                           ;
+
+// PostfixExpression:
+//     Primary 
+//     ExpressionName 
+//     PostIncrementExpression 
+//     PostDecrementExpression
+PostfixExpression: Primary
+                 | PostIncrementExpression
+                 | PostDecrementExpression
+                 ; 
+
+// PostIncrementExpression:
+//     PostfixExpression ++
+PostIncrementExpression: PostfixExpression PLUSPLUS
+                         {
+                           $$ = new PostIncrementDef($1);
+                         }
+                       ; 
+
+// PostDecrementExpression:
+//     PostfixExpression -- 
+PostDecrementExpression: PostfixExpression MINUSMINUS
+                         {
+                           $$ = new PostDecrementDef($1);
+                         }
+                       ;
+
+// CastExpression:
+//     ( PrimitiveType ) UnaryExpression 
+//     ( ReferenceType {AdditionalBound} ) UnaryExpressionNotPlusMinus 
+//     ( ReferenceType {AdditionalBound} ) LambdaExpression
+CastExpression: PARENOPEN BasicType Dims_opt PARENCLOSE UnaryExpression
+                {
+                  $$ = new CastDef(new TypeDef($2.getName(), $3), $5);
+                } 
+              | PARENOPEN QualifiedIdentifier PARENCLOSE UnaryExpressionNotPlusMinus
+                {
+                  $$ = new CastDef(new TypeDef($2, 0), $4);
+                }
+              | PARENOPEN QualifiedIdentifier Dims PARENCLOSE UnaryExpressionNotPlusMinus
+                {
+                  $$ = new CastDef(new TypeDef($2, $3), $5);
+                }
+              ;
+
+
 
 //========================================================
 // QualifiedIdentifier:
@@ -1270,11 +1603,6 @@ ArrayCreatorRest: Dims ArrayInitializer
                 | DimExprs Dims_opt
                 ;  
 
-DimExprs: DimExpr
-        | DimExprs DimExpr;
-
-DimExpr: SQUAREOPEN Expression SQUARECLOSE
-
 Dims: SQUAREOPEN SQUARECLOSE 
       { 
         $$ = 1;
@@ -1287,163 +1615,6 @@ Dims_opt: {
             $$ = 0; 
           }
   | Dims;
-            
-// 15.14 Postfix Expressions
-PostfixExpression: /* ExpressionName | */
-                   Primary
-     | PostfixExpression PLUSPLUS   { $$ = new PostIncrementDef($1); } 
-     | PostfixExpression MINUSMINUS { $$ = new PostDecrementDef($1); };
-
-// 15.15 Unary Operators
-UnaryExpression: PLUSPLUS UnaryExpression   { $$ = new PreIncrementDef($2);  }
-               | MINUSMINUS UnaryExpression { $$ = new PreDecrementDef($2);  }
-               | PLUS UnaryExpression       { $$ = new PlusSignDef($2); } 
-               | MINUS UnaryExpression      { $$ = new MinusSignDef($2); }
-               | UnaryExpressionNotPlusMinus;
-
-UnaryExpressionNotPlusMinus: PostfixExpression 
-                           | TILDE UnaryExpression       { $$ = new NotDef($2); } 
-                           | EXCLAMATION UnaryExpression { $$ = new LogicalNotDef($2); } 
-                           | CastExpression;
-
-// 15.16 Cast Expressions 
-CastExpression: PARENOPEN BasicType Dims_opt PARENCLOSE UnaryExpression   { $$ = new CastDef(new TypeDef($2.getName(), $3), $5); } 
-              | PARENOPEN QualifiedIdentifier PARENCLOSE UnaryExpressionNotPlusMinus      { $$ = new CastDef(new TypeDef($2, 0), $4); }
-              | PARENOPEN QualifiedIdentifier Dims PARENCLOSE UnaryExpressionNotPlusMinus { $$ = new CastDef(new TypeDef($2, $3), $5); };
-
-// 15.17 Multiplicative Operators
-MultiplicativeExpression: UnaryExpression 
-                        | MultiplicativeExpression STAR UnaryExpression    { $$ = new MultiplyDef($1, $3); } 
-                        | MultiplicativeExpression SLASH UnaryExpression   { $$ = new DivideDef($1, $3); } 
-                        | MultiplicativeExpression PERCENT UnaryExpression { $$ = new RemainderDef($1, $3); };
-
-// 15.18 Additive Operators
-AdditiveExpression: MultiplicativeExpression 
-                  | AdditiveExpression PLUS MultiplicativeExpression  { $$ = new AddDef($1, $3); } 
-                  | AdditiveExpression MINUS MultiplicativeExpression { $$ = new SubtractDef($1, $3); };
-
-// 15.19 Shift Operators
-ShiftExpression: AdditiveExpression 
-               | ShiftExpression LESSTHAN2 AdditiveExpression    { $$ = new ShiftLeftDef($1, $3); }
-               | ShiftExpression GREATERTHAN3 AdditiveExpression { $$ = new UnsignedShiftRightDef($1, $3); } 
-               | ShiftExpression GREATERTHAN2 AdditiveExpression { $$ = new ShiftRightDef($1, $3); };
-
-// 15.20 Relational Operators
-RelationalExpression: ShiftExpression 
-                    | RelationalExpression LESSEQUALS ShiftExpression    
-                      { 
-                        $$ = new LessEqualsDef($1, $3);
-                      } 
-                    | RelationalExpression GREATEREQUALS ShiftExpression 
-                      { 
-                        $$ = new GreaterEqualsDef($1, $3); 
-                      } 
-                    | RelationalExpression LESSTHAN ShiftExpression      
-                      { 
-                        $$ = new LessThanDef($1, $3); 
-                      } 
-                    | RelationalExpression GREATERTHAN ShiftExpression   
-                      { 
-                        $$ = new GreaterThanDef($1, $3); 
-                      };
-
-// 15.21 Equality Operators
-EqualityExpression: RelationalExpression 
-                  | EqualityExpression EQUALS2 RelationalExpression   
-                    { 
-                      $$ = new EqualsDef($1, $3);
-                    } 
-                  | EqualityExpression NOTEQUALS RelationalExpression 
-                    { 
-                      $$ = new NotEqualsDef($1, $3); 
-                    };
-
-// 15.22 Bitwise and Logical Operators
-InclusiveOrExpression: ExclusiveOrExpression 
-                     | InclusiveOrExpression VERTLINE ExclusiveOrExpression 
-                       { 
-                         $$ = new OrDef($1, $3); 
-                       };
-
-ExclusiveOrExpression: AndExpression 
-                     | ExclusiveOrExpression CIRCUMFLEX AndExpression 
-                       { 
-                         $$ = new ExclusiveOrDef($1, $3);
-                       };
-
-AndExpression: EqualityExpression 
-             | AndExpression AMPERSAND EqualityExpression 
-               { 
-                 $$ = new AndDef($1, $3); 
-               };
-
-// 15.23 Conditional-And Operator &&
-ConditionalAndExpression: InclusiveOrExpression 
-                        | ConditionalAndExpression AMPERSAND2 InclusiveOrExpression 
-                          { 
-                            $$ = new LogicalAndDef($1, $3); 
-                          };
-
-// 15.24 Conditional-Or Operator ||
-ConditionalOrExpression: ConditionalAndExpression 
-                       | ConditionalOrExpression VERTLINE2 ConditionalAndExpression 
-                         { 
-                           $$ = new LogicalOrDef($1, $3);
-                         };
-
-// 15.25 Conditional Operator ? : 
-ConditionalExpression: ConditionalOrExpression 
-                     | ConditionalOrExpression QUERY Expression COLON ConditionalExpression 
-                       { 
-                         $$ = new QueryDef($1, $3, $5);
-                       };
-                       
-// 15.26 Assignment Operators
-AssignmentExpression: ConditionalExpression
-                    | Assignment; 
-
-Assignment: LeftHandSide AssignmentOperator AssignmentExpression
-            {
-              $$ = new AssignmentDef($1, $2, $3);
-            };
-
-
-// ExpressionName | FieldAccess
-LeftHandSide: QualifiedIdentifier
-              {
-                $$ = new FieldRefDef($1);
-              };
-//            | ArrayAccess;
-
-// AssignmentOperator: 
-//      = 
-//      +=
-//      -= 
-//      *=
-//      /=
-//      &=
-//      |=
-//      ^=
-//      %=
-//      <<=
-//      >>=
-//      >>>=            
-AssignmentOperator: EQUALS
-                  | PLUSEQUALS
-                  | MINUSEQUALS
-                  | STAREQUALS
-                  | SLASHEQUALS
-                  | AMPERSANDEQUALS
-                  | VERTLINEEQUALS
-                  | CIRCUMFLEXEQUALS
-                  | PERCENTEQUALS
-                  | LESSTHAN2EQUALS
-                  | GREATERTHAN2EQUALS
-                  | GREATERTHAN3EQUALS
-                  ;
-
-// 15.27 Expression
-Expression: AssignmentExpression;
 
 ExpressionList_opt: 
                   | ExpressionList;

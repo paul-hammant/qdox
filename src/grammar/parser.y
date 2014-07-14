@@ -814,19 +814,30 @@ PrimaryNoNewArray: Literal
                      $$ = new FieldRefDef($1); 
                    }
                  | MethodInvocation 
-                   {
-                     $$ = $1;
-                   }
-                 | NEW Creator
-                   {
-                     $$ = $2;
-                   }
+                 | Creator
                  ;
 
 // ClassInstanceCreationExpression:
 //     new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
 //     ExpressionName . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
 //     Primary . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody]
+
+// Creator:  
+//     NonWildcardTypeArguments CreatedName ClassCreatorRest
+//     CreatedName ( ClassCreatorRest | ArrayCreatorRest )
+Creator: NEW NonWildcardTypeArguments CreatedName ClassCreatorRest 
+         { 
+           CreatorDef creator = new CreatorDef();
+           creator.setCreatedName( $3 );
+           $$ = creator; 
+         }
+       | NEW CreatedName ClassCreatorRest
+         {
+           CreatorDef creator = new CreatorDef();
+           creator.setCreatedName( $2 );
+           $$ = creator; 
+         }
+       ;
 
 // TypeArgumentsOrDiamond:
 //     TypeArguments 
@@ -1641,23 +1652,6 @@ Arguments: PARENOPEN ExpressionList_opt PARENCLOSE
          ;
          
 //========================================================
-
-// Creator:  
-//     NonWildcardTypeArguments CreatedName ClassCreatorRest
-//     CreatedName ( ClassCreatorRest | ArrayCreatorRest )
-Creator: NonWildcardTypeArguments CreatedName ClassCreatorRest 
-         { 
-           CreatorDef creator = new CreatorDef();
-           creator.setCreatedName( $2 );
-           $$ = creator; 
-         }
-       | CreatedName ClassCreatorRest
-         {
-           CreatorDef creator = new CreatorDef();
-           creator.setCreatedName( $1 );
-           $$ = creator; 
-         }
-       ;
 
 // CreatedName:   
 //     Identifier [TypeArgumentsOrDiamond] { . Identifier [TypeArgumentsOrDiamond] }

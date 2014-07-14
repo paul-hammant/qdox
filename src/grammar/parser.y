@@ -892,14 +892,19 @@ ArgumentList_opt:
 //     new ClassOrInterfaceType DimExprs [Dims] 
 //     new PrimitiveType Dims ArrayInitializer 
 //     new ClassOrInterfaceType Dims ArrayInitializer
-ArrayCreationExpression: NEW CreatedName ArrayCreatorRest 
+ArrayCreationExpression: NEW CreatedName DimExprs Dims_opt 
+                         {
+                           CreatorDef creator = new CreatorDef();
+                           creator.setCreatedName( $2 );
+                           $$ = creator; 
+                         }
+                       | NEW CreatedName Dims ArrayInitializer 
                          {
                            CreatorDef creator = new CreatorDef();
                            creator.setCreatedName( $2 );
                            $$ = creator; 
                          }
                        ;
-
 
 // DimExprs:
 //     DimExpr {DimExpr}
@@ -1670,12 +1675,6 @@ CreatedName: IDENTIFIER TypeArgumentsOrDiamond_opt
 //     Arguments [ClassBody]
 ClassCreatorRest: Arguments ClassBody_opt
                 ;
-
-// ArrayCreatorRest:
-//     [ ( ] {[]} ArrayInitializer | Expression ] {[ Expression ]} {[]} )
-ArrayCreatorRest: Dims ArrayInitializer
-                | DimExprs Dims_opt
-                ;  
 
 ExpressionList_opt: 
                   | ExpressionList;

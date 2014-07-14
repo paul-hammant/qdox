@@ -58,7 +58,7 @@ import java.util.Stack;
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
-%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray MethodInvocation Creator
+%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation Creator
 %type <annoval> PostfixExpression PostIncrementExpression PostDecrementExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator CreatedName
@@ -777,7 +777,7 @@ VariableInitializerList_opt:
 //     PrimaryNoNewArray 
 //     ArrayCreationExpression
 Primary: PrimaryNoNewArray
-//     | ArrayCreationExpression
+       | ArrayCreationExpression
        ;
 
 // PrimaryNoNewArray:
@@ -892,6 +892,14 @@ ArgumentList_opt:
 //     new ClassOrInterfaceType DimExprs [Dims] 
 //     new PrimitiveType Dims ArrayInitializer 
 //     new ClassOrInterfaceType Dims ArrayInitializer
+ArrayCreationExpression: NEW CreatedName ArrayCreatorRest 
+                         {
+                           CreatorDef creator = new CreatorDef();
+                           creator.setCreatedName( $2 );
+                           $$ = creator; 
+                         }
+                       ;
+
 
 // DimExprs:
 //     DimExpr {DimExpr}
@@ -1639,12 +1647,6 @@ Creator: NonWildcardTypeArguments CreatedName ClassCreatorRest
            $$ = creator; 
          }
        | CreatedName ClassCreatorRest
-         {
-           CreatorDef creator = new CreatorDef();
-           creator.setCreatedName( $1 );
-           $$ = creator; 
-         }
-       | CreatedName ArrayCreatorRest 
          {
            CreatorDef creator = new CreatorDef();
            creator.setCreatedName( $1 );

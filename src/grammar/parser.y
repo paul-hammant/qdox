@@ -824,13 +824,13 @@ PrimaryNoNewArray: Literal
 // Creator:  
 //     NonWildcardTypeArguments CreatedName ClassCreatorRest
 //     CreatedName ( ClassCreatorRest | ArrayCreatorRest )
-ClassInstanceCreationExpression: NEW TypeArguments_opt CreatedName ClassCreatorRest 
+ClassInstanceCreationExpression: NEW TypeArguments_opt CreatedName Arguments ClassBody_opt 
                                  { 
                                    CreatorDef creator = new CreatorDef();
                                    creator.setCreatedName( $3 );
                                    $$ = creator; 
                                  }
-                               | NEW CreatedName ClassCreatorRest
+                               | NEW CreatedName Arguments ClassBody_opt
                                  {
                                    CreatorDef creator = new CreatorDef();
                                    creator.setCreatedName( $2 );
@@ -1653,11 +1653,6 @@ CreatedName: IDENTIFIER TypeArgumentsOrDiamond_opt
                $$ = $1 + "." + $3;
              }
            ; 
-
-// ClassCreatorRest: 
-//     Arguments [ClassBody]
-ClassCreatorRest: Arguments ClassBody_opt
-                ;
 
 ExpressionList_opt: 
                   | ExpressionList;

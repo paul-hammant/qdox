@@ -824,7 +824,7 @@ PrimaryNoNewArray: Literal
 // Creator:  
 //     NonWildcardTypeArguments CreatedName ClassCreatorRest
 //     CreatedName ( ClassCreatorRest | ArrayCreatorRest )
-ClassInstanceCreationExpression: NEW TypeArguments_opt CreatedName PARENOPEN ArgumentList_opt PARENCLOSE ClassBody_opt 
+ClassInstanceCreationExpression: NEW TypeArguments_opt IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE ClassBody_opt 
                                  { 
                                    CreatorDef creator = new CreatorDef();
                                    creator.setCreatedName( $3 );

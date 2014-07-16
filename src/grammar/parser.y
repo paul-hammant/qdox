@@ -58,7 +58,7 @@ import java.util.Stack;
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
-%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation Creator
+%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation ClassInstanceCreationExpression
 %type <annoval> PostfixExpression PostIncrementExpression PostDecrementExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator CreatedName
@@ -814,30 +814,29 @@ PrimaryNoNewArray: Literal
                      $$ = new FieldRefDef($1); 
                    }
                  | MethodInvocation 
-                 | Creator
+                 | ClassInstanceCreationExpression
                  ;
 
 // ClassInstanceCreationExpression:
 //     new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
 //     ExpressionName . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
 //     Primary . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody]
-
 // Creator:  
 //     NonWildcardTypeArguments CreatedName ClassCreatorRest
 //     CreatedName ( ClassCreatorRest | ArrayCreatorRest )
-Creator: NEW NonWildcardTypeArguments CreatedName ClassCreatorRest 
-         { 
-           CreatorDef creator = new CreatorDef();
-           creator.setCreatedName( $3 );
-           $$ = creator; 
-         }
-       | NEW CreatedName ClassCreatorRest
-         {
-           CreatorDef creator = new CreatorDef();
-           creator.setCreatedName( $2 );
-           $$ = creator; 
-         }
-       ;
+ClassInstanceCreationExpression: NEW TypeArguments_opt CreatedName ClassCreatorRest 
+                                 { 
+                                   CreatorDef creator = new CreatorDef();
+                                   creator.setCreatedName( $3 );
+                                   $$ = creator; 
+                                 }
+                               | NEW CreatedName ClassCreatorRest
+                                 {
+                                   CreatorDef creator = new CreatorDef();
+                                   creator.setCreatedName( $2 );
+                                   $$ = creator; 
+                                 }
+                               ;
 
 // TypeArgumentsOrDiamond:
 //     TypeArguments 
@@ -1516,11 +1515,6 @@ TypeDeclSpecifier: QualifiedIdentifier
 
 //========================================================
 
-// NonWildcardTypeArguments:
-//     < TypeList >
-NonWildcardTypeArguments: LESSTHAN TypeList GREATERTHAN
-                        ;
-
 // TypeList:  
 //     ReferenceType { , ReferenceType }
 TypeList: ReferenceType
@@ -1532,11 +1526,6 @@ TypeList: ReferenceType
             typeList.add( $3 );
           }
         ;
-
-// NonWildcardTypeArgumentsOrDiamond:
-//     < >
-//     NonWildcardTypeArguments
- 
 //========================================================
 Modifiers_opt:
              | Modifiers_opt Modifier;

@@ -824,13 +824,13 @@ PrimaryNoNewArray: Literal
 // Creator:  
 //     NonWildcardTypeArguments CreatedName ClassCreatorRest
 //     CreatedName ( ClassCreatorRest | ArrayCreatorRest )
-ClassInstanceCreationExpression: NEW TypeArguments_opt CreatedName Arguments ClassBody_opt 
+ClassInstanceCreationExpression: NEW TypeArguments_opt CreatedName PARENOPEN ArgumentList_opt PARENCLOSE ClassBody_opt 
                                  { 
                                    CreatorDef creator = new CreatorDef();
                                    creator.setCreatedName( $3 );
                                    $$ = creator; 
                                  }
-                               | NEW CreatedName Arguments ClassBody_opt
+                               | NEW CreatedName PARENOPEN ArgumentList_opt PARENCLOSE ClassBody_opt
                                  {
                                    CreatorDef creator = new CreatorDef();
                                    creator.setCreatedName( $2 );
@@ -1634,11 +1634,6 @@ Literal: INTEGER_LITERAL
            $$ = new ConstantDef($1, Boolean.class);
          }
        ; 
-
-// Arguments:
-//     ( [ Expression { , Expression } ] )
-Arguments: PARENOPEN ExpressionList_opt PARENCLOSE
-         ;
          
 //========================================================
 
@@ -1653,12 +1648,6 @@ CreatedName: IDENTIFIER TypeArgumentsOrDiamond_opt
                $$ = $1 + "." + $3;
              }
            ; 
-
-ExpressionList_opt: 
-                  | ExpressionList;
-                  
-ExpressionList: Expression
-              | ExpressionList Expression;
 
 //========================================================
 

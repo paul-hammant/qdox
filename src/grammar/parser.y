@@ -801,6 +801,7 @@ PrimaryNoNewArray: Literal
                    { 
                      $$ = new ParenExpressionDef($2); 
                    }
+                 | ClassInstanceCreationExpression
                  | QualifiedIdentifier DOT CLASS 
                    { 
                      $$ = new TypeRefDef(new TypeDef($1, 0));
@@ -814,23 +815,20 @@ PrimaryNoNewArray: Literal
                      $$ = new FieldRefDef($1); 
                    }
                  | MethodInvocation 
-                 | ClassInstanceCreationExpression
                  ;
 
 // ClassInstanceCreationExpression:
 //     new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
 //     ExpressionName . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
 //     Primary . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody]
-// Creator:  
-//     NonWildcardTypeArguments CreatedName ClassCreatorRest
-//     CreatedName ( ClassCreatorRest | ArrayCreatorRest )
+//// TypeArguments_opt confuses parser
 ClassInstanceCreationExpression: NEW TypeArguments_opt IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE ClassBody_opt 
                                  { 
                                    CreatorDef creator = new CreatorDef();
                                    creator.setCreatedName( $3 );
                                    $$ = creator; 
                                  }
-                               | NEW CreatedName PARENOPEN ArgumentList_opt PARENCLOSE ClassBody_opt
+                               | NEW IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE ClassBody_opt
                                  {
                                    CreatorDef creator = new CreatorDef();
                                    creator.setCreatedName( $2 );

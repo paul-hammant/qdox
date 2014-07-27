@@ -43,7 +43,7 @@ import java.util.Stack;
 %token BYTE SHORT INT LONG CHAR FLOAT DOUBLE BOOLEAN
 
 // strongly typed tokens/types
-%token <sval> IDENTIFIER
+%token <sval> IDENTIFIER 
 %token <sval> BOOLEAN_LITERAL
 %token <sval> INTEGER_LITERAL
 %token <sval> FLOAT_LITERAL
@@ -53,6 +53,7 @@ import java.util.Stack;
 %token <ival> LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS LESSTHAN2 GREATERTHAN2 GREATERTHAN3
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
 %token <ival> PLUSPLUS MINUSMINUS
+%token <sval> SUPER
 %token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
 %type <type> PrimitiveType ReferenceType ArrayType ClassOrInterfaceType
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
@@ -61,7 +62,7 @@ import java.util.Stack;
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation ClassInstanceCreationExpression
 %type <annoval> PostfixExpression PostIncrementExpression PostDecrementExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
-%type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator CreatedName
+%type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator
 %type <type> Type ReferenceType Wildcard WildcardBounds VariableDeclaratorId ClassOrInterfaceType TypeArgument
 
 %%
@@ -865,6 +866,14 @@ MethodInvocation: IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
                   {
                     $$ = new MethodInvocationDef($1, null);
                   }
+                | SUPER DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                  {
+                    $$ = new MethodInvocationDef($1, null);
+                  }
+                | QualifiedIdentifier DOT SUPER DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                  {
+                    $$ = new MethodInvocationDef($1 + ".super", null);
+                  }
                 | QualifiedIdentifier DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
                   {
                     $$ = new MethodInvocationDef($1, null);
@@ -900,16 +909,28 @@ ArgumentList_opt:
 //     new ClassOrInterfaceType DimExprs [Dims] 
 //     new PrimitiveType Dims ArrayInitializer 
 //     new ClassOrInterfaceType Dims ArrayInitializer
-ArrayCreationExpression: NEW CreatedName DimExprs Dims_opt 
+ArrayCreationExpression: NEW PrimitiveType DimExprs Dims_opt 
                          {
                            CreatorDef creator = new CreatorDef();
-                           creator.setCreatedName( $2 );
+                           creator.setCreatedName( $2.getName() );
                            $$ = creator; 
                          }
-                       | NEW CreatedName Dims ArrayInitializer 
+                       | NEW ClassOrInterfaceType DimExprs Dims_opt 
                          {
                            CreatorDef creator = new CreatorDef();
-                           creator.setCreatedName( $2 );
+                           creator.setCreatedName( $2.getName() );
+                           $$ = creator; 
+                         }  
+                       | NEW PrimitiveType Dims ArrayInitializer 
+                         {
+                           CreatorDef creator = new CreatorDef();
+                           creator.setCreatedName( $2.getName() );
+                           $$ = creator; 
+                         }
+                       | NEW ClassOrInterfaceType Dims ArrayInitializer 
+                         {
+                           CreatorDef creator = new CreatorDef();
+                           creator.setCreatedName( $2.getName() );
                            $$ = creator; 
                          }
                        ;
@@ -1632,20 +1653,6 @@ Literal: INTEGER_LITERAL
            $$ = new ConstantDef($1, Boolean.class);
          }
        ; 
-         
-//========================================================
-
-// CreatedName:   
-//     Identifier [TypeArgumentsOrDiamond] { . Identifier [TypeArgumentsOrDiamond] }
-CreatedName: IDENTIFIER TypeArgumentsOrDiamond_opt
-             {
-               $$ = $1;
-             }
-           | CreatedName DOT IDENTIFIER TypeArgumentsOrDiamond_opt
-             {
-               $$ = $1 + "." + $3;
-             }
-           ; 
 
 //========================================================
 

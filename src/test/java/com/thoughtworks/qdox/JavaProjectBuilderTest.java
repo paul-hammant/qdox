@@ -1479,6 +1479,19 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( qDoxConstructor, qDoxParameter.getDeclarator() );
     }
     
+    // for QDOX-255
+    public void testPackageAnnotation()
+    {
+        String source = "@Anot\r\n" + 
+            "package net.jcs.jboilerdowntest;\r\n" + 
+            "import net.jcs.annotation.Anot;";
+        
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        JavaPackage pckg = builder.addSource( new StringReader( source) ).getPackage();
+        assertEquals( "net.jcs.jboilerdowntest", pckg.getName() );
+        assertEquals( 1, pckg.getAnnotations().size() );
+    }
+    
     public void testCanonicalName()
         throws Exception
     {

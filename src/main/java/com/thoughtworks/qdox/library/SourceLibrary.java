@@ -60,7 +60,9 @@ public class SourceLibrary
 
     private boolean debugParser;
     
-    private String encoding = System.getProperty("file.encoding");
+    private static final String DEFAULT_ENCODING = System.getProperty("file.encoding"); 
+    
+    private String encoding;
     
     private ErrorHandler errorHandler;
     
@@ -181,7 +183,7 @@ public class SourceLibrary
     {
         try 
         {
-            return parse( new JFlexLexer( new InputStreamReader( stream, encoding) ), url );
+            return parse( new JFlexLexer( new InputStreamReader( stream, getEncoding() ) ), url );
         }
         finally 
         {
@@ -321,7 +323,7 @@ public class SourceLibrary
     
     public final String getEncoding()
     {
-        return encoding;
+        return encoding == null ? DEFAULT_ENCODING : encoding;
     }
     
     public final void setErrorHandler( ErrorHandler errorHandler )

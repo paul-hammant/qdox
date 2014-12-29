@@ -33,27 +33,27 @@
       <post>announce@qdox.codehaus.org</post>
       <subscribe>announce-subscribe@qdox.codehaus.org</subscribe>
       <unsubscribe>announce-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.announce</archive>
+      <archive>http://markmail.org/search/?q=list%3Aorg.codehaus.qdox.announce</archive>
     </mailingList>
     <mailingList>
       <name>dev at QDox</name>
       <post>dev@qdox.codehaus.org</post>
       <subscribe>dev-subscribe@qdox.codehaus.org</subscribe>
       <unsubscribe>dev-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.dev</archive>
+      <archive>http://markmail.org/search/?q=list%3Aorg.codehaus.qdox.dev</archive>
     </mailingList>
     <mailingList>
       <name>scm at QDox</name>
       <subscribe>scm-subscribe@qdox.codehaus.org</subscribe>
       <unsubscribe>scm-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.scm</archive>
+      <archive>http://markmail.org/search/?q=list%3Aorg.codehaus.qdox.scm</archive>
     </mailingList>
     <mailingList>
       <name>user at QDox</name>
       <post>user@qdox.codehaus.org</post>
       <subscribe>user-subscribe@qdox.codehaus.org</subscribe>
       <unsubscribe>user-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://archive.codehaus.org/lists/org.codehaus.qdox.user</archive>
+      <archive>http://markmail.org/search/?q=list%3Aorg.codehaus.qdox.user</archive>
     </mailingList>
   </mailingLists>
 

@@ -206,6 +206,11 @@
             <templateFile>${basedir}/src/site/templates/site.vm</templateFile>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5.1</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>

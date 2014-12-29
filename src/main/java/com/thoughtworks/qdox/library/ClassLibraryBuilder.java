@@ -67,8 +67,9 @@ public interface ClassLibraryBuilder extends Serializable
      * 
      * @param stream
      * @return this ClassLibraryBuilder instance
+     * @throws IOException if an IOException is thrown, e.g. unsupported encoding
      */
-    ClassLibraryBuilder appendSource( InputStream stream );
+    ClassLibraryBuilder appendSource( InputStream stream ) throws IOException;
 
     /**
      * 
@@ -97,8 +98,9 @@ public interface ClassLibraryBuilder extends Serializable
      * 
      * @param stream
      * @return the created JavaSource
+     * @throws IOException if an IOException is thrown, e.g. unsupported encoding
      */
-    JavaSource addSource( InputStream stream );
+    JavaSource addSource( InputStream stream ) throws IOException;
 
     /**
      * Add the source content of the reader to the ClassLibrary and return the generated JavaSource

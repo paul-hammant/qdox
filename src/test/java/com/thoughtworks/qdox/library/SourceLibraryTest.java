@@ -1,9 +1,5 @@
 package com.thoughtworks.qdox.library;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -14,6 +10,7 @@ import java.io.Reader;
 
 import junit.framework.TestCase;
 
+import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.parser.ParseException;
 
 public class SourceLibraryTest
@@ -46,16 +43,18 @@ public class SourceLibraryTest
     
     private void deleteDir(String path) {
         File dir = new File(path);
-        File[] children = dir.listFiles();
-        for (int i = 0; i < children.length; i++) {
-            File file = children[i];
-            if (file.isDirectory()) {
-                deleteDir(file.getAbsolutePath());
-            } else {
-                file.delete();
+        if (dir.exists()) {
+            File[] children = dir.listFiles();
+            for (int i = 0; i < children.length; i++) {
+                File file = children[i];
+                if (file.isDirectory()) {
+                    deleteDir(file.getAbsolutePath());
+                } else {
+                    file.delete();
+                }
             }
+            dir.delete();
         }
-        dir.delete();
     }
 
     //QDOX-221
@@ -89,4 +88,21 @@ public class SourceLibraryTest
             catch(IOException ioe) {}
         }
     }
+    
+    // ensure encoding is read
+    public void testUTF8() throws Exception {
+        File file = new File( "src/test/resources/com/thoughtworks/qdox/testdata/UTF8.java");
+        sourceLibrary.setEncoding( "UTF-8" );
+        JavaSource src = sourceLibrary.addSource( file );
+        assertEquals("TEST-CHARS: \u00DF\u0131\u03A3\u042F\u05D0\u20AC", src.getClassByName( "UTF8" ).getComment());
+    }
+
+    public void testLatin1() throws Exception {
+        File file = new File( "src/test/resources/com/thoughtworks/qdox/testdata/Latin1.java");
+        sourceLibrary.setEncoding( "ISO-8859-1" );
+        JavaSource src = sourceLibrary.addSource( file );
+        assertEquals("TEST-CHARS: \u00C4\u00D6\u00DC\u00E4\u00F6\u00FC\u00DF", src.getClassByName( "Latin1" ).getComment());
+    }
+
+    
 }

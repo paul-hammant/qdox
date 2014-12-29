@@ -70,7 +70,7 @@ public class SortedClassLibraryBuilder
         return this;
     }
 
-    public ClassLibraryBuilder appendSource( InputStream stream )
+    public ClassLibraryBuilder appendSource( InputStream stream ) throws IOException
     {
         sourceLibrary.addSource( stream );
         return this;
@@ -151,7 +151,7 @@ public class SortedClassLibraryBuilder
         return sourceLibrary;
     }
 
-    public JavaSource addSource( InputStream stream )
+    public JavaSource addSource( InputStream stream ) throws IOException
     {
         return sourceLibrary.addSource( stream );
     }

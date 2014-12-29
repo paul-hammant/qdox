@@ -128,7 +128,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
     /* (non-Javadoc)
      * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#addSource(java.io.InputStream)
      */
-    public ClassLibraryBuilder appendSource( InputStream stream )
+    public ClassLibraryBuilder appendSource( InputStream stream ) throws IOException
     {
         SourceLibrary sourceLibrary = getSourceLibrary();
         sourceLibrary.addSource( stream );
@@ -238,7 +238,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
      * (non-Javadoc)
      * @see com.thoughtworks.qdox.library.ClassLibraryBuilder#addSource(java.io.InputStream)
      */
-    public JavaSource addSource( InputStream stream )
+    public JavaSource addSource( InputStream stream ) throws IOException
     {
         SourceLibrary sourceLibrary = getSourceLibrary();
         return sourceLibrary.addSource( stream );

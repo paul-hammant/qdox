@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
@@ -101,7 +102,7 @@ public class SourceLibrary
      * @throws ParseException if this content couldn't be parsed to a JavaModel
      */
     public JavaSource addSource( InputStream stream )
-        throws ParseException
+        throws ParseException, IOException
     {
         JavaSource source = parse( stream, null );
         registerJavaSource(source);
@@ -154,6 +155,8 @@ public class SourceLibrary
     	return result;
     }
     
+    
+    
     protected JavaSource parse( Reader reader, URL url )
         throws ParseException
     {
@@ -174,11 +177,11 @@ public class SourceLibrary
     }
 
     protected JavaSource parse( InputStream stream, URL url )
-        throws ParseException
+        throws ParseException, UnsupportedEncodingException
     {
         try 
         {
-            return parse( new JFlexLexer( stream ), url );
+            return parse( new JFlexLexer( new InputStreamReader( stream, encoding) ), url );
         }
         finally 
         {

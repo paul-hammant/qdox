@@ -2,6 +2,10 @@
 
 QDox is a high speed, small footprint parser for extracting class/interface/method definitions from source files complete with JavaDoc @tags. It is designed to be used by active code generators or documentation tools.
 
+# Migration from Codehaus
+
+This project used to be on Codehaus, in Subversion. The trunk of that has been git-svn-cloned to here. Maven repos have the sources jars for released versions of Qdox.  The [old issues from codehaus are hosted statically on a GH-pages repo](http://paul-hammant.github.io/Old_Qdox_Issues/)
+
 # In A Nutshell
 
 A custom built parser has been built using JFlex and BYacc/J. These have been chosen because of their proven performance and they require no external libraries at runtime.

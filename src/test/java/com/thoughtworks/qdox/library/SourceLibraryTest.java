@@ -104,5 +104,9 @@ public class SourceLibraryTest
         assertEquals("TEST-CHARS: \u00C4\u00D6\u00DC\u00E4\u00F6\u00FC\u00DF", src.getClassByName( "Latin1" ).getComment());
     }
 
+    public void testModuleInfo() throws Exception {
+    	File file = new File( "src/test/resources/com/thoughtworks/qdox/testdata/module-info.java");
+    	assertNull( "module-info.java should be ignored", sourceLibrary.addSource(file) );
+    }
     
 }

@@ -138,6 +138,12 @@ public class SourceLibrary
         JavaSource result = null;
         if ( !"package-info.java".equals( file.getName() ) ) 
         {
+            if ( "module-info.java".equals( file.getName() ) )
+            {
+                // No parse specifications yet
+                return result;
+            }
+
             result = parse( new FileInputStream( file ), file.toURI().toURL() );
             // if an error is handled by the errorHandler the result will be null
             if( result != null )

@@ -330,11 +330,13 @@ JavadocEnd                      = "*"+ "/"
 	
     "dynamic"           { return Parser.DYNAMIC; }
     "exports"           { return Parser.EXPORTS; }
+    "provides"          { return Parser.PROVIDES; }
     "public"            { return Parser.PUBLIC; }
     "requires"          { return Parser.REQUIRES; }
     "static"            { return Parser.STATIC; }
     "to"                { return Parser.TO; }
     "uses"              { return Parser.USES; }
+    "with"              { return Parser.WITH; }
 }
 <ENUM> {
     ";"  { 

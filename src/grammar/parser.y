@@ -104,6 +104,7 @@ ModuleStatement: REQUIRES RequiresModifiers_opt ModuleName SEMI
                | EXPORTS DYNAMIC QualifiedIdentifier /* =PackageName */ ToDeclaration_opt SEMI
                | EXPORTS QualifiedIdentifier /* =PackageName */ ToDeclaration_opt SEMI
                | USES QualifiedIdentifier /* =TypeName */
+               | PROVIDES QualifiedIdentifier WITH QualifiedIdentifier
                ;
 ModuleStatements_opt: 
                     | ModuleStatements_opt ModuleStatement

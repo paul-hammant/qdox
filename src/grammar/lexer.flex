@@ -334,6 +334,7 @@ JavadocEnd                      = "*"+ "/"
     "requires"          { return Parser.REQUIRES; }
     "static"            { return Parser.STATIC; }
     "to"                { return Parser.TO; }
+    "uses"              { return Parser.USES; }
 }
 <ENUM> {
     ";"  { 

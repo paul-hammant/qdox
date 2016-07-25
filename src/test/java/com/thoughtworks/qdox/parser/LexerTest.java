@@ -652,7 +652,8 @@ public class LexerTest extends TestCase {
             "  exports R.S to T1.U1, T2.U2;\n" + 
             "  exports dynamic PP.QQ;\n" + 
             "  exports dynamic RR.SS to T1.U1, T2.U2;" +
-            " }";
+            "  uses V.W;\n"
+            + "}";
         Lexer lexer = new JFlexLexer( new StringReader( in ) );
         assertLex( Parser.MODULE, lexer );
         assertLex( Parser.IDENTIFIER, "M", lexer );
@@ -730,6 +731,12 @@ public class LexerTest extends TestCase {
         assertLex( Parser.IDENTIFIER, "U2", lexer );
         assertLex( Parser.SEMI, lexer );
 
+        assertLex( Parser.USES, lexer );
+        assertLex( Parser.IDENTIFIER, "V", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "W", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
         assertLex( Parser.BRACECLOSE, lexer );
         assertLex( 0, lexer );
     }

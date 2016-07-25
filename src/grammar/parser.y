@@ -30,7 +30,8 @@ import java.util.Stack;
 
 %token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
 %token STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS 
-%token PACKAGE MODULE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE DEFAULT
+%token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE DEFAULT
+%token MODULE REQUIRES EXPORTS TO USES PROVIDES WITH
 %token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT NEW
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
 %token LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS
@@ -82,7 +83,7 @@ CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_
 
 // ModuleDeclaration:
 //    {Annotation} module ModuleName { {ModuleStatement} }
-ModuleDeclaration: Modifiers_opt MODULE ModuleName  {  }
+ModuleDeclaration: Modifiers_opt MODULE ModuleName BRACEOPEN ModuleStatements_opt BRACECLOSE
                  ;
 
 //  ModuleName:
@@ -90,6 +91,23 @@ ModuleDeclaration: Modifiers_opt MODULE ModuleName  {  }
 //    ModuleName . Identifier
 ModuleName: QualifiedIdentifier
           ;
+
+// ModuleStatement:
+//    requires {RequiresModifier} ModuleName ;
+//    exports [dynamic] PackageName [to ModuleName {, ModuleName}] ;
+//    uses TypeName ;
+//    provides TypeName with TypeName ;
+ModuleStatement: REQUIRES RequiresModifiers_opt ModuleName SEMI
+               ;
+ModuleStatements_opt: 
+                    | ModuleStatements_opt ModuleStatement
+                    ;
+
+RequiresModifier: PUBLIC
+                | STATIC
+                ;
+RequiresModifiers_opt:
+                     | RequiresModifiers_opt RequiresModifier
 
 // PackageDeclaration:
 //     {PackageModifier} package Identifier {. Identifier} ;

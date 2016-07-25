@@ -643,13 +643,48 @@ public class LexerTest extends TestCase {
     public void testModule()
         throws Exception
     {
-        String in = "module M.N { }";
+        String in = "module M.N {\n" +
+            "  requires A.B;\n" + 
+            "  requires public C.D;\n" + 
+            "  requires static E.F;\n" + 
+            "  requires public static G.H;\n" +
+            " }";
         Lexer lexer = new JFlexLexer( new StringReader( in ) );
         assertLex( Parser.MODULE, lexer );
         assertLex( Parser.IDENTIFIER, "M", lexer );
         assertLex( Parser.DOT, lexer );
         assertLex( Parser.IDENTIFIER, "N", lexer );
-        assertLex( Parser.CODEBLOCK, lexer );
+        assertLex( Parser.BRACEOPEN, lexer );
+        
+        assertLex( Parser.REQUIRES, lexer );
+        assertLex( Parser.IDENTIFIER, "A", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "B", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.REQUIRES, lexer );
+        assertLex( Parser.PUBLIC, lexer );
+        assertLex( Parser.IDENTIFIER, "C", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "D", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.REQUIRES, lexer );
+        assertLex( Parser.STATIC, lexer );
+        assertLex( Parser.IDENTIFIER, "E", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "F", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.REQUIRES, lexer );
+        assertLex( Parser.PUBLIC, lexer );
+        assertLex( Parser.STATIC, lexer );
+        assertLex( Parser.IDENTIFIER, "G", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "H", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.BRACECLOSE, lexer );
         assertLex( 0, lexer );
     }
 }

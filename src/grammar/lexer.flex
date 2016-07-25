@@ -182,7 +182,7 @@ Id						        = ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 Annotation                      = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
 JavadocEnd                      = "*"+ "/"
 
-%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATIONTYPE ANNOTATION ANNOSTRING ANNOCHAR ENUM ARGUMENTS
+%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATIONTYPE ANNOTATION ANNOSTRING ANNOCHAR ENUM ARGUMENTS MODULEINFO
 
 %%
 
@@ -192,8 +192,10 @@ JavadocEnd                      = "*"+ "/"
     ","                 { return Parser.COMMA; }
     "*"                 { return Parser.STAR; }
 
+    "module"            { pushState(MODULEINFO);
+                          return Parser.MODULE; }
+                          
     "package"           { return Parser.PACKAGE; }
-    "module"            { return Parser.MODULE; }
     "import"            { return Parser.IMPORT; }
     "public"            { return Parser.PUBLIC; }
     "protected"         { return Parser.PROTECTED; }
@@ -317,6 +319,18 @@ JavadocEnd                      = "*"+ "/"
             return Parser.PARENOPEN;
           }
 }
+<MODULEINFO> {
+	"{"                 { return Parser.BRACEOPEN; }
+    "}"                 { popState(); 
+                          return Parser.BRACECLOSE; }
+
+	"."                 { return Parser.DOT; }
+	";"                 { return Parser.SEMI; }
+	
+    "requires"          { return Parser.REQUIRES; }
+    "public"            { return Parser.PUBLIC; }
+    "static"            { return Parser.STATIC; }
+}
 <ENUM> {
     ";"  { 
     		enumConstantMode = false; 
@@ -348,7 +362,7 @@ JavadocEnd                      = "*"+ "/"
 <ANNOTATIONTYPE> {
 	"default"           { assignmentDepth = nestingDepth; appendingToCodeBody = true; pushState(ASSIGNMENT); }
 }
-<YYINITIAL, ANNOTATIONTYPE, ENUM> {
+<YYINITIAL, ANNOTATIONTYPE, ENUM, MODULEINFO> {
     {Id} {
         return Parser.IDENTIFIER;
     }

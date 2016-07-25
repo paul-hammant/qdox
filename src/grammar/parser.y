@@ -31,7 +31,7 @@ import java.util.Stack;
 %token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
 %token STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS 
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE DEFAULT
-%token MODULE REQUIRES EXPORTS TO USES PROVIDES WITH
+%token MODULE REQUIRES EXPORTS DYNAMIC TO USES PROVIDES WITH
 %token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT NEW
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
 %token LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS
@@ -91,6 +91,9 @@ ModuleDeclaration: Modifiers_opt MODULE ModuleName BRACEOPEN ModuleStatements_op
 //    ModuleName . Identifier
 ModuleName: QualifiedIdentifier
           ;
+ModuleNameList: ModuleName
+              | ModuleNameList COMMA ModuleName
+              ;
 
 // ModuleStatement:
 //    requires {RequiresModifier} ModuleName ;
@@ -98,6 +101,8 @@ ModuleName: QualifiedIdentifier
 //    uses TypeName ;
 //    provides TypeName with TypeName ;
 ModuleStatement: REQUIRES RequiresModifiers_opt ModuleName SEMI
+               | EXPORTS DYNAMIC QualifiedIdentifier /* =PackageName */ ToDeclaration_opt SEMI
+               | EXPORTS QualifiedIdentifier /* =PackageName */ ToDeclaration_opt SEMI
                ;
 ModuleStatements_opt: 
                     | ModuleStatements_opt ModuleStatement
@@ -108,6 +113,9 @@ RequiresModifier: PUBLIC
                 ;
 RequiresModifiers_opt:
                      | RequiresModifiers_opt RequiresModifier
+                     
+ToDeclaration_opt:
+                 | TO ModuleNameList
 
 // PackageDeclaration:
 //     {PackageModifier} package Identifier {. Identifier} ;

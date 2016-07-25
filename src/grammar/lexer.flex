@@ -324,12 +324,16 @@ JavadocEnd                      = "*"+ "/"
     "}"                 { popState(); 
                           return Parser.BRACECLOSE; }
 
+    ","                 { return Parser.COMMA; }
 	"."                 { return Parser.DOT; }
 	";"                 { return Parser.SEMI; }
 	
-    "requires"          { return Parser.REQUIRES; }
+    "dynamic"           { return Parser.DYNAMIC; }
+    "exports"           { return Parser.EXPORTS; }
     "public"            { return Parser.PUBLIC; }
+    "requires"          { return Parser.REQUIRES; }
     "static"            { return Parser.STATIC; }
+    "to"                { return Parser.TO; }
 }
 <ENUM> {
     ";"  { 

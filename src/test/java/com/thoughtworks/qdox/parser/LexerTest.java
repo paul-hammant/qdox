@@ -639,4 +639,17 @@ public class LexerTest extends TestCase {
         assertLex( Parser.PARENCLOSE, lexer );
         assertLex( 0, lexer );
     }
+    
+    public void testModule()
+        throws Exception
+    {
+        String in = "module M.N { }";
+        Lexer lexer = new JFlexLexer( new StringReader( in ) );
+        assertLex( Parser.MODULE, lexer );
+        assertLex( Parser.IDENTIFIER, "M", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "N", lexer );
+        assertLex( Parser.CODEBLOCK, lexer );
+        assertLex( 0, lexer );
+    }
 }

@@ -30,7 +30,7 @@ import java.util.Stack;
 
 %token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
 %token STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS 
-%token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE DEFAULT
+%token PACKAGE MODULE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE DEFAULT
 %token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT NEW
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
 %token LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS
@@ -74,9 +74,22 @@ import java.util.Stack;
 // ------------------------------
 
 // CompilationUnit:
-//     [PackageDeclaration] {ImportDeclaration} {TypeDeclaration}  
+//     [PackageDeclaration] {ImportDeclaration} {TypeDeclaration}
+//     {ImportDeclaration} ModuleDeclaration  
 CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_opt
+               | ImportDeclarations_opt ModuleDeclaration
                ;
+
+// ModuleDeclaration:
+//    {Annotation} module ModuleName { {ModuleStatement} }
+ModuleDeclaration: Modifiers_opt MODULE ModuleName  {  }
+                 ;
+
+//  ModuleName:
+//    Identifier
+//    ModuleName . Identifier
+ModuleName: QualifiedIdentifier
+          ;
 
 // PackageDeclaration:
 //     {PackageModifier} package Identifier {. Identifier} ;

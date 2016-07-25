@@ -193,6 +193,7 @@ JavadocEnd                      = "*"+ "/"
     "*"                 { return Parser.STAR; }
 
     "package"           { return Parser.PACKAGE; }
+    "module"            { return Parser.MODULE; }
     "import"            { return Parser.IMPORT; }
     "public"            { return Parser.PUBLIC; }
     "protected"         { return Parser.PROTECTED; }

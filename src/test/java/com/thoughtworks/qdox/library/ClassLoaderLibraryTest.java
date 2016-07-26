@@ -33,4 +33,8 @@ public class ClassLoaderLibraryTest
         assertNull(classLoaderLibrary.getJavaClass("java.util.GoatCrusher"));
     }
 
+    public void testModuleInfo() throws Exception
+    {
+        assertNull( classLoaderLibrary.getJavaModule() );
+    }
 }

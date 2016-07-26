@@ -23,12 +23,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.parser.ParseException;
 
 /**
  * 
@@ -57,6 +60,43 @@ public class SourceFolderLibrary
     }
 
     @Override
+    public JavaModule getJavaModule()
+    {
+        JavaModule module = super.getJavaModule();
+        if ( module == null )
+        {
+            module = resolveJavaModule();
+        }
+        return module;
+    }
+    
+    private JavaModule resolveJavaModule()
+    {
+        JavaModule result = null;
+        for ( File sourceFolder : sourceFolders )
+        {
+            File moduleInfoFile = new File( sourceFolder, "module-info.java" );
+            if ( moduleInfoFile.isFile()  )
+            {
+                try
+                {
+                    result = parse( new FileReader( moduleInfoFile ), moduleInfoFile.toURI().toURL() ).getModuleInfo();
+                    break;
+                }
+                catch ( FileNotFoundException e )
+                {
+                    // noop
+                }
+                catch ( MalformedURLException e )
+                {
+                   // noop
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
     protected JavaClass resolveJavaClass( String className )
     {
         JavaClass result = null;
@@ -64,12 +104,13 @@ public class SourceFolderLibrary
         {
             String mainClassName = className.split( "\\$" )[0];
             File classFile = new File( sourceFolder, mainClassName.replace( '.', File.separatorChar ) + ".java" );
-            if ( classFile.exists() && classFile.isFile() )
+            if ( classFile.isFile() )
             {
                 try
                 {
-                    JavaSource source = parse( new FileReader( classFile ), classFile.toURI().toURL() );
+                    JavaSource source = parse( new FileReader( classFile ), classFile.toURI().toURL() ).getSource();
                     result = source.getClassByName( className );
+                    break;
                 }
                 catch ( FileNotFoundException e )
                 {

@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 
@@ -93,4 +94,6 @@ public interface ClassLibrary
      * @return all JavaPackages as a List, never <code>null</code>
      */
     Collection<JavaPackage> getJavaPackages();
+
+    JavaModule getJavaModule();
 }

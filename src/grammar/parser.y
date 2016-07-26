@@ -63,7 +63,7 @@ import java.util.Stack;
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation ClassInstanceCreationExpression
 %type <annoval> PostfixExpression PostIncrementExpression PostDecrementExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
-%type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator
+%type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator ModuleName
 %type <type> Type ReferenceType Wildcard WildcardBounds VariableDeclaratorId ClassOrInterfaceType TypeArgument
 
 %%
@@ -84,12 +84,19 @@ CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_
 // ModuleDeclaration:
 //    {Annotation} module ModuleName { {ModuleStatement} }
 ModuleDeclaration: Modifiers_opt MODULE ModuleName BRACEOPEN ModuleStatements_opt BRACECLOSE
+                   {
+                     mdl.setName($3);
+                     builder.setModule(mdl);
+                   }
                  ;
 
 //  ModuleName:
 //    Identifier
 //    ModuleName . Identifier
-ModuleName: QualifiedIdentifier
+ModuleName: QualifiedIdentifier 
+            {
+              mdl.setName($1);
+            }
           ;
 ModuleNameList: ModuleName
               | ModuleNameList COMMA ModuleName
@@ -1705,6 +1712,7 @@ private StringBuilder textBuffer = new StringBuilder();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
 private FieldDef fd;
+private ModuleDef mdl = new ModuleDef(); 
 private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>(); //for both JavaClass and JavaMethod
 private LinkedList<AnnoDef> annotationStack = new LinkedList<AnnoDef>(); // Use LinkedList instead of Stack because it is unsynchronized 
 private List<List<ElemValueDef>> annoValueListStack = new LinkedList<List<ElemValueDef>>(); // Use LinkedList instead of Stack because it is unsynchronized

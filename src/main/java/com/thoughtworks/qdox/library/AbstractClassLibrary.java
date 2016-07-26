@@ -29,6 +29,7 @@ import com.thoughtworks.qdox.builder.Builder;
 import com.thoughtworks.qdox.builder.ModelBuilderFactory;
 import com.thoughtworks.qdox.builder.impl.ModelBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.impl.DefaultDocletTagFactory;
@@ -69,6 +70,16 @@ public abstract class AbstractClassLibrary
     public AbstractClassLibrary( AbstractClassLibrary parent )
     {
         this.parentClassLibrary = parent;
+    }
+    
+    public JavaModule getJavaModule()
+    {
+        JavaModule module = null;
+        if ( parentClassLibrary != null )
+        {
+            module = parentClassLibrary.getJavaModule();
+        }
+        return module;
     }
 
     /**

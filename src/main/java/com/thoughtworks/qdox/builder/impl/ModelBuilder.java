@@ -36,6 +36,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
@@ -58,6 +59,7 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.ModuleDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
@@ -71,6 +73,8 @@ import com.thoughtworks.qdox.writer.ModelWriterFactory;
 public class ModelBuilder implements Builder {
 
     private final DefaultJavaSource source;
+    
+    private JavaModule javaModule;
 
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
 
@@ -107,6 +111,18 @@ public class ModelBuilder implements Builder {
     {
         this.modelWriterFactory = modelWriterFactory;
         source.setModelWriterFactory( modelWriterFactory );
+    }
+    
+    public void setModule( final ModuleDef moduleDef )
+    {
+        this.javaModule = new JavaModule()
+        {
+            
+            public String getName()
+            {
+                return moduleDef.getName();
+            }
+        };
     }
 
     /** {@inheritDoc} */
@@ -505,6 +521,11 @@ public class ModelBuilder implements Builder {
     public JavaSource getSource()
     {
         return source;
+    }
+    
+    public JavaModule getModuleInfo()
+    {
+        return javaModule;
     }
 
     public void setUrl( URL url )

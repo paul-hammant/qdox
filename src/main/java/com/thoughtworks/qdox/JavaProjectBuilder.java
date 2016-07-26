@@ -37,6 +37,7 @@ import com.thoughtworks.qdox.library.ClassLibraryBuilder;
 import com.thoughtworks.qdox.library.ErrorHandler;
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 
@@ -305,6 +306,11 @@ public class JavaProjectBuilder
         return classLibraryBuilder.getClassLibrary().getJavaPackages();
     }
 
+    public JavaModule getModuleInfo()
+    {
+        return classLibraryBuilder.getClassLibrary().getJavaModule();
+    }
+    
     // Searcher
 
     public Collection<JavaClass> search( Searcher searcher )

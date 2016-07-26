@@ -137,4 +137,12 @@ public class AbstractClassLibraryTest
         assertEquals( null, nullClassLibrary.getJavaPackage( "java.lang" ) );
         assertEquals( null, nullClassLibrary.getJavaPackage( "com.thoughtworks" ) );
     }
+    
+    public void testModuleInfo()
+    {
+        assertNull( nullClassLibrary.getJavaModule() );
+        assertNull( parentClassLibrary.getJavaModule() );
+        assertNull( filledChildClassLibrary.getJavaModule() );
+        assertNull( emptyChildClassLibrary.getJavaModule() );
+    }
 }

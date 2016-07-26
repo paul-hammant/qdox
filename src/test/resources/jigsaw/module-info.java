@@ -1,0 +1,3 @@
+module com.foo.bar
+{
+}

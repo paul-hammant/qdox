@@ -91,8 +91,13 @@ public class SourceLibrary
     
     private JavaSource addSource( Reader reader, URL url )
     {
-        JavaSource source = parse( reader, url );
-        registerJavaSource(source);
+        Builder builder = parse( reader, url );
+        JavaSource source = null;
+        if( builder != null )
+        {
+            source = builder.getSource();
+            registerJavaSource(source);
+        }
         return source;
     }
 
@@ -106,8 +111,13 @@ public class SourceLibrary
     public JavaSource addSource( InputStream stream )
         throws ParseException, IOException
     {
-        JavaSource source = parse( stream, null );
-        registerJavaSource(source);
+        Builder builder = parse( stream, null );
+        JavaSource source = null;
+        if( builder != null)
+        {
+            source=  builder.getSource();
+            registerJavaSource(source);
+        }
         return source;
     }
     
@@ -144,7 +154,13 @@ public class SourceLibrary
                 return result;
             }
 
-            result = parse( new FileInputStream( file ), file.toURI().toURL() );
+            Builder builder = parse( new FileInputStream( file ), file.toURI().toURL() );
+            
+            if ( builder != null )
+            {
+                result = builder.getSource();
+            }
+            
             // if an error is handled by the errorHandler the result will be null
             if( result != null )
             {
@@ -153,7 +169,8 @@ public class SourceLibrary
                     File packageInfo = new File(file.getParentFile(), "package-info.java");
                     if( packageInfo.exists() )
                     {
-                        JavaPackage pckg = parse( new FileInputStream( packageInfo ), packageInfo.toURI().toURL() ).getPackage();
+                        JavaPackage pckg = parse( new FileInputStream( packageInfo ),
+                                                  packageInfo.toURI().toURL() ).getSource().getPackage();
                         context.add( pckg );
                     }
                 }
@@ -165,7 +182,7 @@ public class SourceLibrary
     
     
     
-    protected JavaSource parse( Reader reader, URL url )
+    Builder parse( Reader reader, URL url )
         throws ParseException
     {
         try 
@@ -184,7 +201,7 @@ public class SourceLibrary
         }
     }
 
-    protected JavaSource parse( InputStream stream, URL url )
+    Builder parse( InputStream stream, URL url )
         throws ParseException, UnsupportedEncodingException
     {
         try 
@@ -203,10 +220,9 @@ public class SourceLibrary
         }
     }
 
-    private JavaSource parse( JavaLexer lexer, URL url )
+    private Builder parse( JavaLexer lexer, URL url )
         throws ParseException
     {
-        JavaSource result = null;
         Builder builder = getModelBuilder();
         builder.setUrl( url );
         Parser parser = new Parser( lexer, builder );
@@ -215,7 +231,7 @@ public class SourceLibrary
         try {
             if ( parser.parse() )
             {
-                result = builder.getSource();
+                return builder;
             }
         }
         catch( ParseException pe )
@@ -233,7 +249,7 @@ public class SourceLibrary
                 throw pe;
             }
         }
-        return result;
+        return null;
     }
 
     @Override

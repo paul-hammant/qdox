@@ -21,6 +21,7 @@ package com.thoughtworks.qdox.builder;
 
 import java.net.URL;
 
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.parser.expression.ExpressionDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
@@ -28,6 +29,7 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.ModuleDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
@@ -37,6 +39,8 @@ public interface Builder
     void setModelWriterFactory( ModelWriterFactory writer );
     
     void setUrl( URL url );
+    
+    void setModule( ModuleDef moduleDef );
 
     void addPackage( PackageDef packageDef );
 
@@ -66,4 +70,6 @@ public interface Builder
     void addArgument(  ExpressionDef argument );
 
     JavaSource getSource();
+
+    JavaModule getModuleInfo();
 }

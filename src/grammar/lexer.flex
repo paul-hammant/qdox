@@ -183,7 +183,7 @@ Annotation                      = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}
 JavadocEnd                      = "*"+ "/"
 
 %state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT  ANNOTATION ANNOSTRING ANNOCHAR ARGUMENTS NAME 
-%state ANNOTATIONTYPE ENUM MODULE TYPE 
+%state ANNOTATIONTYPE ENUM MODULE TYPE ANNOTATION_NOARG
 
 %%
 <YYINITIAL> {
@@ -196,8 +196,13 @@ JavadocEnd                      = "*"+ "/"
          return Parser.SEMI; }
   "{"  {  popState();
           yypushback(1);     }
+  "("  {  popState();
+          yypushback(1);     }
 }
-<YYINITIAL, ANNOTATIONTYPE, ENUM, NAME, TYPE> {
+<ANNOTATION_NOARG> {
+  {WhiteSpace} { popState(); }
+}
+<YYINITIAL, ANNOTATION_NOARG, ANNOTATIONTYPE, ENUM, NAME, TYPE> {
     "."                 { return Parser.DOT; }
     "..."               { return Parser.DOTDOTDOT; }
     ","                 { return Parser.COMMA; }
@@ -262,9 +267,11 @@ JavadocEnd                      = "*"+ "/"
         parenMode = ANNOTATION;
         yypushback(text().length()-1);
         getCodeBody(); /* reset codebody */
+        pushState(NAME);
         return Parser.AT;
     }
     "@"                 {
+        pushState(ANNOTATION_NOARG);
         return Parser.AT;
     }
     "{"                 {
@@ -382,7 +389,7 @@ JavadocEnd                      = "*"+ "/"
 <ANNOTATIONTYPE> {
 	"default"           { assignmentDepth = nestingDepth; appendingToCodeBody = true; pushState(ASSIGNMENT); }
 }
-<YYINITIAL, ANNOTATIONTYPE, ENUM, MODULE, NAME, TYPE> {
+<YYINITIAL, ANNOTATION_NOARG, ANNOTATIONTYPE, ENUM, MODULE, NAME, TYPE> {
     {Id} {
         return Parser.IDENTIFIER;
     }

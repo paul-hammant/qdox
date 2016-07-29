@@ -769,7 +769,9 @@ public class LexerTest extends TestCase {
             + "package module.module;\n"
             + "import static module;\n"
             + "import module.module;\n"
+            + "@module @module.module @module(module=module)\n"
             + "public class module extends module implements module,module {\n"
+            + "  @module\n"
             + "  private module module;\n"
             + "  protected module module(module module) {}\n"
             + "}";
@@ -791,6 +793,20 @@ public class LexerTest extends TestCase {
         assertLex( Parser.IDENTIFIER, "module", lexer );
         assertLex( Parser.SEMI, lexer );
         
+        assertLex( Parser.AT, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.AT, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.AT, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.PARENOPEN, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.EQUALS, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.PARENCLOSE, lexer );
+
         assertLex( Parser.PUBLIC, lexer );
         assertLex( Parser.CLASS, lexer );
         assertLex( Parser.IDENTIFIER, "module",  lexer );
@@ -801,6 +817,9 @@ public class LexerTest extends TestCase {
         assertLex( Parser.COMMA, lexer );
         assertLex( Parser.IDENTIFIER, "module",  lexer );
         assertLex( Parser.BRACEOPEN, lexer );
+
+        assertLex( Parser.AT, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
 
         assertLex( Parser.PRIVATE, lexer );
         assertLex( Parser.IDENTIFIER, "module",  lexer );

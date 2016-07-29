@@ -9,8 +9,6 @@ import static org.mockito.Mockito.when;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import junit.framework.TestCase;
-
 import org.junit.Assert;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.answers.ReturnsElementsOf;
@@ -22,9 +20,12 @@ import com.thoughtworks.qdox.parser.structs.ClassDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.ModuleDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
+
+import junit.framework.TestCase;
 
 public class ParserTest extends TestCase {
     
@@ -686,102 +687,6 @@ public class ParserTest extends TestCase {
         assertEquals( "Class2", cls2.getName() );
         assertEquals( ClassDef.CLASS, cls2.getType() );
     }
-
-/*can't be tested like this anymore*/    
-//    public void testJavaDocAppearingAllOverThePlace() throws Exception {
-//
-//        // setup values
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc1");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc2");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(Parser.PACKAGE);
-//        setupLex(Parser.IDENTIFIER, "mypackage");
-//        setupLex(Parser.SEMI);
-//
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc3");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc4");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(Parser.IMPORT);
-//        setupLex(Parser.IDENTIFIER, "anotherpackage");
-//        setupLex(Parser.DOT);
-//        setupLex(Parser.IDENTIFIER, "Something");
-//        setupLex(Parser.SEMI);
-//
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc5");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc6");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(Parser.IMPORT);
-//        setupLex(Parser.IDENTIFIER, "elsewhere");
-//        setupLex(Parser.DOT);
-//        setupLex(Parser.STAR);
-//        setupLex(Parser.SEMI);
-//
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc7");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc8");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(Parser.PUBLIC);
-//        setupLex(Parser.CLASS);
-//        setupLex(Parser.IDENTIFIER, "MyClass");
-//        setupLex(Parser.BRACEOPEN);
-//        setupLex(Parser.BRACECLOSE);
-//
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc9");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(Parser.JAVADOCSTART);
-//        setupLex(Parser.JAVADOCLINE, "javadoc10");
-//        setupLex(Parser.JAVADOCEND);
-//
-//        setupLex(0);
-//
-//        // execute
-//        Parser parser = new Parser(lexer, builder);
-//        parser.parse();
-//
-//        // expectations
-//        ClassDef cls = new ClassDef();
-//        cls.name = "MyClass";
-//        cls.modifiers.add("public");
-//        
-//        // verify
-//        verify(builder).addJavaDoc("javadoc1");
-//        verify(builder).addJavaDoc("javadoc2");
-//        verify(builder).addPackage( new PackageDef( "mypackage" ) );
-//        verify(builder).addJavaDoc("javadoc3");
-//        verify(builder).addJavaDoc("javadoc4");
-//        verify(builder).addImport( "anotherpackage.Something" );
-//        verify(builder).addJavaDoc("javadoc5");
-//        verify(builder).addJavaDoc("javadoc6");
-//        verify(builder).addImport("elsewhere.*");
-//        verify(builder).addJavaDoc("javadoc7");
-//        verify(builder).beginClass( cls );
-//        verify(builder).endClass();
-//        verify(builder).addJavaDoc("javadoc8");
-//        verify(builder).addJavaDoc("javadoc9");
-//        verify(builder).addJavaDoc("javadoc10");
-//
-//    }
 
     public void testSimpleVoidMethod() throws Exception {
 
@@ -2827,6 +2732,164 @@ public class ParserTest extends TestCase {
         InitDef init = initCaptor.getValue();
         assertFalse( init.isStatic() );
         assertEquals( "//test", init.getBlockContent() );
+    }
+    
+    public void testModule() throws Exception
+    {
+        setupLex( Parser.MODULE );
+        setupLex( Parser.IDENTIFIER, "M" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "N" );
+        setupLex( Parser.BRACEOPEN );
+        
+        setupLex( Parser.REQUIRES );
+        setupLex( Parser.IDENTIFIER, "A" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "B" );
+        setupLex( Parser.SEMI );
+        
+        setupLex( Parser.REQUIRES );
+        setupLex( Parser.PUBLIC );
+        setupLex( Parser.IDENTIFIER, "C" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "D" );
+        setupLex( Parser.SEMI );
+        
+        setupLex( Parser.REQUIRES );
+        setupLex( Parser.STATIC );
+        setupLex( Parser.IDENTIFIER, "E" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "F" );
+        setupLex( Parser.SEMI );
+        
+        setupLex( Parser.REQUIRES );
+        setupLex( Parser.PUBLIC );
+        setupLex( Parser.STATIC );
+        setupLex( Parser.IDENTIFIER, "G" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "H" );
+        setupLex( Parser.SEMI );
+
+        setupLex( Parser.EXPORTS );
+        setupLex( Parser.IDENTIFIER, "P" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "Q" );
+        setupLex( Parser.SEMI );
+
+        setupLex( Parser.EXPORTS );
+        setupLex( Parser.IDENTIFIER, "R" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "S" );
+        setupLex( Parser.TO );
+        setupLex( Parser.IDENTIFIER, "T1" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "U1" );
+        setupLex( Parser.COMMA );
+        setupLex( Parser.IDENTIFIER, "T2" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "U2" );
+        setupLex( Parser.SEMI );
+
+        setupLex( Parser.EXPORTS );
+        setupLex( Parser.DYNAMIC );
+        setupLex( Parser.IDENTIFIER, "PP" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "QQ" );
+        setupLex( Parser.SEMI );
+
+        setupLex( Parser.EXPORTS );
+        setupLex( Parser.DYNAMIC );
+        setupLex( Parser.IDENTIFIER, "RR" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "SS" );
+        setupLex( Parser.TO );
+        setupLex( Parser.IDENTIFIER, "T1" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "U1" );
+        setupLex( Parser.COMMA );
+        setupLex( Parser.IDENTIFIER, "T2" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "U2" );
+        setupLex( Parser.SEMI );
+//
+//        setupLex( Parser.USES );
+//        setupLex( Parser.IDENTIFIER, "V" );
+//        setupLex( Parser.DOT );
+//        setupLex( Parser.IDENTIFIER, "W" );
+//        setupLex( Parser.SEMI );
+//
+//        setupLex( Parser.PROVIDES );
+//        setupLex( Parser.IDENTIFIER, "X" );
+//        setupLex( Parser.DOT );
+//        setupLex( Parser.IDENTIFIER, "Y" );
+//        setupLex( Parser.WITH );
+//        setupLex( Parser.IDENTIFIER, "Z1" );
+//        setupLex( Parser.DOT );
+//        setupLex( Parser.IDENTIFIER, "Z2" );
+//        setupLex( Parser.SEMI );
+//
+//        setupLex( Parser.PROVIDES );
+//        setupLex( Parser.IDENTIFIER, "X" );
+//        setupLex( Parser.DOT );
+//        setupLex( Parser.IDENTIFIER, "Y" );
+//        setupLex( Parser.WITH );
+//        setupLex( Parser.IDENTIFIER, "Z3" );
+//        setupLex( Parser.DOT );
+//        setupLex( Parser.IDENTIFIER, "Z4" );
+//        setupLex( Parser.SEMI );
+
+        setupLex( Parser.BRACECLOSE );
+        setupLex( 0 );
+        
+       // execute
+        Parser parser = new Parser( lexer, builder );
+        parser.parse();
+        
+        ArgumentCaptor<ModuleDef> moduleCaptor = ArgumentCaptor.forClass( ModuleDef.class );
+        verify( builder ).setModule( moduleCaptor.capture() );
+        assertEquals( "M.N", moduleCaptor.getValue().getName() );
+        
+        ArgumentCaptor<ModuleDef.RequiresDef> requiresCaptor = ArgumentCaptor.forClass( ModuleDef.RequiresDef.class );
+        verify( builder, times(4) ).addRequires( requiresCaptor.capture() );
+        assertEquals( "A.B", requiresCaptor.getAllValues().get(0).getName() );
+        assertEquals( false, requiresCaptor.getAllValues().get(0).getModifiers().contains( "public" ) );
+        assertEquals( false, requiresCaptor.getAllValues().get(0).getModifiers().contains( "static" ) );
+        
+        assertEquals( "C.D", requiresCaptor.getAllValues().get(1).getName() );
+        assertEquals( true, requiresCaptor.getAllValues().get(1).getModifiers().contains( "public" ) );
+        assertEquals( false, requiresCaptor.getAllValues().get(1).getModifiers().contains( "static" ) );
+        
+        assertEquals( "E.F", requiresCaptor.getAllValues().get(2).getName() );
+        assertEquals( false, requiresCaptor.getAllValues().get(2).getModifiers().contains( "public" ) );
+        assertEquals( true, requiresCaptor.getAllValues().get(2).getModifiers().contains( "static" ) );
+        
+        assertEquals( "G.H", requiresCaptor.getAllValues().get(3).getName() );
+        assertEquals( true, requiresCaptor.getAllValues().get(3).getModifiers().contains( "public" ) );
+        assertEquals( true, requiresCaptor.getAllValues().get(3).getModifiers().contains( "static" ) );
+        
+        ArgumentCaptor<ModuleDef.ExportsDef> exportsCaptor = ArgumentCaptor.forClass( ModuleDef.ExportsDef.class );
+        verify( builder, times(4) ).addExports( exportsCaptor.capture() );
+        assertEquals( "P.Q", exportsCaptor.getAllValues().get( 0 ).getSource() );
+        assertEquals( 0, exportsCaptor.getAllValues().get( 0 ).getTargets().size() );
+        assertEquals( 0, exportsCaptor.getAllValues().get( 0 ).getModifiers().size() );
+
+        assertEquals( "R.S", exportsCaptor.getAllValues().get( 1 ).getSource() );
+        assertEquals( 2, exportsCaptor.getAllValues().get( 1 ).getTargets().size() );
+        assertEquals( true, exportsCaptor.getAllValues().get( 1 ).getTargets().contains( "T1.U1" ));
+        assertEquals( true, exportsCaptor.getAllValues().get( 1 ).getTargets().contains( "T2.U2" ));
+        assertEquals( 0, exportsCaptor.getAllValues().get( 1 ).getModifiers().size() );
+        
+        assertEquals( "PP.QQ", exportsCaptor.getAllValues().get( 2 ).getSource() );
+        assertEquals( 0, exportsCaptor.getAllValues().get( 2 ).getTargets().size() );
+        assertEquals( 1, exportsCaptor.getAllValues().get( 2 ).getModifiers().size() );
+        assertEquals( true, exportsCaptor.getAllValues().get( 2 ).getModifiers().contains("dynamic") );
+
+        assertEquals( "RR.SS", exportsCaptor.getAllValues().get( 3 ).getSource() );
+        assertEquals( 2, exportsCaptor.getAllValues().get( 3 ).getTargets().size() );
+        assertEquals( true, exportsCaptor.getAllValues().get( 3 ).getTargets().contains( "T1.U1" ));
+        assertEquals( true, exportsCaptor.getAllValues().get( 3 ).getTargets().contains( "T2.U2" ));
+        assertEquals( 1, exportsCaptor.getAllValues().get( 3 ).getModifiers().size() );
+        assertEquals( true, exportsCaptor.getAllValues().get( 3 ).getModifiers().contains("dynamic") );
     }
 
     private void setupLex(int token, String value) {

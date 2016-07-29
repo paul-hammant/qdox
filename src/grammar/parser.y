@@ -85,8 +85,7 @@ CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_
 //    {Annotation} module ModuleName { {ModuleStatement} }
 ModuleDeclaration: Modifiers_opt MODULE ModuleName BRACEOPEN ModuleStatements_opt BRACECLOSE
                    {
-                     mdl.setName($3);
-                     builder.setModule(mdl);
+                     builder.setModule(new ModuleDef($3));
                    }
                  ;
 
@@ -94,12 +93,13 @@ ModuleDeclaration: Modifiers_opt MODULE ModuleName BRACEOPEN ModuleStatements_op
 //    Identifier
 //    ModuleName . Identifier
 ModuleName: QualifiedIdentifier 
-            {
-              mdl.setName($1);
-            }
           ;
-ModuleNameList: ModuleName
-              | ModuleNameList COMMA ModuleName
+ModuleNameList: ModuleName {
+                  exp.getTargets().add($1);
+                }
+              | ModuleNameList COMMA ModuleName {
+                  exp.getTargets().add($3);
+                }
               ;
 
 // ModuleStatement:
@@ -107,9 +107,28 @@ ModuleNameList: ModuleName
 //    exports [dynamic] PackageName [to ModuleName {, ModuleName}] ;
 //    uses TypeName ;
 //    provides TypeName with TypeName ;
-ModuleStatement: REQUIRES RequiresModifiers_opt ModuleName SEMI
-               | EXPORTS DYNAMIC QualifiedIdentifier /* =PackageName */ ToDeclaration_opt SEMI
-               | EXPORTS QualifiedIdentifier /* =PackageName */ ToDeclaration_opt SEMI
+ModuleStatement: REQUIRES RequiresModifiers_opt ModuleName SEMI {
+                   ModuleDef.RequiresDef req = new ModuleDef.RequiresDef($3, modifiers);
+                   modifiers = new java.util.LinkedHashSet<String>();
+                   req.setLineNumber(line);
+                   builder.addRequires(req);
+                 }
+               | EXPORTS DYNAMIC QualifiedIdentifier /* =PackageName */ {
+                   exp = new ModuleDef.ExportsDef($3, java.util.Collections.singleton("dynamic"));
+                   exp.setLineNumber(line);
+                 } 
+                 ToDeclaration_opt SEMI {
+                   builder.addExports(exp);
+                 }
+               | EXPORTS QualifiedIdentifier /* =PackageName */ 
+                 {
+                   exp = new ModuleDef.ExportsDef($2);
+                   exp.setLineNumber(line);
+                 } 
+                 ToDeclaration_opt SEMI
+                 {
+                   builder.addExports(exp);
+                 }
                | USES QualifiedIdentifier /* =TypeName */
                | PROVIDES QualifiedIdentifier WITH QualifiedIdentifier
                ;
@@ -117,14 +136,16 @@ ModuleStatements_opt:
                     | ModuleStatements_opt ModuleStatement
                     ;
 
-RequiresModifier: PUBLIC
-                | STATIC
+RequiresModifier: PUBLIC { modifiers.add("public"); }
+                | STATIC { modifiers.add("static"); }
                 ;
 RequiresModifiers_opt:
                      | RequiresModifiers_opt RequiresModifier
+                     ;
                      
 ToDeclaration_opt:
                  | TO ModuleNameList
+                 ;
 
 // PackageDeclaration:
 //     {PackageModifier} package Identifier {. Identifier} ;
@@ -1712,7 +1733,7 @@ private StringBuilder textBuffer = new StringBuilder();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
 private FieldDef fd;
-private ModuleDef mdl = new ModuleDef(); 
+private ModuleDef.ExportsDef exp; 
 private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>(); //for both JavaClass and JavaMethod
 private LinkedList<AnnoDef> annotationStack = new LinkedList<AnnoDef>(); // Use LinkedList instead of Stack because it is unsynchronized 
 private List<List<ElemValueDef>> annoValueListStack = new LinkedList<List<ElemValueDef>>(); // Use LinkedList instead of Stack because it is unsynchronized

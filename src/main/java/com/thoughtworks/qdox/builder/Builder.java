@@ -41,6 +41,9 @@ public interface Builder
     void setUrl( URL url );
     
     void setModule( ModuleDef moduleDef );
+    
+    void addExports( ModuleDef.ExportsDef exports );
+    void addRequires( ModuleDef.RequiresDef requires );
 
     void addPackage( PackageDef packageDef );
 

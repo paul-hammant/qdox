@@ -64,6 +64,8 @@ import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
+import com.thoughtworks.qdox.parser.structs.ModuleDef.ExportsDef;
+import com.thoughtworks.qdox.parser.structs.ModuleDef.RequiresDef;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
@@ -123,6 +125,16 @@ public class ModelBuilder implements Builder {
                 return moduleDef.getName();
             }
         };
+    }
+    
+    public void addRequires( RequiresDef requires )
+    {
+        // TODO Auto-generated method stub
+    }
+    
+    public void addExports( ExportsDef exports )
+    {
+        // TODO Auto-generated method stub
     }
 
     /** {@inheritDoc} */

@@ -770,6 +770,8 @@ public class LexerTest extends TestCase {
             + "import static module;\n"
             + "import module.module;\n"
             + "public class module extends module implements module,module {\n"
+            + "  private module module;\n"
+            + "  protected module module(module module) {}\n"
             + "}";
         Lexer lexer = new JFlexLexer( new StringReader( in ) );
         assertLex( Parser.PACKAGE, lexer );
@@ -798,8 +800,22 @@ public class LexerTest extends TestCase {
         assertLex( Parser.IDENTIFIER, "module",  lexer );
         assertLex( Parser.COMMA, lexer );
         assertLex( Parser.IDENTIFIER, "module",  lexer );
-        
         assertLex( Parser.BRACEOPEN, lexer );
+
+        assertLex( Parser.PRIVATE, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.IDENTIFIER, "module", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.PROTECTED, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.IDENTIFIER, "module", lexer );
+        assertLex( Parser.PARENOPEN, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.IDENTIFIER, "module", lexer );
+        assertLex( Parser.PARENCLOSE, lexer );
+        assertLex( Parser.CODEBLOCK, lexer );
+
         assertLex( Parser.BRACECLOSE, lexer );
         assertLex( 0, lexer );
     }

@@ -182,7 +182,8 @@ Id						        = ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 Annotation                      = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
 JavadocEnd                      = "*"+ "/"
 
-%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATIONTYPE ANNOTATION ANNOSTRING ANNOCHAR ENUM ARGUMENTS MODULE NAME
+%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT  ANNOTATION ANNOSTRING ANNOCHAR ARGUMENTS NAME 
+%state ANNOTATIONTYPE ENUM MODULE TYPE 
 
 %%
 <YYINITIAL> {
@@ -196,7 +197,7 @@ JavadocEnd                      = "*"+ "/"
   "{"  {  popState();
           yypushback(1);     }
 }
-<YYINITIAL, ANNOTATIONTYPE, ENUM, NAME> {
+<YYINITIAL, ANNOTATIONTYPE, ENUM, NAME, TYPE> {
     "."                 { return Parser.DOT; }
     "..."               { return Parser.DOTDOTDOT; }
     ","                 { return Parser.COMMA; }
@@ -239,14 +240,14 @@ JavadocEnd                      = "*"+ "/"
 
     "class"             {
         classDepth++;
-        braceMode = YYINITIAL;
+        braceMode = TYPE;
         pushState(NAME);
         return Parser.CLASS; 
     }
     
     "interface"         { 
         classDepth++;
-        braceMode = YYINITIAL;
+        braceMode = TYPE;
         pushState(NAME);
         return Parser.INTERFACE;
     }
@@ -282,7 +283,7 @@ JavadocEnd                      = "*"+ "/"
           nestingDepth++;
           if (enumConstantMode && yystate() == ENUM)
           {
-            braceMode = YYINITIAL;
+            braceMode = TYPE;
           }
           else 
           {
@@ -297,7 +298,7 @@ JavadocEnd                      = "*"+ "/"
         popState();
         if ( yystate() == ENUM && enumConstantMode)
         {
-          braceMode = YYINITIAL;
+          braceMode = TYPE;
         }
         else
         {
@@ -319,7 +320,7 @@ JavadocEnd                      = "*"+ "/"
         pushState(ASSIGNMENT);
     }
 }
-<YYINITIAL, ANNOTATIONTYPE> {
+<YYINITIAL, ANNOTATIONTYPE, TYPE> {
     ";"  { return Parser.SEMI; }
     "("  {
             nestingDepth++;
@@ -375,13 +376,13 @@ JavadocEnd                      = "*"+ "/"
             }
          }
 }
-<YYINITIAL, ENUM> {
+<ENUM, TYPE> {
     "default"           { return Parser.DEFAULT; }
 }
 <ANNOTATIONTYPE> {
 	"default"           { assignmentDepth = nestingDepth; appendingToCodeBody = true; pushState(ASSIGNMENT); }
 }
-<YYINITIAL, ANNOTATIONTYPE, ENUM, MODULE, NAME> {
+<YYINITIAL, ANNOTATIONTYPE, ENUM, MODULE, NAME, TYPE> {
     {Id} {
         return Parser.IDENTIFIER;
     }
@@ -584,12 +585,12 @@ JavadocEnd                      = "*"+ "/"
     }
 }
 
-<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE> {
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE, TYPE> {
     "\""                { if (appendingToCodeBody) { codeBody.append('"');  } pushState(STRING); }
     \'                  { if (appendingToCodeBody) { codeBody.append('\''); } pushState(CHAR); }
 }
 
-<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE, ANNOTATION, ARGUMENTS> {
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE, ANNOTATION, ARGUMENTS, TYPE> {
   "//"                { if (appendingToCodeBody) { codeBody.append("//"); } pushState(SINGLELINECOMMENT); }
   "/*"                { if (appendingToCodeBody) { codeBody.append("/*"); } pushState(MULTILINECOMMENT); }
   "/**/"              { if (appendingToCodeBody) { codeBody.append("/**/"); } }

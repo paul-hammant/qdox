@@ -182,21 +182,30 @@ Id						        = ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 Annotation                      = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
 JavadocEnd                      = "*"+ "/"
 
-%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATIONTYPE ANNOTATION ANNOSTRING ANNOCHAR ENUM ARGUMENTS MODULEINFO
+%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATIONTYPE ANNOTATION ANNOSTRING ANNOCHAR ENUM ARGUMENTS MODULE NAME
 
 %%
-
-<YYINITIAL, ANNOTATIONTYPE, ENUM> {
+<YYINITIAL> {
+    "module"            { pushState(MODULE);
+                          return Parser.MODULE; }
+}
+<NAME>
+{
+  ";"  { popState();
+         return Parser.SEMI; }
+  "{"  {  popState();
+          yypushback(1);     }
+}
+<YYINITIAL, ANNOTATIONTYPE, ENUM, NAME> {
     "."                 { return Parser.DOT; }
     "..."               { return Parser.DOTDOTDOT; }
     ","                 { return Parser.COMMA; }
     "*"                 { return Parser.STAR; }
 
-    "module"            { pushState(MODULEINFO);
-                          return Parser.MODULE; }
-                          
-    "package"           { return Parser.PACKAGE; }
-    "import"            { return Parser.IMPORT; }
+    "package"           { pushState(NAME);
+                          return Parser.PACKAGE; }
+    "import"            { pushState(NAME);
+                          return Parser.IMPORT; }
     "public"            { return Parser.PUBLIC; }
     "protected"         { return Parser.PROTECTED; }
     "private"           { return Parser.PRIVATE; }
@@ -231,18 +240,21 @@ JavadocEnd                      = "*"+ "/"
     "class"             {
         classDepth++;
         braceMode = YYINITIAL;
+        pushState(NAME);
         return Parser.CLASS; 
     }
     
     "interface"         { 
         classDepth++;
         braceMode = YYINITIAL;
+        pushState(NAME);
         return Parser.INTERFACE;
     }
     
     "enum"              {
         classDepth++;
         braceMode = ENUM;
+        pushState(NAME);
         return Parser.ENUM;
     }
     {Annotation} "(" {
@@ -319,7 +331,7 @@ JavadocEnd                      = "*"+ "/"
             return Parser.PARENOPEN;
           }
 }
-<MODULEINFO> {
+<MODULE> {
 	"{"                 { return Parser.BRACEOPEN; }
     "}"                 { popState(); 
                           return Parser.BRACECLOSE; }
@@ -369,7 +381,7 @@ JavadocEnd                      = "*"+ "/"
 <ANNOTATIONTYPE> {
 	"default"           { assignmentDepth = nestingDepth; appendingToCodeBody = true; pushState(ASSIGNMENT); }
 }
-<YYINITIAL, ANNOTATIONTYPE, ENUM, MODULEINFO> {
+<YYINITIAL, ANNOTATIONTYPE, ENUM, MODULE, NAME> {
     {Id} {
         return Parser.IDENTIFIER;
     }

@@ -762,4 +762,45 @@ public class LexerTest extends TestCase {
         assertLex( Parser.BRACECLOSE, lexer );
         assertLex( 0, lexer );
     }
+    
+    public void testModuleAsIdentifier() throws Exception
+    {
+        String in = ""
+            + "package module.module;\n"
+            + "import static module;\n"
+            + "import module.module;\n"
+            + "public class module extends module implements module,module {\n"
+            + "}";
+        Lexer lexer = new JFlexLexer( new StringReader( in ) );
+        assertLex( Parser.PACKAGE, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "module", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.IMPORT, lexer );
+        assertLex( Parser.STATIC, lexer );
+        assertLex( Parser.IDENTIFIER, "module", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.IMPORT, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "module", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.PUBLIC, lexer );
+        assertLex( Parser.CLASS, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.EXTENDS, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.IMPLEMENTS, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        assertLex( Parser.COMMA, lexer );
+        assertLex( Parser.IDENTIFIER, "module",  lexer );
+        
+        assertLex( Parser.BRACEOPEN, lexer );
+        assertLex( Parser.BRACECLOSE, lexer );
+        assertLex( 0, lexer );
+    }
 }

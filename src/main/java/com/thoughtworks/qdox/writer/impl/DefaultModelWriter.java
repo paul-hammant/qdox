@@ -41,6 +41,8 @@ import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaExports;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaProvides;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaUses;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.Expression;
 import com.thoughtworks.qdox.writer.ModelWriter;
@@ -491,17 +493,7 @@ public class DefaultModelWriter
         buffer.newline();
         return this;
     }
-    
-    public ModelWriter writeModuleRequires( JavaModuleDescriptor.JavaRequires requires )
-    {
-        buffer.write( "requires " );
-        writeAccessibilityModifier( requires.getModifiers() );
-        writeNonAccessibilityModifiers( requires.getModifiers() );
-        buffer.write( requires.getName() );
-        buffer.write( ';' );
-        buffer.newline();
-        return this;
-    }
+
     
     public ModelWriter writeModuleExports( JavaExports exports )
     {
@@ -523,6 +515,37 @@ public class DefaultModelWriter
                 }
             }
         }
+        buffer.write( ';' );
+        buffer.newline();
+        return this;
+    }
+    
+    public ModelWriter writeModuleProvides( JavaProvides provides )
+    {
+        buffer.write( "provides " );
+        buffer.write( provides.getService() );
+        buffer.write( " with " );
+        buffer.write( provides.getProvider() );
+        buffer.write( ';' );
+        buffer.newline();
+        return null;
+    }
+    
+    public ModelWriter writeModuleRequires( JavaModuleDescriptor.JavaRequires requires )
+    {
+        buffer.write( "requires " );
+        writeAccessibilityModifier( requires.getModifiers() );
+        writeNonAccessibilityModifiers( requires.getModifiers() );
+        buffer.write( requires.getName() );
+        buffer.write( ';' );
+        buffer.newline();
+        return this;
+    }
+    
+    public ModelWriter writeModuleUses( JavaUses uses )
+    {
+        buffer.write( "uses " );
+        buffer.write( uses.getName() );
         buffer.write( ';' );
         buffer.newline();
         return this;

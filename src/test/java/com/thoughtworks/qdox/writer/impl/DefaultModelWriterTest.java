@@ -410,14 +410,32 @@ public class DefaultModelWriterTest {
     @Test
     public void testModuleRequires()
     {
-        JavaModuleDescriptor.JavaRequires requires = mock( JavaModuleDescriptor.JavaRequires.class );
-        when( requires.getName() ).thenReturn( "G.H" );
-        when( requires.getModifiers() ).thenReturn( Arrays.asList( "public", "static" ) );
+        JavaModuleDescriptor.JavaRequires requires1 = mock( JavaModuleDescriptor.JavaRequires.class );
+        when( requires1.getName() ).thenReturn( "A.B" );
+        when( requires1.getModifiers() ).thenReturn( Collections.<String>emptyList() );
+        modelWriter.writeModuleRequires( requires1 );
+        assertEquals( "requires A.B;\n", modelWriter.toString() );
+
+        modelWriter = new DefaultModelWriter();
+        JavaModuleDescriptor.JavaRequires requires2 = mock( JavaModuleDescriptor.JavaRequires.class );
+        when( requires2.getName() ).thenReturn( "C.D" );
+        when( requires2.getModifiers() ).thenReturn( Collections.singleton( "public" ) );
+        modelWriter.writeModuleRequires( requires2 );
+        assertEquals( "requires public C.D;\n", modelWriter.toString() );
         
-        modelWriter.writeModuleRequires( requires );
+        modelWriter = new DefaultModelWriter();
+        JavaModuleDescriptor.JavaRequires requires3 = mock( JavaModuleDescriptor.JavaRequires.class );
+        when( requires3.getName() ).thenReturn( "E.F" );
+        when( requires3.getModifiers() ).thenReturn( Collections.singleton( "static" ) );
+        modelWriter.writeModuleRequires( requires3 );
+        assertEquals( "requires static E.F;\n", modelWriter.toString() );
         
-        String expected = "requires public static G.H;\n";
-        assertEquals( expected, modelWriter.toString() );
+        modelWriter = new DefaultModelWriter();
+        JavaModuleDescriptor.JavaRequires requires4 = mock( JavaModuleDescriptor.JavaRequires.class );
+        when( requires4.getName() ).thenReturn( "G.H" );
+        when( requires4.getModifiers() ).thenReturn( Arrays.asList( "public", "static" ) );
+        modelWriter.writeModuleRequires( requires4 );
+        assertEquals( "requires public static G.H;\n", modelWriter.toString() );
     }
     
     @Test
@@ -450,4 +468,25 @@ public class DefaultModelWriterTest {
         modelWriter.writeModuleExports( exports4 );
         assertEquals( "exports dynamic RR.SS to T1.U1, T2.U2;\n", modelWriter.toString() );
     }
+    
+    @Test
+    public void testModuleProvides()
+    {
+        JavaModuleDescriptor.JavaProvides provides = mock( JavaModuleDescriptor.JavaProvides.class );
+        when(provides.getService()).thenReturn( "X.Y" );
+        when(provides.getProvider()).thenReturn( "Z1.Z2" );
+        modelWriter.writeModuleProvides( provides );
+        assertEquals( "provides X.Y with Z1.Z2;\n", modelWriter.toString() );
+    }
+    
+    @Test
+    public void testModuleUses()
+    {
+        JavaModuleDescriptor.JavaUses uses = mock( JavaModuleDescriptor.JavaUses.class);
+        when(uses.getName()).thenReturn( "V.W" );
+        modelWriter.writeModuleUses( uses );
+        assertEquals( "uses V.W;\n", modelWriter.toString() );
+    }
+    
+    
 }

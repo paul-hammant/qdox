@@ -185,8 +185,12 @@ public interface ModelWriter
     
     ModelWriter writeModule( JavaModule module );
     
-    ModelWriter writeModuleRequires( JavaModuleDescriptor.JavaRequires requires );
-    
     ModelWriter writeModuleExports( JavaModuleDescriptor.JavaExports exports );
+
+    ModelWriter writeModuleProvides( JavaModuleDescriptor.JavaProvides provides );
+    
+    ModelWriter writeModuleRequires( JavaModuleDescriptor.JavaRequires requires );
+
+    ModelWriter writeModuleUses( JavaModuleDescriptor.JavaUses defaultJavaUses );
 
 }

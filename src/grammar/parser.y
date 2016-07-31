@@ -129,8 +129,16 @@ ModuleStatement: REQUIRES RequiresModifiers_opt ModuleName SEMI {
                  {
                    builder.addExports(exp);
                  }
-               | USES QualifiedIdentifier /* =TypeName */
-               | PROVIDES QualifiedIdentifier WITH QualifiedIdentifier
+               | USES QualifiedIdentifier /* =TypeName */ SEMI {
+                   ModuleDef.UsesDef uss = new ModuleDef.UsesDef ($2);
+                   uss.setLineNumber(line);
+                   builder.addUses(uss);
+                 }
+               | PROVIDES QualifiedIdentifier WITH QualifiedIdentifier SEMI {
+                   ModuleDef.ProvidesDef prv = new ModuleDef.ProvidesDef($2, $4);
+                   prv.setLineNumber(line);
+                   builder.addProvides(prv);
+                 }
                ;
 ModuleStatements_opt: 
                     | ModuleStatements_opt ModuleStatement

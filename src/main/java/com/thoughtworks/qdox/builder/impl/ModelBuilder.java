@@ -65,7 +65,9 @@ import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.ExportsDef;
+import com.thoughtworks.qdox.parser.structs.ModuleDef.ProvidesDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.RequiresDef;
+import com.thoughtworks.qdox.parser.structs.ModuleDef.UsesDef;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
@@ -127,15 +129,24 @@ public class ModelBuilder implements Builder {
         };
     }
     
-    public void addRequires( RequiresDef requires )
-    {
-        // TODO Auto-generated method stub
-    }
-    
     public void addExports( ExportsDef exports )
     {
         // TODO Auto-generated method stub
     }
+    public void addProvides( ProvidesDef provides )
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    public void addRequires( RequiresDef requires )
+    {
+        // TODO Auto-generated method stub
+    }
+    public void addUses( UsesDef uses )
+    {
+        // TODO Auto-generated method stub
+    }
+    
 
     /** {@inheritDoc} */
     public void addPackage( PackageDef packageDef )

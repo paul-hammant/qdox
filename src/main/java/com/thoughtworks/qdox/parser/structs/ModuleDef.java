@@ -55,6 +55,29 @@ public class ModuleDef extends LocatedDef
         }
     }
     
+    public static class ProvidesDef extends LocatedDef
+    {
+        private String service;
+        
+        private String implementation;
+
+        public ProvidesDef( String service, String implementation )
+        {
+            this.service = service;
+            this.implementation = implementation;
+        }
+
+        public String getService()
+        {
+            return service;
+        }
+
+        public String getImplementation()
+        {
+            return implementation;
+        }
+    }
+    
     public static class RequiresDef extends LocatedDef
     {
         private String name;
@@ -77,5 +100,20 @@ public class ModuleDef extends LocatedDef
         {
             return modifiers;
         }
+    }
+    
+    public static class UsesDef extends LocatedDef
+    {
+        private String name;
+
+        public UsesDef( String name )
+        {
+            this.name = name;
+        }
+
+        public String getName()
+        {
+            return name;
+        } 
     }
 }

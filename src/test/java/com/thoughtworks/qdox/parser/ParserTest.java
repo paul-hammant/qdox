@@ -2811,32 +2811,32 @@ public class ParserTest extends TestCase {
         setupLex( Parser.DOT );
         setupLex( Parser.IDENTIFIER, "U2" );
         setupLex( Parser.SEMI );
-//
-//        setupLex( Parser.USES );
-//        setupLex( Parser.IDENTIFIER, "V" );
-//        setupLex( Parser.DOT );
-//        setupLex( Parser.IDENTIFIER, "W" );
-//        setupLex( Parser.SEMI );
-//
-//        setupLex( Parser.PROVIDES );
-//        setupLex( Parser.IDENTIFIER, "X" );
-//        setupLex( Parser.DOT );
-//        setupLex( Parser.IDENTIFIER, "Y" );
-//        setupLex( Parser.WITH );
-//        setupLex( Parser.IDENTIFIER, "Z1" );
-//        setupLex( Parser.DOT );
-//        setupLex( Parser.IDENTIFIER, "Z2" );
-//        setupLex( Parser.SEMI );
-//
-//        setupLex( Parser.PROVIDES );
-//        setupLex( Parser.IDENTIFIER, "X" );
-//        setupLex( Parser.DOT );
-//        setupLex( Parser.IDENTIFIER, "Y" );
-//        setupLex( Parser.WITH );
-//        setupLex( Parser.IDENTIFIER, "Z3" );
-//        setupLex( Parser.DOT );
-//        setupLex( Parser.IDENTIFIER, "Z4" );
-//        setupLex( Parser.SEMI );
+
+        setupLex( Parser.USES );
+        setupLex( Parser.IDENTIFIER, "V" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "W" );
+        setupLex( Parser.SEMI );
+
+        setupLex( Parser.PROVIDES );
+        setupLex( Parser.IDENTIFIER, "X" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "Y" );
+        setupLex( Parser.WITH );
+        setupLex( Parser.IDENTIFIER, "Z1" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "Z2" );
+        setupLex( Parser.SEMI );
+
+        setupLex( Parser.PROVIDES );
+        setupLex( Parser.IDENTIFIER, "X" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "Y" );
+        setupLex( Parser.WITH );
+        setupLex( Parser.IDENTIFIER, "Z3" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "Z4" );
+        setupLex( Parser.SEMI );
 
         setupLex( Parser.BRACECLOSE );
         setupLex( 0 );
@@ -2890,6 +2890,18 @@ public class ParserTest extends TestCase {
         assertEquals( true, exportsCaptor.getAllValues().get( 3 ).getTargets().contains( "T2.U2" ));
         assertEquals( 1, exportsCaptor.getAllValues().get( 3 ).getModifiers().size() );
         assertEquals( true, exportsCaptor.getAllValues().get( 3 ).getModifiers().contains("dynamic") );
+        
+        ArgumentCaptor<ModuleDef.UsesDef> usesCaptor = ArgumentCaptor.forClass( ModuleDef.UsesDef.class );
+        verify( builder ).addUses( usesCaptor.capture() );
+        assertEquals( "V.W", usesCaptor.getValue().getName() );
+        
+        ArgumentCaptor<ModuleDef.ProvidesDef> providesCaptor = ArgumentCaptor.forClass( ModuleDef.ProvidesDef.class );
+        verify( builder, times(2) ).addProvides( providesCaptor.capture() );
+        assertEquals( "X.Y", providesCaptor.getAllValues().get(0).getService() );
+        assertEquals( "Z1.Z2", providesCaptor.getAllValues().get(0).getImplementation() );
+
+        assertEquals( "X.Y", providesCaptor.getAllValues().get(1).getService() );
+        assertEquals( "Z3.Z4", providesCaptor.getAllValues().get(1).getImplementation() );
     }
 
     private void setupLex(int token, String value) {

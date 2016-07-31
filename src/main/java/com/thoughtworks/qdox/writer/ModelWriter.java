@@ -25,6 +25,8 @@ import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaModule;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -180,5 +182,11 @@ public interface ModelWriter
      * @return itself
      */
     ModelWriter writeInitializer( JavaInitializer init );
+    
+    ModelWriter writeModule( JavaModule module );
+    
+    ModelWriter writeModuleRequires( JavaModuleDescriptor.JavaRequires requires );
+    
+    ModelWriter writeModuleExports( JavaModuleDescriptor.JavaExports exports );
 
 }

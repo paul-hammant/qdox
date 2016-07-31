@@ -182,11 +182,6 @@ public class JavaMethodDelegate implements JavaMethod
         return originalMethod.getReturns();
     }
 
-    public JavaSource getSource()
-    {
-        return originalMethod.getSource();
-    }
-
     public String getSourceCode()
     {
         return originalMethod.getSourceCode();

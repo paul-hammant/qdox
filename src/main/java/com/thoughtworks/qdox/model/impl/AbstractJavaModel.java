@@ -17,7 +17,6 @@ import com.thoughtworks.qdox.writer.impl.DefaultModelWriter;
 public abstract class AbstractJavaModel implements JavaModel {
 
     private ModelWriterFactory modelWriterFactory;
-    private JavaSource source;
     
 	private int lineNumber = -1;
 
@@ -33,14 +32,6 @@ public abstract class AbstractJavaModel implements JavaModel {
 	    this.lineNumber = lineNumber;
 	}
 
-	public JavaSource getSource() {
-		return source;
-	}
-	
-	public void setSource(JavaSource source) {
-		this.source = source;
-	}
-	
 	/**
      * 
      * @param modelWriterFactory

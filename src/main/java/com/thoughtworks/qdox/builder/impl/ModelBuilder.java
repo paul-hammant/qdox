@@ -37,6 +37,7 @@ import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaModule;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
@@ -48,6 +49,8 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaConstructor;
 import com.thoughtworks.qdox.model.impl.DefaultJavaField;
 import com.thoughtworks.qdox.model.impl.DefaultJavaInitializer;
 import com.thoughtworks.qdox.model.impl.DefaultJavaMethod;
+import com.thoughtworks.qdox.model.impl.DefaultJavaModule;
+import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor;
 import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
@@ -60,14 +63,14 @@ import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef;
-import com.thoughtworks.qdox.parser.structs.PackageDef;
-import com.thoughtworks.qdox.parser.structs.TagDef;
-import com.thoughtworks.qdox.parser.structs.TypeDef;
-import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.ExportsDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.ProvidesDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.RequiresDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.UsesDef;
+import com.thoughtworks.qdox.parser.structs.PackageDef;
+import com.thoughtworks.qdox.parser.structs.TagDef;
+import com.thoughtworks.qdox.parser.structs.TypeDef;
+import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
@@ -78,7 +81,9 @@ public class ModelBuilder implements Builder {
 
     private final DefaultJavaSource source;
     
-    private JavaModule javaModule;
+    private DefaultJavaModule module;
+    
+    private DefaultJavaModuleDescriptor moduleDescriptor;
 
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
 
@@ -119,14 +124,8 @@ public class ModelBuilder implements Builder {
     
     public void setModule( final ModuleDef moduleDef )
     {
-        this.javaModule = new JavaModule()
-        {
-            
-            public String getName()
-            {
-                return moduleDef.getName();
-            }
-        };
+        this.moduleDescriptor = new DefaultJavaModuleDescriptor();
+        this.module = new DefaultJavaModule(moduleDef.getName(), moduleDescriptor);
     }
     
     public void addExports( ExportsDef exports )
@@ -138,9 +137,11 @@ public class ModelBuilder implements Builder {
         // TODO Auto-generated method stub
         
     }
-    public void addRequires( RequiresDef requires )
+    public void addRequires( RequiresDef requiresDef )
     {
-        // TODO Auto-generated method stub
+        DefaultJavaModuleDescriptor.DefaultJavaRequires requires =
+                        new DefaultJavaModuleDescriptor.DefaultJavaRequires( requiresDef.getName(), requiresDef.getModifiers() );
+        moduleDescriptor.addRequires( requires );
     }
     public void addUses( UsesDef uses )
     {
@@ -548,7 +549,7 @@ public class ModelBuilder implements Builder {
     
     public JavaModule getModuleInfo()
     {
-        return javaModule;
+        return module;
     }
 
     public void setUrl( URL url )

@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.writer.impl;
 
+import java.util.Collection;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -32,10 +34,13 @@ import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaModule;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaExports;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.Expression;
 import com.thoughtworks.qdox.writer.ModelWriter;
@@ -344,7 +349,7 @@ public class DefaultModelWriter
         return this;
     }
 
-    private void writeNonAccessibilityModifiers( List<String> modifiers )
+    private void writeNonAccessibilityModifiers( Collection<String> modifiers )
     {
         for ( String modifier : modifiers )
         {
@@ -356,7 +361,7 @@ public class DefaultModelWriter
         }
     }
 
-    private void writeAccessibilityModifier( List<String> modifiers )
+    private void writeAccessibilityModifier( Collection<String> modifiers )
     {
         for ( String modifier : modifiers )
         {
@@ -466,6 +471,61 @@ public class DefaultModelWriter
                 writeAnnotation( annotation );
             }
         }
+    }
+    
+    public ModelWriter writeModule( JavaModule module )
+    {
+        buffer.write( "module " + module.getName() +  " {");
+        buffer.newline();
+        JavaModuleDescriptor descriptor = module.getDescriptor();
+        if(descriptor != null)
+        {
+            buffer.indent();
+
+            // dostuff
+//            descriptor.
+            
+            buffer.deindent();
+        }
+        buffer.write( '}' );
+        buffer.newline();
+        return this;
+    }
+    
+    public ModelWriter writeModuleRequires( JavaModuleDescriptor.JavaRequires requires )
+    {
+        buffer.write( "requires " );
+        writeAccessibilityModifier( requires.getModifiers() );
+        writeNonAccessibilityModifiers( requires.getModifiers() );
+        buffer.write( requires.getName() );
+        buffer.write( ';' );
+        buffer.newline();
+        return this;
+    }
+    
+    public ModelWriter writeModuleExports( JavaExports exports )
+    {
+        buffer.write( "exports " );
+        writeAccessibilityModifier( exports.getModifiers() );
+        writeNonAccessibilityModifiers( exports.getModifiers() );
+        buffer.write( exports.getSource() );
+        if( !exports.getTargets().isEmpty() )
+        {
+            buffer.write( " to " );
+            Iterator<String> targets = exports.getTargets().iterator();
+            while( targets.hasNext() )
+            {
+                String target = targets.next();
+                buffer.write( target );
+                if( targets.hasNext() )
+                {
+                    buffer.write( ", " );
+                }
+            }
+        }
+        buffer.write( ';' );
+        buffer.newline();
+        return this;
     }
 
     @Override

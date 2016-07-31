@@ -30,13 +30,6 @@ public interface JavaModel extends Serializable
     String getCodeBlock();
 
     /**
-     * The compilation unit, which includes the imports, the public and anonymous classes
-     * 
-     * @return the {@link JavaSource} of this element
-     */
-    JavaSource getSource();
-    
-    /**
      * The line number where this element started
      * 
      * @return the line number of this element

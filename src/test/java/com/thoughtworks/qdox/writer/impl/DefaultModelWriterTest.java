@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,8 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaModule;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.expression.Expression;
@@ -391,5 +394,60 @@ public class DefaultModelWriterTest {
         String expected = "@Anno\n";
         assertEquals( expected, modelWriter.toString() );
     }
+    
+    @Test
+    public void testModule()
+    {
+        JavaModule module = mock(JavaModule.class);
+        when(module.getName()).thenReturn( "M.N" );
+        
+        modelWriter.writeModule( module );
+        
+        String expected = "module M.N {\n}\n";
+        assertEquals( expected, modelWriter.toString() );
+    }
+    
+    @Test
+    public void testModuleRequires()
+    {
+        JavaModuleDescriptor.JavaRequires requires = mock( JavaModuleDescriptor.JavaRequires.class );
+        when( requires.getName() ).thenReturn( "G.H" );
+        when( requires.getModifiers() ).thenReturn( Arrays.asList( "public", "static" ) );
+        
+        modelWriter.writeModuleRequires( requires );
+        
+        String expected = "requires public static G.H;\n";
+        assertEquals( expected, modelWriter.toString() );
+    }
+    
+    @Test
+    public void testModuleExports()
+    {
+        JavaModuleDescriptor.JavaExports exports1 = mock( JavaModuleDescriptor.JavaExports.class );
+        when( exports1.getSource() ).thenReturn( "P.Q" );
+        modelWriter.writeModuleExports( exports1 );
+        assertEquals( "exports P.Q;\n", modelWriter.toString() );
 
+        modelWriter = new DefaultModelWriter();
+        JavaModuleDescriptor.JavaExports exports2 = mock( JavaModuleDescriptor.JavaExports.class );
+        when( exports2.getSource() ).thenReturn( "R.S" );
+        when(exports2.getTargets()).thenReturn( Arrays.asList( "T1.U1", "T2.U2" ) );
+        modelWriter.writeModuleExports( exports2 );
+        assertEquals( "exports R.S to T1.U1, T2.U2;\n", modelWriter.toString() );
+
+        modelWriter = new DefaultModelWriter();
+        JavaModuleDescriptor.JavaExports exports3 = mock( JavaModuleDescriptor.JavaExports.class );
+        when( exports3.getSource() ).thenReturn( "PP.QQ" );
+        when( exports3.getModifiers() ).thenReturn( Collections.singleton( "dynamic" ) );
+        modelWriter.writeModuleExports( exports3 );
+        assertEquals( "exports dynamic PP.QQ;\n", modelWriter.toString() );
+
+        modelWriter = new DefaultModelWriter();
+        JavaModuleDescriptor.JavaExports exports4 = mock( JavaModuleDescriptor.JavaExports.class );
+        when( exports4.getSource() ).thenReturn( "RR.SS" );
+        when( exports4.getTargets()).thenReturn( Arrays.asList( "T1.U1", "T2.U2" ) );
+        when( exports4.getModifiers() ).thenReturn( Collections.singleton( "dynamic" ) );
+        modelWriter.writeModuleExports( exports4 );
+        assertEquals( "exports dynamic RR.SS to T1.U1, T2.U2;\n", modelWriter.toString() );
+    }
 }

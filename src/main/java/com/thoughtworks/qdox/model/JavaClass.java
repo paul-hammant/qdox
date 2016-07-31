@@ -32,7 +32,13 @@ import com.thoughtworks.qdox.model.impl.JavaClassParent;
  */
 public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnnotatedElement, JavaGenericDeclaration
 {
-    
+    /**
+     * The compilation unit, which includes the imports, the public and anonymous classes
+     * 
+     * @return the {@link JavaSource} of this element
+     */
+    JavaSource getSource();
+
     // deprecated methods
     // will be removed with QDox-2.0
     

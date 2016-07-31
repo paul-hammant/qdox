@@ -4,5 +4,9 @@ public interface JavaModule
 {
     String getName();
     
+    boolean isNamed();
+    
+    JavaModuleDescriptor getDescriptor();
+    
     
 }

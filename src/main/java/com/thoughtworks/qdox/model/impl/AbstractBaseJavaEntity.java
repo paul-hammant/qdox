@@ -27,9 +27,12 @@ import java.util.List;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaSource;
 
 public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implements Serializable {
 
+    private JavaSource source;
+    
 	private List<JavaAnnotation> annotations = Collections.emptyList();
 	private String comment;
 	private List<DocletTag> tags = Collections.emptyList();
@@ -39,6 +42,14 @@ public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implement
         super();
     }
 
+    public JavaSource getSource() {
+        return source;
+    }
+    
+    public void setSource(JavaSource source) {
+        this.source = source;
+    }
+    
     public List<JavaAnnotation> getAnnotations()
     {
         return annotations;

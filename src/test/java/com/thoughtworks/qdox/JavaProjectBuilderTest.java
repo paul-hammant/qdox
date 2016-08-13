@@ -1553,6 +1553,15 @@ public class JavaProjectBuilderTest extends TestCase
             "}";
         builder.addSource( new StringReader( source ) ); 
     }
+    
+    public void testOneLineJavadoc() throws Exception
+    {
+        String source = "package foo.bar;\n" + 
+            "/***/\n" + 
+            "public class MyClass{\n" + 
+            "} ";
+        builder.addSource( new StringReader( source ) ); 
+    }
 
     public void testSetDebugLexer()
     {

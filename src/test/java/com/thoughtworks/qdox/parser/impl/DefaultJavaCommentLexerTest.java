@@ -26,6 +26,22 @@ public class DefaultJavaCommentLexerTest
     }
 
     @Test
+    public void testCompactMultiLineComment2() throws Exception {
+        lexer = new DefaultJavaCommentLexer( new StringReader("/***/"));
+        lexAssert(DefaultJavaCommentParser.JAVADOCSTART, "/**");
+        lexAssert(DefaultJavaCommentParser.JAVADOCEND, "*/");
+        lexAssert( 0 );
+    }
+
+    @Test
+    public void testCompactMultiLineComment3() throws Exception {
+        lexer = new DefaultJavaCommentLexer( new StringReader("/*****/"));
+        lexAssert(DefaultJavaCommentParser.JAVADOCSTART, "/****");
+        lexAssert(DefaultJavaCommentParser.JAVADOCEND, "*/");
+        lexAssert( 0 );
+    }
+
+    @Test
     public void testSingleRowMultiLineComment() throws Exception {
         lexer = new DefaultJavaCommentLexer( new StringReader("/* multiline comment with one row */"));
         lexAssert( 0 );

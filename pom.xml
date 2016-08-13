@@ -12,7 +12,7 @@
   <artifactId>qdox</artifactId>
   <version>2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <url>http://qdox.codehaus.org</url>
+  <url>https://github.com/paul-hammant/qdox</url>
   <description>
     QDox is a high speed, small footprint parser for extracting class/interface/method definitions from source files
     complete with JavaDoc @tags. It is designed to be used by active code generators or documentation tools.
@@ -27,49 +27,15 @@
     </license>
   </licenses>
 
-  <mailingLists>
-    <mailingList>
-      <name>announce at QDox</name>
-      <post>announce@qdox.codehaus.org</post>
-      <subscribe>announce-subscribe@qdox.codehaus.org</subscribe>
-      <unsubscribe>announce-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://markmail.org/search/?q=list%3Aorg.codehaus.qdox.announce</archive>
-    </mailingList>
-    <mailingList>
-      <name>dev at QDox</name>
-      <post>dev@qdox.codehaus.org</post>
-      <subscribe>dev-subscribe@qdox.codehaus.org</subscribe>
-      <unsubscribe>dev-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://markmail.org/search/?q=list%3Aorg.codehaus.qdox.dev</archive>
-    </mailingList>
-    <mailingList>
-      <name>scm at QDox</name>
-      <subscribe>scm-subscribe@qdox.codehaus.org</subscribe>
-      <unsubscribe>scm-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://markmail.org/search/?q=list%3Aorg.codehaus.qdox.scm</archive>
-    </mailingList>
-    <mailingList>
-      <name>user at QDox</name>
-      <post>user@qdox.codehaus.org</post>
-      <subscribe>user-subscribe@qdox.codehaus.org</subscribe>
-      <unsubscribe>user-unsubscribe@qdox.codehaus.org</unsubscribe>
-      <archive>http://markmail.org/search/?q=list%3Aorg.codehaus.qdox.user</archive>
-    </mailingList>
-  </mailingLists>
-
   <issueManagement>
-    <system>jira</system>
-    <url>http://jira.codehaus.org/browse/QDOX</url>
+    <system>github</system>
+    <url>https://github.com/paul-hammant/qdox/issues</url>
   </issueManagement>
-  <ciManagement>
-    <system>bamboo</system>
-    <url>http://bamboo.ci.codehaus.org/browse/QDOX</url>
-  </ciManagement>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/qdox/trunk/qdox</developerConnection>
-    <url>http://svn.qdox.codehaus.org/browse/qdox/trunk/qdox</url>
+    <connection>scm:git:https://github.com/paul-hammant/qdox.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/paul-hammant/qdox.git</developerConnection>
+    <url>https://github.com/paul-hammant/qdox</url>
   </scm>
 
   <developers>

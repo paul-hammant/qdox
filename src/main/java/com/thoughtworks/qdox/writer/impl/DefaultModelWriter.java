@@ -500,7 +500,7 @@ public class DefaultModelWriter
         buffer.write( "exports " );
         writeAccessibilityModifier( exports.getModifiers() );
         writeNonAccessibilityModifiers( exports.getModifiers() );
-        buffer.write( exports.getSource() );
+        buffer.write( exports.getSource().getName() );
         if( !exports.getTargets().isEmpty() )
         {
             buffer.write( " to " );

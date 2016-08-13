@@ -6,6 +6,7 @@ import java.util.Collections;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor;
+import com.thoughtworks.qdox.model.JavaPackage;
 
 public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
 {
@@ -60,20 +61,20 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
 
     public static class DefaultJavaExports extends AbstractJavaModel implements JavaModuleDescriptor.JavaExports
     {
-        private String source;
+        private JavaPackage source;
 
         private Collection<String> modifiers;
 
         private Collection<String> targets;
 
-        public DefaultJavaExports( String source, Collection<String> modifiers, Collection<String> targets )
+        public DefaultJavaExports( JavaPackage source, Collection<String> modifiers, Collection<String> targets )
         {
             this.source = source;
             this.modifiers = modifiers;
             this.targets = targets;
         }
 
-        public String getSource()
+        public JavaPackage getSource()
         {
             return source;
         }

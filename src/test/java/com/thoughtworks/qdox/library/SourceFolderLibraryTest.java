@@ -49,19 +49,19 @@ public class SourceFolderLibraryTest
         assertEquals( 4, module.getDescriptor().getExports().size());
         Iterator<JavaExports> exportsIter = descriptor.getExports().iterator();
         JavaExports exp = exportsIter.next();
-        assertEquals( "P.Q", exp.getSource() );
+        assertEquals( "P.Q", exp.getSource().getName() );
         assertArrayEquals( new String[0], exp.getTargets().toArray( new String[0] ) );
         assertEquals( false, exp.isDynamic() );
         exp = exportsIter.next();
-        assertEquals( "R.S", exp.getSource() );
+        assertEquals( "R.S", exp.getSource().getName() );
         assertArrayEquals( new String[] {"T1.U1", "T2.U2"}, exp.getTargets().toArray( new String[0] ) );
         assertEquals( false, exp.isDynamic() );
         exp = exportsIter.next();
-        assertEquals( "PP.QQ", exp.getSource() );
+        assertEquals( "PP.QQ", exp.getSource().getName() );
         assertArrayEquals( new String[0], exp.getTargets().toArray( new String[0] ) );
         assertEquals( true, exp.isDynamic() );
         exp = exportsIter.next();
-        assertEquals( "RR.SS", exp.getSource() );
+        assertEquals( "RR.SS", exp.getSource().getName() );
         assertArrayEquals( new String[] {"T1.U1", "T2.U2"}, exp.getTargets().toArray( new String[0] ) );
         assertEquals( true, exp.isDynamic() );
         

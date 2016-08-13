@@ -24,7 +24,7 @@ public interface JavaModuleDescriptor
      */
     static interface JavaExports {
 
-        String getSource();
+        JavaPackage getSource();
         
         Collection<String> getTargets();
         

@@ -134,7 +134,7 @@ public class ModelBuilder implements Builder {
     public void addExports( ExportsDef exportsDef )
     {
         DefaultJavaExports exports =
-            new DefaultJavaExports( exportsDef.getSource(), exportsDef.getModifiers(), exportsDef.getTargets() );
+            new DefaultJavaExports( new DefaultJavaPackage(exportsDef.getSource()), exportsDef.getModifiers(), exportsDef.getTargets() );
         exports.setLineNumber( exportsDef.getLineNumber() );
         exports.setModelWriterFactory( modelWriterFactory );
         moduleDescriptor.addExports( exports );

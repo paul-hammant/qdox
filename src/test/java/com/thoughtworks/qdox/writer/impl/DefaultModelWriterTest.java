@@ -21,7 +21,11 @@ import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaModule;
-import com.thoughtworks.qdox.model.JavaModuleDescriptor;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaExports;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaProvides;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaRequires;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaUses;
+import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.expression.Expression;
@@ -410,28 +414,28 @@ public class DefaultModelWriterTest {
     @Test
     public void testModuleRequires()
     {
-        JavaModuleDescriptor.JavaRequires requires1 = mock( JavaModuleDescriptor.JavaRequires.class );
+        JavaRequires requires1 = mock( JavaRequires.class );
         when( requires1.getName() ).thenReturn( "A.B" );
         when( requires1.getModifiers() ).thenReturn( Collections.<String>emptyList() );
         modelWriter.writeModuleRequires( requires1 );
         assertEquals( "requires A.B;\n", modelWriter.toString() );
 
         modelWriter = new DefaultModelWriter();
-        JavaModuleDescriptor.JavaRequires requires2 = mock( JavaModuleDescriptor.JavaRequires.class );
+        JavaRequires requires2 = mock( JavaRequires.class );
         when( requires2.getName() ).thenReturn( "C.D" );
         when( requires2.getModifiers() ).thenReturn( Collections.singleton( "public" ) );
         modelWriter.writeModuleRequires( requires2 );
         assertEquals( "requires public C.D;\n", modelWriter.toString() );
         
         modelWriter = new DefaultModelWriter();
-        JavaModuleDescriptor.JavaRequires requires3 = mock( JavaModuleDescriptor.JavaRequires.class );
+        JavaRequires requires3 = mock( JavaRequires.class );
         when( requires3.getName() ).thenReturn( "E.F" );
         when( requires3.getModifiers() ).thenReturn( Collections.singleton( "static" ) );
         modelWriter.writeModuleRequires( requires3 );
         assertEquals( "requires static E.F;\n", modelWriter.toString() );
         
         modelWriter = new DefaultModelWriter();
-        JavaModuleDescriptor.JavaRequires requires4 = mock( JavaModuleDescriptor.JavaRequires.class );
+        JavaRequires requires4 = mock( JavaRequires.class );
         when( requires4.getName() ).thenReturn( "G.H" );
         when( requires4.getModifiers() ).thenReturn( Arrays.asList( "public", "static" ) );
         modelWriter.writeModuleRequires( requires4 );
@@ -441,28 +445,36 @@ public class DefaultModelWriterTest {
     @Test
     public void testModuleExports()
     {
-        JavaModuleDescriptor.JavaExports exports1 = mock( JavaModuleDescriptor.JavaExports.class );
-        when( exports1.getSource() ).thenReturn( "P.Q" );
+        JavaExports exports1 = mock( JavaExports.class );
+        JavaPackage source1 = mock(JavaPackage.class);
+        when(source1.getName()).thenReturn( "P.Q" );
+        when( exports1.getSource() ).thenReturn( source1 );
         modelWriter.writeModuleExports( exports1 );
         assertEquals( "exports P.Q;\n", modelWriter.toString() );
 
         modelWriter = new DefaultModelWriter();
-        JavaModuleDescriptor.JavaExports exports2 = mock( JavaModuleDescriptor.JavaExports.class );
-        when( exports2.getSource() ).thenReturn( "R.S" );
+        JavaExports exports2 = mock( JavaExports.class );
+        JavaPackage source2 = mock(JavaPackage.class);
+        when(source2.getName()).thenReturn( "R.S" );
+        when( exports2.getSource() ).thenReturn( source2 );
         when(exports2.getTargets()).thenReturn( Arrays.asList( "T1.U1", "T2.U2" ) );
         modelWriter.writeModuleExports( exports2 );
         assertEquals( "exports R.S to T1.U1, T2.U2;\n", modelWriter.toString() );
 
         modelWriter = new DefaultModelWriter();
-        JavaModuleDescriptor.JavaExports exports3 = mock( JavaModuleDescriptor.JavaExports.class );
-        when( exports3.getSource() ).thenReturn( "PP.QQ" );
+        JavaExports exports3 = mock( JavaExports.class );
+        JavaPackage source3 = mock(JavaPackage.class);
+        when(source3.getName()).thenReturn( "PP.QQ" );
+        when( exports3.getSource() ).thenReturn( source3 );
         when( exports3.getModifiers() ).thenReturn( Collections.singleton( "dynamic" ) );
         modelWriter.writeModuleExports( exports3 );
         assertEquals( "exports dynamic PP.QQ;\n", modelWriter.toString() );
 
         modelWriter = new DefaultModelWriter();
-        JavaModuleDescriptor.JavaExports exports4 = mock( JavaModuleDescriptor.JavaExports.class );
-        when( exports4.getSource() ).thenReturn( "RR.SS" );
+        JavaExports exports4 = mock( JavaExports.class );
+        JavaPackage source4 = mock(JavaPackage.class);
+        when(source4.getName()).thenReturn( "RR.SS" );
+        when( exports4.getSource() ).thenReturn( source4 );
         when( exports4.getTargets()).thenReturn( Arrays.asList( "T1.U1", "T2.U2" ) );
         when( exports4.getModifiers() ).thenReturn( Collections.singleton( "dynamic" ) );
         modelWriter.writeModuleExports( exports4 );
@@ -472,7 +484,7 @@ public class DefaultModelWriterTest {
     @Test
     public void testModuleProvides()
     {
-        JavaModuleDescriptor.JavaProvides provides = mock( JavaModuleDescriptor.JavaProvides.class );
+        JavaProvides provides = mock( JavaProvides.class );
         JavaClass service = mock( JavaClass.class );
         when( service.getName() ).thenReturn( "X.Y" );
         JavaClass provider = mock( JavaClass.class );
@@ -486,7 +498,7 @@ public class DefaultModelWriterTest {
     @Test
     public void testModuleUses()
     {
-        JavaModuleDescriptor.JavaUses uses = mock( JavaModuleDescriptor.JavaUses.class );
+        JavaUses uses = mock( JavaUses.class );
         JavaClass service = mock( JavaClass.class );
         when( service.getName() ).thenReturn( "V.W" );
         when( uses.getService() ).thenReturn( service );

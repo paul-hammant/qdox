@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 import com.thoughtworks.qdox.model.JavaPackage;
 
@@ -65,9 +66,9 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
 
         private Collection<String> modifiers;
 
-        private Collection<String> targets;
+        private Collection<JavaModule> targets;
 
-        public DefaultJavaExports( JavaPackage source, Collection<String> modifiers, Collection<String> targets )
+        public DefaultJavaExports( JavaPackage source, Collection<String> modifiers, Collection<JavaModule> targets )
         {
             this.source = source;
             this.modifiers = modifiers;
@@ -79,7 +80,7 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             return source;
         }
 
-        public Collection<String> getTargets()
+        public Collection<JavaModule> getTargets()
         {
             if( targets == null )
             {
@@ -145,19 +146,19 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
     
     public static class DefaultJavaRequires extends AbstractJavaModel implements JavaModuleDescriptor.JavaRequires 
     {
-        private String name;
+        private JavaModule module;
         
         private Collection<String> modifiers;
     
-        public DefaultJavaRequires( String name, Collection<String> modifiers )
+        public DefaultJavaRequires( JavaModule module, Collection<String> modifiers )
         {
-            this.name = name;
+            this.module = module;
             this.modifiers = modifiers;
         }
     
-        public String getName()
+        public JavaModule getModule()
         {
-            return name;
+            return module;
         }
     
         public boolean isPublic()

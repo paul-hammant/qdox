@@ -26,7 +26,7 @@ public interface JavaModuleDescriptor
 
         JavaPackage getSource();
         
-        Collection<String> getTargets();
+        Collection<JavaModule> getTargets();
         
         boolean isDynamic();
 
@@ -61,7 +61,7 @@ public interface JavaModuleDescriptor
      */
     static interface JavaRequires {
     
-        String getName();
+        JavaModule getModule();
         
         boolean isPublic();
         

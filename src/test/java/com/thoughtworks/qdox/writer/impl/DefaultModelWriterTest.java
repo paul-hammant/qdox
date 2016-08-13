@@ -415,28 +415,36 @@ public class DefaultModelWriterTest {
     public void testModuleRequires()
     {
         JavaRequires requires1 = mock( JavaRequires.class );
-        when( requires1.getName() ).thenReturn( "A.B" );
+        JavaModule moduleAB = mock(JavaModule.class);
+        when( moduleAB.getName() ).thenReturn( "A.B" );
+        when( requires1.getModule() ).thenReturn( moduleAB );
         when( requires1.getModifiers() ).thenReturn( Collections.<String>emptyList() );
         modelWriter.writeModuleRequires( requires1 );
         assertEquals( "requires A.B;\n", modelWriter.toString() );
 
         modelWriter = new DefaultModelWriter();
         JavaRequires requires2 = mock( JavaRequires.class );
-        when( requires2.getName() ).thenReturn( "C.D" );
+        JavaModule moduleCD = mock(JavaModule.class);
+        when( moduleCD.getName() ).thenReturn( "C.D" );
+        when( requires2.getModule() ).thenReturn( moduleCD);
         when( requires2.getModifiers() ).thenReturn( Collections.singleton( "public" ) );
         modelWriter.writeModuleRequires( requires2 );
         assertEquals( "requires public C.D;\n", modelWriter.toString() );
         
         modelWriter = new DefaultModelWriter();
         JavaRequires requires3 = mock( JavaRequires.class );
-        when( requires3.getName() ).thenReturn( "E.F" );
+        JavaModule moduleEF = mock(JavaModule.class);
+        when( moduleEF.getName() ).thenReturn( "E.F" );
+        when( requires3.getModule() ).thenReturn( moduleEF );
         when( requires3.getModifiers() ).thenReturn( Collections.singleton( "static" ) );
         modelWriter.writeModuleRequires( requires3 );
         assertEquals( "requires static E.F;\n", modelWriter.toString() );
         
         modelWriter = new DefaultModelWriter();
         JavaRequires requires4 = mock( JavaRequires.class );
-        when( requires4.getName() ).thenReturn( "G.H" );
+        JavaModule moduleGH = mock(JavaModule.class);
+        when( moduleGH.getName() ).thenReturn( "G.H" );
+        when( requires4.getModule() ).thenReturn( moduleGH );
         when( requires4.getModifiers() ).thenReturn( Arrays.asList( "public", "static" ) );
         modelWriter.writeModuleRequires( requires4 );
         assertEquals( "requires public static G.H;\n", modelWriter.toString() );
@@ -446,18 +454,23 @@ public class DefaultModelWriterTest {
     public void testModuleExports()
     {
         JavaExports exports1 = mock( JavaExports.class );
-        JavaPackage source1 = mock(JavaPackage.class);
-        when(source1.getName()).thenReturn( "P.Q" );
-        when( exports1.getSource() ).thenReturn( source1 );
+        JavaPackage sourcePQ = mock(JavaPackage.class);
+        when(sourcePQ.getName()).thenReturn( "P.Q" );
+        when( exports1.getSource() ).thenReturn( sourcePQ );
         modelWriter.writeModuleExports( exports1 );
         assertEquals( "exports P.Q;\n", modelWriter.toString() );
 
         modelWriter = new DefaultModelWriter();
         JavaExports exports2 = mock( JavaExports.class );
-        JavaPackage source2 = mock(JavaPackage.class);
-        when(source2.getName()).thenReturn( "R.S" );
-        when( exports2.getSource() ).thenReturn( source2 );
-        when(exports2.getTargets()).thenReturn( Arrays.asList( "T1.U1", "T2.U2" ) );
+        JavaPackage sourceRS = mock(JavaPackage.class);
+        when(sourceRS.getName()).thenReturn( "R.S" );
+        when( exports2.getSource() ).thenReturn( sourceRS );
+        
+        JavaModule moduleT1U1 = mock( JavaModule.class );
+        when( moduleT1U1.getName() ).thenReturn( "T1.U1" );
+        JavaModule moduleT2U2 = mock( JavaModule.class );
+        when( moduleT2U2.getName() ).thenReturn( "T2.U2" );
+        when(exports2.getTargets()).thenReturn( Arrays.asList( moduleT1U1, moduleT2U2 ) );
         modelWriter.writeModuleExports( exports2 );
         assertEquals( "exports R.S to T1.U1, T2.U2;\n", modelWriter.toString() );
 
@@ -475,7 +488,7 @@ public class DefaultModelWriterTest {
         JavaPackage source4 = mock(JavaPackage.class);
         when(source4.getName()).thenReturn( "RR.SS" );
         when( exports4.getSource() ).thenReturn( source4 );
-        when( exports4.getTargets()).thenReturn( Arrays.asList( "T1.U1", "T2.U2" ) );
+        when( exports4.getTargets()).thenReturn( Arrays.asList( moduleT1U1, moduleT2U2 ) );
         when( exports4.getModifiers() ).thenReturn( Collections.singleton( "dynamic" ) );
         modelWriter.writeModuleExports( exports4 );
         assertEquals( "exports dynamic RR.SS to T1.U1, T2.U2;\n", modelWriter.toString() );

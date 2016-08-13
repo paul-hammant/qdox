@@ -133,8 +133,15 @@ public class ModelBuilder implements Builder {
     
     public void addExports( ExportsDef exportsDef )
     {
+        // for now use anonymous modules
+        List<JavaModule> targets = new ArrayList<JavaModule>(exportsDef.getTargets().size());
+        for ( String moduleName : exportsDef.getTargets() )
+        {
+            targets.add( new DefaultJavaModule( moduleName, null ) );
+        }
+        
         DefaultJavaExports exports =
-            new DefaultJavaExports( new DefaultJavaPackage(exportsDef.getSource()), exportsDef.getModifiers(), exportsDef.getTargets() );
+            new DefaultJavaExports( new DefaultJavaPackage(exportsDef.getSource()), exportsDef.getModifiers(), targets );
         exports.setLineNumber( exportsDef.getLineNumber() );
         exports.setModelWriterFactory( modelWriterFactory );
         moduleDescriptor.addExports( exports );
@@ -152,7 +159,8 @@ public class ModelBuilder implements Builder {
 
     public void addRequires( RequiresDef requiresDef )
     {
-        DefaultJavaRequires requires = new DefaultJavaRequires( requiresDef.getName(), requiresDef.getModifiers() );
+        JavaModule module = new DefaultJavaModule( requiresDef.getName(), null );
+        DefaultJavaRequires requires = new DefaultJavaRequires( module, requiresDef.getModifiers() );
         requires.setLineNumber( requiresDef.getLineNumber() );
         requires.setModelWriterFactory( modelWriterFactory );
         moduleDescriptor.addRequires( requires );

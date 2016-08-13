@@ -504,11 +504,11 @@ public class DefaultModelWriter
         if( !exports.getTargets().isEmpty() )
         {
             buffer.write( " to " );
-            Iterator<String> targets = exports.getTargets().iterator();
+            Iterator<JavaModule> targets = exports.getTargets().iterator();
             while( targets.hasNext() )
             {
-                String target = targets.next();
-                buffer.write( target );
+                JavaModule target = targets.next();
+                buffer.write( target.getName() );
                 if( targets.hasNext() )
                 {
                     buffer.write( ", " );
@@ -536,7 +536,7 @@ public class DefaultModelWriter
         buffer.write( "requires " );
         writeAccessibilityModifier( requires.getModifiers() );
         writeNonAccessibilityModifiers( requires.getModifiers() );
-        buffer.write( requires.getName() );
+        buffer.write( requires.getModule().getName() );
         buffer.write( ';' );
         buffer.newline();
         return this;

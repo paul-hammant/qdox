@@ -30,19 +30,19 @@ public class SourceFolderLibraryTest
         assertEquals( 4, descriptor.getRequires().size() );
         Iterator<JavaRequires> requiresIter = descriptor.getRequires().iterator();
         JavaRequires req = requiresIter.next();
-        assertEquals( "A.B", req.getName() );
+        assertEquals( "A.B", req.getModule().getName() );
         assertEquals( false, req.isPublic() );
         assertEquals( false, req.isStatic() );
         req = requiresIter.next();
-        assertEquals( "C.D", req.getName() );
+        assertEquals( "C.D", req.getModule().getName() );
         assertEquals( true, req.isPublic() );
         assertEquals( false, req.isStatic() );
         req = requiresIter.next();
-        assertEquals( "E.F", req.getName() );
+        assertEquals( "E.F", req.getModule().getName() );
         assertEquals( false, req.isPublic() );
         assertEquals( true, req.isStatic() );
         req = requiresIter.next();
-        assertEquals( "G.H", req.getName() );
+        assertEquals( "G.H", req.getModule().getName() );
         assertEquals( true, req.isPublic() );
         assertEquals( true, req.isStatic() );
         
@@ -54,7 +54,12 @@ public class SourceFolderLibraryTest
         assertEquals( false, exp.isDynamic() );
         exp = exportsIter.next();
         assertEquals( "R.S", exp.getSource().getName() );
-        assertArrayEquals( new String[] {"T1.U1", "T2.U2"}, exp.getTargets().toArray( new String[0] ) );
+        assertEquals( 2, exp.getTargets().size());
+        Iterator<JavaModule> moduleIter = exp.getTargets().iterator();
+        JavaModule mdl = moduleIter.next();
+        assertEquals( "T1.U1", mdl.getName() );
+        mdl = moduleIter.next();
+        assertEquals( "T2.U2", mdl.getName() );
         assertEquals( false, exp.isDynamic() );
         exp = exportsIter.next();
         assertEquals( "PP.QQ", exp.getSource().getName() );
@@ -62,7 +67,12 @@ public class SourceFolderLibraryTest
         assertEquals( true, exp.isDynamic() );
         exp = exportsIter.next();
         assertEquals( "RR.SS", exp.getSource().getName() );
-        assertArrayEquals( new String[] {"T1.U1", "T2.U2"}, exp.getTargets().toArray( new String[0] ) );
+        assertEquals( 2, exp.getTargets().size());
+        moduleIter = exp.getTargets().iterator();
+        mdl = moduleIter.next();
+        assertEquals( "T1.U1", mdl.getName() );
+        mdl = moduleIter.next();
+        assertEquals( "T2.U2", mdl.getName() );
         assertEquals( true, exp.isDynamic() );
         
         assertEquals( 1, module.getDescriptor().getUses().size() );

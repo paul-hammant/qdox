@@ -83,10 +83,11 @@ CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_
 
 // ModuleDeclaration:
 //    {Annotation} module ModuleName { {ModuleStatement} }
-ModuleDeclaration: Modifiers_opt MODULE ModuleName BRACEOPEN ModuleStatements_opt BRACECLOSE
+ModuleDeclaration: Modifiers_opt MODULE ModuleName
                    {
                      builder.setModule(new ModuleDef($3));
                    }
+                   BRACEOPEN ModuleStatements_opt BRACECLOSE
                  ;
 
 //  ModuleName:

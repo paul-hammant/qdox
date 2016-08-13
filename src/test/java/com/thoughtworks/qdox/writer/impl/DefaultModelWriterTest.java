@@ -487,6 +487,4 @@ public class DefaultModelWriterTest {
         modelWriter.writeModuleUses( uses );
         assertEquals( "uses V.W;\n", modelWriter.toString() );
     }
-    
-    
 }

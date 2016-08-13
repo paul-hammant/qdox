@@ -4,6 +4,14 @@ import java.util.Collection;
 
 public interface JavaModuleDescriptor
 {
+     Collection<JavaExports> getExports();
+
+    Collection<JavaProvides> getProvides();
+
+    Collection<JavaRequires> getRequires();
+
+    Collection<JavaUses> getUses();
+
     /**
      * Represents the following ModuleStatement:<br>
      * <code>

@@ -8,27 +8,70 @@ import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 
 public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
 {
-   
-    private Collection<DefaultJavaRequires> requires = new ArrayList<DefaultJavaModuleDescriptor.DefaultJavaRequires>();
-    
+
+    private Collection<DefaultJavaExports> exports = new ArrayList<DefaultJavaExports>();
+
+    private Collection<DefaultJavaRequires> requires = new ArrayList<DefaultJavaRequires>();
+
+    private Collection<DefaultJavaUses> uses = new ArrayList<DefaultJavaUses>();
+
+    private Collection<DefaultJavaProvides> provides = new ArrayList<DefaultJavaProvides>();
+
+    public void addExports( DefaultJavaExports exports )
+    {
+        this.exports.add( exports );
+    }
+
+    public Collection<JavaExports> getExports()
+    {
+        return Collections.<JavaExports>unmodifiableCollection( exports );
+    } 
+
     public void addRequires( DefaultJavaRequires requires )
     {
         this.requires.add( requires );
     }
 
-    public Collection<DefaultJavaRequires> getRequires()
+    public Collection<JavaRequires> getRequires()
     {
-        return Collections.unmodifiableCollection( requires );
+        return Collections.<JavaRequires>unmodifiableCollection( requires );
     }
-    
+
+    public void addProvides( DefaultJavaProvides provides )
+    {
+        this.provides.add( provides);
+    }
+
+    public Collection<JavaProvides> getProvides()
+    {
+        return Collections.<JavaProvides>unmodifiableCollection( provides );
+    }
+
+    public void addUses( DefaultJavaUses uses)
+    {
+        this.uses.add( uses );
+    }
+
+    public Collection<JavaUses> getUses()
+    {
+        return Collections.<JavaUses>unmodifiableCollection( uses );
+    } 
+
     public static class DefaultJavaExports extends AbstractJavaModel implements JavaModuleDescriptor.JavaExports
     {
         private String source;
 
         private Collection<String> modifiers;
-        
+
         private Collection<String> targets;
-        
+
+        public DefaultJavaExports( String source, Collection<String> modifiers, Collection<String> targets )
+        {
+            this.source = source;
+            this.modifiers = modifiers;
+            this.targets = targets;
+        }
+
         public String getSource()
         {
             return source;

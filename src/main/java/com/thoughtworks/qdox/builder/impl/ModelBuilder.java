@@ -51,6 +51,10 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaInitializer;
 import com.thoughtworks.qdox.model.impl.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.impl.DefaultJavaModule;
 import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor;
+import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor.DefaultJavaExports;
+import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor.DefaultJavaProvides;
+import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor.DefaultJavaRequires;
+import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor.DefaultJavaUses;
 import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
@@ -128,24 +132,37 @@ public class ModelBuilder implements Builder {
         this.module = new DefaultJavaModule(moduleDef.getName(), moduleDescriptor);
     }
     
-    public void addExports( ExportsDef exports )
+    public void addExports( ExportsDef exportsDef )
     {
-        // TODO Auto-generated method stub
+        DefaultJavaExports exports =
+            new DefaultJavaExports( exportsDef.getSource(), exportsDef.getModifiers(), exportsDef.getTargets() );
+        exports.setLineNumber( exportsDef.getLineNumber() );
+        exports.setModelWriterFactory( modelWriterFactory );
+        moduleDescriptor.addExports( exports );
     }
-    public void addProvides( ProvidesDef provides )
+
+    public void addProvides( ProvidesDef providesDef )
     {
-        // TODO Auto-generated method stub
-        
+        DefaultJavaProvides provides = new DefaultJavaProvides( providesDef.getService(), providesDef.getImplementation() );
+        provides.setLineNumber( providesDef.getLineNumber() );
+        provides.setModelWriterFactory( modelWriterFactory );
+        moduleDescriptor.addProvides( provides );
     }
+
     public void addRequires( RequiresDef requiresDef )
     {
-        DefaultJavaModuleDescriptor.DefaultJavaRequires requires =
-                        new DefaultJavaModuleDescriptor.DefaultJavaRequires( requiresDef.getName(), requiresDef.getModifiers() );
+        DefaultJavaRequires requires = new DefaultJavaRequires( requiresDef.getName(), requiresDef.getModifiers() );
+        requires.setLineNumber( requiresDef.getLineNumber() );
+        requires.setModelWriterFactory( modelWriterFactory );
         moduleDescriptor.addRequires( requires );
     }
-    public void addUses( UsesDef uses )
+
+    public void addUses( UsesDef usesDef )
     {
-        // TODO Auto-generated method stub
+        DefaultJavaUses uses = new DefaultJavaUses( usesDef.getName() );
+        uses.setLineNumber( usesDef.getLineNumber() );
+        uses.setModelWriterFactory( modelWriterFactory );
+        moduleDescriptor.addUses( uses );
     }
     
 

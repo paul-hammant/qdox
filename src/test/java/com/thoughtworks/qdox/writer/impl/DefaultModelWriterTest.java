@@ -473,17 +473,23 @@ public class DefaultModelWriterTest {
     public void testModuleProvides()
     {
         JavaModuleDescriptor.JavaProvides provides = mock( JavaModuleDescriptor.JavaProvides.class );
-        when(provides.getService()).thenReturn( "X.Y" );
-        when(provides.getProvider()).thenReturn( "Z1.Z2" );
+        JavaClass service = mock( JavaClass.class );
+        when( service.getName() ).thenReturn( "X.Y" );
+        JavaClass provider = mock( JavaClass.class );
+        when( provider.getName() ).thenReturn( "Z1.Z2" );
+        when( provides.getService() ).thenReturn( service );
+        when( provides.getProvider() ).thenReturn( provider );
         modelWriter.writeModuleProvides( provides );
         assertEquals( "provides X.Y with Z1.Z2;\n", modelWriter.toString() );
     }
-    
+
     @Test
     public void testModuleUses()
     {
-        JavaModuleDescriptor.JavaUses uses = mock( JavaModuleDescriptor.JavaUses.class);
-        when(uses.getName()).thenReturn( "V.W" );
+        JavaModuleDescriptor.JavaUses uses = mock( JavaModuleDescriptor.JavaUses.class );
+        JavaClass service = mock( JavaClass.class );
+        when( service.getName() ).thenReturn( "V.W" );
+        when( uses.getService() ).thenReturn( service );
         modelWriter.writeModuleUses( uses );
         assertEquals( "uses V.W;\n", modelWriter.toString() );
     }

@@ -68,16 +68,16 @@ public class SourceFolderLibraryTest
         assertEquals( 1, module.getDescriptor().getUses().size() );
         Iterator<JavaUses> usesIter = descriptor.getUses().iterator();
         JavaUses uses = usesIter.next();
-        assertEquals( "V.W", uses.getName() );
+        assertEquals( "V.W", uses.getService().getName() );
         
         assertEquals( 2, module.getDescriptor().getProvides().size() );
         Iterator<JavaProvides> providesIter = descriptor.getProvides().iterator();
         JavaProvides provides = providesIter.next();
-        assertEquals( "X.Y", provides.getService() );
-        assertEquals( "Z1.Z2", provides.getProvider() );
+        assertEquals( "X.Y", provides.getService().getName() );
+        assertEquals( "Z1.Z2", provides.getProvider().getName() );
         provides = providesIter.next();
-        assertEquals( "X.Y", provides.getService() );
-        assertEquals( "Z3.Z4", provides.getProvider() );
+        assertEquals( "X.Y", provides.getService().getName() );
+        assertEquals( "Z3.Z4", provides.getProvider().getName() );
     }
     
 }

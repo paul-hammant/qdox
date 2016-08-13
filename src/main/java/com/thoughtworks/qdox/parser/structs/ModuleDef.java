@@ -57,22 +57,22 @@ public class ModuleDef extends LocatedDef
     
     public static class ProvidesDef extends LocatedDef
     {
-        private String service;
+        private TypeDef service;
         
-        private String implementation;
+        private TypeDef implementation;
 
-        public ProvidesDef( String service, String implementation )
+        public ProvidesDef( TypeDef service, TypeDef implementation )
         {
             this.service = service;
             this.implementation = implementation;
         }
 
-        public String getService()
+        public TypeDef getService()
         {
             return service;
         }
 
-        public String getImplementation()
+        public TypeDef getImplementation()
         {
             return implementation;
         }
@@ -104,16 +104,16 @@ public class ModuleDef extends LocatedDef
     
     public static class UsesDef extends LocatedDef
     {
-        private String name;
+        private TypeDef service;
 
-        public UsesDef( String name )
+        public UsesDef( TypeDef service )
         {
-            this.name = name;
+            this.service = service;
         }
 
-        public String getName()
+        public TypeDef getService()
         {
-            return name;
+            return service;
         } 
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 
 public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
@@ -114,23 +115,23 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
     
     public static class DefaultJavaProvides extends AbstractJavaModel implements JavaModuleDescriptor.JavaProvides
     {
-        private String service;
+        private JavaClass service;
         
-        private String provider;
+        private JavaClass provider;
 
-        public DefaultJavaProvides( String service, String provider )
+        public DefaultJavaProvides( JavaClass service, JavaClass provider )
         {
             super();
             this.service = service;
             this.provider = provider;
         }
         
-        public String getService()
+        public JavaClass getService()
         {
             return service;
         }
         
-        public String getProvider()
+        public JavaClass getProvider()
         {
             return provider;
         }
@@ -188,16 +189,16 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
     
     public static class DefaultJavaUses extends AbstractJavaModel implements JavaModuleDescriptor.JavaUses
     {
-        private String name;
+        private JavaClass service;
 
-        public DefaultJavaUses( String name )
+        public DefaultJavaUses( JavaClass service )
         {
-            this.name = name;
+            this.service = service;
         }
-        
-        public String getName()
+
+        public JavaClass getService()
         {
-            return name;
+            return service;
         }
 
         public String getCodeBlock()

@@ -2893,15 +2893,15 @@ public class ParserTest extends TestCase {
         
         ArgumentCaptor<ModuleDef.UsesDef> usesCaptor = ArgumentCaptor.forClass( ModuleDef.UsesDef.class );
         verify( builder ).addUses( usesCaptor.capture() );
-        assertEquals( "V.W", usesCaptor.getValue().getName() );
+        assertEquals( "V.W", usesCaptor.getValue().getService().getName() );
         
         ArgumentCaptor<ModuleDef.ProvidesDef> providesCaptor = ArgumentCaptor.forClass( ModuleDef.ProvidesDef.class );
         verify( builder, times(2) ).addProvides( providesCaptor.capture() );
-        assertEquals( "X.Y", providesCaptor.getAllValues().get(0).getService() );
-        assertEquals( "Z1.Z2", providesCaptor.getAllValues().get(0).getImplementation() );
+        assertEquals( "X.Y", providesCaptor.getAllValues().get(0).getService().getName() );
+        assertEquals( "Z1.Z2", providesCaptor.getAllValues().get(0).getImplementation().getName() );
 
-        assertEquals( "X.Y", providesCaptor.getAllValues().get(1).getService() );
-        assertEquals( "Z3.Z4", providesCaptor.getAllValues().get(1).getImplementation() );
+        assertEquals( "X.Y", providesCaptor.getAllValues().get(1).getService().getName() );
+        assertEquals( "Z3.Z4", providesCaptor.getAllValues().get(1).getImplementation().getName() );
     }
 
     private void setupLex(int token, String value) {

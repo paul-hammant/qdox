@@ -523,9 +523,9 @@ public class DefaultModelWriter
     public ModelWriter writeModuleProvides( JavaProvides provides )
     {
         buffer.write( "provides " );
-        buffer.write( provides.getService() );
+        buffer.write( provides.getService().getName() );
         buffer.write( " with " );
-        buffer.write( provides.getProvider() );
+        buffer.write( provides.getProvider().getName() );
         buffer.write( ';' );
         buffer.newline();
         return null;
@@ -545,7 +545,7 @@ public class DefaultModelWriter
     public ModelWriter writeModuleUses( JavaUses uses )
     {
         buffer.write( "uses " );
-        buffer.write( uses.getName() );
+        buffer.write( uses.getService().getName() );
         buffer.write( ';' );
         buffer.newline();
         return this;

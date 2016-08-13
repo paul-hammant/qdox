@@ -44,9 +44,9 @@ public interface JavaModuleDescriptor
      *
      */
     static interface JavaProvides {
-        String getService();
+        JavaClass getService();
         
-        String getProvider();
+        JavaClass getProvider();
     }
     
     /**
@@ -82,7 +82,7 @@ public interface JavaModuleDescriptor
      */
     static interface JavaUses 
     {
-        String getName();
+        JavaClass getService();
     }
     
     

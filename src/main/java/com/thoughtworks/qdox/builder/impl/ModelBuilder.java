@@ -37,7 +37,6 @@ import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaModule;
-import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
@@ -143,7 +142,9 @@ public class ModelBuilder implements Builder {
 
     public void addProvides( ProvidesDef providesDef )
     {
-        DefaultJavaProvides provides = new DefaultJavaProvides( providesDef.getService(), providesDef.getImplementation() );
+        JavaClass service = createType( providesDef.getService(), 0 );
+        JavaClass provider = createType( providesDef.getImplementation(), 0 );
+        DefaultJavaProvides provides = new DefaultJavaProvides( service, provider );
         provides.setLineNumber( providesDef.getLineNumber() );
         provides.setModelWriterFactory( modelWriterFactory );
         moduleDescriptor.addProvides( provides );
@@ -159,7 +160,7 @@ public class ModelBuilder implements Builder {
 
     public void addUses( UsesDef usesDef )
     {
-        DefaultJavaUses uses = new DefaultJavaUses( usesDef.getName() );
+        DefaultJavaUses uses = new DefaultJavaUses( createType( usesDef.getService(), 0 ) );
         uses.setLineNumber( usesDef.getLineNumber() );
         uses.setModelWriterFactory( modelWriterFactory );
         moduleDescriptor.addUses( uses );

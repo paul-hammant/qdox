@@ -549,9 +549,9 @@ To build QDox there are two prerequisites:
 
 Key Dependencies:
 
-1. (Maven 3)[http://maven.apache.org]
+1. [Maven 3](http://maven.apache.org)
 
-2. [BYacc/J](http://byaccj.sourceforge.net/)
+2. [BYacc/J](http://byaccj.sourceforge.net)
 
 Paarser generator used to create an effective parser for JavaDoc.
 If using Windows, Linux, Solaris or Mac OS X, no additional installation is 

@@ -268,7 +268,9 @@ public class DefaultJavaSource implements JavaSource, Serializable {
             }
             if ( imprt.equals( importSpec ) || ( !fullMatch && imprt.endsWith( dotSuffix ) ) )
             {
-                String candidateName = imprt.substring( 0, imprt.length() - importSpec.length() ) + typeName;
+                String candidateName = imprt.equals(importSpec) ? imprt
+                                : imprt.substring(0, imprt.length() - importSpec.length()) + typeName;
+
                 resolvedName = resolveFullyQualifiedType( candidateName );
                 if ( resolvedName == null && !"*".equals( importSpec ) )
                 {

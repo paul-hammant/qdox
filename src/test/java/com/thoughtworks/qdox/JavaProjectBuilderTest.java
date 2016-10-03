@@ -1554,6 +1554,19 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource( new StringReader( source ) ); 
     }
     
+    public void testFQNField() throws Exception
+    {
+        String source = "import java.text.SimpleDateFormat;\r\n" + 
+            "public class Car {\r\n" + 
+            "    private java.text.SimpleDateFormat format;\r\n" + 
+            "}";
+        
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        builder.addSource(new StringReader( source ));
+        JavaField field = builder.getClassByName("Car").getFieldByName("format");
+        assertEquals( "java.text.SimpleDateFormat", field.getType().getFullyQualifiedName());
+    }
+    
     public void testOneLineJavadoc() throws Exception
     {
         String source = "package foo.bar;\n" + 

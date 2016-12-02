@@ -643,20 +643,34 @@ public class LexerTest extends TestCase {
     public void testModule()
         throws Exception
     {
-        String in = "module M.N {\n" +
+        String in = "@Foo(1) @Foo(2) @Bar\n" + 
+            "open module M.N {\n" + 
             "  requires A.B;\n" + 
-            "  requires public C.D;\n" + 
+            "  requires transitive C.D;\n" + 
             "  requires static E.F;\n" + 
-            "  requires public static G.H;\n" +
+            "  requires transitive static G.H;\n" + 
             "  exports P.Q;\n" + 
             "  exports R.S to T1.U1, T2.U2;\n" + 
-            "  exports dynamic PP.QQ;\n" + 
-            "  exports dynamic RR.SS to T1.U1, T2.U2;" +
+            "  opens P.Q;\n" + 
+            "  opens R.S to T1.U1, T2.U2;\n" + 
             "  uses V.W;\n" + 
-            "  provides X.Y with Z1.Z2;\n" + 
-            "  provides X.Y with Z3.Z4;\n" +
+            "  provides X.Y with Z1.Z2, Z3.Z4;\n" + 
             "}";
         Lexer lexer = new JFlexLexer( new StringReader( in ) );
+        assertLex( Parser.AT, lexer );
+        assertLex( Parser.IDENTIFIER, "Foo", lexer );
+        assertLex( Parser.PARENOPEN, lexer );
+        assertLex( Parser.INTEGER_LITERAL, "1", lexer );
+        assertLex( Parser.PARENCLOSE, lexer );
+        assertLex( Parser.AT, lexer );
+        assertLex( Parser.IDENTIFIER, "Foo", lexer );
+        assertLex( Parser.PARENOPEN, lexer );
+        assertLex( Parser.INTEGER_LITERAL, "2", lexer );
+        assertLex( Parser.PARENCLOSE, lexer );
+        assertLex( Parser.AT, lexer );
+        assertLex( Parser.IDENTIFIER, "Bar", lexer );
+        
+        assertLex( Parser.OPEN, lexer );
         assertLex( Parser.MODULE, lexer );
         assertLex( Parser.IDENTIFIER, "M", lexer );
         assertLex( Parser.DOT, lexer );
@@ -670,7 +684,7 @@ public class LexerTest extends TestCase {
         assertLex( Parser.SEMI, lexer );
         
         assertLex( Parser.REQUIRES, lexer );
-        assertLex( Parser.PUBLIC, lexer );
+        assertLex( Parser.TRANSITIVE, lexer );
         assertLex( Parser.IDENTIFIER, "C", lexer );
         assertLex( Parser.DOT, lexer );
         assertLex( Parser.IDENTIFIER, "D", lexer );
@@ -684,7 +698,7 @@ public class LexerTest extends TestCase {
         assertLex( Parser.SEMI, lexer );
         
         assertLex( Parser.REQUIRES, lexer );
-        assertLex( Parser.PUBLIC, lexer );
+        assertLex( Parser.TRANSITIVE, lexer );
         assertLex( Parser.STATIC, lexer );
         assertLex( Parser.IDENTIFIER, "G", lexer );
         assertLex( Parser.DOT, lexer );
@@ -711,18 +725,16 @@ public class LexerTest extends TestCase {
         assertLex( Parser.IDENTIFIER, "U2", lexer );
         assertLex( Parser.SEMI, lexer );
 
-        assertLex( Parser.EXPORTS, lexer );
-        assertLex( Parser.DYNAMIC, lexer );
-        assertLex( Parser.IDENTIFIER, "PP", lexer );
+        assertLex( Parser.OPENS, lexer );
+        assertLex( Parser.IDENTIFIER, "P", lexer );
         assertLex( Parser.DOT, lexer );
-        assertLex( Parser.IDENTIFIER, "QQ", lexer );
+        assertLex( Parser.IDENTIFIER, "Q", lexer );
         assertLex( Parser.SEMI, lexer );
 
-        assertLex( Parser.EXPORTS, lexer );
-        assertLex( Parser.DYNAMIC, lexer );
-        assertLex( Parser.IDENTIFIER, "RR", lexer );
+        assertLex( Parser.OPENS, lexer );
+        assertLex( Parser.IDENTIFIER, "R", lexer );
         assertLex( Parser.DOT, lexer );
-        assertLex( Parser.IDENTIFIER, "SS", lexer );
+        assertLex( Parser.IDENTIFIER, "S", lexer );
         assertLex( Parser.TO, lexer );
         assertLex( Parser.IDENTIFIER, "T1", lexer );
         assertLex( Parser.DOT, lexer );
@@ -747,13 +759,7 @@ public class LexerTest extends TestCase {
         assertLex( Parser.IDENTIFIER, "Z1", lexer );
         assertLex( Parser.DOT, lexer );
         assertLex( Parser.IDENTIFIER, "Z2", lexer );
-        assertLex( Parser.SEMI, lexer );
-
-        assertLex( Parser.PROVIDES, lexer );
-        assertLex( Parser.IDENTIFIER, "X", lexer );
-        assertLex( Parser.DOT, lexer );
-        assertLex( Parser.IDENTIFIER, "Y", lexer );
-        assertLex( Parser.WITH, lexer );
+        assertLex( Parser.COMMA, lexer );
         assertLex( Parser.IDENTIFIER, "Z3", lexer );
         assertLex( Parser.DOT, lexer );
         assertLex( Parser.IDENTIFIER, "Z4", lexer );

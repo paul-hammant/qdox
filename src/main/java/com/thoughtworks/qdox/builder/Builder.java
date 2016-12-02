@@ -44,6 +44,7 @@ public interface Builder
     
     void addExports( ModuleDef.ExportsDef exports );
     void addRequires( ModuleDef.RequiresDef requires );
+    void addOpens( ModuleDef.OpensDef opens );
     void addProvides( ModuleDef.ProvidesDef provides );
     void addUses( ModuleDef.UsesDef uses );
 

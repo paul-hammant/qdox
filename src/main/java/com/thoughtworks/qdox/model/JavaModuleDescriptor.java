@@ -4,7 +4,13 @@ import java.util.Collection;
 
 public interface JavaModuleDescriptor
 {
-     Collection<JavaExports> getExports();
+    boolean isOpen();
+    
+    String getName();
+    
+    Collection<JavaExports> getExports();
+
+    Collection<JavaOpens> getOpens();
 
     Collection<JavaProvides> getProvides();
 
@@ -15,22 +21,31 @@ public interface JavaModuleDescriptor
     /**
      * Represents the following ModuleStatement:<br>
      * <code>
-     * exports [dynamic] SOURCE [to TARGETS{, TARGET}];
+     * exports SOURCE [to TARGET{, TARGET}];
      * </code>
      * where SOURCE matches a PackageName and TARGET matches a ModuleName
      *  
      * @author Robert Scholte
-     *
      */
     static interface JavaExports {
-
         JavaPackage getSource();
         
         Collection<JavaModule> getTargets();
-        
-        boolean isDynamic();
+    }
 
-        Collection<String> getModifiers();
+    /**
+     * Represents the following ModuleStatement:<br>
+     * <code>
+     * opens SOURCE [to TARGET{, TARGET}];
+     * </code>
+     * where SOURCE matches a PackageName and TARGET matches a ModuleName
+     *  
+     * @author Robert Scholte
+     */
+    static interface JavaOpens {
+        JavaPackage getSource();
+        
+        Collection<JavaModule> getTargets();
     }
 
     /**
@@ -46,7 +61,7 @@ public interface JavaModuleDescriptor
     static interface JavaProvides {
         JavaClass getService();
         
-        JavaClass getProvider();
+        Collection<JavaClass> getImplementations();
     }
     
     /**
@@ -63,7 +78,7 @@ public interface JavaModuleDescriptor
     
         JavaModule getModule();
         
-        boolean isPublic();
+        boolean isTransitive();
         
         boolean isStatic();
 

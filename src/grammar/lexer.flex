@@ -183,10 +183,11 @@ Annotation                      = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}
 JavadocEnd                      = "*"+ "/"
 
 %state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT  ANNOTATION ANNOSTRING ANNOCHAR ARGUMENTS NAME 
-%state ANNOTATIONTYPE ENUM MODULE TYPE ANNOTATION_NOARG
+%state ANNOTATIONTYPE ENUM MODULE TYPE ANNOTATIONNOARG
 
 %%
 <YYINITIAL> {
+    "open"              { return Parser.OPEN; }
     "module"            { pushState(MODULE);
                           return Parser.MODULE; }
 }
@@ -199,10 +200,10 @@ JavadocEnd                      = "*"+ "/"
   "("  {  popState();
           yypushback(1);     }
 }
-<ANNOTATION_NOARG> {
+<ANNOTATIONNOARG> {
   {WhiteSpace} { popState(); }
 }
-<YYINITIAL, ANNOTATION_NOARG, ANNOTATIONTYPE, ENUM, NAME, TYPE> {
+<YYINITIAL, ANNOTATIONNOARG, ANNOTATIONTYPE, ENUM, NAME, TYPE> {
     "."                 { return Parser.DOT; }
     "..."               { return Parser.DOTDOTDOT; }
     ","                 { return Parser.COMMA; }
@@ -271,7 +272,7 @@ JavadocEnd                      = "*"+ "/"
         return Parser.AT;
     }
     "@"                 {
-        pushState(ANNOTATION_NOARG);
+        pushState(ANNOTATIONNOARG);
         return Parser.AT;
     }
     "{"                 {
@@ -348,12 +349,13 @@ JavadocEnd                      = "*"+ "/"
 	"."                 { return Parser.DOT; }
 	";"                 { return Parser.SEMI; }
 	
-    "dynamic"           { return Parser.DYNAMIC; }
     "exports"           { return Parser.EXPORTS; }
+    "opens"             { return Parser.OPENS; }
     "provides"          { return Parser.PROVIDES; }
     "public"            { return Parser.PUBLIC; }
     "requires"          { return Parser.REQUIRES; }
     "static"            { return Parser.STATIC; }
+    "transitive"        { return Parser.TRANSITIVE; }
     "to"                { return Parser.TO; }
     "uses"              { return Parser.USES; }
     "with"              { return Parser.WITH; }
@@ -389,7 +391,7 @@ JavadocEnd                      = "*"+ "/"
 <ANNOTATIONTYPE> {
 	"default"           { assignmentDepth = nestingDepth; appendingToCodeBody = true; pushState(ASSIGNMENT); }
 }
-<YYINITIAL, ANNOTATION_NOARG, ANNOTATIONTYPE, ENUM, MODULE, NAME, TYPE> {
+<YYINITIAL, ANNOTATIONNOARG, ANNOTATIONTYPE, ENUM, MODULE, NAME, TYPE> {
     {Id} {
         return Parser.IDENTIFIER;
     }

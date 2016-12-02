@@ -183,10 +183,12 @@ public interface ModelWriter
      */
     ModelWriter writeInitializer( JavaInitializer init );
     
-    ModelWriter writeModule( JavaModule module );
+    ModelWriter writeModuleDescriptor( JavaModuleDescriptor descriptor );
     
     ModelWriter writeModuleExports( JavaModuleDescriptor.JavaExports exports );
 
+    ModelWriter writeModuleOpens( JavaModuleDescriptor.JavaOpens opens );
+    
     ModelWriter writeModuleProvides( JavaModuleDescriptor.JavaProvides provides );
     
     ModelWriter writeModuleRequires( JavaModuleDescriptor.JavaRequires requires );

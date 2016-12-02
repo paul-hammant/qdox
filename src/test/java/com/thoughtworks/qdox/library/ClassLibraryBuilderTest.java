@@ -35,14 +35,15 @@ public abstract class ClassLibraryBuilderTest
     public final void testAppendSourceInputStream() throws Exception
     {
         ClassLibraryBuilder libraryBuilder = getClassLibraryBuilder();
-        ClassLibraryBuilder result = libraryBuilder.appendSource( new ByteArrayInputStream( new byte[]{} ) );
+        ClassLibraryBuilder result =
+            libraryBuilder.appendSource( new ByteArrayInputStream( "package x.y.z;".getBytes( "UTF-8" ) ) );
         assertSame( libraryBuilder, result );
     }
 
     public final void testAppendSourceReader() throws Exception
     {
         ClassLibraryBuilder libraryBuilder = getClassLibraryBuilder();
-        ClassLibraryBuilder result = libraryBuilder.appendSource( new StringReader("") );
+        ClassLibraryBuilder result = libraryBuilder.appendSource( new StringReader("package x.y.z;") );
         assertSame( libraryBuilder, result );
     }
 

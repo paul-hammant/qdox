@@ -3,6 +3,7 @@ package com.thoughtworks.qdox.model.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaModule;
@@ -11,15 +12,40 @@ import com.thoughtworks.qdox.model.JavaPackage;
 
 public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
 {
+    private String name; 
+
+    private boolean open;
+    
+    private Collection<DefaultJavaRequires> requires = new ArrayList<DefaultJavaRequires>();
 
     private Collection<DefaultJavaExports> exports = new ArrayList<DefaultJavaExports>();
 
-    private Collection<DefaultJavaRequires> requires = new ArrayList<DefaultJavaRequires>();
+    private Collection<DefaultJavaOpens> opens = new ArrayList<DefaultJavaOpens>();
 
     private Collection<DefaultJavaUses> uses = new ArrayList<DefaultJavaUses>();
 
     private Collection<DefaultJavaProvides> provides = new ArrayList<DefaultJavaProvides>();
 
+    public DefaultJavaModuleDescriptor( String name )
+    {
+        this.name = name;
+    }
+    
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setOpen( boolean open )
+    {
+        this.open = open;
+    }
+    
+    public boolean isOpen()
+    {
+        return open;
+    }
+    
     public void addExports( DefaultJavaExports exports )
     {
         this.exports.add( exports );
@@ -30,6 +56,16 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
         return Collections.<JavaExports>unmodifiableCollection( exports );
     } 
 
+    public void addOpens( DefaultJavaOpens opens )
+    {
+        this.opens.add( opens );
+    }
+    
+    public Collection<JavaOpens> getOpens()
+    {
+        return Collections.<JavaOpens>unmodifiableCollection( opens );
+    } 
+    
     public void addRequires( DefaultJavaRequires requires )
     {
         this.requires.add( requires );
@@ -64,14 +100,11 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
     {
         private JavaPackage source;
 
-        private Collection<String> modifiers;
-
         private Collection<JavaModule> targets;
 
-        public DefaultJavaExports( JavaPackage source, Collection<String> modifiers, Collection<JavaModule> targets )
+        public DefaultJavaExports( JavaPackage source, Collection<JavaModule> targets )
         {
             this.source = source;
-            this.modifiers = modifiers;
             this.targets = targets;
         }
 
@@ -92,26 +125,44 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             }
         }
 
-        public boolean isDynamic()
+        public String getCodeBlock()
         {
-            return getModifiers().contains( "dynamic" );
+            return getModelWriter().writeModuleExports( this ).toString();
+        }
+    }
+    
+    public static class DefaultJavaOpens extends AbstractJavaModel implements JavaModuleDescriptor.JavaOpens
+    {
+        private JavaPackage source;
+
+        private Collection<JavaModule> targets;
+
+        public DefaultJavaOpens( JavaPackage source, Collection<JavaModule> targets )
+        {
+            this.source = source;
+            this.targets = targets;
         }
 
-        public Collection<String> getModifiers()
+        public JavaPackage getSource()
         {
-            if( modifiers == null )
+            return source;
+        }
+
+        public Collection<JavaModule> getTargets()
+        {
+            if( targets == null )
             {
                 return Collections.emptyList();
             }
             else
             {
-                return modifiers;
+                return targets;
             }
         }
 
         public String getCodeBlock()
         {
-            return getModelWriter().writeModuleExports( this ).toString();
+            return getModelWriter().writeModuleOpens( this ).toString();
         }
     }
     
@@ -119,13 +170,13 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
     {
         private JavaClass service;
         
-        private JavaClass provider;
+        private List<JavaClass> implementations;
 
-        public DefaultJavaProvides( JavaClass service, JavaClass provider )
+        public DefaultJavaProvides( JavaClass service, List<JavaClass> implementations )
         {
             super();
             this.service = service;
-            this.provider = provider;
+            this.implementations = implementations;
         }
         
         public JavaClass getService()
@@ -133,9 +184,9 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             return service;
         }
         
-        public JavaClass getProvider()
+        public List<JavaClass> getImplementations()
         {
-            return provider;
+            return implementations;
         }
         
         public String getCodeBlock()
@@ -161,9 +212,9 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             return module;
         }
     
-        public boolean isPublic()
+        public boolean isTransitive()
         {
-            return getModifiers().contains( "public" );
+            return getModifiers().contains( "transitive" );
         }
     
         public boolean isStatic()

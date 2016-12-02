@@ -18,7 +18,7 @@ public class DefaultJavaModule extends AbstractJavaModel
     
     public String getCodeBlock()
     {
-        return getModelWriter().writeModule( this ).toString();
+        return getModelWriter().writeModuleDescriptor( this.descriptor ).toString();
     }
     
     public String getName()

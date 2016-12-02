@@ -21,7 +21,9 @@ import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaModule;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaExports;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaOpens;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaProvides;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaRequires;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaUses;
@@ -400,17 +402,30 @@ public class DefaultModelWriterTest {
     }
     
     @Test
-    public void testModule()
+    public void testModuleDescriptor()
     {
-        JavaModule module = mock(JavaModule.class);
-        when(module.getName()).thenReturn( "M.N" );
+        JavaModuleDescriptor descriptor = mock(JavaModuleDescriptor.class);
+        when(descriptor.getName()).thenReturn( "M.N" );
         
-        modelWriter.writeModule( module );
+        modelWriter.writeModuleDescriptor( descriptor );
         
-        String expected = "module M.N {\n}\n";
+        String expected = "module M.N {\n\n}\n";
         assertEquals( expected, modelWriter.toString() );
     }
-    
+
+    @Test
+    public void testOpenModuleDescriptor()
+    {
+        JavaModuleDescriptor descriptor = mock(JavaModuleDescriptor.class);
+        when(descriptor.getName()).thenReturn( "M.N" );
+        when(descriptor.isOpen()).thenReturn( true );
+        
+        modelWriter.writeModuleDescriptor( descriptor );
+        
+        String expected = "open module M.N {\n\n}\n";
+        assertEquals( expected, modelWriter.toString() );
+    }
+
     @Test
     public void testModuleRequires()
     {
@@ -473,25 +488,32 @@ public class DefaultModelWriterTest {
         when(exports2.getTargets()).thenReturn( Arrays.asList( moduleT1U1, moduleT2U2 ) );
         modelWriter.writeModuleExports( exports2 );
         assertEquals( "exports R.S to T1.U1, T2.U2;\n", modelWriter.toString() );
+    }
+    
+    @Test
+    public void testModuleOpens()
+    {
+        modelWriter = new DefaultModelWriter();
+        JavaOpens opens1 = mock( JavaOpens.class );
+        JavaPackage source1 = mock(JavaPackage.class);
+        when(source1.getName()).thenReturn( "P.Q" );
+        when( opens1.getSource() ).thenReturn( source1 );
+        modelWriter.writeModuleOpens( opens1 );
+        assertEquals( "opens P.Q;\n", modelWriter.toString() );
 
         modelWriter = new DefaultModelWriter();
-        JavaExports exports3 = mock( JavaExports.class );
-        JavaPackage source3 = mock(JavaPackage.class);
-        when(source3.getName()).thenReturn( "PP.QQ" );
-        when( exports3.getSource() ).thenReturn( source3 );
-        when( exports3.getModifiers() ).thenReturn( Collections.singleton( "dynamic" ) );
-        modelWriter.writeModuleExports( exports3 );
-        assertEquals( "exports dynamic PP.QQ;\n", modelWriter.toString() );
-
-        modelWriter = new DefaultModelWriter();
-        JavaExports exports4 = mock( JavaExports.class );
-        JavaPackage source4 = mock(JavaPackage.class);
-        when(source4.getName()).thenReturn( "RR.SS" );
-        when( exports4.getSource() ).thenReturn( source4 );
-        when( exports4.getTargets()).thenReturn( Arrays.asList( moduleT1U1, moduleT2U2 ) );
-        when( exports4.getModifiers() ).thenReturn( Collections.singleton( "dynamic" ) );
-        modelWriter.writeModuleExports( exports4 );
-        assertEquals( "exports dynamic RR.SS to T1.U1, T2.U2;\n", modelWriter.toString() );
+        JavaOpens opens2 = mock( JavaOpens.class );
+        JavaPackage source2 = mock(JavaPackage.class);
+        when(source2.getName()).thenReturn( "R.S" );
+        when( opens2.getSource() ).thenReturn( source2 );
+        
+        JavaModule moduleT1U1 = mock( JavaModule.class );
+        when( moduleT1U1.getName() ).thenReturn( "T1.U1" );
+        JavaModule moduleT2U2 = mock( JavaModule.class );
+        when( moduleT2U2.getName() ).thenReturn( "T2.U2" );
+        when( opens2.getTargets()).thenReturn( Arrays.asList( moduleT1U1, moduleT2U2 ) );
+        modelWriter.writeModuleOpens( opens2 );
+        assertEquals( "opens R.S to T1.U1, T2.U2;\n", modelWriter.toString() );
     }
     
     @Test
@@ -500,12 +522,14 @@ public class DefaultModelWriterTest {
         JavaProvides provides = mock( JavaProvides.class );
         JavaClass service = mock( JavaClass.class );
         when( service.getName() ).thenReturn( "X.Y" );
-        JavaClass provider = mock( JavaClass.class );
-        when( provider.getName() ).thenReturn( "Z1.Z2" );
+        JavaClass providerZ1Z2 = mock( JavaClass.class );
+        when( providerZ1Z2.getName() ).thenReturn( "Z1.Z2" );
+        JavaClass providerZ3Z4 = mock( JavaClass.class );
+        when( providerZ3Z4.getName() ).thenReturn( "Z3.Z4" );
         when( provides.getService() ).thenReturn( service );
-        when( provides.getProvider() ).thenReturn( provider );
+        when( provides.getImplementations() ).thenReturn( Arrays.asList( providerZ1Z2, providerZ3Z4 ) );
         modelWriter.writeModuleProvides( provides );
-        assertEquals( "provides X.Y with Z1.Z2;\n", modelWriter.toString() );
+        assertEquals( "provides X.Y with Z1.Z2, Z3.Z4;\n", modelWriter.toString() );
     }
 
     @Test

@@ -51,6 +51,7 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaMethod;
 import com.thoughtworks.qdox.model.impl.DefaultJavaModule;
 import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor;
 import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor.DefaultJavaExports;
+import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor.DefaultJavaOpens;
 import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor.DefaultJavaProvides;
 import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor.DefaultJavaRequires;
 import com.thoughtworks.qdox.model.impl.DefaultJavaModuleDescriptor.DefaultJavaUses;
@@ -67,6 +68,7 @@ import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.ExportsDef;
+import com.thoughtworks.qdox.parser.structs.ModuleDef.OpensDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.ProvidesDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.RequiresDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.UsesDef;
@@ -127,7 +129,7 @@ public class ModelBuilder implements Builder {
     
     public void setModule( final ModuleDef moduleDef )
     {
-        this.moduleDescriptor = new DefaultJavaModuleDescriptor();
+        this.moduleDescriptor = new DefaultJavaModuleDescriptor(moduleDef.getName());
         this.module = new DefaultJavaModule(moduleDef.getName(), moduleDescriptor);
     }
     
@@ -141,17 +143,37 @@ public class ModelBuilder implements Builder {
         }
         
         DefaultJavaExports exports =
-            new DefaultJavaExports( new DefaultJavaPackage(exportsDef.getSource()), exportsDef.getModifiers(), targets );
+            new DefaultJavaExports( new DefaultJavaPackage(exportsDef.getSource()), targets );
         exports.setLineNumber( exportsDef.getLineNumber() );
         exports.setModelWriterFactory( modelWriterFactory );
         moduleDescriptor.addExports( exports );
+    }
+    
+    public void addOpens( OpensDef opensDef )
+    {
+     // for now use anonymous modules
+        List<JavaModule> targets = new ArrayList<JavaModule>(opensDef.getTargets().size());
+        for ( String moduleName : opensDef.getTargets() )
+        {
+            targets.add( new DefaultJavaModule( moduleName, null ) );
+        }
+        
+        DefaultJavaOpens exports =
+            new DefaultJavaOpens( new DefaultJavaPackage(opensDef.getSource()), targets );
+        exports.setLineNumber( opensDef.getLineNumber() );
+        exports.setModelWriterFactory( modelWriterFactory );
+        moduleDescriptor.addOpens( exports );
     }
 
     public void addProvides( ProvidesDef providesDef )
     {
         JavaClass service = createType( providesDef.getService(), 0 );
-        JavaClass provider = createType( providesDef.getImplementation(), 0 );
-        DefaultJavaProvides provides = new DefaultJavaProvides( service, provider );
+        List<JavaClass> implementations = new LinkedList<JavaClass>();
+        for ( TypeDef implementType : providesDef.getImplementations() )
+        {
+            implementations.add( createType( implementType, 0 ) );
+        }
+        DefaultJavaProvides provides = new DefaultJavaProvides( service, implementations );
         provides.setLineNumber( providesDef.getLineNumber() );
         provides.setModelWriterFactory( modelWriterFactory );
         moduleDescriptor.addProvides( provides );

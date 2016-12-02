@@ -95,6 +95,29 @@ public class ParserTest extends TestCase {
         verify(builder).addPackage( argument.capture() );
         assertEquals( "com.blah.thingy.x", argument.getValue().getName() );
     }
+    
+    public void testPackageWithAnnotation() throws Exception {
+
+        // setup values
+        setupLex(Parser.AT);
+        setupLex(Parser.IDENTIFIER, "Bar");
+        setupLex(Parser.PACKAGE);
+        setupLex(Parser.IDENTIFIER, "mypackage");
+        setupLex(Parser.SEMI);
+        setupLex(0);
+
+        // execute
+        Parser parser = new Parser(lexer, builder);
+        parser.parse();
+
+        // verify
+        ArgumentCaptor<AnnoDef> annoCaptor = ArgumentCaptor.forClass( AnnoDef.class );
+        verify( builder ).addAnnotation( annoCaptor.capture() );
+        assertEquals( "Bar", annoCaptor.getValue().getTypeDef().getName() );
+        ArgumentCaptor<PackageDef> argument = ArgumentCaptor.forClass( PackageDef.class );
+        verify( builder ).addPackage( argument.capture() );
+        assertEquals( "mypackage", argument.getValue().getName() );
+    }
 
     public void testImportWithOneWord() throws Exception {
 
@@ -2736,6 +2759,20 @@ public class ParserTest extends TestCase {
     
     public void testModule() throws Exception
     {
+        setupLex( Parser.AT );
+        setupLex( Parser.IDENTIFIER, "Foo" );
+        setupLex( Parser.PARENOPEN );
+        setupLex( Parser.INTEGER_LITERAL, "1" );
+        setupLex( Parser.PARENCLOSE );
+        setupLex( Parser.AT );
+        setupLex( Parser.IDENTIFIER, "Foo" );
+        setupLex( Parser.PARENOPEN );
+        setupLex( Parser.INTEGER_LITERAL, "2" );
+        setupLex( Parser.PARENCLOSE );
+        setupLex( Parser.AT );
+        setupLex( Parser.IDENTIFIER, "Bar" );
+        
+        setupLex( Parser.OPEN );
         setupLex( Parser.MODULE );
         setupLex( Parser.IDENTIFIER, "M" );
         setupLex( Parser.DOT );
@@ -2749,7 +2786,7 @@ public class ParserTest extends TestCase {
         setupLex( Parser.SEMI );
         
         setupLex( Parser.REQUIRES );
-        setupLex( Parser.PUBLIC );
+        setupLex( Parser.TRANSITIVE );
         setupLex( Parser.IDENTIFIER, "C" );
         setupLex( Parser.DOT );
         setupLex( Parser.IDENTIFIER, "D" );
@@ -2763,7 +2800,7 @@ public class ParserTest extends TestCase {
         setupLex( Parser.SEMI );
         
         setupLex( Parser.REQUIRES );
-        setupLex( Parser.PUBLIC );
+        setupLex( Parser.TRANSITIVE );
         setupLex( Parser.STATIC );
         setupLex( Parser.IDENTIFIER, "G" );
         setupLex( Parser.DOT );
@@ -2790,18 +2827,16 @@ public class ParserTest extends TestCase {
         setupLex( Parser.IDENTIFIER, "U2" );
         setupLex( Parser.SEMI );
 
-        setupLex( Parser.EXPORTS );
-        setupLex( Parser.DYNAMIC );
-        setupLex( Parser.IDENTIFIER, "PP" );
+        setupLex( Parser.OPENS );
+        setupLex( Parser.IDENTIFIER, "P" );
         setupLex( Parser.DOT );
-        setupLex( Parser.IDENTIFIER, "QQ" );
+        setupLex( Parser.IDENTIFIER, "Q" );
         setupLex( Parser.SEMI );
 
-        setupLex( Parser.EXPORTS );
-        setupLex( Parser.DYNAMIC );
-        setupLex( Parser.IDENTIFIER, "RR" );
+        setupLex( Parser.OPENS );
+        setupLex( Parser.IDENTIFIER, "R" );
         setupLex( Parser.DOT );
-        setupLex( Parser.IDENTIFIER, "SS" );
+        setupLex( Parser.IDENTIFIER, "S" );
         setupLex( Parser.TO );
         setupLex( Parser.IDENTIFIER, "T1" );
         setupLex( Parser.DOT );
@@ -2826,13 +2861,7 @@ public class ParserTest extends TestCase {
         setupLex( Parser.IDENTIFIER, "Z1" );
         setupLex( Parser.DOT );
         setupLex( Parser.IDENTIFIER, "Z2" );
-        setupLex( Parser.SEMI );
-
-        setupLex( Parser.PROVIDES );
-        setupLex( Parser.IDENTIFIER, "X" );
-        setupLex( Parser.DOT );
-        setupLex( Parser.IDENTIFIER, "Y" );
-        setupLex( Parser.WITH );
+        setupLex( Parser.COMMA );
         setupLex( Parser.IDENTIFIER, "Z3" );
         setupLex( Parser.DOT );
         setupLex( Parser.IDENTIFIER, "Z4" );
@@ -2843,65 +2872,71 @@ public class ParserTest extends TestCase {
         
        // execute
         Parser parser = new Parser( lexer, builder );
+        parser.setDebugParser( true );
+        parser.setDebugLexer( true );
         parser.parse();
+
+        ArgumentCaptor<AnnoDef> annoCaptor = ArgumentCaptor.forClass( AnnoDef.class );
+        verify( builder, times(3) ).addAnnotation( annoCaptor.capture() );
+        assertEquals( "Foo", annoCaptor.getAllValues().get( 0 ).getTypeDef().getName() );
+        assertEquals( "1", annoCaptor.getAllValues().get( 0 ).getArgs().get( "value" ).toString());
+        assertEquals( "Foo", annoCaptor.getAllValues().get( 1 ).getTypeDef().getName() );
+        assertEquals( "2", annoCaptor.getAllValues().get( 1 ).getArgs().get( "value" ).toString());
+        assertEquals( "Bar", annoCaptor.getAllValues().get( 2 ).getTypeDef().getName() );
+        assertEquals( null, annoCaptor.getAllValues().get( 2 ).getArgs().get( "value" ));
         
         ArgumentCaptor<ModuleDef> moduleCaptor = ArgumentCaptor.forClass( ModuleDef.class );
         verify( builder ).setModule( moduleCaptor.capture() );
         assertEquals( "M.N", moduleCaptor.getValue().getName() );
+        assertEquals( true, moduleCaptor.getValue().isOpen() );
         
         ArgumentCaptor<ModuleDef.RequiresDef> requiresCaptor = ArgumentCaptor.forClass( ModuleDef.RequiresDef.class );
         verify( builder, times(4) ).addRequires( requiresCaptor.capture() );
         assertEquals( "A.B", requiresCaptor.getAllValues().get(0).getName() );
-        assertEquals( false, requiresCaptor.getAllValues().get(0).getModifiers().contains( "public" ) );
+        assertEquals( false, requiresCaptor.getAllValues().get(0).getModifiers().contains( "transitive" ) );
         assertEquals( false, requiresCaptor.getAllValues().get(0).getModifiers().contains( "static" ) );
         
         assertEquals( "C.D", requiresCaptor.getAllValues().get(1).getName() );
-        assertEquals( true, requiresCaptor.getAllValues().get(1).getModifiers().contains( "public" ) );
+        assertEquals( true, requiresCaptor.getAllValues().get(1).getModifiers().contains( "transitive" ) );
         assertEquals( false, requiresCaptor.getAllValues().get(1).getModifiers().contains( "static" ) );
         
         assertEquals( "E.F", requiresCaptor.getAllValues().get(2).getName() );
-        assertEquals( false, requiresCaptor.getAllValues().get(2).getModifiers().contains( "public" ) );
+        assertEquals( false, requiresCaptor.getAllValues().get(2).getModifiers().contains( "transitive" ) );
         assertEquals( true, requiresCaptor.getAllValues().get(2).getModifiers().contains( "static" ) );
         
         assertEquals( "G.H", requiresCaptor.getAllValues().get(3).getName() );
-        assertEquals( true, requiresCaptor.getAllValues().get(3).getModifiers().contains( "public" ) );
+        assertEquals( true, requiresCaptor.getAllValues().get(3).getModifiers().contains( "transitive" ) );
         assertEquals( true, requiresCaptor.getAllValues().get(3).getModifiers().contains( "static" ) );
         
         ArgumentCaptor<ModuleDef.ExportsDef> exportsCaptor = ArgumentCaptor.forClass( ModuleDef.ExportsDef.class );
-        verify( builder, times(4) ).addExports( exportsCaptor.capture() );
+        verify( builder, times(2) ).addExports( exportsCaptor.capture() );
         assertEquals( "P.Q", exportsCaptor.getAllValues().get( 0 ).getSource() );
         assertEquals( 0, exportsCaptor.getAllValues().get( 0 ).getTargets().size() );
-        assertEquals( 0, exportsCaptor.getAllValues().get( 0 ).getModifiers().size() );
 
         assertEquals( "R.S", exportsCaptor.getAllValues().get( 1 ).getSource() );
         assertEquals( 2, exportsCaptor.getAllValues().get( 1 ).getTargets().size() );
         assertEquals( true, exportsCaptor.getAllValues().get( 1 ).getTargets().contains( "T1.U1" ));
         assertEquals( true, exportsCaptor.getAllValues().get( 1 ).getTargets().contains( "T2.U2" ));
-        assertEquals( 0, exportsCaptor.getAllValues().get( 1 ).getModifiers().size() );
         
-        assertEquals( "PP.QQ", exportsCaptor.getAllValues().get( 2 ).getSource() );
-        assertEquals( 0, exportsCaptor.getAllValues().get( 2 ).getTargets().size() );
-        assertEquals( 1, exportsCaptor.getAllValues().get( 2 ).getModifiers().size() );
-        assertEquals( true, exportsCaptor.getAllValues().get( 2 ).getModifiers().contains("dynamic") );
+        ArgumentCaptor<ModuleDef.OpensDef> opensCaptor = ArgumentCaptor.forClass( ModuleDef.OpensDef.class );
+        verify( builder, times(2) ).addOpens( opensCaptor.capture() );
+        assertEquals( "P.Q", opensCaptor.getAllValues().get( 0 ).getSource() );
+        assertEquals( 0, opensCaptor.getAllValues().get( 0 ).getTargets().size() );
 
-        assertEquals( "RR.SS", exportsCaptor.getAllValues().get( 3 ).getSource() );
-        assertEquals( 2, exportsCaptor.getAllValues().get( 3 ).getTargets().size() );
-        assertEquals( true, exportsCaptor.getAllValues().get( 3 ).getTargets().contains( "T1.U1" ));
-        assertEquals( true, exportsCaptor.getAllValues().get( 3 ).getTargets().contains( "T2.U2" ));
-        assertEquals( 1, exportsCaptor.getAllValues().get( 3 ).getModifiers().size() );
-        assertEquals( true, exportsCaptor.getAllValues().get( 3 ).getModifiers().contains("dynamic") );
+        assertEquals( "R.S", opensCaptor.getAllValues().get( 1 ).getSource() );
+        assertEquals( 2, opensCaptor.getAllValues().get( 1 ).getTargets().size() );
+        assertEquals( true, opensCaptor.getAllValues().get( 1 ).getTargets().contains( "T1.U1" ));
+        assertEquals( true, opensCaptor.getAllValues().get( 1 ).getTargets().contains( "T2.U2" ));
         
         ArgumentCaptor<ModuleDef.UsesDef> usesCaptor = ArgumentCaptor.forClass( ModuleDef.UsesDef.class );
         verify( builder ).addUses( usesCaptor.capture() );
         assertEquals( "V.W", usesCaptor.getValue().getService().getName() );
         
         ArgumentCaptor<ModuleDef.ProvidesDef> providesCaptor = ArgumentCaptor.forClass( ModuleDef.ProvidesDef.class );
-        verify( builder, times(2) ).addProvides( providesCaptor.capture() );
+        verify( builder, times(1) ).addProvides( providesCaptor.capture() );
         assertEquals( "X.Y", providesCaptor.getAllValues().get(0).getService().getName() );
-        assertEquals( "Z1.Z2", providesCaptor.getAllValues().get(0).getImplementation().getName() );
-
-        assertEquals( "X.Y", providesCaptor.getAllValues().get(1).getService().getName() );
-        assertEquals( "Z3.Z4", providesCaptor.getAllValues().get(1).getImplementation().getName() );
+        assertEquals( "Z1.Z2", providesCaptor.getAllValues().get(0).getImplementations().get(0).getName() );
+        assertEquals( "Z3.Z4", providesCaptor.getAllValues().get(0).getImplementations().get(1).getName() );
     }
 
     private void setupLex(int token, String value) {

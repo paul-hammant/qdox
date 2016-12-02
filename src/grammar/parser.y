@@ -31,7 +31,7 @@ import java.util.Stack;
 %token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
 %token STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS 
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE DEFAULT
-%token MODULE REQUIRES EXPORTS DYNAMIC TO USES PROVIDES WITH
+%token OPEN MODULE REQUIRES TRANSITIVE EXPORTS OPENS TO USES PROVIDES WITH
 %token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT NEW
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
 %token LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS
@@ -77,15 +77,29 @@ import java.util.Stack;
 // CompilationUnit:
 //     [PackageDeclaration] {ImportDeclaration} {TypeDeclaration}
 //     {ImportDeclaration} ModuleDeclaration  
-CompilationUnit: PackageDeclaration_opt ImportDeclarations_opt TypeDeclarations_opt
-               | ImportDeclarations_opt ModuleDeclaration
+CompilationUnit: CompilationDeclaration
+               | CompilationUnit CompilationDeclaration
                ;
 
+CompilationDeclaration: Annotation
+                      | ImportDeclaration
+                      | ModuleDeclaration
+                      | PackageDeclaration
+                      | TypeDeclaration
+                      ;
+
 // ModuleDeclaration:
-//    {Annotation} module ModuleName { {ModuleStatement} }
-ModuleDeclaration: Modifiers_opt MODULE ModuleName
+//    {Annotation} [open] module ModuleName { {ModuleStatement} }
+ModuleDeclaration: OPEN MODULE ModuleName
                    {
-                     builder.setModule(new ModuleDef($3));
+                     ModuleDef module = new ModuleDef($3);
+                     module.setOpen(true);
+                     builder.setModule(module);
+                   }
+                   BRACEOPEN ModuleStatements_opt BRACECLOSE
+                 | MODULE ModuleName
+                   {
+                     builder.setModule(new ModuleDef($2));
                    }
                    BRACEOPEN ModuleStatements_opt BRACECLOSE
                  ;
@@ -96,30 +110,25 @@ ModuleDeclaration: Modifiers_opt MODULE ModuleName
 ModuleName: QualifiedIdentifier 
           ;
 ModuleNameList: ModuleName {
-                  exp.getTargets().add($1);
+                  moduleTargets.add($1);
                 }
               | ModuleNameList COMMA ModuleName {
-                  exp.getTargets().add($3);
+                  moduleTargets.add($3);
                 }
               ;
 
 // ModuleStatement:
 //    requires {RequiresModifier} ModuleName ;
-//    exports [dynamic] PackageName [to ModuleName {, ModuleName}] ;
+//    exports PackageName [to ModuleName {, ModuleName}] ;
+//    opens PackageName [to ModuleName {, ModuleName}] ;
 //    uses TypeName ;
-//    provides TypeName with TypeName ;
-ModuleStatement: REQUIRES RequiresModifiers_opt ModuleName SEMI {
+//    provides TypeName with TypeName {, TypeName} ;
+ModuleStatement: REQUIRES RequiresModifiers_opt ModuleName SEMI 
+                 {
                    ModuleDef.RequiresDef req = new ModuleDef.RequiresDef($3, modifiers);
                    modifiers = new java.util.LinkedHashSet<String>();
                    req.setLineNumber(line);
                    builder.addRequires(req);
-                 }
-               | EXPORTS DYNAMIC QualifiedIdentifier /* =PackageName */ {
-                   exp = new ModuleDef.ExportsDef($3, java.util.Collections.singleton("dynamic"));
-                   exp.setLineNumber(line);
-                 } 
-                 ToDeclaration_opt SEMI {
-                   builder.addExports(exp);
                  }
                | EXPORTS QualifiedIdentifier /* =PackageName */ 
                  {
@@ -128,16 +137,34 @@ ModuleStatement: REQUIRES RequiresModifiers_opt ModuleName SEMI {
                  } 
                  ToDeclaration_opt SEMI
                  {
+                   exp.getTargets().addAll(moduleTargets);
+                   moduleTargets = new LinkedList<String>();
                    builder.addExports(exp);
                  }
+               | OPENS QualifiedIdentifier /* =PackageName */
+                 {
+                   opn = new ModuleDef.OpensDef($2);
+                   opn.setLineNumber(line);
+                 }
+                 ToDeclaration_opt SEMI
+                 {
+                   opn.getTargets().addAll(moduleTargets);
+                   moduleTargets = new LinkedList<String>();
+                   builder.addOpens(opn);
+                 }
                | USES Type /* =TypeName */ SEMI {
-                   ModuleDef.UsesDef uss = new ModuleDef.UsesDef ($2);
+                   ModuleDef.UsesDef uss = new ModuleDef.UsesDef($2);
                    uss.setLineNumber(line);
                    builder.addUses(uss);
                  }
-               | PROVIDES Type /* =TypeName */ WITH Type /* =TypeName */ SEMI {
-                   ModuleDef.ProvidesDef prv = new ModuleDef.ProvidesDef($2, $4);
+               | PROVIDES Type /* =TypeName */ 
+                 {
+                   prv = new ModuleDef.ProvidesDef($2);
                    prv.setLineNumber(line);
+                 }
+                 WITH TypeList SEMI 
+                 {
+                   prv.getImplementations().addAll(typeList);
                    builder.addProvides(prv);
                  }
                ;
@@ -145,8 +172,8 @@ ModuleStatements_opt:
                     | ModuleStatements_opt ModuleStatement
                     ;
 
-RequiresModifier: PUBLIC { modifiers.add("public"); }
-                | STATIC { modifiers.add("static"); }
+RequiresModifier: TRANSITIVE { modifiers.add("transitive"); }
+                | STATIC     { modifiers.add("static"); }
                 ;
 RequiresModifiers_opt:
                      | RequiresModifiers_opt RequiresModifier
@@ -160,22 +187,15 @@ ToDeclaration_opt:
 //     {PackageModifier} package Identifier {. Identifier} ;
 // PackageModifier:
 //      Annotation   
-PackageDeclaration: package
-                  | Annotation
+PackageDeclaration: PACKAGE 
+                    { 
+                      line = lexer.getLine(); 
+                    } 
+                    QualifiedIdentifier /* =PackageName */SEMI 
+                    { 
+                      builder.addPackage(new PackageDef($3, line)); 
+                    }
                   ;
-PackageDeclaration_opt:
-                      | PackageDeclaration_opt PackageDeclaration
-                      ;
-
-package: PACKAGE 
-         { 
-           line = lexer.getLine(); 
-         } 
-         QualifiedIdentifier /* =PackageName */SEMI 
-         { 
-           builder.addPackage(new PackageDef($3, line)); 
-         }
-         ;
 
 // ImportDeclaration:
 //     SingleTypeImportDeclaration 
@@ -187,9 +207,6 @@ ImportDeclaration: SingleTypeImportDeclaration
                  | SingleStaticImportDeclaration
                  | StaticImportOnDemandDeclaration
                  ;
-ImportDeclarations_opt: 
-                      | ImportDeclarations_opt ImportDeclaration
-                      ;
 
 // SingleTypeImportDeclaration:
 //     import TypeName ; 
@@ -231,13 +248,6 @@ TypeDeclaration: ClassDeclaration
                | InterfaceDeclaration
                | SEMI
                ;
-TypeDeclarations_opt: 
-                    | TypeDeclarations_opt 
-                      { 
-                        line = lexer.getLine(); 
-                      } 
-                      TypeDeclaration
-                    ;
 
 // -----------------------------
 // Productions from �8 (Classes)
@@ -252,12 +262,15 @@ ClassDeclaration: NormalClassDeclaration
 
 // NormalClassDeclaration: 
 //     {ClassModifier} class Identifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
-NormalClassDeclaration: Modifiers_opt CLASS IDENTIFIER TypeParameters_opt Superclass_opt Superinterfaces_opt  
+NormalClassDeclaration: Modifiers_opt CLASS IDENTIFIER
                         {
                           cls.setType(ClassDef.CLASS);
-                          cls.setLineNumber(line);
+                          cls.setLineNumber(lexer.getLine());
                           cls.getModifiers().addAll(modifiers); modifiers.clear(); 
                           cls.setName( $3 );
+                        }
+                        TypeParameters_opt Superclass_opt Superinterfaces_opt  
+                        {
                           cls.setTypeParameters(typeParams);
                           builder.beginClass(cls); 
                           cls = new ClassDef(); 
@@ -1742,7 +1755,10 @@ private StringBuilder textBuffer = new StringBuilder();
 private ClassDef cls = new ClassDef();
 private MethodDef mth = new MethodDef();
 private FieldDef fd;
-private ModuleDef.ExportsDef exp; 
+private ModuleDef.ExportsDef exp;
+private ModuleDef.OpensDef opn;
+private ModuleDef.ProvidesDef prv;
+private List<String> moduleTargets = new LinkedList<String>();
 private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>(); //for both JavaClass and JavaMethod
 private LinkedList<AnnoDef> annotationStack = new LinkedList<AnnoDef>(); // Use LinkedList instead of Stack because it is unsynchronized 
 private List<List<ElemValueDef>> annoValueListStack = new LinkedList<List<ElemValueDef>>(); // Use LinkedList instead of Stack because it is unsynchronized

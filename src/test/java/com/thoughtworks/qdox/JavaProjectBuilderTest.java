@@ -1567,6 +1567,21 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( "java.text.SimpleDateFormat", field.getType().getFullyQualifiedName());
     }
     
+    public void testSamePackage() {
+        String source = "package com.fg.rtdoc.test;\n" + 
+            "public class Test extends Extend implements Iface {}";
+        
+        String iface = "package com.fg.rtdoc.test;\n" + 
+                        "public interface Iface {}";
+
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        builder.addSource(new StringReader( iface ));
+        JavaClass clz = builder.addSource(new StringReader( source )).getClassByName( "Test" );
+        
+        
+        assertEquals( "com.fg.rtdoc.test.Iface", clz.getInterfaces().get(0).getFullyQualifiedName() );
+    }
+    
     public void testOneLineJavadoc() throws Exception
     {
         String source = "package foo.bar;\n" + 

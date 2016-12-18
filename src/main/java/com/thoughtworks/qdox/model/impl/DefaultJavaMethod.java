@@ -124,7 +124,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
 
         if ( isDeclaration )
         {
-            result.append( returns.getCanonicalName() );
+            result.append( returns.getGenericCanonicalName() );
             result.append( ' ' );
         }
 
@@ -135,7 +135,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
             JavaParameter parameter = iter.next();
             if ( isDeclaration )
             {
-                result.append( parameter.getType().getCanonicalName() );
+                result.append( parameter.getType().getGenericCanonicalName() );
                 if ( parameter.isVarArgs() )
                 {
                     result.append( "..." );
@@ -154,7 +154,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
             result.append( " throws " );
             for ( Iterator<JavaClass> excIter = getExceptions().iterator(); excIter.hasNext(); )
             {
-                result.append( excIter.next().getCanonicalName() );
+                result.append( excIter.next().getGenericCanonicalName() );
                 if ( excIter.hasNext() )
                 {
                     result.append( ", " );

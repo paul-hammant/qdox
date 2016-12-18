@@ -12,21 +12,15 @@ import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.library.ClassLibraryBuilder;
 import com.thoughtworks.qdox.library.ErrorHandler;
@@ -39,8 +33,6 @@ import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaModule;
-import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaParameterizedType;
@@ -50,6 +42,8 @@ import com.thoughtworks.qdox.model.JavaTypeVariable;
 import com.thoughtworks.qdox.model.util.SerializationUtils;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.testdata.PropertyClass;
+
+import junit.framework.TestCase;
 
 public class JavaProjectBuilderTest extends TestCase
 {
@@ -1567,6 +1561,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( "java.text.SimpleDateFormat", field.getType().getFullyQualifiedName());
     }
     
+    // Github #12
     public void testSamePackage() {
         String source = "package com.fg.rtdoc.test;\n" + 
             "public class Test extends Extend implements Iface {}";
@@ -1578,8 +1573,24 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource(new StringReader( iface ));
         JavaClass clz = builder.addSource(new StringReader( source )).getClassByName( "Test" );
         
-        
         assertEquals( "com.fg.rtdoc.test.Iface", clz.getInterfaces().get(0).getFullyQualifiedName() );
+    }
+    
+    public void testDeclarationSignatureWithGenerics() {
+        String source = "import java.util.List;"
+            + "public interface Test {"
+            + "  public List<com.amaral.model.EntityModel> findById(java.lang.Long id);"
+            + "}";
+        
+        String model = "package com.amaral.model;"
+            + "public class EntityModel {}";
+        
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        builder.addSource(new StringReader( source ));
+        builder.addSource(new StringReader( model ));
+        
+        JavaMethod findById = builder.getClassByName( "Test" ).getMethods().get(0);
+        assertEquals( "public java.util.List<com.amaral.model.EntityModel> findById(java.lang.Long id)", findById.getDeclarationSignature( true ) );
     }
     
     public void testOneLineJavadoc() throws Exception

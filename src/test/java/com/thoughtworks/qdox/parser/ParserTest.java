@@ -14,6 +14,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.answers.ReturnsElementsOf;
 
 import com.thoughtworks.qdox.builder.Builder;
+import com.thoughtworks.qdox.parser.expression.ExpressionDef;
 import com.thoughtworks.qdox.parser.impl.Parser;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
@@ -2872,8 +2873,6 @@ public class ParserTest extends TestCase {
         
        // execute
         Parser parser = new Parser( lexer, builder );
-        parser.setDebugParser( true );
-        parser.setDebugLexer( true );
         parser.parse();
 
         ArgumentCaptor<AnnoDef> annoCaptor = ArgumentCaptor.forClass( AnnoDef.class );
@@ -2937,6 +2936,44 @@ public class ParserTest extends TestCase {
         assertEquals( "X.Y", providesCaptor.getAllValues().get(0).getService().getName() );
         assertEquals( "Z1.Z2", providesCaptor.getAllValues().get(0).getImplementations().get(0).getName() );
         assertEquals( "Z3.Z4", providesCaptor.getAllValues().get(0).getImplementations().get(1).getName() );
+    }
+    
+    public void testCEnums() throws Exception {
+        setupLex( Parser.PUBLIC );
+        setupLex( Parser.ENUM );
+        setupLex( Parser.IDENTIFIER, "EnumWithFields" );
+        setupLex( Parser.BRACEOPEN );
+        
+        setupLex( Parser.IDENTIFIER, "VALUEA" );
+        setupLex( Parser.PARENOPEN );
+        setupLex( Parser.IDENTIFIER, "By" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "linkText" );
+        setupLex( Parser.PARENOPEN );
+        setupLex( Parser.STRING_LITERAL, "\"G\"");
+        setupLex( Parser.PARENCLOSE );
+        setupLex( Parser.COMMA );
+        setupLex( Parser.STRING_LITERAL, "\"H\"");
+        setupLex( Parser.PARENCLOSE );
+        
+        setupLex( Parser.BRACECLOSE );
+        setupLex( 0 );        
+        
+        // execute
+        Parser parser = new Parser( lexer, builder );
+        parser.parse();
+        
+        // expectations
+        ArgumentCaptor<ClassDef> classCaptor = ArgumentCaptor.forClass( ClassDef.class );
+        ArgumentCaptor<FieldDef> fieldCaptor = ArgumentCaptor.forClass( FieldDef.class );
+        ArgumentCaptor<ExpressionDef> argumentCaptor = ArgumentCaptor.forClass( ExpressionDef.class );
+
+        // verify
+        verify( builder ).beginClass( classCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() ); 
+        verify( builder, times(3) ).addArgument( argumentCaptor.capture() );
+        verify( builder ).endField();
+        verify( builder ).endClass();
     }
 
     private void setupLex(int token, String value) {

@@ -902,11 +902,11 @@ PrimaryNoNewArray: Literal
                    {
                      $$ = new TypeRefDef(new TypeDef($1, $2));
                    } 
+                 | MethodInvocation 
                  | QualifiedIdentifier 
                    { 
                      $$ = new FieldRefDef($1); 
                    }
-                 | MethodInvocation 
                  ;
 
 // ClassInstanceCreationExpression:
@@ -957,17 +957,21 @@ MethodInvocation: IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
                   {
                     $$ = new MethodInvocationDef($1, null);
                   }
-                | SUPER DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                | QualifiedIdentifier PARENOPEN ArgumentList_opt PARENCLOSE
                   {
                     $$ = new MethodInvocationDef($1, null);
+                  }
+                | QualifiedIdentifier DOT TypeParameters IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                  {
+                    $$ = new MethodInvocationDef($1, null);
+                  }
+                | SUPER DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                  {
+                    $$ = new MethodInvocationDef("super." + $1, null);
                   }
                 | QualifiedIdentifier DOT SUPER DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
                   {
                     $$ = new MethodInvocationDef($1 + ".super", null);
-                  }
-                | QualifiedIdentifier DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
-                  {
-                    $$ = new MethodInvocationDef($1, null);
                   }
                 ;
 

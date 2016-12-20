@@ -1,5 +1,9 @@
 # QDox
 
+### Status
+
+[![Build Status](https://travis-ci.org/paul-hammant/qdox.png)](https://travis-ci.org/paul-hammant/qdox)
+
 QDox is a high speed, small footprint parser for fully extracting class/interface/method definitions (including annotations, parameters, param names). It is designed to be used by active code generators or documentation tools.
 
 Not so relevant any more, but it also also processes JavaDoc @tags
@@ -40,11 +44,11 @@ I some cases QDox is used to generate classes for another project with it's own 
 /* new ClassLibrary() will give you an empty classLoader
  * Big chance you want at least the system classloader.
  */
-ClassLibraryBuilder libraryBuilder = new SortedClassLibraryBuilder(); //or OrderedClassLibraryBuilder() 
+ClassLibraryBuilder libraryBuilder = new SortedClassLibraryBuilder(); //or OrderedClassLibraryBuilder()
 libraryBuilder.addClassLoader( ClassLoader.getSystemClassLoader() );
 JavaProjectBuilder builder = new JavaProjectBuilder( libraryBuilder );
 ```
- 
+
 ## I'm getting an ArrayIndexOutOfBoundsException: 500. What to do?
 
 During the parsing of java files the Parser needs to remember states, which are kept in a stack. Due to recursive calls the stack can become very large. By default the size of this this stack is 500 and it can only be set during compile-time of QDox. Normally 500 per sourcefile will do, but in very, very rare cases this might be too little. The only way to increase this number is by rebuilding it. Download the sources and build it like mvn install -Dqdox.javaparser.stack=750 if you want to change it to 750.
@@ -60,7 +64,7 @@ QDox is available at the Maven Central. To include the most recent of QDox in yo
   	   <version>${project.version}</version>
   	 </dependency>
 ```
-  	  	
+
 Latest stable release - QDox ${project.rel.org.thoughtworks.qdox:qdox}: binary jar | sources jar | javadoc jar | project tar.bz2 | project tar.gz | project zip
 
 # What is using QDox
@@ -111,7 +115,7 @@ Paranamer a mechamism for accessing the parameter names of methods of Java class
 
 A version of Spring that not only has a very small runtime footprint (none), but also is capable of running on small handheld devices, since it does not rely on reflection.
 
-## vDoclet	
+## vDoclet
 
 vDoclet is a framework for code-generation using Velocity templates, based on annotated Java source-code. vDoclet uses QDox to produce input-data for it's templates.
 
@@ -121,7 +125,7 @@ Voruta is a data access framework for embedding SQL statements in Java methods u
 
 ## XDoclet2
 
-XDoclet2 is a framework for code-generation using Velocity or Jelly templates, based on annotated Java source-code. It is a rewrite of XDoclet.	
+XDoclet2 is a framework for code-generation using Velocity or Jelly templates, based on annotated Java source-code. It is a rewrite of XDoclet.
 
 XDoclet2 uses QDox to produce input-data for it's templates, as well as QDox' APITestCase to validate the generated sources.
 
@@ -220,7 +224,7 @@ Example Code
 JavaProjectBuilder builder = new JavaProjectBuilder();
 JavaSource src = builder.addSource(myReader);
 
-JavaPackage pkg      = src.getPackage(); 
+JavaPackage pkg      = src.getPackage();
 List<String> imports     = src.getImports(); // {"java.awt.*",
                                      //  "java.util.List"}
 
@@ -228,7 +232,7 @@ JavaClass class1     = src.getClasses().get(0);
 JavaClass class2     = src.getClasses().get(1);
 JavaClass interface1 = src.getClasses().get(2);
 ```    
-        
+
 ## JavaPackage
 
 Represents the package of the class.
@@ -242,7 +246,7 @@ public class BarClass  {
 ...
 }
  ```
-  
+
 Example Code
 
 ```java
@@ -281,7 +285,7 @@ public abstract class MyClass extends SubClass
 
 }
 ```
-  
+
 Example Code
 
 ```java
@@ -312,7 +316,7 @@ JavaMethod getNumber = cls.getMethods()[1];
 
 JavaSource javaSource = cls.getParentSource();
 ```
-  
+
 ## JavaField
 
 Represents a field in a class. This has doclet tags, a name and a type.
@@ -333,7 +337,7 @@ public class MyClass  {
 
 }
 ```    
-        
+
 Example Code
 
 ```java
@@ -355,7 +359,7 @@ boolean dStatic= d.isStatic(); // true;
 
 JavaClass javaClass = d.getParentClass();
 ```
-        
+
 ## JavaMethod
 
 Represents a method in a class. This has doclet tags, a name, return type, parameters and exceptions.
@@ -379,7 +383,7 @@ public class MyClass  {
 
 }
 ```
-  
+
 Example Code
 
 ```java
@@ -402,7 +406,7 @@ JavaParameter stuffParam = m.getParameters()[1];
 
 JavaClass javaClass = m.getParentClass();
 ```
-  
+
 ## JavaParameter
 
 Represents a parameter passed to a method. This has a name and a type.
@@ -417,7 +421,7 @@ public class MyClass  {
 
 }
 ```
-  
+
 Example Code
 
 ```java
@@ -434,7 +438,7 @@ boolean oArray = o.getType().isArray(); // true
 
 JavaMethod javaMethod = o.getParentMethod();
 ```
-  
+
 ## JavaType
 
 Represents a specific instance of a class used by another class (such as return value, superclass, etc). The value represents the name of the class. Array dimensions are also available. Since 1.8 it's also possible to get the generic value of the Type
@@ -453,7 +457,7 @@ public class MyClass  {
 
 }
 ```    
-  
+
 Example Code
 
 
@@ -486,7 +490,7 @@ stringList.getGenericValue(); // "java.util.List<java.lang.String>"
 stringList.isArray(); // false
 stringList.getDimensions(); // 0
 ```
-      
+
 ## DocletTag
 
 Represents a JavaDoc tag. Each tag has a name and a value. Optionally, the value can be broken up into tokens accessed by index or name.
@@ -510,7 +514,7 @@ Example Input
  */
 boolean doWeCare(String email, Date dob);
 ```
-        
+
 Example Code
 
 ```java
@@ -554,8 +558,8 @@ Key Dependencies:
 2. [BYacc/J](http://byaccj.sourceforge.net)
 
 Paarser generator used to create an effective parser for JavaDoc.
-If using Windows, Linux, Solaris or Mac OS X, no additional installation is 
-needed as yacc binaries are supplied in the bootstrap directory. 
+If using Windows, Linux, Solaris or Mac OS X, no additional installation is
+needed as yacc binaries are supplied in the bootstrap directory.
 If using any other platform, download BYacc/J from the site or build it yourself, in which case
 we would be grateful to receive a copy of your binary, so we can upgrade the bootstrap support.
 

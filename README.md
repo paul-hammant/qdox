@@ -565,7 +565,7 @@ we would be grateful to receive a copy of your binary, so we can upgrade the boo
 
 Build goals:
 
-mvn install				- Create qdox jar
+mvn package				- Create qdox jar
 mvn generate-sources 	- Generate the Java parser code (allowing you to develop in an IDE).
 mvn site      			- Build the QDox website
 mvn release:prepare		- Prepare release (confirm or change release version interactively)

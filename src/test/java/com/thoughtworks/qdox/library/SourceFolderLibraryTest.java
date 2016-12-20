@@ -25,8 +25,6 @@ public class SourceFolderLibraryTest
     public void testModuleInfo()
     {
         library.addSourceFolder( new File("src/test/resources/jigsaw/example1") );
-        library.setDebugLexer( true );
-        library.setDebugParser( true );
         
         JavaModule module = library.getJavaModule();
         assertEquals( "M.N", module.getName() );

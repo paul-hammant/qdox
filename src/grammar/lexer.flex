@@ -444,6 +444,7 @@ JavadocEnd                      = "*"+ "/"
 	"."                 { return Parser.DOT; }
 
     "?"                 { return Parser.QUERY; }
+    "::"                { return Parser.COLONCOLON; }
     ":"                 { return Parser.COLON; }
     "<<"                { return Parser.LESSTHAN2; }
     ">>>"               { return Parser.GREATERTHAN3; }

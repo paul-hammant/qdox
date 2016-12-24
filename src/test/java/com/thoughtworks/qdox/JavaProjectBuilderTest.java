@@ -1601,7 +1601,17 @@ public class JavaProjectBuilderTest extends TestCase
             "} ";
         builder.addSource( new StringReader( source ) ); 
     }
+    
+    public void testMethodReferences() throws Exception
+    {
+        String source = "public enum AmazonClients {\n" + 
+            "    ECS(AmazonECSClient::new),\n" + 
+            "    ECR(AmazonECRClient::new);\n"
+            + "}";
 
+        builder.addSource( new StringReader( source ) ); 
+    }
+    
     public void testSetDebugLexer()
     {
         ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );

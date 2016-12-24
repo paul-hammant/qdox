@@ -39,7 +39,7 @@ import java.util.Stack;
 %token EXCLAMATION AMPERSAND2 VERTLINE2 EQUALS2 NOTEQUALS
 %token TILDE AMPERSAND VERTLINE CIRCUMFLEX
 %token VOID
-%token QUERY COLON AT
+%token QUERY COLON COLONCOLON AT
 %token CODEBLOCK PARENBLOCK
 %token BYTE SHORT INT LONG CHAR FLOAT DOUBLE BOOLEAN
 
@@ -60,7 +60,7 @@ import java.util.Stack;
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
-%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation ClassInstanceCreationExpression
+%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation MethodReference ClassInstanceCreationExpression
 %type <annoval> PostfixExpression PostIncrementExpression PostDecrementExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator ModuleName
@@ -902,7 +902,8 @@ PrimaryNoNewArray: Literal
                    {
                      $$ = new TypeRefDef(new TypeDef($1, $2));
                    } 
-                 | MethodInvocation 
+                 | MethodInvocation
+                 | MethodReference 
                  | QualifiedIdentifier 
                    { 
                      $$ = new FieldRefDef($1); 
@@ -998,6 +999,23 @@ ArgumentList_opt:
 //     TypeName . super :: [TypeArguments] Identifier 
 //     ClassType :: [TypeArguments] new 
 //     ArrayType :: new
+MethodReference: QualifiedIdentifier COLONCOLON TypeArguments_opt IDENTIFIER
+                 {
+                   $$ = new MethodReferenceDef();
+                 }
+               | SUPER COLONCOLON TypeArguments_opt IDENTIFIER
+                 {
+                   $$ = new MethodReferenceDef();
+                 }
+               | QualifiedIdentifier COLONCOLON NEW
+                 {
+                   $$ = new MethodReferenceDef();
+                 }
+               | ArrayType COLONCOLON TypeArguments_opt IDENTIFIER
+                 {
+                   $$ = new MethodReferenceDef();
+                 }
+               ;
 
 // ArrayCreationExpression:
 //     new PrimitiveType DimExprs [Dims] 

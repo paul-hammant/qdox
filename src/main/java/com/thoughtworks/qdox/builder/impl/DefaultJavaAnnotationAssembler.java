@@ -87,6 +87,7 @@ import com.thoughtworks.qdox.parser.expression.LogicalAndDef;
 import com.thoughtworks.qdox.parser.expression.LogicalNotDef;
 import com.thoughtworks.qdox.parser.expression.LogicalOrDef;
 import com.thoughtworks.qdox.parser.expression.MethodInvocationDef;
+import com.thoughtworks.qdox.parser.expression.MethodReferenceDef;
 import com.thoughtworks.qdox.parser.expression.MinusSignDef;
 import com.thoughtworks.qdox.parser.expression.MultiplyDef;
 import com.thoughtworks.qdox.parser.expression.NotDef;
@@ -452,6 +453,10 @@ public class DefaultJavaAnnotationAssembler
         return null;
     }
 
+    public AnnotationValue transform( MethodReferenceDef methodReferenceDef )
+    {
+        return null;
+    }
     public AnnotationValue transform( CreatorDef newCreator )
     {
         return null;

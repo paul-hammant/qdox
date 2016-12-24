@@ -1612,6 +1612,22 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource( new StringReader( source ) ); 
     }
     
+    public void testAnonymousEnumConstructor() throws Exception
+    {
+        String source = "package parent;\n" + 
+            "public enum MyEnum {\n" + 
+            "    VALUE(new Runnable() {\n" + 
+            "        @Override\n" + 
+            "        public void run() { }\n" + 
+            "    });\n" + 
+            "    MyEnum(Runnable function) { }\n" + 
+            "}";
+        
+        builder.setDebugLexer( true );
+        builder.setDebugParser( true );
+        builder.addSource( new StringReader( source ) ); 
+    }
+
     public void testSetDebugLexer()
     {
         ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );

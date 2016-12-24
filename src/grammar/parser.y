@@ -915,19 +915,23 @@ PrimaryNoNewArray: Literal
 //     ExpressionName . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
 //     Primary . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody]
 //// TypeArguments_opt confuses parser
-ClassInstanceCreationExpression: NEW TypeArguments_opt IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE ClassBody_opt 
+ClassInstanceCreationExpression: NEW TypeArguments IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE CODEBLOCK_opt 
                                  { 
                                    CreatorDef creator = new CreatorDef();
                                    creator.setCreatedName( $3 );
                                    $$ = creator; 
                                  }
-                               | NEW IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE ClassBody_opt
+                               | NEW IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE CODEBLOCK_opt
                                  {
                                    CreatorDef creator = new CreatorDef();
                                    creator.setCreatedName( $2 );
                                    $$ = creator; 
                                  }
                                ;
+
+CODEBLOCK_opt:
+             | CODEBLOCK
+             ;
 
 // TypeArgumentsOrDiamond:
 //     TypeArguments 

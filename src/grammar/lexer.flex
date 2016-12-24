@@ -414,6 +414,17 @@ JavadocEnd                      = "*"+ "/"
     }
 }
 
+<ANNOTATION> {
+	"{"                 { nestingDepth++; return Parser.BRACEOPEN; }
+    "}"                 { nestingDepth--; return Parser.BRACECLOSE; }
+}
+<ARGUMENTS> {
+	"{"                 { pushState(CODEBLOCK);
+                          braceMode = -1;
+                          yypushback(1); /* (re)enter brace in right mode */ }
+    "}"                 { return Parser.BRACECLOSE; }
+}
+
 <ANNOTATION,ARGUMENTS> {
 	"("                 { ++ nestingDepth; return Parser.PARENOPEN; }
     ")"                 { if( nestingDepth-- == annotationDepth) { popState(); } return Parser.PARENCLOSE; }
@@ -434,9 +445,6 @@ JavadocEnd                      = "*"+ "/"
     
     "++"                { return Parser.PLUSPLUS; }
     "--"                { return Parser.MINUSMINUS; }
-    
-	"{"                 { nestingDepth++; return Parser.BRACEOPEN; }
-    "}"                 { nestingDepth--; return Parser.BRACECLOSE; }
 
 	"\""                { appendingToCodeBody=true; codeBody.append("\""); pushState(ANNOSTRING); }
     "\'"                { appendingToCodeBody=true; codeBody.append("\'"); pushState(ANNOCHAR); }

@@ -303,6 +303,18 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
+    public String getSimpleName()
+    {
+        return getName();
+    }
+    
+    /** {@inheritDoc} */
+    public String getBinaryName()
+    {
+        return ( getParentClass() == null ? getCanonicalName() : getParentClass().getBinaryName() + '$' + getSimpleName() ); 
+    }
+    
+    /** {@inheritDoc} */
     public String getFullyQualifiedName()
     {
         return ( getParentClass() != null ? ( getParentClass().getClassNamePrefix() )

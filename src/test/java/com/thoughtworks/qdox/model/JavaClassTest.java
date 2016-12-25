@@ -500,10 +500,12 @@ public abstract class JavaClassTest<C extends JavaClass> {
         setName(cls, "MyClass");
 
         assertEquals("MyClass", cls.getName());
+        assertEquals("MyClass", cls.getSimpleName());
         assertEquals("com.thoughtworks.qdox", cls.getPackage().getName());
         assertEquals("com.thoughtworks.qdox", cls.getPackageName());
-        assertEquals("com.thoughtworks.qdox.MyClass",
-                cls.getFullyQualifiedName());
+        assertEquals("com.thoughtworks.qdox.MyClass", cls.getBinaryName());
+        assertEquals("com.thoughtworks.qdox.MyClass", cls.getCanonicalName());
+        assertEquals("com.thoughtworks.qdox.MyClass", cls.getFullyQualifiedName());
     }
 
     @Test
@@ -522,21 +524,20 @@ public abstract class JavaClassTest<C extends JavaClass> {
         JavaClass outer = mock( JavaClass.class );
         when( outer.getName() ).thenReturn( "Outer" );
         when( outer.getPackageName() ).thenReturn( "foo.bar" );
-        when( outer.getClassNamePrefix() ).thenReturn( "foo.bar.Outer$" );
+        when( outer.getClassNamePrefix() ).thenReturn( "foo.bar.Outer." );
+        when( outer.getBinaryName() ).thenReturn( "foo.bar.Outer" );
 
         C inner = newJavaClass();
         setName(inner, "Inner");
         setPackage( inner, pkg );
         setDeclaringClass( inner, outer );
         
-        
         assertEquals("Inner", inner.getName());
+        assertEquals("Inner", inner.getSimpleName());
         assertEquals("foo.bar", inner.getPackageName());
-        assertEquals("foo.bar.Outer$Inner", inner.getFullyQualifiedName());
-        
-        assertEquals("Inner", inner.getName());
-        assertEquals("foo.bar", inner.getPackageName());
-        assertEquals("foo.bar.Outer$Inner", inner.getFullyQualifiedName());
+        assertEquals("foo.bar.Outer$Inner", inner.getBinaryName());
+        assertEquals("foo.bar.Outer.Inner", inner.getCanonicalName());
+        assertEquals("foo.bar.Outer.Inner", inner.getFullyQualifiedName());
     }
     
     @Test

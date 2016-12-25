@@ -425,9 +425,17 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
     /**
      * Equivalent of {@link java.lang.Class#getName()}.
      * 
-     * @return the fully qualified name of the class
+     * @return the name of the entity (class, interface, array class, primitive type, or void) represented by this Class object, as a String.
      */
     String getName();
+    
+    /**
+     * Equivalent of {@link java.lang.Class#getSimpleName()}.
+     * 
+     * @return the simple name of the underlying class as given in the source code.
+     * @since 2.0
+     */
+    String getSimpleName();
     
     /**
      * Equivalent of {@link Class#getModifiers()}

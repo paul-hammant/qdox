@@ -85,6 +85,16 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         return new DefaultJavaType(null, name, dimensions, context);
     }
     
+	public String getBinaryName()
+	{
+	    return null;
+	}
+	
+	public String getSimpleName()
+	{
+	    return null;
+	}
+	
     /** {@inheritDoc} */
     public String getFullyQualifiedName() {
         StringBuilder result = new StringBuilder( isResolved() ? fullName : name );

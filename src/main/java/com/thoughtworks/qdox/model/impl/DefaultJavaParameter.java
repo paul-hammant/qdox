@@ -96,6 +96,12 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     public boolean isVarArgs() {
         return varArgs;
     }
+    
+    /** {@inheritDoc} */
+    public String getBinaryName()
+    {
+        return type.getBinaryName();
+    }
 
     /** {@inheritDoc} */
     public String getFullyQualifiedName()

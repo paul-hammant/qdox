@@ -28,7 +28,13 @@ public interface JavaType
     JavaType VOID = new JavaType() 
     {
         private final String value = "void";
-
+        
+        
+        public String getBinaryName()
+        {
+            return null;
+        }
+        
         public String getCanonicalName()
         {
             return value;
@@ -66,6 +72,20 @@ public interface JavaType
     };
 
     /**
+     * <blockquote cite="https://docs.oracle.com/javase/specs/jls/se8/html/jls-13.html#jls-13.1">
+     * The class or interface must be named by its binary name, which must meet the following constraints:
+     * <ul>
+     *   <li>The binary name of a top level type is its canonical name.</li>
+     *   <li>The binary name of a member type consists of the binary name of its immediately enclosing type, followed by $, followed by the simple name of the member.</li>
+     * </ul>
+     * </blockquote>
+     * 
+     * @return
+     * @since 2.0
+     */
+    String getBinaryName();
+    
+    /**
      * Equivalent of (@link {@link java.lang.Class#getCanonicalName()}.
      * 
      * @return the canonical name of this class
@@ -80,6 +100,17 @@ public interface JavaType
     String getGenericCanonicalName();
 
     /**
+     * <blockquote cite="https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.7">
+     * Every primitive type, named package, top level class, and top level interface has a fully qualified name:
+     * <ul>
+     *   <li>The fully qualified name of a primitive type is the keyword for that primitive type, namely byte, short, char, int, long, float, double, or boolean.</li>
+     *   <li>The fully qualified name of a named package that is not a subpackage of a named package is its simple name.</li>
+     *   <li>The fully qualified name of a named package that is a subpackage of another named package consists of the fully qualified name of the containing package, followed by ".", followed by the simple (member) name of the subpackage.</li>
+     *   <li>The fully qualified name of a top level class or top level interface that is declared in an unnamed package is the simple name of the class or interface.</li>
+     *   <li>The fully qualified name of a top level class or top level interface that is declared in a named package consists of the fully qualified name of the package, followed by ".", followed by the simple name of the class or interface.</li>
+     * </ul>
+     * </blockquote>
+     * 
      * Returns the FQN of an Object or the handler of a Type.
      * If the name of the can't be resolved based on the imports and the classes on the classpath the name will be returned.
      * InnerClasses will use the $ sign.
@@ -97,6 +128,7 @@ public interface JavaType
      * 
      * @return the fully qualified name, never <code>null</code>
      * @see #getComponentType()
+     * @see #getBinaryName()
      */
     String getFullyQualifiedName();
 

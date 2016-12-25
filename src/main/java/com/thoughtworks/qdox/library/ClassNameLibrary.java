@@ -39,10 +39,18 @@ public class ClassNameLibrary
     protected JavaClass resolveJavaClass( String name )
     {
         Builder unknownBuilder = getModelBuilder();
-        unknownBuilder.beginClass( new ClassDef( name ) );
-        unknownBuilder.endClass();
+        
+        String[] names = name.split( "\\$" ); 
+        for(int i=0;i<names.length;i++)
+        {
+            unknownBuilder.beginClass( new ClassDef( names[i] ) );
+        }
+        for(int i=0;i<names.length;i++)
+        {
+            unknownBuilder.endClass();
+        }
         JavaSource unknownSource = unknownBuilder.getSource();
-        return unknownSource.getClasses().get( 0 );
+        return unknownSource.getClassByName( name );
     }
     
     @Override

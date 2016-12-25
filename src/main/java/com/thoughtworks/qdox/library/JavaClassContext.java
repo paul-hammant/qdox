@@ -87,7 +87,7 @@ public class JavaClassContext implements Serializable {
 	 * @param javaClass the JavaClass to add
 	 */
 	public void add(JavaClass javaClass) {
-	    classMap.put(javaClass.getFullyQualifiedName(), javaClass);
+	    classMap.put(javaClass.getBinaryName(), javaClass);
 	}
 	
 	/**

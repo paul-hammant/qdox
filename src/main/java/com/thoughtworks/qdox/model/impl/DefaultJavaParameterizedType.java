@@ -30,30 +30,9 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
 {
     private List<JavaType> actualArgumentTypes = Collections.emptyList();
 
-    
-    public DefaultJavaParameterizedType( String fullName, int dimensions, JavaClassParent context )
-    {
-        super( fullName, dimensions, context );
-    }
-
-    public DefaultJavaParameterizedType( String fullName, int dimensions )
-    {
-        super( fullName, dimensions );
-    }
-
-    public DefaultJavaParameterizedType( String name, JavaClassParent context )
-    {
-        super( name, context );
-    }
-
     public DefaultJavaParameterizedType( String fullName, String name, int dimensions, JavaClassParent context )
     {
         super( fullName, name, dimensions, context );
-    }
-
-    public DefaultJavaParameterizedType( String fullName )
-    {
-        super( fullName );
     }
 
     /**

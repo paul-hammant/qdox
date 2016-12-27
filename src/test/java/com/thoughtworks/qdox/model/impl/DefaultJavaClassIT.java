@@ -63,7 +63,8 @@ public class DefaultJavaClassIT
         assertTrue( mapClass instanceof DefaultJavaClass );
         
         assertEquals( 1, mapClass.getNestedClasses().size() );
-        assertEquals( "java.util.Map$Entry",  mapClass.getNestedClassByName( "Entry" ).getFullyQualifiedName() );
+        assertEquals( "java.util.Map$Entry",  mapClass.getNestedClassByName( "Entry" ).getBinaryName() );
+        assertEquals( "java.util.Map.Entry",  mapClass.getNestedClassByName( "Entry" ).getFullyQualifiedName() );
         assertEquals( 1, Class.forName( "java.util.Map" ).getDeclaredClasses().length );
         assertEquals( "java.util.Map$Entry", Class.forName( "java.util.Map" ).getDeclaredClasses()[0].getName() );
     }
@@ -76,6 +77,8 @@ public class DefaultJavaClassIT
         assertNotNull( valueBean );
         assertEquals( "java.lang.Object", valueBean.getType().getFullyQualifiedName() );
         assertNotNull( valueBean.getAccessor() );
+        
+        assertEquals( "public abstract java.lang.Object java.util.Map$Entry.getValue()", Class.forName( "java.util.Map$Entry" ).getMethod("getValue").toString() );
         assertEquals( "public abstract java.lang.Object java.util.Map$Entry.getValue()", valueBean.getAccessor().toString() );
         assertNotNull( valueBean.getMutator() );
         assertEquals( "public abstract java.lang.Object java.util.Map$Entry.setValue(java.lang.Object)", valueBean.getMutator().toString() );
@@ -93,12 +96,11 @@ public class DefaultJavaClassIT
         JavaClass entryClass = library.getJavaClass( "java.util.Map$Entry" );
         assertTrue( entryClass instanceof DefaultJavaClass );
         
-        assertEquals( "java.util.Map$Entry", entryClass.getFullyQualifiedName() );
+        assertEquals( "java.util.Map$Entry", entryClass.getBinaryName() );
+        assertEquals( "java.util.Map.Entry", entryClass.getFullyQualifiedName() );
         assertEquals( "java.util.Map$Entry", Class.forName( "java.util.Map$Entry" ).getName() );
         assertEquals( "java.util.Map.Entry", entryClass.getCanonicalName() );
         assertEquals( "java.util.Map.Entry", Class.forName( "java.util.Map$Entry" ).getCanonicalName() );
         assertEquals( "Map.Entry", entryClass.getValue() );
-        
     }
-
 }

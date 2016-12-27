@@ -37,6 +37,8 @@ public class ClassResolutionTest
 
         // verify
         assertEquals( "Should include fully qualified name", "package1.Class1$NestedClass",
+                      type.getBinaryName() );
+        assertEquals( "Should include fully qualified name", "package1.Class1.NestedClass",
                       type.getFullyQualifiedName() );
     }
 
@@ -82,8 +84,11 @@ public class ClassResolutionTest
         builder.addSource( new StringReader( source ) );
         JavaMethod method = builder.getClassByName( "some.pack.Test" ).getMethods().get( 0 );
         JavaParameter parameter = method.getParameters().get( 0 );
-        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getJavaClass().getFullyQualifiedName() );
-        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getType().getFullyQualifiedName() );
-        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getFullyQualifiedName() );
+        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getJavaClass().getBinaryName() );
+        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getType().getBinaryName() );
+        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getBinaryName() );
+        assertEquals( "some.pack.Test.Inner.Inner2", parameter.getJavaClass().getFullyQualifiedName() );
+        assertEquals( "some.pack.Test.Inner.Inner2", parameter.getType().getFullyQualifiedName() );
+        assertEquals( "some.pack.Test.Inner.Inner2", parameter.getFullyQualifiedName() );
     }
 }

@@ -124,7 +124,8 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals(1, outer.getNestedClasses().size());
         JavaClass inner = outer.getNestedClasses().get(0);
         assertEquals("Inner", inner.getName());
-        assertEquals("foo.bar.Outer$Inner", inner.getFullyQualifiedName());
+        assertEquals("foo.bar.Outer$Inner", inner.getBinaryName());
+        assertEquals("foo.bar.Outer.Inner", inner.getFullyQualifiedName());
 
         assertEquals(1, inner.getMethods().size());
         assertEquals("innerMethod", inner.getMethods().get(0).getName());
@@ -671,11 +672,13 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource(new StringReader(source));
         JavaClass outer = builder.getClassByName("foo.Outer");
         JavaClass inner = outer.getNestedClasses().get(0);
-        assertEquals("foo.Outer$Inner", inner.getFullyQualifiedName());
+        assertEquals("foo.Outer$Inner", inner.getBinaryName());
+        assertEquals("foo.Outer.Inner", inner.getFullyQualifiedName());
 
         JavaField field1 = outer.getFieldByName("field1");
         JavaClass type = field1.getType();
-        assertEquals("foo.Outer$Inner", type.getFullyQualifiedName());
+        assertEquals("foo.Outer$Inner", type.getBinaryName());
+        assertEquals("foo.Outer.Inner", type.getFullyQualifiedName());
     }
 
     public void testJiraQdox16() {
@@ -898,7 +901,8 @@ public class JavaProjectBuilderTest extends TestCase
         JavaField innerField = 
             builder.getClassByName("p2.B").getFieldByName("innerField");
         assertEquals(innerClass, innerField.getType() );
-        assertEquals("p1.A$Inner", innerField.getType().getFullyQualifiedName());
+        assertEquals("p1.A$Inner", innerField.getType().getBinaryName());
+        assertEquals("p1.A.Inner", innerField.getType().getFullyQualifiedName());
     }
 
     public void testJiraQdox71() {
@@ -1499,10 +1503,12 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( "com.foo.Outer", cls.getFullyQualifiedName() );
         assertEquals( "com.foo.Outer", cls.getCanonicalName() );
         cls = cls.getNestedClassByName( "Inner" );
-        assertEquals( "com.foo.Outer$Inner", cls.getFullyQualifiedName() );
+        assertEquals( "com.foo.Outer$Inner", cls.getBinaryName() );
+        assertEquals( "com.foo.Outer.Inner", cls.getFullyQualifiedName() );
         assertEquals( "com.foo.Outer.Inner", cls.getCanonicalName() );
         cls = cls.getNestedClassByName( "Core" );
-        assertEquals( "com.foo.Outer$Inner$Core", cls.getFullyQualifiedName() );
+        assertEquals( "com.foo.Outer$Inner$Core", cls.getBinaryName() );
+        assertEquals( "com.foo.Outer.Inner.Core", cls.getFullyQualifiedName() );
         assertEquals( "com.foo.Outer.Inner.Core", cls.getCanonicalName() );
     }
     

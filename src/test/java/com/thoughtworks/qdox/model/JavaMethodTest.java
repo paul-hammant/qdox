@@ -427,7 +427,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     @Test
     public void testToString() throws Exception {
         JavaClass cls = mock(JavaClass.class);
-        when(cls.getFullyQualifiedName()).thenReturn( "java.lang.Object" );
+        when(cls.getBinaryName()).thenReturn( "java.lang.Object" );
     	M mthd = newJavaMethod(newType("boolean"),"equals");
     	setParentClass(mthd, cls);
     	setModifiers(mthd, Arrays.asList(new String[]{"public"}));

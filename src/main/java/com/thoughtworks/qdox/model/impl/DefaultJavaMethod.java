@@ -367,7 +367,7 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
         result.append( getReturns().getFullyQualifiedName() ).append( ' ' );
         if ( getParentClass() != null )
         {
-            result.append( getParentClass().getFullyQualifiedName() );
+            result.append( getParentClass().getBinaryName() );
             result.append( "." );
         }
         result.append( getName() );

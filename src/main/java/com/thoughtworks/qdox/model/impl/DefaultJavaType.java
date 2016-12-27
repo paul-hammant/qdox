@@ -87,17 +87,17 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     
 	public String getBinaryName()
 	{
-	    return null;
+	    return resolveRealClass().getBinaryName(); 
 	}
 	
 	public String getSimpleName()
 	{
-	    return null;
+	    return resolveRealClass().getBinaryName();
 	}
 	
     /** {@inheritDoc} */
     public String getFullyQualifiedName() {
-        StringBuilder result = new StringBuilder( isResolved() ? fullName : name );
+        StringBuilder result = new StringBuilder( isResolved() ? fullName.replaceAll( "\\$", "." ) : name );
         for (int i = 0; i < dimensions; i++) 
         {
             result.append("[]");

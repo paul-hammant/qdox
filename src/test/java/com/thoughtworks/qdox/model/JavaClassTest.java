@@ -524,7 +524,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         JavaClass outer = mock( JavaClass.class );
         when( outer.getName() ).thenReturn( "Outer" );
         when( outer.getPackageName() ).thenReturn( "foo.bar" );
-        when( outer.getClassNamePrefix() ).thenReturn( "foo.bar.Outer." );
+        when( outer.getFullyQualifiedName() ).thenReturn( "foo.bar.Outer" );
         when( outer.getBinaryName() ).thenReturn( "foo.bar.Outer" );
 
         C inner = newJavaClass();
@@ -691,7 +691,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         setName(cls, "X");
         JavaClass innerClass = mock(JavaClass.class );
         when( innerClass.getName() ).thenReturn( "DogFood" );
-        when( innerClass.getFullyQualifiedName() ).thenReturn( "p.X$DogFood" );
+        when( innerClass.getBinaryName() ).thenReturn( "p.X$DogFood" );
         setClasses(cls, Collections.singletonList( innerClass ) );
         
         assertEquals("p.X$DogFood", cls.resolveType("DogFood"));
@@ -743,35 +743,35 @@ public abstract class JavaClassTest<C extends JavaClass> {
     @Test
     public void testInnerClassToString() throws Exception {
     	JavaClass jOuterClass = mock(JavaClass.class);
-    	when(jOuterClass.getClassNamePrefix()).thenReturn( "com.thoughtworks.qdox.model.OuterClass$" );
+    	when(jOuterClass.getFullyQualifiedName()).thenReturn( "com.thoughtworks.qdox.model.OuterClass" );
     	
         C jInnerClass = newJavaClass( "InnerClass" );
     	setDeclaringClass( jInnerClass, jOuterClass );
     	
-    	assertEquals("class com.thoughtworks.qdox.model.OuterClass$InnerClass", jInnerClass.toString());
+    	assertEquals("class com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.toString());
     }
     
     @Test
     public void testInnerClassType() {
         JavaClass jOuterClass = mock(JavaClass.class);
-        when(jOuterClass.getClassNamePrefix()).thenReturn("com.thoughtworks.qdox.model.OuterClass$");
+        when(jOuterClass.getFullyQualifiedName()).thenReturn("com.thoughtworks.qdox.model.OuterClass");
 
         C jInnerClass = newJavaClass("InnerClass");
         setDeclaringClass( jInnerClass, jOuterClass );
         
-        assertEquals( "com.thoughtworks.qdox.model.OuterClass$InnerClass", jInnerClass.getFullyQualifiedName() );
+        assertEquals( "com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.getFullyQualifiedName() );
     }
     
     @Test
     public void testInnerInterfaceToString() {
     	JavaClass jOuterClass = mock(JavaClass.class);
-    	when(jOuterClass.getClassNamePrefix()).thenReturn( "com.thoughtworks.qdox.model.OuterClass$");
+    	when(jOuterClass.getFullyQualifiedName()).thenReturn( "com.thoughtworks.qdox.model.OuterClass");
 
     	C jInnerInterface = newJavaClass( "InnerInterface" );
     	setInterface( jInnerInterface, true );
         setDeclaringClass( jInnerInterface, jOuterClass );
         
-    	assertEquals("interface com.thoughtworks.qdox.model.OuterClass$InnerInterface", jInnerInterface.toString());
+    	assertEquals("interface com.thoughtworks.qdox.model.OuterClass.InnerInterface", jInnerInterface.toString());
     }
     
     @Test

@@ -317,9 +317,17 @@ public class DefaultJavaClass
     /** {@inheritDoc} */
     public String getFullyQualifiedName()
     {
-        return ( getParentClass() != null ? ( getParentClass().getClassNamePrefix() )
-                        : getPackage() != null ? ( getPackage().getName() + "." ) : "" )
-            + getName();
+        if(isPrimitive())
+        {
+            return getName();
+        }
+        else if ( getParentClass() == null )
+        {
+            return (getPackage() == null ? "" :  getPackage().getName() + '.') +getSimpleName(); 
+        }
+        else {
+            return getParentClass().getFullyQualifiedName() + "." + getSimpleName();
+        }
     }
 
     /** {@inheritDoc} */
@@ -365,7 +373,7 @@ public class DefaultJavaClass
         JavaClass resolvedClass = getNestedClassByName( typeName );
         if ( resolvedClass != null )
         {
-            result = resolvedClass.getFullyQualifiedName();
+            result = resolvedClass.getBinaryName();
         }
         else
         {

@@ -42,7 +42,7 @@ public final class JavaModelUtils
     public static JavaClass getClassByName( JavaClass cls, String name )
     {
         JavaClass result = null;
-        if ( cls.getFullyQualifiedName().equals( name ) )
+        if ( cls.getBinaryName().equals( name ) )
         {
             result = cls;
         }

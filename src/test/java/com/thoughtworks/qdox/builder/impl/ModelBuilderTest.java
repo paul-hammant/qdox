@@ -310,7 +310,8 @@ public class ModelBuilderTest extends TestCase {
         assertEquals("bar", outerClass.getMethods().get(0).getName());
         assertEquals(1, outerClass.getNestedClasses().size());
         JavaClass innerClass = outerClass.getNestedClasses().get(0);
-        assertEquals("xyz.Outer$Inner", innerClass.getFullyQualifiedName());
+        assertEquals("xyz.Outer$Inner", innerClass.getBinaryName());
+        assertEquals("xyz.Outer.Inner", innerClass.getFullyQualifiedName());
         assertEquals(1, innerClass.getMethods().size());
         assertEquals("foo", innerClass.getMethods().get(0).getName());
     }

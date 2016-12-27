@@ -383,20 +383,6 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public String resolveFullyQualifiedName( String name )
-    {
-        // Maybe it's an inner class?
-        for ( JavaClass innerClass : getNestedClasses() )
-        {
-            if ( innerClass.getName().equals( name ) )
-            {
-                return innerClass.getFullyQualifiedName();
-            }
-        }
-        return getParent().resolveFullyQualifiedName( name );
-    }
-
-    /** {@inheritDoc} */
     public String getClassNamePrefix()
     {
         return getFullyQualifiedName() + "$";

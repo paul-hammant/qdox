@@ -35,8 +35,6 @@ public interface JavaClassParent {
      */
     String resolveType(String typeName);
     
-    String resolveFullyQualifiedName(String typeName);
-
     JavaSource getParentSource();
 
     JavaClass getNestedClassByName(String name);

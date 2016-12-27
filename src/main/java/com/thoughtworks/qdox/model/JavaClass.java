@@ -154,25 +154,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
     boolean isInner();
     
     /**
-     * The name can be both absolute (including the package) or relative (matching a subclass or an import).
-     * 
-     * Tries to return the fully qualified name based on the name.
-     * The name tries to match the following:
-     * <ul>
-     *   <li>primitives or void</li>
-     *   <li>java.lang.*</li>
-     *   <li>inner classes</li>
-     *   <li>explicit imports</li>
-     *   <li>implicit imports</li>
-     * </ul> 
-     * 
-     * @param name the name to resolve
-     * @return the resolved fully qualified name, otherwise <code>null</code>
-     * @since 2.0
-     */
-    String resolveFullyQualifiedName( String name );
-
-    /**
      * If this class has a package, it will return the package name, followed by a "."(dot).
      * Otherwise it will return an empty String
      * 

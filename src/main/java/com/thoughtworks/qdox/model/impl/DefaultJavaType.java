@@ -712,12 +712,6 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     }
 
     /** {@inheritDoc} */
-    public String resolveCanonicalName( String name )
-    {
-        return resolveRealClass().resolveCanonicalName( name );
-    }
-
-    /** {@inheritDoc} */
     public String resolveFullyQualifiedName( String name )
     {
         return resolveRealClass().resolveFullyQualifiedName( name );

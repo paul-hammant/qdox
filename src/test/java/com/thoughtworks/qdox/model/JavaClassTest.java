@@ -681,7 +681,6 @@ public abstract class JavaClassTest<C extends JavaClass> {
     {
         setName( cls, "X" );
         assertEquals( "int", cls.resolveType( "int" ) );
-        assertEquals( "int", cls.resolveCanonicalName( "int" ) );
         assertEquals( "int", cls.resolveFullyQualifiedName( "int" ) );
     }
     

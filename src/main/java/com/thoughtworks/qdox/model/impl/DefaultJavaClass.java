@@ -383,20 +383,6 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public String resolveCanonicalName( String name )
-    {
-        // Maybe it's an inner class?
-        for ( JavaClass innerClass : getNestedClasses() )
-        {
-            if ( innerClass.getName().equals( name ) )
-            {
-                return innerClass.getName();
-            }
-        }
-        return getParent().resolveCanonicalName( name );
-    }
-
-    /** {@inheritDoc} */
     public String resolveFullyQualifiedName( String name )
     {
         // Maybe it's an inner class?

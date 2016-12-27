@@ -72,18 +72,6 @@ public interface JavaSource extends JavaClassParent
     String resolveType( String typeName );
 
     /**
-     * @param name the simple name or canonical name of a class
-     * @return the resolved canonical name, otherwise <code>null</code>
-     */
-    String resolveCanonicalName( String name );
-    
-    /**
-     * @param name the simple name or canonical name of a class
-     * @return the resolved fully qualified name, otherwise <code>null</code>
-     */
-    String resolveFullyQualifiedName( String name );
-
-    /**
      * If there's a package, return the packageName, followed by a dot, otherwise an empty String
      * 
      * @return the class name prefix, otherwise an empty String

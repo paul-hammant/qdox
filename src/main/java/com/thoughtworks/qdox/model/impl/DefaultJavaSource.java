@@ -125,32 +125,14 @@ public class DefaultJavaSource implements JavaSource, Serializable {
     /**  {@inheritDoc} */
     public String resolveType( String typeName )
     {
-        return resolveFullyQualifiedName( typeName );
-    }
-    
-    /**  {@inheritDoc} */
-   public String resolveFullyQualifiedName( String name )
-    {
-        String result = resolvedTypeCache.get( name );
+        String result = resolvedTypeCache.get( typeName );
         if ( result == null )
         {
-            result = resolveTypeInternal( name );
+            result = resolveTypeInternal( typeName );
             if ( result != null )
             {
-                resolvedTypeCache.put( name, result );
+                resolvedTypeCache.put( typeName, result );
             }
-        }
-        return result;
-    }
-    
-    /**  {@inheritDoc} */
-    public String resolveCanonicalName( String name )
-    {
-        String className = resolveFullyQualifiedName( name );
-        String result = null;
-        if ( className != null )
-        {
-            result = className.replace( '$', '.' );
         }
         return result;
     }

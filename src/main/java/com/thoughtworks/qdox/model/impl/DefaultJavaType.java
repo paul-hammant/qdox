@@ -712,12 +712,6 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     }
 
     /** {@inheritDoc} */
-    public String getClassNamePrefix()
-    {
-        return resolveRealClass().getClassNamePrefix();
-    }
-
-    /** {@inheritDoc} */
     public List<JavaInitializer> getInitializers()
     {
         return resolveRealClass().getInitializers();

@@ -152,14 +152,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      * @return <code>true</code> if this class is an inner class, otherwise <code>false</code>
      */
     boolean isInner();
-    
-    /**
-     * If this class has a package, it will return the package name, followed by a "."(dot).
-     * Otherwise it will return an empty String
-     * 
-     * @return the package name plus a dot if there's a package, otherwise an empty String
-     */
-    String getClassNamePrefix();
 
     /**
      * Equivalent of {@link java.lang.Class#getMethods()}

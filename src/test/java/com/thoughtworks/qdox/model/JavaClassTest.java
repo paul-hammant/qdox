@@ -509,13 +509,6 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetClassNamePrefix() {
-        setPackage(src, newJavaPackage("foo.bar"));
-        setName(cls, "Stanley");
-        assertEquals("foo.bar.Stanley$", cls.getClassNamePrefix());
-    }
-    
-    @Test
     public void testInnerClass() throws Exception
     {
         JavaPackage pkg = mock(JavaPackage.class);

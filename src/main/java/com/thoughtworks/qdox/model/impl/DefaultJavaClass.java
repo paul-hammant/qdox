@@ -383,12 +383,6 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public String getClassNamePrefix()
-    {
-        return getFullyQualifiedName() + "$";
-    }
-
-    /** {@inheritDoc} */
     public JavaType asType()
     {
         return this;

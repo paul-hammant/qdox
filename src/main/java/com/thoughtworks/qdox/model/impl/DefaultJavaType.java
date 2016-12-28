@@ -50,24 +50,24 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     protected String fullName;
     private int dimensions;
     
-    public DefaultJavaType( String name, JavaClassParent context )
+    DefaultJavaType( String name, JavaClassParent context )
     {
         this.name = name;
         this.context = context;
     }
     
-    public DefaultJavaType(String fullName, String name, int dimensions, JavaClassParent context) {
+    DefaultJavaType(String fullName, String name, int dimensions, JavaClassParent context) {
         this.fullName = fullName;
         this.name = name;
         this.dimensions = dimensions;
         this.context = context;
     }
     
-    public DefaultJavaType(String fullName, int dimensions, JavaClassParent context) {
+    DefaultJavaType(String fullName, int dimensions, JavaClassParent context) {
         this(fullName, (String) null, dimensions, context);
     }
 
-    public DefaultJavaType(String fullName, int dimensions) {
+    DefaultJavaType(String fullName, int dimensions) {
         this(fullName, dimensions, null);
     }
 
@@ -76,13 +76,9 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
      * 
      * @param fullName the name of the primitive
      */
-    public DefaultJavaType( String fullName ) 
+    DefaultJavaType( String fullName ) 
     {
         this( fullName, 0 );
-    }
-    
-	public static DefaultJavaType createUnresolved(String name, int dimensions, JavaClassParent context) {
-        return new DefaultJavaType(null, name, dimensions, context);
     }
     
 	public String getBinaryName()
@@ -92,7 +88,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 	
 	public String getSimpleName()
 	{
-	    return resolveRealClass().getBinaryName();
+	    return resolveRealClass().getSimpleName();
 	}
 	
     /** {@inheritDoc} */
@@ -935,25 +931,6 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     } 
     
     // deprecated
-    public JavaType asType()    {
-        return resolveRealClass().asType();
-    }
-
-    public List<JavaClass> getClasses()
-    {
-        return resolveRealClass().getClasses();
-    }
-
-    public JavaClass getInnerClassByName( String name )
-    {
-        return resolveRealClass().getInnerClassByName( name );
-    }
-    
-    public List<JavaClass> getInnerClasses()
-    {
-        return resolveRealClass().getInnerClasses();
-    }
-    
     public JavaClassParent getParent()
     {
         return context;

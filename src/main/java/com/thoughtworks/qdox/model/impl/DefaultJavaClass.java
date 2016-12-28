@@ -637,30 +637,10 @@ public class DefaultJavaClass
         classes.add( cls );
     }
 
-    /**
-     * @deprecated Use {@link #getNestedClasses()} instead.
-     */
-    public List<JavaClass> getClasses()
-    {
-        return getNestedClasses();
-    }
-
     /** {@inheritDoc} */
     public List<JavaClass> getNestedClasses()
     {
         return classes;
-    }
-
-    /** {@inheritDoc} */
-    public JavaClass getInnerClassByName( String name )
-    {
-        return getNestedClassByName( name );
-    }
-
-    /** {@inheritDoc} */
-    public List<JavaClass> getInnerClasses()
-    {
-        return getNestedClasses();
     }
 
     /** {@inheritDoc} */

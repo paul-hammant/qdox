@@ -61,7 +61,7 @@ public class DefaultTypeTest
     {
         JavaSource src = mock( JavaSource.class );
         when( src.getImports() ).thenReturn( Collections.singletonList( "foo.*" ) );
-        DefaultJavaType type = DefaultJavaType.createUnresolved( "Bar", 0, src );
+        DefaultJavaType type = new DefaultJavaType( "Bar", src );
         assertEquals( false, type.isResolved() );
 
         when( src.resolveType( "Bar" ) ).thenReturn( "foo.Bar" );

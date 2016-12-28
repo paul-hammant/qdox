@@ -52,7 +52,7 @@ public final class JavaModelUtils
         }
         else
         {
-            for ( JavaClass innerCls : cls.getClasses() )
+            for ( JavaClass innerCls : cls.getNestedClasses() )
             {
                 result = getClassByName( innerCls, name );
                 if ( result != null )

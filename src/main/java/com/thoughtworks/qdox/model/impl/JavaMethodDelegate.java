@@ -27,7 +27,6 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
 
@@ -57,7 +56,7 @@ public class JavaMethodDelegate implements JavaMethod
         if (result != null) {
             String originalValue = result.getValue();
             
-            result =  DefaultJavaType.resolve( result, originalMethod.getParentClass(), callingClass );
+            result =  DefaultJavaType.resolve( result, originalMethod.getDeclaringClass(), callingClass );
             
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
@@ -75,7 +74,7 @@ public class JavaMethodDelegate implements JavaMethod
         List<JavaType> result = new LinkedList<JavaType>();
         for ( JavaType type : originalMethod.getParameterTypes( resolve ) )
         {
-            JavaType curType = DefaultJavaType.resolve( type, originalMethod.getParentClass(), callingClass );
+            JavaType curType = DefaultJavaType.resolve( type, originalMethod.getDeclaringClass(), callingClass );
             // According to java-specs, if it could be resolved the upper boundary, so Object, should be returned
             if ( !resolve && !type.getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
             {
@@ -317,12 +316,5 @@ public class JavaMethodDelegate implements JavaMethod
     public List<JavaType> getParameterTypes()
     {
         return getParameterTypes( false );
-    }
-    
-    // deprecated methods
-    // will be removed with QDox-2.0
-    public JavaClass getParentClass()
-    {
-        return originalMethod.getParentClass();
     }
 }

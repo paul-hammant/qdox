@@ -190,7 +190,7 @@ public class FieldRef
         }
         else if ( context instanceof JavaParameter )
         {
-            result = ( (JavaParameter) context ).getParentClass();
+            result = ( (JavaParameter) context ).getDeclaringClass();
         }
         // else if ( context instanceof JavaPackage )
         // {

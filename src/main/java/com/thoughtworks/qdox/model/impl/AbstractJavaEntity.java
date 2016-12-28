@@ -161,7 +161,7 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         this.parentCls = parentClass;
     }
     
-    public JavaClass getParentClass()
+    public JavaClass getDeclaringClass()
     {
         return parentCls;
     }

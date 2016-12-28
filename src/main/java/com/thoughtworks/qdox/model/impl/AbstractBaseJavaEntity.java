@@ -66,7 +66,7 @@ public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implement
 	 * 
 	 * @return the surrounding class
 	 */
-    public JavaClass getParentClass()
+    public JavaClass getDeclaringClass()
     {
         return null;
     }

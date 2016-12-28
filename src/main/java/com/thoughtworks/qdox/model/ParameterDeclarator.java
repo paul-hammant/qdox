@@ -8,6 +8,6 @@ package com.thoughtworks.qdox.model;
  */
 public interface ParameterDeclarator extends JavaGenericDeclaration 
 {
-    JavaClass getParentClass();
+    JavaClass getDeclaringClass();
 
 }

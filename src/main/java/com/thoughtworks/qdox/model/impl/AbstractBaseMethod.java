@@ -55,11 +55,6 @@ public abstract class AbstractBaseMethod
         return varArgs;
     }
 
-    public JavaClass getDeclaringClass()
-    {
-        return getParentClass();
-    }
-
     public void setParameters( List<JavaParameter> javaParameters )
     {
         parameters = javaParameters;
@@ -97,12 +92,12 @@ public abstract class AbstractBaseMethod
 
     public boolean isPublic()
     {
-        return super.isPublic() || (getParentClass() != null ? getParentClass().isInterface() : false);
+        return super.isPublic() || (getDeclaringClass() != null ? getDeclaringClass().isInterface() : false);
     }
 
     public List<DocletTag> getTagsByName( String name, boolean inherited )
     {
-        JavaClass cls = getParentClass();
+        JavaClass cls = getDeclaringClass();
         List<JavaType> types = new LinkedList<JavaType>();
         for (JavaParameter parameter : getParameters()) {
             types.add(parameter.getType());

@@ -87,9 +87,9 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     }
     
     /** {@inheritDoc} */
-    public JavaClass getParentClass()
+    public JavaClass getDeclaringClass()
     {
-        return getDeclarator().getParentClass();
+        return getDeclarator().getDeclaringClass();
     }
 
     /** {@inheritDoc} */

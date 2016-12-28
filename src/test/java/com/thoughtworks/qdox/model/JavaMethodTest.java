@@ -412,7 +412,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     public void testParentClass() throws Exception {
         JavaClass clazz = mock(JavaClass.class);
         setParentClass( mth, clazz );
-        assertSame(clazz, mth.getParentClass());
+        assertSame(clazz, mth.getDeclaringClass());
     }
 
     @Test

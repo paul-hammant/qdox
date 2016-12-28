@@ -29,7 +29,6 @@ public class DefaultJavaField
     extends AbstractJavaEntity
     implements JavaField
 {
-
     private JavaClass type;
 
     private String initializationExpression;
@@ -53,12 +52,6 @@ public class DefaultJavaField
     {
         this( name );
         this.type = type;
-    }
-
-    /** {@inheritDoc} */
-    public JavaClass getDeclaringClass()
-    {
-        return getParentClass();
     }
 
     /** {@inheritDoc} */

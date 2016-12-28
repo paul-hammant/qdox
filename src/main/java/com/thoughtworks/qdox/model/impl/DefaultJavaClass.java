@@ -269,7 +269,7 @@ public class DefaultJavaClass
     /** {@inheritDoc} */
     public JavaSource getParentSource()
     {
-        return ( getParentClass() != null ? getParentClass().getParentSource() : super.getSource() );
+        return ( getDeclaringClass() != null ? getDeclaringClass().getParentSource() : super.getSource() );
     }
 
     /** {@inheritDoc} */
@@ -287,7 +287,7 @@ public class DefaultJavaClass
     /** {@inheritDoc} */
     public JavaClassParent getParent()
     {
-        JavaClassParent result = getParentClass();
+        JavaClassParent result = getDeclaringClass();
         if ( result == null )
         {
             result = getParentSource();
@@ -311,7 +311,7 @@ public class DefaultJavaClass
     /** {@inheritDoc} */
     public String getBinaryName()
     {
-        return ( getParentClass() == null ? getCanonicalName() : getParentClass().getBinaryName() + '$' + getSimpleName() ); 
+        return ( getDeclaringClass() == null ? getCanonicalName() : getDeclaringClass().getBinaryName() + '$' + getSimpleName() ); 
     }
     
     /** {@inheritDoc} */
@@ -321,12 +321,12 @@ public class DefaultJavaClass
         {
             return getName();
         }
-        else if ( getParentClass() == null )
+        else if ( getDeclaringClass() == null )
         {
             return (getPackage() == null ? "" :  getPackage().getName() + '.') +getSimpleName(); 
         }
         else {
-            return getParentClass().getFullyQualifiedName() + "." + getSimpleName();
+            return getDeclaringClass().getFullyQualifiedName() + "." + getSimpleName();
         }
     }
 
@@ -363,7 +363,7 @@ public class DefaultJavaClass
     /** {@inheritDoc} */
     public boolean isInner()
     {
-        return getParentClass() != null;
+        return getDeclaringClass() != null;
     }
 
     /** {@inheritDoc} */
@@ -803,12 +803,6 @@ public class DefaultJavaClass
             }
         }
         return result;
-    }
-
-    /** {@inheritDoc} */
-    public JavaClass getDeclaringClass()
-    {
-        return getParentClass();
     }
 
     /** {@inheritDoc} */

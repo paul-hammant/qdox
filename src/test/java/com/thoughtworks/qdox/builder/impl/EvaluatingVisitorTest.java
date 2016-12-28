@@ -551,7 +551,7 @@ public class EvaluatingVisitorTest
         JavaParameter annotatedParameter = mock( JavaParameter.class );
         ref = new FieldRef( "fieldname" );
         ref.setContext( annotatedParameter );
-        when( annotatedParameter.getParentClass() ).thenReturn( declaringClass );
+        when( annotatedParameter.getDeclaringClass() ).thenReturn( declaringClass );
         assertSame( EvaluatingVisitorStub.fieldReferenceValue, visitor.visit( ref ) );
         
         JavaPackage annotatedPackage = mock( JavaPackage.class );

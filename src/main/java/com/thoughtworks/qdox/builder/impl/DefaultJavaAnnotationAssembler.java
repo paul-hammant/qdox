@@ -145,7 +145,7 @@ public class DefaultJavaAnnotationAssembler
         }
         return TypeAssembler.createUnresolved( typeDef,
                                                dimensions,
-                                               parent.getParentClass() != null ? parent.getParentClass()
+                                               parent.getDeclaringClass() != null ? parent.getDeclaringClass()
                                                                : parent.getSource() );
     }
     

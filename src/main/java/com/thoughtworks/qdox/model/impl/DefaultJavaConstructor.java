@@ -64,9 +64,9 @@ public class DefaultJavaConstructor
         {
             result.append( "public " );
         }
-        if ( getParentClass() != null )
+        if ( getDeclaringClass() != null )
         {
-            result.append( getParentClass().getFullyQualifiedName() );
+            result.append( getDeclaringClass().getFullyQualifiedName() );
         }
         result.append( "(" );
         for ( Iterator<JavaParameter> paramIter = getParameters().iterator(); paramIter.hasNext();)

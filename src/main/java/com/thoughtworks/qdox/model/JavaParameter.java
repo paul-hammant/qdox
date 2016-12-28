@@ -54,7 +54,7 @@ public interface JavaParameter extends JavaAnnotatedElement, JavaType
      * 
      * @return the declaring class of the declaring method
      */
-    JavaClass getParentClass();
+    JavaClass getDeclaringClass();
 
     /**
      * Is this a Java 5 var args type specified using three dots. e.g. <code>void doStuff(Object... thing)</code>

@@ -27,11 +27,6 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     // deprecated methods
     // will be removed with QDox-2.0
     /**
-     * @deprecated use {@link #getDeclaringClass()} instead
-     */
-    JavaClass getParentClass();
-
-    /**
      * 
      * @return the return type
      */

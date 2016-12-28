@@ -55,12 +55,14 @@ public class JavaMethodDelegate implements JavaMethod
         JavaType result = originalMethod.getReturnType( resolve );
         
         if (result != null) {
+            String originalValue = result.getValue();
+            
             result =  DefaultJavaType.resolve( result, originalMethod.getParentClass(), callingClass );
             
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
             {
-                result = new DefaultJavaType( "java.lang.Object", 0, callingClass );
+                result = new DefaultJavaType( "java.lang.Object", originalValue, 0, callingClass );
             }
         }
         
@@ -323,12 +325,4 @@ public class JavaMethodDelegate implements JavaMethod
     {
         return originalMethod.getParentClass();
     }
-
-    public JavaClass getGenericReturnType()
-    {
-        return originalMethod.getGenericReturnType();
-    }
-
-
-
 }

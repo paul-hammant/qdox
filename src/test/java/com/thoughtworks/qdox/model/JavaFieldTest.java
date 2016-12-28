@@ -104,30 +104,6 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
         assertEquals(expected, fld.getCodeBlock());
     }
     
-    public void testShouldReturnFieldNameForCallSignature() throws Exception {
-        F fld = newJavaField();
-        setName(fld, "count");
-        setType(fld, newJavaClass("int"));
-        setModifiers(fld, Arrays.asList(new String[]{"public", "final"}));
-        assertEquals("count", fld.getCallSignature());
-    }
-
-    public void testShouldReturnProperDeclarationSignatureWithModifiers() throws Exception {
-        F fld = newJavaField();
-        setName(fld, "count");
-        setType(fld, newJavaClass("int"));
-        setModifiers(fld, Arrays.asList(new String[]{"public", "final"}));
-        assertEquals("public final int count", fld.getDeclarationSignature(true));
-    }
-
-    public void testShouldReturnProperDeclarationSignatureWithoutModifiers() throws Exception {
-        F fld = newJavaField();
-        setName(fld, "count");
-        setType(fld, newJavaClass("int"));
-        setModifiers(fld, Arrays.asList(new String[]{"public", "final"}));
-        assertEquals("int count", fld.getDeclarationSignature(false));
-    }
-    
     public void testToStringThreadMIN_PRIORITY() throws Exception {
     	JavaClass cls = mock(JavaClass.class);
     	when(cls.getFullyQualifiedName()).thenReturn( "java.lang.Thread" );

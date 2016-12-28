@@ -67,11 +67,6 @@ public interface JavaSource extends JavaClassParent
     String getCodeBlock();
 
     /**
-     * @deprecated use {@link #resolveCanonicalName(String)} or {@link #resolveFullyQualifiedName(String)} instead
-     */
-    String resolveType( String typeName );
-
-    /**
      * If there's a package, return the packageName, followed by a dot, otherwise an empty String
      * 
      * @return the class name prefix, otherwise an empty String

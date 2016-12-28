@@ -279,7 +279,7 @@ public class GenericsTest extends TestCase {
         builder.addSource( new StringReader( superSource ) );
         builder.addSource( new StringReader( subSource ) );
         JavaMethod method = builder.getClassByName( "StringTest" ).getMethodBySignature( "getValue", null, true );
-        assertEquals( "T", method.getGenericReturnType().getFullyQualifiedName() );
+        assertEquals( "T", method.getReturnType(false).getValue() );
         assertEquals( "java.lang.Object", method.getReturnType().getFullyQualifiedName() );
         assertEquals( "java.lang.Object", method.getReturnType( false ).getFullyQualifiedName() );
         assertEquals( "java.lang.String", method.getReturnType( true ).getFullyQualifiedName() );

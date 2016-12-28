@@ -399,12 +399,6 @@ public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod 
     }
 
     /** {@inheritDoc} */
-    public JavaClass getGenericReturnType()
-    {
-        return returns;
-    }
-
-    /** {@inheritDoc} */
     public JavaType getReturnType()
     {
         return getReturnType( false );

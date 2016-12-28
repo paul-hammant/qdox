@@ -295,16 +295,6 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     }
 
     /**
-     *  
-     * @return this
-     * @deprecated Type already has the JavaClass interface
-     */
-    public JavaClass getJavaClass()
-    {
-        return this;
-    }
-
-    /**
      * @since 1.3
      */
     public boolean isA( JavaType type )
@@ -347,21 +337,6 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         return "void".equals(getValue());
     }
 
-//    String superSource = "public abstract class Test<T> {\n" + 
-//    "        private T me;\n" + 
-//    "        public Test(T me) {\n" + 
-//    "            this.me = me;\n" + 
-//    "        }\n" + 
-//    "        public T getValue() {\n" + 
-//    "            return me;\n" + 
-//    "        }\n" + 
-//    "    }";
-//String subSource = "public class StringTest extends Test<String> {\n" + 
-//    "        public StringTest(String s) {\n" + 
-//    "            super(s);\n" + 
-//    "        }\n" + 
-//    "    }";
-    
     /**
      *  Consider the following example
      *  

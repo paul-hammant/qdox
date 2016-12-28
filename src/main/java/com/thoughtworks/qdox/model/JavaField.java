@@ -48,12 +48,6 @@ public interface JavaField extends JavaAnnotatedElement, JavaMember, JavaModel
      */
     String getCodeBlock();
 
-    @Deprecated
-    String getDeclarationSignature( boolean withModifiers );
-
-    @Deprecated
-    String getCallSignature();
-
     /**
      * Get the original expression used to initialize the field.
      *

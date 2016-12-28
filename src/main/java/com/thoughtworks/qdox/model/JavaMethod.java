@@ -26,16 +26,6 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     
     // deprecated methods
     // will be removed with QDox-2.0
-
-    /**
-     * Equivalent of java.lang.reflect.Method.getGenericReturnType()
-     * 
-     * @return the generic return type
-     * @since 1.12
-     * @deprecated use {@link #getReturnType()} instead, this one holds generic information
-     */
-    JavaClass getGenericReturnType();
-
     /**
      * @deprecated use {@link #getDeclaringClass()} instead
      */

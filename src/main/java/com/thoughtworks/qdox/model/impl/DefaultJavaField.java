@@ -79,30 +79,6 @@ public class DefaultJavaField
     }
 
     /** {@inheritDoc} */
-    public String getDeclarationSignature( boolean withModifiers )
-    {
-        StringBuilder result = new StringBuilder();
-        if ( withModifiers )
-        {
-            for ( String modifier : getModifiers() )
-            {
-                result.append( modifier );
-                result.append( ' ' );
-            }
-        }
-        result.append( type.getCanonicalName() );
-        result.append( ' ' );
-        result.append( getName() );
-        return result.toString();
-    }
-
-    /** {@inheritDoc} */
-    public String getCallSignature()
-    {
-        return getName();
-    }
-
-    /** {@inheritDoc} */
     public String getInitializationExpression()
     {
         return initializationExpression;
@@ -164,6 +140,7 @@ public class DefaultJavaField
         {
             result.append( "public " );
         }
+        
         if ( isStatic() )
         {
             result.append( "static " );

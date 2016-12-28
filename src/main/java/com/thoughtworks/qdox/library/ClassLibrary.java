@@ -39,7 +39,7 @@ public interface ClassLibrary
     /**
      * Check if this library holds a reference based on the name.
      * 
-     * @param name the Fully Qualified Name trying to resolve
+     * @param name the (binary) name trying to resolve
      * @return true if the classLibrary has a reference, otherwise <code>false</code>
      */
     boolean hasClassReference( String name );
@@ -47,16 +47,16 @@ public interface ClassLibrary
     /**
      * Get the JavaClass or null if it's not possible
      * 
-     * @param name The fully qualified name of the JavaClass
+     * @param name The (binary) name of the JavaClass
      * @return the JavaClass, otherwise <code>null</code>
      */
     JavaClass getJavaClass( String name );
 
     /**
-     * Try to retrieve the JavaClass by a fully qualified name.
+     * Try to retrieve the JavaClass by the (binary) name.
      * If the JavaClss doesn't exist and createStub is <code>true</code> make a stub, otherwise return <code>null</code>
      * 
-     * @param name the fully qualified name of the class
+     * @param name the name of the class
      * @param createStub force creation of a stub if the class can't be found
      * @return the JavaClass, might be <code>null</code> depending on the value of createStub. 
      */

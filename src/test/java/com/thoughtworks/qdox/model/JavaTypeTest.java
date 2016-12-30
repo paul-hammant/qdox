@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import static org.hamcrest.core.IsNot.*;
 import org.junit.Test;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 public abstract class JavaTypeTest<T extends JavaType>
@@ -13,6 +15,10 @@ public abstract class JavaTypeTest<T extends JavaType>
 
     public abstract T newType( String fullname, int dimensions );
 
+    public abstract T newType( String fullname, int dimensions, JavaSource source );
+    
+    public abstract JavaSource newJavaSource( ClassLibrary library );
+    
     @Test
     public void testToString()
         throws Exception
@@ -35,8 +41,9 @@ public abstract class JavaTypeTest<T extends JavaType>
     public void testEquals()
         throws Exception
     {
-        assertEquals( newType( "string" ), newType( "string" ) );
-        assertThat( newType( "string" ), not( newType( "int" ) ) );
+        JavaSource javaSource = newJavaSource( new OrderedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary() );
+        assertEquals( newType( "string", 0, javaSource ), newType( "string", 0, javaSource ) );
+        assertThat( newType( "string", 0, javaSource ), not( newType( "int" ) ) );
         assertThat( newType( "long", 1 ), not( newType( "long" ) ) );
         assertThat( newType( "long" ), not( newType( "long", 2 ) ) );
         assertFalse( newType( "int" ).equals( null ) );

@@ -93,7 +93,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 	
     /** {@inheritDoc} */
     public String getFullyQualifiedName() {
-        StringBuilder result = new StringBuilder( isResolved() ? fullName.replaceAll( "\\$", "." ) : name );
+        StringBuilder result = new StringBuilder( resolveRealClass().getFullyQualifiedName() );
         for (int i = 0; i < dimensions; i++) 
         {
             result.append("[]");
@@ -276,7 +276,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     
     private JavaClass resolveRealClass() 
     {
-        JavaClass result;
+        JavaClass result = null;
         String qualifiedName = isResolved() ? fullName : name;
         if ( isPrimitive( qualifiedName ) )
         {
@@ -284,7 +284,10 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         }
         else
         {
-            result = getJavaClassParent().getNestedClassByName( qualifiedName );
+            if (getJavaClassParent() != null)
+            {
+                result = getJavaClassParent().getNestedClassByName( qualifiedName );
+            }
             if ( result == null )
             {
                 result = getJavaClassLibrary().getJavaClass( qualifiedName, true );

@@ -11,6 +11,7 @@ import java.util.Collections;
 import org.junit.Test;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaTypeTest;
 
@@ -61,6 +62,8 @@ public class DefaultTypeTest
     {
         JavaSource src = mock( JavaSource.class );
         when( src.getImports() ).thenReturn( Collections.singletonList( "foo.*" ) );
+        when( src.getJavaClassLibrary() ).thenReturn( new OrderedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary() );
+        
         DefaultJavaType type = new DefaultJavaType( "Bar", src );
         assertEquals( false, type.isResolved() );
 

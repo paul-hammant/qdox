@@ -203,7 +203,20 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     {
         if ( fullName == null && context != null )
         {
-            fullName = context.resolveType( name );
+            if (context instanceof JavaSource)
+            {
+                JavaSource javaSource = (JavaSource) context;
+                fullName = TypeResolver.byPackageName( javaSource.getPackageName(), javaSource.getJavaClassLibrary(), javaSource.getImports() ).resolveType( name );
+            }
+            else if(context  instanceof JavaClass)
+            {
+                JavaClass javaClass = (JavaClass) context;
+                fullName = TypeResolver.byClassName( javaClass.getBinaryName(), javaClass.getJavaClassLibrary(), javaClass.getSource().getImports() ).resolveType( name );
+            }
+            else
+            {
+              throw new UnsupportedOperationException();    
+            }
         }
         return ( fullName != null );
     }
@@ -439,11 +452,6 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         return type instanceof JavaClass ? ( (JavaClass) type ).getDimensions() : 0;
     }
     
-    private static JavaClass getDeclaringClass( JavaType type )
-    {
-        return type instanceof JavaClass ? ( (JavaClass) type ).getDeclaringClass() : null;
-    }
-
     private static int getTypeVariableIndex( JavaClass declaringClass, String fqn )
     {
         int typeIndex = -1;
@@ -905,11 +913,6 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     public JavaClassParent getParent()
     {
         return context;
-    }
-
-    public String resolveType( String name )
-    {
-        return resolveRealClass().resolveType( name );
     }
     
     public JavaClassParent getJavaClassParent() {

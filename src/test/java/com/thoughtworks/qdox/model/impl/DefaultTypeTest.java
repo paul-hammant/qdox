@@ -55,21 +55,4 @@ public class DefaultTypeTest
         assertEquals( "int", newType( "int", 1 ).getComponentType().getFullyQualifiedName() );
         assertEquals( "long", newType( "long", 3 ).getComponentType().getFullyQualifiedName() );
     }
-
-    @Test
-    public void testResolving()
-        throws Exception
-    {
-        JavaSource src = mock( JavaSource.class );
-        when( src.getImports() ).thenReturn( Collections.singletonList( "foo.*" ) );
-        when( src.getJavaClassLibrary() ).thenReturn( new OrderedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary() );
-        
-        DefaultJavaType type = new DefaultJavaType( "Bar", src );
-        assertEquals( false, type.isResolved() );
-
-        when( src.resolveType( "Bar" ) ).thenReturn( "foo.Bar" );
-        assertEquals( true, type.isResolved() );
-        assertEquals( "Bar", type.getValue() );
-        assertEquals( "foo.Bar", type.getFullyQualifiedName() );
-    }
 }

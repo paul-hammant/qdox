@@ -669,14 +669,6 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testResolveTypeDefaultsToParentScope()
-        throws Exception
-    {
-        setName( cls, "X" );
-        assertEquals( "int", cls.resolveType( "int" ) );
-    }
-
-    @Test
     public void testGetBeanPropertiesReturnsEmptyForEmptyClass() throws Exception {
         assertEquals(0, cls.getBeanProperties().size());
     }

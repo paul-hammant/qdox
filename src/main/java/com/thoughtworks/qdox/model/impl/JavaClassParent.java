@@ -27,13 +27,7 @@ import com.thoughtworks.qdox.model.JavaSource;
  */
 public interface JavaClassParent {
 
-    /**
-     * Resolve a type-name within the context of this source or class.
-     * @param typeName name of a type
-     * @return the fully-qualified name of the type, or null if it cannot
-     *     be resolved
-     */
-    String resolveType(String typeName);
+
     
     JavaSource getParentSource();
 

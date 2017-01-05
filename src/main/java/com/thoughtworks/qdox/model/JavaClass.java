@@ -47,11 +47,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
     JavaClassParent getParent();
 
     /**
-     * @deprecated use {@link #resolveCanonicalName(String)} or {@link #resolveFullyQualifiedName(String)} instead
-     */
-    String resolveType( String name );
-
-    /**
      * (API description of {@link java.lang.Class#isInterface()})
      * <p>
      * Determines if the specified <code>Class</code> object represents an interface type.

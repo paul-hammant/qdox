@@ -40,6 +40,7 @@ import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
+import com.thoughtworks.qdox.type.TypeResolver;
 
 public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 

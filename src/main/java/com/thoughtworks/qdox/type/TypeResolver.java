@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model.impl;
+package com.thoughtworks.qdox.type;
 
 import java.util.Collection;
 import java.util.HashMap;

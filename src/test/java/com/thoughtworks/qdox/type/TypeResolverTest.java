@@ -1,4 +1,4 @@
-package com.thoughtworks.qdox.model.impl;
+package com.thoughtworks.qdox.type;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.type.TypeResolver;
 
 public class TypeResolverTest
 {

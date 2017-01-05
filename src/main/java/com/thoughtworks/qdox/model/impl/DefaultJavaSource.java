@@ -30,6 +30,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaModelUtils;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.type.TypeResolver;
 import com.thoughtworks.qdox.writer.ModelWriter;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 import com.thoughtworks.qdox.writer.impl.DefaultModelWriter;

@@ -38,6 +38,7 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.type.TypeResolver;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>

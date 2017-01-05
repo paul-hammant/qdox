@@ -1,12 +1,15 @@
 package com.thoughtworks.qdox;
 
+import java.io.File;
 import java.io.StringReader;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+
+import junit.framework.TestCase;
 
 
 public class EnumsModelTest extends TestCase {
@@ -120,7 +123,7 @@ public class EnumsModelTest extends TestCase {
         //---
     }
     
-    public void testAddEnumWithFieldAndConstructorsToModel() {
+    public void testAddEnumWithFieldAndConstructorsToModelSource() {
 
         String source = ""
                 + "class X {\n"
@@ -162,6 +165,37 @@ public class EnumsModelTest extends TestCase {
         JavaField enum1d = fields.get(1);
         assertNull( enum1d.getComment() );
         assertEquals( 0, enum1d.getModifiers().size() );
+        assertEquals( "X$EnumWithConstructors", enum1d.getType().getBinaryName() );
+        assertEquals( "X.EnumWithConstructors", enum1d.getType().getFullyQualifiedName() );
+        assertEquals( "d", enum1d.getName() );
+
+        //---
+    }
+    
+    public void testAddEnumWithFieldAndConstructorsToModelBinary() throws Exception
+    {
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addClassLoader( new URLClassLoader( new URL[] { new File("target/test-classes/").toURI().toURL() } )  );
+        
+        JavaClass cls = javaDocBuilder.getClassByName("X$EnumWithConstructors");
+        assertTrue(cls.isEnum());
+        assertEquals("int", cls.getFieldByName("someField").getType().getValue()); // sanity check
+        
+        //---
+
+        List<JavaField> fields = cls.getFields();
+        
+        JavaField enum1c = fields.get(0);
+        assertNull( enum1c.getComment() );
+        assertEquals( 0, enum1c.getAnnotations().size() );
+        assertEquals( "X$EnumWithConstructors", enum1c.getType().getBinaryName() );
+        assertEquals( "X.EnumWithConstructors", enum1c.getType().getFullyQualifiedName() );
+        assertEquals( "c", enum1c.getName() );
+
+        //---
+        
+        JavaField enum1d = fields.get(1);
+        assertNull( enum1d.getComment() );
         assertEquals( "X$EnumWithConstructors", enum1d.getType().getBinaryName() );
         assertEquals( "X.EnumWithConstructors", enum1d.getType().getFullyQualifiedName() );
         assertEquals( "d", enum1d.getName() );

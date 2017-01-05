@@ -369,17 +369,7 @@ public class DefaultJavaClass
     /** {@inheritDoc} */
     public String resolveType( String typeName )
     {
-        String result;
-        JavaClass resolvedClass = getNestedClassByName( typeName );
-        if ( resolvedClass != null )
-        {
-            result = resolvedClass.getBinaryName();
-        }
-        else
-        {
-            result = getParent().resolveType( typeName );
-        }
-        return result;
+        return TypeResolver.byClassName( getBinaryName(), getJavaClassLibrary(), getSource().getImports() ).resolveType( typeName );
     }
 
     /** {@inheritDoc} */
@@ -646,6 +636,7 @@ public class DefaultJavaClass
     /** {@inheritDoc} */
     public JavaClass getNestedClassByName( String name )
     {
+        
         int separatorIndex = name.indexOf( '.' );
         String directInnerClassName = ( separatorIndex > 0 ? name.substring( 0, separatorIndex ) : name );
         for ( JavaClass jClass : getNestedClasses() )

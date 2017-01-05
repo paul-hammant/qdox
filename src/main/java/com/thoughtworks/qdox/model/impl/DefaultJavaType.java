@@ -284,14 +284,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         }
         else
         {
-            if (getJavaClassParent() != null)
-            {
-                result = getJavaClassParent().getNestedClassByName( qualifiedName );
-            }
-            if ( result == null )
-            {
-                result = getJavaClassLibrary().getJavaClass( qualifiedName, true );
-            }
+            result = getJavaClassLibrary().getJavaClass( qualifiedName, true );
         }
 
         return result;

@@ -22,12 +22,8 @@ package com.thoughtworks.qdox.model.impl;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -40,27 +36,12 @@ import com.thoughtworks.qdox.writer.impl.DefaultModelWriter;
 
 public class DefaultJavaSource implements JavaSource, Serializable {
 
-    private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>();
-
-    static {
-        PRIMITIVE_TYPES.add("boolean");
-        PRIMITIVE_TYPES.add("byte");
-        PRIMITIVE_TYPES.add("char");
-        PRIMITIVE_TYPES.add("double");
-        PRIMITIVE_TYPES.add("float");
-        PRIMITIVE_TYPES.add("int");
-        PRIMITIVE_TYPES.add("long");
-        PRIMITIVE_TYPES.add("short");
-        PRIMITIVE_TYPES.add("void");
-    }
-
     private final ClassLibrary classLibrary;
     private ModelWriterFactory modelWriterFactory;
     
     private JavaPackage pkg;
     private List<String> imports = new LinkedList<String>();
     private List<JavaClass> classes = new LinkedList<JavaClass>();
-    private Map<String, String> resolvedTypeCache = new HashMap<String, String>();
     private URL url;
 
     /**
@@ -125,173 +106,9 @@ public class DefaultJavaSource implements JavaSource, Serializable {
     /**  {@inheritDoc} */
     public String resolveType( String typeName )
     {
-        String result = resolvedTypeCache.get( typeName );
-        if ( result == null )
-        {
-            result = resolveTypeInternal( typeName );
-            if ( result != null )
-            {
-                resolvedTypeCache.put( typeName, result );
-            }
-        }
-        return result;
+        return TypeResolver.byPackageName( pkg == null ? null : pkg.getName(), getJavaClassLibrary(), getImports() ).resolveType( typeName );
     }
     
-    /**
-     * Resolves a type name
-     * <p>
-     * Follows the <a href="http://java.sun.com/docs/books/jls/third_edition/html/packages.html#7.5.1">
-     * Java Language Specification, Version 3.0</a>.
-     * <p>
-     * Current resolution order is:
-     * <ol>
-     * <li>Single-Type-Import Declaration</li>
-     * <li>Type-Import-on-Demand Declaration</li>
-     * <li>Automatic Imports</li>
-     * </ol>
-     * 
-     * @param typeName the name to resolve
-     * @return the resolved type name, otherwise <code>null</code>
-     */
-    private String resolveTypeInternal( String typeName )
-    {
-        String resolvedName = null;
-
-        lookup:
-        {
-            // primitive types
-            if ( PRIMITIVE_TYPES.contains( typeName ) )
-            {
-                resolvedName = typeName;
-                break lookup;
-            }
-
-            String outerName = typeName;
-            String nestedName = typeName.replace( '.', '$' );
-            int dotpos = typeName.indexOf( '.' );
-
-            if ( dotpos >= 0 )
-            {
-                outerName = typeName.substring( 0, dotpos );
-            }
-
-            // Check single-type-import with fully qualified name
-            resolvedName = resolveImportedType( typeName, nestedName, true );
-
-            if ( resolvedName != null )
-            {
-                break lookup;
-            }
-
-            // Check single-type-import with outer name
-            resolvedName = resolveImportedType( outerName, nestedName, false );
-
-            if ( resolvedName != null )
-            {
-                break lookup;
-            }
-
-            // check for class in the same package
-            if ( getPackage() != null )
-            {
-                resolvedName = resolveFullyQualifiedType( getPackageName() + '.' + typeName );
-
-                if ( resolvedName != null )
-                {
-                    break lookup;
-                }
-            }
-
-            // check for a class globally
-            resolvedName = resolveFullyQualifiedType( typeName );
-
-            if ( resolvedName != null )
-            {
-                break lookup;
-            }
-
-            // check for a class in the same package
-            resolvedName = resolveFromLibrary( getClassNamePrefix() + nestedName );
-            if ( resolvedName != null )
-            {
-                break lookup;
-            }
-
-            // try java.lang.*
-            resolvedName = resolveFromLibrary( "java.lang." + nestedName );
-            if ( resolvedName != null )
-            {
-                break lookup;
-            }
-
-            // Check type-import-on-demand
-            resolvedName = resolveImportedType( "*", nestedName, false );
-
-            if ( resolvedName != null )
-            {
-                break lookup;
-            }
-        }
-
-        return resolvedName;
-    }
-    
-    private String resolveImportedType( String importSpec, String typeName, boolean fullMatch )
-    {
-        String resolvedName = null;
-        String dotSuffix = "." + importSpec;
-
-        for ( String imprt : getImports() )
-        {
-            // static imports can refer to inner classes
-            if ( imprt.startsWith( "static " ) )
-            {
-                imprt = imprt.substring( 7 );
-            }
-            if ( imprt.equals( importSpec ) || ( !fullMatch && imprt.endsWith( dotSuffix ) ) )
-            {
-                String candidateName = imprt.equals(importSpec) ? imprt
-                                : imprt.substring(0, imprt.length() - importSpec.length()) + typeName;
-
-                resolvedName = resolveFullyQualifiedType( candidateName );
-                if ( resolvedName == null && !"*".equals( importSpec ) )
-                {
-                    resolvedName = candidateName;
-                }
-                if ( resolvedName != null )
-                {
-                    break;
-                }
-            }
-        }
-
-        return resolvedName;
-    }
-    
-    private String resolveFromLibrary(String typeName) {
-        return classLibrary.hasClassReference( typeName ) ? typeName : null;
-    }
-    
-    private String resolveFullyQualifiedType(String typeName) {
-        int indexOfLastDot = typeName.lastIndexOf('.');
-        
-        if (indexOfLastDot >= 0) {
-            String root = typeName.substring(0,indexOfLastDot);
-            String leaf = typeName.substring(indexOfLastDot+1);
-            String resolvedTypeName = resolveFullyQualifiedType(root + '$' + leaf);
-            
-            if(resolvedTypeName != null) {
-                return resolvedTypeName;
-            }
-        }
-
-        if( classLibrary.hasClassReference( typeName )) 
-        {
-            return typeName;
-        }
-        return null;
-    }
-
     /**  {@inheritDoc} */
     public String getClassNamePrefix() {
         return ( pkg == null ? "" : pkg.getName() + '.' ); 

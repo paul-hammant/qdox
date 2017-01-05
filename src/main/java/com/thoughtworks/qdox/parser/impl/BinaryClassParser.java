@@ -50,11 +50,10 @@ public class BinaryClassParser
     {
         try
         {
-            String name = declaringClazz.getName();
-
-            // Set the package name and class name
-            String packageName = getPackageName( name );
-            binaryBuilder.addPackage( new PackageDef( packageName ) );
+            if(declaringClazz.getPackage() != null)
+            {
+                binaryBuilder.addPackage( new PackageDef( declaringClazz.getPackage().getName() ) );
+            }
 
             addClass( declaringClazz );
 
@@ -69,12 +68,20 @@ public class BinaryClassParser
     private void addClass( Class<?> clazz )
     {
         ClassDef classDef = new ClassDef( clazz.getSimpleName() );
-
+        
         // Set the extended class and interfaces.
         Class<?>[] interfaces = clazz.getInterfaces();
-        if ( clazz.isInterface() )
+        
+        if ( clazz.isEnum() )
         {
-            // It's an interface
+            classDef.setType( ClassDef.ENUM );
+        }
+        else if ( clazz.isAnnotation() )
+        {
+            classDef.setType( ClassDef.ANNOTATION_TYPE );
+        }
+        else if ( clazz.isInterface() )
+        {
             classDef.setType( ClassDef.INTERFACE );
             for ( int i = 0; i < interfaces.length; i++ )
             {
@@ -84,7 +91,6 @@ public class BinaryClassParser
         }
         else
         {
-            // It's a class
             for ( int i = 0; i < interfaces.length; i++ )
             {
                 Class<?> anInterface = interfaces[i];
@@ -134,7 +140,6 @@ public class BinaryClassParser
         {
             addClass( classes[i] );
         }
-        
 
         binaryBuilder.endClass();
     }
@@ -221,11 +226,5 @@ public class BinaryClassParser
     private static TypeDef getTypeDef( Class<?> c )
     {
         return new TypeDef( getTypeName( c ) );
-    }
-
-    private String getPackageName( String fullClassName )
-    {
-        int lastDot = fullClassName.lastIndexOf( '.' );
-        return lastDot == -1 ? "" : fullClassName.substring( 0, lastDot );
     }
 }

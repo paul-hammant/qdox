@@ -675,19 +675,6 @@ public abstract class JavaClassTest<C extends JavaClass> {
         setName( cls, "X" );
         assertEquals( "int", cls.resolveType( "int" ) );
     }
-    
-    @Test
-    public void testResolveTypeInnerClass() throws Exception {
-        setPackage(src, newJavaPackage("p"));
-        setName(cls, "X");
-        JavaClass innerClass = mock(JavaClass.class );
-        when( innerClass.getName() ).thenReturn( "DogFood" );
-        when( innerClass.getBinaryName() ).thenReturn( "p.X$DogFood" );
-        setClasses(cls, Collections.singletonList( innerClass ) );
-        
-        assertEquals("p.X$DogFood", cls.resolveType("DogFood"));
-        assertEquals(null, cls.resolveType("Food"));
-    }
 
     @Test
     public void testGetBeanPropertiesReturnsEmptyForEmptyClass() throws Exception {

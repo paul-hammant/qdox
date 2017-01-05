@@ -1,8 +1,6 @@
 package com.thoughtworks.qdox.model.impl;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaSource;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,12 +24,6 @@ import com.thoughtworks.qdox.model.JavaSource;
  * @deprecated this interface will be hidden for the model interfaces
  */
 public interface JavaClassParent {
-
-
-    
-    JavaSource getParentSource();
-
-    JavaClass getNestedClassByName(String name);
     
     ClassLibrary getJavaClassLibrary(); 
     

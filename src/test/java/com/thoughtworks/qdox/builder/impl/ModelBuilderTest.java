@@ -329,8 +329,6 @@ public class ModelBuilderTest extends TestCase {
         JavaMethod doSomething = source.getClasses().get(0).getMethods().get(0);
         assertEquals("doSomething", doSomething.getName());
         assertEquals("void", doSomething.getReturns().getValue());
-        JavaSource parentSource = doSomething.getReturns().getParent().getParentSource();
-        assertSame(source, parentSource);
         assertEquals(0, doSomething.getModifiers().size());
         assertEquals(0, doSomething.getParameters().size());
         assertEquals(0, doSomething.getExceptions().size());

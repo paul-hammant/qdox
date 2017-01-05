@@ -204,22 +204,29 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     {
         if ( fullName == null && context != null )
         {
-            if (context instanceof JavaSource)
-            {
-                JavaSource javaSource = (JavaSource) context;
-                fullName = TypeResolver.byPackageName( javaSource.getPackageName(), javaSource.getJavaClassLibrary(), javaSource.getImports() ).resolveType( name );
-            }
-            else if(context  instanceof JavaClass)
-            {
-                JavaClass javaClass = (JavaClass) context;
-                fullName = TypeResolver.byClassName( javaClass.getBinaryName(), javaClass.getJavaClassLibrary(), javaClass.getSource().getImports() ).resolveType( name );
-            }
-            else
-            {
-              throw new UnsupportedOperationException();    
-            }
+            fullName = getTypeResolver().resolveType( name );
         }
         return ( fullName != null );
+    }
+
+    private TypeResolver getTypeResolver()
+    {
+        TypeResolver typeResolver;
+        if (context instanceof JavaSource)
+        {
+            JavaSource javaSource = (JavaSource) context;
+            typeResolver = TypeResolver.byPackageName( javaSource.getPackageName(), javaSource.getJavaClassLibrary(), javaSource.getImports() );
+        }
+        else if(context  instanceof JavaClass)
+        {
+            JavaClass javaClass = (JavaClass) context;
+            typeResolver = TypeResolver.byClassName( javaClass.getBinaryName(), javaClass.getJavaClassLibrary(), javaClass.getSource().getImports() );
+        }
+        else
+        {
+          throw new UnsupportedOperationException();    
+        }
+        return typeResolver;
     }
 
     /**
@@ -435,7 +442,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
             }
             DefaultJavaParameterizedType typeResult =
                 new DefaultJavaParameterizedType( concreteClassName, value, getDimensions( base ),
-                          ((DefaultJavaType)base).getJavaClassParent() );
+                          ((DefaultJavaType)base).getParent() );
 
             List<JavaType> actualTypes = new LinkedList<JavaType>();
             for ( JavaType actualArgType : actualTypeArguments )
@@ -916,7 +923,4 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         return context;
     }
     
-    public JavaClassParent getJavaClassParent() {
-        return context;
-    }
 }

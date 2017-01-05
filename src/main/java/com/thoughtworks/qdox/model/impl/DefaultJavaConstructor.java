@@ -16,7 +16,7 @@ import com.thoughtworks.qdox.model.JavaTypeVariable;
  * @since 2.0
  */
 public class DefaultJavaConstructor
-    extends AbstractBaseMethod implements JavaConstructor
+    extends DefaultJavaExecutable implements JavaConstructor
 {
 
     private List<JavaTypeVariable<JavaConstructor>> typeParameters = Collections.emptyList();

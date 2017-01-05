@@ -4,7 +4,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.ParameterDeclarator;
+import com.thoughtworks.qdox.model.JavaExecutable;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -31,7 +31,7 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
 
     private String name;
     private JavaClass type;
-    private ParameterDeclarator declarator;
+    private JavaExecutable declarator;
     private boolean varArgs;
 
     public DefaultJavaParameter( JavaClass type, String name )
@@ -76,12 +76,12 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     }
 
     /** {@inheritDoc} */
-    public ParameterDeclarator getDeclarator()
+    public JavaExecutable getDeclarator()
     {
         return declarator;
     }
 
-    public void setDeclarator( ParameterDeclarator declarator )
+    public void setDeclarator( JavaExecutable declarator )
     {
         this.declarator = declarator;
     }

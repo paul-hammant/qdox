@@ -31,7 +31,7 @@ import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
 
-public class DefaultJavaMethod extends AbstractBaseMethod implements JavaMethod {
+public class DefaultJavaMethod extends DefaultJavaExecutable implements JavaMethod {
 
     private boolean defaultMethod;
 	private JavaClass returns = DefaultJavaType.VOID;

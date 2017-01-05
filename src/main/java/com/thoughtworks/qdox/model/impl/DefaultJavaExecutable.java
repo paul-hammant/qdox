@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaExecutable;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
@@ -16,8 +17,8 @@ import com.thoughtworks.qdox.model.JavaType;
  * @author Robert Scholte
  *
  */
-public abstract class AbstractBaseMethod
-    extends AbstractInheritableJavaEntity
+public abstract class DefaultJavaExecutable 
+    extends AbstractInheritableJavaEntity implements JavaExecutable
 {
 
     private List<JavaParameter> parameters = Collections.emptyList();

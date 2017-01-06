@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.model.JavaClass;
 
 /**
  * A per JavaClass resolver of types
@@ -73,6 +74,16 @@ public class TypeResolver
         int dotIndex = binaryName.lastIndexOf( '.' );
         String pckg = dotIndex > 0 ? binaryName.substring( 0, dotIndex ) : null;   
         return new TypeResolver( pckg, binaryName, classLibrary, imports );
+    }
+    
+    public JavaClass resolveJavaClass( String typeName )
+    {
+        return classLibrary.getJavaClass( resolveType( typeName ) );
+    }
+
+    public JavaClass getJavaClass( String binaryName )
+    {
+        return classLibrary.getJavaClass( binaryName );
     }
 
     public String resolveType( String typeName )

@@ -31,7 +31,7 @@ public class DefaultTypeTest
 
     public DefaultJavaType newType( String fullname, int dimensions )
     {
-        return new DefaultJavaType( fullname, dimensions );
+        return new DefaultJavaType( fullname, dimensions, null );
     }
 
     public DefaultJavaType newType( String fullname, int dimensions, JavaSource source )

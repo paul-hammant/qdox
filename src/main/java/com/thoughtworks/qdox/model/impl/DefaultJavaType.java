@@ -51,10 +51,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     protected String fullName;
     private int dimensions;
     
-    DefaultJavaType( String name, JavaClassParent context )
+    private TypeResolver typeResolver;
+    
+    DefaultJavaType( String name, TypeResolver typeResolver )
     {
         this.name = name;
-        this.context = context;
+        this.typeResolver = typeResolver;
     }
     
     DefaultJavaType(String fullName, String name, int dimensions, JavaClassParent context) {
@@ -65,11 +67,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     }
     
     DefaultJavaType(String fullName, int dimensions, JavaClassParent context) {
-        this(fullName, (String) null, dimensions, context);
-    }
-
-    DefaultJavaType(String fullName, int dimensions) {
-        this(fullName, dimensions, null);
+        this(fullName, null, dimensions, context);
     }
 
     /**
@@ -79,7 +77,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
      */
     DefaultJavaType( String fullName ) 
     {
-        this( fullName, 0 );
+        this( fullName, 0, null );
     }
     
 	public String getBinaryName()
@@ -211,6 +209,11 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 
     private TypeResolver getTypeResolver()
     {
+        if(typeResolver != null)
+        {
+            return typeResolver;
+        }
+        
         TypeResolver typeResolver;
         if (context instanceof JavaSource)
         {
@@ -303,11 +306,14 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         {
             result = new DefaultJavaClass( qualifiedName );
         }
+        else if (typeResolver != null)
+        {
+            result = typeResolver.getJavaClass( qualifiedName );
+        }
         else
         {
             result = getJavaClassLibrary().getJavaClass( qualifiedName, true );
         }
-
         return result;
     }
 

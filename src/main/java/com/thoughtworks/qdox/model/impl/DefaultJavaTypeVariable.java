@@ -28,6 +28,7 @@ import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
+import com.thoughtworks.qdox.type.TypeResolver;
 
 /**
  * Equivalent of {@link java.lang.reflect.TypeVariable}
@@ -42,34 +43,11 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     
     private D genericDeclaration;
 
-    public DefaultJavaTypeVariable( String name, D genericDeclaration )
+    public DefaultJavaTypeVariable( String name, TypeResolver typeResolver )
     {
-        super( name, getContext( genericDeclaration ) );
-        this.genericDeclaration = genericDeclaration;
+        super( name, typeResolver );
     }
-
-    private static JavaClass getContext( JavaGenericDeclaration genericDeclaration )
-    {
-        JavaClass result;
-        if ( genericDeclaration instanceof JavaClass )
-        {
-            result = (JavaClass) genericDeclaration;
-        }
-        else if ( genericDeclaration instanceof JavaMethod )
-        {
-            result = ( (JavaMethod) genericDeclaration ).getDeclaringClass();
-        }
-        else if ( genericDeclaration instanceof JavaConstructor )
-        {
-            result = ( (JavaConstructor) genericDeclaration ).getDeclaringClass();
-        }
-        else
-        {
-            throw new IllegalArgumentException( "Unknown JavaGenericDeclaration implementation" );
-        }
-        return result;
-    }
-
+    
     /**
      * @return the bounds
      */

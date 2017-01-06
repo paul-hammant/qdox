@@ -76,6 +76,7 @@ import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
+import com.thoughtworks.qdox.type.TypeResolver;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 /**
@@ -478,7 +479,10 @@ public class ModelBuilder implements Builder {
         {
             return null;
         }
-        DefaultJavaTypeVariable<G> result = new DefaultJavaTypeVariable<G>( typeVariableDef.getName(), genericDeclaration );
+        JavaClass declaringClass = getContext( genericDeclaration );
+        TypeResolver typeResolver = TypeResolver.byClassName( declaringClass.getBinaryName(), declaringClass.getJavaClassLibrary(), declaringClass.getSource().getImports() );
+        
+        DefaultJavaTypeVariable<G> result = new DefaultJavaTypeVariable<G>( typeVariableDef.getName(), typeResolver );
 
         if ( typeVariableDef.getBounds() != null && !typeVariableDef.getBounds().isEmpty() )
         {
@@ -488,6 +492,28 @@ public class ModelBuilder implements Builder {
                 bounds.add( createType( typeDef, 0 ) );
             }
             result.setBounds( bounds );
+        }
+        return result;
+    }
+    
+    private static JavaClass getContext( JavaGenericDeclaration genericDeclaration )
+    {
+        JavaClass result;
+        if ( genericDeclaration instanceof JavaClass )
+        {
+            result = (JavaClass) genericDeclaration;
+        }
+        else if ( genericDeclaration instanceof JavaMethod )
+        {
+            result = ( (JavaMethod) genericDeclaration ).getDeclaringClass();
+        }
+        else if ( genericDeclaration instanceof JavaConstructor )
+        {
+            result = ( (JavaConstructor) genericDeclaration ).getDeclaringClass();
+        }
+        else
+        {
+            throw new IllegalArgumentException( "Unknown JavaGenericDeclaration implementation" );
         }
         return result;
     }

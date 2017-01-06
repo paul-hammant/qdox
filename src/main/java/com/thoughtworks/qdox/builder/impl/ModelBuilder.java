@@ -109,12 +109,15 @@ public class ModelBuilder implements Builder {
 
     private List<TagDef> lastTagSet = new LinkedList<TagDef>();
 
+    private ClassLibrary classLibrary;
+    
     private DocletTagFactory docletTagFactory;
 
     private ModelWriterFactory modelWriterFactory;
 
     public ModelBuilder( ClassLibrary classLibrary, DocletTagFactory docletTagFactory )
     {
+        this.classLibrary = classLibrary;
         this.docletTagFactory = docletTagFactory;
         this.source = new DefaultJavaSource( classLibrary );
         this.currentAnnoDefs = new LinkedList<AnnoDef>();
@@ -480,7 +483,7 @@ public class ModelBuilder implements Builder {
             return null;
         }
         JavaClass declaringClass = getContext( genericDeclaration );
-        TypeResolver typeResolver = TypeResolver.byClassName( declaringClass.getBinaryName(), declaringClass.getJavaClassLibrary(), declaringClass.getSource().getImports() );
+        TypeResolver typeResolver = TypeResolver.byClassName( declaringClass.getBinaryName(), classLibrary, source.getImports() );
         
         DefaultJavaTypeVariable<G> result = new DefaultJavaTypeVariable<G>( typeVariableDef.getName(), typeResolver );
 

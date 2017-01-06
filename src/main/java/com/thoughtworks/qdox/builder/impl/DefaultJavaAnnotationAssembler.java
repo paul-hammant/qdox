@@ -365,7 +365,15 @@ public class DefaultJavaAnnotationAssembler
         FieldRef result;
         String name = annotationFieldRef.getName();
         result = new FieldRef( name );
-        result.setContext( (JavaAnnotatedElement) parent );
+        result.setDeclaringClass( parent.getDeclaringClass() );
+        if(parent.getDeclaringClass() != null)
+        {
+            result.setClassLibrary( parent.getDeclaringClass().getJavaClassLibrary() );
+        }
+        else
+        {
+            result.setClassLibrary( parent.getSource().getJavaClassLibrary() );
+        }
         return result;
     }
 

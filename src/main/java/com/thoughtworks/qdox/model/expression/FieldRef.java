@@ -22,12 +22,8 @@ package com.thoughtworks.qdox.model.expression;
 import java.util.StringTokenizer;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaMember;
-import com.thoughtworks.qdox.model.JavaPackage;
-import com.thoughtworks.qdox.model.JavaParameter;
 
 public class FieldRef
     implements AnnotationValue
@@ -36,7 +32,9 @@ public class FieldRef
 
     private final String name;
 
-    private JavaAnnotatedElement context;
+    private JavaClass declaringClass;
+    
+    private ClassLibrary classLibrary;
 
     private JavaField field;
 
@@ -97,9 +95,14 @@ public class FieldRef
         return getName();
     }
 
-    public void setContext( JavaAnnotatedElement context )
+    public void setDeclaringClass( JavaClass declaringClass )
     {
-        this.context = context;
+        this.declaringClass = declaringClass;
+    }
+    
+    public void setClassLibrary( ClassLibrary classLibrary )
+    {
+        this.classLibrary = classLibrary;
     }
 
     public String getClassPart()
@@ -179,44 +182,11 @@ public class FieldRef
 
     private JavaClass getDeclaringClass()
     {
-        JavaClass result = null;
-        if ( context instanceof JavaMember )
-        {
-            result = ( (JavaMember) context ).getDeclaringClass();
-        }
-        else if ( context instanceof JavaClass )
-        {
-            result = ( (JavaClass) context ).getDeclaringClass();
-        }
-        else if ( context instanceof JavaParameter )
-        {
-            result = ( (JavaParameter) context ).getDeclaringClass();
-        }
-        // else if ( context instanceof JavaPackage )
-        // {
-        // }
-        return result;
+        return declaringClass;
     }
 
     private ClassLibrary getClassLibrary()
     {
-        ClassLibrary result = null;
-        if ( context instanceof JavaPackage )
-        {
-            result = ( (JavaPackage) context ).getJavaClassLibrary();
-        }
-        else if ( context instanceof JavaClass )
-        {
-            result = ( (JavaClass) context ).getJavaClassLibrary();
-        }
-        else
-        {
-            JavaClass declaringClass = getDeclaringClass();
-            if ( declaringClass != null )
-            {
-                result = declaringClass.getJavaClassLibrary();
-            }
-        }
-        return result;
+        return classLibrary;
     }
 }

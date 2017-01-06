@@ -10,11 +10,9 @@ import static org.mockito.Mockito.when;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
@@ -52,7 +50,6 @@ import com.thoughtworks.qdox.model.expression.ShiftRight;
 import com.thoughtworks.qdox.model.expression.Subtract;
 import com.thoughtworks.qdox.model.expression.TypeRef;
 import com.thoughtworks.qdox.model.expression.UnsignedShiftRight;
-import com.thoughtworks.qdox.model.impl.DefaultJavaAnnotation;
 
 public class EvaluatingVisitorTest
 {
@@ -505,9 +502,7 @@ public class EvaluatingVisitorTest
     @Test
     public void testVisitFieldRef() 
     {
-        JavaAnnotatedElement annotatedElement = mock( JavaAnnotatedElement.class );
         FieldRef ref = new FieldRef( "fieldname" );
-        ref.setContext( annotatedElement );
         try {
             visitor.visit( ref );
             fail( "fieldname should be a unresolvable field" );
@@ -522,6 +517,7 @@ public class EvaluatingVisitorTest
         when( declaringClass.getFieldByName( "fieldname" ) ).thenReturn( nonStaticNonFinalfield );
 
         JavaClass annotatedClass = mock( JavaClass.class );
+        ref.setDeclaringClass( declaringClass );
         try 
         {
             visitor.visit(  ref );
@@ -538,31 +534,21 @@ public class EvaluatingVisitorTest
         when( declaringClass.getFieldByName( "fieldname" ) ).thenReturn( staticFinalfield );
 
         ref = new FieldRef( "fieldname" );
-        ref.setContext( annotatedClass );
-        when( annotatedClass.getDeclaringClass() ).thenReturn( declaringClass );
+        ref.setDeclaringClass( declaringClass );
         assertSame( EvaluatingVisitorStub.fieldReferenceValue, visitor.visit( ref ) );
 
-        JavaMethod annotatedMethod = mock( JavaMethod.class );
         ref = new FieldRef( "fieldname" );
-        ref.setContext( annotatedMethod );
-        when( annotatedMethod.getDeclaringClass() ).thenReturn( declaringClass );
+        ref.setDeclaringClass( declaringClass );
         assertSame( EvaluatingVisitorStub.fieldReferenceValue, visitor.visit( ref ) );
 
-        JavaParameter annotatedParameter = mock( JavaParameter.class );
-        ref = new FieldRef( "fieldname" );
-        ref.setContext( annotatedParameter );
-        when( annotatedParameter.getDeclaringClass() ).thenReturn( declaringClass );
-        assertSame( EvaluatingVisitorStub.fieldReferenceValue, visitor.visit( ref ) );
-        
-        JavaPackage annotatedPackage = mock( JavaPackage.class );
         ref = new FieldRef( "a.B.fieldname" );
-        ref.setContext( annotatedPackage );
+        ref.setDeclaringClass( null );
         JavaClass b = mock( JavaClass.class );
         when( b.getFieldByName( "fieldname" ) ).thenReturn( staticFinalfield );
         ClassLibrary classLibrary = mock( ClassLibrary.class );
         when( classLibrary.hasClassReference( "a.B" ) ).thenReturn( true );
         when( classLibrary.getJavaClass( "a.B" ) ).thenReturn( b );
-        when( annotatedPackage.getJavaClassLibrary() ).thenReturn( classLibrary );
+        ref.setClassLibrary( classLibrary );
         assertSame( EvaluatingVisitorStub.fieldReferenceValue, visitor.visit( ref ) );
     }
     

@@ -29,6 +29,7 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
+import com.thoughtworks.qdox.type.TypeResolver;
 
 /**
  * This class can be used to access overridden methods while keeping a reference to the original class.
@@ -61,7 +62,10 @@ public class JavaMethodDelegate implements JavaMethod
             //According to java-specs, if it could be resolved the upper boundary, so Object, should be returned  
             if ( !resolve && !this.getReturns().getFullyQualifiedName().equals( result.getFullyQualifiedName() ) )
             {
-                result = new DefaultJavaType( "java.lang.Object", originalValue, 0, callingClass );
+                TypeResolver typeResolver =
+                    TypeResolver.byClassName( callingClass.getBinaryName(), callingClass.getJavaClassLibrary(),
+                                              callingClass.getSource().getImports() );
+                result = new DefaultJavaType( "java.lang.Object", originalValue, 0, typeResolver );
             }
         }
         

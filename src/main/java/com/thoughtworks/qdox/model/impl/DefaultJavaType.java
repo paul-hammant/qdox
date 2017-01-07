@@ -58,6 +58,13 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         this.name = name;
         this.typeResolver = typeResolver;
     }
+
+    DefaultJavaType(String fullName, String name, int dimensions, TypeResolver typeResolver) {
+        this.fullName = fullName;
+        this.name = name;
+        this.dimensions = dimensions;
+        this.typeResolver = typeResolver;
+    }
     
     DefaultJavaType(String fullName, String name, int dimensions, JavaClassParent context) {
         this.fullName = fullName;

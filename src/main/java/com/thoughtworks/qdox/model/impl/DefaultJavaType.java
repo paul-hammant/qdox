@@ -211,6 +211,10 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         {
             fullName = getTypeResolver().resolveType( name );
         }
+        if ( fullName == null && typeResolver != null )
+        {
+            fullName = typeResolver.resolveType( name );
+        }
         return ( fullName != null );
     }
 

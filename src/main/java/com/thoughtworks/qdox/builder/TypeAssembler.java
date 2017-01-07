@@ -30,6 +30,7 @@ import com.thoughtworks.qdox.model.impl.JavaClassParent;
 import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.WildcardTypeDef;
+import com.thoughtworks.qdox.type.TypeResolver;
 
 /**
  * An assembler to transform a {@link TypeDef} to a {@link DefaultJavaType}
@@ -43,6 +44,11 @@ public final class TypeAssembler
     {
     }
 
+    public static DefaultJavaType createUnresolved( TypeDef typeDef, int dimensions, JavaClassParent context )
+    {
+        return createUnresolved( typeDef, dimensions, context, null );
+    }
+    
     /**
      * this one is specific for those cases where dimensions can be part of both the type and identifier i.e. private
      * String[] matrix[]; //field public abstract String[] getMatrix[](); //method
@@ -52,7 +58,7 @@ public final class TypeAssembler
      * @param context
      * @return the Type
      */
-    public static DefaultJavaType createUnresolved( TypeDef typeDef, int dimensions, JavaClassParent context )
+    public static DefaultJavaType createUnresolved( TypeDef typeDef, int dimensions, JavaClassParent context, TypeResolver typeResolver)
     {
         DefaultJavaType result;
         if ( typeDef instanceof WildcardTypeDef )
@@ -60,7 +66,7 @@ public final class TypeAssembler
             WildcardTypeDef wildcard = (WildcardTypeDef) typeDef;
             if( wildcard.getTypeDef() != null )
             {
-                JavaType type = createUnresolved( wildcard.getTypeDef(), context );
+                JavaType type = createUnresolved( wildcard.getTypeDef(), context, typeResolver );
                 DefaultJavaWildcardType.BoundType boundType = null;
                 if( "extends".equals( wildcard.getWildcardExpressionType() ) )
                 {
@@ -79,13 +85,21 @@ public final class TypeAssembler
         }
         else
         {
-            DefaultJavaParameterizedType typeResult = new DefaultJavaParameterizedType( null, typeDef.getName(), typeDef.getDimensions() + dimensions, context );
+            DefaultJavaParameterizedType typeResult;
+            if(typeResolver != null)
+            {
+                typeResult = new DefaultJavaParameterizedType( null, typeDef.getName(), typeDef.getDimensions() + dimensions, typeResolver );
+            }
+            else {
+                typeResult = new DefaultJavaParameterizedType( null, typeDef.getName(), typeDef.getDimensions() + dimensions, context );
+            }
+            
             if ( typeDef.getActualArgumentTypes() != null && !typeDef.getActualArgumentTypes().isEmpty() )
             {
                 List<JavaType> actualArgumentTypes = new LinkedList<JavaType>();
                 for ( TypeDef actualArgType : typeDef.getActualArgumentTypes() )
                 {
-                    actualArgumentTypes.add( TypeAssembler.createUnresolved( actualArgType, context ) );
+                    actualArgumentTypes.add( TypeAssembler.createUnresolved( actualArgType, context, typeResolver ) );
                 }
                 typeResult.setActualArgumentTypes( actualArgumentTypes );
             }
@@ -99,9 +113,9 @@ public final class TypeAssembler
      * @param context the context
      * @return the Type
      */
-    public static DefaultJavaType createUnresolved( TypeDef typeDef, JavaClassParent context )
+    public static DefaultJavaType createUnresolved( TypeDef typeDef, JavaClassParent context, TypeResolver typeResolver )
     {
-        return createUnresolved( typeDef, 0, context );
+        return createUnresolved( typeDef, 0, context, typeResolver );
     }
 
 }

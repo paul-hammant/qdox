@@ -99,7 +99,7 @@ public class SourceFolderLibrary
     @Override
     protected JavaClass resolveJavaClass( String className )
     {
-        JavaClass result = null;
+        JavaClass result = super.resolveJavaClass( className );
         for ( File sourceFolder : sourceFolders )
         {
             String mainClassName = className.split( "\\$" )[0];
@@ -131,7 +131,7 @@ public class SourceFolderLibrary
     @Override
     protected boolean containsClassReference( String className )
     {
-        boolean result = false;
+        boolean result = super.containsClassReference( className );
         for ( Iterator<File> iterator = sourceFolders.iterator(); !result && iterator.hasNext(); )
         {
             File sourceFolder = (File) iterator.next();

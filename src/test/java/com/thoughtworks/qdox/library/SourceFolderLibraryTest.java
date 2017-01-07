@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.StringReader;
 import java.util.Iterator;
 
 import org.junit.Test;
@@ -24,6 +25,15 @@ public class SourceFolderLibraryTest
     @Test
     public void testModuleInfo()
     {
+        library.addSource( new StringReader("package V;\n"
+                        + "public interface W {}") );
+        library.addSource( new StringReader("package X;\n"
+                        + "public interface Y {}") );
+        library.addSource( new StringReader("package Z1;\n"
+                        + "public class Z2 implements X.Y {}") );
+        library.addSource( new StringReader("package Z3;\n"
+                        + "public class Z4 implements X.Y {}") );
+        
         library.addSourceFolder( new File("src/test/resources/jigsaw/example1") );
         
         JavaModule module = library.getJavaModule();
@@ -79,17 +89,17 @@ public class SourceFolderLibraryTest
         assertEquals( 1, module.getDescriptor().getUses().size() );
         Iterator<JavaUses> usesIter = descriptor.getUses().iterator();
         JavaUses uses = usesIter.next();
-        assertEquals( "V.W", uses.getService().getName() );
+        assertEquals( "V.W", uses.getService().getFullyQualifiedName() );
         
         assertEquals( 1, module.getDescriptor().getProvides().size() );
         Iterator<JavaProvides> providesIter = descriptor.getProvides().iterator();
         JavaProvides provides = providesIter.next();
-        assertEquals( "X.Y", provides.getService().getName() );
+        assertEquals( "X.Y", provides.getService().getFullyQualifiedName() );
         Iterator<JavaClass> classIter = provides.getImplementations().iterator(); 
         JavaClass cls = classIter.next();
-        assertEquals( "Z1.Z2", cls.getName() );
+        assertEquals( "Z1.Z2", cls.getFullyQualifiedName() );
         cls = classIter.next();
-        assertEquals( "Z3.Z4", cls.getName() );
+        assertEquals( "Z3.Z4", cls.getFullyQualifiedName() );
     }
     
 }

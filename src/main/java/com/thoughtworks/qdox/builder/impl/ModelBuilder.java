@@ -333,8 +333,17 @@ public class ModelBuilder implements Builder {
         {
             return null;
         }
-        return TypeAssembler.createUnresolved( typeDef, dimensions,
-                                               classStack.isEmpty() ? source : classStack.getFirst() );
+        TypeResolver typeResolver;
+        if(classStack.isEmpty())
+        {
+            typeResolver = TypeResolver.byPackageName( source.getPackageName(), classLibrary, source.getImports() );
+        }
+        else
+        {
+            typeResolver = TypeResolver.byClassName( classStack.getFirst().getBinaryName(), classLibrary, source.getImports() );
+        }
+        
+        return TypeAssembler.createUnresolved( typeDef, dimensions, null, typeResolver );
     }
 
     private void addJavaDoc( AbstractBaseJavaEntity entity )

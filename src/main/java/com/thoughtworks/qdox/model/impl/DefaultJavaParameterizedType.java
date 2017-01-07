@@ -25,10 +25,16 @@ import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaParameterizedType;
 import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.type.TypeResolver;
 
 public class DefaultJavaParameterizedType extends DefaultJavaType implements JavaParameterizedType
 {
     private List<JavaType> actualArgumentTypes = Collections.emptyList();
+
+    public DefaultJavaParameterizedType( String fullName, String name, int dimensions, TypeResolver typeResolver )
+    {
+        super( fullName, name, dimensions, typeResolver );
+    }
 
     public DefaultJavaParameterizedType( String fullName, String name, int dimensions, JavaClassParent context )
     {

@@ -458,9 +458,22 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
             {
                 value = value.substring( 0, value.indexOf( '[' ) );
             }
+            
+            TypeResolver typeResolver;
+            JavaClassParent parent = ((DefaultJavaType)base).getParent();
+            if(parent instanceof JavaClass)
+            {
+                JavaClass clazz = (JavaClass) parent;
+                typeResolver = TypeResolver.byClassName( clazz.getBinaryName(), clazz.getJavaClassLibrary(), clazz.getSource().getImports() );
+            }
+            else
+            {
+                typeResolver = TypeResolver.byPackageName(null, declaringClass.getJavaClassLibrary(), null );
+            }
+            
             DefaultJavaParameterizedType typeResult =
                 new DefaultJavaParameterizedType( concreteClassName, value, getDimensions( base ),
-                          ((DefaultJavaType)base).getParent() );
+                                                  typeResolver );
 
             List<JavaType> actualTypes = new LinkedList<JavaType>();
             for ( JavaType actualArgType : actualTypeArguments )

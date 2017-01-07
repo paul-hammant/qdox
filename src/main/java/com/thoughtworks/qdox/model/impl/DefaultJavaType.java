@@ -432,7 +432,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
                     if ( fqn.equals( implement.getFullyQualifiedName() ) )
                     {
                         JavaType actualType = getActualTypeArguments( implement ).get( typeIndex );
-                        JavaType resolvedType = new DefaultJavaType( actualType.getFullyQualifiedName(), actualType.getValue(), getDimensions( base ), implement.getParent() ); 
+                        
+                        TypeResolver typeResolver = TypeResolver.byPackageName( implement.getSource().getPackageName(),
+                                                                                implement.getSource().getJavaClassLibrary(),
+                                                                                implement.getSource().getImports() );
+                        
+                        JavaType resolvedType = new DefaultJavaType( actualType.getFullyQualifiedName(), actualType.getValue(), getDimensions( base ), typeResolver ); 
                         result = resolve( resolvedType , implement, implement );
                         break;
                     }

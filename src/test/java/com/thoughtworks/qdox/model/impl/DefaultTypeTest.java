@@ -3,25 +3,20 @@ package com.thoughtworks.qdox.model.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
 
 import org.junit.Test;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
-import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaTypeTest;
 
 public class DefaultTypeTest
     extends JavaTypeTest<DefaultJavaType>
 {
 
-    public JavaSource newJavaSource( ClassLibrary library )
+    public JavaClass newJavaClass( ClassLibrary library )
     {
-        return new DefaultJavaSource( library );
+        return new DefaultJavaClass(new DefaultJavaSource( library ));
     }
 
     public DefaultJavaType newType( String fullname )
@@ -34,9 +29,9 @@ public class DefaultTypeTest
         return new DefaultJavaType( fullname, dimensions, null );
     }
 
-    public DefaultJavaType newType( String fullname, int dimensions, JavaSource source )
+    public DefaultJavaType newType( String fullname, int dimensions, JavaClass clazz )
     {
-        return new DefaultJavaType( fullname, dimensions, source );
+        return new DefaultJavaType( fullname, dimensions, clazz );
     }
 
     @Test

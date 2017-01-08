@@ -47,7 +47,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     public static final DefaultJavaType VOID = new DefaultJavaType("void");
 
     protected final String name;
-    private JavaClassParent context;
+    private JavaClass context;
     protected String fullName;
     private int dimensions;
     
@@ -66,14 +66,14 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         this.typeResolver = typeResolver;
     }
     
-    DefaultJavaType(String fullName, String name, int dimensions, JavaClassParent context) {
+    DefaultJavaType(String fullName, String name, int dimensions, JavaClass context) {
         this.fullName = fullName;
         this.name = name;
         this.dimensions = dimensions;
         this.context = context;
     }
     
-    DefaultJavaType(String fullName, int dimensions, JavaClassParent context) {
+    DefaultJavaType(String fullName, int dimensions, JavaClass context) {
         this(fullName, null, dimensions, context);
     }
 
@@ -207,40 +207,11 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 
     protected boolean isResolved()
     {
-        if ( fullName == null && context != null )
-        {
-            fullName = getTypeResolver().resolveType( name );
-        }
         if ( fullName == null && typeResolver != null )
         {
             fullName = typeResolver.resolveType( name );
         }
         return ( fullName != null );
-    }
-
-    private TypeResolver getTypeResolver()
-    {
-        if(typeResolver != null)
-        {
-            return typeResolver;
-        }
-        
-        TypeResolver typeResolver;
-        if (context instanceof JavaSource)
-        {
-            JavaSource javaSource = (JavaSource) context;
-            typeResolver = TypeResolver.byPackageName( javaSource.getPackageName(), javaSource.getJavaClassLibrary(), javaSource.getImports() );
-        }
-        else if(context  instanceof JavaClass)
-        {
-            JavaClass javaClass = (JavaClass) context;
-            typeResolver = TypeResolver.byClassName( javaClass.getBinaryName(), javaClass.getJavaClassLibrary(), javaClass.getSource().getImports() );
-        }
-        else
-        {
-          throw new UnsupportedOperationException();    
-        }
-        return typeResolver;
     }
 
     /**

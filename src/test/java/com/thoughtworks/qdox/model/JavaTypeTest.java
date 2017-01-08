@@ -15,9 +15,9 @@ public abstract class JavaTypeTest<T extends JavaType>
 
     public abstract T newType( String fullname, int dimensions );
 
-    public abstract T newType( String fullname, int dimensions, JavaSource source );
+    public abstract T newType( String fullname, int dimensions, JavaClass clazz );
     
-    public abstract JavaSource newJavaSource( ClassLibrary library );
+    public abstract JavaClass newJavaClass( ClassLibrary library );
     
     @Test
     public void testToString()
@@ -41,7 +41,7 @@ public abstract class JavaTypeTest<T extends JavaType>
     public void testEquals()
         throws Exception
     {
-        JavaSource javaSource = newJavaSource( new OrderedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary() );
+        JavaClass javaSource = newJavaClass( new OrderedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary() );
         assertEquals( newType( "long", 0, javaSource ), newType( "long", 0, javaSource ) );
         assertThat( newType( "long", 0, javaSource ), not( newType( "int" ) ) );
         assertThat( newType( "long", 1 ), not( newType( "long" ) ) );

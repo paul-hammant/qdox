@@ -23,14 +23,13 @@ import java.net.URL;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.model.impl.JavaClassParent;
 
 /**
  * The root of every JavaModel, even for those based on binary classes.
  * 
  * @author Robert Scholte
  */
-public interface JavaSource extends JavaClassParent
+public interface JavaSource
 {
 
     /**

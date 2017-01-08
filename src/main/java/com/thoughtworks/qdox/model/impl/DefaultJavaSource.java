@@ -30,7 +30,6 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaModelUtils;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.type.TypeResolver;
 import com.thoughtworks.qdox.writer.ModelWriter;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 import com.thoughtworks.qdox.writer.impl.DefaultModelWriter;
@@ -104,12 +103,6 @@ public class DefaultJavaSource implements JavaSource, Serializable {
     	return getCodeBlock();
     }
 
-    /**  {@inheritDoc} */
-    public String resolveType( String typeName )
-    {
-        return TypeResolver.byPackageName( pkg == null ? null : pkg.getName(), getJavaClassLibrary(), getImports() ).resolveType( typeName );
-    }
-    
     /**  {@inheritDoc} */
     public String getClassNamePrefix() {
         return ( pkg == null ? "" : pkg.getName() + '.' ); 

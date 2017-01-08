@@ -22,7 +22,6 @@ package com.thoughtworks.qdox.model;
 import java.util.List;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.model.impl.JavaClassParent;
 
 /**
  * Equivalent of {@link java.lang.Class}, providing the most important methods.
@@ -30,7 +29,7 @@ import com.thoughtworks.qdox.model.impl.JavaClassParent;
  * 
  * @author Robert Scholte
  */
-public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnnotatedElement, JavaGenericDeclaration
+public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, JavaGenericDeclaration
 {
     /**
      * The compilation unit, which includes the imports, the public and anonymous classes

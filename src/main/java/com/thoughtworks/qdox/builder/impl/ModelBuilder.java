@@ -205,7 +205,7 @@ public class ModelBuilder implements Builder {
     public void addPackage( PackageDef packageDef )
     {
         DefaultJavaPackage jPackage = new DefaultJavaPackage( packageDef.getName() );
-        jPackage.setClassLibrary( source.getJavaClassLibrary() );
+        jPackage.setClassLibrary( classLibrary );
         jPackage.setLineNumber( packageDef.getLineNumber() );
         jPackage.setModelWriterFactory( modelWriterFactory );
         addJavaDoc( jPackage );

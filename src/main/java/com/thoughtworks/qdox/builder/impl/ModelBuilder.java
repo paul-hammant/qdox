@@ -343,7 +343,7 @@ public class ModelBuilder implements Builder {
             typeResolver = TypeResolver.byClassName( classStack.getFirst().getBinaryName(), classLibrary, source.getImports() );
         }
         
-        return TypeAssembler.createUnresolved( typeDef, dimensions, null, typeResolver );
+        return TypeAssembler.createUnresolved( typeDef, dimensions, typeResolver );
     }
 
     private void addJavaDoc( AbstractBaseJavaEntity entity )
@@ -563,8 +563,18 @@ public class ModelBuilder implements Builder {
 	{
 	    if ( currentArguments != null && !currentArguments.isEmpty() )
         {
+	        TypeResolver typeResolver;
+	        if( classStack.isEmpty() )
+	        {
+	            typeResolver = TypeResolver.byPackageName( source.getPackageName(), classLibrary, source.getImports() );
+	        }
+	        else
+	        {
+	            typeResolver = TypeResolver.byClassName( classStack.peekFirst().getBinaryName(), classLibrary, source.getImports() );
+	        }
+	        
 	        //DefaultExpressionTransformer?? 
-            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( currentField, classLibrary );
+            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( currentField, classLibrary, typeResolver );
 
             List<Expression> arguments = new LinkedList<Expression>();
             for ( ExpressionDef annoDef : currentArguments )
@@ -604,7 +614,17 @@ public class ModelBuilder implements Builder {
     {
         if ( !currentAnnoDefs.isEmpty() )
         {
-            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( (JavaAnnotatedElement) entity, classLibrary );
+            TypeResolver typeResolver;
+            if( classStack.isEmpty() )
+            {
+                typeResolver = TypeResolver.byPackageName( source.getPackageName(), classLibrary, source.getImports() );
+            }
+            else
+            {
+                typeResolver = TypeResolver.byClassName( classStack.peekFirst().getBinaryName(), classLibrary, source.getImports() );
+            }
+            
+            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( (JavaAnnotatedElement) entity, classLibrary, typeResolver );
 
             List<JavaAnnotation> annotations = new LinkedList<JavaAnnotation>();
             for ( AnnoDef annoDef : currentAnnoDefs )

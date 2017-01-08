@@ -41,7 +41,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
     private ModelWriterFactory modelWriterFactory;
     
     private JavaPackage pkg;
-    private List<String> imports = new LinkedList<String>();
+    private final List<String> imports = new LinkedList<String>();
     private List<JavaClass> classes = new LinkedList<JavaClass>();
     private URL url;
 

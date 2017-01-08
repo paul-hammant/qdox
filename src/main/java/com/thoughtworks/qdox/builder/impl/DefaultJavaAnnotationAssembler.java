@@ -109,6 +109,7 @@ import com.thoughtworks.qdox.parser.expression.TypeRefDef;
 import com.thoughtworks.qdox.parser.expression.UnsignedShiftRightDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
+import com.thoughtworks.qdox.type.TypeResolver;
 
 public class DefaultJavaAnnotationAssembler
     implements ElemValueTransformer<AnnotationValue>
@@ -117,11 +118,14 @@ public class DefaultJavaAnnotationAssembler
     private AbstractBaseJavaEntity parent;
     
     private ClassLibrary classLibrary;
+    
+    private TypeResolver typeResolver;
 
-    public DefaultJavaAnnotationAssembler( JavaAnnotatedElement parent, ClassLibrary classLibrary )
+    public DefaultJavaAnnotationAssembler( JavaAnnotatedElement parent, ClassLibrary classLibrary, TypeResolver typeResolver )
     {
         this.parent = (AbstractBaseJavaEntity) parent;
         this.classLibrary = classLibrary;
+        this.typeResolver = typeResolver;
     }
 
     public DefaultJavaAnnotation assemble( AnnoDef annoDef ) {
@@ -149,8 +153,7 @@ public class DefaultJavaAnnotationAssembler
         }
         return TypeAssembler.createUnresolved( typeDef,
                                                dimensions,
-                                               parent.getDeclaringClass() != null ? parent.getDeclaringClass()
-                                                               : parent.getSource() );
+                                               typeResolver  );
     }
     
     /** {@inheritDoc} */

@@ -564,7 +564,7 @@ public class ModelBuilder implements Builder {
 	    if ( currentArguments != null && !currentArguments.isEmpty() )
         {
 	        //DefaultExpressionTransformer?? 
-            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( currentField );
+            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( currentField, classLibrary );
 
             List<Expression> arguments = new LinkedList<Expression>();
             for ( ExpressionDef annoDef : currentArguments )
@@ -604,7 +604,7 @@ public class ModelBuilder implements Builder {
     {
         if ( !currentAnnoDefs.isEmpty() )
         {
-            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( (JavaAnnotatedElement) entity );
+            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( (JavaAnnotatedElement) entity, classLibrary );
 
             List<JavaAnnotation> annotations = new LinkedList<JavaAnnotation>();
             for ( AnnoDef annoDef : currentAnnoDefs )

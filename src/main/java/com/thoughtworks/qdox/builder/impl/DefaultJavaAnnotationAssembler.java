@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.thoughtworks.qdox.builder.TypeAssembler;
+import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaType;
@@ -114,10 +115,13 @@ public class DefaultJavaAnnotationAssembler
 {
 
     private AbstractBaseJavaEntity parent;
+    
+    private ClassLibrary classLibrary;
 
-    public DefaultJavaAnnotationAssembler( JavaAnnotatedElement parent )
+    public DefaultJavaAnnotationAssembler( JavaAnnotatedElement parent, ClassLibrary classLibrary )
     {
         this.parent = (AbstractBaseJavaEntity) parent;
+        this.classLibrary = classLibrary;
     }
 
     public DefaultJavaAnnotation assemble( AnnoDef annoDef ) {
@@ -366,14 +370,7 @@ public class DefaultJavaAnnotationAssembler
         String name = annotationFieldRef.getName();
         result = new FieldRef( name );
         result.setDeclaringClass( parent.getDeclaringClass() );
-        if(parent.getDeclaringClass() != null)
-        {
-            result.setClassLibrary( parent.getDeclaringClass().getJavaClassLibrary() );
-        }
-        else
-        {
-            result.setClassLibrary( parent.getSource().getJavaClassLibrary() );
-        }
+        result.setClassLibrary( classLibrary );
         return result;
     }
 

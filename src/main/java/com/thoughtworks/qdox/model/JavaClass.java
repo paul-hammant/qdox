@@ -39,13 +39,6 @@ public interface JavaClass extends JavaModel, JavaType, JavaClassParent, JavaAnn
      */
     JavaSource getSource();
 
-    // deprecated methods
-    // will be removed with QDox-2.0
-    /**
-     * @deprecated use {@link #getParentSource()} or {@link #getDeclaringClass()}
-     */
-    JavaClassParent getParent();
-
     /**
      * (API description of {@link java.lang.Class#isInterface()})
      * <p>

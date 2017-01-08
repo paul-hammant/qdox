@@ -286,17 +286,6 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public JavaClassParent getParent()
-    {
-        JavaClassParent result = getDeclaringClass();
-        if ( result == null )
-        {
-            result = getParentSource();
-        }
-        return result;
-    }
-
-    /** {@inheritDoc} */
     public String getPackageName()
     {
         JavaPackage pckg = getPackage();

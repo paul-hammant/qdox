@@ -36,11 +36,6 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
         super( fullName, name, dimensions, typeResolver );
     }
 
-    public DefaultJavaParameterizedType( String fullName, String name, int dimensions, JavaClassParent context )
-    {
-        super( fullName, name, dimensions, context );
-    }
-
     /**
      * 
      * @return the actualTypeArguments or null

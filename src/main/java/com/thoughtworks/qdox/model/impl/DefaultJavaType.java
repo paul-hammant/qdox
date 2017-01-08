@@ -889,7 +889,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     /** {@inheritDoc} */
     public ClassLibrary getJavaClassLibrary()
     {
-        return context.getJavaClassLibrary();
+        return resolveRealClass().getJavaClassLibrary();
     }
 
     /** {@inheritDoc} */

@@ -42,8 +42,8 @@ public abstract class JavaTypeTest<T extends JavaType>
         throws Exception
     {
         JavaSource javaSource = newJavaSource( new OrderedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary() );
-        assertEquals( newType( "string", 0, javaSource ), newType( "string", 0, javaSource ) );
-        assertThat( newType( "string", 0, javaSource ), not( newType( "int" ) ) );
+        assertEquals( newType( "long", 0, javaSource ), newType( "long", 0, javaSource ) );
+        assertThat( newType( "long", 0, javaSource ), not( newType( "int" ) ) );
         assertThat( newType( "long", 1 ), not( newType( "long" ) ) );
         assertThat( newType( "long" ), not( newType( "long", 2 ) ) );
         assertFalse( newType( "int" ).equals( null ) );

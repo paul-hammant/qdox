@@ -621,7 +621,7 @@ public class ModelBuilder implements Builder {
             }
             else
             {
-                typeResolver = TypeResolver.byClassName( classStack.peekFirst().getBinaryName(), classLibrary, source.getImports() );
+                typeResolver = TypeResolver.byClassName( classStack.getFirst().getBinaryName(), classLibrary, source.getImports() );
             }
             
             DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( (JavaAnnotatedElement) entity, classLibrary, typeResolver );

@@ -570,7 +570,7 @@ public class ModelBuilder implements Builder {
 	        }
 	        else
 	        {
-	            typeResolver = TypeResolver.byClassName( classStack.peekFirst().getBinaryName(), classLibrary, source.getImports() );
+	            typeResolver = TypeResolver.byClassName( classStack.getFirst().getBinaryName(), classLibrary, source.getImports() );
 	        }
 	        
 	        //DefaultExpressionTransformer?? 

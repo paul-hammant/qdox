@@ -25,7 +25,6 @@ import java.util.Map;
 
 import com.thoughtworks.qdox.builder.TypeAssembler;
 import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.expression.Add;
@@ -115,15 +114,15 @@ public class DefaultJavaAnnotationAssembler
     implements ElemValueTransformer<AnnotationValue>
 {
 
-    private AbstractBaseJavaEntity parent;
+    private JavaClass declaringClass;
     
     private ClassLibrary classLibrary;
     
     private TypeResolver typeResolver;
 
-    public DefaultJavaAnnotationAssembler( JavaAnnotatedElement parent, ClassLibrary classLibrary, TypeResolver typeResolver )
+    public DefaultJavaAnnotationAssembler( JavaClass declaringClass, ClassLibrary classLibrary, TypeResolver typeResolver )
     {
-        this.parent = (AbstractBaseJavaEntity) parent;
+        this.declaringClass = declaringClass;
         this.classLibrary = classLibrary;
         this.typeResolver = typeResolver;
     }
@@ -371,7 +370,7 @@ public class DefaultJavaAnnotationAssembler
         FieldRef result;
         String name = annotationFieldRef.getName();
         result = new FieldRef( name );
-        result.setDeclaringClass( parent.getDeclaringClass() );
+        result.setDeclaringClass( declaringClass );
         result.setClassLibrary( classLibrary );
         return result;
     }

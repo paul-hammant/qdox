@@ -573,7 +573,7 @@ public class ModelBuilder implements Builder {
 	        }
 	        
 	        //DefaultExpressionTransformer?? 
-            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( currentField, classLibrary, typeResolver );
+            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( currentField.getDeclaringClass(), classLibrary, typeResolver );
 
             List<Expression> arguments = new LinkedList<Expression>();
             for ( ExpressionDef annoDef : currentArguments )
@@ -623,7 +623,7 @@ public class ModelBuilder implements Builder {
                 typeResolver = TypeResolver.byClassName( classStack.getFirst().getBinaryName(), classLibrary, source.getImports() );
             }
             
-            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( (JavaAnnotatedElement) entity, classLibrary, typeResolver );
+            DefaultJavaAnnotationAssembler assembler = new DefaultJavaAnnotationAssembler( entity.getDeclaringClass(), classLibrary, typeResolver );
 
             List<JavaAnnotation> annotations = new LinkedList<JavaAnnotation>();
             for ( AnnoDef annoDef : currentAnnoDefs )

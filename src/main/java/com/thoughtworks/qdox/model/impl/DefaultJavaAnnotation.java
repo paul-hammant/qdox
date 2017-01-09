@@ -33,12 +33,10 @@ import com.thoughtworks.qdox.model.expression.ExpressionVisitor;
 /**
  * @author Eric Redmond
  */
-public class DefaultJavaAnnotation
+public class DefaultJavaAnnotation extends AbstractJavaModel
     implements AnnotationValue, Serializable, JavaAnnotation
 {
     private final JavaClass type;
-
-    private final int lineNumber;
 
     /**
      * Annotation properties as AnnotationValues
@@ -53,11 +51,9 @@ public class DefaultJavaAnnotation
      */
     private final Map<String, Object> namedParameters = new LinkedHashMap<String, Object>();
 
-    public DefaultJavaAnnotation( JavaClass type, Map<String, Object> namedParameters, int lineNumber )
+    public DefaultJavaAnnotation( JavaClass type, Map<String, Object> namedParameters )
     {
         this.type = type;
-        this.lineNumber = lineNumber;
-
         if ( properties != null )
         {
             for ( Entry<String, AnnotationValue> entry : properties.entrySet() )
@@ -70,9 +66,9 @@ public class DefaultJavaAnnotation
         }
     }
 
-    public DefaultJavaAnnotation( JavaClass type, int line )
+    public DefaultJavaAnnotation( JavaClass type )
     {
-        this( type, null, line );
+        this( type, null );
     }
 
     public final void setProperty( String name, AnnotationValue value )
@@ -100,11 +96,11 @@ public class DefaultJavaAnnotation
     }
 
     /** {@inheritDoc} */
-    public int getLineNumber()
+    public String getCodeBlock()
     {
-        return lineNumber;
+        return getModelWriter().writeAnnotation( this ).toString();
     }
-
+    
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
@@ -128,6 +124,8 @@ public class DefaultJavaAnnotation
         return properties.get( name );
     }
 
+
+    
     public String toString()
     {
         StringBuilder result = new StringBuilder();

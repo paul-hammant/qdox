@@ -112,7 +112,6 @@ import com.thoughtworks.qdox.type.TypeResolver;
 public class DefaultJavaAnnotationAssembler
     implements ElemValueTransformer<AnnotationValue>
 {
-
     private JavaClass declaringClass;
     
     private ClassLibrary classLibrary;
@@ -127,8 +126,9 @@ public class DefaultJavaAnnotationAssembler
     }
 
     public DefaultJavaAnnotation assemble( AnnoDef annoDef ) {
-        DefaultJavaAnnotation annotation =
-            new DefaultJavaAnnotation( createType( annoDef.getTypeDef(), 0 ), annoDef.getLineNumber() );
+        DefaultJavaAnnotation annotation = new DefaultJavaAnnotation( createType( annoDef.getTypeDef(), 0 ) );
+        annotation.setLineNumber( annoDef.getLineNumber() );
+        
         for ( Map.Entry<String, ElemValueDef> annoVal : annoDef.getArgs().entrySet() )
         {
             annotation.setProperty( annoVal.getKey(), annoVal.getValue().transform( this ) );

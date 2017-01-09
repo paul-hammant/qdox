@@ -47,8 +47,9 @@ public final class TypeAssembler
      * this one is specific for those cases where dimensions can be part of both the type and identifier i.e. private
      * String[] matrix[]; //field public abstract String[] getMatrix[](); //method
      * 
-     * @param typeDef
-     * @param dimensions
+     * @param typeDef the type definition
+     * @param dimensions the array-depth
+     * @param typeResolver the typeResolver
      * @return the Type
      */
     public static DefaultJavaType createUnresolved( TypeDef typeDef, int dimensions, TypeResolver typeResolver)
@@ -95,8 +96,8 @@ public final class TypeAssembler
     }
 
     /**
-     * @param typeDef the TypeDef
-     * @param context the context
+     * @param typeDef the type definition
+     * @param typeResolver the typeResolver
      * @return the Type
      */
     public static DefaultJavaType createUnresolved( TypeDef typeDef, TypeResolver typeResolver )

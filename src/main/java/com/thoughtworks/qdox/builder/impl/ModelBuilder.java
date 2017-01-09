@@ -34,6 +34,7 @@ import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
+import com.thoughtworks.qdox.model.JavaExecutable;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaModule;
@@ -521,7 +522,7 @@ public class ModelBuilder implements Builder {
         }
         else if ( genericDeclaration instanceof JavaConstructor )
         {
-            result = ( (JavaConstructor) genericDeclaration ).getDeclaringClass();
+            result = ( (JavaExecutable) genericDeclaration ).getDeclaringClass();
         }
         else
         {

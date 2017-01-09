@@ -32,61 +32,6 @@ import java.util.List;
 public interface JavaConstructor
     extends JavaModel, JavaAnnotatedElement, JavaGenericDeclaration, JavaMember, JavaExecutable, Serializable
 {
-    // Methods from Constructor
-      
-    /**
-     * Equivalent of {@link java.lang.reflect.Constructor#getParameterTypes()}, where a JavaParameter also contains the original name if available.
-     * 
-     * @return a list of JavaParameters, never <code>null</code>
-     */
-    List<JavaParameter> getParameters();
-
-    /**
-     * 
-     * @param name the name of the parameter
-     * @return the {@link JavaParameter} matching the name, otherwise <code>null</code>
-     */
-    JavaParameter getParameterByName( String name );
-    
-    /**
-     * Equivalent of {@link java.lang.reflect.Constructor#getParameterTypes()}
-     * 
-     * @return a list of JavaParameters, never <code>null</code>
-     */
-    List<JavaType> getParameterTypes();
-    
-    /**
-     * Equivalent of {@link java.lang.reflect.Constructor#getExceptionTypes()}
-     * 
-     * @return a list of Exceptions, never <code>null</code>
-     */
-    List<JavaClass> getExceptions();
-    
-    List<JavaType> getExceptionTypes();
- 
-    /**
-     * Equivalent of {@link java.lang.reflect.Constructor#isVarArgs()} 
-     * 
-     * @return <code>true</code> if the final parameter is a varArg, otherwise <code>false</code>
-     */
-    boolean isVarArgs();
-
-    // Extra source methods
-    
-    /**
-     * Retrieve the code between the brackets
-     * 
-     * @return the source code
-     */
-    String getSourceCode();
-    
-    /**
-     * Retrieve the complete codeblock of the constructor, including the sourcecode.
-     * 
-     * @return the code block
-     */
-    String getCodeBlock();
-
     // Utility methods
     
     /**

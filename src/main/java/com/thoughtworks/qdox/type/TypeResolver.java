@@ -56,7 +56,7 @@ public class TypeResolver
      * @param binaryName
      * @param classLibrary
      * @param imports
-     * @return
+     * @return the typeResolver
      */
     public static TypeResolver byPackageName( String binaryName, ClassLibrary classLibrary, Collection<String> imports )
     {
@@ -68,7 +68,7 @@ public class TypeResolver
      * @param binaryName the class in which context a type is used.
      * @param classLibrary
      * @param imports
-     * @return
+     * @return the typeResolver
      */
     public static TypeResolver byClassName( String binaryName, ClassLibrary classLibrary, Collection<String> imports )
     {

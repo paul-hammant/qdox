@@ -23,7 +23,7 @@ import java.util.Map;
 
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 
-public interface JavaAnnotation {
+public interface JavaAnnotation extends JavaModel {
 
 	/**
 	 * @return the annotation type

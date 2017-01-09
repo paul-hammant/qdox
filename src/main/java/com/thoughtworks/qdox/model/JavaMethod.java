@@ -29,22 +29,6 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      */
     JavaClass getReturns();
 
-    List<JavaParameter> getParameters();
-
-    JavaParameter getParameterByName( String name );
-
-    List<JavaClass> getExceptions();
-
-    List<JavaType> getExceptionTypes();
-
-    /**
-     * Equivalent of {@link java.lang.reflect.Method#isVarArgs()}
-     * 
-     * @return <code>true</code> if this method was declared to take a variable number of arguments, 
-     *          otherwise <code>false</code>
-     */
-    boolean isVarArgs();
-
     /**
      * @since 1.3
      */
@@ -120,12 +104,6 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
 
     List<DocletTag> getTagsByName( String name, boolean inherited );
 
-    /**
-     * Get the original source code of the body of this method.
-     *
-     * @return Code as string.
-     */
-    String getSourceCode();
     
     /**
      * Equivalent of java.lang.reflect.Method.getReturnType()
@@ -143,22 +121,6 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
      * @since 1.12
      */
     JavaType getReturnType( boolean resolve );
-
-    /**
-     * 
-     * @return the parameter types
-     * @since 1.12
-     */
-    List<JavaType> getParameterTypes();
-
-    /**
-     * If a class inherits this method from a generic class or interface, you can use this method to get the resolved parameter types
-     * 
-     * @param resolve
-     * @return the parameter types
-     * @since 1.12
-     */
-    List<JavaType> getParameterTypes( boolean resolve );
 
     DocletTag getTagByName( String string, boolean b );
     

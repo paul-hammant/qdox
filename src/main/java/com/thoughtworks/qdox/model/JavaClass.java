@@ -101,7 +101,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
 
     /**
      * Equivalent of {@link java.lang.Class#getPackage()}
-     * @return
+     * @return the package
      */
     JavaPackage getPackage();
 
@@ -141,7 +141,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * @return the matching constructor, otherwise <code>null</code>
      * @since 2.0
      */
-    JavaConstructor getConstructor(List<JavaType> parameterTypes);
+    JavaExecutable getConstructor(List<JavaType> parameterTypes);
     
     /**
      * 
@@ -150,7 +150,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * @return the matching constructor, otherwise <code>null</code>
      * @since 2.0
      */
-    JavaConstructor getConstructor(List<JavaType> parameterTypes, boolean varArg);
+    JavaExecutable getConstructor(List<JavaType> parameterTypes, boolean varArg);
     
 
     /**
@@ -225,8 +225,8 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     /**
      * Equivalent of {@link java.lang.Class#getField(String)}, where this method can resolve every field
      * 
-     * @param name
-     * @return
+     * @param name the name of the field
+     * @return the field
      */
     JavaField getFieldByName( String name );
     

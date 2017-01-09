@@ -179,8 +179,9 @@ public class JavaProjectBuilder
      * JavaClass is called it will be searched by matching the package with the folder structure and the classname with
      * the filename
      * 
-     * @see #addSourceTree(File)
      * @param sourceFolder the sourcefolder to add
+     * @return the {@link JavaModule} when the sourceFolder has a module-info, otherwise {@code null}
+     * @see #addSourceTree(File)
      */
     public JavaModule addSourceFolder( File sourceFolder )
     {
@@ -351,6 +352,10 @@ public class JavaProjectBuilder
 
     /**
      * Note that after loading JavaDocBuilder classloaders need to be re-added.
+     * 
+     * @param file the file to load
+     * @return the deserialized project builder
+     * @throws IOException when file could not be deserialized
      */
     public static JavaProjectBuilder load( File file )
         throws IOException

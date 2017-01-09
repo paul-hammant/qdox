@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.library.ClassNameLibrary;
 import com.thoughtworks.qdox.model.DocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaConstructor;
+import com.thoughtworks.qdox.model.JavaExecutable;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -585,7 +585,7 @@ public class ModelBuilderTest extends TestCase {
 
         JavaSource source = builder.getSource();
 
-        JavaConstructor result1 = source.getClasses().get(0).getConstructors().get(0);
+        JavaExecutable result1 = source.getClasses().get(0).getConstructors().get(0);
         JavaMethod result2 = source.getClasses().get(0).getMethods().get(0);
 
         assertNotNull(result1);

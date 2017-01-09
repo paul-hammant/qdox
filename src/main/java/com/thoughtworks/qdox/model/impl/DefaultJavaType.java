@@ -31,6 +31,7 @@ import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
+import com.thoughtworks.qdox.model.JavaExecutable;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaInitializer;
@@ -377,9 +378,10 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
      *   <li>{@code callingClass}  would be ConcreteClass</li>
      *  </ul>
      * 
-     * @param declaringClass
-     * @param callingClass
-     * @return
+     * @param base the base
+     * @param declaringClass the declaring class
+     * @param callingClass the calling class
+     * @return the resolved type
      */
     protected static JavaType resolve( JavaType base, JavaClass declaringClass, JavaClass callingClass )
     {
@@ -715,13 +717,13 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     }
 
     /** {@inheritDoc} */
-    public JavaConstructor getConstructor( List<JavaType> parameterTypes )
+    public JavaExecutable getConstructor( List<JavaType> parameterTypes )
     {
         return resolveRealClass().getConstructor( parameterTypes );
     }
 
     /** {@inheritDoc} */
-    public JavaConstructor getConstructor( List<JavaType> parameterTypes, boolean varArg )
+    public JavaExecutable getConstructor( List<JavaType> parameterTypes, boolean varArg )
     {
         return resolveRealClass().getConstructor( parameterTypes, varArg );
     }

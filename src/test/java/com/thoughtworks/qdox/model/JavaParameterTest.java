@@ -24,7 +24,7 @@ public abstract class JavaParameterTest<P extends JavaParameter>
     // setters
     protected abstract void setMethod( P parameter, JavaMethod method );
 
-    protected abstract void setConstructor( P parameter, JavaConstructor constructor );
+    protected abstract void setConstructor( P parameter, JavaExecutable constructor );
 
     protected JavaClass newType( String typeName )
     {
@@ -72,7 +72,7 @@ public abstract class JavaParameterTest<P extends JavaParameter>
         P p = newJavaParameter( newType( "x" ), "x" );
         assertNull( p.getDeclarator() );
 
-        JavaConstructor c = mock( JavaConstructor.class );
+        JavaExecutable c = mock( JavaConstructor.class );
         setConstructor( p, c );
         assertSame( c, p.getDeclarator() );
     }

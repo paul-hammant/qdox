@@ -30,6 +30,7 @@ import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
+import com.thoughtworks.qdox.model.JavaExecutable;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -480,8 +481,8 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals(6, propertyClass.getMethods().size());
         assertEquals(2, propertyClass.getConstructors().size());
 
-        JavaConstructor ctor = propertyClass.getConstructor(null);
-        JavaConstructor ctor2 = propertyClass.getConstructor(Collections.singletonList((JavaType) propertyClass));
+        JavaExecutable ctor = propertyClass.getConstructor(null);
+        JavaExecutable ctor2 = propertyClass.getConstructor(Collections.singletonList((JavaType) propertyClass));
         JavaMethod getFoo = propertyClass.getMethodBySignature("getFoo", null);
         JavaMethod isBar = propertyClass.getMethodBySignature("isBar", null);
         JavaMethod get = propertyClass.getMethodBySignature("get", null);

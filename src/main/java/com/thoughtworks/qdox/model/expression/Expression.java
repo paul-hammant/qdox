@@ -22,7 +22,7 @@ package com.thoughtworks.qdox.model.expression;
 public interface Expression
 {
     /**
-     * Get a parameter value for {@link JavaAnnotation#getNamedParameter(String)}.
+     * Get a parameter value for {@link com.thoughtworks.qdox.model.JavaAnnotation#getNamedParameter(String)}.
      * 
      * @return Parameter value
      */

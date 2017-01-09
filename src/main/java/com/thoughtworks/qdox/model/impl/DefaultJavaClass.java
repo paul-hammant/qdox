@@ -32,6 +32,7 @@ import com.thoughtworks.qdox.model.BeanProperty;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
+import com.thoughtworks.qdox.model.JavaExecutable;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -356,12 +357,6 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public JavaType asType()
-    {
-        return this;
-    }
-    
-    /** {@inheritDoc} */
     public List<JavaInitializer> getInitializers()
     {
         return initializers;
@@ -374,13 +369,13 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public JavaConstructor getConstructor( List<JavaType> parameterTypes )
+    public JavaExecutable getConstructor( List<JavaType> parameterTypes )
     {
         return getConstructor( parameterTypes, false );
     }
 
     /** {@inheritDoc} */
-    public JavaConstructor getConstructor( List<JavaType> parameterTypes, boolean varArgs )
+    public JavaExecutable getConstructor( List<JavaType> parameterTypes, boolean varArgs )
     {
         for ( JavaConstructor constructor : getConstructors() )
         {

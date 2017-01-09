@@ -34,7 +34,7 @@ public interface JavaType
      * </ul>
      * </blockquote>
      * 
-     * @return
+     * @return the binary name
      * @since 2.0
      */
     String getBinaryName();
@@ -82,8 +82,10 @@ public interface JavaType
      * String[][] > java.lang.String[][]
      * </pre>
      * 
+     * @todo make clear difference between FQN and canonicalName, specs say FQN can be null
+     * 
      * @return the fully qualified name, never <code>null</code>
-     * @see #getComponentType()
+     * @see JavaClass#getComponentType()
      * @see #getBinaryName()
      */
     String getFullyQualifiedName();

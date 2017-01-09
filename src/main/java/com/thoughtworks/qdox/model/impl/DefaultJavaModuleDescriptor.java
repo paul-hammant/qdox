@@ -196,13 +196,13 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
     {
         private JavaClass service;
         
-        private List<JavaClass> implementations;
+        private List<JavaClass> providers;
 
-        public DefaultJavaProvides( JavaClass service, List<JavaClass> implementations )
+        public DefaultJavaProvides( JavaClass service, List<JavaClass> providers )
         {
             super();
             this.service = service;
-            this.implementations = implementations;
+            this.providers = providers;
         }
         
         public JavaClass getService()
@@ -210,9 +210,9 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             return service;
         }
         
-        public List<JavaClass> getImplementations()
+        public List<JavaClass> getProviders()
         {
-            return implementations;
+            return providers;
         }
         
         public String getCodeBlock()

@@ -574,7 +574,7 @@ public class DefaultModelWriter
         buffer.write( "provides " );
         buffer.write( provides.getService().getName() );
         buffer.write( " with " );
-        Iterator<JavaClass> providers = provides.getImplementations().iterator();
+        Iterator<JavaClass> providers = provides.getProviders().iterator();
         while( providers.hasNext() )
         {
             JavaClass provider = providers.next();

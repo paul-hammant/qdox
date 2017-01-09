@@ -61,7 +61,7 @@ public interface JavaModuleDescriptor
     static interface JavaProvides {
         JavaClass getService();
         
-        Collection<JavaClass> getImplementations();
+        Collection<JavaClass> getProviders();
     }
     
     /**

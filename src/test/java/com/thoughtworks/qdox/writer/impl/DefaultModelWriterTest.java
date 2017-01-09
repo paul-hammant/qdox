@@ -527,7 +527,7 @@ public class DefaultModelWriterTest {
         JavaClass providerZ3Z4 = mock( JavaClass.class );
         when( providerZ3Z4.getName() ).thenReturn( "Z3.Z4" );
         when( provides.getService() ).thenReturn( service );
-        when( provides.getImplementations() ).thenReturn( Arrays.asList( providerZ1Z2, providerZ3Z4 ) );
+        when( provides.getProviders() ).thenReturn( Arrays.asList( providerZ1Z2, providerZ3Z4 ) );
         modelWriter.writeModuleProvides( provides );
         assertEquals( "provides X.Y with Z1.Z2, Z3.Z4;\n", modelWriter.toString() );
     }

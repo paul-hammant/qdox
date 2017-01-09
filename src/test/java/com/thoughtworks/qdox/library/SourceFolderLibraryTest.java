@@ -95,7 +95,7 @@ public class SourceFolderLibraryTest
         Iterator<JavaProvides> providesIter = descriptor.getProvides().iterator();
         JavaProvides provides = providesIter.next();
         assertEquals( "X.Y", provides.getService().getFullyQualifiedName() );
-        Iterator<JavaClass> classIter = provides.getImplementations().iterator(); 
+        Iterator<JavaClass> classIter = provides.getProviders().iterator(); 
         JavaClass cls = classIter.next();
         assertEquals( "Z1.Z2", cls.getFullyQualifiedName() );
         cls = classIter.next();

@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
@@ -54,13 +53,9 @@ public class DefaultJavaAnnotation
      */
     private final Map<String, Object> namedParameters = new LinkedHashMap<String, Object>();
 
-    private JavaAnnotatedElement context;
-
-    public DefaultJavaAnnotation( JavaClass type, JavaAnnotatedElement context, Map<String, Object> namedParameters,
-                                  int lineNumber )
+    public DefaultJavaAnnotation( JavaClass type, Map<String, Object> namedParameters, int lineNumber )
     {
         this.type = type;
-        this.context = context;
         this.lineNumber = lineNumber;
 
         if ( properties != null )
@@ -77,7 +72,7 @@ public class DefaultJavaAnnotation
 
     public DefaultJavaAnnotation( JavaClass type, int line )
     {
-        this( type, null, null, line );
+        this( type, null, line );
     }
 
     public final void setProperty( String name, AnnotationValue value )
@@ -102,12 +97,6 @@ public class DefaultJavaAnnotation
     public Map<String, Object> getNamedParameterMap()
     {
         return namedParameters;
-    }
-
-    /** {@inheritDoc} */
-    public final JavaAnnotatedElement getContext()
-    {
-        return context;
     }
 
     /** {@inheritDoc} */
@@ -137,11 +126,6 @@ public class DefaultJavaAnnotation
     public AnnotationValue getProperty( String name )
     {
         return properties.get( name );
-    }
-
-    public void setContext( JavaAnnotatedElement context )
-    {
-        this.context = context;
     }
 
     public String toString()

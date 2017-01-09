@@ -46,9 +46,9 @@ public class DefaultJavaMethodTest
         method.setReturns( type );
     }
 
-    public void setParentClass( DefaultJavaMethod method, JavaClass clazz )
+    public void setDeclaringClass( DefaultJavaMethod method, JavaClass clazz )
     {
-        method.setParentClass( clazz );
+        method.setDeclaringClass( clazz );
     }
 
     @Override

@@ -1,12 +1,10 @@
 package com.thoughtworks.qdox.model.impl;
 
-import static org.mockito.Mockito.*;
 import java.util.List;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructorTest;
 import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.impl.DefaultJavaConstructor;
 
 
 public class DefaultJavaConstructorTest extends JavaConstructorTest<DefaultJavaConstructor>
@@ -34,8 +32,8 @@ public class DefaultJavaConstructorTest extends JavaConstructorTest<DefaultJavaC
     }
     
     @Override
-    protected void setParentClass( DefaultJavaConstructor constructor, JavaClass parentClass )
+    protected void setDeclaringClass( DefaultJavaConstructor constructor, JavaClass parentClass )
     {
-        constructor.setParentClass( parentClass );
+        constructor.setDeclaringClass( parentClass );
     }
 }

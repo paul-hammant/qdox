@@ -21,7 +21,7 @@ public class DefaultJavaFieldTest
         JavaSource source = new DefaultJavaSource( null );
         JavaClass javaClass = new DefaultJavaClass( source );
         DefaultJavaField result = new DefaultJavaField( "NAME" );
-        result.setParentClass( javaClass );
+        result.setDeclaringClass( javaClass );
         return result;
     }
 
@@ -64,6 +64,6 @@ public class DefaultJavaFieldTest
     @Override
     public void setDeclaringClass( DefaultJavaField fld, JavaClass cls )
     {
-        fld.setParentClass( cls );
+        fld.setDeclaringClass( cls );
     }
 }

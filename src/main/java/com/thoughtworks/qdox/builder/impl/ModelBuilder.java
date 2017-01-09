@@ -303,7 +303,7 @@ public class ModelBuilder implements Builder {
         else if ( !classStack.isEmpty() )
         {
             classStack.getFirst().addClass( newClass );
-            newClass.setParentClass( classStack.getFirst() );
+            newClass.setDeclaringClass( classStack.getFirst() );
         }
         else
         {
@@ -378,7 +378,7 @@ public class ModelBuilder implements Builder {
     {
         currentConstructor = new DefaultJavaConstructor();
 
-        currentConstructor.setParentClass( classStack.getFirst() );
+        currentConstructor.setDeclaringClass( classStack.getFirst() );
 
         currentConstructor.setModelWriterFactory( modelWriterFactory );
 
@@ -434,7 +434,7 @@ public class ModelBuilder implements Builder {
         currentMethod = new DefaultJavaMethod();
         if ( currentField == null )
         {
-            currentMethod.setParentClass( classStack.getFirst() );
+            currentMethod.setDeclaringClass( classStack.getFirst() );
             classStack.getFirst().addMethod( currentMethod );
         }
         currentMethod.setModelWriterFactory( modelWriterFactory );
@@ -534,7 +534,7 @@ public class ModelBuilder implements Builder {
     public void beginField( FieldDef def )
     {
         currentField = new DefaultJavaField( def.getName() );
-        currentField.setParentClass( classStack.getFirst() );
+        currentField.setDeclaringClass( classStack.getFirst() );
         currentField.setLineNumber( def.getLineNumber() );
         currentField.setModelWriterFactory( modelWriterFactory );
 

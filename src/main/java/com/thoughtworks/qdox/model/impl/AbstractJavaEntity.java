@@ -28,7 +28,7 @@ import com.thoughtworks.qdox.model.JavaModel;
 public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implements JavaModel {
 
     private List<String> modifiers = Collections.emptyList();
-    private JavaClass parentCls;
+    private JavaClass declaringClass;
 	private String name;
 
 	/**
@@ -156,14 +156,14 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
         return modifiers.contains(modifier);
     }
 
-    public void setParentClass( JavaClass parentClass )
+    public void setDeclaringClass( JavaClass declaringClass )
     {
-        this.parentCls = parentClass;
+        this.declaringClass = declaringClass;
     }
     
     public JavaClass getDeclaringClass()
     {
-        return parentCls;
+        return declaringClass;
     }
 
 	public String getName() {

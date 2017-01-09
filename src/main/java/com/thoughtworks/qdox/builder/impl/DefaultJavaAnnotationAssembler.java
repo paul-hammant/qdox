@@ -135,7 +135,6 @@ public class DefaultJavaAnnotationAssembler
         {
             annotation.setProperty( annoVal.getKey(), annoVal.getValue().transform( this ) );
         }
-        annotation.setContext( (JavaAnnotatedElement) parent );
         return annotation;
     }
     

@@ -17,7 +17,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     protected abstract D newJavaConstructor( String string );    
 
     protected abstract void setModifiers( D constructor, List<String> asList );
-    protected abstract void setParentClass( D constructor, JavaClass cls );
+    protected abstract void setDeclaringClass( D constructor, JavaClass cls );
     protected abstract void setParameters( D constructor, List<JavaParameter> singletonList );
 
     private JavaType newType( String name )
@@ -54,7 +54,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         JavaClass cls = mock(JavaClass.class);
         when(cls.getFullyQualifiedName()).thenReturn( "a.b.Executor" );
         D constructor = newJavaConstructor( "Executor" );
-        setParentClass( constructor, cls );
+        setDeclaringClass( constructor, cls );
         assertEquals("a.b.Executor()", constructor.toString());
     }
 
@@ -64,7 +64,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         when(cls.getFullyQualifiedName()).thenReturn( "a.b.Executor" );
         D constructor = newJavaConstructor( "Executor" );
         setParameters( constructor,  Collections.singletonList( newJavaParameter( newType("a.b.C"), "param" )  ));
-        setParentClass( constructor, cls );
+        setDeclaringClass( constructor, cls );
         assertEquals("a.b.C", constructor.getParameterTypes().get(0).getFullyQualifiedName());
     }
     
@@ -87,7 +87,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         D c3 = newJavaConstructor( "Thong" );
 
         D c4 = newJavaConstructor( "Thong" );
-        setParentClass( c4, mock( JavaClass.class ) );
+        setDeclaringClass( c4, mock( JavaClass.class ) );
 
         assertEquals( c1, c1 );
         assertThat( c1, not( new Object() ) );

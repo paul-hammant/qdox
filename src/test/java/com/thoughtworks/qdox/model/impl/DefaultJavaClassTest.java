@@ -54,7 +54,7 @@ public class DefaultJavaClassTest
     @Override
     public void setDeclaringClass( DefaultJavaClass clazz, JavaClass declaringClazz )
     {
-        clazz.setParentClass( declaringClazz );
+        clazz.setDeclaringClass( declaringClazz );
         
     }
 

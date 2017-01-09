@@ -32,7 +32,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     public abstract void setName(M method, String name);
     public abstract void setModifiers(M method, List<String> modifiers);
     public abstract void setParameters(M method, List<JavaParameter> parameters);
-    public abstract void setParentClass(M method, JavaClass clazz);
+    public abstract void setDeclaringClass(M method, JavaClass clazz);
     public abstract void setReturns(M method, JavaClass type);
     public abstract void setSourceCode(M method, String code);
     
@@ -258,7 +258,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setReturns(m8, newType("int"));
 //        JavaClass declaringClass = mock( JavaClass.class );
 //        when( declaringClass.getFullyQualifiedName() ).thenReturn( "com.foo.bar" );
-        setParentClass( m8, mock( JavaClass.class ) );
+        setDeclaringClass( m8, mock( JavaClass.class ) );
 
         assertEquals(mth, mth);
         assertThat(mth, not(new Object()));
@@ -411,7 +411,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     @Test
     public void testParentClass() throws Exception {
         JavaClass clazz = mock(JavaClass.class);
-        setParentClass( mth, clazz );
+        setDeclaringClass( mth, clazz );
         assertSame(clazz, mth.getDeclaringClass());
     }
 
@@ -429,7 +429,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getBinaryName()).thenReturn( "java.lang.Object" );
     	M mthd = newJavaMethod(newType("boolean"),"equals");
-    	setParentClass(mthd, cls);
+    	setDeclaringClass(mthd, cls);
     	setModifiers(mthd, Arrays.asList(new String[]{"public"}));
     	setParameters(mthd, Collections.singletonList( newJavaParameter(newType("java.lang.Object"), null) ));
     	assertEquals("public boolean java.lang.Object.equals(java.lang.Object)", mthd.toString());

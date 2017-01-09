@@ -20,7 +20,7 @@ public class DefaultJavaFieldTest
     {
         JavaSource source = new DefaultJavaSource( null );
         JavaClass javaClass = new DefaultJavaClass( source );
-        DefaultJavaField result = new DefaultJavaField();
+        DefaultJavaField result = new DefaultJavaField( "NAME" );
         result.setParentClass( javaClass );
         return result;
     }

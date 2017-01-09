@@ -25,7 +25,6 @@ import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
@@ -183,16 +182,67 @@ public interface ModelWriter
      */
     ModelWriter writeInitializer( JavaInitializer init );
     
+    /**
+     * Write the module descriptor
+     * 
+     * A standard module descriptor writer should write:
+     * <ul>
+     *   <li>the javadoc</li>
+     *   <li>the annotations</li>
+     *   <li>the module signature, containing:
+     *     <ul>
+     *       <li>the requires statements</li>
+     *       <li>the exports statements</li>
+     *       <li>the opens statements</li>
+     *       <li>the uses statements</li>
+     *       <li>the provides statements</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * 
+     * @param descriptor the module declaration
+     * @return itself
+     */
     ModelWriter writeModuleDescriptor( JavaModuleDescriptor descriptor );
     
+    /**
+     * Write the module descriptors exports
+     * 
+     * @param exports the exports module statement
+     * @return itself
+     */
     ModelWriter writeModuleExports( JavaModuleDescriptor.JavaExports exports );
 
+    /**
+     * Write the module descriptors opens
+     * 
+     * @param opens the opens module statement
+     * @return itself
+     */
     ModelWriter writeModuleOpens( JavaModuleDescriptor.JavaOpens opens );
     
+    /**
+     * Write the module descriptors provides
+     * 
+     * @param provides the provides module statement
+     * @return itself
+     */
     ModelWriter writeModuleProvides( JavaModuleDescriptor.JavaProvides provides );
     
+    /**
+     * Write the module descriptors requires
+     * 
+     * @param requires the requires module statement
+     * @return itself
+     */
     ModelWriter writeModuleRequires( JavaModuleDescriptor.JavaRequires requires );
 
-    ModelWriter writeModuleUses( JavaModuleDescriptor.JavaUses defaultJavaUses );
+    /**
+     * Write the module descriptors uses
+     * 
+     * @param uses the uses module statement
+     * @return itself
+     */
+    ModelWriter writeModuleUses( JavaModuleDescriptor.JavaUses uses );
 
 }

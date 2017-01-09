@@ -23,9 +23,6 @@ import java.util.List;
 
 public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel, JavaGenericDeclaration, JavaExecutable
 {
-    
-    // deprecated methods
-    // will be removed with QDox-2.0
     /**
      * 
      * @return the return type

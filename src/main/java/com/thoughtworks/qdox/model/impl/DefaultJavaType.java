@@ -288,13 +288,9 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         {
             result = new DefaultJavaClass( qualifiedName );
         }
-        else if (typeResolver != null)
-        {
-            result = typeResolver.getJavaClass( qualifiedName );
-        }
         else
         {
-            result = getJavaClassLibrary().getJavaClass( qualifiedName, true );
+            result = typeResolver.getJavaClass( qualifiedName );
         }
         return result;
     }

@@ -357,12 +357,6 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public String resolveType( String typeName )
-    {
-        return TypeResolver.byClassName( getBinaryName(), getJavaClassLibrary(), getSource().getImports() ).resolveType( typeName );
-    }
-
-    /** {@inheritDoc} */
     public JavaType asType()
     {
         return this;

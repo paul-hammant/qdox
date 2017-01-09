@@ -39,10 +39,6 @@ public class DefaultJavaField
     
     private List<Expression> enumConstantArguments;
 
-    public DefaultJavaField()
-    {
-    }
-
     public DefaultJavaField( String name )
     {
         setName( name );

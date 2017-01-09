@@ -25,52 +25,6 @@ package com.thoughtworks.qdox.model;
  */
 public interface JavaType
 {
-    JavaType VOID = new JavaType() 
-    {
-        private final String value = "void";
-        
-        
-        public String getBinaryName()
-        {
-            return null;
-        }
-        
-        public String getCanonicalName()
-        {
-            return value;
-        }
-
-        public String getGenericCanonicalName()
-        {
-            return value;
-        }
-
-        public String getFullyQualifiedName()
-        {
-            return value;
-        }
-
-        public String getGenericFullyQualifiedName()
-        {
-            return value;
-        }
-
-        public String getValue()
-        {
-            return value;
-        }
-
-        public String getGenericValue()
-        {
-            return value;
-        }
-
-        public String toGenericString()
-        {
-            return value;
-        }
-    };
-
     /**
      * <blockquote cite="https://docs.oracle.com/javase/specs/jls/se8/html/jls-13.html#jls-13.1">
      * The class or interface must be named by its binary name, which must meet the following constraints:

@@ -533,12 +533,11 @@ public class ModelBuilder implements Builder {
     /** {@inheritDoc} */
     public void beginField( FieldDef def )
     {
-        currentField = new DefaultJavaField();
+        currentField = new DefaultJavaField( def.getName() );
         currentField.setParentClass( classStack.getFirst() );
         currentField.setLineNumber( def.getLineNumber() );
         currentField.setModelWriterFactory( modelWriterFactory );
 
-        currentField.setName( def.getName() );
         currentField.setType( createType( def.getType(), def.getDimensions() ) );
         
         currentField.setEnumConstant( def.isEnumConstant() );

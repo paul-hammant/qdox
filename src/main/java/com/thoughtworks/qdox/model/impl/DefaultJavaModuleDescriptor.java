@@ -3,7 +3,9 @@ package com.thoughtworks.qdox.model.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaModule;
@@ -143,6 +145,11 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             this.targets = targets;
         }
 
+        public String source()
+        {
+            return source.getName();
+        }
+        
         public JavaPackage getSource()
         {
             return source;
@@ -157,6 +164,25 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             else
             {
                 return targets;
+            }
+        }
+        
+        public Set<String> targets()
+        {
+            if( targets == null )
+            {
+                return Collections.emptySet();
+            }
+            else
+            {
+                Set<String> targetValues = new LinkedHashSet<String>( targets.size() );
+                
+                for ( JavaModule target : targets )
+                {
+                    targetValues.add( target.getName() );
+                }
+                
+                return Collections.unmodifiableSet( targetValues );
             }
         }
 

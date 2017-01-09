@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +30,6 @@ import java.util.List;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.parser.ParseException;
 
 /**
  * 

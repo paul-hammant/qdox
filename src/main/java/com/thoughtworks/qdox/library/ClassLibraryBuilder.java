@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.net.URL;
 
 import com.thoughtworks.qdox.builder.ModelBuilderFactory;
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
@@ -178,5 +179,13 @@ public interface ClassLibraryBuilder extends Serializable
      * @return this ClassLibraryBuilder instance
      */
     ClassLibraryBuilder setErrorHander( ErrorHandler errorHandler );
+
+    /**
+     * 
+     * @param sourceFolder the sourcefolder
+     * @return the module info if the sourcefolder has a module-info.java, otherwise {@code null} 
+     * @since 2.0
+     */
+    JavaModule addSourceFolder( File sourceFolder );
 
 }

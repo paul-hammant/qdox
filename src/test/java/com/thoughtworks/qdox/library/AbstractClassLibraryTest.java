@@ -140,9 +140,9 @@ public class AbstractClassLibraryTest
     
     public void testModuleInfo()
     {
-        assertNull( nullClassLibrary.getJavaModule() );
-        assertNull( parentClassLibrary.getJavaModule() );
-        assertNull( filledChildClassLibrary.getJavaModule() );
-        assertNull( emptyChildClassLibrary.getJavaModule() );
+        assertNull( nullClassLibrary.getJavaModules() );
+        assertNull( parentClassLibrary.getJavaModules() );
+        assertNull( filledChildClassLibrary.getJavaModules() );
+        assertNull( emptyChildClassLibrary.getJavaModules() );
     }
 }

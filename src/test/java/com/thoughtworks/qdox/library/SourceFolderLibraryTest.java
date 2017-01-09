@@ -23,6 +23,12 @@ public class SourceFolderLibraryTest
     private SourceFolderLibrary library = new SourceFolderLibrary( null );
 
     @Test
+    public void testClassisFolder() {
+        JavaModule directModule = library.addSourceFolder( new File("src/test/resources/qdox-140") ); 
+        assertEquals( null, directModule);
+    }
+    
+    @Test
     public void testModuleInfo()
     {
         library.addSource( new StringReader("package V;\n"
@@ -34,9 +40,10 @@ public class SourceFolderLibraryTest
         library.addSource( new StringReader("package Z3;\n"
                         + "public class Z4 implements X.Y {}") );
         
-        library.addSourceFolder( new File("src/test/resources/jigsaw/example1") );
+        JavaModule directModule = library.addSourceFolder( new File("src/test/resources/jigsaw/example1") );
+        assertEquals( "M.N", directModule.getName() );
         
-        JavaModule module = library.getJavaModule();
+        JavaModule module = library.getJavaModules().iterator().next();
         assertEquals( "M.N", module.getName() );
         JavaModuleDescriptor descriptor = module.getDescriptor();
         assertEquals( 4, descriptor.getRequires().size() );

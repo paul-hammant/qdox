@@ -35,6 +35,6 @@ public class ClassLoaderLibraryTest
 
     public void testModuleInfo() throws Exception
     {
-        assertNull( classLoaderLibrary.getJavaModule() );
+        assertNull( classLoaderLibrary.getJavaModules() );
     }
 }

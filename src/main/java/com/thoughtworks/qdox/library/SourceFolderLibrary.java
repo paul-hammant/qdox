@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,43 +54,49 @@ public class SourceFolderLibrary
         this.sourceFolders.add( sourceFolder );
     }
 
-    public void addSourceFolder( File sourceFolder )
+    public JavaModule addSourceFolder( File sourceFolder )
     {
         this.sourceFolders.add( sourceFolder );
+        return resolveJavaModule( sourceFolder );
     }
 
     @Override
-    public JavaModule getJavaModule()
+    public Collection<JavaModule> getJavaModules()
     {
-        JavaModule module = super.getJavaModule();
-        if ( module == null )
-        {
-            module = resolveJavaModule();
-        }
-        return module;
+        return resolveJavaModules();
     }
     
-    private JavaModule resolveJavaModule()
+    private Collection<JavaModule> resolveJavaModules()
     {
-        JavaModule result = null;
+        Collection<JavaModule> modules = new ArrayList<JavaModule>(sourceFolders.size());
         for ( File sourceFolder : sourceFolders )
         {
-            File moduleInfoFile = new File( sourceFolder, "module-info.java" );
-            if ( moduleInfoFile.isFile()  )
+            JavaModule module = resolveJavaModule( sourceFolder );
+            if( module != null)
             {
-                try
-                {
-                    result = parse( new FileReader( moduleInfoFile ), moduleInfoFile.toURI().toURL() ).getModuleInfo();
-                    break;
-                }
-                catch ( FileNotFoundException e )
-                {
-                    // noop
-                }
-                catch ( MalformedURLException e )
-                {
-                   // noop
-                }
+                modules.add( module );
+            }
+        }
+        return modules;
+    }
+    
+    private JavaModule resolveJavaModule( File sourceFolder )
+    {
+        JavaModule result = null;
+        File moduleInfoFile = new File( sourceFolder, "module-info.java" );
+        if ( moduleInfoFile.isFile()  )
+        {
+            try
+            {
+                result = parse( new FileReader( moduleInfoFile ), moduleInfoFile.toURI().toURL() ).getModuleInfo();
+            }
+            catch ( FileNotFoundException e )
+            {
+                // noop
+            }
+            catch ( MalformedURLException e )
+            {
+               // noop
             }
         }
         return result;

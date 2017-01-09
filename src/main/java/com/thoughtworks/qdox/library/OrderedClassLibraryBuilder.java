@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.net.URL;
 
 import com.thoughtworks.qdox.builder.ModelBuilderFactory;
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
@@ -275,6 +276,12 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         return sourceLibrary.addSource( file );
     }
     
+    public JavaModule addSourceFolder( File sourceFolder )
+    {
+        SourceFolderLibrary sourceFolderLibrary = getSourceFolderLibrary();
+        return sourceFolderLibrary.addSourceFolder( sourceFolder );
+    }
+
     private void prepareSourceLibrary( SourceLibrary sourceLibrary ) {
         sourceLibrary.setModelBuilderFactory( modelBuilderFactory );
         sourceLibrary.setModelWriterFactory( modelWriterFactory );
@@ -292,6 +299,17 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
         SourceLibrary sourceLibrary = (SourceLibrary) classLibrary;
         prepareSourceLibrary( sourceLibrary );
         return sourceLibrary;
+    }
+    
+    private SourceFolderLibrary getSourceFolderLibrary()
+    {
+        if ( !( classLibrary instanceof SourceFolderLibrary ) )
+        {
+            classLibrary = newSourceFolderLibrary( classLibrary );
+        }
+        SourceFolderLibrary library = (SourceFolderLibrary) classLibrary;
+        prepareSourceLibrary( library );
+        return library;
     }
     
     /**

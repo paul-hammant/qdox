@@ -182,9 +182,9 @@ public class JavaProjectBuilder
      * @see #addSourceTree(File)
      * @param sourceFolder the sourcefolder to add
      */
-    public void addSourceFolder( File sourceFolder )
+    public JavaModule addSourceFolder( File sourceFolder )
     {
-        classLibraryBuilder.appendSourceFolder( sourceFolder );
+        return classLibraryBuilder.addSourceFolder( sourceFolder );
     }
 
     /**
@@ -306,9 +306,9 @@ public class JavaProjectBuilder
         return classLibraryBuilder.getClassLibrary().getJavaPackages();
     }
 
-    public JavaModule getModuleInfo()
+    public Collection<JavaModule> getModules()
     {
-        return classLibraryBuilder.getClassLibrary().getJavaModule();
+        return classLibraryBuilder.getClassLibrary().getJavaModules();
     }
     
     // Searcher

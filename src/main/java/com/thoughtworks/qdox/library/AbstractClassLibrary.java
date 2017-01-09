@@ -72,14 +72,14 @@ public abstract class AbstractClassLibrary
         this.parentClassLibrary = parent;
     }
     
-    public JavaModule getJavaModule()
+    public Collection<JavaModule> getJavaModules()
     {
-        JavaModule module = null;
+        Collection<JavaModule> modules = null;
         if ( parentClassLibrary != null )
         {
-            module = parentClassLibrary.getJavaModule();
+            modules = parentClassLibrary.getJavaModules();
         }
-        return module;
+        return modules;
     }
 
     /**

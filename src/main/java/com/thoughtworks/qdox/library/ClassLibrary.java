@@ -95,5 +95,5 @@ public interface ClassLibrary
      */
     Collection<JavaPackage> getJavaPackages();
 
-    JavaModule getJavaModule();
+    Collection<JavaModule> getJavaModules();
 }

@@ -1744,6 +1744,6 @@ public class JavaProjectBuilderTest extends TestCase
         builder = new JavaProjectBuilder( classLibraryBuilder );
         builder.addSourceFolder( file );
         
-        verify( classLibraryBuilder ).appendSourceFolder( same( file ) );
+        verify( classLibraryBuilder ).addSourceFolder( same( file ) );
     }
 }

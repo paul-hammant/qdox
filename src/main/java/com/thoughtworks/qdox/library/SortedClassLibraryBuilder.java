@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.net.URL;
 
 import com.thoughtworks.qdox.builder.ModelBuilderFactory;
+import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
@@ -173,4 +174,8 @@ public class SortedClassLibraryBuilder
         return sourceLibrary.addSource( file );
     }
 
+    public JavaModule addSourceFolder( File sourceFolder )
+    {
+        return sourceFolderLibrary.addSourceFolder( sourceFolder );
+    }
 }

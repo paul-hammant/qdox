@@ -107,7 +107,7 @@ public class SourceLibraryTest
     public void testModuleInfo() throws Exception {
     	File file = new File( "src/test/resources/com/thoughtworks/qdox/testdata/module-info.java");
     	assertNull( "module-info.java should be ignored", sourceLibrary.addSource(file) );
-    	assertNull( sourceLibrary.getJavaModule() );
+    	assertNull( sourceLibrary.getJavaModules() );
     }
     
 }

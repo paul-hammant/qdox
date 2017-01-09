@@ -47,7 +47,6 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     public static final DefaultJavaType VOID = new DefaultJavaType("void");
 
     protected final String name;
-    private JavaClass context;
     protected String fullName;
     private int dimensions;
     
@@ -65,26 +64,27 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         this.dimensions = dimensions;
         this.typeResolver = typeResolver;
     }
-    
-    DefaultJavaType(String fullName, String name, int dimensions, JavaClass context) {
-        this.fullName = fullName;
-        this.name = name;
-        this.dimensions = dimensions;
-        this.context = context;
-    }
-    
-    DefaultJavaType(String fullName, int dimensions, JavaClass context) {
-        this(fullName, null, dimensions, context);
-    }
 
     /**
      * Should only be used by primitives, since they don't have a classloader.
      * 
      * @param fullName the name of the primitive
+     * @param dimensions number of dimensions
+     */
+    DefaultJavaType(String fullName, int dimensions) {
+        this.name = fullName;
+        this.fullName = fullName;
+        this.dimensions = dimensions;
+    }
+
+    /**
+     * Should only be used by primitives and wildcard, since they don't have a classloader.
+     * 
+     * @param fullName the name of the primitive or ?
      */
     DefaultJavaType( String fullName ) 
     {
-        this( fullName, 0, null );
+        this( fullName, 0 );
     }
     
 	public String getBinaryName()
@@ -94,7 +94,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 	
 	public String getSimpleName()
 	{
-	    return resolveRealClass().getSimpleName();
+	    StringBuilder result = new StringBuilder( resolveRealClass().getSimpleName() );
+        for (int i = 0; i < dimensions; i++) 
+        {
+            result.append("[]");
+        }
+        return result.toString();
 	}
 	
     /** {@inheritDoc} */
@@ -119,7 +124,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     
     /** {@inheritDoc}*/
     public String getValue() {
-        return ( name != null ?  name : getFullyQualifiedName().replaceAll( "\\$", "." ) );
+        StringBuilder result = new StringBuilder( name );
+        for (int i = 0; i < dimensions; i++) 
+        {
+            result.append("[]");
+        }
+        return result.toString();
     }
     
     /**
@@ -858,7 +868,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     /** {@inheritDoc} */
     public String getCanonicalName()
     {
-        return resolveRealClass().getCanonicalName();
+        StringBuilder result = new StringBuilder( resolveRealClass().getCanonicalName() );
+        for (int i = 0; i < dimensions; i++) 
+        {
+            result.append("[]");
+        }
+        return result.toString();
     }
 
     /** {@inheritDoc} */

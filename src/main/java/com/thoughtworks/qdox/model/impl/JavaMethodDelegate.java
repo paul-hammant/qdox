@@ -82,7 +82,7 @@ public class JavaMethodDelegate implements JavaMethod
             // According to java-specs, if it could be resolved the upper boundary, so Object, should be returned
             if ( !resolve && !type.getFullyQualifiedName().equals( curType.getFullyQualifiedName() ) )
             {
-                result.add( new DefaultJavaType( "java.lang.Object", 0, callingClass ) );
+                result.add( new DefaultJavaType( "java.lang.Object", 0 ) );
             }
             else
             {

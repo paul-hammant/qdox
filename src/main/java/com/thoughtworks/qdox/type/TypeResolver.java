@@ -1,6 +1,7 @@
 package com.thoughtworks.qdox.type;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class TypeResolver
         this.pckg = pckg;
         this.declaringClass = declaringClass;
         this.classLibrary = classLibrary;
-        this.imports = imports;
+        this.imports = imports != null ? imports : Collections.<String>emptyList();
     }
     
     /**

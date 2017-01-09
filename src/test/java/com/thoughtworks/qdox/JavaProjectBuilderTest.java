@@ -1629,8 +1629,6 @@ public class JavaProjectBuilderTest extends TestCase
             "    MyEnum(Runnable function) { }\n" + 
             "}";
         
-        builder.setDebugLexer( true );
-        builder.setDebugParser( true );
         builder.addSource( new StringReader( source ) ); 
     }
 

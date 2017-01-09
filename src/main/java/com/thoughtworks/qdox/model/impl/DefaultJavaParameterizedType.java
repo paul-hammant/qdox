@@ -68,7 +68,7 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
      */
     public String getGenericValue()
     {
-        StringBuilder result = new StringBuilder( getValue() );
+        StringBuilder result = new StringBuilder( name );
         if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );
@@ -91,7 +91,8 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
     
     public String getGenericCanonicalName()
     {
-        StringBuilder result = new StringBuilder( getCanonicalName() );
+        String base = isArray() ? getComponentType().getCanonicalName() : getCanonicalName();
+        StringBuilder result = new StringBuilder( base );
         if ( !actualArgumentTypes.isEmpty() )
         {
             result.append( "<" );

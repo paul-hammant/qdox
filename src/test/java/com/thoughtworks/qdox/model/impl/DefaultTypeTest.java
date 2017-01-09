@@ -26,12 +26,12 @@ public class DefaultTypeTest
 
     public DefaultJavaType newType( String fullname, int dimensions )
     {
-        return new DefaultJavaType( fullname, dimensions, null );
+        return new DefaultJavaType( fullname, dimensions );
     }
 
     public DefaultJavaType newType( String fullname, int dimensions, JavaClass clazz )
     {
-        return new DefaultJavaType( fullname, dimensions, clazz );
+        return new DefaultJavaType( fullname, dimensions );
     }
 
     @Test

@@ -63,12 +63,14 @@ public interface JavaType
      *   <li>The fully qualified name of a top level class or top level interface that is declared in an unnamed package is the simple name of the class or interface.</li>
      *   <li>The fully qualified name of a top level class or top level interface that is declared in a named package consists of the fully qualified name of the package, followed by ".", followed by the simple name of the class or interface.</li>
      * </ul>
+     * Each member class, member interface, and array type may have a fully qualified name:
+     * <ul>
+     *   <li>A member class or member interface M of another class or interface C has a fully qualified name if and only if C has a fully qualified name.</li>
+     *   <li>In that case, the fully qualified name of M consists of the fully qualified name of C, followed by ".", followed by the simple name of M.</li>
+     *   <li>An array type has a fully qualified name if and only if its element type has a fully qualified name.</li>
+     *   <li>In that case, the fully qualified name of an array type consists of the fully qualified name of the component type of the array type followed by "[]".</li>
+     * </ul>
      * </blockquote>
-     * 
-     * Returns the FQN of an Object or the handler of a Type.
-     * If the name of the can't be resolved based on the imports and the classes on the classpath the name will be returned.
-     * InnerClasses will use the $ sign.
-     * If the type is an array, the brackets will be included. The get only the name, use {@link #getComponentType()}.
      * 
      * Some examples how names will be translated 
      * <pre>
@@ -76,7 +78,7 @@ public interface JavaType
      * java.util.List > java.util.List
      * ?  > ?
      * T  > T
-     * anypackage.Outer.Inner > anypackage.Outer$Inner
+     * anypackage.Outer.Inner > anypackage.Outer.Inner
      * String[][] > java.lang.String[][]
      * </pre>
      * 
@@ -87,7 +89,7 @@ public interface JavaType
     String getFullyQualifiedName();
 
     /**
-     * The fully qualified nate with generic information.
+     * The fully qualified name with generic information.
      * 
      * @return the generic fully qualified name
      */
@@ -123,6 +125,5 @@ public interface JavaType
      */
     String getGenericValue();
 
-    @Deprecated
     String toGenericString();
 }

@@ -1,7 +1,9 @@
 package com.thoughtworks.qdox.model.impl;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -57,8 +59,10 @@ public class DefaultJavaParameterizedTypeTest
                                                  equalTo(field.getType().getSimpleName())));
         assertThat( type.getCanonicalName(), allOf( equalTo("java.util.List"), 
                                                     equalTo(field.getType().getCanonicalName())));
-        assertThat( type.getGenericCanonicalName(), allOf( equalTo("java.util.List<java.lang.String>"), 
-                                                           equalTo(field.getGenericType().getTypeName())));
+        
+// Requires Java8        
+        assertThat( type.getGenericCanonicalName(), allOf( equalTo("java.util.List<java.lang.String>")/*, 
+                                                           equalTo(field.getGenericType().getTypeName())*/));
     }
 
     @SuppressWarnings( "unchecked" )
@@ -82,8 +86,10 @@ public class DefaultJavaParameterizedTypeTest
                                                  equalTo(field.getType().getSimpleName())));
         assertThat( type.getCanonicalName(), allOf( equalTo("java.util.List[]"), 
                                                     equalTo(field.getType().getCanonicalName())));
-        assertThat( type.getGenericCanonicalName(), allOf( equalTo("java.util.List<java.lang.String>[]"), 
-                                                           equalTo(field.getGenericType().getTypeName())));
+        
+// requires java8        
+        assertThat( type.getGenericCanonicalName(), allOf( equalTo("java.util.List<java.lang.String>[]")/*, 
+                                                           equalTo(field.getGenericType().getTypeName())*/));
         
         assertThat( type.getComponentType().getSimpleName(), allOf( equalTo("List"), 
                                                                     equalTo(field.getType().getComponentType().getSimpleName())));
@@ -112,8 +118,8 @@ public class DefaultJavaParameterizedTypeTest
                                                  equalTo(field.getType().getSimpleName())));
         assertThat( type.getCanonicalName(), allOf( equalTo("java.util.List[][]"), 
                                                     equalTo(field.getType().getCanonicalName())));
-        assertThat( type.getGenericCanonicalName(), allOf( equalTo("java.util.List<java.lang.String>[][]"), 
-                                                           equalTo(field.getGenericType().getTypeName())));
+        
+        
 //        assertThat( type.getComponentType().getSimpleName(), allOf( equalTo("java.util.List"), 
 //                                                                    equalTo(field.getType().getComponentType().getSimpleName())));
     }

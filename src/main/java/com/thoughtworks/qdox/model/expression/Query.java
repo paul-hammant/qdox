@@ -36,6 +36,7 @@ public class Query
         this.falseExpression = falseExpression;
     }
 
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
@@ -56,12 +57,14 @@ public class Query
         return this.falseExpression;
     }
 
+    /** {@inheritDoc} */
     public String getParameterValue()
     {
         return condition.getParameterValue().toString() + " ? " + trueExpression.getParameterValue() + " : "
             + falseExpression.getParameterValue();
     }
 
+    @Override
     public String toString()
     {
         return condition.toString() + " ? " + trueExpression.toString() + " : " + falseExpression.toString();

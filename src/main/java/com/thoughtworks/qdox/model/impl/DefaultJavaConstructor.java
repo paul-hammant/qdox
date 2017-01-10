@@ -32,11 +32,13 @@ public class DefaultJavaConstructor
         return typeParameters;
     }
     
+    /** {@inheritDoc} */
     public boolean signatureMatches( List<JavaType> parameterTypes )
     {
         return signatureMatches( parameterTypes, false );
     }
     
+    /** {@inheritDoc} */
     public boolean signatureMatches( List<JavaType> parameterTypes, boolean varArgs )
     {
         return super.signatureMatches( parameterTypes, varArgs );

@@ -34,6 +34,7 @@ public class MethodInvocation
         this.arguments = arguments;
     }
 
+    /** {@inheritDoc} */
     public Object getParameterValue()
     {
         return null;
@@ -49,6 +50,7 @@ public class MethodInvocation
         return arguments;
     }
 
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );

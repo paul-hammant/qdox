@@ -32,6 +32,7 @@ public class DefaultJavaInitializer extends AbstractJavaModel implements JavaIni
     
     private String blockContent;
 
+    /** {@inheritDoc} */
     public boolean isStatic()
     {
         return staticInitializer;
@@ -42,6 +43,7 @@ public class DefaultJavaInitializer extends AbstractJavaModel implements JavaIni
         this.staticInitializer = staticInitializer;
     }
 
+    /** {@inheritDoc} */
     public String getBlockContent()
     {
         return blockContent;
@@ -52,6 +54,7 @@ public class DefaultJavaInitializer extends AbstractJavaModel implements JavaIni
         this.blockContent = codeBlock;
     }
     
+    /** {@inheritDoc} */
     public String getCodeBlock()
     {
         return getModelWriter().writeInitializer( this ).toString();

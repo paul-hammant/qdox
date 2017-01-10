@@ -48,6 +48,7 @@ public class AssignmentDef extends ExpressionDef
         return assignmentExpression;
     }
 
+    /** {@inheritDoc} */
     public <U> U transform( ElemValueTransformer<U> transformer )
     {
         return transformer.transform(this);

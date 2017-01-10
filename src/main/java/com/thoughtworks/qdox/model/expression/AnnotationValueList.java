@@ -39,6 +39,7 @@ public class AnnotationValueList
         return valueList;
     }
 
+    @Override
     public String toString()
     {
         StringBuilder buf = new StringBuilder();
@@ -60,20 +61,13 @@ public class AnnotationValueList
         return buf.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.expression.AnnotationValue#accept(com.thoughtworks.qdox.model.expression.
-     * AnnotationVisitor)
-     */
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.thoughtworks.qdox.model.expression.AnnotationValue#getParameterValue()
-     */
+    /** {@inheritDoc} */
     public List<Object> getParameterValue()
     {
         List<Object> list = new LinkedList<Object>();

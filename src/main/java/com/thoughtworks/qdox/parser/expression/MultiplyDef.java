@@ -26,6 +26,7 @@ public class MultiplyDef extends BinaryOperatorDef {
     	super(lhs, rhs);
 	}
 
+    /** {@inheritDoc} */
     public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }

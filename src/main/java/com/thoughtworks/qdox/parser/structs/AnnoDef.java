@@ -39,6 +39,7 @@ public class AnnoDef extends LocatedDef implements ElemValueDef
     	return this;
     }
     
+    /** {@inheritDoc} */
     public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }

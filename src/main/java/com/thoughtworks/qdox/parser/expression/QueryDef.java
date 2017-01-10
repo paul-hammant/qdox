@@ -33,6 +33,7 @@ public class QueryDef  extends ExpressionDef {
     	this.falseExpr = falseExpr;
 	}
     
+    /** {@inheritDoc} */
     public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }

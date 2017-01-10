@@ -100,16 +100,19 @@ public abstract class Constant
         return image;
     }
 
+    @Override
     public String toString()
     {
         return image;
     }
 
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }
 
+    /** {@inheritDoc} */
     public String getParameterValue()
     {
         return image;

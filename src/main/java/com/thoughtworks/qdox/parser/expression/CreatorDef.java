@@ -71,6 +71,7 @@ public class CreatorDef extends ExpressionDef
         this.classBody = classBody;
     }
 
+    /** {@inheritDoc} */
     public <U> U transform( ElemValueTransformer<U> transformer )
     {
         return transformer.transform( this );

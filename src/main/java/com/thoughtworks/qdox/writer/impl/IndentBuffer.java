@@ -68,6 +68,7 @@ public class IndentBuffer
         depth--;
     }
 
+    @Override
     public String toString()
     {
         return buffer.toString();

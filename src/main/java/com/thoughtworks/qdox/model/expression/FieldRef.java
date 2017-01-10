@@ -79,6 +79,7 @@ public class FieldRef
         return parts.length - 1;
     }
 
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
@@ -90,6 +91,7 @@ public class FieldRef
         return getName();
     }
 
+    @Override
     public String toString()
     {
         return getName();

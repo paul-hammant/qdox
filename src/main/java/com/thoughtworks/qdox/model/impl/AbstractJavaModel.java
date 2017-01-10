@@ -23,6 +23,7 @@ public abstract class AbstractJavaModel implements JavaModel {
 		super();
 	}
 
+	/** {@inheritDoc} */
 	public int getLineNumber() {
 		return lineNumber;
 	}

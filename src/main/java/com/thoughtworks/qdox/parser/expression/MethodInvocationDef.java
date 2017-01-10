@@ -43,6 +43,7 @@ public class MethodInvocationDef extends ExpressionDef
         return arguments;
     }
 
+    /** {@inheritDoc} */
     public <U> U transform( ElemValueTransformer<U> transformer )
     {
         return transformer.transform( this );

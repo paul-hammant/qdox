@@ -45,16 +45,19 @@ public class Cast
         return this.value;
     }
 
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }
 
+    /** {@inheritDoc} */
     public String getParameterValue()
     {
         return "(" + type.getCanonicalName() + ") " + value.getParameterValue();
     }
 
+    @Override
     public String toString()
     {
         return "(" + type.toString() + ") " + value.toString();

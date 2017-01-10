@@ -32,6 +32,7 @@ public class FieldRefDef extends ExpressionDef {
         return name;
     }
 
+    /** {@inheritDoc} */
     public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }

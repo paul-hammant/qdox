@@ -26,11 +26,13 @@ public abstract class DefaultJavaExecutable
     private boolean varArgs;
     private String sourceCode;
 
+    /** {@inheritDoc} */
     public List<JavaParameter> getParameters()
     {
         return parameters;
     }
 
+    /** {@inheritDoc} */
     public JavaParameter getParameterByName( String name )
     {
         for (JavaParameter parameter : getParameters()) {
@@ -41,16 +43,19 @@ public abstract class DefaultJavaExecutable
         return null;
     }
 
+    /** {@inheritDoc} */
     public List<JavaClass> getExceptions()
     {
         return new LinkedList<JavaClass>( exceptions );
     }
-    
+
+    /** {@inheritDoc} */
     public List<JavaType> getExceptionTypes()
     {
         return new LinkedList<JavaType>( exceptions );
     }
 
+    /** {@inheritDoc} */
     public boolean isVarArgs()
     {
         return varArgs;
@@ -91,11 +96,13 @@ public abstract class DefaultJavaExecutable
         return (this.varArgs == varArgs);
     }
 
+    /** {@inheritDoc} */
     public boolean isPublic()
     {
         return super.isPublic() || (getDeclaringClass() != null ? getDeclaringClass().isInterface() : false);
     }
 
+    /** {@inheritDoc} */
     public List<DocletTag> getTagsByName( String name, boolean inherited )
     {
         JavaClass cls = getDeclaringClass();
@@ -117,6 +124,7 @@ public abstract class DefaultJavaExecutable
         return result;
     }
 
+    /** {@inheritDoc} */
     public List<JavaType> getParameterTypes()
     {
         return getParameterTypes( false );

@@ -27,6 +27,7 @@ public class ParenExpressionDef extends ExpressionDef {
     	this.elemValueDef = value;
 	}
     
+    /** {@inheritDoc} */
     public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }

@@ -211,20 +211,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         return ( fullName != null );
     }
 
-    /**
-     * Returns true if this Type is an array
-     * 
-     * @return true if this type is an array, otherwise <code>null</code>
-     */
+    /** {@inheritDoc} */
     public boolean isArray() {
         return dimensions > 0;
     }
 
-    /**
-     * Returns the depth of this array, 0 if it's not an array
-     * 
-     * @return The depth of this array, at least <code>0</code>
-     */
+    /** {@inheritDoc} */
     public int getDimensions() {
         return dimensions;
     }
@@ -307,9 +299,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         }
     }
 
-    /**
-     * @since 1.6
-     */
+    /** {@inheritDoc} */
     public boolean isPrimitive() {
        return isPrimitive( getValue() );
     }
@@ -328,9 +318,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         
     }
 
-    /**
-     * @since 1.6
-     */
+    /** {@inheritDoc} */
     public boolean isVoid() {
         return "void".equals(getValue());
     }

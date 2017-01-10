@@ -267,8 +267,9 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     boolean isA( JavaClass javaClass );
 
     /**
+     * Returns the depth of this array, 0 if it's not an array
      * 
-     * @return the number of dimensions, at least 0
+     * @return The depth of this array, at least <code>0</code>
      * @since 2.0
      */
     int getDimensions();

@@ -132,12 +132,14 @@ public class ModelBuilder implements Builder {
         source.setModelWriterFactory( modelWriterFactory );
     }
     
+    /** {@inheritDoc} */
     public void setModule( final ModuleDef moduleDef )
     {
         this.moduleDescriptor = new DefaultJavaModuleDescriptor(moduleDef.getName());
         this.module = new DefaultJavaModule(moduleDef.getName(), moduleDescriptor);
     }
     
+    /** {@inheritDoc} */
     public void addExports( ExportsDef exportsDef )
     {
         // for now use anonymous modules
@@ -154,6 +156,7 @@ public class ModelBuilder implements Builder {
         moduleDescriptor.addExports( exports );
     }
     
+    /** {@inheritDoc} */
     public void addOpens( OpensDef opensDef )
     {
      // for now use anonymous modules
@@ -170,6 +173,7 @@ public class ModelBuilder implements Builder {
         moduleDescriptor.addOpens( exports );
     }
 
+    /** {@inheritDoc} */
     public void addProvides( ProvidesDef providesDef )
     {
         JavaClass service = createType( providesDef.getService(), 0 );
@@ -184,6 +188,7 @@ public class ModelBuilder implements Builder {
         moduleDescriptor.addProvides( provides );
     }
 
+    /** {@inheritDoc} */
     public void addRequires( RequiresDef requiresDef )
     {
         JavaModule module = new DefaultJavaModule( requiresDef.getName(), null );
@@ -193,6 +198,7 @@ public class ModelBuilder implements Builder {
         moduleDescriptor.addRequires( requires );
     }
 
+    /** {@inheritDoc} */
     public void addUses( UsesDef usesDef )
     {
         DefaultJavaUses uses = new DefaultJavaUses( createType( usesDef.getService(), 0 ) );
@@ -362,6 +368,7 @@ public class ModelBuilder implements Builder {
         lastComment = null;
     }
     
+    /** {@inheritDoc} */
     public void addInitializer( InitDef def )
     {
         DefaultJavaInitializer initializer = new DefaultJavaInitializer();
@@ -639,21 +646,25 @@ public class ModelBuilder implements Builder {
         currentAnnoDefs.add( annotation );
     }
     
+    /** {@inheritDoc} */
     public void addArgument( ExpressionDef argument )
     {
         currentArguments.add( argument );
     }
 
+    /** {@inheritDoc} */
     public JavaSource getSource()
     {
         return source;
     }
     
+    /** {@inheritDoc} */
     public JavaModule getModuleInfo()
     {
         return module;
     }
 
+    /** {@inheritDoc} */
     public void setUrl( URL url )
     {
         source.setURL( url );

@@ -98,7 +98,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return getModelWriter().writeSource( this ).toString();
     }
     
-    /** {@inheritDoc} */
+    @Override
     public String toString() {
     	return getCodeBlock();
     }
@@ -108,10 +108,6 @@ public class DefaultJavaSource implements JavaSource, Serializable {
         return ( pkg == null ? "" : pkg.getName() + '.' ); 
     }
 
-    public JavaSource getParentSource() {
-        return this;
-    }
-    
     /**  {@inheritDoc} */
     public JavaClass getNestedClassByName(String name) {
         JavaClass result = null;

@@ -101,6 +101,7 @@ public class DefaultJavaAnnotation extends AbstractJavaModel
         return getModelWriter().writeAnnotation( this ).toString();
     }
     
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
@@ -124,8 +125,7 @@ public class DefaultJavaAnnotation extends AbstractJavaModel
         return properties.get( name );
     }
 
-
-    
+    @Override
     public String toString()
     {
         StringBuilder result = new StringBuilder();

@@ -44,6 +44,7 @@ public class CastDef extends ExpressionDef
         return elemDef;
     }
 
+    /** {@inheritDoc} */
     public <U> U transform( ElemValueTransformer<U> transformer )
     {
         return transformer.transform( this );

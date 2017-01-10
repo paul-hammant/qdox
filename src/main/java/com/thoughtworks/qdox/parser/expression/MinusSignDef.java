@@ -26,6 +26,7 @@ public class MinusSignDef extends UnaryOperatorDef {
 		super(value);
 	}
 
+    /** {@inheritDoc} */
 	public <U> U transform(ElemValueTransformer<U> transformer) {
 		return transformer.transform(this);
 	}

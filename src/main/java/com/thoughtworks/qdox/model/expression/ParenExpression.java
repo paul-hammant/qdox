@@ -35,16 +35,19 @@ public class ParenExpression
         return value;
     }
 
+    @Override
     public String toString()
     {
         return "(" + value.toString() + ")";
     }
 
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }
 
+    /** {@inheritDoc} */
     public String getParameterValue()
     {
         return "(" + value.getParameterValue() + ")";

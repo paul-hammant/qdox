@@ -45,9 +45,7 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
         super( name, typeResolver );
     }
     
-    /**
-     * @return the bounds
-     */
+    /** {@inheritDoc} */
     public List<JavaType> getBounds()
     {
         return bounds;
@@ -61,6 +59,7 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
         this.bounds = bounds;
     }
     
+    /** {@inheritDoc} */
     public D getGenericDeclaration()
     {
         return genericDeclaration;
@@ -145,15 +144,5 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     public String getName()
     {
         return getValue();
-    }
-
-    public String getResolvedValue()
-    {
-        return bounds.get( 0 ).getValue();
-    }
-
-    public String getResolvedFullyQualifiedName()
-    {
-        return bounds.get( 0 ).getFullyQualifiedName();
     }
 }

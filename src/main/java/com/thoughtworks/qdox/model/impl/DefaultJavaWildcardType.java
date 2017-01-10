@@ -54,6 +54,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
         this.boundType = boundType;
     }
 
+    @Override
     public String getFullyQualifiedName()
     {
         StringBuilder builder = getPreparedStringBuilder();
@@ -64,6 +65,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
         return builder.toString();
     }
 
+    @Override
     public String getGenericValue()
     {
         StringBuilder builder = getPreparedStringBuilder();
@@ -74,6 +76,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
         return builder.toString();
     }
 
+    @Override
     public String getGenericFullyQualifiedName()
     {
         StringBuilder builder = getPreparedStringBuilder();
@@ -84,6 +87,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
         return builder.toString();
     }
     
+    @Override
     public String getCanonicalName()
     {
         StringBuilder builder = getPreparedStringBuilder();
@@ -93,7 +97,8 @@ public class DefaultJavaWildcardType extends DefaultJavaType
         }
         return builder.toString();
     }
-    
+
+    @Override
     public String getGenericCanonicalName()
     {
         StringBuilder builder = getPreparedStringBuilder();
@@ -104,6 +109,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
         return builder.toString();
     }
 
+    @Override
     public String getValue()
     {
         StringBuilder builder = getPreparedStringBuilder();
@@ -115,6 +121,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
 
     }
 
+    @Override
     public String toGenericString()
     {
         StringBuilder builder = getPreparedStringBuilder();

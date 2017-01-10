@@ -29,6 +29,7 @@ import com.thoughtworks.qdox.model.JavaAnnotatedElement;
  */
 public class DefaultDocletTagFactory implements DocletTagFactory {
 
+    /** {@inheritDoc} */
     public DocletTag createDocletTag(
         String tag, String text, 
         JavaAnnotatedElement context, int lineNumber
@@ -36,6 +37,7 @@ public class DefaultDocletTagFactory implements DocletTagFactory {
         return new DefaultDocletTag(tag, text, context, lineNumber);
     }
 
+    /** {@inheritDoc} */
     public DocletTag createDocletTag(String tag, String text) {
         return createDocletTag(tag, text, null, 0);
     }

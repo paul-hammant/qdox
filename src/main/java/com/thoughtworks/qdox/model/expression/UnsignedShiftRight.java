@@ -28,16 +28,19 @@ public class UnsignedShiftRight
         super( left, right );
     }
 
+    @Override
     public String toString()
     {
         return getLeft().toString() + " >>> " + getRight().toString();
     }
 
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }
 
+    /** {@inheritDoc} */
     public String getParameterValue()
     {
         return getLeft().getParameterValue() + " >>> " + getRight().getParameterValue();

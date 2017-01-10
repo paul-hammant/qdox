@@ -164,9 +164,7 @@ public class DefaultJavaClass
         return result;
     }
 
-    /**
-     * Shorthand for getSuperClass().getJavaClass() with null checking.
-     */
+    /** {@inheritDoc} */
     public JavaClass getSuperJavaClass()
     {
         JavaClass result = null;

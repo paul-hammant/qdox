@@ -43,6 +43,7 @@ public class ConstantDef extends ExpressionDef {
         return value;
     }
 
+    /** {@inheritDoc} */
     public <U> U transform(ElemValueTransformer<U> transformer) {
     	return transformer.transform(this);
     }

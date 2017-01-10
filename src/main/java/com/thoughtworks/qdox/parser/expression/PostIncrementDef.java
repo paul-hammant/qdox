@@ -26,6 +26,7 @@ public class PostIncrementDef extends UnaryOperatorDef
         super( elemValueDef );
     }
 
+    /** {@inheritDoc} */
     public <U> U transform( ElemValueTransformer<U> transformer )
     {
         return transformer.transform( this );

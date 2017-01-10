@@ -16,21 +16,25 @@ public class DefaultJavaModule extends AbstractJavaModel
         this.descriptor = descriptor;
     }
     
+    /** {@inheritDoc} */
     public String getCodeBlock()
     {
         return getModelWriter().writeModuleDescriptor( this.descriptor ).toString();
     }
     
+    /** {@inheritDoc} */
     public String getName()
     {
         return name;
     }
 
+    /** {@inheritDoc} */
     public boolean isNamed()
     {
         return name != null;
     }
 
+    /** {@inheritDoc} */
     public JavaModuleDescriptor getDescriptor()
     {
         return descriptor;

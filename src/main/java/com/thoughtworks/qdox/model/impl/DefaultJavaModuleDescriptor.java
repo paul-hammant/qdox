@@ -32,7 +32,8 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
     {
         this.name = name;
     }
-    
+
+    /** {@inheritDoc} */
     public String getName()
     {
         return name;
@@ -42,7 +43,8 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
     {
         this.open = open;
     }
-    
+
+    /** {@inheritDoc} */
     public boolean isOpen()
     {
         return open;
@@ -53,6 +55,7 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
         this.exports.add( exports );
     }
 
+    /** {@inheritDoc} */
     public Collection<JavaExports> getExports()
     {
         return Collections.<JavaExports>unmodifiableCollection( exports );
@@ -62,7 +65,8 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
     {
         this.opens.add( opens );
     }
-    
+
+    /** {@inheritDoc} */
     public Collection<JavaOpens> getOpens()
     {
         return Collections.<JavaOpens>unmodifiableCollection( opens );
@@ -73,6 +77,7 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
         this.requires.add( requires );
     }
 
+    /** {@inheritDoc} */
     public Collection<JavaRequires> getRequires()
     {
         return Collections.<JavaRequires>unmodifiableCollection( requires );
@@ -83,6 +88,7 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
         this.provides.add( provides);
     }
 
+    /** {@inheritDoc} */
     public Collection<JavaProvides> getProvides()
     {
         return Collections.<JavaProvides>unmodifiableCollection( provides );
@@ -93,6 +99,7 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
         this.uses.add( uses );
     }
 
+    /** {@inheritDoc} */
     public Collection<JavaUses> getUses()
     {
         return Collections.<JavaUses>unmodifiableCollection( uses );
@@ -110,11 +117,13 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             this.targets = targets;
         }
 
+        /** {@inheritDoc} */
         public JavaPackage getSource()
         {
             return source;
         }
 
+        /** {@inheritDoc} */
         public Collection<JavaModule> getTargets()
         {
             if( targets == null )
@@ -127,6 +136,7 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             }
         }
 
+        /** {@inheritDoc} */
         public String getCodeBlock()
         {
             return getModelWriter().writeModuleExports( this ).toString();
@@ -149,12 +159,14 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
         {
             return source.getName();
         }
-        
+
+        /** {@inheritDoc} */
         public JavaPackage getSource()
         {
             return source;
         }
 
+        /** {@inheritDoc} */
         public Collection<JavaModule> getTargets()
         {
             if( targets == null )
@@ -186,6 +198,7 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             }
         }
 
+        /** {@inheritDoc} */
         public String getCodeBlock()
         {
             return getModelWriter().writeModuleOpens( this ).toString();
@@ -204,17 +217,20 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             this.service = service;
             this.providers = providers;
         }
-        
+
+        /** {@inheritDoc} */
         public JavaClass getService()
         {
             return service;
         }
-        
+
+        /** {@inheritDoc} */
         public List<JavaClass> getProviders()
         {
             return providers;
         }
-        
+
+        /** {@inheritDoc} */
         public String getCodeBlock()
         {
             return getModelWriter().writeModuleProvides( this ).toString();
@@ -232,22 +248,26 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             this.module = module;
             this.modifiers = modifiers;
         }
-    
+
+        /** {@inheritDoc} */
         public JavaModule getModule()
         {
             return module;
         }
-    
+
+        /** {@inheritDoc} */
         public boolean isTransitive()
         {
             return getModifiers().contains( "transitive" );
         }
-    
+
+        /** {@inheritDoc} */
         public boolean isStatic()
         {
             return getModifiers().contains( "static" );
         }
-    
+
+        /** {@inheritDoc} */
         public Collection<String> getModifiers()
         {
             if( modifiers == null )
@@ -259,7 +279,8 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
                 return modifiers;
             }
         }
-        
+
+        /** {@inheritDoc} */
         public String getCodeBlock()
         {
             return getModelWriter().writeModuleRequires( this ).toString();
@@ -275,11 +296,13 @@ public class DefaultJavaModuleDescriptor implements JavaModuleDescriptor
             this.service = service;
         }
 
+        /** {@inheritDoc} */
         public JavaClass getService()
         {
             return service;
         }
 
+        /** {@inheritDoc} */
         public String getCodeBlock()
         {
             return getModelWriter().writeModuleUses( this ).toString();

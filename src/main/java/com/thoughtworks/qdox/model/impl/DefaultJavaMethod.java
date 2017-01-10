@@ -328,7 +328,7 @@ public class DefaultJavaMethod extends DefaultJavaExecutable implements JavaMeth
         return Introspector.decapitalize( getName().substring( start ) );
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         StringBuilder result = new StringBuilder();
@@ -409,12 +409,14 @@ public class DefaultJavaMethod extends DefaultJavaExecutable implements JavaMeth
     {
         return returns;
     }
-    
+
+    /** {@inheritDoc} */
     public boolean signatureMatches( String name, List<JavaType> parameterTypes )
     {
         return signatureMatches( name, parameterTypes, false );
     }
     
+    /** {@inheritDoc} */
     public boolean signatureMatches( String name, List<JavaType> parameterTypes, boolean varArg )
     {
         if ( !name.equals( this.getName() ) ) 

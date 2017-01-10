@@ -11,6 +11,7 @@ public class ElemValueListDef implements ElemValueDef{
 		this.valueList = annoValueList;
 	}
 
+    /** {@inheritDoc} */
 	public <U> U transform(ElemValueTransformer<U> transformer) {
 		return transformer.transform(this);
 	}

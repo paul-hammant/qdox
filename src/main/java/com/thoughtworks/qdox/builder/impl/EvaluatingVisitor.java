@@ -224,11 +224,13 @@ public class EvaluatingVisitor
         return type;
     }
 
+    /** {@inheritDoc} */
     public Object visit( JavaAnnotation annotation ) throws UnsupportedOperationException
     {
         throw new UnsupportedOperationException( "Illegal annotation value '" + annotation + "'." );
     }
 
+    /** {@inheritDoc} */
     public Object visit( Add op )
     {
         Object left = op.getLeft().accept( this );
@@ -265,11 +267,13 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( Constant constant )
     {
         return constant.getValue();
     }
 
+    /** {@inheritDoc} */
     public Object visit( Divide op )
     {
         Object left = op.getLeft().accept( this );
@@ -301,6 +305,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( FieldRef fieldRef )
     {
         JavaField javaField = fieldRef.getField();
@@ -322,6 +327,7 @@ public class EvaluatingVisitor
         throw new UnsupportedOperationException("getFieldReferenceValue(JavaField) has not been implemented.");
     }
 
+    /** {@inheritDoc} */
     public Object visit( GreaterThan op )
     {
         Object left = op.getLeft().accept( this );
@@ -353,6 +359,7 @@ public class EvaluatingVisitor
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /** {@inheritDoc} */
     public Object visit( LessThan op )
     {
         Object left = op.getLeft().accept( this );
@@ -384,6 +391,7 @@ public class EvaluatingVisitor
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /** {@inheritDoc} */
     public Object visit( Multiply op )
     {
         Object left = op.getLeft().accept( this );
@@ -415,11 +423,13 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( ParenExpression parenExpression )
     {
         return parenExpression.getValue().accept( this );
     }
 
+    /** {@inheritDoc} */
     public Object visit( Subtract op )
     {
         Object left = op.getLeft().accept( this );
@@ -451,11 +461,13 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public JavaType visit( TypeRef typeRef )
     {
         return typeRef.getType();
     }
 
+    /** {@inheritDoc} */
     public List<?> visit( AnnotationValueList valueList )
     {
         List<Object> list = new LinkedList<Object>();
@@ -469,6 +481,7 @@ public class EvaluatingVisitor
         return list;
     }
 
+    /** {@inheritDoc} */
     public Object visit( And and )
     {
         Object left = and.getLeft().accept( this );
@@ -492,6 +505,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( GreaterEquals greaterEquals )
     {
         Object left = greaterEquals.getLeft().accept( this );
@@ -523,6 +537,7 @@ public class EvaluatingVisitor
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /** {@inheritDoc} */
     public Object visit( LessEquals lessEquals )
     {
         Object left = lessEquals.getLeft().accept( this );
@@ -554,6 +569,7 @@ public class EvaluatingVisitor
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /** {@inheritDoc} */
     public Object visit( LogicalAnd and )
     {
         Object left = and.getLeft().accept( this );
@@ -572,6 +588,7 @@ public class EvaluatingVisitor
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /** {@inheritDoc} */
     public Object visit( LogicalNot not )
     {
         Object value = not.getValue().accept( this );
@@ -589,6 +606,7 @@ public class EvaluatingVisitor
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /** {@inheritDoc} */
     public Object visit( LogicalOr or )
     {
         Object left = or.getLeft().accept( this );
@@ -607,6 +625,7 @@ public class EvaluatingVisitor
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /** {@inheritDoc} */
     public Object visit( MinusSign sign )
     {
         Object value = sign.getValue().accept( this );
@@ -637,6 +656,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( Not not )
     {
         Object value = not.getValue().accept( this );
@@ -659,6 +679,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( Or or )
     {
         Object left = or.getLeft().accept( this );
@@ -682,6 +703,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( PlusSign sign )
     {
         Object value = sign.getValue().accept( this );
@@ -699,6 +721,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( Remainder remainder )
     {
         Object left = remainder.getLeft().accept( this );
@@ -730,6 +753,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( ShiftLeft shiftLeft )
     {
         Object left = shiftLeft.getLeft().accept( this );
@@ -753,6 +777,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( ShiftRight shiftRight )
     {
         Object left = shiftRight.getLeft().accept( this );
@@ -776,6 +801,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( UnsignedShiftRight shiftRight )
     {
         Object left = shiftRight.getLeft().accept( this );
@@ -799,6 +825,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( Equals annotationEquals )
     {
         Object left = annotationEquals.getLeft().accept( this );
@@ -830,6 +857,7 @@ public class EvaluatingVisitor
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /** {@inheritDoc} */
     public Object visit( ExclusiveOr annotationExclusiveOr )
     {
         Object left = annotationExclusiveOr.getLeft().accept( this );
@@ -853,6 +881,7 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( NotEquals annotationNotEquals )
     {
         Object left = annotationNotEquals.getLeft().accept( this );
@@ -884,6 +913,7 @@ public class EvaluatingVisitor
         return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /** {@inheritDoc} */
     public Object visit( Query annotationQuery )
     {
         Object value = annotationQuery.getCondition().accept( this );
@@ -900,6 +930,7 @@ public class EvaluatingVisitor
         return expression.accept( this );
     }
 
+    /** {@inheritDoc} */
     public Object visit( Cast annotationCast )
     {
         Object value = annotationCast.getValue().accept( this );
@@ -959,31 +990,37 @@ public class EvaluatingVisitor
         return result;
     }
 
+    /** {@inheritDoc} */
     public Object visit( PreDecrement preDecrement )
     {
         throw new IllegalArgumentException( "Cannot evaluate '" + preDecrement + "'." );
     }
-    
+
+    /** {@inheritDoc} */
     public Object visit( PreIncrement preIncrement )
     {
         throw new IllegalArgumentException( "Cannot evaluate '" + preIncrement + "'." );
     }
-    
+
+    /** {@inheritDoc} */
     public Object visit( PostDecrement postDecrement )
     {
         throw new IllegalArgumentException( "Cannot evaluate '" + postDecrement + "'." );
     }
-    
+
+    /** {@inheritDoc} */
     public Object visit( PostIncrement postIncrement )
     {
         throw new IllegalArgumentException( "Cannot evaluate '" + postIncrement + "'." );
     }
 
+    /** {@inheritDoc} */
     public Object visit( Assignment assignment )
     {
         throw new IllegalArgumentException( "Cannot evaluate '" + assignment + "'." );
     }
-    
+
+    /** {@inheritDoc} */
     public Object visit( MethodInvocation methodInvocation )
     {
         throw new IllegalArgumentException( "Cannot evaluate '" + methodInvocation + "'." );

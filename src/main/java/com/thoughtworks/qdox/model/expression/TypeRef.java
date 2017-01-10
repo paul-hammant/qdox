@@ -37,16 +37,19 @@ public class TypeRef
         return type;
     }
 
+    @Override
     public String toString()
     {
         return type.getValue() + ".class";
     }
 
+    /** {@inheritDoc} */
     public Object accept( ExpressionVisitor visitor )
     {
         return visitor.visit( this );
     }
 
+    /** {@inheritDoc} */
     public String getParameterValue()
     {
         return type.getValue() + ".class";

@@ -160,7 +160,8 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     {
         this.declaringClass = declaringClass;
     }
-    
+
+    /** {@inheritDoc} */
     public JavaClass getDeclaringClass()
     {
         return declaringClass;

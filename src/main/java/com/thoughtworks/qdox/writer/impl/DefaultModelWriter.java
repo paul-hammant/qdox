@@ -476,7 +476,8 @@ public class DefaultModelWriter
             }
         }
     }
-    
+
+    /** {@inheritDoc} */
     public ModelWriter writeModuleDescriptor( JavaModuleDescriptor descriptor )
     {
         if( descriptor.isOpen() ) {
@@ -523,7 +524,7 @@ public class DefaultModelWriter
         return this;
     }
 
-    
+    /** {@inheritDoc} */
     public ModelWriter writeModuleExports( JavaExports exports )
     {
         buffer.write( "exports " );
@@ -547,6 +548,7 @@ public class DefaultModelWriter
         return this;
     }
     
+    /** {@inheritDoc} */
     public ModelWriter writeModuleOpens( JavaOpens opens )
     {
         buffer.write( "opens " );
@@ -569,6 +571,8 @@ public class DefaultModelWriter
         buffer.newline();
         return this;
     }
+
+    /** {@inheritDoc} */
     public ModelWriter writeModuleProvides( JavaProvides provides )
     {
         buffer.write( "provides " );
@@ -589,6 +593,7 @@ public class DefaultModelWriter
         return null;
     }
     
+    /** {@inheritDoc} */
     public ModelWriter writeModuleRequires( JavaRequires requires )
     {
         buffer.write( "requires " );
@@ -600,6 +605,7 @@ public class DefaultModelWriter
         return this;
     }
     
+    /** {@inheritDoc} */
     public ModelWriter writeModuleUses( JavaUses uses )
     {
         buffer.write( "uses " );

@@ -51,8 +51,6 @@ import com.thoughtworks.qdox.type.TypeResolver;
  */
 public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 
-    public static final DefaultJavaType VOID = new DefaultJavaType("void");
-
     protected final String name;
     protected String fullName;
     private int dimensions;

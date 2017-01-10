@@ -598,11 +598,11 @@ public class ModelBuilder implements Builder {
                                       fieldDef.isVarArgs() );
         if( currentMethod != null )
         {
-            jParam.setDeclarator( currentMethod );
+            jParam.setExecutable( currentMethod );
         }
         else
         {
-            jParam.setDeclarator( currentConstructor );
+            jParam.setExecutable( currentConstructor );
         }
         jParam.setModelWriterFactory( modelWriterFactory );
         addJavaDoc( jParam );

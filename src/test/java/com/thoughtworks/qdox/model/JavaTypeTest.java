@@ -1,12 +1,14 @@
 package com.thoughtworks.qdox.model;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.core.IsNot.*;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 
 public abstract class JavaTypeTest<T extends JavaType>
 {
@@ -52,7 +54,7 @@ public abstract class JavaTypeTest<T extends JavaType>
     @Test
     public void testToStringVoid()
     {
-        assertEquals( "void", DefaultJavaType.VOID.toString() );
+        assertEquals( "void", newType("void").toString() );
     }
 
     @Test

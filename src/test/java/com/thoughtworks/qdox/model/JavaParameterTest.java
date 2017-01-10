@@ -3,13 +3,12 @@ package com.thoughtworks.qdox.model;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
-
 import junit.framework.TestCase;
 
 public abstract class JavaParameterTest<P extends JavaParameter>
     extends TestCase
 {
+    private final JavaClass VOID = newType( "void" );
 
     public JavaParameterTest( String s )
     {
@@ -35,23 +34,23 @@ public abstract class JavaParameterTest<P extends JavaParameter>
 
     public void testHashCode()
     {
-        assertTrue( "hashCode should never resolve to 0", newJavaParameter( DefaultJavaType.VOID, "" ).hashCode() != 0 );
+        assertTrue( "hashCode should never resolve to 0", newJavaParameter( VOID, "" ).hashCode() != 0 );
 
-        P simpleParameter = newJavaParameter( DefaultJavaType.VOID, "", false );
-        P varArgParameter = newJavaParameter( DefaultJavaType.VOID, "", true );
+        P simpleParameter = newJavaParameter( VOID, "", false );
+        P varArgParameter = newJavaParameter( VOID, "", true );
 
         assertTrue( simpleParameter.hashCode() != varArgParameter.hashCode() );
     }
 
     public void testEquals()
     {
-        P simpleParameter = newJavaParameter( DefaultJavaType.VOID, "", false );
-        P varArgParameter = newJavaParameter( DefaultJavaType.VOID, "", true );
+        P simpleParameter = newJavaParameter( VOID, "", false );
+        P varArgParameter = newJavaParameter( VOID, "", true );
         assertTrue( !simpleParameter.equals( varArgParameter ) );
 
         // name of parameter shouldn't matter
-        P fooParameter = newJavaParameter( DefaultJavaType.VOID, "foo" );
-        P barParameter = newJavaParameter( DefaultJavaType.VOID, "bar" );
+        P fooParameter = newJavaParameter( VOID, "foo" );
+        P barParameter = newJavaParameter( VOID, "bar" );
         assertEquals( fooParameter, barParameter );
     }
 
@@ -59,22 +58,22 @@ public abstract class JavaParameterTest<P extends JavaParameter>
         throws Exception
     {
         P p = newJavaParameter( newType( "x" ), "x" );
-        assertNull( p.getDeclarator() );
+        assertNull( p.getExecutable() );
 
         JavaMethod m = mock( JavaMethod.class );
         setMethod( p, m );
-        assertSame( m, p.getDeclarator() );
+        assertSame( m, p.getExecutable() );
     }
 
     public void testConstgructorDeclarator()
         throws Exception
     {
         P p = newJavaParameter( newType( "x" ), "x" );
-        assertNull( p.getDeclarator() );
+        assertNull( p.getExecutable() );
 
         JavaExecutable c = mock( JavaConstructor.class );
         setConstructor( p, c );
-        assertSame( c, p.getDeclarator() );
+        assertSame( c, p.getExecutable() );
     }
 
 }

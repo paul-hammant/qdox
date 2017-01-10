@@ -29,12 +29,12 @@ public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParam
     @Override
     protected void setMethod( DefaultJavaParameter parameter, JavaMethod method )
     {
-        parameter.setDeclarator( method );
+        parameter.setExecutable( method );
     }
     
     @Override
     protected void setConstructor( DefaultJavaParameter parameter, JavaExecutable constructor )
     {
-        parameter.setDeclarator( constructor );        
+        parameter.setExecutable( constructor );        
     }
 }

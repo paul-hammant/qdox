@@ -16,8 +16,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
-
 public abstract class JavaMethodTest<M extends JavaMethod> {
 
     private M mth;
@@ -316,7 +314,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     public void testHashCode()
         throws Exception
     {
-        assertTrue( "hashCode should never resolve to 0", newJavaMethod( DefaultJavaType.VOID, "" ).hashCode() != 0 );
+        assertTrue( "hashCode should never resolve to 0", newJavaMethod( newType("void"), "" ).hashCode() != 0 );
 
         JavaClass voidType = newType( "void" );
         JavaClass intType = newType( "int", 1 );
@@ -561,18 +559,18 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     @Test
     public void testIsPropertyMutator()
     {
-        M setNameMethod = newJavaMethod( DefaultJavaType.VOID, "setName" );
+        M setNameMethod = newJavaMethod( newType("void"), "setName" );
         setParameters( setNameMethod, Collections.singletonList( mock(JavaParameter.class) ) );
         assertTrue( setNameMethod.isPropertyMutator() );
 
-        M setUpMethod = newJavaMethod( DefaultJavaType.VOID, "setUp" );
+        M setUpMethod = newJavaMethod( newType("void"), "setUp" );
         assertFalse( setUpMethod.isPropertyMutator() );
 
-        M settingUpMethod = newJavaMethod( DefaultJavaType.VOID, "settingUp" );
+        M settingUpMethod = newJavaMethod( newType("void"), "settingUp" );
         setParameters( settingUpMethod, Collections.singletonList( mock(JavaParameter.class) ) );
         assertFalse( settingUpMethod.isPropertyMutator() );
 
-        M staticSetNameMethod = newJavaMethod( DefaultJavaType.VOID, "setName" );
+        M staticSetNameMethod = newJavaMethod( newType("void"), "setName" );
         setModifiers( staticSetNameMethod, Collections.singletonList( "static" ) );
         setParameters( staticSetNameMethod, Collections.singletonList( mock(JavaParameter.class) ) );
         assertFalse( staticSetNameMethod.isPropertyMutator() );

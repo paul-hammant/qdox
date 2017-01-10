@@ -1478,7 +1478,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( 1, qDoxConstructor.getParameters().size() );
         JavaParameter qDoxParameter = qDoxConstructor.getParameters().get( 0 );
         assertEquals( "apiPath", qDoxParameter.getName() );
-        assertEquals( qDoxConstructor, qDoxParameter.getDeclarator() );
+        assertEquals( qDoxConstructor, qDoxParameter.getExecutable() );
     }
     
     // for QDOX-255

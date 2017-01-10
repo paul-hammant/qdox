@@ -30,7 +30,7 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
 
     private String name;
     private JavaClass type;
-    private JavaExecutable declarator;
+    private JavaExecutable executable;
     private boolean varArgs;
 
     public DefaultJavaParameter( JavaClass type, String name )
@@ -75,20 +75,20 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     }
 
     /** {@inheritDoc} */
-    public JavaExecutable getDeclarator()
+    public JavaExecutable getExecutable()
     {
-        return declarator;
+        return executable;
     }
 
-    public void setDeclarator( JavaExecutable declarator )
+    public void setExecutable( JavaExecutable executable )
     {
-        this.declarator = declarator;
+        this.executable = executable;
     }
     
     /** {@inheritDoc} */
     public JavaClass getDeclaringClass()
     {
-        return getDeclarator().getDeclaringClass();
+        return getExecutable().getDeclaringClass();
     }
 
     /** {@inheritDoc} */
@@ -135,25 +135,25 @@ public class DefaultJavaParameter extends AbstractBaseJavaEntity implements Java
     /** {@inheritDoc} */
     public String getResolvedValue()
     {
-        return DefaultJavaType.getResolvedValue( type, getDeclarator().getTypeParameters() );
+        return DefaultJavaType.getResolvedValue( type, getExecutable().getTypeParameters() );
     }
 
     /** {@inheritDoc} */
     public String getResolvedFullyQualifiedName() 
     {
-        return DefaultJavaType.getResolvedFullyQualifiedName( type, getDeclarator().getTypeParameters() );
+        return DefaultJavaType.getResolvedFullyQualifiedName( type, getExecutable().getTypeParameters() );
     }
     
     /** {@inheritDoc} */
 	public String getResolvedGenericValue() 
 	{
-		return DefaultJavaType.getResolvedGenericValue( type, getDeclarator().getTypeParameters() );
+		return DefaultJavaType.getResolvedGenericValue( type, getExecutable().getTypeParameters() );
 	}
 	
     /** {@inheritDoc} */
 	public String getResolvedGenericFullyQualifiedName()
 	{
-	    return DefaultJavaType.getResolvedGenericFullyQualifiedName( type, getDeclarator().getTypeParameters() );
+	    return DefaultJavaType.getResolvedGenericFullyQualifiedName( type, getExecutable().getTypeParameters() );
 	}
 
     @Override

@@ -21,9 +21,7 @@ public abstract class JavaParameterTest<P extends JavaParameter>
     protected abstract P newJavaParameter( JavaClass type, String name, boolean varArgs );
 
     // setters
-    protected abstract void setMethod( P parameter, JavaMethod method );
-
-    protected abstract void setConstructor( P parameter, JavaExecutable constructor );
+    protected abstract void setJavaExecutable( P parameter, JavaExecutable executable );
 
     protected JavaClass newType( String typeName )
     {
@@ -54,26 +52,14 @@ public abstract class JavaParameterTest<P extends JavaParameter>
         assertEquals( fooParameter, barParameter );
     }
 
-    public void testMethodDeclarator()
+    public void testExecutableDeclarator()
         throws Exception
     {
         P p = newJavaParameter( newType( "x" ), "x" );
         assertNull( p.getExecutable() );
 
-        JavaMethod m = mock( JavaMethod.class );
-        setMethod( p, m );
-        assertSame( m, p.getExecutable() );
+        JavaExecutable e = mock( JavaExecutable.class );
+        setJavaExecutable( p, e );
+        assertSame( e, p.getExecutable() );
     }
-
-    public void testConstgructorDeclarator()
-        throws Exception
-    {
-        P p = newJavaParameter( newType( "x" ), "x" );
-        assertNull( p.getExecutable() );
-
-        JavaExecutable c = mock( JavaConstructor.class );
-        setConstructor( p, c );
-        assertSame( c, p.getExecutable() );
-    }
-
 }

@@ -2,9 +2,7 @@ package com.thoughtworks.qdox.model.impl;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaExecutable;
-import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameterTest;
-import com.thoughtworks.qdox.model.impl.DefaultJavaParameter;
 
 public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParameter>
 {
@@ -27,14 +25,8 @@ public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParam
     }
 
     @Override
-    protected void setMethod( DefaultJavaParameter parameter, JavaMethod method )
+    protected void setJavaExecutable( DefaultJavaParameter parameter, JavaExecutable executable )
     {
-        parameter.setExecutable( method );
-    }
-    
-    @Override
-    protected void setConstructor( DefaultJavaParameter parameter, JavaExecutable constructor )
-    {
-        parameter.setExecutable( constructor );        
+        parameter.setExecutable( executable );        
     }
 }

@@ -516,11 +516,7 @@ public class ModelBuilder implements Builder {
         {
             result = (JavaClass) genericDeclaration;
         }
-        else if ( genericDeclaration instanceof JavaMethod )
-        {
-            result = ( (JavaMethod) genericDeclaration ).getDeclaringClass();
-        }
-        else if ( genericDeclaration instanceof JavaConstructor )
+        else if ( genericDeclaration instanceof JavaExecutable )
         {
             result = ( (JavaExecutable) genericDeclaration ).getDeclaringClass();
         }

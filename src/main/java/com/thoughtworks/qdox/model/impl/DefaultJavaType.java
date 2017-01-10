@@ -703,13 +703,13 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     }
 
     /** {@inheritDoc} */
-    public JavaExecutable getConstructor( List<JavaType> parameterTypes )
+    public JavaConstructor getConstructor( List<JavaType> parameterTypes )
     {
         return resolveRealClass().getConstructor( parameterTypes );
     }
 
     /** {@inheritDoc} */
-    public JavaExecutable getConstructor( List<JavaType> parameterTypes, boolean varArg )
+    public JavaConstructor getConstructor( List<JavaType> parameterTypes, boolean varArg )
     {
         return resolveRealClass().getConstructor( parameterTypes, varArg );
     }

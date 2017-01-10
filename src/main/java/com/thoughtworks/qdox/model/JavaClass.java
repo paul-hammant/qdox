@@ -141,7 +141,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * @return the matching constructor, otherwise <code>null</code>
      * @since 2.0
      */
-    JavaExecutable getConstructor(List<JavaType> parameterTypes);
+    JavaConstructor getConstructor(List<JavaType> parameterTypes);
     
     /**
      * 
@@ -150,7 +150,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * @return the matching constructor, otherwise <code>null</code>
      * @since 2.0
      */
-    JavaExecutable getConstructor(List<JavaType> parameterTypes, boolean varArg);
+    JavaConstructor getConstructor(List<JavaType> parameterTypes, boolean varArg);
     
 
     /**

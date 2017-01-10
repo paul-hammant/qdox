@@ -369,13 +369,13 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public JavaExecutable getConstructor( List<JavaType> parameterTypes )
+    public JavaConstructor getConstructor( List<JavaType> parameterTypes )
     {
         return getConstructor( parameterTypes, false );
     }
 
     /** {@inheritDoc} */
-    public JavaExecutable getConstructor( List<JavaType> parameterTypes, boolean varArgs )
+    public JavaConstructor getConstructor( List<JavaType> parameterTypes, boolean varArgs )
     {
         for ( JavaConstructor constructor : getConstructors() )
         {

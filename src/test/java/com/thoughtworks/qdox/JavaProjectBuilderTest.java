@@ -481,8 +481,8 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals(6, propertyClass.getMethods().size());
         assertEquals(2, propertyClass.getConstructors().size());
 
-        JavaExecutable ctor = propertyClass.getConstructor(null);
-        JavaExecutable ctor2 = propertyClass.getConstructor(Collections.singletonList((JavaType) propertyClass));
+        JavaConstructor ctor = propertyClass.getConstructor(null);
+        JavaConstructor ctor2 = propertyClass.getConstructor(Collections.singletonList((JavaType) propertyClass));
         JavaMethod getFoo = propertyClass.getMethodBySignature("getFoo", null);
         JavaMethod isBar = propertyClass.getMethodBySignature("isBar", null);
         JavaMethod get = propertyClass.getMethodBySignature("get", null);

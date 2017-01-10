@@ -59,14 +59,14 @@ public interface ClassLibraryBuilder extends Serializable
 
     /**
      * 
-     * @param sourceFolder
+     * @param sourceFolder the source folder
      * @return this ClassLibraryBuilder instance
      */
     ClassLibraryBuilder appendSourceFolder( File sourceFolder );
 
     /**
      * 
-     * @param stream
+     * @param stream the Java source as stream
      * @return this ClassLibraryBuilder instance
      * @throws IOException if an IOException is thrown, e.g. unsupported encoding
      */
@@ -74,30 +74,30 @@ public interface ClassLibraryBuilder extends Serializable
 
     /**
      * 
-     * @param reader
+     * @param reader the Java source as reader
      * @return this ClassLibraryBuilder instance
      */
     ClassLibraryBuilder appendSource( Reader reader );
 
     /**
      * 
-     * @param url
+     * @param url the Java source as URL
      * @return this ClassLibraryBuilder instance
-     * @throws IOException
+     * @throws IOException if an IOException occurs
      */
     ClassLibraryBuilder appendSource( URL url ) throws IOException;
 
     /**
      * 
-     * @param file
+     * @param file the Java source as file
      * @return this ClassLibraryBuilder instance
-     * @throws IOException
+     * @throws IOException if an IOException occurs
      */
     ClassLibraryBuilder appendSource( File file ) throws IOException;
 
     /**
      * 
-     * @param stream
+     * @param stream the Java source as stream
      * @return the created JavaSource
      * @throws IOException if an IOException is thrown, e.g. unsupported encoding
      */
@@ -106,44 +106,46 @@ public interface ClassLibraryBuilder extends Serializable
     /**
      * Add the source content of the reader to the ClassLibrary and return the generated JavaSource
      * 
-     * @param reader
+     * @param reader the Java source as reader
      * @return the created JavaSource
      */
     JavaSource addSource( Reader reader );
     
     /**
      * 
-     * @param url
+     * @param url the Java source as URL
      * @return the created JavaSource
-     * @throws IOException
+     * @throws IOException if an IOException occurs
      */
     JavaSource addSource( URL url ) throws IOException;
     
     /**
      * 
-     * @param file
+     * @param file the Java source as file
      * @return the created JavaSource
-     * @throws IOException
+     * @throws IOException if an IOException occurs
      */
     JavaSource addSource( File file ) throws IOException;
     
     /**
+     * Set to {@code true} to enable debug logging for the lexer
      * 
-     * @param debugLexer
+     * @param debugLexer the debug logging flag
      * @return this ClassLibraryBuilder instance
      */
     ClassLibraryBuilder setDebugLexer( boolean debugLexer );
 
     /**
+     * Set to {@code true} to enable debug logging for the parser
      * 
-     * @param debugParser
+     * @param debugParser the debug logging flag
      * @return this ClassLibraryBuilder instance
      */
     ClassLibraryBuilder setDebugParser( boolean debugParser );
     
     /**
      * 
-     * @param encoding
+     * @param encoding set the encoding
      * @return this ClassLibraryBuilder instance
      */
     ClassLibraryBuilder setEncoding( String encoding );

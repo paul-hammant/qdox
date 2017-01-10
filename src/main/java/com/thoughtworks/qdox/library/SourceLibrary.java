@@ -69,7 +69,7 @@ public class SourceLibrary
     /**
      * Create a new instance of SourceLibrary and chain it to the parent 
      * 
-     * @param parent
+     * @param parent the parent classLibrary
      */
     public SourceLibrary( AbstractClassLibrary parent )
     {
@@ -107,6 +107,7 @@ public class SourceLibrary
      * @param stream an {@link InputStream} which should contain java code
      * @return The constructed {@link JavaSource} object of this stream
      * @throws ParseException if this content couldn't be parsed to a JavaModel
+     * @throws IOException  if an IOException occurs
      */
     public JavaSource addSource( InputStream stream )
         throws ParseException, IOException
@@ -127,6 +128,7 @@ public class SourceLibrary
      * @param url a {@link URL} which should contain java code
      * @return The constructed {@link JavaSource} object of this url
      * @throws ParseException if this content couldn't be parsed to a JavaModel
+     * @throws IOException  if an IOException occurs
      */
     public JavaSource addSource( URL url )
         throws ParseException, IOException
@@ -139,8 +141,8 @@ public class SourceLibrary
      * 
      * @param file a {@link File} which should contain java code
      * @return The constructed {@link JavaSource} object of this file
-     * @throws ParseException
-     * @throws IOException
+     * @throws ParseException if this content couldn't be parsed to a JavaModel
+     * @throws IOException  if an IOException occurs
      */
     public JavaSource addSource( File file )
         throws ParseException, IOException
@@ -179,9 +181,7 @@ public class SourceLibrary
         }
     	return result;
     }
-    
-    
-    
+
     Builder parse( Reader reader, URL url )
         throws ParseException
     {
@@ -306,7 +306,7 @@ public class SourceLibrary
     /**
      * Use the Lexer in debug mode
      * 
-     * @param debugLexer 
+     * @param debugLexer the debug logging flag
      */
     public final void setDebugLexer( boolean debugLexer )
     {
@@ -321,7 +321,7 @@ public class SourceLibrary
     /**
      * Use the Parser in debug mode
      * 
-     * @param debugParser
+     * @param debugParser  the debug logging flag
      */
     public final void setDebugParser( boolean debugParser )
     {
@@ -336,7 +336,7 @@ public class SourceLibrary
     /**
      * Sets the encoding to use when parsing a URL or InputStreamReader
      * 
-     * @param encoding
+     * @param encoding the source encoding
      */
     public final void setEncoding( String encoding )
     {

@@ -66,6 +66,7 @@ public abstract class AbstractClassLibrary
 
     /**
      * constructor for chained ClassLibrary
+     * @param parent the parent library
      */
     public AbstractClassLibrary( AbstractClassLibrary parent )
     {
@@ -86,7 +87,7 @@ public abstract class AbstractClassLibrary
      * First checks if there's a JavaClass available in the private context by this name. Otherwise try to resolve it by
      * the concrete class. If there's still no JavaClass, ask the parent (if available) to resolve it.
      * 
-     * @param name
+     * @param name the binary name of the class
      * @return the JavaClass matching the name, otherwise <code>null</code>
      */
     public final JavaClass getJavaClass( String name ) {
@@ -151,7 +152,7 @@ public abstract class AbstractClassLibrary
     /**
      * 
      * 
-     * @param filter
+     * @param filter the classlibrary filter
      * @return JavaSources matching the filter
      */
     protected final Collection<JavaSource> getJavaSources( ClassLibraryFilter filter) {
@@ -168,8 +169,8 @@ public abstract class AbstractClassLibrary
     /**
      * Get all the classes of the current {@link AbstractClassLibrary}.
      * Subclasses can overwrite this method by including the following code
-     * <code> 
-     * public List<JavaClass> getClasses()
+     * <pre> 
+     * public List&lt;JavaClass&gt; getClasses()
      * {
      *   return getJavaClasses( new ClassLibraryFilter()
      *   {
@@ -179,7 +180,7 @@ public abstract class AbstractClassLibrary
      *      }
      *   });
      * }
-     * </code>
+     * </pre>
      * This example would return all created {@link JavaClass } objects, including those from the classloaders.
      * 
      * @return all JavaClasses of this ClassLibrary
@@ -192,7 +193,7 @@ public abstract class AbstractClassLibrary
     /**
      * Subclasses can call this method to gather all JavaClass object, including those from the parent.
      * 
-     * @param filter
+     * @param filter the classlibrary filter
      * @return JavaClasses matching the filter
      */
     protected final Collection<JavaClass> getJavaClasses( ClassLibraryFilter filter) {
@@ -209,8 +210,8 @@ public abstract class AbstractClassLibrary
     /**
      * Get all packages of the current {@link AbstractClassLibrary}.
      * Subclasses can overwrite this method by including the following code
-     * <code> 
-     * public List<JavaPackage> getJavaPackages()
+     * <pre> 
+     * public List&lt;JavaPackage&gt; getJavaPackages()
      * {
      *   return getJavaPackages( new ClassLibraryFilter()
      *   {
@@ -220,7 +221,7 @@ public abstract class AbstractClassLibrary
      *      }
      *   });
      * }
-     * </code>
+     * </pre>
      * This example would return all created {@link JavaPackage } objects, including those from the classloaders.
      * 
      * @return all JavaPackages of this ClassLibrary

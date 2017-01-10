@@ -43,6 +43,12 @@ import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.JavaTypeVariable;
 import com.thoughtworks.qdox.type.TypeResolver;
 
+/**
+ * The default implementation for {@link JavaType}
+ * 
+ * @author Robert Scholte
+ * @since 2.0
+ */
 public class DefaultJavaType implements JavaClass, JavaType, Serializable {
 
     public static final DefaultJavaType VOID = new DefaultJavaType("void");
@@ -88,11 +94,13 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         this( fullName, 0 );
     }
     
+    /** {@inheritDoc} */
 	public String getBinaryName()
 	{
 	    return resolveRealClass().getBinaryName(); 
 	}
 	
+	/** {@inheritDoc} */
 	public String getSimpleName()
 	{
 	    StringBuilder result = new StringBuilder( resolveRealClass().getSimpleName() );
@@ -113,12 +121,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         return result.toString();
     }
 
-    /**
-     * Equivalent of {@link Class#getComponentType()}
-     * If this type is an array, return its component type
-     * 
-     * @return the type of array if it's one, otherwise <code>null</code>
-     */
+    /** {@inheritDoc}*/
     public JavaClass getComponentType() {
       return isArray() ? resolveRealClass() : null;
     }
@@ -133,22 +136,7 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
         return result.toString();
     }
     
-    /**
-     * The FQN representation of an Object for code usage
-     * This implementation ignores generics
-     *
-     * Some examples how Objects will be translated
-     * <pre>
-     * Object > java.lang.object
-     * java.util.List<T> > java.util.List
-     * ? > ?
-     * T > T
-     * anypackage.Outer.Inner > anypackage.Outer.Inner
-     * </pre>
-
-     * @since 1.8
-     * @return generic type representation for code usage 
-     */
+    /** {@inheritDoc}*/
     public String getGenericValue()
     {
         StringBuilder result = new StringBuilder( getValue() );
@@ -259,11 +247,11 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
      * Returns getGenericValue() extended with the array information
      * 
      * <pre>
-     * Object > java.lang.Object
-     * Object[] > java.lang.Object[]
-     * List&lt;Object&gt; > java.lang.List<java.lang.Object>
-     * Outer.Inner > Outer$Inner
-     * Outer.Inner&lt;Object&gt;[][] > Outer$Inner<java.lang.Object>[][] 
+     * Object &gt; java.lang.Object
+     * Object[] &gt; java.lang.Object[]
+     * List&lt;Object&gt; &gt; java.lang.List&lt;java.lang.Object&gt;
+     * Outer.Inner &gt; Outer$Inner
+     * Outer.Inner&lt;Object&gt;[][] &gt; Outer$Inner&lt;java.lang.Object&gt;[][] 
      * </pre>
      * @return a generic string representation of this type.
      */

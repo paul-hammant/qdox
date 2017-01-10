@@ -26,7 +26,7 @@ package com.thoughtworks.qdox.model;
 public interface JavaType
 {
     /**
-     * <blockquote cite="https://docs.oracle.com/javase/specs/jls/se8/html/jls-13.html#jls-13.1">
+     * <blockquote>
      * The class or interface must be named by its binary name, which must meet the following constraints:
      * <ul>
      *   <li>The binary name of a top level type is its canonical name.</li>
@@ -36,6 +36,7 @@ public interface JavaType
      * 
      * @return the binary name
      * @since 2.0
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-13.html#jls-13.1">https://docs.oracle.com/javase/specs/jls/se8/html/jls-13.html#jls-13.1</a>
      */
     String getBinaryName();
     
@@ -54,7 +55,7 @@ public interface JavaType
     String getGenericCanonicalName();
 
     /**
-     * <blockquote cite="https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.7">
+     * <blockquote>
      * Every primitive type, named package, top level class, and top level interface has a fully qualified name:
      * <ul>
      *   <li>The fully qualified name of a primitive type is the keyword for that primitive type, namely byte, short, char, int, long, float, double, or boolean.</li>
@@ -74,20 +75,20 @@ public interface JavaType
      * 
      * Some examples how names will be translated 
      * <pre>
-     * Object > java.lang.Object
-     * java.util.List > java.util.List
-     * ?  > ?
-     * T  > T
-     * anypackage.Outer.Inner > anypackage.Outer.Inner
-     * String[][] > java.lang.String[][]
+     * Object &gt; java.lang.Object
+     * java.util.List &gt; java.util.List
+     * ?  &gt; ?
+     * T  &gt; T
+     * anypackage.Outer.Inner &gt; anypackage.Outer.Inner
+     * String[][] &gt; java.lang.String[][]
      * </pre>
-     * 
-     * @todo make clear difference between FQN and canonicalName, specs say FQN can be null
      * 
      * @return the fully qualified name, never <code>null</code>
      * @see JavaClass#getComponentType()
      * @see #getBinaryName()
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.7">https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.7</a>
      */
+    // @TODO make clear difference between FQN and canonicalName, specs say FQN can be null
     String getFullyQualifiedName();
 
     /**
@@ -104,9 +105,9 @@ public interface JavaType
      * 
      * Examples:
      * <pre>
-     *  private String fieldA;           // getValue() will return "String"
-     *  private java.lang.String fieldA; // getValue() will return "java.lang.String"
-     *  private List<String> aList;      // getValue() will return "List"
+     *  private String fieldA;             // getValue() will return "String"
+     *  private java.lang.String fieldA;   // getValue() will return "java.lang.String"
+     *  private List&gt;String&gt; aList;  // getValue() will return "List"
      * </pre>
      * 
      * @return the name of the class as used in the source
@@ -119,9 +120,9 @@ public interface JavaType
      * 
      * Examples:
      * <pre>
-     *  private String fieldA;           // getValue() will return "String"
-     *  private java.lang.String fieldA; // getValue() will return "java.lang.String"
-     *  private List<String> aList;      // getValue() will return "List<String>"
+     *  private String fieldA;             // getValue() will return "String"
+     *  private java.lang.String fieldA;   // getValue() will return "java.lang.String"
+     *  private List&gt;String&gt; aList;  // getValue() will return "List&gt;String&gt;"
      * </pre>
      * @return the generic name of the class as used in the source
      */

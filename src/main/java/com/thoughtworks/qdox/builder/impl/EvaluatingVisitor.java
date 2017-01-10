@@ -118,7 +118,7 @@ public class EvaluatingVisitor
      * @param left the left hand side instance
      * @param right the right hand side instance
      * @return the expected result Class 
-     * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section 5.6.1<a>
+     * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section 5.6.1</a>
      */
     protected static Class<?> resultType( final Object left, final Object right )
     {
@@ -159,7 +159,7 @@ public class EvaluatingVisitor
      * @param left the left hand side instance
      * @param right the right hand side instance
      * @return the expected result Class 
-     * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section 5.6.1<a>
+     * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170983">section 5.6.1</a>
      */
     protected static Class<?> numericResultType( final Object left, final Object right )
     {
@@ -187,7 +187,7 @@ public class EvaluatingVisitor
      * 
      * @param value the instance
      * @return the expected result Class 
-     * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170952">section 5.6.2<a>
+     * @see <a href="http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html#170952">section 5.6.2</a>
      */
     protected static Class<?> unaryNumericResultType( final Object value )
     {

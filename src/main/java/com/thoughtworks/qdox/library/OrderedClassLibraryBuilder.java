@@ -67,7 +67,7 @@ public class OrderedClassLibraryBuilder implements ClassLibraryBuilder
      * Constructor for which you can set the root ClassLibrary
      * If you set this to null, all classes should be available on the classpath.
      * 
-     * @param rootClassLibrary
+     * @param rootClassLibrary the parent Classlibrary
      */
     public OrderedClassLibraryBuilder( AbstractClassLibrary rootClassLibrary )
     {

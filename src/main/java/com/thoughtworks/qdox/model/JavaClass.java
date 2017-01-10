@@ -170,47 +170,47 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * This should be the signature for getMethodBySignature.
      * 
      * @param name the name of the method
-     * @param parameterTypes the parameter types of the method, can be <code>null<code>
+     * @param parameterTypes the parameter types of the method, can be {@code null}
      * @param varArgs define if the method has varArgs
-     * @return the matching method, otherwise <code>null</code>
+     * @return the matching method, otherwise  {@code null}
      */
     JavaMethod getMethod( String name, List<JavaType> parameterTypes, boolean varArgs );
 
     /**
      * 
      * @param name the name of the method
-     * @param parameterTypes the parameter types of the method, can be <code>null</code>
+     * @param parameterTypes the parameter types of the method, can be  {@code null}
      * @param superclasses to define if superclasses should be included as well
-     * @return the matching method, otherwise <code>null</code> 
+     * @return the matching method, otherwise  {@code null}
      */
     JavaMethod getMethodBySignature( String name, List<JavaType> parameterTypes, boolean superclasses );
 
     /**
      * 
      * @param name the name of the method
-     * @param parameterTypes the parameter types of the method, can be <code>null<code>
+     * @param parameterTypes the parameter types of the method, can be  {@code null}
      * @param superclasses
      * @param varArg define if the method has varArgs
-     * @return the matching method, otherwise <code>null</code>
+     * @return the matching method, otherwise  {@code null}
      */
     JavaMethod getMethodBySignature( String name, List<JavaType> parameterTypes, boolean superclasses, boolean varArg );
 
     /**
      * 
      * @param name the name of the method
-     * @param parameterTypes the parameter types of the method, can be <code>null<code>
+     * @param parameterTypes the parameter types of the method, can be  {@code null}
      * @param superclasses to define if superclasses should be included as well
-     * @return the matching methods, otherwise <code>null</code>
+     * @return the matching methods, otherwise  {@code null}
      */
     List<JavaMethod> getMethodsBySignature( String name, List<JavaType> parameterTypes, boolean superclasses );
 
     /**
      * 
      * @param name the name of the method
-     * @param parameterTypes the parameter types of the method, can be <code>null<code>
+     * @param parameterTypes the parameter types of the method, can be  {@code null}
      * @param superclasses to define if superclasses should be included as well
      * @param varArg define if the method has varArgs
-     * @return the matching methods, otherwise <code>null</code>
+     * @return the matching methods, otherwise  {@code null}
      */
     List<JavaMethod> getMethodsBySignature( String name, List<JavaType> parameterTypes, boolean superclasses,
                                                    boolean varArg );
@@ -218,7 +218,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     /**
      * Equivalent of {@link java.lang.Class#getFields()}
      * 
-     * @return a list of fiels, never <code>null</code>
+     * @return a list of fiels, never  {@code null}
      */
     List<JavaField> getFields();
 
@@ -234,7 +234,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * Based on {@link java.lang.Class#getEnumConstants()}.
      *  
      * 
-     * @return a List of enum constants if this class is an <code>enum</code>, otherwise <code>null</code>
+     * @return a List of enum constants if this class is an <code>enum</code>, otherwise  {@code null}
      */
     List<JavaField> getEnumConstants();
 

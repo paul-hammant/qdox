@@ -39,14 +39,14 @@ import com.thoughtworks.qdox.parser.impl.Parser;
 /**
  * <strong>Important!! Be sure to add a classloader with the bootstrap classes.</strong>
  * <p>
- * Normally you can generate your classLibrary like this:<br/>
+ * Normally you can generate your classLibrary like this:<br>
  * <code>
  *  ClassLibrary classLibrary = new ClassLibrary();
  *  classLibrary.addDefaultLoader();
  * </code>
  * </p>
  * <p>
- * If you want full control over the classLoaders you might want to create your library like:<br/>
+ * If you want full control over the classLoaders you might want to create your library like:<br>
  * <code>
  * ClassLibrary classLibrary = new ClassLibrary( ClassLoader.getSystemClassLoader() )
  * </code>
@@ -205,9 +205,9 @@ public class ClassLoaderLibrary
     }
     
     /**
-     * Use the Lexer in debug mode
+     * Set to {@code true} to enable debug logging for the lexer
      * 
-     * @param debugLexer 
+     * @param debugLexer the debug logging flag
      */
     public void setDebugLexer( boolean debugLexer )
     {
@@ -215,9 +215,9 @@ public class ClassLoaderLibrary
     }
     
     /**
-     * Use the Parser in debug mode
+     * Set to {@code true} to enable debug logging for the parser
      * 
-     * @param debugParser
+     * @param debugParser the debug logging flag
      */
     public void setDebugParser( boolean debugParser )
     {

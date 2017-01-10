@@ -36,10 +36,8 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
         super( fullName, name, dimensions, typeResolver );
     }
 
-    /**
-     * 
-     * @return the actualTypeArguments or null
-     */
+
+    /** {@inheritDoc} */
     public List<JavaType> getActualTypeArguments()
     {
         return actualArgumentTypes;
@@ -50,22 +48,7 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
         this.actualArgumentTypes = actualArgumentTypes;
     }
     
-    /**
-     * The FQN representation of an Object for code usage
-     * This implementation ignores generics
-     *
-     * Some examples how Objects will be translated
-     * <pre>
-     * Object > java.lang.object
-     * java.util.List<T> > java.util.List
-     * ? > ?
-     * T > T
-     * anypackage.Outer.Inner > anypackage.Outer.Inner
-     * </pre>
-
-     * @since 1.8
-     * @return generic type representation for code usage 
-     */
+    /** {@inheritDoc} */
     public String getGenericValue()
     {
         StringBuilder result = new StringBuilder( name );
@@ -89,6 +72,7 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
         return result.toString();
     }
     
+    /** {@inheritDoc} */
     public String getGenericCanonicalName()
     {
         String base = isArray() ? getComponentType().getCanonicalName() : getCanonicalName();
@@ -113,6 +97,7 @@ public class DefaultJavaParameterizedType extends DefaultJavaType implements Jav
         return result.toString();
     }
 
+    /** {@inheritDoc} */
     public String getGenericFullyQualifiedName()
     {
         StringBuilder result = new StringBuilder( isResolved() ? fullName : name );

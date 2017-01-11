@@ -285,6 +285,8 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     }
 
     /**
+     * @param type the type to match with
+     * @return {@code true} if this type if of type, otherwise {@code false}
      * @since 1.3
      */
     public boolean isA( JavaType type )

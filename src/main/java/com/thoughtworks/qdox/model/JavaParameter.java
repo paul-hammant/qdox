@@ -59,6 +59,7 @@ public interface JavaParameter extends JavaAnnotatedElement, JavaType
     /**
      * Is this a Java 5 var args type specified using three dots. e.g. <code>void doStuff(Object... thing)</code>
      * 
+     * @return {@code true} if this parameter is a varArg, otherwise {@code false}
      * @since 1.6
      */
     boolean isVarArgs();

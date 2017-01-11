@@ -30,11 +30,14 @@ public interface JavaMethod extends JavaAnnotatedElement, JavaMember, JavaModel,
     JavaClass getReturns();
 
     /**
+     * @param withModifiers {@code true} if modifiers should be added, otherwise {@code false}
+     * @return the declaration signature
      * @since 1.3
      */
     String getDeclarationSignature( boolean withModifiers );
 
     /**
+     * @return the call signature
      * @since 1.3
      */
     String getCallSignature();

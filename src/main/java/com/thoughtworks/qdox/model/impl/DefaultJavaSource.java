@@ -55,6 +55,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
     }
 
     /**
+     * @param url the URL of the source file
      * @since 1.4
      */
     public void setURL(URL url) {
@@ -151,7 +152,7 @@ public class DefaultJavaSource implements JavaSource, Serializable {
     
     /**
      * 
-     * @param modelWriterFactory
+     * @param modelWriterFactory the modelWriterFactory
      * @since 2.0
      */
     public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )

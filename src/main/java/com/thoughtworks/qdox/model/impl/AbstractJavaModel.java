@@ -34,7 +34,7 @@ public abstract class AbstractJavaModel implements JavaModel {
 
 	/**
      * 
-     * @param modelWriterFactory
+     * @param modelWriterFactory the modelWriterFactory
      * @since 2.0
      */
     public void setModelWriterFactory( ModelWriterFactory modelWriterFactory )

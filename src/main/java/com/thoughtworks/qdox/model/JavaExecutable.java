@@ -15,7 +15,7 @@ public interface JavaExecutable extends JavaMember, JavaGenericDeclaration
     JavaClass getDeclaringClass();
     
     /**
-     * Equivalent of {@link java.lang.reflect.Constructor#getExceptionTypes()}
+     * Equivalent of {@link java.lang.reflect.Executable#getExceptionTypes()}
      * 
      * @return a list of Exceptions, never <code>null</code>
      */
@@ -48,7 +48,7 @@ public interface JavaExecutable extends JavaMember, JavaGenericDeclaration
     /**
      * If a class inherits this method from a generic class or interface, you can use this method to get the resolved parameter types
      * 
-     * @param resolve
+     * @param resolve {@code true} if the resolved types should be returned, otherwise {@code false}
      * @return the parameter types
      * @since 1.12
      */

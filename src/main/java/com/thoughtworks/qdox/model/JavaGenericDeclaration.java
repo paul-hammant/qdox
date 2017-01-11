@@ -33,6 +33,7 @@ public interface JavaGenericDeclaration
     /**
      * Equivalent of {@link java.lang.reflect.GenericDeclaration#getTypeParameters()}
      * 
+     * @param <D> the type
      * @return a list of typeParameters, never <code>null</code> 
      */
     <D extends JavaGenericDeclaration> List<JavaTypeVariable<D>> getTypeParameters();

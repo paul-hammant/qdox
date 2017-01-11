@@ -33,6 +33,7 @@ public interface JavaSource
 {
 
     /**
+     * @return the URL of the source file
      * @since 1.4
      */
     URL getURL();
@@ -76,6 +77,7 @@ public interface JavaSource
      * Try to get the JavaClass child based on its name relative to the package.
      * This doesn't try to resolve it by recursion.
      * 
+     * @param name the name of the class
      * @return the resolved JavaClass, otherwise <code>null</code>
      */
     JavaClass getNestedClassByName( String name );

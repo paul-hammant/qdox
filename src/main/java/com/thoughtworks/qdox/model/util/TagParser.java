@@ -37,6 +37,9 @@ public final class TagParser {
     
     /**
      * Create a StreamTokenizer suitable for parsing the tag text. 
+     * 
+     * @param tagValue the tag value
+     * @return the tokenizer
      */
     static StreamTokenizer makeTokenizer(String tagValue) {
         StreamTokenizer tokenizer = 
@@ -61,7 +64,10 @@ public final class TagParser {
     }
     
     /**
-     * Extract a Map of named parameters  
+     * Extract a Map of named parameters
+     * 
+     * @param tagValue the tag value
+     * @return a Map with the parameter names and their values
      */
     public static Map<String, String> parseNamedParameters(String tagValue) {
         Map<String, String> paramMap = new LinkedHashMap<String, String>();
@@ -89,6 +95,9 @@ public final class TagParser {
 
     /**
      * Extract an array of positional parameters  
+     * 
+     * @param tagValue the tag value
+     * @return an array with words
      */
     public static String[] parseWords(String tagValue) {
         StreamTokenizer tokenizer = makeTokenizer(tagValue);
@@ -110,6 +119,9 @@ public final class TagParser {
     
     /**
      * Extract an array of parameters as name or name=value representation
+     * 
+     * @param tagValue the tag value
+     * @return the names of the parameters
      * @since 1.11  
      */
     public static List<String> parseParameters(String tagValue) {

@@ -53,9 +53,9 @@ public class TypeResolver
     /**
      * Type resolver in case there's no declaring class, e.g. using extends, implements and annotations on a toplevel class
      * 
-     * @param binaryName
-     * @param classLibrary
-     * @param imports
+     * @param binaryName the binary name of the package
+     * @param classLibrary the class library
+     * @param imports the imports, can be {@code null}
      * @return the typeResolver
      */
     public static TypeResolver byPackageName( String binaryName, ClassLibrary classLibrary, Collection<String> imports )
@@ -66,8 +66,8 @@ public class TypeResolver
     /**
      * 
      * @param binaryName the class in which context a type is used.
-     * @param classLibrary
-     * @param imports
+     * @param classLibrary the class library
+     * @param imports the imports, can be {@code null}
      * @return the typeResolver
      */
     public static TypeResolver byClassName( String binaryName, ClassLibrary classLibrary, Collection<String> imports )

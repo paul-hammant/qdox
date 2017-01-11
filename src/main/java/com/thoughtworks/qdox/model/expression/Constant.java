@@ -297,8 +297,12 @@ public abstract class Constant
 
     /**
      * Convert a character literal into a character.
+     * 
+     * @param value the single quoted value
+     * @return the transformed char
+     * @throws IllegalArgumentException if value is not a character literal
      */
-    protected static Character toChar( String value )
+    protected static Character toChar( String value ) throws IllegalArgumentException
     {
         if ( !value.startsWith( "'" ) && !value.endsWith( "'" ) )
         {
@@ -317,8 +321,12 @@ public abstract class Constant
 
     /**
      * Convert a string literal into a string.
+     * 
+     * @param value the double quoted value
+     * @return the transformed String
+     * @throws IllegalArgumentException if value is not a String literal
      */
-    protected static String toString( String value )
+    protected static String toString( String value ) throws IllegalArgumentException
     {
         if ( value.length() < 2 && !value.startsWith( "\"" ) && !value.endsWith( "\"" ) )
         {

@@ -116,6 +116,7 @@ public abstract class AbstractBaseJavaEntity extends AbstractJavaModel implement
      * 
      * @param tagName the name of the docletTag
      * @param parameterName the name of the parameter
+     * @return the value of the named parameter 
      * @since 1.3
      */
     public String getNamedParameter( String tagName, String parameterName )

@@ -150,6 +150,10 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     
 
     /**
+     * Return declared methods and optionally the inherited methods
+     *
+     * @param superclasses {@code true} if inherited methods should be returned as well 
+     * @return all methods
      * @since 1.3
      */
     List<JavaMethod> getMethods( boolean superclasses );
@@ -185,7 +189,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * 
      * @param name the name of the method
      * @param parameterTypes the parameter types of the method, can be  {@code null}
-     * @param superclasses
+     * @param superclasses {@code true} if inherited methods should be matched as well
      * @param varArg define if the method has varArgs
      * @return the matching method, otherwise  {@code null}
      */
@@ -195,7 +199,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * 
      * @param name the name of the method
      * @param parameterTypes the parameter types of the method, can be  {@code null}
-     * @param superclasses to define if superclasses should be included as well
+     * @param superclasses {@code true} if inherited methods should be matched as well
      * @return the matching methods, otherwise  {@code null}
      */
     List<JavaMethod> getMethodsBySignature( String name, List<JavaType> parameterTypes, boolean superclasses );
@@ -204,7 +208,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * 
      * @param name the name of the method
      * @param parameterTypes the parameter types of the method, can be  {@code null}
-     * @param superclasses to define if superclasses should be included as well
+     * @param superclasses {@code true} if inherited methods should be matched as well
      * @param varArg define if the method has varArgs
      * @return the matching methods, otherwise  {@code null}
      */
@@ -236,7 +240,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
 
     /**
      * 
-     * 
+     * @param name the name of the enum constant
      * @return the enumConstant matching the {@code name}, otherwise <code>null</code>
      */
     JavaField getEnumConstantByName( String name );
@@ -252,12 +256,15 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     JavaClass getNestedClassByName( String name );
 
     /**
+     * @param fullyQualifiedName the FQN to match with
+     * @return {@code true} if this is of type FQN, otherwise {@code false}
      * @since 1.3
      */
     boolean isA( String fullyQualifiedName );
 
     /**
-     * @param javaClass 
+     * @param javaClass the JavaClass to match with
+     * @return {@code true} if this is of type {@literal javaClass}, otherwise {@code false}
      * @since 1.3
      */
     boolean isA( JavaClass javaClass );
@@ -295,6 +302,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     /**
      * Gets bean properties without looking in superclasses or interfaces.
      *
+     * @return the bean properties
      * @since 1.3
      */
     List<BeanProperty> getBeanProperties();
@@ -302,6 +310,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     /**
      * 
      * @param superclasses to define if superclasses should be included as well
+     * @return the bean properties
      * @since 1.3
      */
     List<BeanProperty> getBeanProperties( boolean superclasses );
@@ -310,6 +319,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
      * Gets bean property without looking in superclasses or interfaces.
      *
      * @param propertyName the name of the property
+     * @return the bean property
      * @since 1.3
      */
     BeanProperty getBeanProperty( String propertyName );
@@ -317,7 +327,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     /**
      * @param propertyName the name of the property
      * @param superclasses to define if superclasses should be included as well
-     * 
+     * @return the bean property
      * @since 1.3
      */
     BeanProperty getBeanProperty( String propertyName, boolean superclasses );
@@ -325,6 +335,7 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     /**
      * Equivalent of {@link Class#getClasses()}
      * Gets the known derived classes. That is, subclasses or implementing classes.
+     * @return the derived classes
      */
     List<JavaClass> getDerivedClasses();
 

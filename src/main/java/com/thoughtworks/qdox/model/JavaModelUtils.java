@@ -34,8 +34,8 @@ public final class JavaModelUtils
      * </p>
      * <strong>Note:</strong>the name must match the {@code cls} itself or one of its nested classes.
      * 
-     * @param cls 
-     * @param name 
+     * @param cls the declaring class
+     * @param name the name
      * @return the matching class, otherwise <code>null</code>
      * @see JavaClass#getJavaClassLibrary()
      */

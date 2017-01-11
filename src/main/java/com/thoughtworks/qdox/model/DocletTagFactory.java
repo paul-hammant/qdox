@@ -28,6 +28,12 @@ import java.io.Serializable;
 public interface DocletTagFactory extends Serializable {
 
     /**
+     * 
+     * @param tag the tag
+     * @param text the text
+     * @param context the context
+     * @param lineNumber the line number
+     * @return the doclet tag
      * @since 1.5
      */ 
     DocletTag createDocletTag(
@@ -35,6 +41,13 @@ public interface DocletTagFactory extends Serializable {
         JavaAnnotatedElement context, int lineNumber
     );
 
+    /**
+     * 
+     * @param tag the tag
+     * @param text the text
+     * @return the doclet tag
+     * @since 1.5
+     */ 
     DocletTag createDocletTag(String tag, String text);
 
 }

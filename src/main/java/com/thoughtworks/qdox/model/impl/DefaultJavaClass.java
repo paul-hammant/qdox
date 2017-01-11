@@ -251,7 +251,7 @@ public class DefaultJavaClass
     /**
      * Only used when constructing the model by hand / without source
      * 
-     * @param javaPackage
+     * @param javaPackage the package
      */
     public void setJavaPackage( JavaPackage javaPackage )
     {

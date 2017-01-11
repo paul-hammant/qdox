@@ -37,7 +37,7 @@ public interface JavaConstructor
     /**
      * Returns <code>true</code> if this constructor matches the parameterTypes, assuming it's a non-varArg constructor.
      * 
-     * @param parameterTypes
+     * @param parameterTypes the parameter types
      * @return <code>true</code> if signature matches, otherwise <code>false</code>
      */
     boolean signatureMatches( List<JavaType> parameterTypes );
@@ -45,8 +45,8 @@ public interface JavaConstructor
     /**
      * Returns <code>true</code> if this constructor matches the parameterTypes and matches the varArg argument.
      * 
-     * @param parameterTypes
-     * @param varArgs 
+     * @param parameterTypes the parameter types
+     * @param varArgs {@code true} if the last argument should be a varArg, otherwise {@code false} 
      * @return <code>true</code> if signature matches, otherwise <code>false</code>
      */
     boolean signatureMatches( List<JavaType> parameterTypes, boolean varArgs );

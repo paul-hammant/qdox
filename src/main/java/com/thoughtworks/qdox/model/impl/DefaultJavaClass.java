@@ -32,7 +32,6 @@ import com.thoughtworks.qdox.model.BeanProperty;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
-import com.thoughtworks.qdox.model.JavaExecutable;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -180,12 +179,6 @@ public class DefaultJavaClass
     public List<JavaType> getImplements()
     {
         return new LinkedList<JavaType>( implementz );
-    }
-
-    /** {@inheritDoc} */
-    public List<JavaClass> getImplementedInterfaces()
-    {
-        return new LinkedList<JavaClass>( implementz );
     }
 
     /** {@inheritDoc} */
@@ -444,7 +437,7 @@ public class DefaultJavaClass
 
         }
 
-        for ( JavaClass clazz : callingClazz.getImplementedInterfaces() )
+        for ( JavaClass clazz : callingClazz.getInterfaces() )
         {
             Map<String, JavaMethod> interfaceMethods = getMethodsFromSuperclassAndInterfaces( callingClazz, clazz );
             for ( Map.Entry<String, JavaMethod> methodEntry : interfaceMethods.entrySet() )
@@ -537,7 +530,7 @@ public class DefaultJavaClass
                 }
             }
 
-            for ( JavaClass clazz : getImplementedInterfaces() )
+            for ( JavaClass clazz : getInterfaces() )
             {
                 JavaMethod method = clazz.getMethodBySignature( name, parameterTypes, true, varArg );
                 if ( method != null )
@@ -643,7 +636,7 @@ public class DefaultJavaClass
         {
             return true;
         }
-        for ( JavaClass implementz : getImplementedInterfaces() )
+        for ( JavaClass implementz : getInterfaces() )
         {
             if ( implementz.isA( fullClassName ) )
             {
@@ -672,7 +665,7 @@ public class DefaultJavaClass
         else if ( javaClass != null )
         {
             // ask our interfaces
-            for ( JavaClass intrfc : getImplementedInterfaces() )
+            for ( JavaClass intrfc : getInterfaces() )
             {
                 if ( intrfc.isA( javaClass ) )
                 {
@@ -791,7 +784,7 @@ public class DefaultJavaClass
                 result.addAll( getTagsRecursive( superclass, name, superclasses ) );
             }
 
-            for ( JavaClass intrfc : javaClass.getImplementedInterfaces() )
+            for ( JavaClass intrfc : javaClass.getInterfaces() )
             {
                 if ( intrfc != null )
                 {

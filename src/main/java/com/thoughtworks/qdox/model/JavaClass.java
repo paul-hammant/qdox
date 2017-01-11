@@ -76,19 +76,15 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
 
     /**
      * Shorthand for getSuperClass().getJavaClass() with null checking.
+     * @return the super class as {@link JavaClass}
      */
     JavaClass getSuperJavaClass();
 
     List<JavaType> getImplements();
 
     /**
-     * @since 1.3
-     */
-    List<JavaClass> getImplementedInterfaces();
-    
-    /**
      * Equivalent of {@link java.lang.Class#getInterfaces()}
-     *  Determines the interfaces implemented by the class or interface represented by this object.     * 
+     *  Determines the interfaces implemented by the class or interface represented by this object. 
      * 
      * @return a list of interfaces, never <code>null</code>
      * @since 2.0

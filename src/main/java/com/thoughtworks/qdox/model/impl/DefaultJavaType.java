@@ -619,15 +619,9 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     }
 
     /** {@inheritDoc} */
-    public List<JavaClass> getImplementedInterfaces()
-    {
-        return resolveRealClass().getImplementedInterfaces();
-    }
-    
-    /** {@inheritDoc} */
     public List<JavaClass> getInterfaces()
     {
-        return resolveRealClass().getImplementedInterfaces();
+        return resolveRealClass().getInterfaces();
     }
 
     /** {@inheritDoc} */

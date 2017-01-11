@@ -831,10 +831,10 @@ public class JavaProjectBuilderTest extends TestCase
         String sourceCode = "package pack; public class Foo extends Bar implements Zap {}";
         builder.addSource(new StringReader(sourceCode));
         JavaClass clazz = builder.getClassByName("pack.Foo");
-        assertEquals(1, clazz.getImplementedInterfaces().size());
+        assertEquals(1, clazz.getInterfaces().size());
         // Ideally the fully qualified names should be the pack.Zap and pack.Bar,
         // but this will do for now to fix the NPE bug.
-        assertEquals("Zap", clazz.getImplementedInterfaces().get(0).getFullyQualifiedName());
+        assertEquals("Zap", clazz.getInterfaces().get(0).getFullyQualifiedName());
         assertEquals("Bar", clazz.getSuperJavaClass().getFullyQualifiedName());
     }
 

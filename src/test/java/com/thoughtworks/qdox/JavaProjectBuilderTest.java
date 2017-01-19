@@ -1582,6 +1582,38 @@ public class JavaProjectBuilderTest extends TestCase
         
         assertEquals( "com.fg.rtdoc.test.Iface", clz.getInterfaces().get(0).getFullyQualifiedName() );
     }
+
+    // Github #16
+    public void testBeanProperties()
+    {
+        String zothParent = "public class ZothParent {\n" + 
+            " private String name;\n" + 
+            " public String getName() {\n" + 
+            "    return name;\n" + 
+            " }\n" + 
+            " public void setName(String name) {\n" + 
+            "    this.name = name;\n" + 
+            " }\n" + 
+            "}";
+        
+        String zothChild = "public class ZothChild // extends ZothParent\n" + 
+            "{\n" + 
+            " private int age;\n" + 
+            " public int getAge() {\n" + 
+            "    return age;\n" + 
+            " }\n" + 
+            " public void setAge(int age) {\n" + 
+            "    this.age = age;\n" + 
+            " }\n" + 
+            "}";
+        
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        builder.addSource(new StringReader( zothParent ));
+        JavaClass zothClass = builder.addSource(new StringReader( zothChild )).getClassByName( "ZothChild" );
+        assertEquals( "java.lang.Object", zothClass.getSuperClass().getBinaryName());
+        assertEquals( 2, zothClass.getBeanProperties( true ).size() );
+        
+    }
     
     public void testDeclarationSignatureWithGenerics() {
         String source = "import java.util.List;"

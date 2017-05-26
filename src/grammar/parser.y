@@ -429,11 +429,24 @@ MethodHeader: TypeParameters Type /* =Result */ IDENTIFIER
                 mth.setTypeParams(typeParams);
                 mth.setReturnType($2);
                 mth.setName($3);
-              } 
+              }
               PARENOPEN FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt
               {
                 mth.setDimensions($8);
-              } 
+              }
+            | TypeParameters Annotation Type /* =Result */ IDENTIFIER
+              {
+                builder.beginMethod();
+                mth.setLineNumber(lexer.getLine());
+                mth.getModifiers().addAll(modifiers); modifiers.clear();
+                mth.setTypeParams(typeParams);
+                mth.setReturnType($3);
+                mth.setName($4);
+              }
+              PARENOPEN FormalParameterList_opt PARENCLOSE Dims_opt Throws_opt
+              {
+                mth.setDimensions($9);
+              }
             | Type /* =Result */ IDENTIFIER  
               {
                 builder.beginMethod();

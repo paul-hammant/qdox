@@ -1167,6 +1167,52 @@ public class ParserTest extends TestCase {
         Assert.assertArrayEquals( new String[] { "final", "volatile" }, parameterCaptor.getValue().getModifiers().toArray( new String[0] ) );
         assertEquals( new TypeDef("int"), parameterCaptor.getValue().getType() );
     }
+    
+    public void testMethodWithAnnotatedGenericReturnValue() throws Exception {
+    	
+        setupLex(Parser.CLASS);
+        setupLex(Parser.IDENTIFIER, "MyClass");
+        setupLex(Parser.BRACEOPEN);
+        
+        setupLex(Parser.PUBLIC);
+        setupLex(Parser.LESSTHAN);
+        setupLex(Parser.IDENTIFIER, "T");
+        setupLex(Parser.GREATERTHAN);
+        setupLex(Parser.AT);
+        setupLex(Parser.IDENTIFIER, "Nullable");
+        setupLex(Parser.IDENTIFIER, "T");
+        setupLex(Parser.IDENTIFIER, "doSomething");
+        setupLex(Parser.PARENOPEN);
+        setupLex(Parser.PARENCLOSE);
+        setupLex(Parser.CODEBLOCK);
+
+        setupLex(Parser.BRACECLOSE);
+        setupLex(0);
+        
+    	Parser parser = new Parser(lexer, builder);
+    	parser.parse();
+        
+        ArgumentCaptor<ClassDef> classCaptor = ArgumentCaptor.forClass(ClassDef.class);
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass(MethodDef.class);
+        ArgumentCaptor<AnnoDef> annotationCaptor = ArgumentCaptor.forClass(AnnoDef.class);
+
+        verify(builder).beginClass(classCaptor.capture());
+        verify(builder).beginMethod();
+        verify(builder).endMethod(methodCaptor.capture());
+        verify(builder).addAnnotation(annotationCaptor.capture());
+        verify(builder).endClass();
+
+        ClassDef cls = classCaptor.getValue();
+        assertEquals("MyClass", cls.getName());
+
+        MethodDef mth = methodCaptor.getValue();
+        assertTrue(mth.getModifiers().contains("public"));
+        assertEquals(new TypeDef("T"), mth.getReturnType());
+        assertEquals("doSomething", mth.getName());
+        
+        AnnoDef annotation = annotationCaptor.getValue();
+        assertEquals("Nullable", annotation.getTypeDef().getName());
+    }
 
     public void testMethodThrowingOneException() throws Exception {
 

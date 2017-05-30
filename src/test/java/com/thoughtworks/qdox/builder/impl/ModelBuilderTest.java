@@ -10,7 +10,6 @@ import com.thoughtworks.qdox.library.ClassNameLibrary;
 import com.thoughtworks.qdox.model.DocletTagFactory;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
-import com.thoughtworks.qdox.model.JavaExecutable;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;

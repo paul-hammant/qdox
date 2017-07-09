@@ -608,7 +608,7 @@ JavadocEnd                      = "*"+ "/"
     \'                  { if (appendingToCodeBody) { codeBody.append('\''); } pushState(CHAR); }
 }
 
-<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE, ANNOTATION, ARGUMENTS, TYPE, NAME> {
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE, ANNOTATION, ARGUMENTS, TYPE, NAME, MODULE> {
   "//"                { if (appendingToCodeBody) { codeBody.append("//"); } pushState(SINGLELINECOMMENT); }
   "/*"                { if (appendingToCodeBody) { codeBody.append("/*"); } pushState(MULTILINECOMMENT); }
   "/**/"              { if (appendingToCodeBody) { codeBody.append("/**/"); } }

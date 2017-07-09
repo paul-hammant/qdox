@@ -1664,6 +1664,19 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource( new StringReader( source ) ); 
     }
 
+    public void testModuleWithComment() throws Exception
+    {
+        String source = "/**\r\n" + 
+            " * TODO javadoc\r\n" + 
+            " */\r\n" + 
+            "module maven.moduleinfo.comments {\r\n" + 
+            "    // this comment fails the build\r\n" + 
+            "    exports maven.reproducer.moduleinfo;\r\n" + 
+            "}\r\n";
+        
+        builder.addSource( new StringReader( source ) );
+    }
+    
     public void testSetDebugLexer()
     {
         ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );

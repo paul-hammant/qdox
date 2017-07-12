@@ -11,42 +11,50 @@ public class DefaultJavaMethodTest
     extends JavaMethodTest<DefaultJavaMethod>
 {
 
-    public DefaultJavaMethod newJavaMethod()
+    @Override
+	public DefaultJavaMethod newJavaMethod()
     {
         return new DefaultJavaMethod();
     }
 
-    public DefaultJavaMethod newJavaMethod( JavaClass returns, String name )
+    @Override
+	public DefaultJavaMethod newJavaMethod( JavaClass returns, String name )
     {
         return new DefaultJavaMethod( returns, name );
     }
 
-    public void setExceptions( DefaultJavaMethod method, List<JavaClass> exceptions )
+    @Override
+	public void setExceptions( DefaultJavaMethod method, List<JavaClass> exceptions )
     {
         method.setExceptions( exceptions );
     }
 
-    public void setComment( DefaultJavaMethod method, String comment )
+    @Override
+	public void setComment( DefaultJavaMethod method, String comment )
     {
         method.setComment( comment );
     }
 
-    public void setName( DefaultJavaMethod method, String name )
+    @Override
+	public void setName( DefaultJavaMethod method, String name )
     {
         method.setName( name );
     }
 
-    public void setModifiers( DefaultJavaMethod method, List<String> modifiers )
+    @Override
+	public void setModifiers( DefaultJavaMethod method, List<String> modifiers )
     {
         method.setModifiers( modifiers );
     }
 
-    public void setReturns( DefaultJavaMethod method, JavaClass type )
+    @Override
+	public void setReturns( DefaultJavaMethod method, JavaClass type )
     {
         method.setReturns( type );
     }
 
-    public void setDeclaringClass( DefaultJavaMethod method, JavaClass clazz )
+    @Override
+	public void setDeclaringClass( DefaultJavaMethod method, JavaClass clazz )
     {
         method.setDeclaringClass( clazz );
     }
@@ -57,7 +65,8 @@ public class DefaultJavaMethodTest
         method.setParameters( parameters );
     }
 
-    public void setSourceCode( DefaultJavaMethod method, String code )
+    @Override
+	public void setSourceCode( DefaultJavaMethod method, String code )
     {
         method.setSourceCode( code );
     }

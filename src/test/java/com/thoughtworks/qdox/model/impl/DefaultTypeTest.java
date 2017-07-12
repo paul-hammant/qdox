@@ -14,22 +14,26 @@ public class DefaultTypeTest
     extends JavaTypeTest<DefaultJavaType>
 {
 
-    public JavaClass newJavaClass( ClassLibrary library )
+    @Override
+	public JavaClass newJavaClass( ClassLibrary library )
     {
         return new DefaultJavaClass(new DefaultJavaSource( library ));
     }
 
-    public DefaultJavaType newType( String fullname )
+    @Override
+	public DefaultJavaType newType( String fullname )
     {
         return new DefaultJavaType( fullname );
     }
 
-    public DefaultJavaType newType( String fullname, int dimensions )
+    @Override
+	public DefaultJavaType newType( String fullname, int dimensions )
     {
         return new DefaultJavaType( fullname, dimensions );
     }
 
-    public DefaultJavaType newType( String fullname, int dimensions, JavaClass clazz )
+    @Override
+	public DefaultJavaType newType( String fullname, int dimensions, JavaClass clazz )
     {
         return new DefaultJavaType( fullname, dimensions );
     }

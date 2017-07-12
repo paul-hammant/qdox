@@ -16,14 +16,17 @@ public class AbstractClassLibraryTest
 
     private AbstractClassLibrary nullClassLibrary = new AbstractClassLibrary()
     {
-        protected JavaClass resolveJavaClass( String name )
+        @Override
+		protected JavaClass resolveJavaClass( String name )
         {
             return null;
         }
-        protected JavaPackage resolveJavaPackage(String name) {
+        @Override
+		protected JavaPackage resolveJavaPackage(String name) {
         	return null;
         }
-        protected boolean containsClassReference( String name )
+        @Override
+		protected boolean containsClassReference( String name )
         {
             return false;
         }
@@ -32,19 +35,23 @@ public class AbstractClassLibraryTest
     private AbstractClassLibrary filledChildClassLibrary;
     private AbstractClassLibrary emptyChildClassLibrary;
     
-    protected void setUp()
-        throws Exception
+    @Override
+	protected void setUp() throws Exception
     {
         parentClassLibrary = new AbstractClassLibrary()
         {
-            protected JavaClass resolveJavaClass( String name )
+            @Override
+			protected JavaClass resolveJavaClass( String name )
             {
                 return new DefaultJavaClass(name);
             }
-            protected JavaPackage resolveJavaPackage(String name) {
+            @Override
+			protected JavaPackage resolveJavaPackage(String name) 
+            {
             	return new DefaultJavaPackage(name);
             }
-            protected boolean containsClassReference( String name )
+            @Override
+			protected boolean containsClassReference( String name )
             {
                 throw new RuntimeException();
             }
@@ -52,28 +59,36 @@ public class AbstractClassLibraryTest
         
         filledChildClassLibrary = new AbstractClassLibrary(parentClassLibrary)
         {
-            protected JavaClass resolveJavaClass( String name )
+            @Override
+			protected JavaClass resolveJavaClass( String name )
             {
                 return new DefaultJavaClass(name);
             }
-            protected JavaPackage resolveJavaPackage(String name) {
+            @Override
+			protected JavaPackage resolveJavaPackage(String name) 
+            {
             	return new DefaultJavaPackage(name);
             }
-            protected boolean containsClassReference( String name )
+            @Override
+			protected boolean containsClassReference( String name )
             {
                 throw new RuntimeException();
             }
         };
         emptyChildClassLibrary = new AbstractClassLibrary(parentClassLibrary)
         {
-            protected JavaClass resolveJavaClass( String name )
+            @Override
+			protected JavaClass resolveJavaClass( String name )
             {
                 return null;
             }
-            protected JavaPackage resolveJavaPackage(String name) {
+            @Override
+			protected JavaPackage resolveJavaPackage(String name) 
+            {
             	return null;
             }
-            protected boolean containsClassReference( String name )
+            @Override
+			protected boolean containsClassReference( String name )
             {
                 throw new RuntimeException();
             }

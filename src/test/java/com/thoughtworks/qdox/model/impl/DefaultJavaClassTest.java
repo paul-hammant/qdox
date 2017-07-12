@@ -15,23 +15,27 @@ public class DefaultJavaClassTest
     extends JavaClassTest<DefaultJavaClass>
 {
 
-    public DefaultJavaClass newJavaClass()
+    @Override
+	public DefaultJavaClass newJavaClass()
     {
         return new DefaultJavaClass();
     }
 
-    public DefaultJavaClass newJavaClass( String name )
+    @Override
+	public DefaultJavaClass newJavaClass( String name )
     {
         return new DefaultJavaClass( name );
     }
 
-    public JavaSource newJavaSource()
+    @Override
+	public JavaSource newJavaSource()
     {
         return new DefaultJavaSource(new SortedClassLibraryBuilder().getClassLibrary());
     }
 
     // Add-methods
-    public void setClasses( DefaultJavaClass clazz, List<JavaClass> innerClasses )
+    @Override
+	public void setClasses( DefaultJavaClass clazz, List<JavaClass> innerClasses )
     {
         for( JavaClass innerClazz : innerClasses )
         {
@@ -39,14 +43,16 @@ public class DefaultJavaClassTest
         }
     }
 
-    public void addClass( JavaSource source, JavaClass clazz )
+    @Override
+	public void addClass( JavaSource source, JavaClass clazz )
     {
         ((DefaultJavaClass) clazz).setSource( source );
         ((DefaultJavaSource) source).addClass( clazz );
     }
 
     // Set-methods
-    public void setComment( DefaultJavaClass clazz, String comment )
+    @Override
+	public void setComment( DefaultJavaClass clazz, String comment )
     {
         clazz.setComment( comment );
     }
@@ -58,42 +64,50 @@ public class DefaultJavaClassTest
         
     }
 
-    public void setEnum( DefaultJavaClass clazz, boolean isEnum )
+    @Override
+	public void setEnum( DefaultJavaClass clazz, boolean isEnum )
     {
         clazz.setEnum( isEnum );
     }
 
-    public void setImplementz( DefaultJavaClass clazz, List<JavaClass> implementz )
+    @Override
+	public void setImplementz( DefaultJavaClass clazz, List<JavaClass> implementz )
     {
         clazz.setImplementz( implementz );
     }
 
-    public void setInterface( DefaultJavaClass clazz, boolean isInterface )
+    @Override
+	public void setInterface( DefaultJavaClass clazz, boolean isInterface )
     {
         clazz.setInterface( isInterface );
     }
 
-    public void setModifiers( DefaultJavaClass clazz, List<String> modifiers )
+    @Override
+	public void setModifiers( DefaultJavaClass clazz, List<String> modifiers )
     {
         clazz.setModifiers( modifiers );
     }
 
-    public void setName( DefaultJavaClass clazz, String name )
+    @Override
+	public void setName( DefaultJavaClass clazz, String name )
     {
         clazz.setName( name );
     }
 
-    public void setPackage( DefaultJavaClass clazz, JavaPackage pckg )
+    @Override
+	public void setPackage( DefaultJavaClass clazz, JavaPackage pckg )
     {
         clazz.setJavaPackage( pckg );
     }
 
-    public void setPackage( JavaSource source, JavaPackage pckg )
+    @Override
+	public void setPackage( JavaSource source, JavaPackage pckg )
     {
         ((DefaultJavaSource) source).setPackage( pckg );
     }
 
-    public void setSuperClass( DefaultJavaClass clazz, JavaType type )
+    @Override
+	public void setSuperClass( DefaultJavaClass clazz, JavaType type )
     {
         clazz.setSuperClass( type );
     }

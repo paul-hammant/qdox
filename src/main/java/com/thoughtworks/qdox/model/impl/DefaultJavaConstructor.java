@@ -39,7 +39,8 @@ public class DefaultJavaConstructor
     }
     
     /** {@inheritDoc} */
-    public boolean signatureMatches( List<JavaType> parameterTypes, boolean varArgs )
+    @Override
+	public boolean signatureMatches( List<JavaType> parameterTypes, boolean varArgs )
     {
         return super.signatureMatches( parameterTypes, varArgs );
     }

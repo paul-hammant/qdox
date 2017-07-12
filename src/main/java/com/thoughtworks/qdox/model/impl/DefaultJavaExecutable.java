@@ -97,13 +97,15 @@ public abstract class DefaultJavaExecutable
     }
 
     /** {@inheritDoc} */
-    public boolean isPublic()
+    @Override
+	public boolean isPublic()
     {
         return super.isPublic() || (getDeclaringClass() != null ? getDeclaringClass().isInterface() : false);
     }
 
     /** {@inheritDoc} */
-    public List<DocletTag> getTagsByName( String name, boolean inherited )
+    @Override
+	public List<DocletTag> getTagsByName( String name, boolean inherited )
     {
         JavaClass cls = getDeclaringClass();
         List<JavaType> types = new LinkedList<JavaType>();

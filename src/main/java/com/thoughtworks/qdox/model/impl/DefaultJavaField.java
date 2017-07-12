@@ -114,7 +114,8 @@ public class DefaultJavaField
     /**
      * @see java.lang.reflect.Field#toString()
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         StringBuilder result = new StringBuilder();
         if ( isPrivate() )

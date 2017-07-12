@@ -227,7 +227,8 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
      * @return a string representation of this type.
      * @see Class#toString()
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return getFullyQualifiedName();
     }

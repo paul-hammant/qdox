@@ -162,7 +162,8 @@ public abstract class AbstractJavaEntity extends AbstractBaseJavaEntity implemen
     }
 
     /** {@inheritDoc} */
-    public JavaClass getDeclaringClass()
+    @Override
+	public JavaClass getDeclaringClass()
     {
         return declaringClass;
     }

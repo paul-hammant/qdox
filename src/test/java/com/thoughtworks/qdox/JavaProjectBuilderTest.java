@@ -50,7 +50,8 @@ public class JavaProjectBuilderTest extends TestCase
 
     private JavaProjectBuilder builder;
     
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         super.setUp();
         builder = new JavaProjectBuilder();
         createFile("target/test-source/com/blah/Another.java", "com.blah", "Another");
@@ -59,7 +60,8 @@ public class JavaProjectBuilderTest extends TestCase
         createFile("target/test-source/com/blah/subpackage/Cheese.java", "com.blah.subpackage", "Cheese");
     }
 
-    protected void tearDown() throws Exception {
+    @Override
+	protected void tearDown() throws Exception {
         super.tearDown();
         deleteDir("target/test-source");
     }
@@ -251,7 +253,8 @@ public class JavaProjectBuilderTest extends TestCase
     public void testAddMoreClassLoaders() throws Exception {
     	builder = new JavaProjectBuilder(new OrderedClassLibraryBuilder(null));
         builder.addClassLoader(new ClassLoader() {
-            public Class loadClass(String name) throws ClassNotFoundException {
+            @Override
+			public Class loadClass(String name) throws ClassNotFoundException {
             	if("com.thoughtworks.qdox.Spoon".equals(name))  {
                     return Spoon.class; //Located inside com.thoughtworks.qdox.TestClasses.java
             	}
@@ -262,7 +265,8 @@ public class JavaProjectBuilderTest extends TestCase
         });
 
         builder.addClassLoader(new ClassLoader() {
-            public Class loadClass(String name) throws ClassNotFoundException {
+            @Override
+			public Class loadClass(String name) throws ClassNotFoundException {
             	if("com.thoughtworks.qdox.Fork".equals(name))  {
                     return Fork.class;  //Located inside com.thoughtworks.qdox.TestClasses.java
             	}

@@ -22,7 +22,8 @@ public class AnnotationsModelTest
 
     private JavaProjectBuilder builder;
 
-    protected void setUp()
+    @Override
+	protected void setUp()
         throws Exception
     {
         builder = new JavaProjectBuilder();

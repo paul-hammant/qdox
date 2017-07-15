@@ -15,7 +15,8 @@ public class JavaClassContextTest
 
     private JavaClassContext context;
     
-    protected void setUp()
+    @Override
+	protected void setUp()
         throws Exception
     {
         context = new JavaClassContext();

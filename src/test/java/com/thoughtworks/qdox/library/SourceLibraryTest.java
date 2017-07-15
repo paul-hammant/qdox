@@ -18,13 +18,15 @@ public class SourceLibraryTest
 {
     private SourceLibrary sourceLibrary;
     
-    protected void setUp()
+    @Override
+	protected void setUp()
         throws Exception
     {
         sourceLibrary = new SourceLibrary( null );
     }
     
-    protected void tearDown()
+    @Override
+	protected void tearDown()
         throws Exception
     {
         deleteDir("target/test-source");

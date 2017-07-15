@@ -30,7 +30,8 @@ public class ModelBuilderTest extends TestCase {
         super(s);
     }
 
-    protected void setUp()
+    @Override
+	protected void setUp()
         throws Exception
     {
         docletTagFactory = mock( DocletTagFactory.class );

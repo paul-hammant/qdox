@@ -351,7 +351,8 @@ public class JavaMethodDelegate implements JavaMethod
     }
 
     /** {@inheritDoc} */
-    public String toString()
+    @Override
+	public String toString()
     {
         return originalMethod.toString();
     }

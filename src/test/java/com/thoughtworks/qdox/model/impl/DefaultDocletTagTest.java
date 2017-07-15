@@ -19,7 +19,8 @@ public class DefaultDocletTagTest extends AbstractDocletTagTest {
 
     private final DocletTagFactory docletTagFactory = new DefaultDocletTagFactory();
 
-    protected DocletTagFactory getDocletTagFactory() {
+    @Override
+	protected DocletTagFactory getDocletTagFactory() {
         return docletTagFactory;
     }
     

@@ -265,7 +265,8 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public JavaSource getSource()
+    @Override
+	public JavaSource getSource()
     {
         return getParentSource();
     }
@@ -766,7 +767,8 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
-    public List<DocletTag> getTagsByName( String name, boolean superclasses )
+    @Override
+	public List<DocletTag> getTagsByName( String name, boolean superclasses )
     {
         return getTagsRecursive( this, name, superclasses );
     }

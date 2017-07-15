@@ -15,12 +15,14 @@ public class DefaultJavaSourceTest extends JavaSourceTest<DefaultJavaSource>
         super( s );
     }
 
-    public DefaultJavaSource newJavaSource( ClassLibrary classLibrary )
+    @Override
+	public DefaultJavaSource newJavaSource( ClassLibrary classLibrary )
     {
         return new DefaultJavaSource(classLibrary);
     }
 
-    public void setPackage( DefaultJavaSource source, JavaPackage pckg )
+    @Override
+	public void setPackage( DefaultJavaSource source, JavaPackage pckg )
     {
         source.setPackage( pckg );
     }

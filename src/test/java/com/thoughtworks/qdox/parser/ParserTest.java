@@ -41,7 +41,8 @@ public class ParserTest extends TestCase {
         super(s);
     }
 
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         builder = mock(Builder.class);
         lexer = mock(JavaLexer.class);
         lexValues.clear();

@@ -15,7 +15,8 @@ public class TraversalTest extends TestCase {
         super(name);
     }
 
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         builder = new JavaProjectBuilder();
         //by default current classloader is already added, so QDox-classes can be found
     }

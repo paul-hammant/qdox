@@ -8,7 +8,8 @@ public class ClassLoaderLibraryTest
 
     private ClassLoaderLibrary classLoaderLibrary;
     
-    protected void setUp()
+    @Override
+	protected void setUp()
         throws Exception
     {
         classLoaderLibrary = new ClassLoaderLibrary(null);

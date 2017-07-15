@@ -39,7 +39,8 @@ public class ConstantDef extends ExpressionDef {
         return value;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return value;
     }
 

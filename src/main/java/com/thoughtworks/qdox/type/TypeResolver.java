@@ -110,7 +110,7 @@ public class TypeResolver
                 {
                     String nestedBinaryName = declaringClass + '$' + typeName.replace( '.', '$' );
 
-                    result = resolveFromLibrary( nestedBinaryName );;
+                    result = resolveFromLibrary( nestedBinaryName );
                 }
             }
 

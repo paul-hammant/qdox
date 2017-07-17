@@ -120,13 +120,13 @@ public class AbstractClassLibraryTest
         filledChildClassLibrary.getJavaClass( "ChildClass" );
         
         Collection<JavaClass> parentClasses = parentClassLibrary.getJavaClasses( new AbstractClassLibrary.ClassLibraryFilter(){
-            public boolean accept(AbstractClassLibrary classLibrary) { return true; };
+            public boolean accept(AbstractClassLibrary classLibrary) { return true; }
         } ); 
         assertEquals(1, parentClasses.size());
         assertEquals( "ParentClass", parentClasses.iterator().next().getFullyQualifiedName() );
         
         Collection<JavaClass> filledClasses = filledChildClassLibrary.getJavaClasses(new AbstractClassLibrary.ClassLibraryFilter(){
-            public boolean accept(AbstractClassLibrary classLibrary) { return true; };
+            public boolean accept(AbstractClassLibrary classLibrary) { return true; }
         } ); 
         assertEquals(2, filledClasses.size() );
         Iterator<JavaClass> iter = filledClasses.iterator();
@@ -134,7 +134,7 @@ public class AbstractClassLibraryTest
         assertEquals( "ParentClass", iter.next().getFullyQualifiedName() );
         
         Collection<JavaClass> emptyClasses = emptyChildClassLibrary.getJavaClasses(new AbstractClassLibrary.ClassLibraryFilter(){
-            public boolean accept(AbstractClassLibrary classLibrary) { return true; };
+            public boolean accept(AbstractClassLibrary classLibrary) { return true; }
         } ); 
         assertEquals(1, emptyClasses.size() );
         assertEquals( "ParentClass", emptyClasses.iterator().next().getFullyQualifiedName() );

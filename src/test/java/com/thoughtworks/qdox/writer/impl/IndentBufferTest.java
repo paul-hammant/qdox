@@ -12,12 +12,12 @@ public class IndentBufferTest {
     private IndentBuffer buffer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         buffer = new IndentBuffer();
     }
 
     @Test
-    public void testNoIndentation() throws Exception {
+    public void testNoIndentation() {
         buffer.write("A string");
         buffer.newline();
         buffer.write("more string");
@@ -30,7 +30,7 @@ public class IndentBufferTest {
     }
 
     @Test
-    public void testIndentation() throws Exception {
+    public void testIndentation() {
         buffer.write("Line1");
         buffer.newline();
         buffer.indent();

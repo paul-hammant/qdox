@@ -222,7 +222,6 @@ public class AnnotationsModelTest
 
     // from Qdox-98
     public void testPackageWithAnnotation()
-        throws Exception
     {
         String source =
             "@javax.xml.bind.annotation.XmlSchema(namespace = \"http://docs.oasis-open.org/wsn/br-2\")\n"

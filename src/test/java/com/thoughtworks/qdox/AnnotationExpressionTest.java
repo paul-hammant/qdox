@@ -37,7 +37,6 @@ public class AnnotationExpressionTest
 
     @Before
     public void setUp()
-        throws Exception
     {
         builder = new JavaProjectBuilder();
     }

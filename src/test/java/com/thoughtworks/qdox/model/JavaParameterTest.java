@@ -53,7 +53,6 @@ public abstract class JavaParameterTest<P extends JavaParameter>
     }
 
     public void testExecutableDeclarator()
-        throws Exception
     {
         P p = newJavaParameter( newType( "x" ), "x" );
         assertNull( p.getExecutable() );

@@ -148,7 +148,6 @@ public class AnnotationsTest
 
     // from QDOX-113
     public void testAnnotationWithParameter()
-        throws Exception
     {
         String source =
             "public class Foo{\n" + "@Editor(FileEditor.class)\n"
@@ -158,7 +157,6 @@ public class AnnotationsTest
 
     // from QDOX-128
     public void testQuotedStringAnnotation()
-        throws Exception
     {
         String source = "@Anno(run = \"1.0\")" + "public interface Foo {}";
         builder.addSource( new StringReader( source ) );
@@ -181,7 +179,6 @@ public class AnnotationsTest
 
     // from QDOX-142
     public void testEmptyParameterListAnnotation()
-        throws Exception
     {
         String source = "@MyAnnotation()\n" + "public class MyClass {}";
         JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get( 0 );
@@ -189,7 +186,6 @@ public class AnnotationsTest
     }
 
     public void testMethodAnnotationBeforeComment()
-        throws Exception
     {
         String source =
             "class Foo {\n" + "@Override\n" + "/**\n" + " * " + " */"
@@ -201,7 +197,6 @@ public class AnnotationsTest
     }
 
     public void testEnumsWithAnnotations()
-        throws Exception
     {
         String source =
             "class Foo {\n" + " public enum BasicType {\n" + " @XmlEnumValue(\"text\")\n" + " TEXT(\"text\"),\n" + ""
@@ -210,7 +205,6 @@ public class AnnotationsTest
     }
 
     public void testParameterAnnotations()
-        throws Exception
     {
         String source =
             "class Foo {\n"
@@ -226,7 +220,6 @@ public class AnnotationsTest
     }
 
     public void testFieldRefAnnotation()
-        throws Exception
     {
         String source =
             "public class Foo {\n" + "  final String s = \"unchecked\";\n" + "  @SuppressWarnings( s )\n"
@@ -238,7 +231,6 @@ public class AnnotationsTest
     }
 
     public void testDoubleEscapedString()
-        throws Exception
     {
         JavaProjectBuilder builder = new JavaProjectBuilder();
         String source = "public class Foo {\n" + "@SuppressWarnings({\"abc\\\\d\"})\n" + "private void bar() { } }";

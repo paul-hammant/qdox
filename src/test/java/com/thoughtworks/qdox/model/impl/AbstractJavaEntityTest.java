@@ -28,7 +28,7 @@ public class AbstractJavaEntityTest {
     }
     
     @Test
-    public void testGetTagsByNameMethod() throws Exception {
+    public void testGetTagsByNameMethod() {
         AbstractBaseJavaEntity entity = newAbstractJavaEntity();
         List<DocletTag> tags = new LinkedList<DocletTag>();
         
@@ -50,7 +50,7 @@ public class AbstractJavaEntityTest {
     }
 
     @Test
-    public void testGetSingleTagByName() throws Exception {
+    public void testGetSingleTagByName() {
         AbstractBaseJavaEntity entity = newAbstractJavaEntity();
         List<DocletTag> tags = new LinkedList<DocletTag>();
 
@@ -124,7 +124,7 @@ public class AbstractJavaEntityTest {
     }
 
     @Test
-    public void testGetTagsReturnsEmptyArrayInsteadOfNull() throws Exception {
+    public void testGetTagsReturnsEmptyArrayInsteadOfNull() {
     	AbstractJavaEntity entity = newAbstractJavaEntity();
         assertEquals(0, entity.getTags().size());
     }

@@ -172,7 +172,7 @@ public class JavaProjectBuilderTest extends TestCase
         return buffer.toString();
     }
 
-    public void testSourceTree() throws Exception {
+    public void testSourceTree() {
         builder.addSourceTree(new File("target/test-source"));
 
         assertNotNull(builder.getClassByName("com.blah.Thing"));
@@ -190,7 +190,6 @@ public class JavaProjectBuilderTest extends TestCase
     }
 
     public void testSearcher()
-        throws Exception
     {
         builder.addSourceTree( new File( "target/test-source" ) );
 
@@ -238,7 +237,7 @@ public class JavaProjectBuilderTest extends TestCase
         dir.delete();
     }
     
-    public void testDefaultClassLoader() throws Exception {
+    public void testDefaultClassLoader() {
         String in = ""
                 + "package x;"
                 + "import java.util.*;"
@@ -250,7 +249,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals("java.util.List", cls.getSuperClass().getFullyQualifiedName());
     }
 
-    public void testAddMoreClassLoaders() throws Exception {
+    public void testAddMoreClassLoaders() {
     	builder = new JavaProjectBuilder(new OrderedClassLibraryBuilder(null));
         builder.addClassLoader(new ClassLoader() {
             @Override
@@ -299,7 +298,7 @@ public class JavaProjectBuilderTest extends TestCase
 
     }
 
-    public void testOldfashionedExtraClassesAreSupported() throws Exception {
+    public void testOldfashionedExtraClassesAreSupported() {
         String in = ""
                 + "package oldfashioned;"
                 + "public class Ping {"
@@ -312,7 +311,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertNotNull(builder.getClassByName("oldfashioned.Bar"));
     }
 
-    public void testBinaryClassesAreFound() throws Exception {
+    public void testBinaryClassesAreFound() {
 
         String in = ""
                 + "package x;"
@@ -343,7 +342,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals("java.util.Collection", list.getImplements().get(0).getValue());
     }
 
-    public void testSuperclassOfObjectIsNull() throws Exception {
+    public void testSuperclassOfObjectIsNull() {
         JavaClass object = builder.getClassByName("java.lang.Object");
         JavaClass objectSuper = object.getSuperJavaClass();
         assertNull(objectSuper);
@@ -397,7 +396,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertFalse("should not be Object", list.isA("java.lang.Object")); // I think! ;)
     }
 
-    public void testClassCanBeTestedForNonexistantClasses() throws Exception {
+    public void testClassCanBeTestedForNonexistantClasses() {
         String in = ""
                 + "package food;"
                 + "class Sausage extends food.Meat implements food.Proteine {"
@@ -409,7 +408,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertTrue(sausage.isA("food.Proteine"));
     }
 
-    public void testClassesCanBeAddedLater() throws Exception {
+    public void testClassesCanBeAddedLater() {
         testClassCanBeTestedForNonexistantClasses();
         assertEquals(1, builder.getClasses().size());
         JavaClass sausage = builder.getClassByName("food.Sausage");
@@ -543,7 +542,7 @@ public class JavaProjectBuilderTest extends TestCase
     /*
      * The JavaDocBuilder has to be serializable, With JavaProjectBuilder, we only need to serialize the ClassLibraryBuilder
      */
-    public void testSerializable() throws Exception {
+    public void testSerializable() {
         
         JavaSource source = builder.addSource(new StringReader("package test; public class X{}"));
         assertEquals("X", source.getClasses().get(0).getName());
@@ -587,7 +586,7 @@ public class JavaProjectBuilderTest extends TestCase
 
     }
 
-    public void testSuperClassOfAnInterfaceReturnsNull() throws Exception {
+    public void testSuperClassOfAnInterfaceReturnsNull() {
         String in = "package x; interface I {}";
         builder.addSource(new StringReader(in));
         JavaClass cls = builder.getClassByName("x.I");
@@ -1057,7 +1056,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertTrue("Public", modifiers.contains("public"));
     }
 
-    public void testMultipleFieldsWithJavaDoc() throws Exception {
+    public void testMultipleFieldsWithJavaDoc() {
         String sourceCode = "class Thing {\n" +
                 " /** some doc */\n" +
                 " int a = 1,\n" +
@@ -1074,7 +1073,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals("etc", fieldC.getComment());
     }
 
-    public void testValueRemainsIntact() throws Exception {
+    public void testValueRemainsIntact() {
         String in = ""
                 + "package x;\n"
                 + "/**\n"
@@ -1089,7 +1088,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals("aa count(*) bbb * ccc dd=e f='g' i = \"xx\"", tag.getValue());
     }
     
-    public void testJiraQdox117() throws Exception {
+    public void testJiraQdox117() {
         String sourceCode = "" +
                 "public class foo {\n" +
                 "{ dosomething(); }\n" +
@@ -1102,7 +1101,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals("\"test blah blah\"", javaMethod.getAnnotations().get(0).getNamedParameter("description").toString());
     }
     
-    public void testJiraQdox131() throws Exception {
+    public void testJiraQdox131() {
         String sourceCode = "package com.acme.qdox;\n" + 
                "\n" + 
                "public class QDoxBugClass {\n" + 
@@ -1122,7 +1121,7 @@ public class JavaProjectBuilderTest extends TestCase
                aClass.getMethods().get(0).getSourceCode());
    }
     
-    public void testJiraQdox134() throws Exception {
+    public void testJiraQdox134() {
         String sourceCode = "/**\n" + 
                 "*\n" + 
                 "@myTag name=TestClass attrs=Something1,Something2,Something3\n" + 
@@ -1154,7 +1153,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
 
     //for qdox-152
-    public void testExtendedClass() throws Exception {
+    public void testExtendedClass() {
         String source = "import javax.faces.component.UIOutput;" +
                 "public abstract class AbstractSayHello extends UIOutput {\n" +
                 "}";
@@ -1165,7 +1164,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
     //for QDox-154
-    public void testImplicitJavadocCommentOrder() throws Exception {
+    public void testImplicitJavadocCommentOrder() {
         String source = "" +
                 "public class Foo {\n" +
                 "    /**\n" + 
@@ -1198,7 +1197,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
 
     //for qdox-155
-    public void testCharField() throws Exception {
+    public void testCharField() {
         String source = "public class Foo {\n" +
                 "public static final char SEPARATOR = ',';" +
                 "}";
@@ -1208,7 +1207,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
   //for qdox-157
-    public void testCommentBetweenFields() throws Exception {
+    public void testCommentBetweenFields() {
         String source = "public class Foo {\n" +
                 "public static final String TEST1 = \"test1\";\n" +
                 "// TODO: blabla\n" +
@@ -1219,7 +1218,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals(javaClass.getFieldByName( "TEST2" ).getInitializationExpression(), "\"test2\"");
     }
     
-    public void testAnnotationWithComment() throws Exception {
+    public void testAnnotationWithComment() {
         String source = "@OneToMany(cascade = {/* CascadeType.PERSIST */}, fetch = FetchType.LAZY)\n" +
                 "public class Foo{}"; 
         JavaSource javaSource = builder.addSource(new StringReader(source));
@@ -1231,7 +1230,7 @@ public class JavaProjectBuilderTest extends TestCase
      * According to sun specs: Starting with Javadoc 1.4, the leading asterisks are optional
      * @throws Exception
      */
-    public void testJavadocWithoutStartingAsterisks() throws Exception {
+    public void testJavadocWithoutStartingAsterisks() {
         String source = "    /**\n" + 
                 "     Some text\n" +
                 "more text\n" +
@@ -1309,7 +1308,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( 1, javaSource2.getPackage().getLineNumber() );
     }
     
-    public void testSourceFolder() throws Exception {
+    public void testSourceFolder() {
         builder.addSourceFolder( new File("target/test-source") );
         String source = "package com.foo;\n" +
                 "import com.blah.*;\n" +
@@ -1324,7 +1323,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
     // for QDOX-208
-    public void testMethodLineNumber() throws Exception {
+    public void testMethodLineNumber() {
         String source = "package com.foo;\n" +
                 "public class Bar {\n" +
                 "  public void method1() \n" +
@@ -1342,7 +1341,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
     // for QDOX-209
-    public void testAnnotationMap() throws Exception{
+    public void testAnnotationMap() {
         String source = "import javax.persistence.JoinColumn;\n" + 
                 "public class Instruction {\n" + 
                 "    private static final int something = 40;\n" + 
@@ -1365,7 +1364,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
     
-    public void testEnumConstantArguments() throws Exception
+    public void testEnumConstantArguments()
     {
         String source = "public enum AssignmentOperators {" +
         		" EQ    ( a = b )," +
@@ -1387,7 +1386,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( "a ^= b", xoreq.getEnumConstantArguments().get(0).getParameterValue() );
     }
     
-    public void testIncrementAndDecrement() throws Exception
+    public void testIncrementAndDecrement()
     {
         String source = "public enum Expression {" +
                 " POSTINC ( a++ )," +
@@ -1402,7 +1401,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
     // for QDOX-230
-    public void testInterfaceAnnotations() throws Exception {
+    public void testInterfaceAnnotations() {
         String source = "@RemoteServiceRelativePath(\"greetings\")\r\n" + 
         		"public interface GreetingService extends RemoteService {\r\n" + 
         		"    String greetServer(String name) throws IllegalArgumentException;\r\n" + 
@@ -1470,7 +1469,6 @@ public class JavaProjectBuilderTest extends TestCase
 
     // for QDOX-253
     public void testConstructorHasAnnotation()
-        throws Exception
     {
         JavaProjectBuilder builder = new JavaProjectBuilder();
         String source =
@@ -1498,7 +1496,6 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
     public void testCanonicalName()
-        throws Exception
     {
         String source =
             "package com.foo;\b" + "public class Outer {\n" + "public class Inner {\n" + "public class Core {}\n"
@@ -1542,7 +1539,7 @@ public class JavaProjectBuilderTest extends TestCase
     }
     
     // QDOX-240
-    public void testComplexEnum() throws Exception
+    public void testComplexEnum()
     {
         String source = "import java.util.HashMap;\r\n" + 
             "\r\n" + 
@@ -1558,7 +1555,7 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource( new StringReader( source ) ); 
     }
     
-    public void testFQNField() throws Exception
+    public void testFQNField()
     {
         String source = "import java.text.SimpleDateFormat;\r\n" + 
             "public class Car {\r\n" + 
@@ -1635,7 +1632,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( "public java.util.List<com.amaral.model.EntityModel> findById(java.lang.Long id)", findById.getDeclarationSignature( true ) );
     }
     
-    public void testOneLineJavadoc() throws Exception
+    public void testOneLineJavadoc()
     {
         String source = "package foo.bar;\n" + 
             "/***/\n" + 
@@ -1644,7 +1641,7 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource( new StringReader( source ) ); 
     }
     
-    public void testMethodReferences() throws Exception
+    public void testMethodReferences()
     {
         String source = "public enum AmazonClients {\n" + 
             "    ECS(AmazonECSClient::new),\n" + 
@@ -1654,7 +1651,7 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource( new StringReader( source ) ); 
     }
     
-    public void testAnonymousEnumConstructor() throws Exception
+    public void testAnonymousEnumConstructor()
     {
         String source = "package parent;\n" + 
             "public enum MyEnum {\n" + 
@@ -1668,7 +1665,7 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource( new StringReader( source ) ); 
     }
 
-    public void testModuleWithComment() throws Exception
+    public void testModuleWithComment()
     {
         String source = "/**\r\n" + 
             " * TODO javadoc\r\n" + 
@@ -1755,7 +1752,7 @@ public class JavaProjectBuilderTest extends TestCase
         assertSame( addedSource, source );
     }
     
-    public void testAddReaderSource() throws Exception
+    public void testAddReaderSource()
     {
         ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );
         Reader reader = mock( Reader.class );

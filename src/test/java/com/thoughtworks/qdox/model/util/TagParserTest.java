@@ -169,7 +169,7 @@ public class TagParserTest extends TestCase {
     }
 
     //for QDOX-173
-    public void testGenericsSupport() throws Exception {
+    public void testGenericsSupport() {
     	String[] words = TagParser.parseWords("<K>  The Key");
     	assertEquals("<K>", words[0]);
     	assertEquals("The", words[1]);

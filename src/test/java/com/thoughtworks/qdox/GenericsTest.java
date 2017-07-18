@@ -261,7 +261,7 @@ public class GenericsTest extends TestCase {
     } 
     
     // QDOX-207
-    public void testMethodReturnTypeExtends() throws Exception {
+    public void testMethodReturnTypeExtends() {
         String superSource = "public abstract class Test<T> {\n" + 
         		"        private T me;\n" + 
         		"        public Test(T me) {\n" + 
@@ -286,7 +286,7 @@ public class GenericsTest extends TestCase {
     }
     
     //GWT-186
-    public void testMethodReturnTypeImplements() throws Exception {
+    public void testMethodReturnTypeImplements() {
         String source1="public interface GenericDao<TEntity, TKey> {\n" + 
         		"public List<TEntity> getAll();\n" + 
                 "public TEntity getRandom();\n" + 
@@ -335,7 +335,7 @@ public class GenericsTest extends TestCase {
     }
     
     //for QDOX-210
-    public void testResolveTypeGetMethod() throws Exception {
+    public void testResolveTypeGetMethod() {
         String source1="import java.util.*;" +
         "public interface GenericDao<TEntity, TKey> {\n" + 
         "public List<TEntity> getAll();\n" + 

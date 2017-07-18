@@ -21,7 +21,7 @@ public class TraversalTest extends TestCase {
         //by default current classloader is already added, so QDox-classes can be found
     }
 
-    public void testParentClassTraversal() throws Exception {
+    public void testParentClassTraversal() {
         JavaClass javaClass = builder.getClassByName(DefaultJavaMethod.class.getName());
         JavaClass parentClass = javaClass.getSuperJavaClass();
         assertNotNull("Parent class not found", parentClass);

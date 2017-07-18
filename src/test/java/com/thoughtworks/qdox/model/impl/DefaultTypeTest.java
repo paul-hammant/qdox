@@ -40,7 +40,6 @@ public class DefaultTypeTest
 
     @Test
     public void testArrayType()
-        throws Exception
     {
         DefaultJavaType type = newType( "int", 1 );
         assertTrue( type.isArray() );
@@ -48,7 +47,6 @@ public class DefaultTypeTest
 
     @Test
     public void testComponentType()
-        throws Exception
     {
         assertNull( newType( "int" ).getComponentType() );
         assertEquals( "int", newType( "int", 1 ).getComponentType().getFullyQualifiedName() );

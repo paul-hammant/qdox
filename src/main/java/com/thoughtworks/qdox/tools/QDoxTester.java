@@ -75,7 +75,7 @@ public class QDoxTester {
         }
     }
 
-    public void checkDirectory(File dir) throws IOException {
+    public void checkDirectory(File dir) {
         DirectoryScanner directoryScanner = new DirectoryScanner(dir);
         directoryScanner.addFilter(new SuffixFilter(".java"));
         directoryScanner.scan(new FileVisitor() {

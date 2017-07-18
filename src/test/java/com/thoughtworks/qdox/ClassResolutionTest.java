@@ -75,7 +75,6 @@ public class ClassResolutionTest
 
     // from QDOX-86
     public void testInnerClassInMethod()
-        throws Exception
     {
         JavaProjectBuilder builder = new JavaProjectBuilder();
         String source =

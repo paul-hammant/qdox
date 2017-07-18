@@ -23,7 +23,6 @@ public abstract class JavaTypeTest<T extends JavaType>
     
     @Test
     public void testToString()
-        throws Exception
     {
         assertEquals( "int", newType( "int" ).toString() );
         assertEquals( "int[]", newType( "int", 1 ).toString() );
@@ -32,7 +31,6 @@ public abstract class JavaTypeTest<T extends JavaType>
 
     @Test
     public void testFullyQualifiedName()
-        throws Exception
     {
         assertEquals( "int", newType( "int" ).getFullyQualifiedName() );
         assertEquals( "int[]", newType( "int", 1 ).getFullyQualifiedName() );
@@ -41,7 +39,6 @@ public abstract class JavaTypeTest<T extends JavaType>
 
     @Test
     public void testEquals()
-        throws Exception
     {
         JavaClass javaSource = newJavaClass( new OrderedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary() );
         assertEquals( newType( "long", 0, javaSource ), newType( "long", 0, javaSource ) );

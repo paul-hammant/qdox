@@ -22,7 +22,7 @@ public class JavaClassContextTest
         context = new JavaClassContext();
     }
 
-    public void testGetClassByName() throws Exception
+    public void testGetClassByName()
     {
         assertNull( context.getClassByName( null ) );
         assertNull( "a new context should be empty, not even contain java.lang.Object", context.getClassByName( "java.lang.Object" ) );
@@ -33,7 +33,7 @@ public class JavaClassContextTest
         assertEquals( clazz, context.getClassByName( "com.foo.Bar" ) );
     }
 
-    public void testRemoveClassByName() throws Exception
+    public void testRemoveClassByName()
     {
         assertNull( context.removeClassByName( null ));
         assertNull( context.removeClassByName( "com.foo.Bar" ) );
@@ -44,7 +44,7 @@ public class JavaClassContextTest
         assertEquals( clazz, context.removeClassByName( "com.foo.Bar" ) );
     }
 
-    public void testGetClasses() throws Exception
+    public void testGetClasses()
     {
         assertNotNull( context.getClasses() );
         assertEquals( 0, context.getClasses().size() );
@@ -63,7 +63,7 @@ public class JavaClassContextTest
         assertEquals( 0, context.getClasses().size() );
     }
 
-    public void testAddJavaClass() throws Exception
+    public void testAddJavaClass()
     {
         JavaClass clazz = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz );
@@ -78,7 +78,7 @@ public class JavaClassContextTest
         catch(NullPointerException npe) {}
     }
 
-    public void testGetPackageByName() throws Exception
+    public void testGetPackageByName()
     {
         assertNull( context.getPackageByName( null ) );
         assertNull( context.getPackageByName( "java.lang" ) );
@@ -87,7 +87,7 @@ public class JavaClassContextTest
         assertEquals( pckg, context.getPackageByName( "com.foo" ) );
     }
 
-    public void testRemovePackageByName() throws Exception
+    public void testRemovePackageByName()
     {
         assertNull( context.removePackageByName( null ) );
         assertNull( context.removePackageByName( "com.foo" ) );
@@ -96,7 +96,7 @@ public class JavaClassContextTest
         assertEquals( pckg, context.removePackageByName( "com.foo" ) );
     }
 
-    public void testAddJavaPackage() throws Exception
+    public void testAddJavaPackage()
     {
         JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
@@ -108,7 +108,7 @@ public class JavaClassContextTest
         context.add( (JavaPackage) null );
     }
 
-    public void testGetPackages() throws Exception
+    public void testGetPackages()
     {
         assertNotNull( context.getPackages() );
         assertEquals( 0, context.getPackages().size() );
@@ -126,7 +126,7 @@ public class JavaClassContextTest
         assertEquals( 0, context.getPackages().size() );
     }
 
-    public void testAddJavaSource() throws Exception
+    public void testAddJavaSource()
     {
         JavaSource source = new DefaultJavaSource(null);
         context.add( source );
@@ -135,7 +135,7 @@ public class JavaClassContextTest
         context.add( (JavaSource) null );
     }
 
-    public void testGetSources() throws Exception
+    public void testGetSources()
     {
         assertNotNull( context.getSources() );
         assertEquals( 0, context.getSources().size() );
@@ -150,7 +150,7 @@ public class JavaClassContextTest
         assertEquals( 2, context.getSources().size() );
     }
     
-    public void testAdd() throws Exception {
+    public void testAdd() {
         context.add(new DefaultJavaClass("com.blah.Ping"));
         context.add(new DefaultJavaClass("com.moo.Poo"));
         assertTrue(context.getClassByName("com.blah.Ping") != null );

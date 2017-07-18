@@ -11,21 +11,21 @@ public abstract class ClassLibraryBuilderTest
 
     protected abstract ClassLibraryBuilder getClassLibraryBuilder();
 
-    public final void testAppendClassLoader() throws Exception
+    public final void testAppendClassLoader()
     {
         ClassLibraryBuilder libraryBuilder = getClassLibraryBuilder();
         ClassLibraryBuilder result = libraryBuilder.appendClassLoader( null );
         assertSame( libraryBuilder, result );
     }
 
-    public final void testAppendDefaultClassLoaders() throws Exception
+    public final void testAppendDefaultClassLoaders()
     {
         ClassLibraryBuilder libraryBuilder = getClassLibraryBuilder();
         ClassLibraryBuilder result = libraryBuilder.appendDefaultClassLoaders();
         assertSame( libraryBuilder, result );
     }
 
-    public final void testAppendSourceFolder() throws Exception
+    public final void testAppendSourceFolder()
     {
         ClassLibraryBuilder libraryBuilder = getClassLibraryBuilder();
         ClassLibraryBuilder result = libraryBuilder.appendSourceFolder( null );
@@ -40,7 +40,7 @@ public abstract class ClassLibraryBuilderTest
         assertSame( libraryBuilder, result );
     }
 
-    public final void testAppendSourceReader() throws Exception
+    public final void testAppendSourceReader()
     {
         ClassLibraryBuilder libraryBuilder = getClassLibraryBuilder();
         ClassLibraryBuilder result = libraryBuilder.appendSource( new StringReader("package x.y.z;") );
@@ -61,10 +61,9 @@ public abstract class ClassLibraryBuilderTest
 //        assertSame( libraryBuilder, result );
 //    }
 
-    public final void testGetClassLibrary() throws Exception
+    public final void testGetClassLibrary()
     {
         ClassLibraryBuilder libraryBuilder = getClassLibraryBuilder();
         assertNotNull( libraryBuilder.getClassLibrary() );
     }
-    
 }

@@ -15,18 +15,18 @@ public class ClassLoaderLibraryTest
         classLoaderLibrary = new ClassLoaderLibrary(null);
     }
     
-    public void testNoClassLoaders() throws Exception {
+    public void testNoClassLoaders() {
         assertNull( classLoaderLibrary.getJavaClass( "java.lang.String") );
     }
     
-    public void testWithClassLoader() throws Exception {
+    public void testWithClassLoader() {
         classLoaderLibrary.addClassLoader(getClass().getClassLoader());
         assertNotNull(classLoaderLibrary.getJavaClass("java.lang.String"));
         assertNotNull(classLoaderLibrary.getJavaClass("java.util.Collection"));
         assertNull(classLoaderLibrary.getJavaClass("java.util.GoatCrusher"));
     }
     
-    public void testDefaultClassLoader() throws Exception {
+    public void testDefaultClassLoader() {
         classLoaderLibrary.addDefaultLoader();
         assertNotNull(classLoaderLibrary.getJavaClass( "java.lang.String"));
         assertNotNull(classLoaderLibrary.getJavaClass("java.util.Collection"));
@@ -34,7 +34,7 @@ public class ClassLoaderLibraryTest
         assertNull(classLoaderLibrary.getJavaClass("java.util.GoatCrusher"));
     }
 
-    public void testModuleInfo() throws Exception
+    public void testModuleInfo()
     {
         assertNull( classLoaderLibrary.getJavaModules() );
     }

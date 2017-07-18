@@ -24,7 +24,7 @@ public class DefaultDocletTagTest extends AbstractDocletTagTest {
         return docletTagFactory;
     }
     
-    public void testJiraQdox60() throws Exception {
+    public void testJiraQdox60() {
         DefaultDocletTag tag = new DefaultDocletTag("author", "<a href=\"mailto:dev@excalibur.apache.org\">Excalibur Development Team</a>");
 
         tag = (DefaultDocletTag) SerializationUtils.serializedCopy(tag);

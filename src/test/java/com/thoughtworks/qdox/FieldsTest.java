@@ -46,7 +46,7 @@ public class FieldsTest extends TestCase
     //from QDOX-127
     //fails because returned value is " null"
     //which is already better then mentioned in the issue
-    public void testCommentBeforeInitialization() throws Exception {
+    public void testCommentBeforeInitialization() {
     	String source = "public class X{\n" +
     			"// Attributes\n" +
     			"\n" +
@@ -61,7 +61,7 @@ public class FieldsTest extends TestCase
     	assertEquals("null", field.getInitializationExpression());
     }
     
-    public void testTwoDocletTags() throws Exception {
+    public void testTwoDocletTags() {
         String source = "public class Foo {" +
         		"    /**\r\n" + 
         		"     * @parameter implementation=source2.sub.MyBla\r\n" + 
@@ -75,7 +75,7 @@ public class FieldsTest extends TestCase
         assertEquals( 2, field.getTags().size() );
     }
     
-    public void testCommentAndTwoDocletTags() throws Exception {
+    public void testCommentAndTwoDocletTags() {
         String source = "public class Foo {" +
                 "    /**\r\n" + 
                 "     * Being Lazy Always\r\n" + 
@@ -90,7 +90,7 @@ public class FieldsTest extends TestCase
         assertEquals( 2, field.getTags().size() );
     }
 
-    public void testMultiCommentAndTwoDocletTags() throws Exception {
+    public void testMultiCommentAndTwoDocletTags() {
         String source = "public class Foo {" +
                 "    /**\r\n" + 
                 "     * Being\r\n" + 

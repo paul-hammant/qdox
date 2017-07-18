@@ -51,14 +51,14 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
         assertTrue( "hashCode should never resolve to 0", newJavaField().hashCode() != 0 );
     }
     
-    public void testGetCodeBlock() throws Exception {
+    public void testGetCodeBlock() {
         F fld = newJavaField();
         setName(fld, "count");
         setType(fld, newJavaClass("int"));
         assertEquals("int count;\n", fld.getCodeBlock());
     }
 
-    public void testGetCodeBlockWithModifiers() throws Exception {
+    public void testGetCodeBlockWithModifiers() {
         F fld = newJavaField();
         setName(fld, "count");
         setType(fld, newJavaClass("int"));
@@ -66,7 +66,7 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
         assertEquals("public final int count;\n", fld.getCodeBlock());
     }
 
-    public void testGetCodeBlockWithComment() throws Exception {
+    public void testGetCodeBlockWithComment() {
         F fld = newJavaField();
         setName(fld, "count");
         setType(fld, newJavaClass("int"));
@@ -79,7 +79,7 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
         assertEquals(expected, fld.getCodeBlock());
     }
 
-    public void testGetCodeBlock1dArray() throws Exception {
+    public void testGetCodeBlock1dArray() {
         F fld = newJavaField();
         setName(fld, "count");
         setType(fld, newJavaClass("int", 1));
@@ -87,7 +87,7 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
         assertEquals(expected, fld.getCodeBlock());
     }
 
-    public void testGetCodeBlock2dArray() throws Exception {
+    public void testGetCodeBlock2dArray() {
         F fld = newJavaField();
         setName(fld, "count");
         setType(fld, newJavaClass("int", 2));
@@ -95,7 +95,7 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
         assertEquals(expected, fld.getCodeBlock());
     }
 
-    public void testGetCodeBlockWithValue() throws Exception {
+    public void testGetCodeBlockWithValue() {
         F fld = newJavaField();
         setName(fld, "stuff");
         setType(fld, newJavaClass("String"));
@@ -104,7 +104,7 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
         assertEquals(expected, fld.getCodeBlock());
     }
     
-    public void testToStringThreadMIN_PRIORITY() throws Exception {
+    public void testToStringThreadMIN_PRIORITY() {
     	JavaClass cls = mock(JavaClass.class);
     	when(cls.getFullyQualifiedName()).thenReturn( "java.lang.Thread" );
     	F fld = newJavaField(newJavaClass("int"), "MIN_PRIORITY");
@@ -113,7 +113,7 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
     	assertEquals("public static final int java.lang.Thread.MIN_PRIORITY", fld.toString());
     }
     
-    public void testToStringFieldDescriptorFd() throws Exception {
+    public void testToStringFieldDescriptorFd() {
     	JavaClass cls = mock(JavaClass.class);
     	when(cls.getFullyQualifiedName()).thenReturn("java.io.FileDescriptor");
     	F fld =  newJavaField(newJavaClass("int"), "fd");

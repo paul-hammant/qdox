@@ -72,7 +72,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mth = newJavaMethod();
     }
     
@@ -116,14 +116,14 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
 //    }
     
     @Test
-    public void testGetCodeBlockSimple() throws Exception {
+    public void testGetCodeBlockSimple() {
         setName(mth, "doSomething");
         setReturns(mth, newType("java.lang.String"));
         assertEquals("java.lang.String doSomething();\n", mth.getCodeBlock());
     }
 
     @Test
-    public void testGetCodeBlockOneParam() throws Exception {
+    public void testGetCodeBlockOneParam() {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setParameters( mth, Collections.singletonList( newJavaParameter(newType("String"), "thingy") ) );
@@ -131,7 +131,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testGetCodeBlockTwoParams() throws Exception {
+    public void testGetCodeBlockTwoParams() {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setParameters(mth, Arrays.asList( newJavaParameter(newType("int"), "count"), newJavaParameter(newType("MyThing"), "t") ) );
@@ -139,7 +139,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testGetCodeBlockThreeParams() throws Exception {
+    public void testGetCodeBlockThreeParams() {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setParameters(mth, Arrays.asList( newJavaParameter(newType("int"), "count"), newJavaParameter(newType("MyThing"), "t"), newJavaParameter(newType("java.lang.Meat"), "beef") ));
@@ -147,7 +147,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testGetCodeBlockModifiersWithAccessLevelFirst() throws Exception {
+    public void testGetCodeBlockModifiersWithAccessLevelFirst() {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setModifiers(mth, Arrays.asList(new String[]{"synchronized", "public", "final"}));
@@ -155,7 +155,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testGetCodeBlockOneException() throws Exception {
+    public void testGetCodeBlockOneException() {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setExceptions( mth, Arrays.asList( new JavaClass[] { newType( "RuntimeException" ) } ) );
@@ -163,7 +163,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testGetCodeBlockTwoException() throws Exception {
+    public void testGetCodeBlockTwoException() {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setExceptions(mth, Arrays.asList( new JavaClass[]{newType("RuntimeException"), newType("java.lang.SheepException")}));
@@ -171,7 +171,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testGetCodeBlockThreeException() throws Exception {
+    public void testGetCodeBlockThreeException() {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setExceptions(mth, Arrays.asList( new JavaClass[]{newType("RuntimeException"), newType("java.lang.SheepException"), newType("CowException")}));
@@ -179,7 +179,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testGetCodeBlockWithComment() throws Exception {
+    public void testGetCodeBlockWithComment() {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setComment(mth, "Hello");
@@ -192,21 +192,21 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testGetCodeBlock1dArray() throws Exception {
+    public void testGetCodeBlock1dArray() {
         setName(mth, "doSomething");
         setReturns(mth, newType("java.lang.String", 1));
         assertEquals("java.lang.String[] doSomething();\n", mth.getCodeBlock());
     }
 
     @Test
-    public void testGetCodeBlock2dArray() throws Exception {
+    public void testGetCodeBlock2dArray() {
         setName(mth, "doSomething");
         setReturns(mth, newType("java.lang.String", 2));
         assertEquals("java.lang.String[][] doSomething();\n", mth.getCodeBlock());
     }
 
     @Test
-    public void testGetCodeBlockParamArray() throws Exception {
+    public void testGetCodeBlockParamArray() {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setParameters( mth, Arrays.asList( newJavaParameter( newType("int", 2), "count"), newJavaParameter( newType("MyThing", 1), "t") ) );
@@ -214,7 +214,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testGetCodeBlockWithBody() throws Exception {
+    public void testGetCodeBlockWithBody() {
         setName(mth, "doStuff");
         setReturns(mth, newType("java.lang.String"));
         setSourceCode(mth, "  int x = 2;\n  return STUFF;\n");
@@ -228,7 +228,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
     
     @Test
-    public void testEquals() throws Exception {
+    public void testEquals() {
         JavaClass voidType = newType("void");
 
         setName(mth, "thing");
@@ -273,7 +273,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testEqualsWithParameters() throws Exception {
+    public void testEqualsWithParameters() {
         JavaClass voidType = newType("void");
         JavaClass intArrayType = newType("int", 1);
         JavaClass stringArrayType = newType("java.lang.String", 2);
@@ -312,7 +312,6 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
 
     @Test
     public void testHashCode()
-        throws Exception
     {
         assertTrue( "hashCode should never resolve to 0", newJavaMethod( newType("void"), "" ).hashCode() != 0 );
 
@@ -344,7 +343,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-   public void testSignatureMatches() throws Exception {
+   public void testSignatureMatches() {
         JavaClass intType = newType("int");
         JavaClass longArrayType = newType("long", 2);
 
@@ -375,7 +374,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
     
     @Test
-    public void testVarArgSignatureMatches() throws Exception {
+    public void testVarArgSignatureMatches() {
         JavaClass intType = newType("int");
         JavaClass longArrayType = newType("long", 2);
 
@@ -407,14 +406,14 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testParentClass() throws Exception {
+    public void testParentClass() {
         JavaClass clazz = mock(JavaClass.class);
         setDeclaringClass( mth, clazz );
         assertSame(clazz, mth.getDeclaringClass());
     }
 
     @Test
-    public void testCanGetParameterByName() throws Exception {
+    public void testCanGetParameterByName() {
         JavaParameter paramX = newJavaParameter(newType("int"), "x");
         setParameters(mth, Arrays.asList( paramX, newJavaParameter(newType("string"), "y") ));
         
@@ -423,7 +422,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     }
 
     @Test
-    public void testToString() throws Exception {
+    public void testToString() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getBinaryName()).thenReturn( "java.lang.Object" );
     	M mthd = newJavaMethod(newType("boolean"),"equals");

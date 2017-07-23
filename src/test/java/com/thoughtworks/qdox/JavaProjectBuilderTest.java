@@ -1678,6 +1678,21 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource( new StringReader( source ) );
     }
     
+    public void testLineNumbers() {
+        String source = "package foo.bar;\n" + 
+                        "/** some javadoc */\n" + 
+                        "public class MyClass {}\n" + 
+                        "interface MyInterface {}\n" + 
+                        "public enum MyEnum{}\n" +
+                        "@interface MyAnnoInterface{}\n";
+        
+        JavaSource jSource = builder.addSource( new StringReader( source ) );
+        assertEquals( 3, jSource.getClassByName( "MyClass" ).getLineNumber() );
+        assertEquals( 4, jSource.getClassByName( "MyInterface" ).getLineNumber() );
+        assertEquals( 5, jSource.getClassByName( "MyEnum" ).getLineNumber() );
+        assertEquals( 6, jSource.getClassByName( "MyAnnoInterface" ).getLineNumber() );
+    }
+    
     public void testSetDebugLexer()
     {
         ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );

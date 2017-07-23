@@ -611,7 +611,7 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
 //     {ClassModifier} enum Identifier [Superinterfaces] EnumBody
 EnumDeclaration: Modifiers_opt ENUM IDENTIFIER Superinterfaces_opt 
                  { 
-                   cls.setLineNumber(line);
+                   cls.setLineNumber(lexer.getLine());
                    cls.getModifiers().addAll(modifiers);
                    cls.setName( $3 );
                    cls.setType(ClassDef.ENUM);
@@ -684,7 +684,7 @@ InterfaceDeclaration: NormalInterfaceDeclaration
 NormalInterfaceDeclaration: Modifiers_opt INTERFACE IDENTIFIER TypeParameters_opt ExtendsInterfaces_opt  
                             {
                               cls.setType(ClassDef.INTERFACE);
-                              cls.setLineNumber(line);
+                              cls.setLineNumber(lexer.getLine());
                               cls.getModifiers().addAll(modifiers); modifiers.clear(); 
                               cls.setName( $3 );
                               cls.setTypeParameters(typeParams);
@@ -733,7 +733,7 @@ ExtendsInterfaces_opt:
 AnnotationTypeDeclaration: Modifiers_opt ANNOINTERFACE IDENTIFIER 
                            {
                              cls.setType(ClassDef.ANNOTATION_TYPE);
-                             cls.setLineNumber(line);
+                             cls.setLineNumber(lexer.getLine());
                              cls.getModifiers().addAll(modifiers); modifiers.clear(); 
                              cls.setName( $3 );
                              builder.beginClass(cls); 

@@ -67,4 +67,6 @@ public interface JavaExecutable extends JavaAnnotatedElement, JavaGenericDeclara
      * @return <code>true</code> if the final parameter is a varArg, otherwise <code>false</code>
      */
     boolean isVarArgs();
+
+    String getCallSignature();
 }

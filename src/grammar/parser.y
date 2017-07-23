@@ -681,12 +681,15 @@ InterfaceDeclaration: NormalInterfaceDeclaration
                
 // NormalInterfaceDeclaration: 
 //     {InterfaceModifier} interface Identifier [TypeParameters] [ExtendsInterfaces] InterfaceBody
-NormalInterfaceDeclaration: Modifiers_opt INTERFACE IDENTIFIER TypeParameters_opt ExtendsInterfaces_opt  
+NormalInterfaceDeclaration: Modifiers_opt INTERFACE  
                             {
                               cls.setType(ClassDef.INTERFACE);
                               cls.setLineNumber(lexer.getLine());
                               cls.getModifiers().addAll(modifiers); modifiers.clear(); 
-                              cls.setName( $3 );
+                            }
+                            IDENTIFIER TypeParameters_opt ExtendsInterfaces_opt
+                            {
+                              cls.setName( $4 );
                               cls.setTypeParameters(typeParams);
                               builder.beginClass(cls); 
                               cls = new ClassDef(); 

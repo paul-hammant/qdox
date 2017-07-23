@@ -1684,13 +1684,15 @@ public class JavaProjectBuilderTest extends TestCase
                         "public class MyClass {}\n" + 
                         "interface MyInterface {}\n" + 
                         "public enum MyEnum{}\n" +
-                        "@interface MyAnnoInterface{}\n";
+                        "@interface MyAnnoInterface{}\n" +
+                        "interface NewLineInterface\n{}";
         
         JavaSource jSource = builder.addSource( new StringReader( source ) );
         assertEquals( 3, jSource.getClassByName( "MyClass" ).getLineNumber() );
         assertEquals( 4, jSource.getClassByName( "MyInterface" ).getLineNumber() );
         assertEquals( 5, jSource.getClassByName( "MyEnum" ).getLineNumber() );
         assertEquals( 6, jSource.getClassByName( "MyAnnoInterface" ).getLineNumber() );
+        assertEquals( 7, jSource.getClassByName( "NewLineInterface" ).getLineNumber() );
     }
     
     public void testSetDebugLexer()

@@ -28,7 +28,7 @@ public class TypeResolverTest
     }
     
     @Test
-    public void testResolveTypeInnerClass() throws Exception {
+    public void testResolveTypeInnerClass() {
         when( classLibrary.hasClassReference( "p.X$DogFood" ) ).thenReturn( true );
         
         typeResolver = TypeResolver.byClassName( "p.X", classLibrary, Collections.<String>emptyList() );
@@ -39,7 +39,6 @@ public class TypeResolverTest
     
     @Test
     public void testResolving()
-        throws Exception
     {
         when( classLibrary.hasClassReference( "foo.Bar" ) ).thenReturn( true );
         
@@ -50,7 +49,7 @@ public class TypeResolverTest
     }
     
     @Test
-    public void testResolveJavaPrimitive() throws Exception {
+    public void testResolveJavaPrimitive() {
         List<String> imports = new ArrayList<String>();
         imports.add("bogus.int");
         imports.add("bogus.double");
@@ -65,13 +64,13 @@ public class TypeResolverTest
     }
 
     @Test
-    public void testDontResolveMissingClasses() throws Exception {
+    public void testDontResolveMissingClasses() {
         typeResolver = TypeResolver.byPackageName( null, classLibrary, Collections.<String>emptyList() );
         assertEquals(null, typeResolver.resolveType("not.Found"));
     }
 
     @Test
-    public void testResolveFullyQualifiedName() throws Exception
+    public void testResolveFullyQualifiedName()
     {
         typeResolver = TypeResolver.byPackageName( null, classLibrary, Collections.<String>emptyList() );
         when( classLibrary.hasClassReference( "open.Bar" ) ).thenReturn( true );
@@ -79,14 +78,14 @@ public class TypeResolverTest
     }
     
     @Test
-    public void testResolveFullyQualifiedImport() throws Exception {
+    public void testResolveFullyQualifiedImport() {
         typeResolver = TypeResolver.byPackageName( null, classLibrary, Collections.singletonList( "foo.Bar" ) );
         when( classLibrary.hasClassReference( "foo.Bar" ) ).thenReturn( true );
         assertEquals( "foo.Bar", typeResolver.resolveType( "Bar" ) );
     }
 
     @Test
-    public void testResolveChooseFirstMatchingImport() throws Exception {
+    public void testResolveChooseFirstMatchingImport() {
         List<String> imports = new ArrayList<String>();
         imports.add( "bogus.package.MyType" );
         imports.add( "com.thoughtworks.qdox.model.Type" );
@@ -99,14 +98,14 @@ public class TypeResolverTest
     }
 
     @Test
-    public void testResolveSamePackage() throws Exception {
+    public void testResolveSamePackage() {
         typeResolver = TypeResolver.byPackageName( "foo", classLibrary, Collections.<String>emptyList() );
         when( classLibrary.hasClassReference( "foo.Bar" ) ).thenReturn( true );
         assertEquals("foo.Bar", typeResolver.resolveType("Bar"));
     }
 
     @Test
-    public void testResolveFullyQualifiedTrumpsSamePackage() throws Exception {
+    public void testResolveFullyQualifiedTrumpsSamePackage() {
         typeResolver = TypeResolver.byPackageName( "foo", classLibrary, Collections.<String>emptyList() );
         when( classLibrary.hasClassReference( "foo.Bar" ) ).thenReturn( true );
         when( classLibrary.hasClassReference( "open.Bar" ) ).thenReturn( true );
@@ -114,7 +113,7 @@ public class TypeResolverTest
     }
 
     @Test
-    public void testResolveFullyQualifiedTrumpsWildCard() throws Exception {
+    public void testResolveFullyQualifiedTrumpsWildCard() {
         List<String> imports = new ArrayList<String>();
         imports.add("foo.*");
         imports.add("bar.Bar");
@@ -125,21 +124,21 @@ public class TypeResolverTest
     }
 
     @Test
-    public void testResolveWildcard() throws Exception {
+    public void testResolveWildcard() {
         typeResolver = TypeResolver.byPackageName( null, classLibrary, Collections.singletonList("foo.*") );
         when( classLibrary.hasClassReference( "foo.Bar" ) ).thenReturn( true );
         assertEquals("foo.Bar", typeResolver.resolveType("Bar"));
     }
 
     @Test
-    public void testResolveJavaLangClass() throws Exception {
+    public void testResolveJavaLangClass() {
         typeResolver = TypeResolver.byPackageName( null, classLibrary, Collections.<String>emptyList() );
         when( classLibrary.hasClassReference( "java.lang.System" ) ).thenReturn( true );
         assertEquals("java.lang.System", typeResolver.resolveType("System"));
     }
 
     @Test
-    public void testResolveSamePackageTrumpsWildcard() throws Exception {
+    public void testResolveSamePackageTrumpsWildcard() {
         List<String> imports = new ArrayList<String>();
         imports.add("com.thoughtworks.qdox.model.Type");
         imports.add("foo.*");
@@ -150,14 +149,14 @@ public class TypeResolverTest
     }
 
     @Test
-    public void testResolveFullyQualifiedInnerClass() throws Exception {
+    public void testResolveFullyQualifiedInnerClass() {
         typeResolver = TypeResolver.byPackageName( "foo", classLibrary, Collections.<String>emptyList() );
         when( classLibrary.hasClassReference( "foo.Bar$Fnord" ) ).thenReturn( true );
         assertEquals("foo.Bar$Fnord", typeResolver.resolveType("foo.Bar.Fnord"));
     }
 
     @Test
-    public void testResolvePartiallySpecifiedInnerClass() throws Exception {
+    public void testResolvePartiallySpecifiedInnerClass() {
         typeResolver = TypeResolver.byPackageName( "foo", classLibrary, Collections.singletonList("java.util.*") );
         when( classLibrary.hasClassReference( "foo.Bar$Fnord" ) ).thenReturn( true );
         when( classLibrary.hasClassReference( "java.util.Map$Entry" ) ).thenReturn( true );

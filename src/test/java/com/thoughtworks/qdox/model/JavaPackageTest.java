@@ -13,7 +13,6 @@ public abstract class JavaPackageTest<P extends JavaPackage>
 
     @Test
     public void testToStringJavaLang()
-        throws Exception
     {
         P pckg = newJavaPackage( "java.lang" );
         assertEquals( "package java.lang", pckg.toString() );
@@ -21,7 +20,6 @@ public abstract class JavaPackageTest<P extends JavaPackage>
 
     @Test
     public void testEquals()
-        throws Exception
     {
         P pckg = newJavaPackage( "java.lang" );
 
@@ -42,11 +40,9 @@ public abstract class JavaPackageTest<P extends JavaPackage>
     
     
     @Test
-    public void testListAccessors() throws Exception {
+    public void testListAccessors() {
         P pckg = newJavaPackage( "com.foo.bar" );
         assertNotNull( pckg.getSubPackages() );
         assertEquals( 0, pckg.getSubPackages().size() );
     }
-    
-    
 }

@@ -54,7 +54,6 @@ public class EvaluatingVisitorTest
     
     @Test
     public void testUnaryNumericResultTypeInteger()
-        throws Exception
     {
         assertEquals( Integer.class, EvaluatingVisitor.unaryNumericResultType( 0 ) );
         assertEquals( Integer.class, EvaluatingVisitor.unaryNumericResultType( (byte) 0 ) );
@@ -64,14 +63,12 @@ public class EvaluatingVisitorTest
 
     @Test
     public void testUnaryNumericResultTypeLong()
-        throws Exception
     {
         assertEquals( Long.class, EvaluatingVisitor.unaryNumericResultType( 0L ) );
     }
 
     @Test
     public void testUnaryNumericResultTypeVoid()
-        throws Exception
     {
         assertEquals( void.class, EvaluatingVisitor.unaryNumericResultType( new Object() ) );
         assertEquals( void.class, EvaluatingVisitor.unaryNumericResultType( (double) 0 ) );
@@ -81,7 +78,6 @@ public class EvaluatingVisitorTest
 
     @Test
     public void testUnaryResultTypeInteger()
-        throws Exception
     {
         assertEquals( Integer.class, EvaluatingVisitor.unaryResultType( 0 ) );
         assertEquals( Integer.class, EvaluatingVisitor.unaryResultType( (byte) 0 ) );
@@ -91,28 +87,24 @@ public class EvaluatingVisitorTest
 
     @Test
     public void testUnaryResultTypeLong()
-        throws Exception
     {
         assertEquals( Long.class, EvaluatingVisitor.unaryResultType( 0L ) );
     }
 
     @Test
     public void testUnaryResultTypeDouble()
-        throws Exception
     {
         assertEquals( Double.class, EvaluatingVisitor.unaryResultType( (double) 0 ) );
     }
 
     @Test
     public void testUnaryResultTypeFloat()
-        throws Exception
     {
         assertEquals( Float.class, EvaluatingVisitor.unaryResultType( (float) 0 ) );
     }
 
     @Test
     public void testUnaryResultTypeVoid()
-        throws Exception
     {
         assertEquals( void.class, EvaluatingVisitor.unaryResultType( new Object() ) );
         assertEquals( void.class, EvaluatingVisitor.unaryResultType( null ) );
@@ -120,7 +112,6 @@ public class EvaluatingVisitorTest
     
     @Test
     public void testNumericResultTypeLong()
-        throws Exception
     {
         assertEquals( Long.class, EvaluatingVisitor.numericResultType( (long) 0, (long) 0 ) );
         assertEquals( Long.class, EvaluatingVisitor.numericResultType( (int) 0, (long) 0 ) );
@@ -129,7 +120,6 @@ public class EvaluatingVisitorTest
     
     @Test
     public void testNumericResultTypeInteger()
-        throws Exception
     {
         assertEquals( Integer.class, EvaluatingVisitor.numericResultType( (int) 0, (int) 0 ) );
         assertEquals( Integer.class, EvaluatingVisitor.numericResultType( (short) 0, (int) 0 ) );
@@ -138,7 +128,6 @@ public class EvaluatingVisitorTest
     
     @Test
     public void testNumericResultTypeVoid()
-        throws Exception
     {
         assertEquals( void.class, EvaluatingVisitor.numericResultType( (double) 0, (double) 0 ) );
         assertEquals( void.class, EvaluatingVisitor.numericResultType( (float) 0, (double) 0 ) );
@@ -168,7 +157,6 @@ public class EvaluatingVisitorTest
 
     @Test
     public void testResultTypeDouble()
-        throws Exception
     {
         // If either operand is of type double, the other is converted to double.
         assertEquals( Double.class, EvaluatingVisitor.resultType( (double) 0, (double) 0 ) );
@@ -180,7 +168,6 @@ public class EvaluatingVisitorTest
 
     @Test
     public void testResultTypeFloat()
-        throws Exception
     {
         // Otherwise, if either operand is of type float, the other is converted to float.
         assertEquals( Float.class, EvaluatingVisitor.resultType( (float) 0, (float) 0 ) );
@@ -190,7 +177,6 @@ public class EvaluatingVisitorTest
 
     @Test
     public void testResultTypeLong()
-        throws Exception
     {
         // Otherwise, if either operand is of type long, the other is converted to long.
         assertEquals( Long.class, EvaluatingVisitor.resultType( (long) 0, (long) 0 ) );
@@ -200,7 +186,6 @@ public class EvaluatingVisitorTest
 
     @Test
     public void testResultTypeInteger()
-        throws Exception
     {
         // Otherwise, if either operand is of type long, the other is converted to long.
         assertEquals( Integer.class, EvaluatingVisitor.resultType( (int) 0, (int) 0 ) );
@@ -210,7 +195,6 @@ public class EvaluatingVisitorTest
     
     @Test
     public void testResultTypeVoid()
-        throws Exception
     {
         // Otherwise, if either operand is of type long, the other is converted to long.
         assertEquals( void.class, EvaluatingVisitor.resultType( (double) 0, new Object() ) );

@@ -42,7 +42,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     }
     
     @Test
-    public void testGetCodeBlockConstructor() throws Exception {
+    public void testGetCodeBlockConstructor() {
         D constructor = newJavaConstructor( "Blah" );
         setModifiers(constructor, Arrays.asList(new String[]{"public"}));
         assertEquals("public Blah() {\n}\n", constructor.getCodeBlock());
@@ -50,7 +50,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     
 
     @Test
-    public void testConstructorToString() throws Exception {
+    public void testConstructorToString() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getFullyQualifiedName()).thenReturn( "a.b.Executor" );
         D constructor = newJavaConstructor( "Executor" );
@@ -59,7 +59,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     }
 
     @Test
-    public void testConstructorParameterTypes() throws Exception {
+    public void testConstructorParameterTypes() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getFullyQualifiedName()).thenReturn( "a.b.Executor" );
         D constructor = newJavaConstructor( "Executor" );
@@ -69,7 +69,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     }
     
     @Test
-    public void testHashCode() throws Exception {
+    public void testHashCode() {
         assertTrue( "hashCode should never resolve to 0", newJavaConstructor( "" ).hashCode() != 0 );
         
         D c1 = newJavaConstructor( "Thong" );
@@ -80,7 +80,6 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     
     @Test
     public void testEquals()
-        throws Exception
     {
         D c1 = newJavaConstructor( "thing" );
         D c2 = newJavaConstructor( "Thong" );

@@ -76,14 +76,14 @@ public abstract class JavaClassTest<C extends JavaClass> {
     public abstract void addClass(JavaSource source, JavaClass clazz);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         src = newJavaSource();
         cls = newJavaClass();
         addClass(src, cls);
     }
 
     @Test
-    public void testGetCodeBlockSimpleClass() throws Exception {
+    public void testGetCodeBlockSimpleClass() {
         setName(cls, "MyClass");
         String expected = ""
                 + "class MyClass {\n"
@@ -93,7 +93,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockSimpleInterface() throws Exception {
+    public void testGetCodeBlockSimpleInterface() {
         setName(cls, "MyClass");
         setInterface(cls, true);
         String expected = ""
@@ -104,7 +104,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockSimpleEnum() throws Exception {
+    public void testGetCodeBlockSimpleEnum() {
         setName(cls, "MyEnum");
         setEnum(cls, true);
         String expected = ""
@@ -115,7 +115,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassExtends() throws Exception {
+    public void testGetCodeBlockClassExtends() {
         setName(cls, "MyClass");
         setSuperClass(cls, newType("SuperClass"));
         String expected = ""
@@ -126,7 +126,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockInterfaceExtends() throws Exception {
+    public void testGetCodeBlockInterfaceExtends() {
         setName(cls, "MyClass");
         setImplementz(cls, type(new String[]{"SomeInterface"}));
         setInterface(cls, true);
@@ -138,7 +138,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockInterfaceExtendsTwo() throws Exception {
+    public void testGetCodeBlockInterfaceExtendsTwo() {
         setName(cls, "MyClass");
         setImplementz(cls, type(new String[]{"SomeInterface", "AnotherInterface"}));
         setInterface(cls, true);
@@ -150,7 +150,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockInterfaceExtendsThree() throws Exception {
+    public void testGetCodeBlockInterfaceExtendsThree() {
         setName(cls, "MyClass");
         setImplementz(cls, type(new String[]{"SomeInterface", "AnotherInterface", "Thingy"}));
         setInterface(cls, true);
@@ -162,7 +162,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassImplements() throws Exception {
+    public void testGetCodeBlockClassImplements() {
         setName(cls, "MyClass");
         setImplementz(cls, type(new String[]{"SomeInterface"}));
         String expected = ""
@@ -173,7 +173,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassImplementsTwo() throws Exception {
+    public void testGetCodeBlockClassImplementsTwo() {
         setName(cls, "MyClass");
         setImplementz(cls, type(new String[]{"SomeInterface", "AnotherInterface", "Xx"}));
         String expected = ""
@@ -184,7 +184,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassImplementsAndExtends() throws Exception {
+    public void testGetCodeBlockClassImplementsAndExtends() {
         setName(cls, "MyClass");
         setImplementz(cls, type(new String[]{"SomeInterface", "AnotherInterface", "Xx"}));
         setSuperClass(cls, newType("SubMarine"));
@@ -196,7 +196,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockModifers() throws Exception {
+    public void testGetCodeBlockModifers() {
         setName(cls, "MyClass");
         setModifiers(cls, Arrays.asList(new String[]{"public", "final"}));
         String expected = ""
@@ -207,7 +207,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockModifersProtectionAlwaysFirst() throws Exception {
+    public void testGetCodeBlockModifersProtectionAlwaysFirst() {
         setName(cls, "MyClass");
         setModifiers(cls, Arrays.asList(new String[]{"final", "public"}));
         String expected = ""
@@ -225,7 +225,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassWithOneMethod() throws Exception {
+    public void testGetCodeBlockClassWithOneMethod() {
         setName(cls, "MyClass");
         JavaMethod mth = mock(JavaMethod.class);
         when(mth.getName()).thenReturn( "doStuff" );
@@ -243,7 +243,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassWithThreeMethods() throws Exception {
+    public void testGetCodeBlockClassWithThreeMethods() {
         setName(cls, "MyClass");
         List<JavaMethod> methods = new ArrayList<JavaMethod>();
         {
@@ -285,7 +285,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassWithTwoFields() throws Exception {
+    public void testGetCodeBlockClassWithTwoFields() {
         setName(cls, "MyClass");
         List<JavaField> fields = new ArrayList<JavaField>();
         {
@@ -320,7 +320,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassWithInnerClass() throws Exception {
+    public void testGetCodeBlockClassWithInnerClass() {
         setName(cls, "Outer");
         JavaClass innerClass = mock( JavaClass.class );
         when( innerClass.getName() ).thenReturn( "Inner" );
@@ -338,7 +338,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassWithInnerEnum() throws Exception {
+    public void testGetCodeBlockClassWithInnerEnum() {
         setName(cls, "Outer");
         JavaClass innerEnum = mock( JavaClass.class );
         when( innerEnum.getName() ).thenReturn( "Inner" );
@@ -357,7 +357,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockEnumWithInnerClass() throws Exception {
+    public void testGetCodeBlockEnumWithInnerClass() {
         setName(cls, "Outer");
         setEnum(cls, true);
         JavaClass innerClass = mock( JavaClass.class );
@@ -376,7 +376,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassWithComment() throws Exception {
+    public void testGetCodeBlockClassWithComment() {
         setName(cls, "MyClass");
         setComment(cls, "Hello World");
 
@@ -391,7 +391,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetCodeBlockClassWithIndentedCommentsForFieldAndMethod() throws Exception {
+    public void testGetCodeBlockClassWithIndentedCommentsForFieldAndMethod() {
         setName(cls, "MyClass");
         setComment(cls, "Hello World");
 
@@ -494,7 +494,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testQualifiedType() throws Exception {
+    public void testQualifiedType() {
         setPackage(src, newJavaPackage("com.thoughtworks.qdox"));
 
         setName(cls, "MyClass");
@@ -509,7 +509,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testInnerClass() throws Exception
+    public void testInnerClass()
     {
         JavaPackage pkg = mock(JavaPackage.class);
         when(pkg.getName()).thenReturn( "foo.bar" );
@@ -543,7 +543,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testDefaultClassSuperclass() throws Exception {
+    public void testDefaultClassSuperclass() {
         setName(cls, "MyClass");
         assertEquals("java.lang.Object", cls.getSuperClass().getValue());
         setSuperClass(cls, newType("x.X"));
@@ -551,7 +551,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testDefaultInterfaceSuperclass() throws Exception {
+    public void testDefaultInterfaceSuperclass() {
         setName(cls, "MyInterface");
         setInterface(cls, true);
         assertNull(cls.getSuperClass());
@@ -560,14 +560,14 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testEnumSuperclass() throws Exception {
+    public void testEnumSuperclass() {
         setName(cls, "MyEnum");
         setEnum(cls, true);
         assertEquals("java.lang.Enum", cls.getSuperClass().getValue());
     }
 
     @Test
-    public void testEnumCannotExtendAnythingElse() throws Exception {
+    public void testEnumCannotExtendAnythingElse() {
         setName(cls, "MyEnum");
         setEnum(cls, true);
         try {
@@ -620,7 +620,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
     
     @Test
-    public void testCanGetFieldByName() throws Exception {
+    public void testCanGetFieldByName() {
         JavaField fredField = mock(JavaField.class);
         when(fredField.getName()).thenReturn( "fred" );
         JavaClass intType = newJavaClass("int");
@@ -658,7 +658,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testCanGetInnerClassByName() throws Exception 
+    public void testCanGetInnerClassByName() 
     {
         JavaClass innerClass = mock( JavaClass.class );
         when( innerClass.getName() ).thenReturn( "Inner" );
@@ -669,12 +669,12 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
 
     @Test
-    public void testGetBeanPropertiesReturnsEmptyForEmptyClass() throws Exception {
+    public void testGetBeanPropertiesReturnsEmptyForEmptyClass() {
         assertEquals(0, cls.getBeanProperties().size());
     }
 
     @Test
-    public void testGetBeanPropertiesFindsSimpleProperties() throws Exception {
+    public void testGetBeanPropertiesFindsSimpleProperties() {
         List<JavaMethod> methods = new ArrayList<JavaMethod>();
         JavaMethod setFooMethod = mock(JavaMethod.class);
         when(setFooMethod.getName()).thenReturn( "setFoo" );
@@ -711,7 +711,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
     
     @Test
-    public void testInnerClassToString() throws Exception {
+    public void testInnerClassToString() {
     	JavaClass jOuterClass = mock(JavaClass.class);
     	when(jOuterClass.getFullyQualifiedName()).thenReturn( "com.thoughtworks.qdox.model.OuterClass" );
     	
@@ -842,7 +842,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     }
  
     @Ignore
-    public void testJavaLangObjectAsDefaultSuperClass() throws Exception {
+    public void testJavaLangObjectAsDefaultSuperClass() {
         //up untill now this succeeds, because other tests have already set the static value of OBJECT
         //running this test alone make it fail, so it's not a proper test.
         //should be fixed if we can get rid of the Type-visibility

@@ -203,7 +203,7 @@ public class EnumsModelTest extends TestCase {
         //---
     }
 
-    public void testAddEnumsWithMethodsToModel() throws Exception {
+    public void testAddEnumsWithMethodsToModel() {
         String source = ""
                 + "public enum Animal {\n"
                 + "    \n"

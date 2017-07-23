@@ -26,7 +26,7 @@ public class DefaultJavaCommentParserTest
     private Builder builder;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         lexer = mock(DefaultJavaCommentLexer.class);
         builder = mock(Builder.class);
         lexValues.clear();
@@ -35,7 +35,6 @@ public class DefaultJavaCommentParserTest
     
     @After
     public void tearDown()
-        throws Exception
     {
         verifyNoMoreInteractions( builder );
     }

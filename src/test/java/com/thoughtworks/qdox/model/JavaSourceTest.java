@@ -40,7 +40,7 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         source = newJavaSource(new SortedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary());
     }
 
-    public void testToStringOneClass() throws Exception {
+    public void testToStringOneClass() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn( "MyClass" );
         setClasses( source, Collections.singletonList( cls ) );
@@ -51,7 +51,7 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         assertEquals(expected, source.toString());
     }
 
-    public void testToStringMultipleClass() throws Exception {
+    public void testToStringMultipleClass() {
         List<JavaClass> classes = new ArrayList<JavaClass>();
         JavaClass cls1 = mock(JavaClass.class);
         when(cls1.getName()).thenReturn( "MyClass1" );
@@ -80,7 +80,7 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         assertEquals(expected, source.toString());
     }
 
-    public void testToStringPackage() throws Exception {
+    public void testToStringPackage() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn("MyClass");
         
@@ -95,7 +95,7 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         assertEquals(expected, source.toString());
     }
 
-    public void testToStringImport() throws Exception {
+    public void testToStringImport() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn("MyClass");
         setClasses(source, Collections.singletonList( cls ));
@@ -109,7 +109,7 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         assertEquals(expected, source.toString());
     }
 
-    public void testToStringMultipleImports() throws Exception {
+    public void testToStringMultipleImports() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn("MyClass");
         setClasses(source, Collections.singletonList( cls ));
@@ -129,7 +129,7 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         assertEquals(expected, source.toString());
     }
 
-    public void testToStringImportAndPackage() throws Exception {
+    public void testToStringImportAndPackage() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn("MyClass");
         setClasses(source, Collections.singletonList( cls ));

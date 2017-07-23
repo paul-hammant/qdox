@@ -98,23 +98,23 @@ public class AbstractClassLibraryTest
     /*
      * Never null, empty by default
      */
-    public void testGetJavaSources() throws Exception {
+    public void testGetJavaSources() {
         assertEquals( 0, nullClassLibrary.getJavaSources().size() );
     }
     
     /*
      * Never null, empty by default
      */
-    public void testGetJavaClasses() throws Exception {
+    public void testGetJavaClasses() {
         assertEquals( 0, nullClassLibrary.getJavaClasses().size() );
     }
 
-    public void testGetJavaClassByName() throws Exception {
+    public void testGetJavaClassByName() {
         assertEquals( null, nullClassLibrary.getJavaClass( "java.lang.String" ) );
         assertEquals( null, nullClassLibrary.getJavaClass( "com.thoughtworks.qdox.JavaProjectBuilder" ) );
     }
     
-    public void testChainedJavaClass() throws Exception {
+    public void testChainedJavaClass() {
         //prepare libraries
         parentClassLibrary.getJavaClass( "ParentClass" );
         filledChildClassLibrary.getJavaClass( "ChildClass" );
@@ -144,11 +144,11 @@ public class AbstractClassLibraryTest
     /*
      * Never null, empty by default
      */
-    public void testGetJavaPackages() throws Exception {
+    public void testGetJavaPackages() {
         assertEquals( 0, nullClassLibrary.getJavaPackages().size() );
     }
     
-    public void testGetJavaPackageByName() throws Exception {
+    public void testGetJavaPackageByName() {
         assertEquals( null, nullClassLibrary.getJavaPackage( "java.lang" ) );
         assertEquals( null, nullClassLibrary.getJavaPackage( "com.thoughtworks" ) );
     }

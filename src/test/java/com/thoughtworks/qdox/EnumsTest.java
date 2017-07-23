@@ -93,7 +93,7 @@ public class EnumsTest extends TestCase {
         assertFalse( cls.getFieldByName( "someField" ).isEnumConstant() );
     }
 
-    public void testAddEnumsWithMethodsToModel() throws Exception {
+    public void testAddEnumsWithMethodsToModel() {
         String source = ""
                 + "public enum Animal {\n"
                 + "    \n"
@@ -110,7 +110,7 @@ public class EnumsTest extends TestCase {
     }
 
     //Verify test case from QDOX-74
-    public void testAddEnumsWithConstructorsToModel() throws Exception {
+    public void testAddEnumsWithConstructorsToModel() {
         String source = ""
                 + "public enum AccountType {\n"
                 + "    \n"
@@ -126,7 +126,7 @@ public class EnumsTest extends TestCase {
     }
     
     //Verify test case from QDOX-74
-    public void testAddEnumsThatDontEndInSemicolon() throws Exception {
+    public void testAddEnumsThatDontEndInSemicolon() {
         String source = ""
                 + "public enum Foo { BAR }\n";
 
@@ -137,7 +137,7 @@ public class EnumsTest extends TestCase {
     }
     
     
-    public void testEnumBeforeClass() throws Exception {
+    public void testEnumBeforeClass() {
         String source = "" +
         	"package org.carrot2.util.attribute.constraint;" +
         	"public class Test" +
@@ -150,7 +150,7 @@ public class EnumsTest extends TestCase {
         new JavaProjectBuilder().addSource(new StringReader(source));
    }
     
-    public void testEnumAfterClass() throws Exception {
+    public void testEnumAfterClass() {
         String source = "" +
         	"package org.carrot2.util.attribute.constraint;" +
         	"public class Test" +
@@ -164,7 +164,7 @@ public class EnumsTest extends TestCase {
    }
     
     //for QDOX-153
-    public void testAnotherEnumTest() throws Exception {
+    public void testAnotherEnumTest() {
     	String source = "package org.apache.myfaces.el.unified.resolver;\n" +
     			"public final class FacesCompositeELResolver extends org.apache.myfaces.el.CompositeELResolver\n" +
     			"{\n" +

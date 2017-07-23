@@ -34,7 +34,7 @@ import java.util.List;
  * @since 2.0
  *
  */
-public interface JavaAnnotatedElement
+public interface JavaAnnotatedElement extends JavaModel
 {
     // Methods from AnnotatedElement
     

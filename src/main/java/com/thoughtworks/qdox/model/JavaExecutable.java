@@ -10,7 +10,7 @@ import java.util.List;
  * 
  * @see java.lang.reflect.Executable
  */
-public interface JavaExecutable extends JavaMember, JavaGenericDeclaration
+public interface JavaExecutable extends JavaAnnotatedElement, JavaGenericDeclaration, JavaMember
 {
     JavaClass getDeclaringClass();
     

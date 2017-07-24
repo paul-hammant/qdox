@@ -29,7 +29,7 @@ public class DefaultDocletTagTest extends AbstractDocletTagTest {
 
         tag = (DefaultDocletTag) SerializationUtils.serializedCopy(tag);
 
-        Map paramMap = tag.getNamedParameterMap();
+        Map<String, String> paramMap = tag.getNamedParameterMap();
         assertEquals(0, paramMap.size());        
     }
     

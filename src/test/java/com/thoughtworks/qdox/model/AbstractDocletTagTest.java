@@ -40,7 +40,7 @@ public abstract class AbstractDocletTagTest extends TestCase {
         DocletTag tag = createDocletTag(
             "x", "hello=world dog=cat fork=spoon"
         );
-        Map map = tag.getNamedParameterMap();
+        Map<String, String> map = tag.getNamedParameterMap();
         assertEquals(3, map.size());
         assertEquals("world", map.get("hello"));
         assertEquals("cat", map.get("dog"));

@@ -609,7 +609,7 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
 
 // EnumDeclaration:
 //     {ClassModifier} enum Identifier [Superinterfaces] EnumBody
-EnumDeclaration: Modifiers_opt ENUM IDENTIFIER Superinterfaces_opt 
+EnumDeclaration: Modifiers_opt ENUM IDENTIFIER 
                  { 
                    cls.setLineNumber(lexer.getLine());
                    cls.getModifiers().addAll(modifiers);
@@ -618,8 +618,8 @@ EnumDeclaration: Modifiers_opt ENUM IDENTIFIER Superinterfaces_opt
                    builder.beginClass(cls);
                    cls = new ClassDef();
                    fieldType = new TypeDef($3, 0);
-                 } 
-                 EnumBody
+                 }
+                 Superinterfaces_opt EnumBody
                ;
 
 // EnumBody:

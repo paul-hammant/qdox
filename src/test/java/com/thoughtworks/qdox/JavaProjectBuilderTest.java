@@ -1681,18 +1681,24 @@ public class JavaProjectBuilderTest extends TestCase
     public void testLineNumbers() {
         String source = "package foo.bar;\n" + 
                         "/** some javadoc */\n" + 
-                        "public class MyClass {}\n" + 
-                        "interface MyInterface {}\n" + 
-                        "public enum MyEnum{}\n" +
-                        "@interface MyAnnoInterface{}\n" +
-                        "interface NewLineInterface\n{}";
-        
+                        "public \n" + 
+                        "class MyClass {}\n" + 
+                        "interface \n" + 
+                        "MyInterface {}\n" + 
+                        "public \n" + 
+                        "enum MyEnum{}\n" +
+                        "@interface \n" + 
+                        "MyAnnoInterface{}\n" +
+                        "interface NewLineInterface \n" +
+                        "{}";
+//        builder.setDebugLexer( true );
+        builder.setDebugParser( true );
         JavaSource jSource = builder.addSource( new StringReader( source ) );
         assertEquals( 3, jSource.getClassByName( "MyClass" ).getLineNumber() );
-        assertEquals( 4, jSource.getClassByName( "MyInterface" ).getLineNumber() );
-        assertEquals( 5, jSource.getClassByName( "MyEnum" ).getLineNumber() );
-        assertEquals( 6, jSource.getClassByName( "MyAnnoInterface" ).getLineNumber() );
-        assertEquals( 7, jSource.getClassByName( "NewLineInterface" ).getLineNumber() );
+        assertEquals( 5, jSource.getClassByName( "MyInterface" ).getLineNumber() );
+        assertEquals( 7, jSource.getClassByName( "MyEnum" ).getLineNumber() );
+        assertEquals( 9, jSource.getClassByName( "MyAnnoInterface" ).getLineNumber() );
+        assertEquals( 11, jSource.getClassByName( "NewLineInterface" ).getLineNumber() );
     }
     
     public void testSetDebugLexer()

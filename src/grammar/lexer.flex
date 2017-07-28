@@ -75,6 +75,7 @@ import java.util.*;
     private int[] stateStack = new int[10];
     private int braceMode = CODEBLOCK;
     private int parenMode = -1;
+    private int annotatedElementLine = -1;
     private StringBuffer codeBody = new StringBuffer(8192);
     private boolean newMode;
     private boolean bracketMode;
@@ -105,7 +106,7 @@ import java.util.*;
     }
     
     public int getLine() {
-        return yyline + 1;
+        return ( annotatedElementLine < 0 ? yyline + 1 : annotatedElementLine );
     }
 
     public int getColumn() {
@@ -143,6 +144,19 @@ import java.util.*;
         result = defaultValue;
       }
       return result;
+    }
+    
+    private void markAnnotatedElementLine()
+    {
+      if( annotatedElementLine == -1 )
+      {
+        annotatedElementLine = getLine();
+      }
+    }
+
+    private void resetAnnotatedElementLine()
+    {
+      annotatedElementLine = -1;
     }
     
     public JFlexLexer( java.io.Reader reader, java.io.Writer writer ) {
@@ -193,12 +207,13 @@ JavadocEnd                      = "*"+ "/"
 }
 <NAME>
 {
-  ";"  { popState();
+  ";"  { resetAnnotatedElementLine();
+         popState();
          return Parser.SEMI; }
-  "{"  {  popState();
-          yypushback(1);     }
-  "("  {  popState();
-          yypushback(1);     }
+  "{"  { popState();
+         yypushback(1);     }
+  "("  { popState();
+         yypushback(1);     }
 }
 <ANNOTATIONNOARG> {
   {WhiteSpace} { popState(); }
@@ -209,21 +224,21 @@ JavadocEnd                      = "*"+ "/"
     ","                 { return Parser.COMMA; }
     "*"                 { return Parser.STAR; }
 
-    "package"           { pushState(NAME);
+    "package"           { markAnnotatedElementLine(); pushState(NAME);
                           return Parser.PACKAGE; }
     "import"            { pushState(NAME);
                           return Parser.IMPORT; }
-    "public"            { return Parser.PUBLIC; }
-    "protected"         { return Parser.PROTECTED; }
-    "private"           { return Parser.PRIVATE; }
-    "static"            { return Parser.STATIC; }
-    "final"             { return Parser.FINAL; }
-    "abstract"          { return Parser.ABSTRACT; }
-    "native"            { return Parser.NATIVE; }
-    "strictfp"          { return Parser.STRICTFP; }
-    "synchronized"      { return Parser.SYNCHRONIZED; }
-    "transient"         { return Parser.TRANSIENT; }
-    "volatile"          { return Parser.VOLATILE; }
+    "public"            { markAnnotatedElementLine(); return Parser.PUBLIC; }
+    "protected"         { markAnnotatedElementLine(); return Parser.PROTECTED; }
+    "private"           { markAnnotatedElementLine(); return Parser.PRIVATE; }
+    "static"            { markAnnotatedElementLine(); return Parser.STATIC; }
+    "final"             { markAnnotatedElementLine(); return Parser.FINAL; }
+    "abstract"          { markAnnotatedElementLine(); return Parser.ABSTRACT; }
+    "native"            { markAnnotatedElementLine(); return Parser.NATIVE; }
+    "strictfp"          { markAnnotatedElementLine(); return Parser.STRICTFP; }
+    "synchronized"      { markAnnotatedElementLine(); return Parser.SYNCHRONIZED; }
+    "transient"         { markAnnotatedElementLine(); return Parser.TRANSIENT; }
+    "volatile"          { markAnnotatedElementLine(); return Parser.VOLATILE; }
     "throws"            { return Parser.THROWS; }
     "extends"           { return Parser.EXTENDS; }
     "implements"        { return Parser.IMPLEMENTS; }
@@ -239,12 +254,14 @@ JavadocEnd                      = "*"+ "/"
     "?"                 { return Parser.QUERY; }
 
     "@" {WhiteSpace}* "interface" {
+        markAnnotatedElementLine();
       	classDepth++;
         braceMode = ANNOTATIONTYPE;
         return Parser.ANNOINTERFACE;
 	  }
 
     "class"             {
+        markAnnotatedElementLine();
         classDepth++;
         braceMode = TYPE;
         pushState(NAME);
@@ -252,6 +269,7 @@ JavadocEnd                      = "*"+ "/"
     }
     
     "interface"         { 
+        markAnnotatedElementLine();
         classDepth++;
         braceMode = TYPE;
         pushState(NAME);
@@ -259,6 +277,7 @@ JavadocEnd                      = "*"+ "/"
     }
     
     "enum"              {
+        markAnnotatedElementLine();
         classDepth++;
         braceMode = ENUM;
         pushState(NAME);
@@ -276,6 +295,7 @@ JavadocEnd                      = "*"+ "/"
         return Parser.AT;
     }
     "{"                 {
+        resetAnnotatedElementLine();
         if(braceMode >= 0) {
           if(braceMode == ENUM) {
             enumConstantMode = true;

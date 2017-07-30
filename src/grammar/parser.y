@@ -774,10 +774,14 @@ AnnotationTypeDeclaration: Modifiers_opt ANNOINTERFACE IDENTIFIER
 //     @ TypeName 
 // SingleElementAnnotation:
 //     @ TypeName ( ElementValue )
-Annotation: AT QualifiedIdentifier 
+Annotation: AT 
             {
-              AnnoDef annotation = new AnnoDef( new TypeDef($2) );
-              annotation.setLineNumber(lexer.getLine());
+              line = lexer.getLine();
+            }
+			QualifiedIdentifier 
+            {
+              AnnoDef annotation = new AnnoDef( new TypeDef($3) );
+              annotation.setLineNumber(line);
               annotationStack.addFirst(annotation);
             }
             _AnnotationParens_opt
@@ -1885,7 +1889,7 @@ private class Value {
 private void makeField(TypeDef field, String body, boolean enumConstant) {
     fd = new FieldDef( field.getName() );
     fd.setName(field.getName());
-    fd.setLineNumber(line);
+    fd.setLineNumber(lexer.getLine());
     fd.getModifiers().addAll(modifiers); 
     fd.setType( fieldType );
     fd.setDimensions(field.getDimensions());

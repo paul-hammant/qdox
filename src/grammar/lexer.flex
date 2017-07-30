@@ -75,7 +75,7 @@ import java.util.*;
     private int[] stateStack = new int[10];
     private int braceMode = CODEBLOCK;
     private int parenMode = -1;
-    private int annotatedElementLine = -1;
+    private int annotatedElementLine = 0;
     private StringBuffer codeBody = new StringBuffer(8192);
     private boolean newMode;
     private boolean bracketMode;
@@ -101,12 +101,15 @@ import java.util.*;
     }
 
     public int lex() throws java.io.IOException {
-//    	write();
+    	if(annotatedElementLine < 0)
+    	{
+    	  annotatedElementLine = 0;
+    	}
         return yylex();
     }
     
     public int getLine() {
-        return ( annotatedElementLine < 0 ? yyline + 1 : annotatedElementLine );
+        return ( annotatedElementLine == 0 ? yyline + 1 : Math.abs(annotatedElementLine) );
     }
 
     public int getColumn() {
@@ -148,7 +151,7 @@ import java.util.*;
     
     private void markAnnotatedElementLine()
     {
-      if( annotatedElementLine == -1 )
+      if( annotatedElementLine <= 0 )
       {
         annotatedElementLine = getLine();
       }
@@ -156,7 +159,7 @@ import java.util.*;
 
     private void resetAnnotatedElementLine()
     {
-      annotatedElementLine = -1;
+      annotatedElementLine = 0 - annotatedElementLine;
     }
     
     public JFlexLexer( java.io.Reader reader, java.io.Writer writer ) {
@@ -193,11 +196,10 @@ HexSignificand                  = ( {HexNumeral} "."? ) |
 HexadecimalFloatingPointLiteral = {HexSignificand} {BinaryExponent} ([dDfF])?
 UnicodeChar                     = \\u[a-fA-F0-9]{4}						  
 Id						        = ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
-Annotation                      = "@" {WhiteSpace}* {Id} ("."{Id})* {WhiteSpace}*
 JavadocEnd                      = "*"+ "/"
 
 %state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT  ANNOTATION ANNOSTRING ANNOCHAR ARGUMENTS NAME 
-%state ANNOTATIONTYPE ENUM MODULE TYPE ANNOTATIONNOARG
+%state ANNOTATIONTYPE ENUM MODULE TYPE ANNOTATIONNOARG ATANNOTATION
 
 %%
 <YYINITIAL> {
@@ -210,7 +212,8 @@ JavadocEnd                      = "*"+ "/"
   ";"  { resetAnnotatedElementLine();
          popState();
          return Parser.SEMI; }
-  "{"  { popState();
+  "{"  { resetAnnotatedElementLine();
+         popState();
          yypushback(1);     }
   "("  { popState();
          yypushback(1);     }
@@ -257,6 +260,7 @@ JavadocEnd                      = "*"+ "/"
         markAnnotatedElementLine();
       	classDepth++;
         braceMode = ANNOTATIONTYPE;
+        pushState(NAME);
         return Parser.ANNOINTERFACE;
 	  }
 
@@ -283,15 +287,9 @@ JavadocEnd                      = "*"+ "/"
         pushState(NAME);
         return Parser.ENUM;
     }
-    {Annotation} "(" {
-        parenMode = ANNOTATION;
-        yypushback(text().length()-1);
-        getCodeBody(); /* reset codebody */
-        pushState(NAME);
-        return Parser.AT;
-    }
     "@"                 {
-        pushState(ANNOTATIONNOARG);
+        markAnnotatedElementLine();
+        pushState(ATANNOTATION);
         return Parser.AT;
     }
     "{"                 {
@@ -348,8 +346,17 @@ JavadocEnd                      = "*"+ "/"
         pushState(ASSIGNMENT);
     }
 }
+<ATANNOTATION>
+{
+    "."                       { return Parser.DOT; }
+    {Id} / {WhiteSpace}* "."  { return Parser.IDENTIFIER; }
+    {Id} / {WhiteSpace}* "("  { parenMode = ANNOTATION; getCodeBody(); /* reset codebody */; popState(); resetAnnotatedElementLine(); return Parser.IDENTIFIER; }
+    {Id}                      { resetAnnotatedElementLine(); popState(); return Parser.IDENTIFIER; }
+}
+
 <YYINITIAL, ANNOTATIONTYPE, TYPE> {
-    ";"  { return Parser.SEMI; }
+    ";"  {  resetAnnotatedElementLine();
+            return Parser.SEMI; }
     "("  {
             nestingDepth++;
             if( parenMode >= 0 ) {
@@ -412,9 +419,8 @@ JavadocEnd                      = "*"+ "/"
 	"default"           { assignmentDepth = nestingDepth; appendingToCodeBody = true; pushState(ASSIGNMENT); }
 }
 <YYINITIAL, ANNOTATIONNOARG, ANNOTATIONTYPE, ENUM, MODULE, NAME, TYPE> {
-    {Id} {
-        return Parser.IDENTIFIER;
-    }
+    {Id} { return Parser.IDENTIFIER;
+         }
 }
 <CODEBLOCK> {
      "{"  { 
@@ -547,6 +553,7 @@ JavadocEnd                      = "*"+ "/"
 
 <ASSIGNMENT> {
     ";"                 { 
+        resetAnnotatedElementLine();
         if (nestingDepth == assignmentDepth) {
             appendingToCodeBody = true;
             newMode = false;
@@ -628,7 +635,7 @@ JavadocEnd                      = "*"+ "/"
     \'                  { if (appendingToCodeBody) { codeBody.append('\''); } pushState(CHAR); }
 }
 
-<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE, ANNOTATION, ARGUMENTS, TYPE, NAME, MODULE> {
+<ASSIGNMENT, YYINITIAL, CODEBLOCK, PARENBLOCK, ENUM, ANNOTATIONTYPE, ANNOTATION, ATANNOTATION, ARGUMENTS, TYPE, NAME, MODULE > {
   "//"                { if (appendingToCodeBody) { codeBody.append("//"); } pushState(SINGLELINECOMMENT); }
   "/*"                { if (appendingToCodeBody) { codeBody.append("/*"); } pushState(MULTILINECOMMENT); }
   "/**/"              { if (appendingToCodeBody) { codeBody.append("/**/"); } }

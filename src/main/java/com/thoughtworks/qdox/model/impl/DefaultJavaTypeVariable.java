@@ -124,7 +124,9 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
     @Override
     public String getGenericValue()
     {
-        StringBuilder result = new StringBuilder( getValue() );
+        StringBuilder result = new StringBuilder();
+        result.append( '<' );
+        result.append( getValue() );
         if ( bounds != null && !bounds.isEmpty() )
         {
             result.append( " extends " );
@@ -137,6 +139,7 @@ public class DefaultJavaTypeVariable<D extends JavaGenericDeclaration>
                 }
             }
         }
+        result.append( '>' );
         return result.toString();
     }
 

@@ -1336,6 +1336,7 @@ public class JavaProjectBuilderTest extends TestCase
                 "   }\n" +
                 "}";
         JavaClass clazz = builder.addSource( new StringReader( source ) ).getClasses().get(0);
+        assertEquals( 2, clazz.getLineNumber() );
         assertEquals( 3, clazz.getMethods().get(0).getLineNumber() );
         assertEquals( 9, clazz.getMethods().get(1).getLineNumber() );
     }
@@ -1682,9 +1683,14 @@ public class JavaProjectBuilderTest extends TestCase
         String source = "package foo.bar;\n" + 
                         "/** some javadoc */\n" + 
                         "public \n" + 
-                        "class MyClass {}\n" + 
+                        "class MyClass {\n" +
+                        "public static final String CONSTANT1 = \"default value\";\n" +
+                        "public static final String CONSTANT2 = \"default value\";}\n" +
                         "interface \n" + 
-                        "MyInterface {}\n" + 
+                        "MyInterface {\n" + 
+                        "public void method1( String aString );\n" + 
+                        "@Override\n" +
+                        "void method2( String aString );}\n" + 
                         "public \n" + 
                         "enum MyEnum{}\n" +
                         "@interface \n" + 
@@ -1695,12 +1701,17 @@ public class JavaProjectBuilderTest extends TestCase
         builder.setDebugParser( true );
         JavaSource jSource = builder.addSource( new StringReader( source ) );
         assertEquals( 3, jSource.getClassByName( "MyClass" ).getLineNumber() );
-        assertEquals( 5, jSource.getClassByName( "MyInterface" ).getLineNumber() );
-        assertEquals( 7, jSource.getClassByName( "MyEnum" ).getLineNumber() );
-        assertEquals( 9, jSource.getClassByName( "MyAnnoInterface" ).getLineNumber() );
-        assertEquals( 11, jSource.getClassByName( "NewLineInterface" ).getLineNumber() );
+        assertEquals( 5, jSource.getClassByName( "MyClass" ).getFieldByName( "CONSTANT1" ).getLineNumber() );
+        assertEquals( 6, jSource.getClassByName( "MyClass" ).getFieldByName( "CONSTANT2" ).getLineNumber() );
+        assertEquals( 7, jSource.getClassByName( "MyInterface" ).getLineNumber() );
+        assertEquals( 9, jSource.getClassByName( "MyInterface" ).getMethods().get( 0 ).getLineNumber() );
+        assertEquals( 10, jSource.getClassByName( "MyInterface" ).getMethods().get( 1 ).getAnnotations().get( 0 ).getLineNumber() );
+        assertEquals( 11, jSource.getClassByName( "MyInterface" ).getMethods().get( 1 ).getLineNumber() );
+        assertEquals( 12, jSource.getClassByName( "MyEnum" ).getLineNumber() );
+        assertEquals( 14, jSource.getClassByName( "MyAnnoInterface" ).getLineNumber() );
+        assertEquals( 16, jSource.getClassByName( "NewLineInterface" ).getLineNumber() );
     }
-    
+
     public void testSetDebugLexer()
     {
         ClassLibraryBuilder classLibraryBuilder = mock( ClassLibraryBuilder.class );

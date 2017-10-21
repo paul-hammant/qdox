@@ -1058,13 +1058,13 @@ ArrayCreationExpression: NEW PrimitiveType DimExprs Dims_opt
                            creator.setCreatedName( $2.getName() );
                            $$ = creator; 
                          }  
-                       | NEW PrimitiveType Dims ArrayInitializer 
+                       | NEW PrimitiveType Dims CODEBLOCK /* =ArrayInitializer */ 
                          {
                            CreatorDef creator = new CreatorDef();
                            creator.setCreatedName( $2.getName() );
                            $$ = creator; 
                          }
-                       | NEW ClassOrInterfaceType Dims ArrayInitializer 
+                       | NEW ClassOrInterfaceType Dims CODEBLOCK /* =ArrayInitializer */ 
                          {
                            CreatorDef creator = new CreatorDef();
                            creator.setCreatedName( $2.getName() );

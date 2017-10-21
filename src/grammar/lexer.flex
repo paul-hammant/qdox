@@ -467,6 +467,8 @@ JavadocEnd                      = "*"+ "/"
 <ANNOTATION,ARGUMENTS> {
 	"("                 { ++ nestingDepth; return Parser.PARENOPEN; }
     ")"                 { if( nestingDepth-- == annotationDepth) { popState(); } return Parser.PARENCLOSE; }
+    "["                 { return Parser.SQUAREOPEN; }
+    "]"                 { return Parser.SQUARECLOSE; }
 
 	","                 { return Parser.COMMA; }
     "="                 { return Parser.EQUALS; }

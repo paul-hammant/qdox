@@ -773,7 +773,7 @@ public class LexerTest extends TestCase {
     {
         String in = ""
             + "package module.module;\n"
-            + "import static module;\n"
+            + "import static module.module;\n"
             + "import module.module;\n"
             + "@module @module.module @module(module=module)\n"
             + "public class module extends module implements module,module {\n"
@@ -790,6 +790,8 @@ public class LexerTest extends TestCase {
 
         assertLex( Parser.IMPORT, lexer );
         assertLex( Parser.STATIC, lexer );
+        assertLex( Parser.IDENTIFIER, "module", lexer );
+        assertLex( Parser.DOT, lexer );
         assertLex( Parser.IDENTIFIER, "module", lexer );
         assertLex( Parser.SEMI, lexer );
         
@@ -840,6 +842,122 @@ public class LexerTest extends TestCase {
         assertLex( Parser.IDENTIFIER, "module", lexer );
         assertLex( Parser.PARENCLOSE, lexer );
         assertLex( Parser.CODEBLOCK, lexer );
+
+        assertLex( Parser.BRACECLOSE, lexer );
+        assertLex( 0, lexer );
+    }
+    
+    public void testModuleModifiersAsIdentifier()
+                    throws Exception
+    {
+        String in = "open module module.module {\n" + 
+            "  requires requires.requires;\n" + 
+            "  requires transitive transitive.transitive;\n" + 
+            "  requires static requires.transitive;\n" + 
+            "  requires transitive static requires.transitive;\n" + 
+            "  exports exports.exports;\n" + 
+            "  exports to.to to to.to, to.to;\n" + 
+            "  opens opens.opens;\n" + 
+            "  opens to.to to to.to, to.to;\n" + 
+            "  uses uses.uses;\n" + 
+            "  provides with.with with with.with, with.with;\n" + 
+            "}";
+        Lexer lexer = new JFlexLexer( new StringReader( in ) );
+        
+        assertLex( Parser.OPEN, lexer );
+        assertLex( Parser.MODULE, lexer );
+        assertLex( Parser.IDENTIFIER, "module", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "module", lexer );
+        assertLex( Parser.BRACEOPEN, lexer );
+        
+        assertLex( Parser.REQUIRES, lexer );
+        assertLex( Parser.IDENTIFIER, "requires", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "requires", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.REQUIRES, lexer );
+        assertLex( Parser.TRANSITIVE, lexer );
+        assertLex( Parser.IDENTIFIER, "transitive", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "transitive", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.REQUIRES, lexer );
+        assertLex( Parser.STATIC, lexer );
+        assertLex( Parser.IDENTIFIER, "requires", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "transitive", lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.REQUIRES, lexer );
+        assertLex( Parser.TRANSITIVE, lexer );
+        assertLex( Parser.STATIC, lexer );
+        assertLex( Parser.IDENTIFIER, "requires", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "transitive", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.EXPORTS, lexer );
+        assertLex( Parser.IDENTIFIER, "exports", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "exports", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.EXPORTS, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.TO, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.COMMA, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.OPENS, lexer );
+        assertLex( Parser.IDENTIFIER, "opens", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "opens", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.OPENS, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.TO, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.COMMA, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.USES, lexer );
+        assertLex( Parser.IDENTIFIER, "uses", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "uses", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.PROVIDES, lexer );
+        assertLex( Parser.IDENTIFIER, "with", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "with", lexer );
+        assertLex( Parser.WITH, lexer );
+        assertLex( Parser.IDENTIFIER, "with", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "with", lexer );
+        assertLex( Parser.COMMA, lexer );
+        assertLex( Parser.IDENTIFIER, "with", lexer );
+        assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "with", lexer );
+        assertLex( Parser.SEMI, lexer );
 
         assertLex( Parser.BRACECLOSE, lexer );
         assertLex( 0, lexer );

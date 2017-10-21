@@ -200,23 +200,35 @@ JavadocEnd                      = "*"+ "/"
 
 %state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT  ANNOTATION ANNOSTRING ANNOCHAR ARGUMENTS NAME 
 %state ANNOTATIONTYPE ENUM MODULE TYPE ANNOTATIONNOARG ATANNOTATION
+%state NAME_OR_MODIFIER
 
 %%
 <YYINITIAL> {
-    "open"              { return Parser.OPEN; }
-    "module"            { pushState(MODULE);
-                          return Parser.MODULE; }
+    "open"              { if ( classDepth == 0 )
+                          {
+                            return Parser.OPEN;
+                          }
+                          else
+                          {
+                            return Parser.IDENTIFIER;
+                          } 
+                        }
+    "module"            { if ( classDepth == 0 )
+                          {
+                            pushState(MODULE);
+                            pushState(NAME);
+                            return Parser.MODULE;
+                          }
+                          else
+                          {
+                            return Parser.IDENTIFIER;
+                          } 
+                        }
 }
-<NAME>
-{
-  ";"  { resetAnnotatedElementLine();
-         popState();
-         return Parser.SEMI; }
-  "{"  { resetAnnotatedElementLine();
-         popState();
-         yypushback(1);     }
-  "("  { popState();
-         yypushback(1);     }
+<NAME_OR_MODIFIER> {
+    {Id} / {WhiteSpace}* "."  { popState(); pushState(NAME); return Parser.IDENTIFIER; }
+    "static"                  { return Parser.STATIC; }
+    "transitive"              { return Parser.TRANSITIVE; }
 }
 <ANNOTATIONNOARG> {
   {WhiteSpace} { popState(); }
@@ -225,7 +237,7 @@ JavadocEnd                      = "*"+ "/"
     "."                 { return Parser.DOT; }
     "..."               { return Parser.DOTDOTDOT; }
     ","                 { return Parser.COMMA; }
-    "*"                 { return Parser.STAR; }
+    "*"                 { popState(); return Parser.STAR; }
 
     "package"           { markAnnotatedElementLine(); pushState(NAME);
                           return Parser.PACKAGE; }
@@ -372,20 +384,16 @@ JavadocEnd                      = "*"+ "/"
     "}"                 { popState(); 
                           return Parser.BRACECLOSE; }
 
-    ","                 { return Parser.COMMA; }
-	"."                 { return Parser.DOT; }
+    ","                 { pushState(NAME); return Parser.COMMA; }
 	";"                 { return Parser.SEMI; }
 	
-    "exports"           { return Parser.EXPORTS; }
-    "opens"             { return Parser.OPENS; }
-    "provides"          { return Parser.PROVIDES; }
-    "public"            { return Parser.PUBLIC; }
-    "requires"          { return Parser.REQUIRES; }
-    "static"            { return Parser.STATIC; }
-    "transitive"        { return Parser.TRANSITIVE; }
-    "to"                { return Parser.TO; }
-    "uses"              { return Parser.USES; }
-    "with"              { return Parser.WITH; }
+    "exports"           { pushState(NAME); return Parser.EXPORTS; }
+    "opens"             { pushState(NAME); return Parser.OPENS; }
+    "provides"          { pushState(NAME); return Parser.PROVIDES; }
+    "requires"          { pushState(NAME_OR_MODIFIER); return Parser.REQUIRES; }
+    "to"                { pushState(NAME); return Parser.TO; }
+    "uses"              { pushState(NAME); return Parser.USES; }
+    "with"              { pushState(NAME); return Parser.WITH; }
 }
 <ENUM> {
     ";"  { 
@@ -418,7 +426,12 @@ JavadocEnd                      = "*"+ "/"
 <ANNOTATIONTYPE> {
 	"default"           { assignmentDepth = nestingDepth; appendingToCodeBody = true; pushState(ASSIGNMENT); }
 }
-<YYINITIAL, ANNOTATIONNOARG, ANNOTATIONTYPE, ENUM, MODULE, NAME, TYPE> {
+<NAME> {
+    {Id} / {WhiteSpace}* "."  { return Parser.IDENTIFIER; }
+    {Id} / {WhiteSpace}* [;{] { resetAnnotatedElementLine(); popState(); return Parser.IDENTIFIER; }
+    {Id}                      { popState(); return Parser.IDENTIFIER; }
+}
+<YYINITIAL, ANNOTATIONNOARG, ANNOTATIONTYPE, ENUM, MODULE, TYPE> {
     {Id} { return Parser.IDENTIFIER;
          }
 }

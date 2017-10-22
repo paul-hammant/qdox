@@ -253,7 +253,7 @@ public class JavaProjectBuilderTest extends TestCase
     	builder = new JavaProjectBuilder(new OrderedClassLibraryBuilder(null));
         builder.addClassLoader(new ClassLoader() {
             @Override
-			public Class loadClass(String name) throws ClassNotFoundException {
+			public Class<?> loadClass(String name) throws ClassNotFoundException {
             	if("com.thoughtworks.qdox.Spoon".equals(name))  {
                     return Spoon.class; //Located inside com.thoughtworks.qdox.TestClasses.java
             	}
@@ -265,7 +265,7 @@ public class JavaProjectBuilderTest extends TestCase
 
         builder.addClassLoader(new ClassLoader() {
             @Override
-			public Class loadClass(String name) throws ClassNotFoundException {
+			public Class<?> loadClass(String name) throws ClassNotFoundException {
             	if("com.thoughtworks.qdox.Fork".equals(name))  {
                     return Fork.class;  //Located inside com.thoughtworks.qdox.TestClasses.java
             	}
@@ -860,7 +860,7 @@ public class JavaProjectBuilderTest extends TestCase
         JavaClass multiline = builder.addSource(new StringReader(sourceCode)).getClasses().get(0);
         DocletTag frenchEnglish = multiline.getTagByName("french.english");
 
-        Set expected = new HashSet();
+        Set<String> expected = new HashSet<String>();
         expected.add("cheese");
         expected.add("fish");
         assertEquals(expected,frenchEnglish.getNamedParameterMap().keySet());
@@ -1356,7 +1356,7 @@ public class JavaProjectBuilderTest extends TestCase
         List<JavaAnnotation> annotations = fieldByName.getAnnotations();
         
         // Now we do have the annotation "JoinColumn" in annotations[0]
-        Map propertyMap = annotations.get(0).getNamedParameterMap();
+        Map<String, Object> propertyMap = annotations.get(0).getNamedParameterMap();
         // This one works
         assertEquals("\"hi\"", propertyMap.get("bla"));
         String string = (String) propertyMap.get("name");

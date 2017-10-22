@@ -168,11 +168,11 @@ public class DefaultJavaField
             return false;
         }
         JavaField fld = (JavaField) obj;
-        if ( fld.getDeclaringClass().equals( this.getDeclaringClass() ) )
+        if ( !fld.getDeclaringClass().equals( this.getDeclaringClass() ) )
         {
             return false;
         }
-        if ( fld.isEnumConstant() == this.isEnumConstant() )
+        if ( !fld.isEnumConstant() == this.isEnumConstant() )
         {
             return false;
         }

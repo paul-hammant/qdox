@@ -411,9 +411,9 @@ MethodDeclaration: Modifiers_opt MethodHeader MethodBody
 // VariableInitializer:
 //     Expression
 //     ArrayInitializer
-VariableInitializer: ArrayInitializer
-                   | Expression
-                   ;
+// VariableInitializer: ArrayInitializer
+//                    | Expression
+//                    ;
 
 // MethodHeader:
 //     Result MethodDeclarator [Throws] 
@@ -867,20 +867,21 @@ Annotations_opt:
 // -----------------------------
 // Productions from �10 (Arrays)
 // -----------------------------
-
+//
 // ArrayInitializer:
 //     { [VariableInitializerList] [,] }
-ArrayInitializer: BRACEOPEN VariableInitializerList_opt BRACECLOSE
-                ;
- 
+// ArrayInitializer: BRACEOPEN VariableInitializerList_opt BRACECLOSE
+//                 ;
+//  
 // VariableInitializerList:
 //     VariableInitializer {, VariableInitializer}
-VariableInitializerList: VariableInitializerList VariableInitializer
-                       | VariableInitializerList COMMA
-                       ;
-VariableInitializerList_opt:
-                           | VariableInitializerList
-                           ;
+// VariableInitializerList: VariableInitializerList VariableInitializer
+//                        | VariableInitializerList COMMA
+//                        ;
+// VariableInitializerList_opt:
+//                            | VariableInitializerList
+//                            ;
+
 // ----------------------------------
 // Productions from �15 (Expressions)
 // ----------------------------------
@@ -1058,13 +1059,13 @@ ArrayCreationExpression: NEW PrimitiveType DimExprs Dims_opt
                            creator.setCreatedName( $2.getName() );
                            $$ = creator; 
                          }  
-                       | NEW PrimitiveType Dims CODEBLOCK /* =ArrayInitializer */ 
+                       | NEW PrimitiveType Dims CODEBLOCK /* =ArrayInitializer */
                          {
                            CreatorDef creator = new CreatorDef();
                            creator.setCreatedName( $2.getName() );
                            $$ = creator; 
                          }
-                       | NEW ClassOrInterfaceType Dims CODEBLOCK /* =ArrayInitializer */ 
+                       | NEW ClassOrInterfaceType Dims CODEBLOCK /* =ArrayInitializer */
                          {
                            CreatorDef creator = new CreatorDef();
                            creator.setCreatedName( $2.getName() );

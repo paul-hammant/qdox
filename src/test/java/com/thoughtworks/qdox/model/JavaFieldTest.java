@@ -220,4 +220,16 @@ public abstract class JavaFieldTest<F extends JavaField> extends TestCase {
         setModifiers( fld, Arrays.asList( new String[] { "volatile" } ) );
         assertTrue( fld.isVolatile() );
     }
+    
+    public void testEquals()
+    {
+        JavaClass type = mock(JavaClass.class);
+        JavaClass declaringClass = mock(JavaClass.class);
+        F fld1 = newJavaField( type, "field");
+        F fld2 = newJavaField( type, "field");
+        setDeclaringClass( fld1, declaringClass );
+        setDeclaringClass( fld2, declaringClass );
+        
+        assertEquals( fld1, fld2 );
+    }
 }

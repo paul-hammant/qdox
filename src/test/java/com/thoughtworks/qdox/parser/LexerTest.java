@@ -640,6 +640,57 @@ public class LexerTest extends TestCase {
         assertLex( 0, lexer );
     }
     
+    // Github #31
+    public void testParseEnumWithConstructor() throws Exception
+    {
+        String in = "public enum SomeEnum {\n" + 
+            " VALUE1(\"hello\", 1, new String[]{\"hello\", \"world\"});\n" + 
+            " SomeEnum(String string, int integer, String[] stringArray) {\n" + 
+            " }\r\n" + 
+            "}";
+        
+        Lexer lexer = new JFlexLexer( new StringReader( in ) );
+        
+        assertLex( Parser.PUBLIC, lexer );
+        assertLex( Parser.ENUM, lexer );
+        assertLex( Parser.IDENTIFIER, "SomeEnum", lexer );
+        assertLex( Parser.BRACEOPEN, lexer );
+        
+        assertLex( Parser.IDENTIFIER, "VALUE1", lexer );
+        assertLex( Parser.PARENOPEN, lexer );
+        assertLex( Parser.STRING_LITERAL, "\"", lexer ); //???
+        assertLex( Parser.COMMA, lexer );
+        assertLex( Parser.INTEGER_LITERAL, "1", lexer );
+        assertLex( Parser.COMMA, lexer );
+        assertLex( Parser.NEW, lexer );
+        assertLex( Parser.IDENTIFIER, "String", lexer );
+        assertLex( Parser.SQUAREOPEN, lexer );
+        assertLex( Parser.SQUARECLOSE, lexer );
+        assertLex( Parser.CODEBLOCK, lexer );
+        assertLex( Parser.PARENCLOSE, lexer );
+        assertLex( Parser.SEMI, lexer );
+        
+        assertLex( Parser.IDENTIFIER, "SomeEnum", lexer );
+        assertLex( Parser.PARENOPEN, lexer );
+        assertLex( Parser.IDENTIFIER, "String", lexer );
+        assertLex( Parser.IDENTIFIER, "string", lexer );
+        assertLex( Parser.COMMA, lexer );
+        assertLex( Parser.IDENTIFIER, "int", lexer );
+        assertLex( Parser.IDENTIFIER, "integer", lexer );
+        assertLex( Parser.COMMA, lexer );
+        assertLex( Parser.IDENTIFIER, "String", lexer );
+        assertLex( Parser.SQUAREOPEN, lexer );
+        assertLex( Parser.SQUARECLOSE, lexer );
+        assertLex( Parser.IDENTIFIER, "stringArray", lexer );
+        assertLex( Parser.PARENCLOSE, lexer );
+        
+        assertLex( Parser.CODEBLOCK, lexer );
+        assertLex( Parser.BRACECLOSE, lexer );
+        
+        assertLex( 0, lexer );
+    }
+    
+    
     public void testModule()
         throws Exception
     {

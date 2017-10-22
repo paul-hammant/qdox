@@ -1613,8 +1613,21 @@ public class JavaProjectBuilderTest extends TestCase
         JavaClass zothClass = builder.addSource(new StringReader( zothChild )).getClassByName( "ZothChild" );
         assertEquals( "java.lang.Object", zothClass.getSuperClass().getBinaryName());
         assertEquals( 2, zothClass.getBeanProperties( true ).size() );
-        
     }
+
+    // Github #31
+    public void testParseEnumWithConstructor() throws Exception
+    {
+        String source = "public enum SomeEnum {\n" + 
+            " VALUE1(\"hello\", 1, new String[]{\"hello\", \"world\"});\n" + 
+            " SomeEnum(String string, int integer, String[] stringArray) {\n" + 
+            " }\r\n" + 
+            "}";
+        
+        builder.setDebugParser( true );
+        builder.addSource( new StringReader( source ) ); 
+    }
+    
     
     public void testDeclarationSignatureWithGenerics() {
         String source = "import java.util.List;"

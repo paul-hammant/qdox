@@ -649,7 +649,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         );
         assertEquals(
                 null,
-                cls.getMethodBySignature("doStuff", Collections.EMPTY_LIST)
+                cls.getMethodBySignature("doStuff", Collections.<JavaType>emptyList())
         );
         assertEquals(
                 null,

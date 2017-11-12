@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.model.expression.FieldRef;
 
 public class AnnotationsTest
@@ -98,7 +99,7 @@ public class AnnotationsTest
         assertNotNull( builder.getClassByName( "BitTwiddle" ) );
         assertNotNull( builder.getClassByName( "BitTwiddle" ).getAnnotations().get( 0 ).getNamedParameter( "value" ) );
         assertEquals( "Author",
-                      builder.getClassByName( "BitTwiddle" ).getMethodBySignature( "doStuff", Collections.EMPTY_LIST ).getAnnotations().get( 0 ).getType().getValue() );
+                      builder.getClassByName( "BitTwiddle" ).getMethodBySignature( "doStuff", Collections.<JavaType>emptyList() ).getAnnotations().get( 0 ).getType().getValue() );
     }
 
     public void testShouldIgnoreAnnotationDeclaration()

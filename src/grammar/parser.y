@@ -314,6 +314,7 @@ Superinterfaces_opt:
                    | IMPLEMENTS TypeList
                      {
                        cls.getImplements().addAll( typeList );
+                       typeList.clear();
                      }
                    ;
 

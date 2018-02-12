@@ -1,5 +1,6 @@
 package com.thoughtworks.qdox;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
@@ -1628,6 +1629,21 @@ public class JavaProjectBuilderTest extends TestCase
         builder.addSource( new StringReader( source ) ); 
     }
     
+    // Github #39
+    public void testInnerClassInterfaces()
+        throws Exception
+    {
+        String sourceA = "public class A implements Itf1 {\n" + "     class B implements Itf2 {}\n" + "}";
+        String sourceItf1 = "interface Itf1 {}";
+        String sourceItf2 = "interface Itf2 {}";
+
+        builder.addSource( new StringReader( sourceItf1 ) );
+        builder.addSource( new StringReader( sourceItf2 ) );
+        builder.addSource( new StringReader( sourceA ) );
+        JavaClass classA = builder.getClassByName( "A$B" );
+
+        assertTrue( classA.getImplements().equals( Arrays.asList( builder.getClassByName( "Itf2" ) ) ) );
+    }
     
     public void testDeclarationSignatureWithGenerics() {
         String source = "import java.util.List;"

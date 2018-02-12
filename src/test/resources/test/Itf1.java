@@ -1,1 +1,0 @@
-interface Itf1 {}

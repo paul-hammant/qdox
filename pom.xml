@@ -126,10 +126,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <timestamp>${maven.build.timestamp}</timestamp>
     <qdox.javaparser.stack>500</qdox.javaparser.stack>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
   </properties>
-
+  
   <build>
     <pluginManagement>
       <plugins>
@@ -492,4 +490,5 @@
       </plugin>
     </plugins>
   </reporting>
+
 </project>

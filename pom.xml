@@ -10,7 +10,7 @@
   <name>QDox</name>
   <groupId>com.thoughtworks.qdox</groupId>
   <artifactId>qdox</artifactId>
-  <version>2.0-SNAPSHOT</version>
+  <version>2.0-M8</version>
 
   <url>https://github.com/paul-hammant/qdox</url>
   <description>
@@ -36,7 +36,7 @@
     <connection>scm:git:https://github.com/paul-hammant/qdox.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/paul-hammant/qdox.git</developerConnection>
     <url>https://github.com/paul-hammant/qdox</url>
-    <tag>HEAD</tag>
+    <tag>qdox-2.0-M8</tag>
   </scm>
 
   <developers>

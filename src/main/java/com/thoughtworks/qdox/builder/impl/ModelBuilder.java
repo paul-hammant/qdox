@@ -271,6 +271,9 @@ public class ModelBuilder implements Builder {
         }
         newClass.setImplementz( implementz );
 
+        // imports
+        newClass.setImports( source.getImports() );
+
         // modifiers
         newClass.setModifiers( new LinkedList<String>( def.getModifiers() ) );
         

@@ -34,6 +34,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaInitializer;
+import com.thoughtworks.qdox.model.JavaMember;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -50,6 +51,8 @@ public class DefaultJavaClass
 
     private List<JavaConstructor> constructors = new LinkedList<JavaConstructor>();
 
+    private List<JavaMember> members = new LinkedList<JavaMember>();
+
     private List<JavaMethod> methods = new LinkedList<JavaMethod>();
 
     private List<JavaField> fields = new LinkedList<JavaField>();
@@ -63,6 +66,8 @@ public class DefaultJavaClass
     private boolean anAnnotation;
 
     private JavaType superClass;
+
+    private List<String> imports = new LinkedList<String>();
 
     private List<JavaClass> implementz = new LinkedList<JavaClass>();
     
@@ -176,6 +181,12 @@ public class DefaultJavaClass
     }
 
     /** {@inheritDoc} */
+    public List<String> getImports()
+    {
+        return new LinkedList<String>( imports );
+    }
+
+    /** {@inheritDoc} */
     public List<JavaType> getImplements()
     {
         return new LinkedList<JavaType>( implementz );
@@ -211,11 +222,13 @@ public class DefaultJavaClass
     public void addConstructor( JavaConstructor constructor )
     {
         constructors.add( constructor );
+        members.add( constructor );
     }
 
     public void addMethod( JavaMethod meth )
     {
         methods.add( meth );
+        members.add( meth );
     }
 
     public void setSuperClass( JavaType type )
@@ -225,6 +238,11 @@ public class DefaultJavaClass
             throw new IllegalArgumentException( "enums cannot extend other classes" );
         }
         superClass = type;
+    }
+
+    public void setImports( List<String> imports )
+    {
+        this.imports = imports;
     }
 
     public void setImplementz( List<JavaClass> implementz )
@@ -246,6 +264,7 @@ public class DefaultJavaClass
     public void addField( JavaField javaField )
     {
         fields.add( javaField );
+        members.add( javaField );
     }
 
     /**
@@ -548,6 +567,11 @@ public class DefaultJavaClass
     public List<JavaField> getFields()
     {
         return fields;
+    }
+
+    public List<JavaMember> getMembers()
+    {
+        return members;
     }
 
     /** {@inheritDoc} */

@@ -34,6 +34,7 @@ import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaGenericDeclaration;
 import com.thoughtworks.qdox.model.JavaInitializer;
+import com.thoughtworks.qdox.model.JavaMember;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameterizedType;
@@ -116,6 +117,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
             result.append("[]");
         }
         return result.toString();
+    }
+
+    /** {@inheritDoc} */
+    public List<String> getImports()
+    {
+        return new LinkedList<String>();
     }
 
     /** {@inheritDoc}*/
@@ -739,6 +746,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
                                                    boolean varArg )
     {
         return resolveRealClass().getMethodsBySignature( name, parameterTypes, superclasses, varArg );
+    }
+
+    /** {@inheritDoc} */
+    public List<JavaMember> getMembers()
+    {
+        return resolveRealClass().getMembers();
     }
 
     /** {@inheritDoc} */

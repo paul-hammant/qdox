@@ -82,6 +82,10 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
 
     List<JavaType> getImplements();
 
+    List<String> getImports();
+
+    List<JavaMember> getMembers();
+
     /**
      * Equivalent of {@link java.lang.Class#getInterfaces()}
      *  Determines the interfaces implemented by the class or interface represented by this object. 

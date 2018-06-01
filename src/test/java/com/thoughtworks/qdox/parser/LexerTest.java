@@ -1008,11 +1008,11 @@ public class LexerTest extends TestCase {
 
         assertLex( Parser.USES, lexer );
         assertLex( Parser.IDENTIFIER, "uses", lexer );
-        assertLex( Parser.DOT, lexer );
-        assertLex( Parser.IDENTIFIER, "uses", lexer );
         assertLex( Parser.SEMI, lexer );
 
         assertLex( Parser.USES, lexer );
+        assertLex( Parser.IDENTIFIER, "uses", lexer );
+        assertLex( Parser.DOT, lexer );
         assertLex( Parser.IDENTIFIER, "uses", lexer );
         assertLex( Parser.SEMI, lexer );
 

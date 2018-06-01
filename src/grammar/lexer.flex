@@ -227,6 +227,7 @@ JavadocEnd                      = "*"+ "/"
 }
 <NAME_OR_MODIFIER> {
     {Id} / {WhiteSpace}* "."  { popState(); pushState(NAME); return Parser.IDENTIFIER; }
+    {Id} / {WhiteSpace}* ";"  { popState(); return Parser.IDENTIFIER; }
     "static"                  { return Parser.STATIC; }
     "transitive"              { return Parser.TRANSITIVE; }
 }

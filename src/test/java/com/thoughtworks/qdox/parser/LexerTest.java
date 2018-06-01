@@ -902,14 +902,18 @@ public class LexerTest extends TestCase {
                     throws Exception
     {
         String in = "open module module.module {\n" + 
+            "  requires requires;\n" + 
             "  requires requires.requires;\n" + 
             "  requires transitive transitive.transitive;\n" + 
             "  requires static requires.transitive;\n" + 
             "  requires transitive static requires.transitive;\n" + 
+            "  exports exports;\n" + 
             "  exports exports.exports;\n" + 
             "  exports to.to to to.to, to.to;\n" + 
+            "  opens opens;\n" + 
             "  opens opens.opens;\n" + 
             "  opens to.to to to.to, to.to;\n" + 
+            "  uses uses;\n" + 
             "  uses uses.uses;\n" + 
             "  provides with.with with with.with, with.with;\n" + 
             "}";
@@ -921,7 +925,11 @@ public class LexerTest extends TestCase {
         assertLex( Parser.DOT, lexer );
         assertLex( Parser.IDENTIFIER, "module", lexer );
         assertLex( Parser.BRACEOPEN, lexer );
-        
+
+        assertLex( Parser.REQUIRES, lexer );
+        assertLex( Parser.IDENTIFIER, "requires", lexer );
+        assertLex( Parser.SEMI, lexer );
+
         assertLex( Parser.REQUIRES, lexer );
         assertLex( Parser.IDENTIFIER, "requires", lexer );
         assertLex( Parser.DOT, lexer );
@@ -948,6 +956,10 @@ public class LexerTest extends TestCase {
         assertLex( Parser.IDENTIFIER, "requires", lexer );
         assertLex( Parser.DOT, lexer );
         assertLex( Parser.IDENTIFIER, "transitive", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.EXPORTS, lexer );
+        assertLex( Parser.IDENTIFIER, "exports", lexer );
         assertLex( Parser.SEMI, lexer );
 
         assertLex( Parser.EXPORTS, lexer );
@@ -968,6 +980,10 @@ public class LexerTest extends TestCase {
         assertLex( Parser.IDENTIFIER, "to", lexer );
         assertLex( Parser.DOT, lexer );
         assertLex( Parser.IDENTIFIER, "to", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.OPENS, lexer );
+        assertLex( Parser.IDENTIFIER, "opens", lexer );
         assertLex( Parser.SEMI, lexer );
 
         assertLex( Parser.OPENS, lexer );
@@ -993,6 +1009,10 @@ public class LexerTest extends TestCase {
         assertLex( Parser.USES, lexer );
         assertLex( Parser.IDENTIFIER, "uses", lexer );
         assertLex( Parser.DOT, lexer );
+        assertLex( Parser.IDENTIFIER, "uses", lexer );
+        assertLex( Parser.SEMI, lexer );
+
+        assertLex( Parser.USES, lexer );
         assertLex( Parser.IDENTIFIER, "uses", lexer );
         assertLex( Parser.SEMI, lexer );
 

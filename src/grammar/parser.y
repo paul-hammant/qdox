@@ -907,6 +907,7 @@ Primary: PrimaryNoNewArray
 //     MethodInvocation 
 //     MethodReference
 PrimaryNoNewArray: Literal 
+                 | MethodInvocation
                  | PrimitiveType Dims_opt DOT CLASS 
                    { 
                      $$ = new TypeRefDef(new TypeDef($1.getName(), $2));
@@ -924,7 +925,6 @@ PrimaryNoNewArray: Literal
                    {
                      $$ = new TypeRefDef(new TypeDef($1, $2));
                    } 
-                 | MethodInvocation
                  | MethodReference 
                  | QualifiedIdentifier 
                    { 
@@ -980,7 +980,11 @@ TypeArgumentsOrDiamond_opt:
 //     Primary . [TypeArguments] Identifier ( [ArgumentList] ) 
 //     super . [TypeArguments] Identifier ( [ArgumentList] ) 
 //     TypeName . super . [TypeArguments] Identifier ( [ArgumentList] )
-MethodInvocation: IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+MethodInvocation: Primary DOT TypeParameters_opt IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
+                  {
+                    $$ = new MethodInvocationDef( $1 + "." + $4, null);
+                  }                
+                | IDENTIFIER PARENOPEN ArgumentList_opt PARENCLOSE
                   {
                     $$ = new MethodInvocationDef($1, null);
                   }

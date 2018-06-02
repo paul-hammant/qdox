@@ -3022,6 +3022,56 @@ public class ParserTest extends TestCase {
         verify( builder ).endField();
         verify( builder ).endClass();
     }
+    
+    public void testStringBasedEnum()
+        throws Exception
+    {
+        setupLex( Parser.PUBLIC );
+        setupLex( Parser.ENUM );
+        setupLex( Parser.IDENTIFIER, "StringBasedEnum" );
+
+        setupLex( Parser.BRACEOPEN );
+
+        setupLex( Parser.IDENTIFIER, "LIST" );
+        setupLex( Parser.PARENOPEN );
+        setupLex( Parser.IDENTIFIER, "List" );
+        setupLex( Parser.DOT );
+        setupLex( Parser.CLASS );
+        setupLex( Parser.DOT );
+        setupLex( Parser.IDENTIFIER, "getName" );
+        setupLex( Parser.PARENOPEN );
+        setupLex( Parser.PARENCLOSE );
+        setupLex( Parser.PARENCLOSE );
+        setupLex( Parser.SEMI );
+
+        setupLex( Parser.IDENTIFIER, "StringBasedEnum" );
+        setupLex( Parser.PARENOPEN );
+        setupLex( Parser.IDENTIFIER, "String" );
+        setupLex( Parser.IDENTIFIER, "className" );
+        setupLex( Parser.PARENCLOSE );
+        setupLex( Parser.CODEBLOCK, "}" );
+
+        setupLex( Parser.BRACECLOSE );
+        setupLex( 0 );
+
+        Parser parser = new Parser( lexer, builder );
+        parser.setDebugParser( true );
+        parser.parse();
+
+        ArgumentCaptor<ClassDef> classCaptor = ArgumentCaptor.forClass( ClassDef.class );
+        ArgumentCaptor<FieldDef> fieldCaptor = ArgumentCaptor.forClass( FieldDef.class );
+        ArgumentCaptor<ExpressionDef> argumentCaptor = ArgumentCaptor.forClass( ExpressionDef.class );
+        ArgumentCaptor<MethodDef> methodCaptor = ArgumentCaptor.forClass( MethodDef.class );
+
+        verify( builder ).beginClass( classCaptor.capture() );
+        verify( builder ).beginField( fieldCaptor.capture() );
+        verify( builder ).addArgument( argumentCaptor.capture() );
+        verify( builder ).endField();
+        verify( builder ).beginConstructor();
+        verify( builder ).addParameter( fieldCaptor.capture() );
+        verify( builder ).endConstructor( methodCaptor.capture() );
+        verify( builder ).endClass();
+    }
 
     private void setupLex(int token, String value) {
         lexValues.add( token );

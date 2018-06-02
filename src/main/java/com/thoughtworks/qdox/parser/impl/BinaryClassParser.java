@@ -50,7 +50,10 @@ public class BinaryClassParser
     {
         try
         {
-            if(declaringClazz.getPackage() != null)
+            // Spec change in Java 9:
+            // "If this class represents an array type, a primitive type or void, this method returns null."
+            // This means that classes without package will get a package with empty name
+            if ( declaringClazz.getPackage() != null && !"".equals( declaringClazz.getPackage().getName() ) )
             {
                 binaryBuilder.addPackage( new PackageDef( declaringClazz.getPackage().getName() ) );
             }

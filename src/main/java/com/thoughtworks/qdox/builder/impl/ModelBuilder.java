@@ -499,7 +499,15 @@ public class ModelBuilder implements Builder {
         {
             return null;
         }
+        
         JavaClass declaringClass = getContext( genericDeclaration );
+        // can't select a declaring class based on the genericDeclaration
+        // likely method specifies its own genericDecleration
+        if ( declaringClass == null )
+        {
+            return null;
+        }
+        
         TypeResolver typeResolver = TypeResolver.byClassName( declaringClass.getBinaryName(), classLibrary, source.getImports() );
         
         DefaultJavaTypeVariable<G> result = new DefaultJavaTypeVariable<G>( typeVariableDef.getName(), typeResolver );

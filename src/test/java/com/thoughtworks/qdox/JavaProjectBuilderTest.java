@@ -1645,6 +1645,21 @@ public class JavaProjectBuilderTest extends TestCase
         assertTrue( classA.getImplements().equals( Arrays.asList( builder.getClassByName( "Itf2" ) ) ) );
     }
     
+    public void testGenericEnumMethod() throws Exception {
+        String source = "package java.time.temporal;\r\n" + 
+            "public final class IsoFields {\r\n" + 
+            "    private static enum Field implements TemporalField {\r\n" + 
+            "        DAY_OF_QUARTER {\r\n" + 
+            "            public <R extends Temporal> R adjustInto(R temporal, long newValue) {\r\n" + 
+            "                return null;\r\n" + 
+            "            }\r\n" + 
+            "        }\r\n" + 
+            "    }\r\n" + 
+            "}";
+        
+        builder.addSource( new StringReader( source ) );
+    }
+    
     public void testDeclarationSignatureWithGenerics() {
         String source = "import java.util.List;"
             + "public interface Test {"
@@ -1706,6 +1721,16 @@ public class JavaProjectBuilderTest extends TestCase
             "}\r\n";
         
         builder.addSource( new StringReader( source ) );
+    }
+    
+    public void testSimpleModule()
+    {
+        String source = "module bar {\r\n" + 
+            "  requires foo.foo;\r\n" + 
+            "}";
+
+        builder.addSource( new StringReader( source ) );
+
     }
     
     public void testLineNumbers() {

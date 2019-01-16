@@ -159,7 +159,7 @@ import java.util.*;
 
     private void resetAnnotatedElementLine()
     {
-      annotatedElementLine = 0 - annotatedElementLine;
+      annotatedElementLine = - Math.abs(annotatedElementLine);
     }
     
     public JFlexLexer( java.io.Reader reader, java.io.Writer writer ) {
@@ -428,9 +428,9 @@ JavadocEnd                      = "*"+ "/"
 	"default"           { assignmentDepth = nestingDepth; appendingToCodeBody = true; pushState(ASSIGNMENT); }
 }
 <NAME> {
-    {Id} / {WhiteSpace}* "."  { return Parser.IDENTIFIER; }
-    {Id} / {WhiteSpace}* [;{] { resetAnnotatedElementLine(); popState(); return Parser.IDENTIFIER; }
-    {Id}                      { popState(); return Parser.IDENTIFIER; }
+    {Id} / {WhiteSpace}* "."   { return Parser.IDENTIFIER; }
+    {Id} / {WhiteSpace}* [;{(] { resetAnnotatedElementLine(); popState(); return Parser.IDENTIFIER; }
+    {Id}                       { popState(); return Parser.IDENTIFIER; }
 }
 <YYINITIAL, ANNOTATIONNOARG, ANNOTATIONTYPE, ENUM, MODULE, TYPE> {
     {Id} { return Parser.IDENTIFIER;

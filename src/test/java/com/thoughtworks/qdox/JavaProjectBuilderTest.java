@@ -1342,6 +1342,21 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals( 9, clazz.getMethods().get(1).getLineNumber() );
     }
     
+    public void testConstructorLineNumber() {
+        String source = "package fix.test;\r\n" + 
+            "public class ClassWithJavadoc\r\n" + 
+            "    implements InterfaceWithJavadoc\r\n" + 
+            "{\r\n" + 
+            "    public ClassWithJavadoc()\r\n" + 
+            "    {\r\n" + 
+            "    }"
+            + "}";
+        
+        builder.addSource(new StringReader( source ));
+        
+        assertEquals( 5, builder.getClassByName( "fix.test.ClassWithJavadoc" ).getConstructors().get( 0 ).getLineNumber() );
+    }
+    
     // for QDOX-209
     public void testAnnotationMap() {
         String source = "import javax.persistence.JoinColumn;\n" + 

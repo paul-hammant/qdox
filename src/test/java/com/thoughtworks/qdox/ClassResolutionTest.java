@@ -90,4 +90,14 @@ public class ClassResolutionTest
         assertEquals( "some.pack.Test.Inner.Inner2", parameter.getType().getFullyQualifiedName() );
         assertEquals( "some.pack.Test.Inner.Inner2", parameter.getFullyQualifiedName() );
     }
+
+    public void testIsAWithPrimitives()
+    {
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        String source = "class Foo { public byte[] bar() { return null; } }";
+        builder.addSource( new StringReader( source ) );
+        JavaMethod method = builder.getClassByName("Foo").getMethods().get(0);
+        JavaClass returns = method.getReturns();
+        assertFalse(returns.isA(builder.getClassByName("java.lang.Object")));
+    }
 }

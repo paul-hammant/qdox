@@ -143,6 +143,11 @@ public class DefaultJavaClass
     public JavaType getSuperClass()
     {
         JavaType result = null;
+
+        if(isPrimitive()) {
+            return null;
+        }
+
         JavaClass OBJECT_JAVACLASS = getJavaClassLibrary().getJavaClass( "java.lang.Object" );
         JavaClass ENUM_JAVACLASS = getJavaClassLibrary().getJavaClass( "java.lang.Enum" );
 

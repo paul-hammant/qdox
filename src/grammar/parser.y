@@ -1665,11 +1665,21 @@ ClassOrInterfaceType: TypeDeclSpecifier
 // Actually
 // TypeDeclSpecifier: TypeName | ClassOrInterfaceType . Identifier
 // TypeName:          Identifier | TypeName . Identifier
-TypeDeclSpecifier: QualifiedIdentifier
-                 | ClassOrInterfaceType DOT IDENTIFIER 
-                   { 
+TypeDeclSpecifier:
+                 IDENTIFIER
+                 | Annotations_opt IDENTIFIER
+                   {
+                     $$ = $2;
+                   }
+                 | ClassOrInterfaceType DOT IDENTIFIER
+                   {
                      $$ = $1.getName() + '.' + $3;
-                   };
+                   }
+                 | ClassOrInterfaceType DOT Annotations_opt IDENTIFIER
+                   {
+                     $$ = $1.getName() + '.' + $4;
+                   }
+                   ;
 
 
 

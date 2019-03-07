@@ -1454,7 +1454,7 @@ ReferenceType: ArrayType
 // InterfaceType:
 //     ClassType 
 // TypeVariable:
-//     {Annotation} Identifier 
+//     {Annotation} Identifier // already covered by ClassType
 
 // ArrayType:
 //     PrimitiveType Dims 

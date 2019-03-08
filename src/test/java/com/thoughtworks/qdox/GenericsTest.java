@@ -3,8 +3,10 @@ package com.thoughtworks.qdox;
 import static org.mockito.Mockito.*;
 
 import java.io.StringReader;
+import java.util.Collection;
 import java.util.Collections;
 
+import com.thoughtworks.qdox.model.impl.DefaultJavaParameterizedType;
 import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.JavaClass;
@@ -139,7 +141,25 @@ public class GenericsTest extends TestCase {
         builder.addSource(new StringReader(source));
         assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
-    
+
+    public void testShouldUnderstandAnnotationsOnTypeParameters() {
+        String source = "" +
+                "public class Bar {\n" +
+                "    public static Collection<String> foo() { }\n" +
+                "    public static Collection<java.lang.String> foo2() { }\n" +
+                "    public static Collection<@Annot String> foo3() { }\n" +
+                "    public static Collection<@Annot java.lang.String> foo4() { }\n" +
+                "}";
+        builder.addSource(new StringReader(source));
+        JavaClass bar = builder.getClassByName("Bar");
+        assertEquals("Bar", bar.getName());
+
+        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(0).getReturns()).getActualTypeArguments().get(0)));
+        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(1).getReturns()).getActualTypeArguments().get(0)));
+        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(2).getReturns()).getActualTypeArguments().get(0)));
+        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(3).getReturns()).getActualTypeArguments().get(0)));
+    }
+
     public void testGenericField() {
         // Also see QDOX-77
         String source = "" +

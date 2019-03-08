@@ -56,7 +56,7 @@ import java.util.Stack;
 %token <ival> PLUSPLUS MINUSMINUS
 %token <sval> SUPER
 %token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
-%type <type> PrimitiveType ReferenceType ArrayType ClassOrInterfaceType
+%type <type> PrimitiveType ReferenceType ArrayType ClassOrInterfaceType TypeVariable
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
@@ -1441,7 +1441,8 @@ Type: PrimitiveType
 //     ClassOrInterfaceType 
 //     TypeVariable 
 //     ArrayType
-ReferenceType: ArrayType
+ReferenceType: TypeVariable
+             | ArrayType
              | ClassOrInterfaceType
              ; 
 
@@ -1452,9 +1453,15 @@ ReferenceType: ArrayType
 //     {Annotation} Identifier [TypeArguments] 
 //     ClassOrInterfaceType . {Annotation} Identifier [TypeArguments] 
 // InterfaceType:
-//     ClassType 
+//     ClassType
+
 // TypeVariable:
-//     {Annotation} Identifier 
+//     {Annotation} Identifier
+TypeVariable: Annotations_opt QualifiedIdentifier
+              {
+                $$ = new TypeDef($2,0);
+              }
+            ;
 
 // ArrayType:
 //     PrimitiveType Dims 

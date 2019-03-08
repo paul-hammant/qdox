@@ -1446,14 +1446,37 @@ ReferenceType: TypeVariable
              | ClassOrInterfaceType
              ; 
 
+// Actually
 // ClassOrInterfaceType:
 //     ClassType 
 //     InterfaceType 
 // ClassType:
-//     {Annotation} Identifier [TypeArguments] 
-//     ClassOrInterfaceType . {Annotation} Identifier [TypeArguments] 
+//     {Annotation} TypeIdentifier [TypeArguments] 
+//     PackageName . {Annotation} TypeIdentifier [TypeArguments] 
+//     ClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments] 
 // InterfaceType:
 //     ClassType
+// Parser can't see the difference  
+ClassOrInterfaceType: QualifiedIdentifier /* =PackageName */ DOT Annotations_opt IDENTIFIER 
+                      {
+                        TypeDef td = new TypeDef($1 + '.' + $4,0);
+                        $$ = typeStack.push(td);
+                      }
+                      TypeArguments_opt
+                      {
+                        $$ = typeStack.pop();
+                      };
+                    |
+                      TypeDeclSpecifier 
+                      {
+                        TypeDef td = new TypeDef($1,0);
+                        $$ = typeStack.push(td);
+                      }
+                      TypeArguments_opt
+                      {
+                        $$ = typeStack.pop();
+                      };
+
 
 // TypeVariable:
 //     {Annotation} Identifier
@@ -1655,20 +1678,6 @@ PrimitiveType: BYTE
            }  
          ;
 
-// Actually
-// ClassOrInterfaceType: ClassType | InterfaceType;
-// ClassType:            TypeDeclSpecifier TypeArguments_opt
-// InterfaceType:        TypeDeclSpecifier TypeArguments_opt
-// Parser can't see the difference  
-ClassOrInterfaceType: TypeDeclSpecifier 
-                      {
-                        TypeDef td = new TypeDef($1,0);
-                        $$ = typeStack.push(td);
-                      }
-                      TypeArguments_opt
-                      {
-                        $$ = typeStack.pop();
-                      };
 // Actually
 // TypeDeclSpecifier: TypeName | ClassOrInterfaceType . Identifier
 // TypeName:          Identifier | TypeName . Identifier

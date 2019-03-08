@@ -149,6 +149,7 @@ public class GenericsTest extends TestCase {
                 "    public static Collection<java.lang.String> foo2() { }\n" +
                 "    public static Collection<@Annot String> foo3() { }\n" +
                 "    public static Collection<@Annot java.lang.String> foo4() { }\n" +
+                "    public static Collection<java.lang.@Annot String> foo5() { }\n" +
                 "}";
         builder.addSource(new StringReader(source));
         JavaClass bar = builder.getClassByName("Bar");
@@ -158,6 +159,7 @@ public class GenericsTest extends TestCase {
         assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(1).getReturns()).getActualTypeArguments().get(0)));
         assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(2).getReturns()).getActualTypeArguments().get(0)));
         assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(3).getReturns()).getActualTypeArguments().get(0)));
+        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(4).getReturns()).getActualTypeArguments().get(0)));
     }
 
     public void testGenericField() {

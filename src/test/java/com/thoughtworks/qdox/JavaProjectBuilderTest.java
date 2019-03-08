@@ -1639,8 +1639,6 @@ public class JavaProjectBuilderTest extends TestCase
             " SomeEnum(String string, int integer, String[] stringArray) {\n" + 
             " }\r\n" + 
             "}";
-        
-        builder.setDebugParser( true );
         builder.addSource( new StringReader( source ) ); 
     }
     
@@ -1766,8 +1764,6 @@ public class JavaProjectBuilderTest extends TestCase
                         "MyAnnoInterface{}\n" +
                         "interface NewLineInterface \n" +
                         "{}";
-//        builder.setDebugLexer( true );
-        builder.setDebugParser( true );
         JavaSource jSource = builder.addSource( new StringReader( source ) );
         assertEquals( 3, jSource.getClassByName( "MyClass" ).getLineNumber() );
         assertEquals( 5, jSource.getClassByName( "MyClass" ).getFieldByName( "CONSTANT1" ).getLineNumber() );

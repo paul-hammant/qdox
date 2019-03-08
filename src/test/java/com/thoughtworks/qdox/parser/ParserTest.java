@@ -3055,7 +3055,6 @@ public class ParserTest extends TestCase {
         setupLex( 0 );
 
         Parser parser = new Parser( lexer, builder );
-        parser.setDebugParser( true );
         parser.parse();
 
         ArgumentCaptor<ClassDef> classCaptor = ArgumentCaptor.forClass( ClassDef.class );

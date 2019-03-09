@@ -143,23 +143,23 @@ public class GenericsTest extends TestCase {
     }
 
     public void testShouldUnderstandAnnotationsOnTypeParameters() {
-        String source = "" +
+        String source = "import com.foo.Item;" +
                 "public class Bar {\n" +
-                "    public static Collection<String> foo() { }\n" +
-                "    public static Collection<java.lang.String> foo2() { }\n" +
-                "    public static Collection<@Annot String> foo3() { }\n" +
-                "    public static Collection<@Annot java.lang.String> foo4() { }\n" +
-                "    public static Collection<java.lang.@Annot String> foo5() { }\n" +
+                "    public static Collection<Item> foo() { }\n" +
+                "    public static Collection<com.foo.Item> foo2() { }\n" +
+                "    public static Collection<@Annot Item> foo3() { }\n" +
+                "    public static Collection<@Annot com.foo.Item> foo4() { }\n" +
+                "    public static Collection<com.foo.@Annot Item> foo5() { }\n" +
                 "}";
         builder.addSource(new StringReader(source));
         JavaClass bar = builder.getClassByName("Bar");
         assertEquals("Bar", bar.getName());
 
-        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(0).getReturns()).getActualTypeArguments().get(0)));
-        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(1).getReturns()).getActualTypeArguments().get(0)));
-        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(2).getReturns()).getActualTypeArguments().get(0)));
-        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(3).getReturns()).getActualTypeArguments().get(0)));
-        assertEquals(builder.getClassByName("java.lang.String"), (( (DefaultJavaParameterizedType)bar.getMethods().get(4).getReturns()).getActualTypeArguments().get(0)));
+        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(0).getReturns()).getActualTypeArguments().get(0)));
+        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(1).getReturns()).getActualTypeArguments().get(0)));
+        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(2).getReturns()).getActualTypeArguments().get(0)));
+        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(3).getReturns()).getActualTypeArguments().get(0)));
+        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(4).getReturns()).getActualTypeArguments().get(0)));
     }
 
     public void testGenericField() {

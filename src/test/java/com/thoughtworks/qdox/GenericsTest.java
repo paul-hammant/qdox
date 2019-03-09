@@ -143,7 +143,7 @@ public class GenericsTest extends TestCase {
     }
 
     public void testShouldUnderstandAnnotationsOnTypeParameters() {
-        String source = "import com.foo.Item;" +
+        String source = "import com.foo.Item;\n" +
                 "public class Bar {\n" +
                 "    public static Collection<Item> foo() { }\n" +
                 "    public static Collection<com.foo.Item> foo2() { }\n" +

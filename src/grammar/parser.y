@@ -56,7 +56,7 @@ import java.util.Stack;
 %token <ival> PLUSPLUS MINUSMINUS
 %token <sval> SUPER
 %token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
-%type <type> PrimitiveType ReferenceType ArrayType ClassOrInterfaceType
+%type <type> PrimitiveType ReferenceType ArrayType ClassOrInterfaceType TypeVariable
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
@@ -1441,20 +1441,50 @@ Type: PrimitiveType
 //     ClassOrInterfaceType 
 //     TypeVariable 
 //     ArrayType
-ReferenceType: ArrayType
+ReferenceType: TypeVariable
+             | ArrayType
              | ClassOrInterfaceType
              ; 
 
+// Actually
 // ClassOrInterfaceType:
 //     ClassType 
 //     InterfaceType 
 // ClassType:
-//     {Annotation} Identifier [TypeArguments] 
-//     ClassOrInterfaceType . {Annotation} Identifier [TypeArguments] 
+//     {Annotation} TypeIdentifier [TypeArguments] 
+//     PackageName . {Annotation} TypeIdentifier [TypeArguments] 
+//     ClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments] 
 // InterfaceType:
-//     ClassType 
+//     ClassType
+// Parser can't see the difference  
+ClassOrInterfaceType: QualifiedIdentifier /* =PackageName */ DOT Annotations_opt IDENTIFIER 
+                      {
+                        TypeDef td = new TypeDef($1 + '.' + $4,0);
+                        $$ = typeStack.push(td);
+                      }
+                      TypeArguments_opt
+                      {
+                        $$ = typeStack.pop();
+                      };
+                    |
+                      TypeDeclSpecifier 
+                      {
+                        TypeDef td = new TypeDef($1,0);
+                        $$ = typeStack.push(td);
+                      }
+                      TypeArguments_opt
+                      {
+                        $$ = typeStack.pop();
+                      };
+
+
 // TypeVariable:
-//     {Annotation} Identifier 
+//     {Annotation} Identifier
+TypeVariable: Annotations_opt QualifiedIdentifier
+              {
+                $$ = new TypeDef($2,0);
+              }
+            ;
 
 // ArrayType:
 //     PrimitiveType Dims 
@@ -1648,20 +1678,6 @@ PrimitiveType: BYTE
            }  
          ;
 
-// Actually
-// ClassOrInterfaceType: ClassType | InterfaceType;
-// ClassType:            TypeDeclSpecifier TypeArguments_opt
-// InterfaceType:        TypeDeclSpecifier TypeArguments_opt
-// Parser can't see the difference  
-ClassOrInterfaceType: TypeDeclSpecifier 
-                      {
-                        TypeDef td = new TypeDef($1,0);
-                        $$ = typeStack.push(td);
-                      }
-                      TypeArguments_opt
-                      {
-                        $$ = typeStack.pop();
-                      };
 // Actually
 // TypeDeclSpecifier: TypeName | ClassOrInterfaceType . Identifier
 // TypeName:          Identifier | TypeName . Identifier

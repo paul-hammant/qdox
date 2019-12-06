@@ -322,6 +322,10 @@
           </goals>
           <settingsFile>src/it/settings.xml</settingsFile>
           <debug>true</debug>
+          <properties>
+            <maven.compiler.source>8</maven.compiler.source>
+            <maven.compiler.target>8</maven.compiler.target>
+          </properties>
         </configuration>
         <executions>
           <execution>

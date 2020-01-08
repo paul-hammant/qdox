@@ -1658,6 +1658,18 @@ public class JavaProjectBuilderTest extends TestCase
         assertTrue( classA.getImplements().equals( Arrays.asList( builder.getClassByName( "Itf2" ) ) ) );
     }
     
+    // Github #64
+    public void testGetInterface()
+    {
+        JavaProjectBuilder javaProjectBuilder = new JavaProjectBuilder();
+        javaProjectBuilder.addSourceTree( new File( "src/main/java" ) );
+        JavaClass intrfc = javaProjectBuilder.getClassByName( "org.thoughtworks.qdox.Searcher" );
+        assertNotNull(intrfc);
+
+        JavaClass clss = javaProjectBuilder.getClassByName( "org.thoughtworks.qdox.JavaProjectBuilder" );
+        assertNotNull(clss);
+    }
+    
     public void testGenericEnumMethod() throws Exception {
         String source = "package java.time.temporal;\r\n" + 
             "public final class IsoFields {\r\n" + 

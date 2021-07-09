@@ -1,52 +1,23 @@
 package com.thoughtworks.qdox;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.NotSerializableException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.thoughtworks.qdox.library.ClassLibraryBuilder;
 import com.thoughtworks.qdox.library.ErrorHandler;
 import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
-import com.thoughtworks.qdox.model.BeanProperty;
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.JavaAnnotation;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaConstructor;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaGenericDeclaration;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaPackage;
-import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.JavaParameterizedType;
-import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.JavaTypeVariable;
+import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.model.util.SerializationUtils;
 import com.thoughtworks.qdox.parser.ParseException;
 import com.thoughtworks.qdox.testdata.PropertyClass;
-
 import junit.framework.TestCase;
 
-public class JavaProjectBuilderTest extends TestCase
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.*;
+
+public class JavaProjectBuilderBisTest extends TestCase
 {
 
     private JavaProjectBuilder builder;
@@ -524,33 +495,6 @@ public class JavaProjectBuilderTest extends TestCase
         List<JavaField> fields = propertyClass.getFields();
         assertEquals(3, fields.size());
     }
-
-    public void testCodeExtractorBug() throws IOException {
-        builder.addSource(new File("src/test/resources/com/thoughtworks/qdox/testdata/CodeExtractorTest.java"));
-
-        final JavaClass unknownClass = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorXXXXTest");
-        assertEquals(0, unknownClass.getLineNumber());
-
-        final JavaClass classByName = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorTest");
-        assertTrue(0 != classByName.getLineNumber());
-
-        final JavaClass nestedClass = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorTest.ExtractCode.ExtractPartOfCode");
-        assertTrue(0 != nestedClass.getLineNumber());
-    }
-
-    public void testCodeExtractorBisBug() throws IOException {
-        builder.addSource(new File("src/test/resources/com/thoughtworks/qdox/testdata/CodeExtractorBisTest.java"));
-
-        final JavaClass unknownClass = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorXXXXTest");
-        assertEquals(0, unknownClass.getLineNumber());
-
-        final JavaClass classByName = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorTest");
-        assertTrue(0 != classByName.getLineNumber());
-
-        final JavaClass nestedClass = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorTest.ExtractCode.ExtractPartOfCode");
-        assertTrue(0 != nestedClass.getLineNumber());
-    }
-
 
     public void testSourceDefaultCtor() throws Exception {
         builder.addSource(new File("src/test/resources/com/thoughtworks/qdox/testdata/DefaultCtor.java"));
@@ -1465,7 +1409,7 @@ public class JavaProjectBuilderTest extends TestCase
                 + "  public static java.util.list<java.util.Map<? extends java.util.Set<Long>, String>> crazyType() { return null; }\n"
                 + "}\n";
 
-        builder.addSource( new java.io.StringReader( sourceCode ) );
+        builder.addSource( new StringReader( sourceCode ) );
         JavaClass qDoxClass = builder.getClassByName( "foo.DummyOne" );
         JavaMethod qDoxMethod = qDoxClass.getMethodBySignature( "crazyType", null );
 
@@ -1484,7 +1428,7 @@ public class JavaProjectBuilderTest extends TestCase
                 + "  public static <T extends Number & Iterable<Integer>> T genericTypeParam(T x) { return null; }\n"
                 + "}\n";
 
-        builder.addSource( new java.io.StringReader( sourceCode ) );
+        builder.addSource( new StringReader( sourceCode ) );
         JavaClass qDoxClass = builder.getClassByName( "foo.DummyOne" );
         JavaMethod qDoxMethod = qDoxClass.getMethods().get(0);
 
@@ -1502,7 +1446,7 @@ public class JavaProjectBuilderTest extends TestCase
                 "  public static String withGenerifiedParam(java.util.Collection<? extends Comparable<String>> things) { return null; }\n" +
                 "}\n";
         
-        builder.addSource(new java.io.StringReader(sourceCode));
+        builder.addSource(new StringReader(sourceCode));
         JavaClass qDoxClass = builder.getClassByName("foo.DummyOne");
         JavaMethod qDoxMethod = qDoxClass.getMethods().get(0);
         

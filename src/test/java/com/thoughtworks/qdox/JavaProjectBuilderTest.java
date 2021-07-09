@@ -525,33 +525,6 @@ public class JavaProjectBuilderTest extends TestCase
         assertEquals(3, fields.size());
     }
 
-    public void testCodeExtractorBug() throws IOException {
-        builder.addSource(new File("src/test/resources/com/thoughtworks/qdox/testdata/CodeExtractorTest.java"));
-
-        final JavaClass unknownClass = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorXXXXTest");
-        assertEquals(0, unknownClass.getLineNumber());
-
-        final JavaClass classByName = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorTest");
-        assertTrue(0 != classByName.getLineNumber());
-
-        final JavaClass nestedClass = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorTest.ExtractCode.ExtractPartOfCode");
-        assertTrue(0 != nestedClass.getLineNumber());
-    }
-
-    public void testCodeExtractorBisBug() throws IOException {
-        builder.addSource(new File("src/test/resources/com/thoughtworks/qdox/testdata/CodeExtractorBisTest.java"));
-
-        final JavaClass unknownClass = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorXXXXTest");
-        assertEquals(0, unknownClass.getLineNumber());
-
-        final JavaClass classByName = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorTest");
-        assertTrue(0 != classByName.getLineNumber());
-
-        final JavaClass nestedClass = builder.getClassByName("org.sfvl.doctesting.utils.CodeExtractorTest.ExtractCode.ExtractPartOfCode");
-        assertTrue(0 != nestedClass.getLineNumber());
-    }
-
-
     public void testSourceDefaultCtor() throws Exception {
         builder.addSource(new File("src/test/resources/com/thoughtworks/qdox/testdata/DefaultCtor.java"));
         JavaClass javaClass = builder.getClassByName("com.thoughtworks.qdox.testdata.DefaultCtor");

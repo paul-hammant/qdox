@@ -77,7 +77,8 @@ class CodeExtractorTest {
                 System.out.println(CodeExtractor.getComment(method));
             }
         }
-        System.out.println("CodeExtractorTest.ttt");
+
+        // XXXX
     }
 
     @Nested

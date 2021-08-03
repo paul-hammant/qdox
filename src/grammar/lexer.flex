@@ -20,6 +20,7 @@ package com.thoughtworks.qdox.parser.impl;
  */
 
 import com.thoughtworks.qdox.parser.*;
+import java.io.InputStreamReader;
 import java.util.*;
 
 %%
@@ -166,6 +167,10 @@ import java.util.*;
        this( reader );
        this.writer = writer;
   	}
+
+  	public JFlexLexer( java.io.InputStream stream ) {
+	    this( new InputStreamReader(stream) );
+	}
 
     public JFlexLexer( java.io.InputStream stream, java.io.Writer writer ) {
        this( stream );

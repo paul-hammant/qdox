@@ -68,7 +68,37 @@ import java.util.Stack;
 
 %%
 // Source: Java Language Specification - Third Edition
-//         The Java(TM) Language Specification - Java SE 8 Edition ( Chapter 19. Syntax )
+//         The Java(TM) Language Specification - Java SE 17 Edition ( Chapter 19. Syntax )
+//
+// Grammar Notation (Chapter 2.4)
+// The syntax {x} on the right-hand side of a production denotes zero or more occurrences of x.
+//
+// The syntax [x] on the right-hand side of a production denotes zero or one occurrences of x. 
+//      That is, x is an optional symbol. The alternative which contains the optional symbol actually defines two alternatives: one that omits the optional symbol and one that includes it.
+//
+// ** Transforming **
+// // Statement: {Key}
+// Statement: Keys_opt
+//          ;
+//
+// // Key: value
+// Key: value
+//    ;
+// Keys_opt:
+//         | Keys_opt Key
+//         ;       
+//
+//
+// // Statement: [Key]
+// Statement: Key_opt
+//          ;
+//
+// // Key: value
+// Key: value
+//    ;
+// Key_opt:
+//        | Key
+//        ;       
 
 // ------------------------------
 // Productions from �7 (Packages)

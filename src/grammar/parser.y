@@ -32,7 +32,7 @@ import java.util.Stack;
 %token STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS 
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE DEFAULT
 %token OPEN MODULE REQUIRES TRANSITIVE EXPORTS OPENS TO USES PROVIDES WITH
-%token CLASS INTERFACE ENUM ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT NEW
+%token CLASS INTERFACE ENUM RECORD ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT NEW
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
 %token LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS
 %token LESSTHAN2 GREATERTHAN2 GREATERTHAN3
@@ -256,12 +256,14 @@ TypeDeclaration: ClassDeclaration
 // ClassDeclaration: 
 //     NormalClassDeclaration
 //     EnumDeclaration
+//     RecordDeclaration
 ClassDeclaration: NormalClassDeclaration 
                 | EnumDeclaration
+                | RecordDeclaration
                 ;
 
 // NormalClassDeclaration: 
-//     {ClassModifier} class Identifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
+//     {ClassModifier} class Identifier [TypeParameters] [Superclass] [ClassImplements] ClassBody
 NormalClassDeclaration: Modifiers_opt CLASS IDENTIFIER
                         {
                           cls.setType(ClassDef.CLASS);
@@ -269,7 +271,7 @@ NormalClassDeclaration: Modifiers_opt CLASS IDENTIFIER
                           cls.getModifiers().addAll(modifiers); modifiers.clear(); 
                           cls.setName( $3 );
                         }
-                        TypeParameters_opt Superclass_opt Superinterfaces_opt  
+                        TypeParameters_opt Superclass_opt ClassImplements_opt  
                         {
                           cls.setTypeParameters(typeParams);
                           builder.beginClass(cls); 
@@ -308,9 +310,9 @@ Superclass_opt:
                 }
               ;
 
-// Superinterfaces:
+// ClassImplements:
 //     implements InterfaceTypeList                
-Superinterfaces_opt:
+ClassImplements_opt:
                    | IMPLEMENTS TypeList
                      {
                        cls.getImplements().addAll( typeList );
@@ -609,7 +611,7 @@ ConstructorDeclaration: Modifiers_opt IDENTIFIER
 //     Primary . [TypeArguments] super ( [ArgumentList] ) ;
 
 // EnumDeclaration:
-//     {ClassModifier} enum Identifier [Superinterfaces] EnumBody
+//     {ClassModifier} enum Identifier [ClassImplements] EnumBody
 EnumDeclaration: Modifiers_opt ENUM IDENTIFIER 
                  { 
                    cls.setLineNumber(lexer.getLine());
@@ -620,7 +622,7 @@ EnumDeclaration: Modifiers_opt ENUM IDENTIFIER
                    cls = new ClassDef();
                    fieldType = new TypeDef($3, 0);
                  }
-                 Superinterfaces_opt EnumBody
+                 ClassImplements_opt EnumBody
                ;
 
 // EnumBody:
@@ -668,6 +670,38 @@ EnumConstant: Annotations_opt IDENTIFIER
 EnumBodyDeclarations_opt:
                         | SEMI ClassBodyDeclarations_opt
                         ;      
+
+// RecordDeclaration:
+//     {ClassModifier} record TypeIdentifier [TypeParameters] RecordHeader [ClassImplements] RecordBody
+RecordDeclaration: Modifiers_opt RECORD IDENTIFIER TypeParameters_opt RecordHeader ClassImplements_opt RecordBody
+
+// RecordHeader:
+//     ( [RecordComponentList] )
+RecordHeader: PARENOPEN RecordComponentList_opt PARENCLOSE
+
+// RecordComponentList:
+//     RecordComponent {, RecordComponent}
+RecordComponentList: RecordComponentList COMMA RecordComponent
+                   | RecordComponent
+                   ;
+RecordComponentList_opt:
+                       | RecordComponentList
+                       ;
+
+// RecordComponent:
+//     {RecordComponentModifier} UnannType Identifier
+//     VariableArityRecordComponent
+RecordComponent: Annotations_opt /* ={RecordComponentModifier} */ Type /* =UnannType */ IDENTIFIER
+               | VariableArityRecordComponent
+               ;
+
+// VariableArityRecordComponent:
+//     {RecordComponentModifier} UnannType {Annotation} ... Identifier
+VariableArityRecordComponent: Annotations_opt /* ={RecordComponentModifier} */ Type /* =UnannType */ DOTDOTDOT IDENTIFIER
+
+// RecordBody:
+//     { {RecordBodyDeclaration} }
+RecordBody: CODEBLOCK 
 
 // -----------------------------
 // Productions from �9 (Interfaces)

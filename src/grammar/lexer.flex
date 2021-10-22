@@ -261,6 +261,9 @@ JavadocEnd                      = "*"+ "/"
     "super"             { return Parser.SUPER; }
     "new"               { return Parser.NEW; }
     "record"            { return Parser.RECORD; }
+    "sealed"            { return Parser.SEALED; }
+    "non-sealed"        { return Parser.NON_SEALED; }
+    "permits"           { return Parser.PERMITS; }
 
     "["                 { nestingDepth++; return Parser.SQUAREOPEN; }
     "]"                 { nestingDepth--; return Parser.SQUARECLOSE; }

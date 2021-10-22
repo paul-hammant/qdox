@@ -32,7 +32,7 @@ import java.util.Stack;
 %token STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS 
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE DEFAULT
 %token OPEN MODULE REQUIRES TRANSITIVE EXPORTS OPENS TO USES PROVIDES WITH
-%token CLASS INTERFACE ENUM RECORD ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT NEW
+%token CLASS INTERFACE ENUM RECORD ANNOINTERFACE THROWS EXTENDS IMPLEMENTS SUPER DEFAULT NEW PERMITS
 %token BRACEOPEN BRACECLOSE SQUAREOPEN SQUARECLOSE PARENOPEN PARENCLOSE
 %token LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS
 %token LESSTHAN2 GREATERTHAN2 GREATERTHAN3
@@ -262,8 +262,8 @@ ClassDeclaration: NormalClassDeclaration
                 | RecordDeclaration
                 ;
 
-// NormalClassDeclaration: 
-//     {ClassModifier} class Identifier [TypeParameters] [Superclass] [ClassImplements] ClassBody
+// NormalClassDeclaration:
+//    {ClassModifier} class TypeIdentifier [TypeParameters] [ClassExtends] [ClassImplements] [ClassPermits] ClassBody
 NormalClassDeclaration: Modifiers_opt CLASS IDENTIFIER
                         {
                           cls.setType(ClassDef.CLASS);
@@ -271,7 +271,7 @@ NormalClassDeclaration: Modifiers_opt CLASS IDENTIFIER
                           cls.getModifiers().addAll(modifiers); modifiers.clear(); 
                           cls.setName( $3 );
                         }
-                        TypeParameters_opt Superclass_opt ClassImplements_opt  
+                        TypeParameters_opt Superclass_opt ClassImplements_opt ClassPermits_opt 
                         {
                           cls.setTypeParameters(typeParams);
                           builder.beginClass(cls); 
@@ -323,6 +323,14 @@ ClassImplements_opt:
 // InterfaceTypeList:
 //     InterfaceType {, InterfaceType} 
 //// -> InterfaceTypeList is for QDox the same as TypeList
+
+// ClassPermits:
+//    permits TypeName {, TypeName}
+ClassPermits: PERMITS TypeList
+            ;
+ClassPermits_opt:
+                | ClassPermits
+                ;
 
 // ClassBody: 
 //     { { ClassBodyDeclaration } }
@@ -714,15 +722,15 @@ InterfaceDeclaration: NormalInterfaceDeclaration
                     | AnnotationTypeDeclaration
                     ;
                
-// NormalInterfaceDeclaration: 
-//     {InterfaceModifier} interface Identifier [TypeParameters] [ExtendsInterfaces] InterfaceBody
+// NormalInterfaceDeclaration:
+//    {InterfaceModifier} interface TypeIdentifier [TypeParameters] [InterfaceExtends] [InterfacePermits] InterfaceBody
 NormalInterfaceDeclaration: Modifiers_opt INTERFACE  
                             {
                               cls.setType(ClassDef.INTERFACE);
                               cls.setLineNumber(lexer.getLine());
                               cls.getModifiers().addAll(modifiers); modifiers.clear(); 
                             }
-                            IDENTIFIER TypeParameters_opt ExtendsInterfaces_opt
+                            IDENTIFIER TypeParameters_opt InterfaceExtends_opt InterfacePermits_opt
                             {
                               cls.setName( $4 );
                               cls.setTypeParameters(typeParams);
@@ -737,15 +745,23 @@ NormalInterfaceDeclaration: Modifiers_opt INTERFACE
 
 // ExtendsInterfaces:
 //     extends InterfaceTypeList
-ExtendsInterfaces: EXTENDS TypeList
+InterfaceExtends: EXTENDS TypeList
                    {
                      cls.getExtends().addAll( typeList );
                      typeList.clear();
                    }
                  ;
-ExtendsInterfaces_opt: 
-                     | ExtendsInterfaces
+InterfaceExtends_opt: 
+                     | InterfaceExtends
                      ;
+
+// InterfacePermits:
+//    permits TypeName {, TypeName}
+InterfacePermits: PERMITS TypeList
+                ;
+InterfacePermits_opt :
+                     | InterfacePermits
+                     ;                
 
 // InterfaceBody:
 //     { {InterfaceMemberDeclaration} }
@@ -1742,19 +1758,44 @@ TypeList: ReferenceType
 Modifiers_opt:
              | Modifiers_opt Modifier;
 
-// Modifier: 
-//     Annotation
-//     public
-//     protected
-//     private
-//     static 
-//     abstract
-//     final
-//     native
-//     synchronized
-//     transient
-//     volatile
-//     strictfp
+// AnnotationInterfaceElementModifier:
+//    (one of)
+//    Annotation public
+//    abstract
+// ClassModifier:
+//    (one of)
+//    Annotation public protected private
+//    abstract static final sealed non-sealed strictfp
+// ConstantModifier:
+//    (one of)
+//    Annotation public
+//    static final
+// ConstructorModifier:
+//    (one of)
+//    Annotation public protected private
+// EnumConstantModifier:
+//    Annotation
+// FieldModifier:
+//    (one of)
+//    Annotation public protected private
+//    static final transient volatile
+// InterfaceModifier:
+//    (one of)
+//    Annotation public protected private
+//    abstract static sealed non-sealed strictfp
+// InterfaceMethodModifier:
+//    (one of)
+//    Annotation public private
+//    abstract default static strictfp
+// MethodModifier:
+//    (one of)
+//    Annotation public protected private
+//    abstract static final synchronized native strictfp
+// RecordComponentModifier:
+//    Annotation
+// VariableModifier:
+//    Annotation
+//    final
 Modifier: Annotation 
         | PUBLIC
           {
@@ -1768,6 +1809,10 @@ Modifier: Annotation
           {
             modifiers.add("private");
           }
+        | ABSTRACT
+          {
+            modifiers.add("abstract");
+          }
         | STATIC
           {
             modifiers.add("static");
@@ -1776,9 +1821,17 @@ Modifier: Annotation
           {
             modifiers.add("final");
           }
-        | ABSTRACT
+        | SEALED
           {
-            modifiers.add("abstract");
+            modifiers.add("sealed");
+          }
+        | NON_SEALED
+          {
+            modifiers.add("non-sealed");
+          }
+        | STRICTFP
+          {
+            modifiers.add("strictfp");
           }
         | NATIVE
           {
@@ -1796,14 +1849,11 @@ Modifier: Annotation
           {
             modifiers.add("transient");
           }
-        | STRICTFP
-          {
-            modifiers.add("strictfp");
-          }
         | DEFAULT
           {
             modifiers.add("default");
           }
+        | 
         ;
          
 Arguments_opt:

@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.model.expression;
 
+import java.util.List;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -94,7 +96,15 @@ public class FieldRef
     @Override
     public String toString()
     {
-        return getName();
+        JavaField field = getField();
+        if ( field != null && !getDeclaringClass().equals( field.getDeclaringClass() ) )
+        {
+            return field.getDeclaringClass().getCanonicalName() + "." + field.getName();
+        }
+        else
+        {
+            return name; 
+        }
     }
 
     public void setDeclaringClass( JavaClass declaringClass )
@@ -139,7 +149,7 @@ public class FieldRef
         {
             field = javaClass.getFieldByName( getNamePart( i ) );
 
-            if ( field == null )
+            if ( field != null )
             {
                 break;
             }
@@ -174,6 +184,33 @@ public class FieldRef
                             fieldIndex = i + 1;
                             field = resolveField( javaClass, i + 1, parts.length - 1 );
                             break;
+                        }
+                    }
+                }
+            }
+            
+            if ( field == null )
+            {
+                ClassLibrary classLibrary = getClassLibrary();
+                if ( classLibrary != null )
+                {
+                    List<String> imports = getDeclaringClass().getSource().getImports();
+                    for ( String i : imports )
+                    {
+                        if ( i.startsWith( "static" ) )
+                        {
+                            String member = i.substring( i.lastIndexOf( '.' ) + 1 );
+                            if ( "*".equals( member ) || getNamePrefix( 0 ).equals( member )  ) 
+                            {
+                                String className =  i.substring( 7, i.lastIndexOf( '.' ) ).trim();
+                                JavaClass javaClass = classLibrary.getJavaClass( className );
+                                JavaField tmpField = javaClass.getFieldByName( member ); 
+                                if ( tmpField != null && ( javaClass.isInterface() || tmpField.isStatic() ) )
+                                {
+                                    field = tmpField;
+                                    break;
+                                }
+                            }
                         }
                     }
                 }

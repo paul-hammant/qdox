@@ -493,11 +493,10 @@ public class EvaluatingVisitorTest
         }
         
         JavaField nonStaticNonFinalfield = mock( JavaField.class );
-        
         JavaClass declaringClass = mock( JavaClass.class );
         when( declaringClass.getFieldByName( "fieldname" ) ).thenReturn( nonStaticNonFinalfield );
+        when( nonStaticNonFinalfield.getDeclaringClass() ).thenReturn( declaringClass );
 
-        JavaClass annotatedClass = mock( JavaClass.class );
         ref.setDeclaringClass( declaringClass );
         try 
         {

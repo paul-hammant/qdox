@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
@@ -1668,6 +1667,24 @@ public class JavaProjectBuilderTest extends TestCase
 
         JavaClass clss = javaProjectBuilder.getClassByName( "org.thoughtworks.qdox.JavaProjectBuilder" );
         assertNotNull(clss);
+    }
+    
+    // github #75
+    public void testAnnotationWithConstant() {  
+        String constantSource = "package com.xenoamess;\n"
+                        + "public interface Constants {\n"
+                        + "  public String STATIC_STRING_A=\"SOME_VALUE\";" + "}";
+        builder.addSource( new StringReader( constantSource ) );
+
+        String source = "import static com.xenoamess.Constants.STATIC_STRING_A;\n"
+                        + "\n" + "public class ClassA{\n"
+                        + "    @AnnotationA(annotationFieldA = STATIC_STRING_A)\n"
+                        + "    public void functionA(){\n" + "    }\n"
+                        + "}";
+        JavaMethod method =
+            builder.addSource( new StringReader( source ) ).getClassByName( "ClassA" ).getMethods().get( 0 );
+        assertEquals( "@AnnotationA(annotationFieldA=com.xenoamess.Constants.STATIC_STRING_A)\n",
+                      method.getAnnotations().get( 0 ).getCodeBlock() );
     }
     
     // Github #76

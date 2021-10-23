@@ -60,7 +60,7 @@ import java.util.Stack;
 %type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
-%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation MethodReference ClassInstanceCreationExpression
+%type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation MethodReference ClassInstanceCreationExpression UnqualifiedClassInstanceCreationExpression
 %type <annoval> PostfixExpression PostIncrementExpression PostDecrementExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator ModuleName
@@ -1013,23 +1013,30 @@ PrimaryNoNewArray: Literal
                  ;
 
 // ClassInstanceCreationExpression:
-//     new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
-//     ExpressionName . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody] 
-//     Primary . new [TypeArguments] {Annotation} Identifier [TypeArgumentsOrDiamond] ( [ArgumentList] ) [ClassBody]
-//// TypeArguments_opt confuses parser
-ClassInstanceCreationExpression: NEW TypeArguments IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE CODEBLOCK_opt 
-                                 { 
-                                   CreatorDef creator = new CreatorDef();
-                                   creator.setCreatedName( $3 );
-                                   $$ = creator; 
-                                 }
-                               | NEW IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE CODEBLOCK_opt
-                                 {
-                                   CreatorDef creator = new CreatorDef();
-                                   creator.setCreatedName( $2 );
-                                   $$ = creator; 
-                                 }
+//    UnqualifiedClassInstanceCreationExpression
+//    ExpressionName . UnqualifiedClassInstanceCreationExpression
+//    Primary . UnqualifiedClassInstanceCreationExpression
+ClassInstanceCreationExpression: UnqualifiedClassInstanceCreationExpression
+                               | ExpressionName DOT UnqualifiedClassInstanceCreationExpression
+                               | Primary DOT UnqualifiedClassInstanceCreationExpression
                                ;
+
+// UnqualifiedClassInstanceCreationExpression:
+//    new [TypeArguments] ClassOrInterfaceTypeToInstantiate ( [ArgumentList] ) [ClassBody]
+//// TypeArguments_opt confuses parser
+UnqualifiedClassInstanceCreationExpression: NEW TypeArguments IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE CODEBLOCK_opt 
+                                            { 
+                                              CreatorDef creator = new CreatorDef();
+                                              creator.setCreatedName( $3 );
+                                              $$ = creator; 
+                                            }
+                                          | NEW IDENTIFIER TypeArgumentsOrDiamond_opt PARENOPEN ArgumentList_opt PARENCLOSE CODEBLOCK_opt
+                                            {
+                                              CreatorDef creator = new CreatorDef();
+                                              creator.setCreatedName( $2 );
+                                              $$ = creator; 
+                                            }
+                                          ;
 
 CODEBLOCK_opt:
              | CODEBLOCK

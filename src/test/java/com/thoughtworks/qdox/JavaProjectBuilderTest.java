@@ -1669,6 +1669,15 @@ public class JavaProjectBuilderTest extends TestCase
         assertNotNull(clss);
     }
     
+    // github #73
+    public void testLambdaExpression() {
+        String source = "public enum GenerateType {"
+            + "ENTITY(\"entity\", (mojo, biConsumer) -> {} )"
+            + "}";
+        
+        builder.addSource( new StringReader( source ) );
+    }
+    
     // github #75
     public void testAnnotationWithConstant() {  
         String constantSource = "package com.xenoamess;\n"

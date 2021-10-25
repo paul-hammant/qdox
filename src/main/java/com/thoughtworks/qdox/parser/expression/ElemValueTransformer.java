@@ -101,4 +101,6 @@ public interface ElemValueTransformer<U>
 
     U transform( CreatorDef newCreator );
 
+    U transform( LambdaDef lambdaDef );
+
 }

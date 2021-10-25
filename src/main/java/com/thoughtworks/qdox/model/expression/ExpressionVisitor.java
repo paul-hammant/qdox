@@ -103,4 +103,6 @@ public interface ExpressionVisitor
 
     Object visit( MethodInvocation methodInvocation );
 
+    Object visit( Lambda lambda );
+
 }

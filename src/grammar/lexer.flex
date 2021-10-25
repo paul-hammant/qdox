@@ -480,6 +480,8 @@ JavadocEnd                      = "*"+ "/"
     "["                 { return Parser.SQUAREOPEN; }
     "]"                 { return Parser.SQUARECLOSE; }
 
+    "->"                { return Parser.ARROW; }
+
 	","                 { return Parser.COMMA; }
     "="                 { return Parser.EQUALS; }
     "*="                { return Parser.STAREQUALS; }

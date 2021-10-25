@@ -41,6 +41,7 @@ import com.thoughtworks.qdox.model.expression.ExpressionVisitor;
 import com.thoughtworks.qdox.model.expression.FieldRef;
 import com.thoughtworks.qdox.model.expression.GreaterEquals;
 import com.thoughtworks.qdox.model.expression.GreaterThan;
+import com.thoughtworks.qdox.model.expression.Lambda;
 import com.thoughtworks.qdox.model.expression.LessEquals;
 import com.thoughtworks.qdox.model.expression.LessThan;
 import com.thoughtworks.qdox.model.expression.LogicalAnd;
@@ -1024,5 +1025,11 @@ public class EvaluatingVisitor
     public Object visit( MethodInvocation methodInvocation )
     {
         throw new IllegalArgumentException( "Cannot evaluate '" + methodInvocation + "'." );
+    }
+    
+    @Override
+    public Object visit( Lambda lambda )
+    {
+        throw new IllegalArgumentException( "Cannot evaluate '" + lambda + "'." );
     }
 }

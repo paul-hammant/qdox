@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Stack;
 %}
 
-%token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS
+%token SEMI DOT DOTDOTDOT COMMA STAR PERCENT EQUALS ANNOSTRING ANNOCHAR SLASH PLUS MINUS ARROW
 %token STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS 
 %token PACKAGE IMPORT PUBLIC PROTECTED PRIVATE STATIC FINAL ABSTRACT NATIVE STRICTFP SYNCHRONIZED TRANSIENT VOLATILE DEFAULT SEALED NON_SEALED
 %token OPEN MODULE REQUIRES TRANSITIVE EXPORTS OPENS TO USES PROVIDES WITH
@@ -57,7 +57,7 @@ import java.util.Stack;
 %token <sval> SUPER
 %token <sval> EQUALS STAREQUALS SLASHEQUALS PERCENTEQUALS PLUSEQUALS MINUSEQUALS LESSTHAN2EQUALS GREATERTHAN2EQUALS GREATERTHAN3EQUALS AMPERSANDEQUALS CIRCUMFLEXEQUALS VERTLINEEQUALS
 %type <type> PrimitiveType ReferenceType ArrayType ClassOrInterfaceType TypeVariable
-%type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer
+%type <annoval> Expression Literal Annotation ElementValue ElementValueArrayInitializer LambdaExpression
 %type <annoval> ConditionalExpression ConditionalOrExpression ConditionalAndExpression InclusiveOrExpression ExclusiveOrExpression AndExpression
 %type <annoval> EqualityExpression RelationalExpression ShiftExpression AdditiveExpression MultiplicativeExpression
 %type <annoval> UnaryExpression UnaryExpressionNotPlusMinus PreIncrementExpression PreDecrementExpression Primary PrimaryNoNewArray ArrayCreationExpression MethodInvocation MethodReference ClassInstanceCreationExpression UnqualifiedClassInstanceCreationExpression
@@ -1181,20 +1181,36 @@ DimExpr: SQUAREOPEN Expression SQUARECLOSE
 // Expression:
 //     LambdaExpression 
 //     AssignmentExpression
-Expression: AssignmentExpression
+Expression: LambdaExpression
+          | AssignmentExpression
           ;
 
 // LambdaExpression:
 //     LambdaParameters -> LambdaBody 
+LambdaExpression: LambdaParameters ARROW LambdaBody { $$ = new LambdaDef(); }
+                ;
+
 // LambdaParameters:
 //     Identifier 
 //     ( [FormalParameterList] ) 
 //     ( InferredFormalParameterList ) 
+LambdaParameters: IDENTIFIER
+                | PARENOPEN FormalParameterList_opt PARENCLOSE
+                | PARENOPEN InferredFormalParameterList PARENCLOSE 
+                ;
+
 // InferredFormalParameterList:
 //     Identifier {, Identifier} 
+InferredFormalParameterList: InferredFormalParameterList COMMA IDENTIFIER
+                           | IDENTIFIER
+                           ; 
+
 // LambdaBody:
 //     Expression 
 //     Block
+LambdaBody: Expression
+          | CODEBLOCK
+          ; 
 
 // AssignmentExpression:
 //     ConditionalExpression 

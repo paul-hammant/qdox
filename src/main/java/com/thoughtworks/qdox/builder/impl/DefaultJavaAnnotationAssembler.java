@@ -80,6 +80,7 @@ import com.thoughtworks.qdox.parser.expression.ExclusiveOrDef;
 import com.thoughtworks.qdox.parser.expression.FieldRefDef;
 import com.thoughtworks.qdox.parser.expression.GreaterEqualsDef;
 import com.thoughtworks.qdox.parser.expression.GreaterThanDef;
+import com.thoughtworks.qdox.parser.expression.LambdaDef;
 import com.thoughtworks.qdox.parser.expression.LessEqualsDef;
 import com.thoughtworks.qdox.parser.expression.LessThanDef;
 import com.thoughtworks.qdox.parser.expression.LogicalAndDef;
@@ -463,6 +464,11 @@ public class DefaultJavaAnnotationAssembler
         return null;
     }
     public AnnotationValue transform( CreatorDef newCreator )
+    {
+        return null;
+    }
+    @Override
+    public AnnotationValue transform( LambdaDef lambdaDef )
     {
         return null;
     }

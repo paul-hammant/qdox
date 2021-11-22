@@ -1,0 +1,42 @@
+name: Java CI
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest , windows-latest , macos-latest ]
+        java: [ 11, 14 ]
+        experimental: [ false ]
+
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: actions/cache@v2.1.6
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-gradle-m2-${{ hashFiles('**/build.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - uses: actions/cache@v2.1.6
+        with:
+          path: ~/.gradle/caches/
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/build.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - uses: actions/cache@v2.1.6
+        with:
+          path: ~/.gradle/wrapper/
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/build.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: adopt
+      - name: Build with mvn
+        run: |
+          mvn clean install

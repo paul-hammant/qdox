@@ -2,8 +2,6 @@
 
 ### Status
 
-[![Build Status](https://travis-ci.org/paul-hammant/qdox.png)](https://travis-ci.org/paul-hammant/qdox)
-
 QDox is a high speed, small footprint parser for fully extracting class/interface/method definitions (including annotations, parameters, param names). It is designed to be used by active code generators or documentation tools.
 
 Not so relevant any more, but it also also processes JavaDoc @tags

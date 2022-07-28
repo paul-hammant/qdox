@@ -308,7 +308,7 @@ JavadocEnd                      = "*"+ "/"
         pushState(NAME);
         return Parser.ENUM;
     }
-    "record" / {WhiteSpace}* {Id} {
+    "record" / {WhiteSpace}+ {Id} {
         markAnnotatedElementLine();
         classDepth++;
         braceMode = CODEBLOCK;

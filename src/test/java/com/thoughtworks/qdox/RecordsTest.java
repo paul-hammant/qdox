@@ -164,4 +164,12 @@ public class RecordsTest
             + "}";
             builder.addSource( new StringReader(source) );
     }
+
+    @Test
+    public void parametersContainingRecord() {
+        String source = "interface Example{\n"
+            + " void apply(Object recordList);"
+            + "}";
+        builder.addSource( new StringReader(source) );
+    }
 }

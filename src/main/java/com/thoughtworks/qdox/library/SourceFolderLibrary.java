@@ -25,7 +25,6 @@ import java.io.FileReader;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -106,25 +105,11 @@ public class SourceFolderLibrary
     protected JavaClass resolveJavaClass( String className )
     {
         JavaClass result = super.resolveJavaClass( className );
-        for ( File sourceFolder : sourceFolders )
+        String mainClassName = className.split( "\\$" )[0];
+        File sourceFile = getSourceFile( mainClassName );
+        if ( sourceFile != null )
         {
-            String mainClassName = className.split( "\\$" )[0];
-            File classFile = new File( sourceFolder, mainClassName.replace( '.', File.separatorChar ) + ".java" );
-            if ( classFile.isFile() )
-            {
-                try
-                {
-                    JavaSource source = parse( new FileReader( classFile ), classFile.toURI().toURL() ).getSource();
-                    result = source.getClassByName( className );
-                    break;
-                }
-                catch ( FileNotFoundException e )
-                {
-                }
-                catch ( MalformedURLException e )
-                {
-                }
-            }
+            result = getClassFromSourceFile( sourceFile, className );
         }
         return result;
     }
@@ -138,15 +123,48 @@ public class SourceFolderLibrary
     protected boolean containsClassReference( String className )
     {
         boolean result = super.containsClassReference( className );
-        for ( Iterator<File> iterator = sourceFolders.iterator(); !result && iterator.hasNext(); )
+        if ( !result )
         {
-            File sourceFolder = (File) iterator.next();
             String mainClassName = className.split( "\\$" )[0];
-            File classFile = new File( sourceFolder, mainClassName.replace( '.', File.separatorChar ) + ".java" );
-            
-            result = ( classFile.exists() && classFile.isFile() );
+            File sourceFile = getSourceFile( mainClassName );
+            if ( sourceFile != null )
+            {
+                if ( mainClassName.equals( className ) ) {
+                    result = true;
+                } else {
+                    result = getClassFromSourceFile( sourceFile, className ) != null;
+                }
+            }
         }
         return result;
     }
-    
+
+    private File getSourceFile( String mainClassName )
+    {
+        for ( File sourceFolder : sourceFolders )
+        {
+            File classFile = new File( sourceFolder, mainClassName.replace( '.', File.separatorChar ) + ".java" );
+            if ( classFile.isFile() )
+            {
+                return classFile;
+            }
+        }
+        return null;
+    }
+
+    private JavaClass getClassFromSourceFile( File sourceFile, String className )
+    {
+        try
+        {
+            JavaSource source = parse( new FileReader( sourceFile ), sourceFile.toURI().toURL() ).getSource();
+            return source.getClassByName( className );
+        }
+        catch ( FileNotFoundException e )
+        {
+        }
+        catch ( MalformedURLException e )
+        {
+        }
+        return null;
+    }
 }

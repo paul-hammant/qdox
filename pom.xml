@@ -426,11 +426,22 @@
       </properties>
     </profile>
     <profile>
-      <id>macosx</id>
+      <id>macosx-i386</id>
       <activation>
         <os>
           <family>Mac</family>
           <arch>i386</arch>
+        </os>
+      </activation>
+      <properties>
+        <qdox.byaccj.executable>${basedir}/bootstrap/yacc.macosx</qdox.byaccj.executable>
+      </properties>
+    </profile>
+     <id>macosx-powerpc</id>
+      <activation>
+        <os>
+          <family>Mac</family>
+          <arch>powerpc</arch>
         </os>
       </activation>
       <properties>

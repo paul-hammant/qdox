@@ -357,7 +357,9 @@ public class DefaultModelWriter
     {
         for ( String modifier : modifiers )
         {
-            if ( !modifier.startsWith( "p" ) )
+            // interface is included as a modifier
+            // https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Modifier.html#toString(int)
+            if ( !modifier.startsWith( "p" ) && !"interface".equals( modifier ) )
             {
                 buffer.write( modifier );
                 buffer.write( ' ' );

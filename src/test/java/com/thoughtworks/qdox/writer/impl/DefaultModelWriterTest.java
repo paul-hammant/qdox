@@ -1,5 +1,7 @@
 package com.thoughtworks.qdox.writer.impl;
 
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,6 +15,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
@@ -541,5 +545,16 @@ public class DefaultModelWriterTest {
         when( uses.getService() ).thenReturn( service );
         modelWriter.writeModuleUses( uses );
         assertEquals( "uses V.W;\n", modelWriter.toString() );
+    }
+    
+    @Test
+    public void interfaceModifier()
+    {
+        ClassLibrary classLibrary = new SortedClassLibraryBuilder()
+                        .appendDefaultClassLoaders()
+                        .getClassLibrary();
+        
+        JavaClass clazz = classLibrary.getJavaClass( "java.util.Set" );
+        assertThat( clazz.getCodeBlock(), startsWith( "public abstract interface Set" ) );
     }
 }

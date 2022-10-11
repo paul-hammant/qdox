@@ -437,6 +437,7 @@
         <qdox.byaccj.executable>${basedir}/bootstrap/yacc.macosx</qdox.byaccj.executable>
       </properties>
     </profile>
+    <profile>
      <id>macosx-powerpc</id>
       <activation>
         <os>

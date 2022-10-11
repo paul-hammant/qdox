@@ -1,13 +1,8 @@
 package com.thoughtworks.qdox.library;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.StringReader;
 import java.util.Iterator;
-
-import org.junit.Test;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaModule;
@@ -17,6 +12,12 @@ import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaOpens;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaProvides;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaRequires;
 import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaUses;
+import org.junit.Test;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SourceFolderLibraryTest
 {
@@ -108,5 +109,13 @@ public class SourceFolderLibraryTest
         cls = classIter.next();
         assertEquals( "Z3.Z4", cls.getFullyQualifiedName() );
     }
-    
+
+    @Test
+    public void testHasClassReference() {
+        library.addSourceFolder( new File("src/test/resources") );
+        assertFalse( library.hasClassReference( "Integer" ) );
+        assertTrue( library.hasClassReference( "com.thoughtworks.qdox.testdata.DefaultCtor" ) );
+        // the following (non-existing) FQCN is called e.g. from TypeResolver
+        assertFalse( library.hasClassReference( "com.thoughtworks.qdox.testdata.DefaultCtor$Integer" ) );
+    }
 }

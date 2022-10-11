@@ -623,6 +623,31 @@ public class JavaProjectBuilderTest extends TestCase
         assertNull("Shouldn't be able to get private methods", betterList.getMethodBySignature("myown", null, true));
     }
 
+    public void testMethodsWithNonQualifiedTypesFromJavaLangCanBeRetrievedFromSourceFolderLibrary() {
+        builder.addSourceFolder( new File( "src/test/resources/issue104") );
+        JavaClass testClass = builder.getClassByName("x.Test");
+        assertNull(testClass.getMethodBySignature("test", null));
+        JavaType argumentType = builder.getClassByName("java.lang.Integer");
+        assertNotNull(testClass.getMethodBySignature("test", Collections.singletonList( argumentType )));
+    }
+
+    public void testMethodsWithNonQualifiedTypesFromJavaLangCanBeRetrievedFromSourceLibrary() {
+        String testSource = ""
+                        + "package x;"
+                        + "/**"
+                        + " * @foo bar"
+                        + " */"
+                        + "class Test {"
+                        + "  public void test(Integer value) {}"
+                        + "}";
+        builder.addSource(new StringReader(testSource));
+
+        JavaClass testClass = builder.getClassByName("x.Test");
+        assertNull(testClass.getMethodBySignature("test", null));
+        JavaType argumentType = builder.getClassByName("java.lang.Integer");
+        assertNotNull(testClass.getMethodBySignature("test", Collections.singletonList( argumentType )));
+    }
+
     public void testTagLineNumbersAndSourceInTags() {
         String jallaSource = ""
                 + "package x;\n"

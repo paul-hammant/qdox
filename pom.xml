@@ -182,7 +182,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>2.5.1</version>
+          <version>2.5.3</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -203,6 +203,20 @@
                   <version>3.0</version>
                 </requireMavenVersion>
               </rules>    
+            </configuration>
+          </execution>
+          <execution>
+            <id>enforce-byaccj</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireProperty>
+                  <property>qdox.byaccj.executable</property>
+                  <message>You can't run the build as BYacc/J is not available for ${os.name} (${os.arch})!</message>
+                </requireProperty>
+              </rules>
             </configuration>
           </execution>
         </executions>
@@ -412,14 +426,39 @@
       </properties>
     </profile>
     <profile>
-      <id>macosx</id>
+      <id>macosx-i386</id>
       <activation>
         <os>
           <family>Mac</family>
+          <arch>i386</arch>
         </os>
       </activation>
       <properties>
         <qdox.byaccj.executable>${basedir}/bootstrap/yacc.macosx</qdox.byaccj.executable>
+      </properties>
+    </profile>
+    <profile>
+     <id>macosx-powerpc</id>
+      <activation>
+        <os>
+          <family>Mac</family>
+          <arch>powerpc</arch>
+        </os>
+      </activation>
+      <properties>
+        <qdox.byaccj.executable>${basedir}/bootstrap/yacc.macosx</qdox.byaccj.executable>
+      </properties>
+    </profile>
+    <profile>
+      <id>macosx-aarch64</id>
+      <activation>
+        <os>
+          <family>Mac</family>
+          <arch>aarch64</arch>
+        </os>
+      </activation>
+      <properties>
+        <qdox.byaccj.executable>${basedir}/bootstrap/yacc.macosx.aarch64</qdox.byaccj.executable>
       </properties>
     </profile>
     <profile>

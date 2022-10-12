@@ -432,7 +432,7 @@ JavaType nType   = n.getType(); // "int";
 JavaParameter o = m.getParameters()[1];
 String oName   = o.getName(); // "objects"
 JavaType oType     = o.getType(); // "java.lang.Object";
-boolean oArray = o.getType().isArray(); // true
+boolean oArray = o.getJavaClass().isArray(); // true
 
 JavaMethod javaMethod = o.getParentMethod();
 ```

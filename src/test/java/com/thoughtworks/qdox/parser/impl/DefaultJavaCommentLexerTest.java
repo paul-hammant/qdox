@@ -1,11 +1,10 @@
 package com.thoughtworks.qdox.parser.impl;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.StringReader;
-
-import org.junit.Test;
 
 public class DefaultJavaCommentLexerTest
 {
@@ -15,14 +14,14 @@ public class DefaultJavaCommentLexerTest
     public void testSingleLineComment() throws Exception {
         lexer = new DefaultJavaCommentLexer( new StringReader("// this is a single line comment"));
         lexAssert( 0 );
-        assertEquals( "// this is a single line comment", lexer.getCodeBody() );
+        Assertions.assertEquals("// this is a single line comment", lexer.getCodeBody());
     }
 
     @Test
     public void testCompactMultiLineComment() throws Exception {
         lexer = new DefaultJavaCommentLexer( new StringReader("/**/"));
         lexAssert( 0 );
-        assertEquals( "/**/", lexer.getCodeBody() );
+        Assertions.assertEquals("/**/", lexer.getCodeBody());
     }
 
     @Test
@@ -45,7 +44,7 @@ public class DefaultJavaCommentLexerTest
     public void testSingleRowMultiLineComment() throws Exception {
         lexer = new DefaultJavaCommentLexer( new StringReader("/* multiline comment with one row */"));
         lexAssert( 0 );
-        assertEquals( "/* multiline comment with one row */", lexer.getCodeBody() );
+        Assertions.assertEquals("/* multiline comment with one row */", lexer.getCodeBody());
     }
     
     @Test
@@ -264,8 +263,8 @@ public class DefaultJavaCommentLexerTest
 
     }
     private void lexAssert(int lex, String text) throws IOException {
-        assertEquals(lex, lexer.lex());
-        assertEquals(text, lexer.text());
+        Assertions.assertEquals(lex, lexer.lex());
+        Assertions.assertEquals(text, lexer.text());
     }
     
 }

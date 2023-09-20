@@ -1,16 +1,14 @@
 package com.thoughtworks.qdox.model.impl;
 
-import java.util.List;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethodTest;
 import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.impl.DefaultJavaMethod;
+
+import java.util.List;
 
 public class DefaultJavaMethodTest
     extends JavaMethodTest<DefaultJavaMethod>
 {
-
     @Override
 	public DefaultJavaMethod newJavaMethod()
     {

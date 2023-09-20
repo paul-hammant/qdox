@@ -1,17 +1,14 @@
 package com.thoughtworks.qdox.writer.impl;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.thoughtworks.qdox.writer.impl.IndentBuffer;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class IndentBufferTest {
 
     private IndentBuffer buffer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         buffer = new IndentBuffer();
     }
@@ -26,7 +23,7 @@ public class IndentBufferTest {
         String expected = ""
                 + "A string\n"
                 + "more strings\n";
-        assertEquals(expected, buffer.toString());
+        Assertions.assertEquals(expected, buffer.toString());
     }
 
     @Test
@@ -47,6 +44,6 @@ public class IndentBufferTest {
                 + "\tIndent1\n"
                 + "\tIndent2 more\n"
                 + "Line2\n";
-        assertEquals(expected, buffer.toString());
+        Assertions.assertEquals(expected, buffer.toString());
     }
 }

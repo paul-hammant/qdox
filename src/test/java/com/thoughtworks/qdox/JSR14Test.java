@@ -1,17 +1,11 @@
 package com.thoughtworks.qdox;
 
+import com.thoughtworks.qdox.model.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.StringReader;
 
-import junit.framework.TestCase;
-
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaGenericDeclaration;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.JavaTypeVariable;
 /**
  * QDOX-54 Support for retrieval of generic type information (JSR 14)
  * 
@@ -23,61 +17,68 @@ import com.thoughtworks.qdox.model.JavaTypeVariable;
  * @author Robert Scholte
  *
  */
-public class JSR14Test extends TestCase {
+public class JSR14Test {
 	
 	private JavaProjectBuilder builder = new JavaProjectBuilder();
 
-	public void testSimpleSingleParameterizedTypeMethod() {
+    @Test
+    public void testSimpleSingleParameterizedTypeMethod() {
     	JavaMethod javaMethod = buildMethod("java.util.List<String> getList();");
-    	assertEquals("java.util.List", javaMethod.getReturns().getFullyQualifiedName());
-        assertEquals("java.util.List<java.lang.String>", javaMethod.getReturns().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaMethod.getReturns().getValue());
-        assertEquals("java.util.List<String>", javaMethod.getReturns().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaMethod.getReturns().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.lang.String>", javaMethod.getReturns().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaMethod.getReturns().getValue());
+        Assertions.assertEquals("java.util.List<String>", javaMethod.getReturns().getGenericValue());
     }
 
-	public void testSimpleWildcardTypeMethod() {
+    @Test
+    public void testSimpleWildcardTypeMethod() {
     	JavaMethod javaMethod = buildMethod("java.util.List<?> getList();");
-    	assertEquals("java.util.List<?>", javaMethod.getReturns().getGenericValue());
+    	Assertions.assertEquals("java.util.List<?>", javaMethod.getReturns().getGenericValue());
     }
 
-	public void testSimpleExtendsWildcardTypeMethod() {
+    @Test
+    public void testSimpleExtendsWildcardTypeMethod() {
     	JavaMethod javaMethod = buildMethod("java.util.List<? extends Number> getList();");
-    	assertEquals("java.util.List", javaMethod.getReturns().getFullyQualifiedName());
-        assertEquals("java.util.List<? extends java.lang.Number>", javaMethod.getReturns().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaMethod.getReturns().getValue());
-        assertEquals("java.util.List<? extends Number>", javaMethod.getReturns().getGenericValue());
-    }
-	
-	public void testSimpleSuperWildcardTypeMethod() {
-    	JavaMethod javaMethod = buildMethod("java.util.List<? super Integer> getList();");
-    	assertEquals("java.util.List", javaMethod.getReturns().getFullyQualifiedName());
-        assertEquals("java.util.List<? super java.lang.Integer>", javaMethod.getReturns().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaMethod.getReturns().getValue());
-        assertEquals("java.util.List<? super Integer>", javaMethod.getReturns().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaMethod.getReturns().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? extends java.lang.Number>", javaMethod.getReturns().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaMethod.getReturns().getValue());
+        Assertions.assertEquals("java.util.List<? extends Number>", javaMethod.getReturns().getGenericValue());
     }
 
+    @Test
+    public void testSimpleSuperWildcardTypeMethod() {
+    	JavaMethod javaMethod = buildMethod("java.util.List<? super Integer> getList();");
+    	Assertions.assertEquals("java.util.List", javaMethod.getReturns().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? super java.lang.Integer>", javaMethod.getReturns().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaMethod.getReturns().getValue());
+        Assertions.assertEquals("java.util.List<? super Integer>", javaMethod.getReturns().getGenericValue());
+    }
+
+    @Test
     public void testSimpleMultiParameterizedTypeMethod() {
     	JavaMethod javaMethod = buildMethod("java.util.Map<String, Object> getMap();");
-    	assertEquals("java.util.Map", javaMethod.getReturns().getFullyQualifiedName());
-        assertEquals("java.util.Map<java.lang.String,java.lang.Object>", javaMethod.getReturns().getGenericFullyQualifiedName());
-        assertEquals("java.util.Map", javaMethod.getReturns().getValue());
-        assertEquals("java.util.Map<String,Object>", javaMethod.getReturns().getGenericValue());
+    	Assertions.assertEquals("java.util.Map", javaMethod.getReturns().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map<java.lang.String,java.lang.Object>", javaMethod.getReturns().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map", javaMethod.getReturns().getValue());
+        Assertions.assertEquals("java.util.Map<String,Object>", javaMethod.getReturns().getGenericValue());
     }
 
+    @Test
     public void testComplexSingleParameterizedTypeMethod() {
     	JavaMethod javaMethod = buildMethod("java.util.List<java.util.Set<String>> getList();");
-    	assertEquals("java.util.List", javaMethod.getReturns().getFullyQualifiedName());
-        assertEquals("java.util.List<java.util.Set<java.lang.String>>", javaMethod.getReturns().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaMethod.getReturns().getValue());
-        assertEquals("java.util.List<java.util.Set<String>>", javaMethod.getReturns().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaMethod.getReturns().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.util.Set<java.lang.String>>", javaMethod.getReturns().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaMethod.getReturns().getValue());
+        Assertions.assertEquals("java.util.List<java.util.Set<String>>", javaMethod.getReturns().getGenericValue());
     }
-    
+
+    @Test
     public void testComplexMultiParameterizedTypeMethod() {
     	JavaMethod javaMethod = buildMethod("java.util.Map<String, java.util.Iterator<Number>> getMap();");
-    	assertEquals("java.util.Map", javaMethod.getReturns().getFullyQualifiedName());
-        assertEquals("java.util.Map<java.lang.String,java.util.Iterator<java.lang.Number>>", javaMethod.getReturns().getGenericFullyQualifiedName());
-        assertEquals("java.util.Map", javaMethod.getReturns().getValue());
-        assertEquals("java.util.Map<String,java.util.Iterator<Number>>", javaMethod.getReturns().getGenericValue());
+    	Assertions.assertEquals("java.util.Map", javaMethod.getReturns().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map<java.lang.String,java.util.Iterator<java.lang.Number>>", javaMethod.getReturns().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map", javaMethod.getReturns().getValue());
+        Assertions.assertEquals("java.util.Map<String,java.util.Iterator<Number>>", javaMethod.getReturns().getGenericValue());
     }
     
     private JavaMethod buildMethod(String methodSource) {
@@ -87,7 +88,8 @@ public class JSR14Test extends TestCase {
         JavaMethod javaMethod = javaClass.getMethods().get(0);
         return javaMethod;
     }
-    
+
+    @Test
     public void testSimpleSingleParameterizedTypeField() {
         String source = "public class Something { " +
 		"public java.util.List<String> aList;" + 
@@ -95,25 +97,27 @@ public class JSR14Test extends TestCase {
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
         JavaField javaField = javaClass.getFieldByName("aList");
-        assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
-        assertEquals("java.util.List<java.lang.String>", javaField.getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaField.getType().getValue());
-        assertEquals("java.util.List<String>", javaField.getType().getGenericValue());
+        Assertions.assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.lang.String>", javaField.getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaField.getType().getValue());
+        Assertions.assertEquals("java.util.List<String>", javaField.getType().getGenericValue());
     }
-    
-    public void testSimpleMultiParameterizedTypeField() { 
+
+    @Test
+    public void testSimpleMultiParameterizedTypeField() {
         String source = "public class Something { " +
         		"public java.util.Map<String, Object> aMap;" + 
         		" }";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
         JavaField javaField = javaClass.getFieldByName("aMap");
-        assertEquals("java.util.Map", javaField.getType().getFullyQualifiedName());
-        assertEquals("java.util.Map<java.lang.String,java.lang.Object>", javaField.getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.Map", javaField.getType().getValue());
-        assertEquals("java.util.Map<String,Object>", javaField.getType().getGenericValue());
+        Assertions.assertEquals("java.util.Map", javaField.getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map<java.lang.String,java.lang.Object>", javaField.getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map", javaField.getType().getValue());
+        Assertions.assertEquals("java.util.Map<String,Object>", javaField.getType().getGenericValue());
     }
-    
+
+    @Test
     public void testSimpleWildcardTypeField() {
     	String source = "public class Something { " +
 		"public java.util.List<?> aList;" + 
@@ -121,48 +125,52 @@ public class JSR14Test extends TestCase {
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaField javaField = javaClass.getFieldByName("aList");
-    	assertEquals("java.util.List<?>", javaField.getType().getGenericValue());
+    	Assertions.assertEquals("java.util.List<?>", javaField.getType().getGenericValue());
     }
 
-	public void testSimpleExtendsWildcardTypeField() {
+    @Test
+    public void testSimpleExtendsWildcardTypeField() {
 		String source = "public class Something { " +
 		"public java.util.List<? extends Number> aList;" + 
 		" }";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaField javaField = javaClass.getFieldByName("aList");
-    	assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
-        assertEquals("java.util.List<? extends java.lang.Number>", javaField.getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaField.getType().getValue());
-        assertEquals("java.util.List<? extends Number>", javaField.getType().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? extends java.lang.Number>", javaField.getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaField.getType().getValue());
+        Assertions.assertEquals("java.util.List<? extends Number>", javaField.getType().getGenericValue());
     }
-	
-	public void testSimpleSuperWildcardTypeField() {
+
+    @Test
+    public void testSimpleSuperWildcardTypeField() {
 		String source = "public class Something { " +
 		"public java.util.List<? super Integer> aList;" + 
 		" }";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaField javaField = javaClass.getFieldByName("aList");
-    	assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
-        assertEquals("java.util.List<? super java.lang.Integer>", javaField.getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaField.getType().getValue());
-        assertEquals("java.util.List<? super Integer>", javaField.getType().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? super java.lang.Integer>", javaField.getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaField.getType().getValue());
+        Assertions.assertEquals("java.util.List<? super Integer>", javaField.getType().getGenericValue());
     }
-	
-	public void testComplexSingleParameterizedTypeField() {
+
+    @Test
+    public void testComplexSingleParameterizedTypeField() {
 		String source = "public class Something { " +
 		"public java.util.List<java.util.Set<String>> aList;" + 
 		" }";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaField javaField = javaClass.getFieldByName("aList");
-    	assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
-        assertEquals("java.util.List<java.util.Set<java.lang.String>>", javaField.getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaField.getType().getValue());
-        assertEquals("java.util.List<java.util.Set<String>>", javaField.getType().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.util.Set<java.lang.String>>", javaField.getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaField.getType().getValue());
+        Assertions.assertEquals("java.util.List<java.util.Set<String>>", javaField.getType().getGenericValue());
     }
-    
+
+    @Test
     public void testComplexMultiParameterizedTypeField() {
 		String source = "public class Something { " +
 		"public java.util.List<java.util.Set<String>> aList;" + 
@@ -170,228 +178,251 @@ public class JSR14Test extends TestCase {
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaField javaField = javaClass.getFieldByName("aList");
-    	assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
-        assertEquals("java.util.List<java.util.Set<java.lang.String>>", javaField.getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaField.getType().getValue());
-        assertEquals("java.util.List<java.util.Set<String>>", javaField.getType().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaField.getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.util.Set<java.lang.String>>", javaField.getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaField.getType().getValue());
+        Assertions.assertEquals("java.util.List<java.util.Set<String>>", javaField.getType().getGenericValue());
     }
-    
+
+    @Test
     public void testSimpleSingleParameterizedTypeParameter() {
     	JavaMethod javaMethod = buildMethod("void setList(java.util.List<String> aList);");
-    	assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getFullyQualifiedName());
-        assertEquals("java.util.List<java.lang.String>", javaMethod.getParameterByName("aList").getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getValue());
-        assertEquals("java.util.List<String>", javaMethod.getParameterByName("aList").getType().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.lang.String>", javaMethod.getParameterByName("aList").getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getValue());
+        Assertions.assertEquals("java.util.List<String>", javaMethod.getParameterByName("aList").getType().getGenericValue());
     }
 
-	public void testSimpleWildcardTypeParameter() {
+    @Test
+    public void testSimpleWildcardTypeParameter() {
     	JavaMethod javaMethod = buildMethod("void setList(java.util.List<?> aList);");
-    	assertEquals("java.util.List<?>", javaMethod.getParameterByName("aList").getType().getGenericValue());
+    	Assertions.assertEquals("java.util.List<?>", javaMethod.getParameterByName("aList").getType().getGenericValue());
     }
 
-	public void testSimpleExtendsWildcardTypeParameter() {
+    @Test
+    public void testSimpleExtendsWildcardTypeParameter() {
     	JavaMethod javaMethod = buildMethod("void setList(java.util.List<? extends Number> aList);");
-    	assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getFullyQualifiedName());
-        assertEquals("java.util.List<? extends java.lang.Number>", javaMethod.getParameterByName("aList").getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getValue());
-        assertEquals("java.util.List<? extends Number>", javaMethod.getParameterByName("aList").getType().getGenericValue());
-    }
-	
-	public void testSimpleSuperWildcardTypeParameter() {
-    	JavaMethod javaMethod = buildMethod("void setList(java.util.List<? super Integer> aList);");
-    	assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getFullyQualifiedName());
-        assertEquals("java.util.List<? super java.lang.Integer>", javaMethod.getParameterByName("aList").getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getValue());
-        assertEquals("java.util.List<? super Integer>", javaMethod.getParameterByName("aList").getType().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? extends java.lang.Number>", javaMethod.getParameterByName("aList").getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getValue());
+        Assertions.assertEquals("java.util.List<? extends Number>", javaMethod.getParameterByName("aList").getType().getGenericValue());
     }
 
+    @Test
+    public void testSimpleSuperWildcardTypeParameter() {
+    	JavaMethod javaMethod = buildMethod("void setList(java.util.List<? super Integer> aList);");
+    	Assertions.assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? super java.lang.Integer>", javaMethod.getParameterByName("aList").getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getValue());
+        Assertions.assertEquals("java.util.List<? super Integer>", javaMethod.getParameterByName("aList").getType().getGenericValue());
+    }
+
+    @Test
     public void testSimpleMultiParameterizedTypeParameter() {
     	JavaMethod javaMethod = buildMethod("void setMap(java.util.Map<String, Object> aMap);");
-    	assertEquals("java.util.Map", javaMethod.getParameterByName("aMap").getType().getFullyQualifiedName());
-        assertEquals("java.util.Map<java.lang.String,java.lang.Object>", javaMethod.getParameterByName("aMap").getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.Map", javaMethod.getParameterByName("aMap").getType().getValue());
-        assertEquals("java.util.Map<String,Object>", javaMethod.getParameterByName("aMap").getType().getGenericValue());
+    	Assertions.assertEquals("java.util.Map", javaMethod.getParameterByName("aMap").getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map<java.lang.String,java.lang.Object>", javaMethod.getParameterByName("aMap").getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map", javaMethod.getParameterByName("aMap").getType().getValue());
+        Assertions.assertEquals("java.util.Map<String,Object>", javaMethod.getParameterByName("aMap").getType().getGenericValue());
     }
 
+    @Test
     public void testComplexSingleParameterizedTypeParameter() {
     	JavaMethod javaMethod = buildMethod("void setList(java.util.List<java.util.Set<String>> aList);");
-    	assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getFullyQualifiedName());
-        assertEquals("java.util.List<java.util.Set<java.lang.String>>", javaMethod.getParameterByName("aList").getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getValue());
-        assertEquals("java.util.List<java.util.Set<String>>", javaMethod.getParameterByName("aList").getType().getGenericValue());
+    	Assertions.assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.util.Set<java.lang.String>>", javaMethod.getParameterByName("aList").getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", javaMethod.getParameterByName("aList").getType().getValue());
+        Assertions.assertEquals("java.util.List<java.util.Set<String>>", javaMethod.getParameterByName("aList").getType().getGenericValue());
     }
-    
+
+    @Test
     public void testComplexMultiParameterizedTypeParameter() {
     	JavaMethod javaMethod = buildMethod("void setMap(java.util.Map<String, java.util.Iterator<Number>> aMap);");
-    	assertEquals("java.util.Map", javaMethod.getParameterByName("aMap").getType().getFullyQualifiedName());
-        assertEquals("java.util.Map<java.lang.String,java.util.Iterator<java.lang.Number>>", javaMethod.getParameterByName("aMap").getType().getGenericFullyQualifiedName());
-        assertEquals("java.util.Map", javaMethod.getParameterByName("aMap").getType().getValue());
-        assertEquals("java.util.Map<String,java.util.Iterator<Number>>", javaMethod.getParameterByName("aMap").getType().getGenericValue());
+    	Assertions.assertEquals("java.util.Map", javaMethod.getParameterByName("aMap").getType().getFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map<java.lang.String,java.util.Iterator<java.lang.Number>>", javaMethod.getParameterByName("aMap").getType().getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map", javaMethod.getParameterByName("aMap").getType().getValue());
+        Assertions.assertEquals("java.util.Map<String,java.util.Iterator<Number>>", javaMethod.getParameterByName("aMap").getType().getGenericValue());
     }
-    
+
+    @Test
     public void testSimpleSingleParameterizedTypeClassExtends() {
         String source = "public class Something extends java.util.List<String> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
         JavaType superClass = javaClass.getSuperClass();
-        assertEquals("java.util.List", superClass.getFullyQualifiedName());
-        assertEquals("java.util.List<java.lang.String>", superClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", superClass.getValue());
-        assertEquals("java.util.List<String>", superClass.getGenericValue());
+        Assertions.assertEquals("java.util.List", superClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.lang.String>", superClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", superClass.getValue());
+        Assertions.assertEquals("java.util.List<String>", superClass.getGenericValue());
     }
-    
-    public void testSimpleMultiParameterizedTypeClassExtends() { 
+
+    @Test
+    public void testSimpleMultiParameterizedTypeClassExtends() {
         String source = "public class Something extends java.util.Map<String, Object> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
         JavaType superClass = javaClass.getSuperClass();
-        assertEquals("java.util.Map", superClass.getFullyQualifiedName());
-        assertEquals("java.util.Map<java.lang.String,java.lang.Object>", superClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.Map", superClass.getValue());
-        assertEquals("java.util.Map<String,Object>", superClass.getGenericValue());
+        Assertions.assertEquals("java.util.Map", superClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map<java.lang.String,java.lang.Object>", superClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map", superClass.getValue());
+        Assertions.assertEquals("java.util.Map<String,Object>", superClass.getGenericValue());
     }
-    
+
+    @Test
     public void testSimpleWildcardTypeClassExtends() {
     	String source = "public class Something extends java.util.List<?>{}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType superClass = javaClass.getSuperClass();
-    	assertEquals("java.util.List<?>", superClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List<?>", superClass.getGenericValue());
     }
 
-	public void testSimpleExtendsWildcardTypeClassExtends() {
+    @Test
+    public void testSimpleExtendsWildcardTypeClassExtends() {
 		String source = "public class Something extends java.util.List<? extends Number> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType superClass = javaClass.getSuperClass();
-    	assertEquals("java.util.List", superClass.getFullyQualifiedName());
-        assertEquals("java.util.List<? extends java.lang.Number>", superClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", superClass.getValue());
-        assertEquals("java.util.List<? extends Number>", superClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List", superClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? extends java.lang.Number>", superClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", superClass.getValue());
+        Assertions.assertEquals("java.util.List<? extends Number>", superClass.getGenericValue());
     }
-	
-	public void testSimpleSuperWildcardTypeClassExtends() {
+
+    @Test
+    public void testSimpleSuperWildcardTypeClassExtends() {
 		String source = "public class Something extends java.util.List<? super Integer> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType superClass = javaClass.getSuperClass();
-    	assertEquals("java.util.List", superClass.getFullyQualifiedName());
-        assertEquals("java.util.List<? super java.lang.Integer>", superClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", superClass.getValue());
-        assertEquals("java.util.List<? super Integer>", superClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List", superClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? super java.lang.Integer>", superClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", superClass.getValue());
+        Assertions.assertEquals("java.util.List<? super Integer>", superClass.getGenericValue());
     }
-	
-	public void testComplexSingleParameterizedTypeClassExtends() {
+
+    @Test
+    public void testComplexSingleParameterizedTypeClassExtends() {
 		String source = "public class Something extends java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType superClass = javaClass.getSuperClass();
-    	assertEquals("java.util.List", superClass.getFullyQualifiedName());
-        assertEquals("java.util.List<java.util.Set<java.lang.String>>", superClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", superClass.getValue());
-        assertEquals("java.util.List<java.util.Set<String>>", superClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List", superClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.util.Set<java.lang.String>>", superClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", superClass.getValue());
+        Assertions.assertEquals("java.util.List<java.util.Set<String>>", superClass.getGenericValue());
     }
-    
+
+    @Test
     public void testComplexMultiParameterizedTypeClassExtends() {
 		String source = "public class Something extends java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType superClass = javaClass.getSuperClass();
-    	assertEquals("java.util.List", superClass.getFullyQualifiedName());
-        assertEquals("java.util.List<java.util.Set<java.lang.String>>", superClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", superClass.getValue());
-        assertEquals("java.util.List<java.util.Set<String>>", superClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List", superClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.util.Set<java.lang.String>>", superClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", superClass.getValue());
+        Assertions.assertEquals("java.util.List<java.util.Set<String>>", superClass.getGenericValue());
     }
-    
+
+    @Test
     public void testSimpleSingleParameterizedTypeClassImplements() {
         String source = "public class Something implements java.util.List<String> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
         JavaType implementsClass = javaClass.getImplements().get(0);
-        assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
-        assertEquals("java.util.List<java.lang.String>", implementsClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", implementsClass.getValue());
-        assertEquals("java.util.List<String>", implementsClass.getGenericValue());
+        Assertions.assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.lang.String>", implementsClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", implementsClass.getValue());
+        Assertions.assertEquals("java.util.List<String>", implementsClass.getGenericValue());
     }
-    
-    public void testSimpleMultiParameterizedTypeClassImplements() { 
+
+    @Test
+    public void testSimpleMultiParameterizedTypeClassImplements() {
         String source = "public class Something implements java.util.Map<String, Object> {}";
         JavaSource javaSource = builder.addSource(new StringReader(source));
         JavaClass javaClass = javaSource.getClasses().get(0);
         JavaType implementsClass = javaClass.getImplements().get(0);
-        assertEquals("java.util.Map", implementsClass.getFullyQualifiedName());
-        assertEquals("java.util.Map<java.lang.String,java.lang.Object>", implementsClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.Map", implementsClass.getValue());
-        assertEquals("java.util.Map<String,Object>", implementsClass.getGenericValue());
+        Assertions.assertEquals("java.util.Map", implementsClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map<java.lang.String,java.lang.Object>", implementsClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.Map", implementsClass.getValue());
+        Assertions.assertEquals("java.util.Map<String,Object>", implementsClass.getGenericValue());
     }
-    
+
+    @Test
     public void testSimpleWildcardTypeClassImplements() {
     	String source = "public class Something implements java.util.List<?>{}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType implementsClass = javaClass.getImplements().get(0);
-    	assertEquals("java.util.List<?>", implementsClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List<?>", implementsClass.getGenericValue());
     }
 
-	public void testSimpleExtendsWildcardTypeClassImplements() {
+    @Test
+    public void testSimpleExtendsWildcardTypeClassImplements() {
 		String source = "public class Something implements java.util.List<? extends Number> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType implementsClass = javaClass.getImplements().get(0);
-    	assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
-        assertEquals("java.util.List<? extends java.lang.Number>", implementsClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", implementsClass.getValue());
-        assertEquals("java.util.List<? extends Number>", implementsClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? extends java.lang.Number>", implementsClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", implementsClass.getValue());
+        Assertions.assertEquals("java.util.List<? extends Number>", implementsClass.getGenericValue());
     }
-	
-	public void testSimpleSuperWildcardTypeClassImplements() {
+
+    @Test
+    public void testSimpleSuperWildcardTypeClassImplements() {
 		String source = "public class Something implements java.util.List<? super Integer> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType implementsClass = javaClass.getImplements().get(0);
-    	assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
-        assertEquals("java.util.List<? super java.lang.Integer>", implementsClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", implementsClass.getValue());
-        assertEquals("java.util.List<? super Integer>", implementsClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<? super java.lang.Integer>", implementsClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", implementsClass.getValue());
+        Assertions.assertEquals("java.util.List<? super Integer>", implementsClass.getGenericValue());
     }
-	
-	public void testComplexSingleParameterizedTypeClassImplements() {
+
+    @Test
+    public void testComplexSingleParameterizedTypeClassImplements() {
 		String source = "public class Something implements java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType implementsClass = javaClass.getImplements().get(0);
-    	assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
-        assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", implementsClass.getValue());
-        assertEquals("java.util.List<java.util.Set<String>>", implementsClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", implementsClass.getValue());
+        Assertions.assertEquals("java.util.List<java.util.Set<String>>", implementsClass.getGenericValue());
     }
-    
+
+    @Test
     public void testComplexMultiParameterizedTypeClassImplements() {
 		String source = "public class Something implements java.util.List<java.util.Set<String>> {}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaType implementsClass = javaClass.getImplements().get(0);
-    	assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
-        assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericFullyQualifiedName());
-        assertEquals("java.util.List", implementsClass.getValue());
-        assertEquals("java.util.List<java.util.Set<String>>", implementsClass.getGenericValue());
+    	Assertions.assertEquals("java.util.List", implementsClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.List<java.util.Set<java.lang.String>>", implementsClass.getGenericFullyQualifiedName());
+        Assertions.assertEquals("java.util.List", implementsClass.getValue());
+        Assertions.assertEquals("java.util.List<java.util.Set<String>>", implementsClass.getGenericValue());
     }
-    
+
+    @Test
     public void testSimpleTypeVariable() {
     	String source = "public class Something {\n" +
     			" public <T extends StringBuffer> void doStuff(T param) {}\n" +
     			"}";
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods().get(0);
-    	assertEquals( 1, javaMethod.getTypeParameters().size());
+    	Assertions.assertEquals(1, javaMethod.getTypeParameters().size());
     	JavaTypeVariable<JavaGenericDeclaration> typeVariable = javaMethod.getTypeParameters().get(0);
-        assertEquals( "T", typeVariable.getName() );
-        assertEquals( "T", typeVariable.getFullyQualifiedName());
-        assertEquals( "<T extends StringBuffer>", typeVariable.getGenericValue());
-        assertEquals( "<T extends java.lang.StringBuffer>", typeVariable.getGenericFullyQualifiedName());
-        assertEquals( "T", typeVariable.getValue());
+        Assertions.assertEquals("T", typeVariable.getName());
+        Assertions.assertEquals("T", typeVariable.getFullyQualifiedName());
+        Assertions.assertEquals("<T extends StringBuffer>", typeVariable.getGenericValue());
+        Assertions.assertEquals("<T extends java.lang.StringBuffer>", typeVariable.getGenericFullyQualifiedName());
+        Assertions.assertEquals("T", typeVariable.getValue());
     }
-    
+
+    @Test
     public void testComplexTypeVariable() {
     	String source  = "class Collections {\n" +
     			"public static <T, S extends T> void copy(List<T> dest, List<S> src){}\n" +
@@ -399,20 +430,21 @@ public class JSR14Test extends TestCase {
     	JavaSource javaSource = builder.addSource(new StringReader(source));
     	JavaMethod javaMethod = javaSource.getClasses().get(0).getMethods().get(0);
     	JavaTypeVariable<JavaGenericDeclaration> typeVariable0 = javaMethod.getTypeParameters().get(0);
-        assertEquals("T", typeVariable0.getName());
-        assertEquals("T", typeVariable0.getFullyQualifiedName());
-        assertEquals("<T>", typeVariable0.getGenericValue());
-        assertEquals("<T>", typeVariable0.getGenericFullyQualifiedName());
-        assertEquals("T", typeVariable0.getValue());
+        Assertions.assertEquals("T", typeVariable0.getName());
+        Assertions.assertEquals("T", typeVariable0.getFullyQualifiedName());
+        Assertions.assertEquals("<T>", typeVariable0.getGenericValue());
+        Assertions.assertEquals("<T>", typeVariable0.getGenericFullyQualifiedName());
+        Assertions.assertEquals("T", typeVariable0.getValue());
 
         JavaTypeVariable<JavaGenericDeclaration> typeVariable1 = javaMethod.getTypeParameters().get(1);
-        assertEquals("S", typeVariable1.getName());
-        assertEquals("S", typeVariable1.getFullyQualifiedName());
-        assertEquals("<S extends T>", typeVariable1.getGenericValue());
-        assertEquals("<S extends T>", typeVariable1.getGenericFullyQualifiedName());
-        assertEquals("S", typeVariable1.getValue());
+        Assertions.assertEquals("S", typeVariable1.getName());
+        Assertions.assertEquals("S", typeVariable1.getFullyQualifiedName());
+        Assertions.assertEquals("<S extends T>", typeVariable1.getGenericValue());
+        Assertions.assertEquals("<S extends T>", typeVariable1.getGenericFullyQualifiedName());
+        Assertions.assertEquals("S", typeVariable1.getValue());
 	}
-    
+
+    @Test
     public void testComplexTypeVariableMultipleBounds() {
     	String source = "class Collections\n" +
     			"public static <T extends Object & Comparable<? super T>>\n" +
@@ -425,6 +457,7 @@ public class JSR14Test extends TestCase {
     // second assert is based on java's Method.toString()
     // http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/Method.html#toString()
     // 3rd and 4th are resolved Types, based on <T extends StringBuffer> in method
+    @Test
     public void testGenericMethodDeclarationSingleParameter() {
     	String source = "package com.thoughtworks.qdox;" +
     			"import java.util.*;\n" +
@@ -438,18 +471,19 @@ public class JSR14Test extends TestCase {
     	JavaMethod javaMethod = javaClass.getMethods().get(0);
     	JavaParameter paramType = javaMethod.getParameters().get(0);
     	JavaType returnType = javaMethod.getReturns();
-    	assertEquals("myMethod(request)", javaMethod.getCallSignature());
-    	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer) throws java.lang.Exception", javaMethod.toString());
-    	assertEquals("StringBuffer", paramType.getResolvedValue());
-        assertEquals("java.lang.StringBuffer", paramType.getResolvedFullyQualifiedName());
-    	assertEquals("StringBuffer", paramType.getResolvedGenericValue());
-    	assertEquals("java.util.List", returnType.getFullyQualifiedName());
-    	assertEquals("java.util.List<java.lang.StringBuffer>", returnType.getGenericFullyQualifiedName());
-        assertEquals("List", returnType.getValue());
-        assertEquals("List<StringBuffer>", returnType.getGenericValue());
+    	Assertions.assertEquals("myMethod(request)", javaMethod.getCallSignature());
+    	Assertions.assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer) throws java.lang.Exception", javaMethod.toString());
+    	Assertions.assertEquals("StringBuffer", paramType.getResolvedValue());
+        Assertions.assertEquals("java.lang.StringBuffer", paramType.getResolvedFullyQualifiedName());
+    	Assertions.assertEquals("StringBuffer", paramType.getResolvedGenericValue());
+    	Assertions.assertEquals("java.util.List", returnType.getFullyQualifiedName());
+    	Assertions.assertEquals("java.util.List<java.lang.StringBuffer>", returnType.getGenericFullyQualifiedName());
+        Assertions.assertEquals("List", returnType.getValue());
+        Assertions.assertEquals("List<StringBuffer>", returnType.getGenericValue());
     	
     }
-    
+
+    @Test
     public void testGenericMethodDeclarationMultipleParameters() {
     	String source = "package com.thoughtworks.qdox;" +
     			"import java.util.*;\n" +
@@ -462,15 +496,16 @@ public class JSR14Test extends TestCase {
     	JavaClass javaClass = javaSource.getClasses().get(0);
     	JavaMethod javaMethod = javaClass.getMethods().get(0);
     	JavaParameter paramType = javaMethod.getParameters().get(1);
-    	assertEquals("myMethod(request, list)", javaMethod.getCallSignature());
-    	assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer,java.util.List) throws java.lang.Exception", javaMethod.toString());
-    	assertEquals("List", paramType.getResolvedValue());
-        assertEquals("java.util.List", paramType.getResolvedFullyQualifiedName());
-        assertEquals("List<StringBuffer>", paramType.getResolvedGenericValue());    	
-        assertEquals("java.util.List<java.lang.StringBuffer>", paramType.getResolvedGenericFullyQualifiedName());
+    	Assertions.assertEquals("myMethod(request, list)", javaMethod.getCallSignature());
+    	Assertions.assertEquals("public java.util.List com.thoughtworks.qdox.TestQDOX150.myMethod(java.lang.StringBuffer,java.util.List) throws java.lang.Exception", javaMethod.toString());
+    	Assertions.assertEquals("List", paramType.getResolvedValue());
+        Assertions.assertEquals("java.util.List", paramType.getResolvedFullyQualifiedName());
+        Assertions.assertEquals("List<StringBuffer>", paramType.getResolvedGenericValue());
+        Assertions.assertEquals("java.util.List<java.lang.StringBuffer>", paramType.getResolvedGenericFullyQualifiedName());
     }
 
     //for QDOX-167
+    @Test
     public void testGenericTypedMethodCall() {
         String source = "import java.util.*;\n" + 
         		"\n" + 
@@ -486,6 +521,7 @@ public class JSR14Test extends TestCase {
     }
     
     // For QDox-205
+    @Test
     public void testClassTypeParameters() {
         String source1 = "class GenericControllerImpl<T, K, D extends GenericDAO<T, K>>\n" + 
         		"    implements GenericController<T, K>\n {}";
@@ -495,15 +531,16 @@ public class JSR14Test extends TestCase {
         JavaClass genericControllerImpl = builder.addSource(new StringReader(source1)).getClasses().get(0);
         JavaClass groupControllerImpl = builder.addSource(new StringReader(source2)).getClasses().get(0);
         JavaClass genericController = builder.addSource(new StringReader(source3)).getClasses().get(0);
-        assertEquals( 3, genericControllerImpl.getTypeParameters().size() );
-        assertEquals( 0, groupControllerImpl.getTypeParameters().size() );
-        assertEquals( 2, genericController.getTypeParameters().size() );
+        Assertions.assertEquals(3, genericControllerImpl.getTypeParameters().size());
+        Assertions.assertEquals(0, groupControllerImpl.getTypeParameters().size());
+        Assertions.assertEquals(2, genericController.getTypeParameters().size());
     }
     
     // For QDOX-206
+    @Test
     public void testGenericsAndArrays() {
         JavaMethod method = buildMethod( "public Map<String[], Object[]> test(Map<String[], Object[]> input);" );
-        assertEquals("Map<java.lang.String[],java.lang.Object[]>", method.getReturns().toGenericString());
-        assertEquals("Map<java.lang.String[],java.lang.Object[]>", method.getParameters().get(0).getType().toGenericString());
+        Assertions.assertEquals("Map<java.lang.String[],java.lang.Object[]>", method.getReturns().toGenericString());
+        Assertions.assertEquals("Map<java.lang.String[],java.lang.Object[]>", method.getParameters().get(0).getType().toGenericString());
     }
 }

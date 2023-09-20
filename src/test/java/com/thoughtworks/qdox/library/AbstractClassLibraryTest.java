@@ -1,18 +1,17 @@
 package com.thoughtworks.qdox.library;
 
-import java.util.Collection;
-import java.util.Iterator;
-
-import junit.framework.TestCase;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class AbstractClassLibraryTest
-    extends TestCase
-{
+import java.util.Collection;
+import java.util.Iterator;
+
+public class AbstractClassLibraryTest {
 
     private AbstractClassLibrary nullClassLibrary = new AbstractClassLibrary()
     {
@@ -34,9 +33,9 @@ public class AbstractClassLibraryTest
     private AbstractClassLibrary parentClassLibrary;
     private AbstractClassLibrary filledChildClassLibrary;
     private AbstractClassLibrary emptyChildClassLibrary;
-    
-    @Override
-	protected void setUp() throws Exception
+
+    @BeforeEach
+    public void setUp() throws Exception
     {
         parentClassLibrary = new AbstractClassLibrary()
         {
@@ -98,22 +97,26 @@ public class AbstractClassLibraryTest
     /*
      * Never null, empty by default
      */
+    @Test
     public void testGetJavaSources() {
-        assertEquals( 0, nullClassLibrary.getJavaSources().size() );
+        Assertions.assertEquals(0, nullClassLibrary.getJavaSources().size());
     }
     
     /*
      * Never null, empty by default
      */
+    @Test
     public void testGetJavaClasses() {
-        assertEquals( 0, nullClassLibrary.getJavaClasses().size() );
+        Assertions.assertEquals(0, nullClassLibrary.getJavaClasses().size());
     }
 
+    @Test
     public void testGetJavaClassByName() {
-        assertEquals( null, nullClassLibrary.getJavaClass( "java.lang.String" ) );
-        assertEquals( null, nullClassLibrary.getJavaClass( "com.thoughtworks.qdox.JavaProjectBuilder" ) );
+        Assertions.assertEquals(null, nullClassLibrary.getJavaClass( "java.lang.String" ));
+        Assertions.assertEquals(null, nullClassLibrary.getJavaClass( "com.thoughtworks.qdox.JavaProjectBuilder" ));
     }
-    
+
+    @Test
     public void testChainedJavaClass() {
         //prepare libraries
         parentClassLibrary.getJavaClass( "ParentClass" );
@@ -122,42 +125,45 @@ public class AbstractClassLibraryTest
         Collection<JavaClass> parentClasses = parentClassLibrary.getJavaClasses( new AbstractClassLibrary.ClassLibraryFilter(){
             public boolean accept(AbstractClassLibrary classLibrary) { return true; }
         } ); 
-        assertEquals(1, parentClasses.size());
-        assertEquals( "ParentClass", parentClasses.iterator().next().getFullyQualifiedName() );
+        Assertions.assertEquals(1, parentClasses.size());
+        Assertions.assertEquals("ParentClass", parentClasses.iterator().next().getFullyQualifiedName());
         
         Collection<JavaClass> filledClasses = filledChildClassLibrary.getJavaClasses(new AbstractClassLibrary.ClassLibraryFilter(){
             public boolean accept(AbstractClassLibrary classLibrary) { return true; }
         } ); 
-        assertEquals(2, filledClasses.size() );
+        Assertions.assertEquals(2, filledClasses.size());
         Iterator<JavaClass> iter = filledClasses.iterator();
-        assertEquals( "ChildClass", iter.next().getFullyQualifiedName() );
-        assertEquals( "ParentClass", iter.next().getFullyQualifiedName() );
+        Assertions.assertEquals("ChildClass", iter.next().getFullyQualifiedName());
+        Assertions.assertEquals("ParentClass", iter.next().getFullyQualifiedName());
         
         Collection<JavaClass> emptyClasses = emptyChildClassLibrary.getJavaClasses(new AbstractClassLibrary.ClassLibraryFilter(){
             public boolean accept(AbstractClassLibrary classLibrary) { return true; }
         } ); 
-        assertEquals(1, emptyClasses.size() );
-        assertEquals( "ParentClass", emptyClasses.iterator().next().getFullyQualifiedName() );
+        Assertions.assertEquals(1, emptyClasses.size());
+        Assertions.assertEquals("ParentClass", emptyClasses.iterator().next().getFullyQualifiedName());
     }
     
     
     /*
      * Never null, empty by default
      */
+    @Test
     public void testGetJavaPackages() {
-        assertEquals( 0, nullClassLibrary.getJavaPackages().size() );
+        Assertions.assertEquals(0, nullClassLibrary.getJavaPackages().size());
     }
-    
+
+    @Test
     public void testGetJavaPackageByName() {
-        assertEquals( null, nullClassLibrary.getJavaPackage( "java.lang" ) );
-        assertEquals( null, nullClassLibrary.getJavaPackage( "com.thoughtworks" ) );
+        Assertions.assertEquals(null, nullClassLibrary.getJavaPackage( "java.lang" ));
+        Assertions.assertEquals(null, nullClassLibrary.getJavaPackage( "com.thoughtworks" ));
     }
-    
+
+    @Test
     public void testModuleInfo()
     {
-        assertNull( nullClassLibrary.getJavaModules() );
-        assertNull( parentClassLibrary.getJavaModules() );
-        assertNull( filledChildClassLibrary.getJavaModules() );
-        assertNull( emptyChildClassLibrary.getJavaModules() );
+        Assertions.assertNull(nullClassLibrary.getJavaModules());
+        Assertions.assertNull(parentClassLibrary.getJavaModules());
+        Assertions.assertNull(filledChildClassLibrary.getJavaModules());
+        Assertions.assertNull(emptyChildClassLibrary.getJavaModules());
     }
 }

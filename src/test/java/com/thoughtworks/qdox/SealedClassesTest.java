@@ -1,8 +1,8 @@
 package com.thoughtworks.qdox;
 
-import java.io.StringReader;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import java.io.StringReader;
 
 /**
  * Examples from <a href="https://docs.oracle.com/en/java/javase/16/language/sealed-classes-and-interfaces.html">https://docs.oracle.com/en/java/javase/16/language/sealed-classes-and-interfaces.html</a>

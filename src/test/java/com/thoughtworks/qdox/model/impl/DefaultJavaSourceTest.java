@@ -1,20 +1,14 @@
 package com.thoughtworks.qdox.model.impl;
 
-import java.util.List;
-
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSourceTest;
 
+import java.util.List;
+
 public class DefaultJavaSourceTest extends JavaSourceTest<DefaultJavaSource>
 {
-
-    public DefaultJavaSourceTest( String s )
-    {
-        super( s );
-    }
-
     @Override
 	public DefaultJavaSource newJavaSource( ClassLibrary classLibrary )
     {

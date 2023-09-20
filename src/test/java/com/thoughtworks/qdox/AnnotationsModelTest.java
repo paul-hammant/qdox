@@ -1,29 +1,23 @@
 package com.thoughtworks.qdox;
 
-import java.io.StringReader;
-import java.util.ListIterator;
-
-import junit.framework.TestCase;
-
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
-import com.thoughtworks.qdox.model.expression.Add;
-import com.thoughtworks.qdox.model.expression.AnnotationValue;
-import com.thoughtworks.qdox.model.expression.AnnotationValueList;
-import com.thoughtworks.qdox.model.expression.Constant;
-import com.thoughtworks.qdox.model.expression.FieldRef;
-import com.thoughtworks.qdox.model.expression.TypeRef;
+import com.thoughtworks.qdox.model.expression.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class AnnotationsModelTest
-    extends TestCase
-{
+import java.io.StringReader;
+import java.util.ListIterator;
+
+public class AnnotationsModelTest {
 
     private JavaProjectBuilder builder;
 
-    @Override
-	protected void setUp()
+    @BeforeEach
+    public void setUp()
         throws Exception
     {
         builder = new JavaProjectBuilder();
@@ -35,192 +29,205 @@ public class AnnotationsModelTest
     {
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
+        Assertions.assertEquals(1, clazz.getAnnotations().size(), "Annotations");
         JavaAnnotation annotation = clazz.getAnnotations().get( 0 );
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
+        Assertions.assertEquals("Annotation", annotation.getType().getFullyQualifiedName(), "Annotation name");
         return annotation;
     }
 
+    @Test
     public void testMarkerAnnotation()
     {
         checkClassAnnotation( "@Annotation\nclass Foo {}" );
     }
 
+    @Test
     public void testEmptyAnnotation()
     {
         checkClassAnnotation( "@Annotation()\nclass Foo {}" );
     }
 
+    @Test
     public void testAnnotationAnnotation()
     {
         checkClassAnnotation( "@Annotation(@NestedAnnotation)\nclass Foo {}" );
     }
 
+    @Test
     public void testConstAnnotation()
     {
         checkClassAnnotation( "@Annotation(1)\nclass Foo {}" );
     }
 
+    @Test
     public void testAnnotationConstants()
     {
         String source =
             "@Annotation( f = 1.0, d = 1.0d, i = 1, ix = 0x1, l = 1L, lx = 0x1L, c = 'c', s = \"string\" )\nclass Foo {}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
+        Assertions.assertEquals(1, clazz.getAnnotations().size(), "Annotations");
         JavaAnnotation annotation = clazz.getAnnotations().get( 0 );
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
-        assertEquals( "Properties", 8, annotation.getNamedParameterMap().size() );
+        Assertions.assertEquals("Annotation", annotation.getType().getFullyQualifiedName(), "Annotation name");
+        Assertions.assertEquals(8, annotation.getNamedParameterMap().size(), "Properties");
 
         Constant f = (Constant) annotation.getProperty( "f" );
-        assertEquals( "f", new Float( 1 ), f.getValue() );
+        Assertions.assertEquals(new Float( 1 ), f.getValue(), "f");
 
         Constant d = (Constant) annotation.getProperty( "d" );
-        assertEquals( "d", new Double( 1 ), d.getValue() );
+        Assertions.assertEquals(new Double( 1 ), d.getValue(), "d");
 
         Constant i = (Constant) annotation.getProperty( "i" );
-        assertEquals( "i", new Integer( 1 ), i.getValue() );
+        Assertions.assertEquals(new Integer( 1 ), i.getValue(), "i");
 
         Constant ix = (Constant) annotation.getProperty( "ix" );
-        assertEquals( "ix", new Integer( 1 ), ix.getValue() );
+        Assertions.assertEquals(new Integer( 1 ), ix.getValue(), "ix");
 
         Constant l = (Constant) annotation.getProperty( "l" );
-        assertEquals( "l", new Long( 1 ), l.getValue() );
+        Assertions.assertEquals(new Long( 1 ), l.getValue(), "l");
 
         Constant lx = (Constant) annotation.getProperty( "lx" );
-        assertEquals( "lx", new Long( 1 ), lx.getValue() );
+        Assertions.assertEquals(new Long( 1 ), lx.getValue(), "lx");
 
         Constant c = (Constant) annotation.getProperty( "c" );
-        assertEquals( "c", new Character( 'c' ), c.getValue() );
+        Assertions.assertEquals(new Character( 'c' ), c.getValue(), "c");
 
         Constant s = (Constant) annotation.getProperty( "s" );
-        assertEquals( "s", "string", s.getValue() );
+        Assertions.assertEquals("string", s.getValue(), "s");
     }
 
+    @Test
     public void testAnnotationConstantsControlChars()
     {
         String source =
             "@Annotation( s1 = \"a\\nb\", s2 = \"a\\nb\", s3 = \"a\\rb\", s4 = \"a\\tb\", s5 = \"a\\u0009b\" ) class Foo {}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
+        Assertions.assertEquals(1, clazz.getAnnotations().size(), "Annotations");
         JavaAnnotation annotation = clazz.getAnnotations().get( 0 );
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
-        assertEquals( "Properties", 5, annotation.getPropertyMap().size() );
+        Assertions.assertEquals("Annotation", annotation.getType().getFullyQualifiedName(), "Annotation name");
+        Assertions.assertEquals(5, annotation.getPropertyMap().size(), "Properties");
 
         Constant s1 = (Constant) annotation.getProperty( "s1" );
-        assertEquals( "s1", "a\nb", s1.getValue() );
+        Assertions.assertEquals("a\nb", s1.getValue(), "s1");
 
         Constant s2 = (Constant) annotation.getProperty( "s2" );
-        assertEquals( "s2", "a\nb", s2.getValue() );
+        Assertions.assertEquals("a\nb", s2.getValue(), "s2");
 
         Constant s3 = (Constant) annotation.getProperty( "s3" );
-        assertEquals( "s3", "a\rb", s3.getValue() );
+        Assertions.assertEquals("a\rb", s3.getValue(), "s3");
 
         Constant s4 = (Constant) annotation.getProperty( "s4" );
-        assertEquals( "s4", "a\tb", s4.getValue() );
+        Assertions.assertEquals("a\tb", s4.getValue(), "s4");
 
         Constant s5 = (Constant) annotation.getProperty( "s5" );
-        assertEquals( "s5", "a\u0009b", s5.getValue() );
+        Assertions.assertEquals("a\u0009b", s5.getValue(), "s5");
     }
 
+    @Test
     public void testNestedAnnotation()
     {
         String source = "@Annotation( { @Inner(1), @Inner(2) } ) class Foo {}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
+        Assertions.assertEquals(1, clazz.getAnnotations().size(), "Annotations");
         JavaAnnotation annotation = clazz.getAnnotations().get( 0 );
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
-        assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
+        Assertions.assertEquals("Annotation", annotation.getType().getFullyQualifiedName(), "Annotation name");
+        Assertions.assertEquals(1, annotation.getPropertyMap().size(), "Properties");
 
         AnnotationValueList list = (AnnotationValueList) annotation.getProperty( "value" );
-        assertEquals( "Inner Annotations", 2, list.getValueList().size() );
+        Assertions.assertEquals(2, list.getValueList().size(), "Inner Annotations");
 
         for ( ListIterator<AnnotationValue> i = list.getValueList().listIterator(); i.hasNext(); )
         {
             JavaAnnotation inner = (JavaAnnotation) i.next();
-            assertEquals( "Inner " + i.previousIndex(), "Inner", inner.getType().getValue() );
+            Assertions.assertEquals("Inner", inner.getType().getValue(), "Inner " + i.previousIndex());
         }
     }
 
+    @Test
     public void testExpressionAnnotation1()
     {
         String source = "@Annotation( 1 + 1 ) class Foo {}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
+        Assertions.assertEquals(1, clazz.getAnnotations().size(), "Annotations");
         JavaAnnotation annotation = clazz.getAnnotations().get( 0 );
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
-        assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
+        Assertions.assertEquals("Annotation", annotation.getType().getFullyQualifiedName(), "Annotation name");
+        Assertions.assertEquals(1, annotation.getPropertyMap().size(), "Properties");
 
         Add add = (Add) annotation.getProperty( "value" );
-        assertEquals( "Left", new Integer( 1 ), ( (Constant) add.getLeft() ).getValue() );
-        assertEquals( "Right", new Integer( 1 ), ( (Constant) add.getRight() ).getValue() );
+        Assertions.assertEquals(new Integer( 1 ), ( (Constant) add.getLeft() ).getValue(), "Left");
+        Assertions.assertEquals(new Integer( 1 ), ( (Constant) add.getRight() ).getValue(), "Right");
     }
 
+    @Test
     public void testExpressionAnnotation2()
     {
         String source = "@Annotation( \"value = \" + 1 ) class Foo {}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
+        Assertions.assertEquals(1, clazz.getAnnotations().size(), "Annotations");
         JavaAnnotation annotation = clazz.getAnnotations().get( 0 );
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
-        assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
+        Assertions.assertEquals("Annotation", annotation.getType().getFullyQualifiedName(), "Annotation name");
+        Assertions.assertEquals(1, annotation.getPropertyMap().size(), "Properties");
 
         Add add = (Add) annotation.getProperty( "value" );
-        assertEquals( "Left", "value = ", ( (Constant) add.getLeft() ).getValue() );
-        assertEquals( "Right", new Integer( 1 ), ( (Constant) add.getRight() ).getValue() );
+        Assertions.assertEquals("value = ", ( (Constant) add.getLeft() ).getValue(), "Left");
+        Assertions.assertEquals(new Integer( 1 ), ( (Constant) add.getRight() ).getValue(), "Right");
     }
 
+    @Test
     public void testFieldRefAnnotation()
     {
         String source = "@Annotation( java.lang.Math.E ) class Foo {}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
+        Assertions.assertEquals(1, clazz.getAnnotations().size(), "Annotations");
         JavaAnnotation annotation = clazz.getAnnotations().get( 0 );
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
-        assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
+        Assertions.assertEquals("Annotation", annotation.getType().getFullyQualifiedName(), "Annotation name");
+        Assertions.assertEquals(1, annotation.getPropertyMap().size(), "Properties");
 
         FieldRef value = (FieldRef) annotation.getProperty( "value" );
-        assertEquals( "type", "double", value.getField().getType().getValue() );
-        assertEquals( "class part", "java.lang.Math", value.getClassPart() );
-        assertEquals( "field part", "E", value.getFieldPart() );
+        Assertions.assertEquals("double", value.getField().getType().getValue(), "type");
+        Assertions.assertEquals("java.lang.Math", value.getClassPart(), "class part");
+        Assertions.assertEquals("E", value.getFieldPart(), "field part");
     }
 
+    @Test
     public void testPrimitiveClassAnnotation()
     {
         String source = "@Annotation( int.class ) class Foo {}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
+        Assertions.assertEquals(1, clazz.getAnnotations().size(), "Annotations");
         JavaAnnotation annotation = clazz.getAnnotations().get( 0 );
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
-        assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
+        Assertions.assertEquals("Annotation", annotation.getType().getFullyQualifiedName(), "Annotation name");
+        Assertions.assertEquals(1, annotation.getPropertyMap().size(), "Properties");
 
         Object value = annotation.getProperty( "value" );
         TypeRef ref = (TypeRef) value;
-        assertEquals( "value", "int", ref.getType().getValue() );
+        Assertions.assertEquals("int", ref.getType().getValue(), "value");
     }
 
+    @Test
     public void testClassAnnotation()
     {
         String source = "@Annotation( java.util.Set.class ) class Foo {}";
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Annotations", 1, clazz.getAnnotations().size() );
+        Assertions.assertEquals(1, clazz.getAnnotations().size(), "Annotations");
         JavaAnnotation annotation = clazz.getAnnotations().get( 0 );
-        assertEquals( "Annotation name", "Annotation", annotation.getType().getFullyQualifiedName() );
-        assertEquals( "Properties", 1, annotation.getPropertyMap().size() );
+        Assertions.assertEquals("Annotation", annotation.getType().getFullyQualifiedName(), "Annotation name");
+        Assertions.assertEquals(1, annotation.getPropertyMap().size(), "Properties");
 
         Object value = annotation.getProperty( "value" );
         TypeRef ref = (TypeRef) value;
-        assertEquals( "value", "java.util.Set", ref.getType().getValue() );
+        Assertions.assertEquals("java.util.Set", ref.getType().getValue(), "value");
     }
 
     // from Qdox-98
+    @Test
     public void testPackageWithAnnotation()
     {
         String source =
@@ -228,13 +235,14 @@ public class AnnotationsModelTest
                 + "package org.oasis_open.docs.wsn.br_2;\n" + "public class Foo {}";
         JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get( 0 );
         JavaPackage jPackage = cls.getPackage();
-        assertEquals( "org.oasis_open.docs.wsn.br_2", jPackage.getName() );
-        assertEquals( "javax.xml.bind.annotation.XmlSchema", jPackage.getAnnotations().get( 0 ).getType().getValue() );
-        assertEquals( 2, jPackage.getLineNumber() );
+        Assertions.assertEquals("org.oasis_open.docs.wsn.br_2", jPackage.getName());
+        Assertions.assertEquals("javax.xml.bind.annotation.XmlSchema", jPackage.getAnnotations().get( 0 ).getType().getValue());
+        Assertions.assertEquals(2, jPackage.getLineNumber());
 
     }
 
     // http://jira.codehaus.org/browse/QDOX-135
+    @Test
     public void testAnnotationInMethodParamList()
     {
         String source = "" + "class Foo {\n"
@@ -243,10 +251,10 @@ public class AnnotationsModelTest
 
         builder.addSource( new StringReader( source ) );
         JavaClass clazz = builder.getClassByName( "Foo" );
-        assertEquals( "Foo", clazz.getName() );
+        Assertions.assertEquals("Foo", clazz.getName());
         JavaMethod mth = clazz.getMethods().get( 0 );
         JavaAnnotation paramAnn = mth.getParameterByName( "blah" ).getAnnotations().get( 0 );
-        assertEquals( "@Y(value=1)", paramAnn.toString() );
+        Assertions.assertEquals("@Y(value=1)", paramAnn.toString());
     }
 
 }

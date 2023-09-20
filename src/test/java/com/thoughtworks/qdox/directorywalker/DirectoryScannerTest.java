@@ -1,14 +1,12 @@
 package com.thoughtworks.qdox.directorywalker;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.List;
 
-import org.junit.Test;
+import static org.mockito.Mockito.*;
 
 public class DirectoryScannerTest
 {
@@ -40,10 +38,10 @@ public class DirectoryScannerTest
 
         DirectoryScanner scanner = new DirectoryScanner( rootDir );
         List<File> files = scanner.scan();
-        assertEquals( 3, files.size() );
-        assertEquals( "blah.txt", files.get( 0 ).getName() );
-        assertEquals( "foo.txt", files.get( 1 ).getName() );
-        assertEquals( "pig.java", files.get( 2 ).getName() );
+        Assertions.assertEquals(3, files.size());
+        Assertions.assertEquals("blah.txt", files.get( 0 ).getName());
+        Assertions.assertEquals("foo.txt", files.get( 1 ).getName());
+        Assertions.assertEquals("pig.java", files.get( 2 ).getName());
     }
 
     @Test
@@ -66,11 +64,11 @@ public class DirectoryScannerTest
 
         DirectoryScanner scanner = new DirectoryScanner( rootDir );
         List<File> files = scanner.scan();
-        assertEquals( 4, files.size() );
-        assertEquals( "child1.txt", files.get( 0 ).getName() );
-        assertEquals( "child2.txt", files.get( 1 ).getName() );
-        assertEquals( "foo.txt", files.get( 2 ).getName() );
-        assertEquals( "pig.java", files.get( 3 ).getName() );
+        Assertions.assertEquals(4, files.size());
+        Assertions.assertEquals("child1.txt", files.get( 0 ).getName());
+        Assertions.assertEquals("child2.txt", files.get( 1 ).getName());
+        Assertions.assertEquals("foo.txt", files.get( 2 ).getName());
+        Assertions.assertEquals("pig.java", files.get( 3 ).getName());
     }
 
     @Test
@@ -100,12 +98,12 @@ public class DirectoryScannerTest
 
         DirectoryScanner scanner = new DirectoryScanner( rootDir );
         List<File> files = scanner.scan();
-        assertEquals( 5, files.size() );
-        assertEquals( "grandChild1.txt", files.get( 0 ).getName() );
-        assertEquals( "child1.txt", files.get( 1 ).getName() );
-        assertEquals( "child2.txt", files.get( 2 ).getName() );
-        assertEquals( "foo.txt", files.get( 3 ).getName() );
-        assertEquals( "pig.java", files.get( 4 ).getName() );
+        Assertions.assertEquals(5, files.size());
+        Assertions.assertEquals("grandChild1.txt", files.get( 0 ).getName());
+        Assertions.assertEquals("child1.txt", files.get( 1 ).getName());
+        Assertions.assertEquals("child2.txt", files.get( 2 ).getName());
+        Assertions.assertEquals("foo.txt", files.get( 3 ).getName());
+        Assertions.assertEquals("pig.java", files.get( 4 ).getName());
     }
 
     @Test
@@ -122,9 +120,9 @@ public class DirectoryScannerTest
         DirectoryScanner scanner = new DirectoryScanner( rootDir );
         scanner.addFilter( new SuffixFilter( ".java" ) );
         List<File> files = scanner.scan();
-        assertEquals( 2, files.size() );
-        assertEquals( "foo.java", files.get( 0 ).getName() );
-        assertEquals( "pig.java", files.get( 1 ).getName() );
+        Assertions.assertEquals(2, files.size());
+        Assertions.assertEquals("foo.java", files.get( 0 ).getName());
+        Assertions.assertEquals("pig.java", files.get( 1 ).getName());
     }
 
     @Test
@@ -148,8 +146,8 @@ public class DirectoryScannerTest
         };
         scanner.addFilter( mockFilter );
         List<File> files = scanner.scan();
-        assertEquals( 1, files.size() );
-        assertEquals( "foo.java", files.get( 0 ).getName() );
+        Assertions.assertEquals(1, files.size());
+        Assertions.assertEquals("foo.java", files.get( 0 ).getName());
     }
 
     @Test
@@ -174,8 +172,8 @@ public class DirectoryScannerTest
             }
         } );
         List<File> files = scanner.scan();
-        assertEquals( 1, files.size() );
-        assertEquals( "foo.java", files.get( 0 ).getName() );
+        Assertions.assertEquals(1, files.size());
+        Assertions.assertEquals("foo.java", files.get( 0 ).getName());
     }
 
     @Test

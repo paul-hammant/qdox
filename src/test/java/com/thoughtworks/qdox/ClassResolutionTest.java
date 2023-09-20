@@ -1,18 +1,17 @@
 package com.thoughtworks.qdox;
 
-import java.io.StringReader;
-
-import junit.framework.TestCase;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-public class ClassResolutionTest
-    extends TestCase
-{
+import java.io.StringReader;
 
+public class ClassResolutionTest {
+
+    @Test
     public void testNestedClassesResolvedAcrossPackageBoundaries()
     {
 
@@ -36,12 +35,11 @@ public class ClassResolutionTest
         JavaType type = parameter.getType();
 
         // verify
-        assertEquals( "Should include fully qualified name", "package1.Class1$NestedClass",
-                      type.getBinaryName() );
-        assertEquals( "Should include fully qualified name", "package1.Class1.NestedClass",
-                      type.getFullyQualifiedName() );
+        Assertions.assertEquals("package1.Class1$NestedClass", type.getBinaryName(), "Should include fully qualified name");
+        Assertions.assertEquals("package1.Class1.NestedClass", type.getFullyQualifiedName(), "Should include fully qualified name");
     }
 
+    @Test
     public void testSurvivesStaticImports()
     {
 
@@ -56,9 +54,10 @@ public class ClassResolutionTest
 
         // find the parameter
         JavaClass class2 = builder.getClassByName( "package2.Class2" );
-        assertNotNull( class2 );
+        Assertions.assertNotNull(class2);
     }
 
+    @Test
     public void testAnonymousClass()
     {
         JavaProjectBuilder builder = new JavaProjectBuilder();
@@ -74,6 +73,7 @@ public class ClassResolutionTest
     }
 
     // from QDOX-86
+    @Test
     public void testInnerClassInMethod()
     {
         JavaProjectBuilder builder = new JavaProjectBuilder();
@@ -83,14 +83,15 @@ public class ClassResolutionTest
         builder.addSource( new StringReader( source ) );
         JavaMethod method = builder.getClassByName( "some.pack.Test" ).getMethods().get( 0 );
         JavaParameter parameter = method.getParameters().get( 0 );
-        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getJavaClass().getBinaryName() );
-        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getType().getBinaryName() );
-        assertEquals( "some.pack.Test$Inner$Inner2", parameter.getBinaryName() );
-        assertEquals( "some.pack.Test.Inner.Inner2", parameter.getJavaClass().getFullyQualifiedName() );
-        assertEquals( "some.pack.Test.Inner.Inner2", parameter.getType().getFullyQualifiedName() );
-        assertEquals( "some.pack.Test.Inner.Inner2", parameter.getFullyQualifiedName() );
+        Assertions.assertEquals("some.pack.Test$Inner$Inner2", parameter.getJavaClass().getBinaryName());
+        Assertions.assertEquals("some.pack.Test$Inner$Inner2", parameter.getType().getBinaryName());
+        Assertions.assertEquals("some.pack.Test$Inner$Inner2", parameter.getBinaryName());
+        Assertions.assertEquals("some.pack.Test.Inner.Inner2", parameter.getJavaClass().getFullyQualifiedName());
+        Assertions.assertEquals("some.pack.Test.Inner.Inner2", parameter.getType().getFullyQualifiedName());
+        Assertions.assertEquals("some.pack.Test.Inner.Inner2", parameter.getFullyQualifiedName());
     }
 
+    @Test
     public void testIsAWithPrimitives()
     {
         JavaProjectBuilder builder = new JavaProjectBuilder();
@@ -98,6 +99,6 @@ public class ClassResolutionTest
         builder.addSource( new StringReader( source ) );
         JavaMethod method = builder.getClassByName("Foo").getMethods().get(0);
         JavaClass returns = method.getReturns();
-        assertFalse(returns.isA(builder.getClassByName("java.lang.Object")));
+        Assertions.assertFalse(returns.isA(builder.getClassByName("java.lang.Object")));
     }
 }

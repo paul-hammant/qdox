@@ -1,15 +1,14 @@
 package com.thoughtworks.qdox.model.expression;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class AnnotationValueListTest
@@ -19,14 +18,14 @@ public class AnnotationValueListTest
     public void testParameterValue_emptyList()
     {
         AnnotationValueList  expr = new AnnotationValueList ( Collections.<AnnotationValue>emptyList() );
-        assertEquals( Collections.<Object>emptyList(), expr.getParameterValue() );
+        Assertions.assertEquals(Collections.<Object>emptyList(), expr.getParameterValue());
     }
 
     @Test
     public void testToString_emptyList()
     {
         AnnotationValueList  expr = new AnnotationValueList ( Collections.<AnnotationValue>emptyList() );
-        assertEquals( "{}", expr.toString() );
+        Assertions.assertEquals("{}", expr.toString());
     }
 
     @Test
@@ -35,7 +34,7 @@ public class AnnotationValueListTest
         AnnotationValue value= mock( AnnotationValue.class );
         when( value.getParameterValue() ).thenReturn( "2" );
         AnnotationValueList  expr = new AnnotationValueList ( Collections.singletonList( value ) );
-        assertEquals( Collections.singletonList( "2" ), expr.getParameterValue() );
+        Assertions.assertEquals(Collections.singletonList( "2" ), expr.getParameterValue());
     }
 
     @Test
@@ -44,7 +43,7 @@ public class AnnotationValueListTest
         AnnotationValue value= mock( AnnotationValue.class );
         when( value.getParameterValue() ).thenReturn( "2" );
         AnnotationValueList  expr = new AnnotationValueList ( Collections.singletonList( value ) );
-        assertEquals( "{" + value+ "}", expr.toString() );
+        Assertions.assertEquals("{" + value+ "}", expr.toString());
     }
     
     @Test
@@ -61,7 +60,7 @@ public class AnnotationValueListTest
         List<String> expectedParameterValue = new LinkedList<String>();
         expectedParameterValue.add( "2" );
         expectedParameterValue.add( "3" );
-        assertEquals( expectedParameterValue, expr.getParameterValue() );
+        Assertions.assertEquals(expectedParameterValue, expr.getParameterValue());
     }
 
     @Test
@@ -78,7 +77,7 @@ public class AnnotationValueListTest
         List<String> expectedParameterValue = new LinkedList<String>();
         expectedParameterValue.add( "2" );
         expectedParameterValue.add( "3" );
-        assertEquals( "{" + value1+ ", " + value2 + "}", expr.toString() );
+        Assertions.assertEquals("{" + value1+ ", " + value2 + "}", expr.toString());
     }
 
     @Test
@@ -88,7 +87,7 @@ public class AnnotationValueListTest
         AnnotationValueList  expr = new AnnotationValueList ( null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );
-        assertSame( expr.accept( visitor ), visitResult );
+        Assertions.assertSame(expr.accept( visitor ), visitResult);
     }
 
 }

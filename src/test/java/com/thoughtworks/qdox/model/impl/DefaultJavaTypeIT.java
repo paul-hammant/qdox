@@ -1,20 +1,17 @@
 package com.thoughtworks.qdox.model.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.thoughtworks.qdox.library.ClassLoaderLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaType;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DefaultJavaTypeIT
 {
     private ClassLoaderLibrary library;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         library = new ClassLoaderLibrary( null );
@@ -26,10 +23,10 @@ public class DefaultJavaTypeIT
     public void testSuperClass()
     {
         JavaClass hashSetClass = library.getJavaClass( "java.util.HashSet" );
-        assertTrue( hashSetClass instanceof DefaultJavaClass );
+        Assertions.assertTrue(hashSetClass instanceof DefaultJavaClass);
         JavaType hashSetSuperClass = hashSetClass.getSuperClass();
-        assertEquals( "java.util.AbstractSet", hashSetSuperClass.getFullyQualifiedName() );
-        assertEquals( "java.util.AbstractSet", hashSetSuperClass.getCanonicalName() );
-        assertEquals( "java.util.AbstractSet", hashSetSuperClass.getValue() );
+        Assertions.assertEquals("java.util.AbstractSet", hashSetSuperClass.getFullyQualifiedName());
+        Assertions.assertEquals("java.util.AbstractSet", hashSetSuperClass.getCanonicalName());
+        Assertions.assertEquals("java.util.AbstractSet", hashSetSuperClass.getValue());
     }
 }

@@ -1,10 +1,10 @@
 package com.thoughtworks.qdox.model.impl;
 
-import java.util.List;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaConstructorTest;
 import com.thoughtworks.qdox.model.JavaParameter;
+
+import java.util.List;
 
 
 public class DefaultJavaConstructorTest extends JavaConstructorTest<DefaultJavaConstructor>

@@ -1,14 +1,10 @@
 package com.thoughtworks.qdox.model.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaTypeTest;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class DefaultTypeTest
     extends JavaTypeTest<DefaultJavaType>
@@ -42,14 +38,14 @@ public class DefaultTypeTest
     public void testArrayType()
     {
         DefaultJavaType type = newType( "int", 1 );
-        assertTrue( type.isArray() );
+        Assertions.assertTrue(type.isArray());
     }
 
     @Test
     public void testComponentType()
     {
-        assertNull( newType( "int" ).getComponentType() );
-        assertEquals( "int", newType( "int", 1 ).getComponentType().getFullyQualifiedName() );
-        assertEquals( "long", newType( "long", 3 ).getComponentType().getFullyQualifiedName() );
+        Assertions.assertNull(newType( "int" ).getComponentType());
+        Assertions.assertEquals("int", newType( "int", 1 ).getComponentType().getFullyQualifiedName());
+        Assertions.assertEquals("long", newType( "long", 3 ).getComponentType().getFullyQualifiedName());
     }
 }

@@ -1,13 +1,11 @@
 package com.thoughtworks.qdox.model.expression;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import com.thoughtworks.qdox.model.JavaType;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import org.junit.Test;
-
-import com.thoughtworks.qdox.model.JavaType;
 
 public class CastTest
 {
@@ -19,7 +17,7 @@ public class CastTest
         when( type.getCanonicalName() ).thenReturn( "int" );
         when( value.getParameterValue() ).thenReturn( "3" );
         Cast expr = new Cast( type, value );
-        assertEquals( "(int) 3", expr.getParameterValue() );
+        Assertions.assertEquals("(int) 3", expr.getParameterValue());
     }
 
     @Test
@@ -28,7 +26,7 @@ public class CastTest
         JavaType type = mock(JavaType.class);
         AnnotationValue value = mock( AnnotationValue.class );
         Cast expr = new Cast( type, value );
-        assertEquals( "(" +type+ ") " + value, expr.toString() );
+        Assertions.assertEquals("(" +type+ ") " + value, expr.toString());
     }
     
     @Test
@@ -38,6 +36,6 @@ public class CastTest
         Cast expr = new Cast( null, null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );
-        assertSame( expr.accept( visitor ), visitResult );
+        Assertions.assertSame(expr.accept( visitor ), visitResult);
     }
 }

@@ -1,19 +1,13 @@
 package com.thoughtworks.qdox.model;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import junit.framework.TestCase;
-
-public abstract class JavaParameterTest<P extends JavaParameter>
-    extends TestCase
-{
+public abstract class JavaParameterTest<P extends JavaParameter> {
     private final JavaClass VOID = newType( "void" );
-
-    public JavaParameterTest( String s )
-    {
-        super( s );
-    }
 
     // constructors
     protected abstract P newJavaParameter( JavaClass type, String name );
@@ -30,35 +24,38 @@ public abstract class JavaParameterTest<P extends JavaParameter>
         return result;
     }
 
+    @Test
     public void testHashCode()
     {
-        assertTrue( "hashCode should never resolve to 0", newJavaParameter( VOID, "" ).hashCode() != 0 );
+        Assertions.assertTrue(newJavaParameter( VOID, "" ).hashCode() != 0, "hashCode should never resolve to 0");
 
         P simpleParameter = newJavaParameter( VOID, "", false );
         P varArgParameter = newJavaParameter( VOID, "", true );
 
-        assertTrue( simpleParameter.hashCode() != varArgParameter.hashCode() );
+        Assertions.assertTrue(simpleParameter.hashCode() != varArgParameter.hashCode());
     }
 
+    @Test
     public void testEquals()
     {
         P simpleParameter = newJavaParameter( VOID, "", false );
         P varArgParameter = newJavaParameter( VOID, "", true );
-        assertTrue( !simpleParameter.equals( varArgParameter ) );
+        Assertions.assertTrue(!simpleParameter.equals( varArgParameter ));
 
         // name of parameter shouldn't matter
         P fooParameter = newJavaParameter( VOID, "foo" );
         P barParameter = newJavaParameter( VOID, "bar" );
-        assertEquals( fooParameter, barParameter );
+        Assertions.assertEquals(fooParameter, barParameter);
     }
 
+    @Test
     public void testExecutableDeclarator()
     {
         P p = newJavaParameter( newType( "x" ), "x" );
-        assertNull( p.getExecutable() );
+        Assertions.assertNull(p.getExecutable());
 
         JavaExecutable e = mock( JavaExecutable.class );
         setJavaExecutable( p, e );
-        assertSame( e, p.getExecutable() );
+        Assertions.assertSame(e, p.getExecutable());
     }
 }

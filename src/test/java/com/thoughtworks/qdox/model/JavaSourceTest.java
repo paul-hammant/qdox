@@ -1,24 +1,21 @@
 package com.thoughtworks.qdox.model;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import com.thoughtworks.qdox.library.ClassLibrary;
+import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import junit.framework.TestCase;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import com.thoughtworks.qdox.library.ClassLibrary;
-import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
-
-public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
+public abstract class JavaSourceTest<S extends JavaSource> {
 
     private S source;
-
-    public JavaSourceTest(String s) {
-        super(s);
-    }
 
     //constructors
     public abstract S newJavaSource(ClassLibrary classLibrary);
@@ -34,12 +31,12 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
         return result;
     }
 
-    @Override
-	protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    public void setUp() throws Exception {
         source = newJavaSource(new SortedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary());
     }
 
+    @Test
     public void testToStringOneClass() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn( "MyClass" );
@@ -48,9 +45,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
                 + "class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, source.toString());
+        Assertions.assertEquals(expected, source.toString());
     }
 
+    @Test
     public void testToStringMultipleClass() {
         List<JavaClass> classes = new ArrayList<JavaClass>();
         JavaClass cls1 = mock(JavaClass.class);
@@ -77,9 +75,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
                 + "class MyClass3 {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, source.toString());
+        Assertions.assertEquals(expected, source.toString());
     }
 
+    @Test
     public void testToStringPackage() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn("MyClass");
@@ -92,9 +91,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
                 + "class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, source.toString());
+        Assertions.assertEquals(expected, source.toString());
     }
 
+    @Test
     public void testToStringImport() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn("MyClass");
@@ -106,9 +106,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
                 + "class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, source.toString());
+        Assertions.assertEquals(expected, source.toString());
     }
 
+    @Test
     public void testToStringMultipleImports() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn("MyClass");
@@ -126,9 +127,10 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
                 + "class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, source.toString());
+        Assertions.assertEquals(expected, source.toString());
     }
 
+    @Test
     public void testToStringImportAndPackage() {
         JavaClass cls = mock(JavaClass.class);
         when(cls.getName()).thenReturn("MyClass");
@@ -143,12 +145,13 @@ public abstract class JavaSourceTest<S extends JavaSource> extends TestCase {
                 + "class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, source.toString());
+        Assertions.assertEquals(expected, source.toString());
     }
 
+    @Test
     public void testGetClassNamePrefix() {
-        assertEquals("", source.getClassNamePrefix());
+        Assertions.assertEquals("", source.getClassNamePrefix());
         setPackage(source, newJavaPackage("foo.bar"));
-        assertEquals("foo.bar.", source.getClassNamePrefix());
+        Assertions.assertEquals("foo.bar.", source.getClassNamePrefix());
        }
 }

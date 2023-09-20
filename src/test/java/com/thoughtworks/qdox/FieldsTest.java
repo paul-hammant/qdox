@@ -4,17 +4,17 @@
 
 package com.thoughtworks.qdox;
 
-import java.io.StringReader;
-
-import junit.framework.TestCase;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-public class FieldsTest extends TestCase
-{
+import java.io.StringReader;
+
+public class FieldsTest {
     private JavaProjectBuilder builder = new JavaProjectBuilder();
 
+    @Test
     public void testAssignmentViaBitShift() {
         String source = ""
                         + "public class X {\n"
@@ -24,12 +24,13 @@ public class FieldsTest extends TestCase
 
         builder.addSource(new StringReader(source));
         JavaClass fooClass = builder.getClassByName("X");
-        assertEquals("X", fooClass.getName());
-        assertEquals("a", fooClass.getFieldByName("a").getName());
-        assertEquals("1 << 30", fooClass.getFieldByName("a").getInitializationExpression().trim());
+        Assertions.assertEquals("X", fooClass.getName());
+        Assertions.assertEquals("a", fooClass.getFieldByName("a").getName());
+        Assertions.assertEquals("1 << 30", fooClass.getFieldByName("a").getInitializationExpression().trim());
     }
 
     // from QDOX-114
+    @Test
     public void testNewArrayWithBitShift() {
         String source = ""
                         + "public class X {\n"
@@ -38,14 +39,15 @@ public class FieldsTest extends TestCase
 
         builder.addSource(new StringReader(source));
         JavaClass fooClass = builder.getClassByName("X");
-        assertEquals("X", fooClass.getName());
-        assertEquals("a", fooClass.getFieldByName("a").getName());
-        assertEquals("new int[1 << 16]", fooClass.getFieldByName("a").getInitializationExpression().trim());
+        Assertions.assertEquals("X", fooClass.getName());
+        Assertions.assertEquals("a", fooClass.getFieldByName("a").getName());
+        Assertions.assertEquals("new int[1 << 16]", fooClass.getFieldByName("a").getInitializationExpression().trim());
     }
     
     //from QDOX-127
     //fails because returned value is " null"
     //which is already better then mentioned in the issue
+    @Test
     public void testCommentBeforeInitialization() {
     	String source = "public class X{\n" +
     			"// Attributes\n" +
@@ -58,9 +60,10 @@ public class FieldsTest extends TestCase
     	
     	JavaClass cls = builder.addSource(new StringReader(source)).getClasses().get(0);
     	JavaField field = cls.getFields().get(0);
-    	assertEquals("null", field.getInitializationExpression());
+    	Assertions.assertEquals("null", field.getInitializationExpression());
     }
-    
+
+    @Test
     public void testTwoDocletTags() {
         String source = "public class Foo {" +
         		"    /**\r\n" + 
@@ -71,10 +74,11 @@ public class FieldsTest extends TestCase
         		"}";
         JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get(0);
         JavaField field = cls.getFields().get(0);
-        assertEquals( "", field.getComment() );
-        assertEquals( 2, field.getTags().size() );
+        Assertions.assertEquals("", field.getComment());
+        Assertions.assertEquals(2, field.getTags().size());
     }
-    
+
+    @Test
     public void testCommentAndTwoDocletTags() {
         String source = "public class Foo {" +
                 "    /**\r\n" + 
@@ -86,10 +90,11 @@ public class FieldsTest extends TestCase
                 "}";
         JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get(0);
         JavaField field = cls.getFields().get(0);
-        assertEquals( "Being Lazy Always", field.getComment() );
-        assertEquals( 2, field.getTags().size() );
+        Assertions.assertEquals("Being Lazy Always", field.getComment());
+        Assertions.assertEquals(2, field.getTags().size());
     }
 
+    @Test
     public void testMultiCommentAndTwoDocletTags() {
         String source = "public class Foo {" +
                 "    /**\r\n" + 
@@ -104,8 +109,8 @@ public class FieldsTest extends TestCase
                 "}";
         JavaClass cls = builder.addSource( new StringReader( source ) ).getClasses().get(0);
         JavaField field = cls.getFields().get(0);
-        assertEquals( "Being\r\nLazy\r\nAlways", field.getComment() );
-        assertEquals( 2, field.getTags().size() );
+        Assertions.assertEquals("Being\r\nLazy\r\nAlways", field.getComment());
+        Assertions.assertEquals(2, field.getTags().size());
     }
 
 }

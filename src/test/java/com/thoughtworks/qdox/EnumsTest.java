@@ -1,13 +1,14 @@
 package com.thoughtworks.qdox;
 
+import com.thoughtworks.qdox.model.JavaClass;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.StringReader;
 
-import junit.framework.TestCase;
+public class EnumsTest {
 
-import com.thoughtworks.qdox.model.JavaClass;
-
-public class EnumsTest extends TestCase {
-
+    @Test
     public void testAddEmptyEnumsToModel() {
         String source = ""
                 + "public enum Enum1 {}\n"
@@ -17,11 +18,12 @@ public class EnumsTest extends TestCase {
         JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
-        assertTrue(javaDocBuilder.getClassByName("Enum1").isEnum());
-        assertTrue(javaDocBuilder.getClassByName("Enum2").isEnum());
-        assertTrue(javaDocBuilder.getClassByName("Enum3").isEnum());
+        Assertions.assertTrue(javaDocBuilder.getClassByName("Enum1").isEnum());
+        Assertions.assertTrue(javaDocBuilder.getClassByName("Enum2").isEnum());
+        Assertions.assertTrue(javaDocBuilder.getClassByName("Enum3").isEnum());
     }
 
+    @Test
     public void testAddSimpleEnumsToModel() {
 
         String source = ""
@@ -35,11 +37,12 @@ public class EnumsTest extends TestCase {
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("X");
-        assertEquals("int", cls.getFieldByName("someField").getType().getValue()); // sanity check
-        assertTrue(javaDocBuilder.getClassByName("Enum1").isEnum());
-        assertTrue(javaDocBuilder.getClassByName("X$Enum2").isEnum());
-    }    
-    
+        Assertions.assertEquals("int", cls.getFieldByName("someField").getType().getValue()); // sanity check
+        Assertions.assertTrue(javaDocBuilder.getClassByName("Enum1").isEnum());
+        Assertions.assertTrue(javaDocBuilder.getClassByName("X$Enum2").isEnum());
+    }
+
+    @Test
     public void testAddEnumImplementingInterfaceToModel() {
         String source = ""
                 + "public enum Enum1 implements java.io.Serializable { a, b }";
@@ -48,10 +51,11 @@ public class EnumsTest extends TestCase {
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("Enum1");
-        assertTrue(cls.isEnum());
-        assertTrue(cls.isA("java.io.Serializable"));
+        Assertions.assertTrue(cls.isEnum());
+        Assertions.assertTrue(cls.isA("java.io.Serializable"));
     }
 
+    @Test
     public void testAddEnumWithAnnotationToModel() {
         String source = ""
                 + "public enum Enum1 implements java.io.Serializable { a, @Deprecated b }";
@@ -60,10 +64,11 @@ public class EnumsTest extends TestCase {
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("Enum1");
-        assertTrue(cls.isEnum());
-        assertTrue(cls.isA("java.io.Serializable"));
+        Assertions.assertTrue(cls.isEnum());
+        Assertions.assertTrue(cls.isA("java.io.Serializable"));
     }
 
+    @Test
     public void testAddEnumWithFieldAndConstructorsToModel() {
 
         String source = ""
@@ -84,15 +89,16 @@ public class EnumsTest extends TestCase {
         javaDocBuilder.addSource(new StringReader(source));
 
         JavaClass cls = javaDocBuilder.getClassByName("X$EnumWithConstructors");
-        assertTrue(cls.isEnum());
-        assertEquals( 3, cls.getFields().size() );
-        assertEquals( 2, cls.getConstructors().size() );
-        assertEquals("int", cls.getFieldByName("someField").getType().getValue()); // sanity check
-        assertTrue( "c should be recognized as a enumConstant", cls.getFieldByName( "c" ).isEnumConstant() );
-        assertTrue( "d should be recognized as a enumConstant", cls.getFieldByName( "d" ).isEnumConstant() );
-        assertFalse( cls.getFieldByName( "someField" ).isEnumConstant() );
+        Assertions.assertTrue(cls.isEnum());
+        Assertions.assertEquals(3, cls.getFields().size());
+        Assertions.assertEquals(2, cls.getConstructors().size());
+        Assertions.assertEquals("int", cls.getFieldByName("someField").getType().getValue()); // sanity check
+        Assertions.assertTrue(cls.getFieldByName( "c" ).isEnumConstant(), "c should be recognized as a enumConstant");
+        Assertions.assertTrue(cls.getFieldByName( "d" ).isEnumConstant(), "d should be recognized as a enumConstant");
+        Assertions.assertFalse(cls.getFieldByName( "someField" ).isEnumConstant());
     }
 
+    @Test
     public void testAddEnumsWithMethodsToModel() {
         String source = ""
                 + "public enum Animal {\n"
@@ -106,10 +112,11 @@ public class EnumsTest extends TestCase {
         JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
-        assertTrue(javaDocBuilder.getClassByName("Animal").isEnum());
+        Assertions.assertTrue(javaDocBuilder.getClassByName("Animal").isEnum());
     }
 
     //Verify test case from QDOX-74
+    @Test
     public void testAddEnumsWithConstructorsToModel() {
         String source = ""
                 + "public enum AccountType {\n"
@@ -122,10 +129,11 @@ public class EnumsTest extends TestCase {
         JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
-        assertTrue(javaDocBuilder.getClassByName("AccountType").isEnum());
+        Assertions.assertTrue(javaDocBuilder.getClassByName("AccountType").isEnum());
     }
     
     //Verify test case from QDOX-74
+    @Test
     public void testAddEnumsThatDontEndInSemicolon() {
         String source = ""
                 + "public enum Foo { BAR }\n";
@@ -133,10 +141,11 @@ public class EnumsTest extends TestCase {
         JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource(new StringReader(source));
 
-        assertTrue(javaDocBuilder.getClassByName("Foo").isEnum());
+        Assertions.assertTrue(javaDocBuilder.getClassByName("Foo").isEnum());
     }
-    
-    
+
+
+    @Test
     public void testEnumBeforeClass() {
         String source = "" +
         	"package org.carrot2.util.attribute.constraint;" +
@@ -149,7 +158,8 @@ public class EnumsTest extends TestCase {
         	"}";
         new JavaProjectBuilder().addSource(new StringReader(source));
    }
-    
+
+    @Test
     public void testEnumAfterClass() {
         String source = "" +
         	"package org.carrot2.util.attribute.constraint;" +
@@ -164,6 +174,7 @@ public class EnumsTest extends TestCase {
    }
     
     //for QDOX-153
+    @Test
     public void testAnotherEnumTest() {
     	String source = "package org.apache.myfaces.el.unified.resolver;\n" +
     			"public final class FacesCompositeELResolver extends org.apache.myfaces.el.CompositeELResolver\n" +
@@ -177,6 +188,7 @@ public class EnumsTest extends TestCase {
      }
     
     // QDOX-240
+    @Test
     public void testObjectCreation()
     {
         String source="package simpleenum;\r\n" + 
@@ -194,6 +206,7 @@ public class EnumsTest extends TestCase {
     }
     
     // QDOX-240
+    @Test
     public void testMethodInvocation()
     {
         String source="package simpleenum;\r\n" + 

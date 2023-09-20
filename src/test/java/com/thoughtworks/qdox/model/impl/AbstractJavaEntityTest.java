@@ -1,19 +1,16 @@
 package com.thoughtworks.qdox.model.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import com.thoughtworks.qdox.model.DocletTag;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.thoughtworks.qdox.model.DocletTag;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AbstractJavaEntityTest {
 
@@ -44,9 +41,9 @@ public class AbstractJavaEntityTest {
         tags.add(horseNotSoMuchTag);
         entity.setTags(tags);
 
-        assertEquals(2, entity.getTagsByName("monkey").size());
-        assertEquals(1, entity.getTagsByName("horse").size());
-        assertEquals(0, entity.getTagsByName("non existent tag").size());
+        Assertions.assertEquals(2, entity.getTagsByName("monkey").size());
+        Assertions.assertEquals(1, entity.getTagsByName("horse").size());
+        Assertions.assertEquals(0, entity.getTagsByName("non existent tag").size());
     }
 
     @Test
@@ -69,9 +66,9 @@ public class AbstractJavaEntityTest {
         tags.add(horseNotSoMuchTag);
         entity.setTags(tags);
 
-        assertEquals("is good", entity.getTagByName("monkey").getValue());
-        assertEquals("not so much", entity.getTagByName("horse").getValue());
-        assertNull(entity.getTagByName("cow"));
+        Assertions.assertEquals("is good", entity.getTagByName("monkey").getValue());
+        Assertions.assertEquals("not so much", entity.getTagByName("horse").getValue());
+        Assertions.assertNull(entity.getTagByName("cow"));
 
     }
 
@@ -79,53 +76,53 @@ public class AbstractJavaEntityTest {
     public void testPublicModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers( Collections.singletonList( "public" ) );
-        assertTrue( entity.isPublic() );
+        Assertions.assertTrue(entity.isPublic());
     }
 
     @Test
     public void testPrivateModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(Collections.singletonList( "private" ));
-        assertTrue(entity.isPrivate());
+        Assertions.assertTrue(entity.isPrivate());
     }
 
     @Test
     public void testAbstractModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(Arrays.asList(new String[]{"public", "abstract"}));
-        assertTrue(entity.isAbstract());
-        assertTrue(!entity.isPrivate());
+        Assertions.assertTrue(entity.isAbstract());
+        Assertions.assertTrue(!entity.isPrivate());
     }
 
     @Test
     public void testProtectedModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(Arrays.asList(new String[]{"protected", "abstract", "synchronized", "transient"}));
-        assertTrue(entity.isProtected());
-        assertTrue(entity.isSynchronized());
-        assertTrue(entity.isTransient());
+        Assertions.assertTrue(entity.isProtected());
+        Assertions.assertTrue(entity.isSynchronized());
+        Assertions.assertTrue(entity.isTransient());
     }
 
     @Test
     public void testStaticModifer() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(Arrays.asList(new String[]{"public", "static", "final"}));
-        assertTrue(entity.isStatic());
-        assertTrue(entity.isFinal());
+        Assertions.assertTrue(entity.isStatic());
+        Assertions.assertTrue(entity.isFinal());
     }
 
     @Test
     public void testQDOX30() {
         AbstractJavaEntity entity = newAbstractJavaEntity();
         entity.setModifiers(Arrays.asList(new String[]{"native", "volatile", "strictfp"}));
-        assertTrue(entity.isNative());
-        assertTrue(entity.isVolatile());
-        assertTrue(entity.isStrictfp());
+        Assertions.assertTrue(entity.isNative());
+        Assertions.assertTrue(entity.isVolatile());
+        Assertions.assertTrue(entity.isStrictfp());
     }
 
     @Test
     public void testGetTagsReturnsEmptyArrayInsteadOfNull() {
     	AbstractJavaEntity entity = newAbstractJavaEntity();
-        assertEquals(0, entity.getTags().size());
+        Assertions.assertEquals(0, entity.getTags().size());
     }
 }

@@ -1,20 +1,19 @@
 package com.thoughtworks.qdox.parser.impl;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import com.thoughtworks.qdox.builder.Builder;
+import com.thoughtworks.qdox.parser.structs.TagDef;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.stubbing.answers.ReturnsElementsOf;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.stubbing.answers.ReturnsElementsOf;
-
-import com.thoughtworks.qdox.builder.Builder;
-import com.thoughtworks.qdox.parser.structs.TagDef;
+import static org.mockito.Mockito.*;
 
 public class DefaultJavaCommentParserTest
 {
@@ -25,7 +24,7 @@ public class DefaultJavaCommentParserTest
     private DefaultJavaCommentLexer lexer;
     private Builder builder;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         lexer = mock(DefaultJavaCommentLexer.class);
         builder = mock(Builder.class);
@@ -33,7 +32,7 @@ public class DefaultJavaCommentParserTest
         textValues.clear();
     }
     
-    @After
+    @AfterEach
     public void tearDown()
     {
         verifyNoMoreInteractions( builder );
@@ -75,8 +74,8 @@ public class DefaultJavaCommentParserTest
         // verify
         verify(builder).addJavaDocTag( tagCaptor.capture() );
         TagDef tag = tagCaptor.getValue();
-        assertEquals( "This", tag.getName() );
-        assertEquals( "is great!", tag.getText() );
+        Assertions.assertEquals("This", tag.getName());
+        Assertions.assertEquals("is great!", tag.getText());
     }
 
     @Test
@@ -98,8 +97,8 @@ public class DefaultJavaCommentParserTest
         // verify
         verify(builder).addJavaDocTag( tagCaptor.capture() );
         TagDef tag = tagCaptor.getValue();
-        assertEquals( "eatme", tag.getName() );
-        assertEquals( "", tag.getText() );
+        Assertions.assertEquals("eatme", tag.getName());
+        Assertions.assertEquals("", tag.getText());
     }
 
     @Test
@@ -121,8 +120,8 @@ public class DefaultJavaCommentParserTest
         // verify
         verify( builder ).addJavaDocTag( tagCaptor.capture() );
         TagDef tag = tagCaptor.getValue();
-        assertEquals( "This", tag.getName() );
-        assertEquals( "is great! Mmmkay.", tag.getText() );
+        Assertions.assertEquals("This", tag.getName());
+        Assertions.assertEquals("is great! Mmmkay.", tag.getText());
     }
 
     @Test
@@ -146,11 +145,11 @@ public class DefaultJavaCommentParserTest
         // verify
         verify(builder, times(2)).addJavaDocTag( tagCaptor.capture() );
         TagDef tag1 = tagCaptor.getAllValues().get( 0 );
-        assertEquals( "This", tag1.getName() );
-        assertEquals( "is great!", tag1.getText() );
+        Assertions.assertEquals("This", tag1.getName());
+        Assertions.assertEquals("is great!", tag1.getText());
         TagDef tag2 = tagCaptor.getAllValues().get( 1 ) ;
-        assertEquals( "mock", tag2.getName() );
-        assertEquals( "generate", tag2.getText() );
+        Assertions.assertEquals("mock", tag2.getName());
+        Assertions.assertEquals("generate", tag2.getText());
     }
 
     @Test
@@ -176,11 +175,11 @@ public class DefaultJavaCommentParserTest
         verify(builder).addJavaDoc( "Welcome! Here is my class." );
         verify(builder, times(2) ).addJavaDocTag( tagCaptor.capture() );
         TagDef tag1 = tagCaptor.getAllValues().get( 0 );
-        assertEquals( "This", tag1.getName() );
-        assertEquals( "is great!", tag1.getText() );
+        Assertions.assertEquals("This", tag1.getName());
+        Assertions.assertEquals("is great!", tag1.getText());
         TagDef tag2 = tagCaptor.getAllValues().get( 1 ) ;
-        assertEquals( "mock", tag2.getName() );
-        assertEquals( "generate", tag2.getText() );
+        Assertions.assertEquals("mock", tag2.getName());
+        Assertions.assertEquals("generate", tag2.getText());
     }
 
     @Test

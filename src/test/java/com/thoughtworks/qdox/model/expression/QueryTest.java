@@ -1,11 +1,10 @@
 package com.thoughtworks.qdox.model.expression;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import org.junit.Test;
 
 
 public class QueryTest
@@ -21,7 +20,7 @@ public class QueryTest
         when( trueExpr.getParameterValue() ).thenReturn( "consequent" );
         when( falseExpr.getParameterValue() ).thenReturn( "alternative" );
         Query expr = new Query( condition, trueExpr, falseExpr );
-        assertEquals( "predicate ? consequent : alternative", expr.getParameterValue() );
+        Assertions.assertEquals("predicate ? consequent : alternative", expr.getParameterValue());
     }
 
     @Test
@@ -31,7 +30,7 @@ public class QueryTest
         AnnotationValue trueExpr = mock( AnnotationValue.class );
         AnnotationValue falseExpr = mock( AnnotationValue.class );
         Query expr = new Query( condition, trueExpr, falseExpr );
-        assertEquals( condition + " ? " + trueExpr + " : " + falseExpr, expr.toString() );
+        Assertions.assertEquals(condition + " ? " + trueExpr + " : " + falseExpr, expr.toString());
     }
     
     @Test
@@ -41,6 +40,6 @@ public class QueryTest
         Query expr = new Query( null, null, null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );
-        assertSame( expr.accept( visitor ), visitResult );
+        Assertions.assertSame(expr.accept( visitor ), visitResult);
     }
 }

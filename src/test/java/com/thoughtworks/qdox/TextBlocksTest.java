@@ -1,13 +1,11 @@
 package com.thoughtworks.qdox;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.StringReader;
-
-import org.junit.Test;
-
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaSource;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.StringReader;
 
 /**
  * Examples from <a href="https://docs.oracle.com/en/java/javase/16/text-blocks/index.html">https://docs.oracle.com/en/java/javase/16/text-blocks/index.html</a>
@@ -27,8 +25,8 @@ public class TextBlocksTest
             + "                Pat Q. Smith\"\"\"; }";
         JavaSource javaSource = builder.addSource( new StringReader( source ) );
         JavaField javaField = javaSource.getClasses().get( 0 ).getFieldByName( "tbName" );
-        assertEquals( "\"\"\"\r\n"
-                        + "                Pat Q. Smith\"\"\"", javaField.getInitializationExpression() );
+        Assertions.assertEquals("\"\"\"\r\n"
+                        + "                Pat Q. Smith\"\"\"", javaField.getInitializationExpression());
     }
     
 }

@@ -1,46 +1,44 @@
 package com.thoughtworks.qdox;
 
-import static org.mockito.Mockito.*;
+import com.thoughtworks.qdox.model.*;
+import com.thoughtworks.qdox.model.impl.DefaultJavaParameterizedType;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.StringReader;
-import java.util.Collection;
 import java.util.Collections;
 
-import com.thoughtworks.qdox.model.impl.DefaultJavaParameterizedType;
-import junit.framework.TestCase;
-
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaParameterizedType;
-import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.JavaWildcardType;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author <a href="mailto:joew@thoughtworks.com">Joe Walnes</a>
  * @author Aslak Helles&oslash;y
  * @author Mike Williams
  */
-public class GenericsTest extends TestCase {
+public class GenericsTest {
     
     private JavaProjectBuilder builder = new JavaProjectBuilder();
 
+    @Test
     public void testShouldUnderstandSingleGenericClassDeclarations() {
         String source = "" +
                 "public interface Foo<T> extends Bar<T> {}";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Foo", builder.getClassByName("Foo").getName());
+        Assertions.assertEquals("Foo", builder.getClassByName("Foo").getName());
     }
 
+    @Test
     public void testShouldUnderstandMultipleGenericClassDeclarations() {
         String source = "" +
                 "public interface Foo<X,Y> extends Bar<X,Y> {}";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Foo", builder.getClassByName("Foo").getName());
+        Assertions.assertEquals("Foo", builder.getClassByName("Foo").getName());
     }
 
+    @Test
     public void testShouldUnderstandMultipleGenericsInMethodDeclarations() {
         String source = "" +
                 "public interface Foo {" +
@@ -48,9 +46,10 @@ public class GenericsTest extends TestCase {
                 "}";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Foo", builder.getClassByName("Foo").getName());
+        Assertions.assertEquals("Foo", builder.getClassByName("Foo").getName());
     }
 
+    @Test
     public void testShouldUnderstandOuterAndInnerClassGenericsInMethodDeclarations() {
         String source = "" +
                 "    public interface Foo {\n" +
@@ -58,9 +57,10 @@ public class GenericsTest extends TestCase {
                 "    }";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Foo", builder.getClassByName("Foo").getName());
+        Assertions.assertEquals("Foo", builder.getClassByName("Foo").getName());
     }
 
+    @Test
     public void testShouldUnderstandMultipleGenericsInConstructorDeclarations() {
         String source = "" +
                 "public class Bar {" +
@@ -68,9 +68,10 @@ public class GenericsTest extends TestCase {
                 "}";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Bar", builder.getClassByName("Bar").getName());
+        Assertions.assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
 
+    @Test
     public void testShouldUnderstandMultipleGenericsInFieldDeclarations() {
         String source = "" +
                 "public class Bar {" +
@@ -78,9 +79,10 @@ public class GenericsTest extends TestCase {
                 "}";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Bar", builder.getClassByName("Bar").getName());
+        Assertions.assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
-    
+
+    @Test
     public void testShouldUnderstandNestedGenerics() {
         String source = "" +
                 "public class Bar {" +
@@ -88,9 +90,10 @@ public class GenericsTest extends TestCase {
                 "}";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Bar", builder.getClassByName("Bar").getName());
+        Assertions.assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
-    
+
+    @Test
     public void testShouldUnderstandFullyQualifiedTypeArguments() {
         String source = "" +
                 "public class Bar {" +
@@ -98,39 +101,44 @@ public class GenericsTest extends TestCase {
                 "}";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Bar", builder.getClassByName("Bar").getName());
+        Assertions.assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
 
+    @Test
     public void testShouldUnderstandBoundedTypeParameters() {
         String source = "" +
                 "public class Bar<T extends Date> {}";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Bar", builder.getClassByName("Bar").getName());
+        Assertions.assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
 
+    @Test
     public void testShouldUnderstandComplexBoundedTypeParameters() {
         String source = "" +
                 "public class Bar<T extends Date & Serializable> {}";
 
         builder.addSource(new StringReader(source));
-        assertEquals("Bar", builder.getClassByName("Bar").getName());
+        Assertions.assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
-    
+
+    @Test
     public void testShouldUnderstandWildcardTypeArguments() {
         String source = "" +
                 "public class Bar { private Class<? extends Date> klass; }";
         builder.addSource(new StringReader(source));
-        assertEquals("Bar", builder.getClassByName("Bar").getName());
+        Assertions.assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
-    
+
+    @Test
     public void testShouldUnderstandBoundedWildcardTypeArguments() {
         String source = "" +
                 "public class Bar { Map<? super String, ? extends Date> klass; }";
         builder.addSource(new StringReader(source));
-        assertEquals("Bar", builder.getClassByName("Bar").getName());
+        Assertions.assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
 
+    @Test
     public void testShouldUnderstandMethodTypeParameters() {
         String source = "" +
                 "public class Bar {" +
@@ -139,9 +147,10 @@ public class GenericsTest extends TestCase {
                 "    }" +
                 "}";
         builder.addSource(new StringReader(source));
-        assertEquals("Bar", builder.getClassByName("Bar").getName());
+        Assertions.assertEquals("Bar", builder.getClassByName("Bar").getName());
     }
 
+    @Test
     public void testShouldUnderstandAnnotationsOnTypeParameters() {
         String source = "import com.foo.Item;\n" +
                 "public class Bar {\n" +
@@ -153,15 +162,16 @@ public class GenericsTest extends TestCase {
                 "}";
         builder.addSource(new StringReader(source));
         JavaClass bar = builder.getClassByName("Bar");
-        assertEquals("Bar", bar.getName());
+        Assertions.assertEquals("Bar", bar.getName());
 
-        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(0).getReturns()).getActualTypeArguments().get(0)));
-        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(1).getReturns()).getActualTypeArguments().get(0)));
-        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(2).getReturns()).getActualTypeArguments().get(0)));
-        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(3).getReturns()).getActualTypeArguments().get(0)));
-        assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(4).getReturns()).getActualTypeArguments().get(0)));
+        Assertions.assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(0).getReturns()).getActualTypeArguments().get(0)));
+        Assertions.assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(1).getReturns()).getActualTypeArguments().get(0)));
+        Assertions.assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(2).getReturns()).getActualTypeArguments().get(0)));
+        Assertions.assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(3).getReturns()).getActualTypeArguments().get(0)));
+        Assertions.assertEquals(builder.getClassByName("com.foo.Item"), (( (DefaultJavaParameterizedType)bar.getMethods().get(4).getReturns()).getActualTypeArguments().get(0)));
     }
 
+    @Test
     public void testGenericField() {
         // Also see QDOX-77
         String source = "" +
@@ -174,14 +184,15 @@ public class GenericsTest extends TestCase {
         builder.addSource(new StringReader(source));
         
         JavaClass fooClass = builder.getClassByName("Foo");
-        assertNotNull(fooClass);
-        assertEquals("Foo", fooClass.getName());
+        Assertions.assertNotNull(fooClass);
+        Assertions.assertEquals("Foo", fooClass.getName());
         
         JavaField envField = fooClass.getFieldByName("m_env");
-        assertNotNull(envField);
-        assertEquals("Map", envField.getType().getValue());
-    } 
+        Assertions.assertNotNull(envField);
+        Assertions.assertEquals("Map", envField.getType().getValue());
+    }
 
+    @Test
     public void testGenericFieldInstantiation() {
         // Also see QDOX-77
         String source = "" +
@@ -194,14 +205,15 @@ public class GenericsTest extends TestCase {
         builder.addSource(new StringReader(source));
         
         JavaClass fooClass = builder.getClassByName("Foo");
-        assertNotNull(fooClass);
-        assertEquals("Foo", fooClass.getName());
+        Assertions.assertNotNull(fooClass);
+        Assertions.assertEquals("Foo", fooClass.getName());
         
         JavaField envField = fooClass.getFieldByName("m_env");
-        assertNotNull(envField);
-        assertEquals("Map", envField.getType().getValue());
-    } 
+        Assertions.assertNotNull(envField);
+        Assertions.assertEquals("Map", envField.getType().getValue());
+    }
 
+    @Test
     public void testGenericFieldInstantiationHalfComplex() {
         // Also see QDOX-77
         String source = "" +
@@ -214,14 +226,15 @@ public class GenericsTest extends TestCase {
         builder.addSource(new StringReader(source));
         
         JavaClass fooClass = builder.getClassByName("Foo");
-        assertNotNull(fooClass);
-        assertEquals("Foo", fooClass.getName());
+        Assertions.assertNotNull(fooClass);
+        Assertions.assertEquals("Foo", fooClass.getName());
         
         JavaField envField = fooClass.getFieldByName("m_env");
-        assertNotNull(envField);
-        assertEquals("Map", envField.getType().getValue());
+        Assertions.assertNotNull(envField);
+        Assertions.assertEquals("Map", envField.getType().getValue());
     }
 
+    @Test
     public void testGenericFieldInstantiationComplex() {
         // Also see QDOX-77
         String source = "" +
@@ -234,14 +247,15 @@ public class GenericsTest extends TestCase {
         builder.addSource(new StringReader(source));
         
         JavaClass fooClass = builder.getClassByName("Foo");
-        assertNotNull(fooClass);
-        assertEquals("Foo", fooClass.getName());
+        Assertions.assertNotNull(fooClass);
+        Assertions.assertEquals("Foo", fooClass.getName());
         
         JavaField envField = fooClass.getFieldByName("m_env");
-        assertNotNull(envField);
-        assertEquals("Map", envField.getType().getValue());
+        Assertions.assertNotNull(envField);
+        Assertions.assertEquals("Map", envField.getType().getValue());
     }
 
+    @Test
     public void testGenericFieldInstantiationVeryComplex() {
         // Also see QDOX-77
         String source = "" +
@@ -254,14 +268,15 @@ public class GenericsTest extends TestCase {
         builder.addSource(new StringReader(source));
         
         JavaClass fooClass = builder.getClassByName("Foo");
-        assertNotNull(fooClass);
-        assertEquals("Foo", fooClass.getName());
+        Assertions.assertNotNull(fooClass);
+        Assertions.assertEquals("Foo", fooClass.getName());
         
         JavaField envField = fooClass.getFieldByName("m_env");
-        assertNotNull(envField);
-        assertEquals("Map", envField.getType().getValue());
+        Assertions.assertNotNull(envField);
+        Assertions.assertEquals("Map", envField.getType().getValue());
     }
 
+    @Test
     public void testJiraQdox66() {
         // Also see QDOX-77
         String source = "" +
@@ -274,15 +289,16 @@ public class GenericsTest extends TestCase {
         builder.addSource(new StringReader(source));
         
         JavaClass fooClass = builder.getClassByName("Foo");
-        assertNotNull(fooClass);
-        assertEquals("Foo", fooClass.getName());
+        Assertions.assertNotNull(fooClass);
+        Assertions.assertEquals("Foo", fooClass.getName());
         
         JavaField envField = fooClass.getFieldByName("m_env");
-        assertNotNull(envField);
-        assertEquals("Map", envField.getType().getValue());
+        Assertions.assertNotNull(envField);
+        Assertions.assertEquals("Map", envField.getType().getValue());
     } 
     
     // QDOX-207
+    @Test
     public void testMethodReturnTypeExtends() {
         String superSource = "public abstract class Test<T> {\n" + 
         		"        private T me;\n" + 
@@ -301,13 +317,14 @@ public class GenericsTest extends TestCase {
         builder.addSource( new StringReader( superSource ) );
         builder.addSource( new StringReader( subSource ) );
         JavaMethod method = builder.getClassByName( "StringTest" ).getMethodBySignature( "getValue", null, true );
-        assertEquals( "T", method.getReturnType(false).getValue() );
-        assertEquals( "java.lang.Object", method.getReturnType().getFullyQualifiedName() );
-        assertEquals( "java.lang.Object", method.getReturnType( false ).getFullyQualifiedName() );
-        assertEquals( "java.lang.String", method.getReturnType( true ).getFullyQualifiedName() );
+        Assertions.assertEquals("T", method.getReturnType(false).getValue());
+        Assertions.assertEquals("java.lang.Object", method.getReturnType().getFullyQualifiedName());
+        Assertions.assertEquals("java.lang.Object", method.getReturnType( false ).getFullyQualifiedName());
+        Assertions.assertEquals("java.lang.String", method.getReturnType( true ).getFullyQualifiedName());
     }
     
     //GWT-186
+    @Test
     public void testMethodReturnTypeImplements() {
         String source1="public interface GenericDao<TEntity, TKey> {\n" + 
         		"public List<TEntity> getAll();\n" + 
@@ -327,36 +344,37 @@ public class GenericsTest extends TestCase {
         builder.addSource( new StringReader( source2 ) );
         builder.addSource( new StringReader( source3 ) );
         JavaMethod method = builder.getClassByName( "GenericDao" ).getMethodBySignature( "getRandom", null, true );
-        assertEquals( "TEntity", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("TEntity", method.getReturnType( true ).getGenericValue());
         method = builder.getClassByName( "GenericDao" ).getMethodBySignature( "getAll", null, true );
-        assertEquals( "List<TEntity>", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("List<TEntity>", method.getReturnType( true ).getGenericValue());
         method = builder.getClassByName( "GenericDao" ).getMethodBySignature( "asMap", null, true );
-        assertEquals( "Map<TKey,TEntity>", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("Map<TKey,TEntity>", method.getReturnType( true ).getGenericValue());
 
         method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "getRandom", null, true );
-        assertEquals( "Subject", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("Subject", method.getReturnType( true ).getGenericValue());
         method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "getAll", null, true );
-        assertEquals( "List<Subject>", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("List<Subject>", method.getReturnType( true ).getGenericValue());
         method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "asMap", null, true );
-        assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericFullyQualifiedName() );
-        assertEquals( "Map<Long,Subject>", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericFullyQualifiedName());
+        Assertions.assertEquals("Map<Long,Subject>", method.getReturnType( true ).getGenericValue());
         
         method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "getRandom", null, true );
-        assertEquals( "Subject", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("Subject", method.getReturnType( true ).getGenericValue());
         method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "getAll", null, true );
-        assertEquals( "List<Subject>", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("List<Subject>", method.getReturnType( true ).getGenericValue());
         method = builder.getClassByName( "SubjectService" ).getMethodBySignature( "asMap", null, true );
-        assertEquals( "Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericFullyQualifiedName() );
-        assertEquals( "Map<Long,Subject>", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("Map<java.lang.Long,Subject>", method.getReturnType( true ).getGenericFullyQualifiedName());
+        Assertions.assertEquals("Map<Long,Subject>", method.getReturnType( true ).getGenericValue());
         
         JavaType tEntity = mock( JavaType.class );
         when( tEntity.getFullyQualifiedName() ).thenReturn( "TEntity[]" );
         method = builder.getClassByName( "SubjectDao" ).getMethodBySignature( "persist", Collections.singletonList( tEntity ), true );
-        assertNotNull( method );
-        assertEquals( "Subject[]", method.getParameterTypes( true ).get( 0 ).getGenericFullyQualifiedName() );
+        Assertions.assertNotNull(method);
+        Assertions.assertEquals("Subject[]", method.getParameterTypes( true ).get( 0 ).getGenericFullyQualifiedName());
     }
     
     //for QDOX-210
+    @Test
     public void testResolveTypeGetMethod() {
         String source1="import java.util.*;" +
         "public interface GenericDao<TEntity, TKey> {\n" + 
@@ -380,16 +398,17 @@ public class GenericsTest extends TestCase {
         
         JavaClass clazz = builder.getClassByName( "SubjectService" );
         JavaMethod method = clazz.getMethods( true ).get(0);
-        assertEquals( "getAll", method.getName() );
-        assertEquals( "java.util.List<Subject>", method.getReturnType( true ).getGenericFullyQualifiedName() );
-        assertEquals( "List<Subject>", method.getReturnType( true ).getGenericValue() );
+        Assertions.assertEquals("getAll", method.getName());
+        Assertions.assertEquals("java.util.List<Subject>", method.getReturnType( true ).getGenericFullyQualifiedName());
+        Assertions.assertEquals("List<Subject>", method.getReturnType( true ).getGenericValue());
         method = clazz.getMethods( true ).get(2);
-        assertEquals( "findById", method.getName() );
-        assertEquals( "java.lang.Long", method.getParameterTypes( true ).get(0).getGenericFullyQualifiedName() );
-        assertEquals( "Long", method.getParameterTypes( true ).get(0).getGenericValue() );
+        Assertions.assertEquals("findById", method.getName());
+        Assertions.assertEquals("java.lang.Long", method.getParameterTypes( true ).get(0).getGenericFullyQualifiedName());
+        Assertions.assertEquals("Long", method.getParameterTypes( true ).get(0).getGenericValue());
     }
     
     // for QDOX-239
+    @Test
     public void testFieldWithWildcardType()
     {
        StringBuilder b = new StringBuilder("package test;\n");
@@ -400,11 +419,11 @@ public class GenericsTest extends TestCase {
        builder.addSource(new StringReader(b.toString()));
        JavaClass javaClass = builder.getClassByName( "test.TestClass" );
        JavaField field = javaClass.getFields().get( 0 );
-       assertTrue( field.getType() instanceof JavaParameterizedType );
+       Assertions.assertTrue(field.getType() instanceof JavaParameterizedType);
        JavaParameterizedType paramType = (JavaParameterizedType) field.getType();
-       assertTrue( paramType.getActualTypeArguments().get( 0 ) instanceof JavaWildcardType);
+       Assertions.assertTrue(paramType.getActualTypeArguments().get( 0 ) instanceof JavaWildcardType);
        JavaWildcardType wildcardType = (JavaWildcardType) paramType.getActualTypeArguments().get( 0 );
-       assertEquals("? extends java.util.Map<java.lang.String,E>", wildcardType.getGenericFullyQualifiedName() );
+       Assertions.assertEquals("? extends java.util.Map<java.lang.String,E>", wildcardType.getGenericFullyQualifiedName());
     }
 
 }

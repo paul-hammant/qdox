@@ -1,15 +1,16 @@
 package com.thoughtworks.qdox.model;
 
-import static org.hamcrest.core.IsNot.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import static org.hamcrest.core.IsNot.not;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public abstract class JavaConstructorTest<D extends JavaConstructor>
 {
@@ -45,7 +46,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
     public void testGetCodeBlockConstructor() {
         D constructor = newJavaConstructor( "Blah" );
         setModifiers(constructor, Arrays.asList(new String[]{"public"}));
-        assertEquals("public Blah() {\n}\n", constructor.getCodeBlock());
+        Assertions.assertEquals("public Blah() {\n}\n", constructor.getCodeBlock());
     }
     
 
@@ -55,7 +56,7 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         when(cls.getFullyQualifiedName()).thenReturn( "a.b.Executor" );
         D constructor = newJavaConstructor( "Executor" );
         setDeclaringClass( constructor, cls );
-        assertEquals("a.b.Executor()", constructor.toString());
+        Assertions.assertEquals("a.b.Executor()", constructor.toString());
     }
 
     @Test
@@ -65,17 +66,17 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         D constructor = newJavaConstructor( "Executor" );
         setParameters( constructor,  Collections.singletonList( newJavaParameter( newType("a.b.C"), "param" )  ));
         setDeclaringClass( constructor, cls );
-        assertEquals("a.b.C", constructor.getParameterTypes().get(0).getFullyQualifiedName());
+        Assertions.assertEquals("a.b.C", constructor.getParameterTypes().get(0).getFullyQualifiedName());
     }
     
     @Test
     public void testHashCode() {
-        assertTrue( "hashCode should never resolve to 0", newJavaConstructor( "" ).hashCode() != 0 );
+        Assertions.assertTrue(newJavaConstructor( "" ).hashCode() != 0, "hashCode should never resolve to 0");
         
         D c1 = newJavaConstructor( "Thong" );
         D c2 = newJavaConstructor( "Thong" );
         
-        assertEquals(c1.hashCode(), c2.hashCode());
+        Assertions.assertEquals(c1.hashCode(), c2.hashCode());
     }
     
     @Test
@@ -88,120 +89,120 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         D c4 = newJavaConstructor( "Thong" );
         setDeclaringClass( c4, mock( JavaClass.class ) );
 
-        assertEquals( c1, c1 );
-        assertThat( c1, not( new Object() ) );
-        assertThat( c1, not(c2) );
-        assertEquals( c2, c3 );
-        assertThat( c3, not(c4) );
+        Assertions.assertEquals(c1, c1);
+        MatcherAssert.assertThat(c1, not( new Object() ));
+        MatcherAssert.assertThat(c1, not(c2));
+        Assertions.assertEquals(c2, c3);
+        MatcherAssert.assertThat(c3, not(c4));
     }
     
     @Test
     public void testIsPublic()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isPublic() );
+        Assertions.assertTrue(!cstr.isPublic());
 
         setModifiers( cstr, Arrays.asList( new String[] { "public" } ) );
-        assertTrue( cstr.isPublic() );
+        Assertions.assertTrue(cstr.isPublic());
     }
 
     @Test
     public void testIsProtected()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isProtected() );
+        Assertions.assertTrue(!cstr.isProtected());
 
         setModifiers( cstr, Arrays.asList( new String[] { "protected" } ) );
-        assertTrue( cstr.isProtected() );
+        Assertions.assertTrue(cstr.isProtected());
     }
     
     @Test
     public void testIsPrivate()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isPrivate() );
+        Assertions.assertTrue(!cstr.isPrivate());
 
         setModifiers( cstr, Arrays.asList( new String[] { "private" } ) );
-        assertTrue( cstr.isPrivate() );
+        Assertions.assertTrue(cstr.isPrivate());
     }
 
     @Test
     public void testIsAbstract()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isAbstract() );
+        Assertions.assertTrue(!cstr.isAbstract());
 
         setModifiers( cstr, Arrays.asList( new String[] { "abstract" } ) );
-        assertTrue( cstr.isAbstract() );
+        Assertions.assertTrue(cstr.isAbstract());
     }
 
     @Test
     public void testIsFinal()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isFinal() );
+        Assertions.assertTrue(!cstr.isFinal());
 
         setModifiers( cstr, Arrays.asList( new String[] { "final" } ) );
-        assertTrue( cstr.isFinal() );
+        Assertions.assertTrue(cstr.isFinal());
     }
 
     @Test
     public void testIsNavite()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isNative() );
+        Assertions.assertTrue(!cstr.isNative());
 
         setModifiers( cstr, Arrays.asList( new String[] { "native" } ) );
-        assertTrue( cstr.isNative() );
+        Assertions.assertTrue(cstr.isNative());
     }
 
     @Test
     public void testIsStatic()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isStatic() );
+        Assertions.assertTrue(!cstr.isStatic());
 
         setModifiers( cstr, Arrays.asList( new String[] { "static" } ) );
-        assertTrue( cstr.isStatic() );
+        Assertions.assertTrue(cstr.isStatic());
     }
     
     @Test
     public void testIsStrict()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isStrictfp() );
+        Assertions.assertTrue(!cstr.isStrictfp());
 
         setModifiers( cstr, Arrays.asList( new String[] { "strictfp" } ) );
-        assertTrue( cstr.isStrictfp() );
+        Assertions.assertTrue(cstr.isStrictfp());
     }
 
     @Test
     public void testIsSynchronized()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isSynchronized() );
+        Assertions.assertTrue(!cstr.isSynchronized());
 
         setModifiers( cstr, Arrays.asList( new String[] { "synchronized" } ) );
-        assertTrue( cstr.isSynchronized() );
+        Assertions.assertTrue(cstr.isSynchronized());
     }
     
     @Test
     public void testIsTransient()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isTransient() );
+        Assertions.assertTrue(!cstr.isTransient());
 
         setModifiers( cstr, Arrays.asList( new String[] { "transient" } ) );
-        assertTrue( cstr.isTransient() );
+        Assertions.assertTrue(cstr.isTransient());
     }
     
     @Test
     public void testIsVolatile()
     {
         D cstr = newJavaConstructor( "Constructor" );
-        assertTrue( !cstr.isVolatile() );
+        Assertions.assertTrue(!cstr.isVolatile());
 
         setModifiers( cstr, Arrays.asList( new String[] { "volatile" } ) );
-        assertTrue( cstr.isVolatile() );
+        Assertions.assertTrue(cstr.isVolatile());
     }
 }

@@ -1,15 +1,9 @@
 package com.thoughtworks.qdox.model.impl;
 
-import java.util.List;
-
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaClassTest;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaPackage;
-import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.*;
+
+import java.util.List;
 
 public class DefaultJavaClassTest
     extends JavaClassTest<DefaultJavaClass>

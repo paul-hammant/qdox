@@ -1,20 +1,14 @@
 package com.thoughtworks.qdox.model.impl;
 
-import java.util.List;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaFieldTest;
 import com.thoughtworks.qdox.model.JavaSource;
 
+import java.util.List;
+
 public class DefaultJavaFieldTest
     extends JavaFieldTest<DefaultJavaField>
 {
-
-    public DefaultJavaFieldTest( String s )
-    {
-        super( s );
-    }
-
     @Override
     public DefaultJavaField newJavaField()
     {

@@ -6,12 +6,6 @@ import com.thoughtworks.qdox.model.JavaParameterTest;
 
 public class DefaultJavaParameterTest extends JavaParameterTest<DefaultJavaParameter>
 {
-
-    public DefaultJavaParameterTest( String s )
-    {
-        super( s );
-    }
-
     @Override
     protected DefaultJavaParameter newJavaParameter( JavaClass type, String name )
     {

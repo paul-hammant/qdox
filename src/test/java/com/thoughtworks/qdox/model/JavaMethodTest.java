@@ -1,20 +1,17 @@
 package com.thoughtworks.qdox.model;
 
-import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.core.IsNot.not;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public abstract class JavaMethodTest<M extends JavaMethod> {
 
@@ -71,7 +68,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         return result;
     }
     
-    @Before
+    @BeforeEach
     public void setUp() {
         mth = newJavaMethod();
     }
@@ -92,21 +89,21 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     public void testDeclarationSignatureWithModifiers() {
         createSignatureTestMethod();
         String signature = mth.getDeclarationSignature(true);
-        assertEquals("protected final void blah(int count, MyThing t) throws FishException, FruitException", signature);
+        Assertions.assertEquals("protected final void blah(int count, MyThing t) throws FishException, FruitException", signature);
     }
 
     @Test
     public void testDeclarationSignatureWithoutModifiers() {
         createSignatureTestMethod();
         String signature = mth.getDeclarationSignature(false);
-        assertEquals("void blah(int count, MyThing t) throws FishException, FruitException", signature);
+        Assertions.assertEquals("void blah(int count, MyThing t) throws FishException, FruitException", signature);
     }
 
     @Test
     public void testCallSignature() {
         createSignatureTestMethod();
         String signature = mth.getCallSignature();
-        assertEquals("blah(count, t)", signature);
+        Assertions.assertEquals("blah(count, t)", signature);
     }
 
 //    public void testSignatureWithVarArgs() throws Exception {
@@ -119,7 +116,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     public void testGetCodeBlockSimple() {
         setName(mth, "doSomething");
         setReturns(mth, newType("java.lang.String"));
-        assertEquals("java.lang.String doSomething();\n", mth.getCodeBlock());
+        Assertions.assertEquals("java.lang.String doSomething();\n", mth.getCodeBlock());
     }
 
     @Test
@@ -127,7 +124,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setParameters( mth, Collections.singletonList( newJavaParameter(newType("String"), "thingy") ) );
-        assertEquals("void blah(String thingy);\n", mth.getCodeBlock());
+        Assertions.assertEquals("void blah(String thingy);\n", mth.getCodeBlock());
     }
 
     @Test
@@ -135,7 +132,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setParameters(mth, Arrays.asList( newJavaParameter(newType("int"), "count"), newJavaParameter(newType("MyThing"), "t") ) );
-        assertEquals("void blah(int count, MyThing t);\n", mth.getCodeBlock());
+        Assertions.assertEquals("void blah(int count, MyThing t);\n", mth.getCodeBlock());
     }
 
     @Test
@@ -143,7 +140,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setParameters(mth, Arrays.asList( newJavaParameter(newType("int"), "count"), newJavaParameter(newType("MyThing"), "t"), newJavaParameter(newType("java.lang.Meat"), "beef") ));
-        assertEquals("void blah(int count, MyThing t, java.lang.Meat beef);\n", mth.getCodeBlock());
+        Assertions.assertEquals("void blah(int count, MyThing t, java.lang.Meat beef);\n", mth.getCodeBlock());
     }
 
     @Test
@@ -151,7 +148,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setModifiers(mth, Arrays.asList(new String[]{"synchronized", "public", "final"}));
-        assertEquals("public synchronized final void blah();\n", mth.getCodeBlock());
+        Assertions.assertEquals("public synchronized final void blah();\n", mth.getCodeBlock());
     }
 
     @Test
@@ -159,7 +156,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setExceptions( mth, Arrays.asList( new JavaClass[] { newType( "RuntimeException" ) } ) );
-        assertEquals("void blah() throws RuntimeException;\n", mth.getCodeBlock());
+        Assertions.assertEquals("void blah() throws RuntimeException;\n", mth.getCodeBlock());
     }
 
     @Test
@@ -167,7 +164,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setExceptions(mth, Arrays.asList( new JavaClass[]{newType("RuntimeException"), newType("java.lang.SheepException")}));
-        assertEquals("void blah() throws RuntimeException, java.lang.SheepException;\n", mth.getCodeBlock());
+        Assertions.assertEquals("void blah() throws RuntimeException, java.lang.SheepException;\n", mth.getCodeBlock());
     }
 
     @Test
@@ -175,7 +172,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setExceptions(mth, Arrays.asList( new JavaClass[]{newType("RuntimeException"), newType("java.lang.SheepException"), newType("CowException")}));
-        assertEquals("void blah() throws RuntimeException, java.lang.SheepException, CowException;\n", mth.getCodeBlock());
+        Assertions.assertEquals("void blah() throws RuntimeException, java.lang.SheepException, CowException;\n", mth.getCodeBlock());
     }
 
     @Test
@@ -188,21 +185,21 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
                 + " * Hello\n"
                 + " */\n"
                 + "void blah();\n";
-        assertEquals(expect, mth.getCodeBlock());
+        Assertions.assertEquals(expect, mth.getCodeBlock());
     }
 
     @Test
     public void testGetCodeBlock1dArray() {
         setName(mth, "doSomething");
         setReturns(mth, newType("java.lang.String", 1));
-        assertEquals("java.lang.String[] doSomething();\n", mth.getCodeBlock());
+        Assertions.assertEquals("java.lang.String[] doSomething();\n", mth.getCodeBlock());
     }
 
     @Test
     public void testGetCodeBlock2dArray() {
         setName(mth, "doSomething");
         setReturns(mth, newType("java.lang.String", 2));
-        assertEquals("java.lang.String[][] doSomething();\n", mth.getCodeBlock());
+        Assertions.assertEquals("java.lang.String[][] doSomething();\n", mth.getCodeBlock());
     }
 
     @Test
@@ -210,7 +207,7 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setName(mth, "blah");
         setReturns(mth, newType("void"));
         setParameters( mth, Arrays.asList( newJavaParameter( newType("int", 2), "count"), newJavaParameter( newType("MyThing", 1), "t") ) );
-        assertEquals("void blah(int[][] count, MyThing[] t);\n", mth.getCodeBlock());
+        Assertions.assertEquals("void blah(int[][] count, MyThing[] t);\n", mth.getCodeBlock());
     }
 
     @Test
@@ -219,12 +216,11 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setReturns(mth, newType("java.lang.String"));
         setSourceCode(mth, "  int x = 2;\n  return STUFF;\n");
 
-        assertEquals("" +
+        Assertions.assertEquals("" +
                 "java.lang.String doStuff() {\n" +
                 "  int x = 2;\n" +
                 "  return STUFF;\n" +
-                "}\n",
-                mth.getCodeBlock());
+                "}\n", mth.getCodeBlock());
     }
     
     @Test
@@ -258,18 +254,18 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
 //        when( declaringClass.getFullyQualifiedName() ).thenReturn( "com.foo.bar" );
         setDeclaringClass( m8, mock( JavaClass.class ) );
 
-        assertEquals(mth, mth);
-        assertThat(mth, not(new Object()));
-        assertEquals(mth, m2);
-        assertEquals(m2, mth);
-        assertThat(mth, not(m3));
-        assertThat(mth, not(m4));
-        assertFalse(mth.equals(null));
-        assertThat( m4, not(m5) );
-        assertThat( m5, not(m4) );
-        assertEquals( m5, m6 );
-        assertThat( m5, not(m7) );
-        assertThat( m7, not(m8) );
+        Assertions.assertEquals(mth, mth);
+        MatcherAssert.assertThat(mth, not(new Object()));
+        Assertions.assertEquals(mth, m2);
+        Assertions.assertEquals(m2, mth);
+        MatcherAssert.assertThat(mth, not(m3));
+        MatcherAssert.assertThat(mth, not(m4));
+        Assertions.assertFalse(mth.equals(null));
+        MatcherAssert.assertThat(m4, not(m5));
+        MatcherAssert.assertThat(m5, not(m4));
+        Assertions.assertEquals(m5, m6);
+        MatcherAssert.assertThat(m5, not(m7));
+        MatcherAssert.assertThat(m7, not(m8));
     }
 
     @Test
@@ -304,16 +300,16 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
                        Arrays.asList( intArrayParam, stringArrayParam, newJavaParameter( newType( "X", 9 ), "blah" ) ) );
         setReturns( m5, voidType );
 
-        assertEquals( mth, m2 );
-        assertEquals( m2, mth );
-        assertThat( mth, not(m3) );
-        assertThat( mth, not(m5) );
+        Assertions.assertEquals(mth, m2);
+        Assertions.assertEquals(m2, mth);
+        MatcherAssert.assertThat(mth, not(m3));
+        MatcherAssert.assertThat(mth, not(m5));
     }
 
     @Test
     public void testHashCode()
     {
-        assertTrue( "hashCode should never resolve to 0", newJavaMethod( newType("void"), "" ).hashCode() != 0 );
+        Assertions.assertTrue(newJavaMethod( newType("void"), "" ).hashCode() != 0, "hashCode should never resolve to 0");
 
         JavaClass voidType = newType( "void" );
         JavaClass intType = newType( "int", 1 );
@@ -338,8 +334,8 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         setParameters( m3, Arrays.asList( intParam, stringArrayParam ) );
         setReturns( m3, voidType );
 
-        assertEquals( mth.hashCode(), m2.hashCode() );
-        assertTrue( mth.hashCode() != m3.hashCode() );
+        Assertions.assertEquals(mth.hashCode(), m2.hashCode());
+        Assertions.assertTrue(mth.hashCode() != m3.hashCode());
     }
 
     @Test
@@ -367,10 +363,10 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
             newType("double")
         };
 
-        assertTrue(mth.signatureMatches("thing", Arrays.asList( correctTypes )));
-        assertFalse(mth.signatureMatches("xxx", Arrays.asList( correctTypes )));
-        assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes1 )));
-        assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes2 )));
+        Assertions.assertTrue(mth.signatureMatches("thing", Arrays.asList( correctTypes )));
+        Assertions.assertFalse(mth.signatureMatches("xxx", Arrays.asList( correctTypes )));
+        Assertions.assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes1 )));
+        Assertions.assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes2 )));
     }
     
     @Test
@@ -398,18 +394,18 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
             newType("double")
         };
 
-        assertTrue(mth.signatureMatches("thing", Arrays.asList( correctTypes ), true));
-        assertFalse(mth.signatureMatches("thing", Arrays.asList( correctTypes ), false));
-        assertFalse(mth.signatureMatches("xxx", Arrays.asList( correctTypes ), true));
-        assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes1 ), true));
-        assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes2 ), true));
+        Assertions.assertTrue(mth.signatureMatches("thing", Arrays.asList( correctTypes ), true));
+        Assertions.assertFalse(mth.signatureMatches("thing", Arrays.asList( correctTypes ), false));
+        Assertions.assertFalse(mth.signatureMatches("xxx", Arrays.asList( correctTypes ), true));
+        Assertions.assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes1 ), true));
+        Assertions.assertFalse(mth.signatureMatches("thing", Arrays.asList( wrongTypes2 ), true));
     }
 
     @Test
     public void testParentClass() {
         JavaClass clazz = mock(JavaClass.class);
         setDeclaringClass( mth, clazz );
-        assertSame(clazz, mth.getDeclaringClass());
+        Assertions.assertSame(clazz, mth.getDeclaringClass());
     }
 
     @Test
@@ -417,8 +413,8 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
         JavaParameter paramX = newJavaParameter(newType("int"), "x");
         setParameters(mth, Arrays.asList( paramX, newJavaParameter(newType("string"), "y") ));
         
-        assertEquals(paramX, mth.getParameterByName("x"));
-        assertEquals(null, mth.getParameterByName("z"));
+        Assertions.assertEquals(paramX, mth.getParameterByName("x"));
+        Assertions.assertEquals(null, mth.getParameterByName("z"));
     }
 
     @Test
@@ -429,130 +425,130 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     	setDeclaringClass(mthd, cls);
     	setModifiers(mthd, Arrays.asList(new String[]{"public"}));
     	setParameters(mthd, Collections.singletonList( newJavaParameter(newType("java.lang.Object"), null) ));
-    	assertEquals("public boolean java.lang.Object.equals(java.lang.Object)", mthd.toString());
+    	Assertions.assertEquals("public boolean java.lang.Object.equals(java.lang.Object)", mthd.toString());
     }
     
     @Test
     public void testIsPublic()
     {
-        assertTrue( !mth.isPublic() );
+        Assertions.assertTrue(!mth.isPublic());
 
         setModifiers( mth, Arrays.asList( new String[] { "public" } ) );
-        assertTrue( mth.isPublic() );
+        Assertions.assertTrue(mth.isPublic());
     }
 
     @Test
     public void testIsProtected()
     {
-        assertTrue( !mth.isProtected() );
+        Assertions.assertTrue(!mth.isProtected());
 
         setModifiers( mth, Arrays.asList( new String[] { "protected" } ) );
-        assertTrue( mth.isProtected() );
+        Assertions.assertTrue(mth.isProtected());
     }
     
     @Test
     public void testIsPrivate()
     {
-        assertTrue( !mth.isPrivate() );
+        Assertions.assertTrue(!mth.isPrivate());
 
         setModifiers( mth, Arrays.asList( new String[] { "private" } ) );
-        assertTrue( mth.isPrivate() );
+        Assertions.assertTrue(mth.isPrivate());
     }
 
     @Test
     public void testIsAbstract()
     {
-        assertTrue( !mth.isAbstract() );
+        Assertions.assertTrue(!mth.isAbstract());
 
         setModifiers( mth, Arrays.asList( new String[] { "abstract" } ) );
-        assertTrue( mth.isAbstract() );
+        Assertions.assertTrue(mth.isAbstract());
     }
 
     @Test
     public void testIsFinal()
     {
-        assertTrue( !mth.isFinal() );
+        Assertions.assertTrue(!mth.isFinal());
 
         setModifiers( mth, Arrays.asList( new String[] { "final" } ) );
-        assertTrue( mth.isFinal() );
+        Assertions.assertTrue(mth.isFinal());
     }
 
     @Test
     public void testIsNavite()
     {
-        assertTrue( !mth.isNative() );
+        Assertions.assertTrue(!mth.isNative());
 
         setModifiers( mth, Arrays.asList( new String[] { "native" } ) );
-        assertTrue( mth.isNative() );
+        Assertions.assertTrue(mth.isNative());
     }
 
     @Test
     public void testIsStatic()
     {
-        assertTrue( !mth.isStatic() );
+        Assertions.assertTrue(!mth.isStatic());
 
         setModifiers( mth, Arrays.asList( new String[] { "static" } ) );
-        assertTrue( mth.isStatic() );
+        Assertions.assertTrue(mth.isStatic());
     }
     
     @Test
     public void testIsStrict()
     {
-        assertTrue( !mth.isStrictfp() );
+        Assertions.assertTrue(!mth.isStrictfp());
 
         setModifiers( mth, Arrays.asList( new String[] { "strictfp" } ) );
-        assertTrue( mth.isStrictfp() );
+        Assertions.assertTrue(mth.isStrictfp());
     }
 
     @Test
     public void testIsSynchronized()
     {
-        assertTrue( !mth.isSynchronized() );
+        Assertions.assertTrue(!mth.isSynchronized());
 
         setModifiers( mth, Arrays.asList( new String[] { "synchronized" } ) );
-        assertTrue( mth.isSynchronized() );
+        Assertions.assertTrue(mth.isSynchronized());
     }
     
     @Test
     public void testIsTransient()
     {
-        assertTrue( !mth.isTransient() );
+        Assertions.assertTrue(!mth.isTransient());
 
         setModifiers( mth, Arrays.asList( new String[] { "transient" } ) );
-        assertTrue( mth.isTransient() );
+        Assertions.assertTrue(mth.isTransient());
     }
     
     @Test
     public void testIsVolatile()
     {
-        assertTrue( !mth.isVolatile() );
+        Assertions.assertTrue(!mth.isVolatile());
 
         setModifiers( mth, Arrays.asList( new String[] { "volatile" } ) );
-        assertTrue( mth.isVolatile() );
+        Assertions.assertTrue(mth.isVolatile());
     }
     
     @Test
     public void testIsPropertyAccessor() 
     {
         M getNameMethod = newJavaMethod( newType( "java.lang.String" ), "getName" );
-        assertTrue( getNameMethod.isPropertyAccessor() );
+        Assertions.assertTrue(getNameMethod.isPropertyAccessor());
 
         M isValidMethod = newJavaMethod( newType( "boolean" ), "isValid" );
-        assertTrue( isValidMethod.isPropertyAccessor() );
+        Assertions.assertTrue(isValidMethod.isPropertyAccessor());
 
         M getNameWithParamMethod = newJavaMethod( newType( "boolean" ), "getName" );
         setParameters( getNameWithParamMethod, Collections.singletonList( mock(JavaParameter.class) ) );
-        assertFalse( getNameWithParamMethod.isPropertyAccessor() );
+        Assertions.assertFalse(getNameWithParamMethod.isPropertyAccessor());
 
         M gettingUpMethod = newJavaMethod( newType( "java.lang.String" ), "gettingUp" );
-        assertFalse( gettingUpMethod.isPropertyAccessor() );
+        Assertions.assertFalse(gettingUpMethod.isPropertyAccessor());
 
         M isolatedMethod = newJavaMethod( newType( "boolean" ), "isolated" );
-        assertFalse( isolatedMethod.isPropertyAccessor() );
+        Assertions.assertFalse(isolatedMethod.isPropertyAccessor());
 
         M staticGetNameMethod = newJavaMethod( newType( "java.lang.String" ), "getName" );
         setModifiers( staticGetNameMethod, Collections.singletonList( "static" ) );
-        assertFalse( staticGetNameMethod.isPropertyAccessor() );
+        Assertions.assertFalse(staticGetNameMethod.isPropertyAccessor());
     }
     
     @Test
@@ -560,18 +556,18 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
     {
         M setNameMethod = newJavaMethod( newType("void"), "setName" );
         setParameters( setNameMethod, Collections.singletonList( mock(JavaParameter.class) ) );
-        assertTrue( setNameMethod.isPropertyMutator() );
+        Assertions.assertTrue(setNameMethod.isPropertyMutator());
 
         M setUpMethod = newJavaMethod( newType("void"), "setUp" );
-        assertFalse( setUpMethod.isPropertyMutator() );
+        Assertions.assertFalse(setUpMethod.isPropertyMutator());
 
         M settingUpMethod = newJavaMethod( newType("void"), "settingUp" );
         setParameters( settingUpMethod, Collections.singletonList( mock(JavaParameter.class) ) );
-        assertFalse( settingUpMethod.isPropertyMutator() );
+        Assertions.assertFalse(settingUpMethod.isPropertyMutator());
 
         M staticSetNameMethod = newJavaMethod( newType("void"), "setName" );
         setModifiers( staticSetNameMethod, Collections.singletonList( "static" ) );
         setParameters( staticSetNameMethod, Collections.singletonList( mock(JavaParameter.class) ) );
-        assertFalse( staticSetNameMethod.isPropertyMutator() );
+        Assertions.assertFalse(staticSetNameMethod.isPropertyMutator());
     }
 }

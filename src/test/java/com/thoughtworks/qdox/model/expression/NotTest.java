@@ -1,11 +1,10 @@
 package com.thoughtworks.qdox.model.expression;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import org.junit.Test;
 
 
 public class NotTest
@@ -17,7 +16,7 @@ public class NotTest
         AnnotationValue value = mock( AnnotationValue.class );
         when( value.getParameterValue() ).thenReturn( "valid" );
         Not expr = new Not( value );
-        assertEquals( "~valid", expr.getParameterValue() );
+        Assertions.assertEquals("~valid", expr.getParameterValue());
     }
 
     @Test
@@ -25,7 +24,7 @@ public class NotTest
     {
         AnnotationValue value = mock( AnnotationValue.class );
         Not expr = new Not( value );
-        assertEquals( "~" + value, expr.toString() );
+        Assertions.assertEquals("~" + value, expr.toString());
     }
     
     @Test
@@ -35,6 +34,6 @@ public class NotTest
         Not expr = new Not( null );
         Object visitResult = new Object();
         when( visitor.visit( expr ) ).thenReturn( visitResult );
-        assertSame( expr.accept( visitor ), visitResult );
+        Assertions.assertSame(expr.accept( visitor ), visitResult);
     }
 }

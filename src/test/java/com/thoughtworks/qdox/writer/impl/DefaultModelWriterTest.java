@@ -1,46 +1,26 @@
 package com.thoughtworks.qdox.writer.impl;
 
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.JavaAnnotatedElement;
-import com.thoughtworks.qdox.model.JavaAnnotation;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaInitializer;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaModule;
-import com.thoughtworks.qdox.model.JavaModuleDescriptor;
-import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaExports;
-import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaOpens;
-import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaProvides;
-import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaRequires;
-import com.thoughtworks.qdox.model.JavaModuleDescriptor.JavaUses;
-import com.thoughtworks.qdox.model.JavaPackage;
-import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.*;
+import com.thoughtworks.qdox.model.JavaModuleDescriptor.*;
 import com.thoughtworks.qdox.model.expression.Expression;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DefaultModelWriterTest {
 
 	private DefaultModelWriter modelWriter;
 	
-	@Before
+	@BeforeEach
 	public void onSetup(){
 		modelWriter = new DefaultModelWriter();
 	}
@@ -61,7 +41,7 @@ public class DefaultModelWriterTest {
         modelWriter.commentHeader(annotatedElement);
 
         // verify
-        assertEquals(expected, modelWriter.toString());
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
     
     @Test
@@ -80,7 +60,7 @@ public class DefaultModelWriterTest {
         modelWriter.commentHeader(annotatedElement);
 
         // verify
-        assertEquals(expected, modelWriter.toString());
+        Assertions.assertEquals(expected, modelWriter.toString());
     	
     }
 
@@ -99,7 +79,7 @@ public class DefaultModelWriterTest {
         modelWriter.commentHeader(annotatedElement);
 
         // verify
-        assertEquals(expected, modelWriter.toString());
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -114,7 +94,7 @@ public class DefaultModelWriterTest {
         modelWriter.commentHeader(annotatedElement);
 
         // verify
-        assertEquals(expected, modelWriter.toString());
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -139,7 +119,7 @@ public class DefaultModelWriterTest {
         modelWriter.commentHeader(annotatedElement);
 
         // verify
-        assertEquals(expected, modelWriter.toString());
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -171,7 +151,7 @@ public class DefaultModelWriterTest {
         modelWriter.commentHeader(annotatedElement);
 
         // verify
-        assertEquals(expected, modelWriter.toString());
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -193,7 +173,7 @@ public class DefaultModelWriterTest {
         modelWriter.commentHeader(annotatedElement);
 
         // verify
-        assertEquals(expected, modelWriter.toString());
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -215,7 +195,7 @@ public class DefaultModelWriterTest {
         modelWriter.commentHeader(annotatedElement);
 
         // verify
-        assertEquals(expected, modelWriter.toString());
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
     
     
@@ -236,7 +216,7 @@ public class DefaultModelWriterTest {
         modelWriter.writeField( enumConstant );
         
         //verify
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -257,7 +237,7 @@ public class DefaultModelWriterTest {
         modelWriter.writeField( enumConstant );
         
         //verify
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -284,7 +264,7 @@ public class DefaultModelWriterTest {
         modelWriter.writeField( enumConstant );
         
         //verify
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
     
     @Test
@@ -326,7 +306,7 @@ public class DefaultModelWriterTest {
         modelWriter.writeField( enumConstant );
         
         //verify
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
     
     @Test
@@ -340,7 +320,7 @@ public class DefaultModelWriterTest {
         modelWriter.writeParameter( prm );
         
         String expected = "java.lang.String argument";
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
     
     @Test
@@ -355,7 +335,7 @@ public class DefaultModelWriterTest {
         modelWriter.writeParameter( prm );
         
         String expected = "java.lang.String... argument";
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
     
     @Test
@@ -371,7 +351,7 @@ public class DefaultModelWriterTest {
         String expected = "static {\n" +
         		"\t//test\n" +
         		"}\n";
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -387,7 +367,7 @@ public class DefaultModelWriterTest {
         String expected = "{\n" +
                 "\t//test\n" +
                 "}\n";
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
     
     @Test
@@ -402,7 +382,7 @@ public class DefaultModelWriterTest {
         modelWriter.writeAnnotation( ann );
         
         String expected = "@Anno\n";
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
     
     @Test
@@ -414,7 +394,7 @@ public class DefaultModelWriterTest {
         modelWriter.writeModuleDescriptor( descriptor );
         
         String expected = "module M.N {\n\n}\n";
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -427,7 +407,7 @@ public class DefaultModelWriterTest {
         modelWriter.writeModuleDescriptor( descriptor );
         
         String expected = "open module M.N {\n\n}\n";
-        assertEquals( expected, modelWriter.toString() );
+        Assertions.assertEquals(expected, modelWriter.toString());
     }
 
     @Test
@@ -439,7 +419,7 @@ public class DefaultModelWriterTest {
         when( requires1.getModule() ).thenReturn( moduleAB );
         when( requires1.getModifiers() ).thenReturn( Collections.<String>emptyList() );
         modelWriter.writeModuleRequires( requires1 );
-        assertEquals( "requires A.B;\n", modelWriter.toString() );
+        Assertions.assertEquals("requires A.B;\n", modelWriter.toString());
 
         modelWriter = new DefaultModelWriter();
         JavaRequires requires2 = mock( JavaRequires.class );
@@ -448,7 +428,7 @@ public class DefaultModelWriterTest {
         when( requires2.getModule() ).thenReturn( moduleCD);
         when( requires2.getModifiers() ).thenReturn( Collections.singleton( "public" ) );
         modelWriter.writeModuleRequires( requires2 );
-        assertEquals( "requires public C.D;\n", modelWriter.toString() );
+        Assertions.assertEquals("requires public C.D;\n", modelWriter.toString());
         
         modelWriter = new DefaultModelWriter();
         JavaRequires requires3 = mock( JavaRequires.class );
@@ -457,7 +437,7 @@ public class DefaultModelWriterTest {
         when( requires3.getModule() ).thenReturn( moduleEF );
         when( requires3.getModifiers() ).thenReturn( Collections.singleton( "static" ) );
         modelWriter.writeModuleRequires( requires3 );
-        assertEquals( "requires static E.F;\n", modelWriter.toString() );
+        Assertions.assertEquals("requires static E.F;\n", modelWriter.toString());
         
         modelWriter = new DefaultModelWriter();
         JavaRequires requires4 = mock( JavaRequires.class );
@@ -466,7 +446,7 @@ public class DefaultModelWriterTest {
         when( requires4.getModule() ).thenReturn( moduleGH );
         when( requires4.getModifiers() ).thenReturn( Arrays.asList( "public", "static" ) );
         modelWriter.writeModuleRequires( requires4 );
-        assertEquals( "requires public static G.H;\n", modelWriter.toString() );
+        Assertions.assertEquals("requires public static G.H;\n", modelWriter.toString());
     }
     
     @Test
@@ -477,7 +457,7 @@ public class DefaultModelWriterTest {
         when(sourcePQ.getName()).thenReturn( "P.Q" );
         when( exports1.getSource() ).thenReturn( sourcePQ );
         modelWriter.writeModuleExports( exports1 );
-        assertEquals( "exports P.Q;\n", modelWriter.toString() );
+        Assertions.assertEquals("exports P.Q;\n", modelWriter.toString());
 
         modelWriter = new DefaultModelWriter();
         JavaExports exports2 = mock( JavaExports.class );
@@ -491,7 +471,7 @@ public class DefaultModelWriterTest {
         when( moduleT2U2.getName() ).thenReturn( "T2.U2" );
         when(exports2.getTargets()).thenReturn( Arrays.asList( moduleT1U1, moduleT2U2 ) );
         modelWriter.writeModuleExports( exports2 );
-        assertEquals( "exports R.S to T1.U1, T2.U2;\n", modelWriter.toString() );
+        Assertions.assertEquals("exports R.S to T1.U1, T2.U2;\n", modelWriter.toString());
     }
     
     @Test
@@ -503,7 +483,7 @@ public class DefaultModelWriterTest {
         when(source1.getName()).thenReturn( "P.Q" );
         when( opens1.getSource() ).thenReturn( source1 );
         modelWriter.writeModuleOpens( opens1 );
-        assertEquals( "opens P.Q;\n", modelWriter.toString() );
+        Assertions.assertEquals("opens P.Q;\n", modelWriter.toString());
 
         modelWriter = new DefaultModelWriter();
         JavaOpens opens2 = mock( JavaOpens.class );
@@ -517,7 +497,7 @@ public class DefaultModelWriterTest {
         when( moduleT2U2.getName() ).thenReturn( "T2.U2" );
         when( opens2.getTargets()).thenReturn( Arrays.asList( moduleT1U1, moduleT2U2 ) );
         modelWriter.writeModuleOpens( opens2 );
-        assertEquals( "opens R.S to T1.U1, T2.U2;\n", modelWriter.toString() );
+        Assertions.assertEquals("opens R.S to T1.U1, T2.U2;\n", modelWriter.toString());
     }
     
     @Test
@@ -533,7 +513,7 @@ public class DefaultModelWriterTest {
         when( provides.getService() ).thenReturn( service );
         when( provides.getProviders() ).thenReturn( Arrays.asList( providerZ1Z2, providerZ3Z4 ) );
         modelWriter.writeModuleProvides( provides );
-        assertEquals( "provides X.Y with Z1.Z2, Z3.Z4;\n", modelWriter.toString() );
+        Assertions.assertEquals("provides X.Y with Z1.Z2, Z3.Z4;\n", modelWriter.toString());
     }
 
     @Test
@@ -544,7 +524,7 @@ public class DefaultModelWriterTest {
         when( service.getName() ).thenReturn( "V.W" );
         when( uses.getService() ).thenReturn( service );
         modelWriter.writeModuleUses( uses );
-        assertEquals( "uses V.W;\n", modelWriter.toString() );
+        Assertions.assertEquals("uses V.W;\n", modelWriter.toString());
     }
     
     @Test

@@ -1,75 +1,78 @@
 package com.thoughtworks.qdox.library;
 
-import junit.framework.TestCase;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.impl.DefaultJavaClass;
 import com.thoughtworks.qdox.model.impl.DefaultJavaPackage;
 import com.thoughtworks.qdox.model.impl.DefaultJavaSource;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class JavaClassContextTest
-    extends TestCase
-{
+public class JavaClassContextTest {
 
     private JavaClassContext context;
-    
-    @Override
-	protected void setUp()
+
+    @BeforeEach
+    public void setUp()
         throws Exception
     {
         context = new JavaClassContext();
     }
 
+    @Test
     public void testGetClassByName()
     {
-        assertNull( context.getClassByName( null ) );
-        assertNull( "a new context should be empty, not even contain java.lang.Object", context.getClassByName( "java.lang.Object" ) );
+        Assertions.assertNull(context.getClassByName( null ));
+        Assertions.assertNull(context.getClassByName( "java.lang.Object" ), "a new context should be empty, not even contain java.lang.Object");
         JavaClass clazz = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz );
         //check case sensitive
-        assertNull( context.getClassByName( "com.foo.bar" ) ); 
-        assertEquals( clazz, context.getClassByName( "com.foo.Bar" ) );
+        Assertions.assertNull(context.getClassByName( "com.foo.bar" ));
+        Assertions.assertEquals(clazz, context.getClassByName( "com.foo.Bar" ));
     }
 
+    @Test
     public void testRemoveClassByName()
     {
-        assertNull( context.removeClassByName( null ));
-        assertNull( context.removeClassByName( "com.foo.Bar" ) );
+        Assertions.assertNull(context.removeClassByName( null ));
+        Assertions.assertNull(context.removeClassByName( "com.foo.Bar" ));
         JavaClass clazz = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz );
         //check case sensitive
-        assertNull( context.getClassByName( "com.foo.bar" ) ); 
-        assertEquals( clazz, context.removeClassByName( "com.foo.Bar" ) );
+        Assertions.assertNull(context.getClassByName( "com.foo.bar" ));
+        Assertions.assertEquals(clazz, context.removeClassByName( "com.foo.Bar" ));
     }
 
+    @Test
     public void testGetClasses()
     {
-        assertNotNull( context.getClasses() );
-        assertEquals( 0, context.getClasses().size() );
+        Assertions.assertNotNull(context.getClasses());
+        Assertions.assertEquals(0, context.getClasses().size());
 
         JavaClass clazz = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz );
-        assertEquals( 1, context.getClasses().size() );
+        Assertions.assertEquals(1, context.getClasses().size());
         //weird case, add same class 
         JavaClass clazz_copy = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz_copy );
-        assertEquals( 1, context.getClasses().size() );
+        Assertions.assertEquals(1, context.getClasses().size());
         
         context.removeClassByName( "com.foo.Bar" );
         
-        assertNotNull( context.getClasses() );
-        assertEquals( 0, context.getClasses().size() );
+        Assertions.assertNotNull(context.getClasses());
+        Assertions.assertEquals(0, context.getClasses().size());
     }
 
+    @Test
     public void testAddJavaClass()
     {
         JavaClass clazz = new DefaultJavaClass( "com.foo.Bar" );
         context.add( clazz );
         //check case sensitive
-        assertNull( context.getClassByName( "com.foo.bar" ) ); 
-        assertEquals( clazz, context.getClassByName( "com.foo.Bar" ) );
+        Assertions.assertNull(context.getClassByName( "com.foo.bar" ));
+        Assertions.assertEquals(clazz, context.getClassByName( "com.foo.Bar" ));
         
         //weird case, should never happen
         try {
@@ -78,54 +81,59 @@ public class JavaClassContextTest
         catch(NullPointerException npe) {}
     }
 
+    @Test
     public void testGetPackageByName()
     {
-        assertNull( context.getPackageByName( null ) );
-        assertNull( context.getPackageByName( "java.lang" ) );
+        Assertions.assertNull(context.getPackageByName( null ));
+        Assertions.assertNull(context.getPackageByName( "java.lang" ));
         JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
-        assertEquals( pckg, context.getPackageByName( "com.foo" ) );
+        Assertions.assertEquals(pckg, context.getPackageByName( "com.foo" ));
     }
 
+    @Test
     public void testRemovePackageByName()
     {
-        assertNull( context.removePackageByName( null ) );
-        assertNull( context.removePackageByName( "com.foo" ) );
+        Assertions.assertNull(context.removePackageByName( null ));
+        Assertions.assertNull(context.removePackageByName( "com.foo" ));
         JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
-        assertEquals( pckg, context.removePackageByName( "com.foo" ) );
+        Assertions.assertEquals(pckg, context.removePackageByName( "com.foo" ));
     }
 
+    @Test
     public void testAddJavaPackage()
     {
         JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
         //check case sensitive
-        assertNull( context.getClassByName( "com.bar" ) ); 
-        assertEquals( pckg, context.getPackageByName( "com.foo" ) );
+        Assertions.assertNull(context.getClassByName( "com.bar" ));
+        Assertions.assertEquals(pckg, context.getPackageByName( "com.foo" ));
         
         //null-safe
         context.add( (JavaPackage) null );
     }
 
+    @Test
     public void testGetPackages()
     {
-        assertNotNull( context.getPackages() );
-        assertEquals( 0, context.getPackages().size() );
+        Assertions.assertNotNull(context.getPackages());
+        Assertions.assertEquals(0, context.getPackages().size());
 
         JavaPackage pckg = new DefaultJavaPackage("com.foo");
         context.add( pckg );
-        assertEquals( 1, context.getPackages().size() );
+        Assertions.assertEquals(1, context.getPackages().size());
         //add same package
         JavaPackage pckg_copy = new DefaultJavaPackage("com.foo");
         context.add( pckg_copy );
-        assertEquals( 1, context.getPackages().size() );
+        Assertions.assertEquals(1, context.getPackages().size());
         
         context.removePackageByName( "com.foo" );        
-        assertNotNull( context.getPackages() );
-        assertEquals( 0, context.getPackages().size() );
+        Assertions.assertNotNull(context.getPackages());
+        Assertions.assertEquals(0, context.getPackages().size());
     }
 
+    @Test
     public void testAddJavaSource()
     {
         JavaSource source = new DefaultJavaSource(null);
@@ -135,27 +143,29 @@ public class JavaClassContextTest
         context.add( (JavaSource) null );
     }
 
+    @Test
     public void testGetSources()
     {
-        assertNotNull( context.getSources() );
-        assertEquals( 0, context.getSources().size() );
+        Assertions.assertNotNull(context.getSources());
+        Assertions.assertEquals(0, context.getSources().size());
 
         JavaSource source = new DefaultJavaSource(null);
         context.add( source );
-        assertEquals( 1, context.getSources().size() );
+        Assertions.assertEquals(1, context.getSources().size());
 
         //every source is unique, just add it
         JavaSource source_copy = new DefaultJavaSource(null);
         context.add( source_copy );
-        assertEquals( 2, context.getSources().size() );
+        Assertions.assertEquals(2, context.getSources().size());
     }
-    
+
+    @Test
     public void testAdd() {
         context.add(new DefaultJavaClass("com.blah.Ping"));
         context.add(new DefaultJavaClass("com.moo.Poo"));
-        assertTrue(context.getClassByName("com.blah.Ping") != null );
-        assertTrue(context.getClassByName("com.moo.Poo") != null);
-        assertTrue(context.getClassByName("com.not.You") == null);
+        Assertions.assertTrue(context.getClassByName("com.blah.Ping") != null);
+        Assertions.assertTrue(context.getClassByName("com.moo.Poo") != null);
+        Assertions.assertTrue(context.getClassByName("com.not.You") == null);
     }
 
 

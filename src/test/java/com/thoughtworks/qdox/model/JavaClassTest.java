@@ -1,20 +1,16 @@
 package com.thoughtworks.qdox.model;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+import java.util.*;
+
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 public abstract class JavaClassTest<C extends JavaClass> {
 
@@ -75,7 +71,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
     
     public abstract void addClass(JavaSource source, JavaClass clazz);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         src = newJavaSource();
         cls = newJavaClass();
@@ -89,7 +85,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -100,7 +96,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "interface MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -111,7 +107,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "enum MyEnum {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -122,7 +118,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "class MyClass extends SuperClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -134,7 +130,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "interface MyClass extends SomeInterface {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -146,7 +142,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "interface MyClass extends SomeInterface, AnotherInterface {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -158,7 +154,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "interface MyClass extends SomeInterface, AnotherInterface, Thingy {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -169,7 +165,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "class MyClass implements SomeInterface {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -180,7 +176,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "class MyClass implements SomeInterface, AnotherInterface, Xx {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -192,7 +188,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "class MyClass extends SubMarine implements SomeInterface, AnotherInterface, Xx {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -203,7 +199,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "public final class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -214,14 +210,14 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "public final class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
 
         setModifiers(cls, Arrays.asList(new String[]{"abstract", "protected"}));
         expected = ""
                 + "protected abstract class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -239,7 +235,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "\tvoid doStuff();\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -281,7 +277,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "\tvoid eat();\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -316,7 +312,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "\tpublic String thing;\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -334,7 +330,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "\t}\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -353,7 +349,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "\t}\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -372,7 +368,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "\t}\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -387,7 +383,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "class MyClass {\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
@@ -426,71 +422,71 @@ public abstract class JavaClassTest<C extends JavaClass> {
                 + "\tString thingy();\n"
                 + "\n"
                 + "}\n";
-        assertEquals(expected, cls.getCodeBlock());
+        Assertions.assertEquals(expected, cls.getCodeBlock());
     }
 
     @Test
     public void testIsPublic()
     {
-        assertTrue( !cls.isPublic() );
+        Assertions.assertTrue(!cls.isPublic());
 
         setModifiers( cls, Arrays.asList( new String[] { "public" } ) );
-        assertTrue( cls.isPublic() );
+        Assertions.assertTrue(cls.isPublic());
     }
 
     @Test
     public void testIsProtected()
     {
-        assertTrue( !cls.isProtected() );
+        Assertions.assertTrue(!cls.isProtected());
 
         setModifiers( cls, Arrays.asList( new String[] { "protected" } ) );
-        assertTrue( cls.isProtected() );
+        Assertions.assertTrue(cls.isProtected());
     }
     
     @Test
     public void testIsPrivate()
     {
-        assertTrue( !cls.isPrivate() );
+        Assertions.assertTrue(!cls.isPrivate());
 
         setModifiers( cls, Arrays.asList( new String[] { "private" } ) );
-        assertTrue( cls.isPrivate() );
+        Assertions.assertTrue(cls.isPrivate());
     }
 
     @Test
     public void testIsAbstract()
     {
-        assertTrue( !cls.isAbstract() );
+        Assertions.assertTrue(!cls.isAbstract());
 
         setModifiers( cls, Arrays.asList( new String[] { "abstract" } ) );
-        assertTrue( cls.isAbstract() );
+        Assertions.assertTrue(cls.isAbstract());
     }
 
     @Test
     public void testIsFinal()
     {
-        assertTrue( !cls.isFinal() );
+        Assertions.assertTrue(!cls.isFinal());
 
         setModifiers( cls, Arrays.asList( new String[] { "final" } ) );
-        assertTrue( cls.isFinal() );
+        Assertions.assertTrue(cls.isFinal());
     }
 
     @Test
     public void testIsStatic()
     {
-        assertTrue( !cls.isStatic() );
+        Assertions.assertTrue(!cls.isStatic());
 
         setModifiers( cls, Arrays.asList( new String[] { "static" } ) );
-        assertTrue( cls.isStatic() );
+        Assertions.assertTrue(cls.isStatic());
     }
     
     @Test
     public void testIsVoid()
     {
         setName( cls, "void" );
-        assertTrue( cls.isVoid() );
+        Assertions.assertTrue(cls.isVoid());
         
         setName( cls, "Void" );
-        assertFalse( cls.isVoid() );
+        Assertions.assertFalse(cls.isVoid());
     }
 
     @Test
@@ -499,13 +495,13 @@ public abstract class JavaClassTest<C extends JavaClass> {
 
         setName(cls, "MyClass");
 
-        assertEquals("MyClass", cls.getName());
-        assertEquals("MyClass", cls.getSimpleName());
-        assertEquals("com.thoughtworks.qdox", cls.getPackage().getName());
-        assertEquals("com.thoughtworks.qdox", cls.getPackageName());
-        assertEquals("com.thoughtworks.qdox.MyClass", cls.getBinaryName());
-        assertEquals("com.thoughtworks.qdox.MyClass", cls.getCanonicalName());
-        assertEquals("com.thoughtworks.qdox.MyClass", cls.getFullyQualifiedName());
+        Assertions.assertEquals("MyClass", cls.getName());
+        Assertions.assertEquals("MyClass", cls.getSimpleName());
+        Assertions.assertEquals("com.thoughtworks.qdox", cls.getPackage().getName());
+        Assertions.assertEquals("com.thoughtworks.qdox", cls.getPackageName());
+        Assertions.assertEquals("com.thoughtworks.qdox.MyClass", cls.getBinaryName());
+        Assertions.assertEquals("com.thoughtworks.qdox.MyClass", cls.getCanonicalName());
+        Assertions.assertEquals("com.thoughtworks.qdox.MyClass", cls.getFullyQualifiedName());
     }
 
     @Test
@@ -525,12 +521,12 @@ public abstract class JavaClassTest<C extends JavaClass> {
         setPackage( inner, pkg );
         setDeclaringClass( inner, outer );
         
-        assertEquals("Inner", inner.getName());
-        assertEquals("Inner", inner.getSimpleName());
-        assertEquals("foo.bar", inner.getPackageName());
-        assertEquals("foo.bar.Outer$Inner", inner.getBinaryName());
-        assertEquals("foo.bar.Outer.Inner", inner.getCanonicalName());
-        assertEquals("foo.bar.Outer.Inner", inner.getFullyQualifiedName());
+        Assertions.assertEquals("Inner", inner.getName());
+        Assertions.assertEquals("Inner", inner.getSimpleName());
+        Assertions.assertEquals("foo.bar", inner.getPackageName());
+        Assertions.assertEquals("foo.bar.Outer$Inner", inner.getBinaryName());
+        Assertions.assertEquals("foo.bar.Outer.Inner", inner.getCanonicalName());
+        Assertions.assertEquals("foo.bar.Outer.Inner", inner.getFullyQualifiedName());
     }
     
     @Test
@@ -538,32 +534,32 @@ public abstract class JavaClassTest<C extends JavaClass> {
     	setPackage(src, null);
     	setName(cls, "DefaultPackageClass");
     	
-    	assertEquals("", src.getClasses().get(0).getPackageName());
-    	assertEquals("DefaultPackageClass", src.getClasses().get(0).getFullyQualifiedName());
+    	Assertions.assertEquals("", src.getClasses().get(0).getPackageName());
+    	Assertions.assertEquals("DefaultPackageClass", src.getClasses().get(0).getFullyQualifiedName());
     }
 
     @Test
     public void testDefaultClassSuperclass() {
         setName(cls, "MyClass");
-        assertEquals("java.lang.Object", cls.getSuperClass().getValue());
+        Assertions.assertEquals("java.lang.Object", cls.getSuperClass().getValue());
         setSuperClass(cls, newType("x.X"));
-        assertEquals("x.X", cls.getSuperClass().getValue());
+        Assertions.assertEquals("x.X", cls.getSuperClass().getValue());
     }
 
     @Test
     public void testDefaultInterfaceSuperclass() {
         setName(cls, "MyInterface");
         setInterface(cls, true);
-        assertNull(cls.getSuperClass());
+        Assertions.assertNull(cls.getSuperClass());
         setSuperClass(cls, newType("x.X"));
-        assertEquals("x.X", cls.getSuperClass().getValue());
+        Assertions.assertEquals("x.X", cls.getSuperClass().getValue());
     }
 
     @Test
     public void testEnumSuperclass() {
         setName(cls, "MyEnum");
         setEnum(cls, true);
-        assertEquals("java.lang.Enum", cls.getSuperClass().getValue());
+        Assertions.assertEquals("java.lang.Enum", cls.getSuperClass().getValue());
     }
 
     @Test
@@ -572,32 +568,32 @@ public abstract class JavaClassTest<C extends JavaClass> {
         setEnum(cls, true);
         try {
             setSuperClass(cls, newType("x.X"));
-            fail("expected an exception");
+            Assertions.fail("expected an exception");
         } catch (IllegalArgumentException e) {
-            assertEquals("enums cannot extend other classes", e.getMessage());
+            Assertions.assertEquals("enums cannot extend other classes", e.getMessage());
         }
     }
     
     @Test
     public void testGetEnumConstants() {
         setName( cls, "MyEnum" );
-        assertNull( cls.getEnumConstants() );
+        Assertions.assertNull(cls.getEnumConstants());
         
         setEnum( cls, true );
-        assertNotNull( cls.getEnumConstants() );
-        assertEquals( 0, cls.getEnumConstants().size() );
+        Assertions.assertNotNull(cls.getEnumConstants());
+        Assertions.assertEquals(0, cls.getEnumConstants().size());
         
         List<JavaField> fields = new ArrayList<JavaField>();
         JavaField nonEnumConstantField = mock(JavaField.class);
         fields.add( nonEnumConstantField );
         setFields( cls, fields );
-        assertEquals( 0, cls.getEnumConstants().size() );
+        Assertions.assertEquals(0, cls.getEnumConstants().size());
         
         JavaField enumConstantField = mock(JavaField.class);
         when ( enumConstantField.isEnumConstant() ).thenReturn( true );
         fields.add( enumConstantField );
         setFields( cls, fields );
-        assertEquals( 1, cls.getEnumConstants().size() );
+        Assertions.assertEquals(1, cls.getEnumConstants().size());
     }
     
     @Test
@@ -609,14 +605,14 @@ public abstract class JavaClassTest<C extends JavaClass> {
         when ( nonEnumConstantField.getName() ).thenReturn( "nonEnumField" );
         fields.add( nonEnumConstantField );
         setFields( cls, fields );
-        assertEquals( null, cls.getEnumConstantByName( "nonEnumField" ) );
+        Assertions.assertEquals(null, cls.getEnumConstantByName( "nonEnumField" ));
         
         JavaField enumConstantField = mock(JavaField.class);
         when ( enumConstantField.isEnumConstant() ).thenReturn( true );
         when ( enumConstantField.getName() ).thenReturn( "enumField" );
         fields.add( enumConstantField );
         setFields( cls, fields );
-        assertEquals( enumConstantField, cls.getEnumConstantByName( "enumField" ) );
+        Assertions.assertEquals(enumConstantField, cls.getEnumConstantByName( "enumField" ));
     }
     
     @Test
@@ -628,8 +624,8 @@ public abstract class JavaClassTest<C extends JavaClass> {
         when(fredField.getDeclaringClass()).thenReturn( cls );
         setFields( cls, Collections.singletonList( fredField ) );
 
-        assertEquals(fredField, cls.getFieldByName("fred"));
-        assertEquals(null, cls.getFieldByName("barney"));
+        Assertions.assertEquals(fredField, cls.getFieldByName("fred"));
+        Assertions.assertEquals(null, cls.getFieldByName("barney"));
     }
 
     @Test
@@ -643,18 +639,9 @@ public abstract class JavaClassTest<C extends JavaClass> {
         when(method.signatureMatches( "doStuff", parameterTypes, false )).thenReturn( true );
         setMethods(cls, Collections.singletonList( method ));
 
-        assertSame(
-                method,
-                cls.getMethodBySignature("doStuff", parameterTypes)
-        );
-        assertEquals(
-                null,
-                cls.getMethodBySignature("doStuff", Collections.<JavaType>emptyList())
-        );
-        assertEquals(
-                null,
-                cls.getMethodBySignature("sitIdlyBy", parameterTypes)
-        );
+        Assertions.assertSame(method, cls.getMethodBySignature("doStuff", parameterTypes));
+        Assertions.assertEquals(null, cls.getMethodBySignature("doStuff", Collections.<JavaType>emptyList()));
+        Assertions.assertEquals(null, cls.getMethodBySignature("sitIdlyBy", parameterTypes));
     }
 
     @Test
@@ -664,13 +651,13 @@ public abstract class JavaClassTest<C extends JavaClass> {
         when( innerClass.getName() ).thenReturn( "Inner" );
         setClasses(cls, Collections.singletonList( innerClass ) );
 
-        assertEquals(innerClass, cls.getNestedClassByName("Inner"));
-        assertEquals(null, cls.getNestedClassByName("Bogus"));
+        Assertions.assertEquals(innerClass, cls.getNestedClassByName("Inner"));
+        Assertions.assertEquals(null, cls.getNestedClassByName("Bogus"));
     }
 
     @Test
     public void testGetBeanPropertiesReturnsEmptyForEmptyClass() {
-        assertEquals(0, cls.getBeanProperties().size());
+        Assertions.assertEquals(0, cls.getBeanProperties().size());
     }
 
     @Test
@@ -696,18 +683,18 @@ public abstract class JavaClassTest<C extends JavaClass> {
         
         setMethods( cls, methods );
         
-        assertEquals(1, cls.getBeanProperties().size());
+        Assertions.assertEquals(1, cls.getBeanProperties().size());
         BeanProperty fooProp = cls.getBeanProperties().get(0);
-        assertEquals("foo", fooProp.getName());
-        assertEquals(intType, fooProp.getType());
-        assertEquals(getFooMethod, fooProp.getAccessor());
-        assertEquals(setFooMethod, fooProp.getMutator());
+        Assertions.assertEquals("foo", fooProp.getName());
+        Assertions.assertEquals(intType, fooProp.getType());
+        Assertions.assertEquals(getFooMethod, fooProp.getAccessor());
+        Assertions.assertEquals(setFooMethod, fooProp.getMutator());
     }
     
     @Test
     public void testToStringClass() {
     	setName(cls, "com.MyClass");
-    	assertEquals("class com.MyClass", cls.toString());
+    	Assertions.assertEquals("class com.MyClass", cls.toString());
     }
     
     @Test
@@ -718,7 +705,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         C jInnerClass = newJavaClass( "InnerClass" );
     	setDeclaringClass( jInnerClass, jOuterClass );
     	
-    	assertEquals("class com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.toString());
+    	Assertions.assertEquals("class com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.toString());
     }
     
     @Test
@@ -729,7 +716,7 @@ public abstract class JavaClassTest<C extends JavaClass> {
         C jInnerClass = newJavaClass("InnerClass");
         setDeclaringClass( jInnerClass, jOuterClass );
         
-        assertEquals( "com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.getFullyQualifiedName() );
+        Assertions.assertEquals("com.thoughtworks.qdox.model.OuterClass.InnerClass", jInnerClass.getFullyQualifiedName());
     }
     
     @Test
@@ -741,14 +728,14 @@ public abstract class JavaClassTest<C extends JavaClass> {
     	setInterface( jInnerInterface, true );
         setDeclaringClass( jInnerInterface, jOuterClass );
         
-    	assertEquals("interface com.thoughtworks.qdox.model.OuterClass.InnerInterface", jInnerInterface.toString());
+    	Assertions.assertEquals("interface com.thoughtworks.qdox.model.OuterClass.InnerInterface", jInnerInterface.toString());
     }
     
     @Test
     public void testToStringInterface() {
     	setName(cls, "com.MyClass");
     	setInterface(cls, true);
-    	assertEquals("interface com.MyClass", cls.toString());
+    	Assertions.assertEquals("interface com.MyClass", cls.toString());
     }
     
     @Test
@@ -758,10 +745,10 @@ public abstract class JavaClassTest<C extends JavaClass> {
         C c2 = newJavaClass( "java.util.String" );
         C c3 = newJavaClass( "org.mycompany.String" );
 
-        assertEquals( c1, c1 );
-        assertThat( c1, not( new Object() ) );
-        assertEquals( c1, c2 );
-        assertThat( c1, not( c3 ) );
+        Assertions.assertEquals(c1, c1);
+        MatcherAssert.assertThat(c1, not( new Object() ));
+        Assertions.assertEquals(c1, c2);
+        MatcherAssert.assertThat(c1, not( c3 ));
     }    
 
     /**
@@ -795,10 +782,10 @@ public abstract class JavaClassTest<C extends JavaClass> {
         setMethods( cls, methods );
 
         List<BeanProperty> properties = cls.getBeanProperties();
-        assertEquals(3, properties.size());
-        assertEquals("foo", properties.get(0).getName());
-        assertEquals("bar", properties.get(1).getName());
-        assertEquals("mcFnord", properties.get(2).getName());        
+        Assertions.assertEquals(3, properties.size());
+        Assertions.assertEquals("foo", properties.get(0).getName());
+        Assertions.assertEquals("bar", properties.get(1).getName());
+        Assertions.assertEquals("mcFnord", properties.get(2).getName());
     }
     
     private List<JavaClass> type(String[] typeNames) {
@@ -832,23 +819,23 @@ public abstract class JavaClassTest<C extends JavaClass> {
         
         setMethods( cls, methods );
         
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ) ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), false ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), true ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), false, false ) );
-        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), false, true ) );
-        assertEquals( simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), true, false ) );
-        assertEquals( varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), true, true ) );
+        Assertions.assertEquals(simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ) ));
+        Assertions.assertEquals(simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), false ));
+        Assertions.assertEquals(simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), true ));
+        Assertions.assertEquals(simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), false, false ));
+        Assertions.assertEquals(varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), false, true ));
+        Assertions.assertEquals(simpleMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), true, false ));
+        Assertions.assertEquals(varArgMethod, cls.getMethodBySignature( "doSomething", Collections.singletonList( stringType ), true, true ));
     }
  
-    @Ignore
+    @Disabled
     public void testJavaLangObjectAsDefaultSuperClass() {
         //up untill now this succeeds, because other tests have already set the static value of OBJECT
         //running this test alone make it fail, so it's not a proper test.
         //should be fixed if we can get rid of the Type-visibility
         JavaClass clazz = newJavaClass( "a.b.Sample" );
-        assertEquals( "java.lang.Object", clazz.getSuperJavaClass().getFullyQualifiedName() );
-        assertEquals( "java.lang.Object", clazz.getSuperClass().getFullyQualifiedName() );
+        Assertions.assertEquals("java.lang.Object", clazz.getSuperJavaClass().getFullyQualifiedName());
+        Assertions.assertEquals("java.lang.Object", clazz.getSuperClass().getFullyQualifiedName());
     }
     
 }

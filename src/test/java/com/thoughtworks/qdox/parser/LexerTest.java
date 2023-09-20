@@ -1,17 +1,17 @@
 package com.thoughtworks.qdox.parser;
 
+import com.thoughtworks.qdox.parser.impl.JFlexLexer;
+import com.thoughtworks.qdox.parser.impl.Parser;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
-import com.thoughtworks.qdox.parser.impl.JFlexLexer;
-import com.thoughtworks.qdox.parser.impl.Parser;
-
-public class LexerTest extends TestCase {
+public class LexerTest {
 
     private static Map<Integer, String> tokens;
 
@@ -30,16 +30,14 @@ public class LexerTest extends TestCase {
         }
     }
 
-    public LexerTest(String s) {
-        super(s);
-    }
-
+    @Test
     public void testEmptyInput() throws Exception {
         String in = "";
         Lexer lexer = new JFlexLexer(new StringReader(in));
         assertLex(0, lexer);
     }
 
+    @Test
     public void testNewlines() throws Exception {
         String in = "DOS\r\nUNIX\nMAC\r";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -49,6 +47,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testStaticBlock() throws Exception {
         String in = ""
                 + "class X { "
@@ -67,6 +66,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testFieldAssignment() throws Exception {
         checkAssignment("x");
         checkAssignment("(map.isEmpty ? 1 : -1)");
@@ -80,16 +80,19 @@ public class LexerTest extends TestCase {
         checkAssignment("/* , ; } */");
     }
 
+    @Test
     public void testAnonymousInnerClassAssignment() throws Exception {
         checkAssignment("new Thingifier() { void doThings(int x) { blah(); } }");
         checkAssignment("new Thingifier() { void doThings(int x) { a = \"aaa\"; } }");
     }
 
+    @Test
     public void testGenericTypeAssignment() throws Exception {
         // QDOX-77
         checkAssignment("new HashMap<String,Integer>");
     }
 
+    @Test
     public void testFieldsContainingLessThanOrGreaterThanInAssignment() throws Exception {
         // QDOX-71 - this is really important as it is common to see in all versions of the JDK.
         // Please don't disable this test -joe.
@@ -119,6 +122,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testMultipleFields() throws Exception {
         String in = ""
         + "class X { "
@@ -140,6 +144,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testSpecialCharsInIdentifier() throws Exception {
         String in = "a_b x$y z80";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -149,10 +154,12 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testUnicodeInTest() throws Exception {
         checkAssignment("\"\u0000\""); 
     }
 
+    @Test
     public void testUnicodeInFile() throws Exception {
         Lexer lexer = new JFlexLexer( getClass().getResourceAsStream( "/com/thoughtworks/qdox/testdata/Unicode.java" ) );
         assertLex(Parser.PACKAGE, lexer);
@@ -176,6 +183,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testUnicodeIdentifiers() throws Exception {
         // \u0391 == uppercase Greek "Alpha"
         assertSingleLex("\u0391", Parser.IDENTIFIER);
@@ -183,6 +191,7 @@ public class LexerTest extends TestCase {
         assertSingleLex("f\u00f6rnamn", Parser.IDENTIFIER); 
     }
 
+    @Test
     public void testInnerClass() throws Exception {
         String in = ""
                 + "class X { "
@@ -210,6 +219,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testCurliesInStringsOrChars() throws Exception {
 
         checkAssignment("\"{\"");
@@ -219,6 +229,7 @@ public class LexerTest extends TestCase {
 
     }
 
+    @Test
     public void testDoubleBackSlashesInStringsOrChars() throws Exception {
 
         checkAssignment("\"\\\\\""); // x = "\\"
@@ -226,11 +237,13 @@ public class LexerTest extends TestCase {
 
     }
 
+    @Test
     public void testFunnyCharsInStringsOrChars() throws Exception {
         checkAssignment("\"???????????\"");
         checkAssignment("'???????????'");
     }
 
+    @Test
     public void testQuoteInCharInCodeBlock() throws Exception {
         String in = "{'\"'}";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -238,6 +251,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testDoubleQuotesInCharInAssignment() throws Exception {
         String in = "x = '\"';";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -246,6 +260,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testSingleQuoteInCharInAssignment() throws Exception {
         String in = "x = '\\'';";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -254,6 +269,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testStringWithDoubleQuotesIn() throws Exception {
         String in = "x = \"blah \\\" blah\";";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -262,6 +278,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testCommentsWithSingleQuoteInCodeBlock() throws Exception {
         String in = "{ /* ' */ }";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -269,6 +286,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testCommentsWithDoubleQuotesInCodeBlock() throws Exception {
         String in = "{ /* \" */ }";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -276,6 +294,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testCommentsThatEndImmediately() throws Exception {
         String in = "/**/ class";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -283,6 +302,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testCommentsWithQuotesInAssignment() throws Exception {
         String in = "a x = y /* don't do stuff*/;";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -301,6 +321,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testArrayTokens() throws Exception {
         String in = "String[] []o[]";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -315,6 +336,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testKeyWords() throws Exception {
         assertSingleLex("package", Parser.PACKAGE);
         assertSingleLex("import", Parser.IMPORT);
@@ -337,6 +359,7 @@ public class LexerTest extends TestCase {
         assertSingleLex("super", Parser.SUPER);
     }
 
+    @Test
     public void testTypeTokens() throws Exception {
         String in = "Map<? extends A & B, List<String>>";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -356,6 +379,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testAnnotationDeclarationTokens() throws Exception {
         String in = "" 
             + "public @interface Copyright {\n" 
@@ -382,6 +406,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testAnnotationTokens() throws Exception {
         String in = ""
             + "@Copyright (year = 2004, month = \"Jan\")\n"
@@ -399,13 +424,13 @@ public class LexerTest extends TestCase {
         assertLex(Parser.IDENTIFIER, "month", lexer);
         assertLex(Parser.EQUALS, lexer);
         assertLex(Parser.STRING_LITERAL, "\"", lexer);
-        assertEquals("\"Jan\"", lexer.getCodeBody());
+        Assertions.assertEquals("\"Jan\"", lexer.getCodeBody());
         assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.AT, "@", lexer);
         assertLex(Parser.IDENTIFIER, "Note", lexer);
         assertLex(Parser.PARENOPEN, lexer);
         assertLex(Parser.STRING_LITERAL, lexer);
-        assertEquals( "\"Just ignore me\"", lexer.getCodeBody() );
+        Assertions.assertEquals("\"Just ignore me\"", lexer.getCodeBody());
         assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.PUBLIC, lexer);
         assertLex(Parser.CLASS, lexer);
@@ -417,6 +442,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testQDOX134_MoreAnnotationTokens() throws Exception {
         String in = ""
             + "@myTag name=TestClass attrs=Something1,Something2,Something3\n"
@@ -439,7 +465,8 @@ public class LexerTest extends TestCase {
         assertLex(Parser.BRACECLOSE, lexer);
         assertLex(0, lexer);
     }
-    
+
+    @Test
     public void testAnnotationElementValueArrayInitializer() throws Exception {
     	String in = "@Endorsers({\"Children\", \"Unscrupulous dentists\"})\n" +
     			"public class Lollipop { }";
@@ -450,10 +477,10 @@ public class LexerTest extends TestCase {
         assertLex(Parser.PARENOPEN, "(", lexer);
         assertLex(Parser.BRACEOPEN, "{", lexer);
         assertLex(Parser.STRING_LITERAL, "\"", lexer);
-        assertEquals( "\"Children\"", lexer.getCodeBody() );
+        Assertions.assertEquals("\"Children\"", lexer.getCodeBody());
         assertLex(Parser.COMMA, ",", lexer);
         assertLex(Parser.STRING_LITERAL, "\"", lexer);
-        assertEquals( "\"Unscrupulous dentists\"", lexer.getCodeBody() );
+        Assertions.assertEquals("\"Unscrupulous dentists\"", lexer.getCodeBody());
         assertLex(Parser.BRACECLOSE, "}", lexer);
         assertLex(Parser.PARENCLOSE, ")", lexer);
         assertLex(Parser.PUBLIC, "public", lexer);
@@ -464,6 +491,7 @@ public class LexerTest extends TestCase {
         assertLex(0, lexer);
     }
 
+    @Test
     public void testEnumConstructor() throws Exception {
         String in = "enum Foo { a(\"hello\"); int someField; }";
         Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -473,7 +501,7 @@ public class LexerTest extends TestCase {
         assertLex(Parser.IDENTIFIER, "a", lexer);
         assertLex(Parser.PARENOPEN, lexer);
         assertLex(Parser.STRING_LITERAL, "\"", lexer);
-        assertEquals( "\"hello\"", lexer.getCodeBody() );
+        Assertions.assertEquals("\"hello\"", lexer.getCodeBody());
         assertLex(Parser.PARENCLOSE, lexer);
         assertLex(Parser.SEMI, lexer);
         assertLex(Parser.IDENTIFIER, "int", lexer);
@@ -482,6 +510,7 @@ public class LexerTest extends TestCase {
         assertLex(Parser.BRACECLOSE, lexer);
     }
 
+    @Test
     public void testEnumWithMethods() throws Exception {
         String in = ""
                 + "enum Animal {"
@@ -516,15 +545,16 @@ public class LexerTest extends TestCase {
     private void assertLex(int expectedToken, Lexer lexer) throws IOException {
         Object expected = tokens.get(new Integer(expectedToken));
         Object actual = tokens.get(new Integer(lexer.lex()));
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     private void assertLex(int expectedToken, String expectedText, Lexer lexer) throws IOException {
         assertLex(expectedToken, lexer);
-        assertEquals(expectedText, lexer.text());
+        Assertions.assertEquals(expectedText, lexer.text());
     }
 
     // for QDOX-140
+    @Test
     public void testNonAsciiMethodNameDoesNotCrashLexerButChewsUpUnicodeEscapedSequencesBadly() throws Exception {
         String in = ""
                 + "interface X { "
@@ -545,6 +575,7 @@ public class LexerTest extends TestCase {
     }
     
     //for QDOX-158
+    @Test
     public void testAnnotationWithMultipleParameters() throws Exception {
     	String in = 
     			"@MyFunction.MyInterface( prefix1 = \"abc\", prefix2 = \"abc\" )";
@@ -557,15 +588,16 @@ public class LexerTest extends TestCase {
     	assertLex(Parser.IDENTIFIER, "prefix1", lexer);
     	assertLex(Parser.EQUALS, lexer);
     	assertLex(Parser.STRING_LITERAL, lexer);
-    	assertEquals( "\"abc\"", lexer.getCodeBody() );
+    	Assertions.assertEquals("\"abc\"", lexer.getCodeBody());
     	assertLex(Parser.COMMA, lexer);
     	assertLex(Parser.IDENTIFIER, "prefix2", lexer);
     	assertLex(Parser.EQUALS, lexer);
     	assertLex(Parser.STRING_LITERAL, lexer);
-    	assertEquals( "\"abc\"", lexer.getCodeBody() );
+    	Assertions.assertEquals("\"abc\"", lexer.getCodeBody());
     	assertLex(Parser.PARENCLOSE, lexer);
     }
 
+    @Test
     public void testSimpleAnnotation() throws Exception {
     	String in = "@Override\n public boolean isReadOnly(final ELContext context)";
     	Lexer lexer = new JFlexLexer(new StringReader(in));
@@ -580,7 +612,8 @@ public class LexerTest extends TestCase {
     	assertLex(Parser.IDENTIFIER, "context", lexer);
     	assertLex(Parser.PARENCLOSE, lexer);
     }
-    
+
+    @Test
     public void testMultipleRowAnnotation()
         throws Exception
     {
@@ -592,10 +625,11 @@ public class LexerTest extends TestCase {
         assertLex( Parser.IDENTIFIER, "name", lexer );
         assertLex( Parser.EQUALS, lexer );
         assertLex( Parser.STRING_LITERAL, lexer );
-        assertEquals( "\"h:inputHidden\"", lexer.getCodeBody() );
+        Assertions.assertEquals("\"h:inputHidden\"", lexer.getCodeBody());
         assertLex( Parser.PARENCLOSE, lexer );
     }
-    
+
+    @Test
     public void testEnumWithAnnotations() throws Exception {
     	String in = "class Foo {\n" +
 		"public enum BasicType {\n" +
@@ -614,17 +648,18 @@ public class LexerTest extends TestCase {
     	assertLex(Parser.IDENTIFIER, "XmlEnumValue", lexer);
     	assertLex(Parser.PARENOPEN, lexer);
     	assertLex(Parser.STRING_LITERAL, lexer);
-    	assertEquals( "\"text\"", lexer.getCodeBody() );
+    	Assertions.assertEquals("\"text\"", lexer.getCodeBody());
     	assertLex(Parser.PARENCLOSE, lexer);
     	assertLex(Parser.IDENTIFIER, "VALUE", lexer);
         assertLex(Parser.PARENOPEN, lexer);
         assertLex(Parser.STRING_LITERAL, lexer);
-        assertEquals( "\"value\"", lexer.getCodeBody() );
+        Assertions.assertEquals("\"value\"", lexer.getCodeBody());
         assertLex(Parser.PARENCLOSE, lexer);
     	assertLex(Parser.SEMI, lexer);
     }
     
     // QDOX-242
+    @Test
     public void testDoubleValueAnnotation()
         throws Exception
     {
@@ -641,6 +676,7 @@ public class LexerTest extends TestCase {
     }
     
     // Github #31
+    @Test
     public void testParseEnumWithConstructor() throws Exception
     {
         String in = "public enum SomeEnum {\n" + 
@@ -689,8 +725,9 @@ public class LexerTest extends TestCase {
         
         assertLex( 0, lexer );
     }
-    
-    
+
+
+    @Test
     public void testModule()
         throws Exception
     {
@@ -819,7 +856,8 @@ public class LexerTest extends TestCase {
         assertLex( Parser.BRACECLOSE, lexer );
         assertLex( 0, lexer );
     }
-    
+
+    @Test
     public void testModuleAsIdentifier() throws Exception
     {
         String in = ""
@@ -897,7 +935,8 @@ public class LexerTest extends TestCase {
         assertLex( Parser.BRACECLOSE, lexer );
         assertLex( 0, lexer );
     }
-    
+
+    @Test
     public void testModuleModifiersAsIdentifier()
                     throws Exception
     {

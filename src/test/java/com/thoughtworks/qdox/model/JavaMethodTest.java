@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.core.IsNot.not;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -254,18 +253,18 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
 //        when( declaringClass.getFullyQualifiedName() ).thenReturn( "com.foo.bar" );
         setDeclaringClass( m8, mock( JavaClass.class ) );
 
-        Assertions.assertEquals(mth, mth);
-        MatcherAssert.assertThat(mth, not(new Object()));
-        Assertions.assertEquals(mth, m2);
-        Assertions.assertEquals(m2, mth);
-        MatcherAssert.assertThat(mth, not(m3));
-        MatcherAssert.assertThat(mth, not(m4));
-        Assertions.assertFalse(mth.equals(null));
-        MatcherAssert.assertThat(m4, not(m5));
-        MatcherAssert.assertThat(m5, not(m4));
-        Assertions.assertEquals(m5, m6);
-        MatcherAssert.assertThat(m5, not(m7));
-        MatcherAssert.assertThat(m7, not(m8));
+        assertThat(mth).isEqualTo(mth);
+        assertThat(mth).isNotEqualTo(new Object());
+        assertThat(mth).isEqualTo(m2);
+        assertThat(m2).isEqualTo(mth);
+        assertThat(mth).isNotEqualTo(m3);
+        assertThat(mth).isNotEqualTo(m4);
+        assertThat(mth).isNotEqualTo(null);
+        assertThat(m4).isNotEqualTo(m5);
+        assertThat(m5).isNotEqualTo(m4);
+        assertThat(m5).isEqualTo(m6);
+        assertThat(m5).isNotEqualTo(m7);
+        assertThat(m7).isNotEqualTo(m8);
     }
 
     @Test
@@ -300,10 +299,10 @@ public abstract class JavaMethodTest<M extends JavaMethod> {
                        Arrays.asList( intArrayParam, stringArrayParam, newJavaParameter( newType( "X", 9 ), "blah" ) ) );
         setReturns( m5, voidType );
 
-        Assertions.assertEquals(mth, m2);
-        Assertions.assertEquals(m2, mth);
-        MatcherAssert.assertThat(mth, not(m3));
-        MatcherAssert.assertThat(mth, not(m5));
+        assertThat(mth).isEqualTo(m2);
+        assertThat(m2).isEqualTo(mth);
+        assertThat(mth).isNotEqualTo(m3);
+        assertThat(mth).isNotEqualTo(m5);
     }
 
     @Test

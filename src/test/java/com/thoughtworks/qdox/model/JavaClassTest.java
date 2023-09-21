@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -8,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.not;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -745,10 +744,10 @@ public abstract class JavaClassTest<C extends JavaClass> {
         C c2 = newJavaClass( "java.util.String" );
         C c3 = newJavaClass( "org.mycompany.String" );
 
-        Assertions.assertEquals(c1, c1);
-        MatcherAssert.assertThat(c1, not( new Object() ));
-        Assertions.assertEquals(c1, c2);
-        MatcherAssert.assertThat(c1, not( c3 ));
+        assertThat(c1).isEqualTo(c1);
+        assertThat(c1).isNotEqualTo(new Object() );
+        assertThat(c1).isEqualTo(c2);
+        assertThat(c1).isNotEqualTo(c3);
     }    
 
     /**

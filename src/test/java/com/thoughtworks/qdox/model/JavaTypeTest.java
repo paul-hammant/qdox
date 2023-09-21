@@ -2,11 +2,10 @@ package com.thoughtworks.qdox.model;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.library.OrderedClassLibraryBuilder;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.core.IsNot.not;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class JavaTypeTest<T extends JavaType>
 {
@@ -39,11 +38,11 @@ public abstract class JavaTypeTest<T extends JavaType>
     public void testEquals()
     {
         JavaClass javaSource = newJavaClass( new OrderedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary() );
-        Assertions.assertEquals(newType( "long", 0, javaSource ), newType( "long", 0, javaSource ));
-        MatcherAssert.assertThat(newType( "long", 0, javaSource ), not( newType( "int" ) ));
-        MatcherAssert.assertThat(newType( "long", 1 ), not( newType( "long" ) ));
-        MatcherAssert.assertThat(newType( "long" ), not( newType( "long", 2 ) ));
-        Assertions.assertFalse(newType( "int" ).equals( null ));
+        assertThat(newType( "long", 0, javaSource )).isEqualTo( newType( "long", 0, javaSource ) );
+        assertThat(newType( "long", 0, javaSource )).isNotEqualTo( newType( "int" ) );
+        assertThat(newType( "long", 1 )).isNotEqualTo(newType( "long" ));
+        assertThat(newType( "long" )).isNotEqualTo(newType( "long", 2 ));
+        assertThat(newType( "int" )).isNotEqualTo(null);
     }
 
     @Test

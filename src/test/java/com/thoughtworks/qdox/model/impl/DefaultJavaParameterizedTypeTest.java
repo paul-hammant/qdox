@@ -3,7 +3,6 @@ package com.thoughtworks.qdox.model.impl;
 import com.thoughtworks.qdox.library.ClassLoaderLibrary;
 import com.thoughtworks.qdox.model.JavaType;
 import com.thoughtworks.qdox.type.TypeResolver;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DefaultJavaParameterizedTypeTest
 {
@@ -37,7 +35,6 @@ public class DefaultJavaParameterizedTypeTest
         typeResolver = TypeResolver.byPackageName( null, classLibrary , null );
     }
 
-    @SuppressWarnings( "unchecked" )
     @Test
     public void testListOfString() throws Exception
     {
@@ -53,18 +50,15 @@ public class DefaultJavaParameterizedTypeTest
         Assertions.assertEquals("java.util.List", type.getBinaryName());
         Assertions.assertEquals("java.util.List", type.getFullyQualifiedName());
 
-        // Also compare with reflect implementations
-        MatcherAssert.assertThat(type.getSimpleName(), allOf( equalTo("List"),
-                                                 equalTo(field.getType().getSimpleName())));
-        MatcherAssert.assertThat(type.getCanonicalName(), allOf( equalTo("java.util.List"),
-                                                    equalTo(field.getType().getCanonicalName())));
         
-// Requires Java8        
-        MatcherAssert.assertThat(type.getGenericCanonicalName(), allOf( equalTo("java.util.List<java.lang.String>")/*,
-                                                           equalTo(field.getGenericType().getTypeName())*/));
+        // Also compare with reflect implementations
+        assertThat(type.getSimpleName()).isEqualTo("List").isEqualTo(field.getType().getSimpleName());
+        assertThat(type.getCanonicalName()).isEqualTo("java.util.List").isEqualTo(field.getType().getCanonicalName());
+        
+        assertThat(type.getGenericCanonicalName()).isEqualTo("java.util.List<java.lang.String>")/*,
+                                                           equalTo(field.getGenericType().getTypeName())*/;
     }
 
-    @SuppressWarnings( "unchecked" )
     @Test
     public void testListOfStringArray() throws Exception
     {
@@ -81,22 +75,16 @@ public class DefaultJavaParameterizedTypeTest
         Assertions.assertEquals("java.util.List[]", type.getFullyQualifiedName());
 
         // Also compare with reflect implementations
-        MatcherAssert.assertThat(type.getSimpleName(), allOf( equalTo("List[]"),
-                                                 equalTo(field.getType().getSimpleName())));
-        MatcherAssert.assertThat(type.getCanonicalName(), allOf( equalTo("java.util.List[]"),
-                                                    equalTo(field.getType().getCanonicalName())));
+        assertThat(type.getSimpleName()).isEqualTo("List[]").isEqualTo(field.getType().getSimpleName());
+        assertThat(type.getCanonicalName()).isEqualTo("java.util.List[]").isEqualTo(field.getType().getCanonicalName());
         
-// requires java8        
-        MatcherAssert.assertThat(type.getGenericCanonicalName(), allOf( equalTo("java.util.List<java.lang.String>[]")/*,
-                                                           equalTo(field.getGenericType().getTypeName())*/));
+        assertThat(type.getGenericCanonicalName()).isEqualTo("java.util.List<java.lang.String>[]")/*,
+                                                           equalTo(field.getGenericType().getTypeName())*/;
         
-        MatcherAssert.assertThat(type.getComponentType().getSimpleName(), allOf( equalTo("List"),
-                                                                    equalTo(field.getType().getComponentType().getSimpleName())));
-        MatcherAssert.assertThat(type.getComponentType().getCanonicalName(), allOf( equalTo("java.util.List"),
-                                                                       equalTo(field.getType().getComponentType().getCanonicalName())));
+        assertThat(type.getComponentType().getSimpleName()).isEqualTo("List").isEqualTo(field.getType().getComponentType().getSimpleName());
+        assertThat(type.getComponentType().getCanonicalName()).isEqualTo("java.util.List").isEqualTo(field.getType().getComponentType().getCanonicalName());
     }
     
-    @SuppressWarnings( "unchecked" )
     @Test
     public void testListOfStringArrayArray() throws Exception
     {
@@ -113,17 +101,13 @@ public class DefaultJavaParameterizedTypeTest
         Assertions.assertEquals("java.util.List[][]", type.getFullyQualifiedName());
 
         // Also compare with reflect implementations
-        MatcherAssert.assertThat(type.getSimpleName(), allOf( equalTo("List[][]"),
-                                                 equalTo(field.getType().getSimpleName())));
-        MatcherAssert.assertThat(type.getCanonicalName(), allOf( equalTo("java.util.List[][]"),
-                                                    equalTo(field.getType().getCanonicalName())));
+        assertThat(type.getSimpleName()).isEqualTo("List[][]").isEqualTo(field.getType().getSimpleName());
+        assertThat(type.getCanonicalName()).isEqualTo("java.util.List[][]").isEqualTo(field.getType().getCanonicalName());
         
         
-//        assertThat( type.getComponentType().getSimpleName(), allOf( equalTo("java.util.List"), 
-//                                                                    equalTo(field.getType().getComponentType().getSimpleName())));
+//        assertThat(type.getComponentType().getSimpleName()).isEqualTo("List").isEqualTo(field.getType().getComponentType().getSimpleName());
     }
     
-    @SuppressWarnings( "unchecked" )
     @Test
     public void testMapEntryIntegerForString() throws Exception
     {
@@ -141,13 +125,11 @@ public class DefaultJavaParameterizedTypeTest
         Assertions.assertEquals("java.util.Map.Entry", type.getFullyQualifiedName());
 
         // Also compare with reflect implementations
-        MatcherAssert.assertThat(type.getSimpleName(), allOf( equalTo("Entry"),
-                                                 equalTo(field.getType().getSimpleName())));
-        MatcherAssert.assertThat(type.getCanonicalName(), allOf( equalTo("java.util.Map.Entry"),
-                                                    equalTo(field.getType().getCanonicalName())));
+        assertThat(type.getSimpleName()).isEqualTo( "Entry" ).isEqualTo(field.getType().getSimpleName());
+        assertThat(type.getCanonicalName()).isEqualTo("java.util.Map.Entry").isEqualTo(field.getType().getCanonicalName());
         // this is buggy for multiple JDKs 
-        MatcherAssert.assertThat(type.getGenericCanonicalName(), allOf( equalTo("java.util.Map.Entry<java.lang.Integer,java.lang.String>") /*,
-                                                           equalTo(field.getGenericType().getTypeName())*/ ));
+        assertThat(type.getGenericCanonicalName()).isEqualTo("java.util.Map.Entry<java.lang.Integer,java.lang.String>") /*,
+                                                           .isEqualTo(field.getGenericType().getTypeName())*/ ;
     }
 
 }

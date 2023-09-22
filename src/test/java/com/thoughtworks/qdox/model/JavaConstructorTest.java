@@ -1,6 +1,5 @@
 package com.thoughtworks.qdox.model;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.core.IsNot.not;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -89,11 +88,11 @@ public abstract class JavaConstructorTest<D extends JavaConstructor>
         D c4 = newJavaConstructor( "Thong" );
         setDeclaringClass( c4, mock( JavaClass.class ) );
 
-        Assertions.assertEquals(c1, c1);
-        MatcherAssert.assertThat(c1, not( new Object() ));
-        MatcherAssert.assertThat(c1, not(c2));
-        Assertions.assertEquals(c2, c3);
-        MatcherAssert.assertThat(c3, not(c4));
+        assertThat(c1).isEqualTo(c1);
+        assertThat(c1).isNotEqualTo( new Object() );
+        assertThat(c1).isNotEqualTo(c2);
+        assertThat(c2).isEqualTo(c3);
+        assertThat(c3).isNotEqualTo(c4);
     }
     
     @Test

@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -535,6 +534,6 @@ public class DefaultModelWriterTest {
                         .getClassLibrary();
         
         JavaClass clazz = classLibrary.getJavaClass( "java.util.Set" );
-        assertThat( clazz.getCodeBlock(), startsWith( "public abstract interface Set" ) );
+        assertThat( clazz.getCodeBlock()).startsWith( "public abstract interface Set" );
     }
 }

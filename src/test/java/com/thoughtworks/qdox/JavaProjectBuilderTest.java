@@ -16,8 +16,6 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.*;
 
 public class JavaProjectBuilderTest {

@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.stubbing.answers.ReturnsElementsOf;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.AdditionalAnswers.returnsElementsOf;
 
 public class DefaultJavaCommentParserTest
 {
@@ -208,8 +208,8 @@ public class DefaultJavaCommentParserTest
         setupLex(token, null);
         if( token == 0) 
         {
-            when( lexer.lex() ).thenAnswer( new ReturnsElementsOf( lexValues ) );
-            when( lexer.text() ).thenAnswer( new ReturnsElementsOf( textValues ) );
+            when( lexer.lex() ).thenAnswer( returnsElementsOf( lexValues ) );
+            when( lexer.text() ).thenAnswer( returnsElementsOf( textValues ) );
             when( lexer.getLine() ).thenReturn( -1 );
         }
     }

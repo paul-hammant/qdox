@@ -29,16 +29,17 @@ import com.thoughtworks.qdox.model.JavaWildcardType;
  * Equivalent of {@link java.lang.reflect.WildcardType}
  * This class supports both the 'super' and 'extends' wildcards. For &lt;?&gt; you must use the normal Type, because ?
  * itself can't be generic
- * 
+ *
  * @author Robert Scholte
  */
 public class DefaultJavaWildcardType extends DefaultJavaType
-    implements JavaWildcardType
+        implements JavaWildcardType
 {
-    public static enum BoundType { EXTENDS, SUPER }
-    
+    public static enum BoundType
+    {EXTENDS, SUPER}
+
     private BoundType boundType;
-    
+
     private List<JavaType> bounds;
 
     public DefaultJavaWildcardType()
@@ -46,7 +47,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
         super( "?" );
         bounds = Collections.emptyList();
     }
-    
+
     public DefaultJavaWildcardType( JavaType type, BoundType boundType )
     {
         this();
@@ -55,10 +56,37 @@ public class DefaultJavaWildcardType extends DefaultJavaType
     }
 
     @Override
+    public JavaType[] getUpperBounds()
+    {
+        switch (boundType)
+        {
+            case SUPER:
+                return new JavaType[] { new DefaultJavaClass("java.lang.Object") };
+            case EXTENDS:
+                return bounds.toArray(new JavaType[]{});
+            default:
+                return new JavaType[0];
+        }
+    }
+
+    @Override
+    public JavaType[] getLowerBounds()
+    {
+        switch (boundType)
+        {
+            case SUPER:
+                return bounds.toArray(new JavaType[]{});
+            case EXTENDS:
+            default:
+                return new JavaType[0];
+        }
+    }
+
+    @Override
     public String getFullyQualifiedName()
     {
         StringBuilder builder = getPreparedStringBuilder();
-        for( JavaType type : bounds )
+        for ( JavaType type : bounds )
         {
             builder.append( type.getFullyQualifiedName() );
         }
@@ -69,7 +97,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
     public String getGenericValue()
     {
         StringBuilder builder = getPreparedStringBuilder();
-        for( JavaType type : bounds )
+        for ( JavaType type : bounds )
         {
             builder.append( type.getGenericValue() );
         }
@@ -80,18 +108,18 @@ public class DefaultJavaWildcardType extends DefaultJavaType
     public String getGenericFullyQualifiedName()
     {
         StringBuilder builder = getPreparedStringBuilder();
-        for( JavaType type : bounds )
+        for ( JavaType type : bounds )
         {
             builder.append( type.getGenericFullyQualifiedName() );
         }
         return builder.toString();
     }
-    
+
     @Override
     public String getCanonicalName()
     {
         StringBuilder builder = getPreparedStringBuilder();
-        for( JavaType type : bounds )
+        for ( JavaType type : bounds )
         {
             builder.append( type.getCanonicalName() );
         }
@@ -102,7 +130,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
     public String getGenericCanonicalName()
     {
         StringBuilder builder = getPreparedStringBuilder();
-        for( JavaType type : bounds )
+        for ( JavaType type : bounds )
         {
             builder.append( type.getGenericCanonicalName() );
         }
@@ -113,7 +141,7 @@ public class DefaultJavaWildcardType extends DefaultJavaType
     public String getValue()
     {
         StringBuilder builder = getPreparedStringBuilder();
-        for( JavaType type : bounds )
+        for ( JavaType type : bounds )
         {
             builder.append( type.getValue() );
         }
@@ -125,21 +153,20 @@ public class DefaultJavaWildcardType extends DefaultJavaType
     public String toGenericString()
     {
         StringBuilder builder = getPreparedStringBuilder();
-        for( JavaType type : bounds )
+        for ( JavaType type : bounds )
         {
             builder.append( type.toGenericString() );
         }
         return builder.toString();
     }
-    
+
     private StringBuilder getPreparedStringBuilder()
     {
         StringBuilder builder = new StringBuilder( "?" );
-        if( BoundType.EXTENDS.equals( boundType ) )
+        if ( BoundType.EXTENDS.equals( boundType ) )
         {
             builder.append( " extends " );
-        }
-        else if( BoundType.SUPER.equals( boundType ) )
+        } else if ( BoundType.SUPER.equals( boundType ) )
         {
             builder.append( " super " );
         }

@@ -19,9 +19,17 @@ package com.thoughtworks.qdox.model;
  * under the License.
  */
 
+import com.thoughtworks.qdox.model.impl.DefaultJavaWildcardType;
+
+import java.util.List;
+
 /**
  * Equivalent of {@link java.lang.reflect.WildcardType}
  */
 public interface JavaWildcardType extends JavaType
 {
+    JavaType[] getUpperBounds();
+
+    JavaType[] getLowerBounds();
+
 }

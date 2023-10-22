@@ -2,24 +2,22 @@ package com.thoughtworks.qdox.model;
 
 import com.thoughtworks.qdox.library.ClassLibrary;
 import com.thoughtworks.qdox.library.SortedClassLibraryBuilder;
-import com.thoughtworks.qdox.model.impl.DefaultJavaType;
 import com.thoughtworks.qdox.model.impl.DefaultJavaWildcardType;
 import com.thoughtworks.qdox.type.TypeResolver;
-import org.junit.Before;
-import org.junit.Test;
 
-import java.lang.reflect.Field;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public abstract class JavaWildcardTypeTest<T extends JavaWildcardType>
 {
     private TypeResolver typeResolver;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         ClassLibrary classLibrary = new SortedClassLibraryBuilder().appendDefaultClassLoaders().getClassLibrary();
         List<String> typeList = new ArrayList<String>();

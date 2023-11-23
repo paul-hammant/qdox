@@ -50,7 +50,9 @@ public interface JavaAnnotatedElement extends JavaModel
     
     /**
      * Retrieve the javadoc comment of this annotated element.
-     * This is the part between &#47;&#42;&#42; and the &#42;&#47;, but without the doclet tags
+     * This is the part between <code>&#47;&#42;&#42;</code> and <code>&#42;&#47;</code>, but without the 
+     * <a href="https://docs.oracle.com/en/java/javase/17/docs/specs/javadoc/doc-comment-spec.html#block-tags">Standard doclet block tags</a>.
+     * It may still contain <a href="https://docs.oracle.com/en/java/javase/17/docs/specs/javadoc/doc-comment-spec.html#inline-tags">Standard doclet inline tags</a>, though.
      * 
      * @return the comment, otherwise <code>null</code>
      */

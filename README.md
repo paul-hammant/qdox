@@ -4,7 +4,7 @@
 
 QDox is a high speed, small footprint parser for fully extracting class/interface/method definitions (including annotations, parameters, param names). It is designed to be used by active code generators or documentation tools.
 
-Not so relevant any more, but it also also processes JavaDoc @tags
+Not so relevant anymore, but it also processes JavaDoc @tags
 
 # Migration from Codehaus
 
@@ -16,7 +16,7 @@ Maven's central repo [holds versions of QDox](http://search.maven.org/#search%7C
 
 # In A Nutshell
 
-A custom built parser has been built using JFlex and BYacc/J. These have been chosen because of their proven performance and they require no external libraries at runtime.
+A custom-built parser has been built using JFlex and BYacc/J. These have been chosen because of their proven performance, and they require no external libraries at runtime.
 
 The parser skims the source files only looking for things of interest such as class/interface definitions, import statements, JavaDoc and member declarations. The parser ignores things such as actual method implementations to avoid overhead (while in method blocks, curly brace counting suffices).
 

@@ -29,6 +29,7 @@ public class ClassDef extends LocatedDef {
     public static final String CLASS = "class";
     public static final String INTERFACE = "interface";
     public static final String ENUM = "enum";
+    public static final String RECORD = "record";
     public static final String ANNOTATION_TYPE = "@interface";
     
     private String name = "";

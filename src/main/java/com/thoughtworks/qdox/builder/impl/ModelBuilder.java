@@ -94,7 +94,11 @@ public class ModelBuilder implements Builder {
 
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
 
+    private LinkedList<DefaultJavaConstructor> defaultRecordConstructorStack = new LinkedList<DefaultJavaConstructor>();
+
     private List<DefaultJavaParameter> parameterList = new LinkedList<DefaultJavaParameter>();
+
+    private List<FieldDef> parameterDefList = new LinkedList<FieldDef>();
 
     private DefaultJavaConstructor currentConstructor;
 
@@ -226,6 +230,16 @@ public class ModelBuilder implements Builder {
         source.addImport( importName );
     }
 
+    public void addImplements( Set<TypeDef> implementSet )
+    {
+        List<JavaClass> implementz = new LinkedList<JavaClass>();
+        for ( TypeDef implementType : implementSet )
+        {
+            implementz.add( createType( implementType, 0 ) );
+        }
+        classStack.getFirst().setImplementz( implementz );
+    }
+
     /** {@inheritDoc} */
     public void addJavaDoc( String text )
     {
@@ -249,6 +263,7 @@ public class ModelBuilder implements Builder {
         newClass.setName( def.getName() );
         newClass.setInterface( ClassDef.INTERFACE.equals( def.getType() ) );
         newClass.setEnum( ClassDef.ENUM.equals( def.getType() ) );
+        newClass.setRecord( ClassDef.RECORD.equals( def.getType() ) );
         newClass.setAnnotation( ClassDef.ANNOTATION_TYPE.equals( def.getType() ) );
 
         // superclass
@@ -322,6 +337,11 @@ public class ModelBuilder implements Builder {
     /** {@inheritDoc} */
     public void endClass()
     {
+        if( classStack.getFirst().isRecord() )
+        {
+            defaultRecordConstructorStack.removeFirst();
+        }
+
         classStack.removeFirst();
     }
 
@@ -434,6 +454,48 @@ public class ModelBuilder implements Builder {
         }
 
         currentConstructor.setSourceCode( def.getBody() );
+
+        if ( def.isDefaultRecordConstructor() )
+        {
+            defaultRecordConstructorStack.addFirst( currentConstructor );
+            for ( FieldDef param : parameterDefList )
+            {
+                int dimensions =
+                  param.isVarArgs()
+                  ? param.getDimensions() + 1
+                  : param.getDimensions();
+
+                FieldDef field = new FieldDef();
+                field.setName(param.getName());
+                field.setType(param.getType());
+                field.setDimensions(dimensions);
+                field.setEnumConstant(false);
+                field.getModifiers().addAll(param.getModifiers());
+                field.getModifiers().add("private");
+                field.getModifiers().add("final");
+                beginField(field);
+                endField();
+
+                MethodDef mth = new MethodDef();
+                mth.setName(param.getName());
+                mth.setLineNumber(param.getLineNumber());
+                mth.setReturnType(param.getType());
+                mth.getModifiers().add("public");
+                mth.setDimensions(dimensions);
+                mth.setTypeParams(new LinkedList());
+                beginMethod();
+                endMethod(mth);
+            }
+        }
+
+        parameterDefList.clear();
+    }
+
+    public void addCompactConstructorInfo( Set<String> modifiers, String body )
+    {
+        DefaultJavaConstructor javaConstructor = defaultRecordConstructorStack.getFirst();
+        javaConstructor.setModifiers( new LinkedList<String>( modifiers ) );
+        javaConstructor.setSourceCode( body );
     }
 
     /** {@inheritDoc} */
@@ -488,6 +550,7 @@ public class ModelBuilder implements Builder {
         {
             currentMethod.setParameters( new ArrayList<JavaParameter>( parameterList ) );
             parameterList.clear();
+            parameterDefList.clear();
         }
 
         currentMethod.setSourceCode( def.getBody() );
@@ -619,6 +682,7 @@ public class ModelBuilder implements Builder {
         addJavaDoc( jParam );
         setAnnotations( jParam );
         parameterList.add( jParam );
+        parameterDefList.add( fieldDef );
     }
 
     private void setAnnotations( final AbstractBaseJavaEntity entity )

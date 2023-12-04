@@ -311,7 +311,7 @@ JavadocEnd                      = "*"+ "/"
     "record" / {WhiteSpace}+ {Id} {
         markAnnotatedElementLine();
         classDepth++;
-        braceMode = CODEBLOCK;
+        braceMode = TYPE;
         pushState(NAME);
         return Parser.RECORD;
     }

@@ -711,11 +711,46 @@ EnumBodyDeclarations_opt:
 
 // RecordDeclaration:
 //     {ClassModifier} record TypeIdentifier [TypeParameters] RecordHeader [ClassImplements] RecordBody
-RecordDeclaration: Modifiers_opt RECORD IDENTIFIER TypeParameters_opt RecordHeader ClassImplements_opt RecordBody
+RecordDeclaration: Modifiers_opt RECORD IDENTIFIER
+                  {
+                    cls.setLineNumber(lexer.getLine());
+                    cls.getModifiers().addAll(modifiers);
+                    cls.setName( $3 );
+                    cls.setType(ClassDef.RECORD);
+                  }
+                  TypeParameters_opt
+                  {
+                    cls.setTypeParameters(typeParams);
+                    builder.beginClass(cls);
+                  }
+                  RecordHeader ClassImplements_opt
+                  {
+                    builder.addImplements(cls.getImplements());
+                    cls = new ClassDef();
+                  }
+                  RecordBody
+                  {
+                    builder.endClass();
+                  }
+                  ;
 
 // RecordHeader:
 //     ( [RecordComponentList] )
-RecordHeader: PARENOPEN RecordComponentList_opt PARENCLOSE
+RecordHeader: PARENOPEN
+              {
+                builder.beginConstructor();
+                mth.setLineNumber(lexer.getLine());
+                mth.setConstructor(true); 
+                mth.setDefaultRecordConstructor(true);
+                mth.setName(cls.getName());
+              }
+              RecordComponentList_opt
+              {
+                builder.endConstructor(mth);
+                mth = new MethodDef(); 
+              }
+              PARENCLOSE
+              ;
 
 // RecordComponentList:
 //     RecordComponent {, RecordComponent}
@@ -730,16 +765,56 @@ RecordComponentList_opt:
 //     {RecordComponentModifier} UnannType Identifier
 //     VariableArityRecordComponent
 RecordComponent: Annotations_opt /* ={RecordComponentModifier} */ Type /* =UnannType */ IDENTIFIER
+                {
+                  param.setType($2);
+                  param.setName($3);
+                  param.setDimensions(0);
+                  param.setVarArgs(false);
+                  builder.addParameter(param);
+                  param = new FieldDef();
+                }
                | VariableArityRecordComponent
                ;
 
 // VariableArityRecordComponent:
 //     {RecordComponentModifier} UnannType {Annotation} ... Identifier
 VariableArityRecordComponent: Annotations_opt /* ={RecordComponentModifier} */ Type /* =UnannType */ DOTDOTDOT IDENTIFIER
+                            {
+                              param.setType($2);
+                              param.setName($4);
+                              param.setDimensions(0);
+                              param.setVarArgs(true);
+                              builder.addParameter(param);
+                              param = new FieldDef();
+                            }
+                            ;
 
-// RecordBody:
-//     { {RecordBodyDeclaration} }
-RecordBody: CODEBLOCK 
+// RecordBody: 
+//     { { RecordBodyDeclaration } }
+RecordBody: BRACEOPEN RecordBodyDeclarations_opt BRACECLOSE
+
+// RecordBodyDeclaration:
+//     ClassBodyDeclaration
+//     CompactConstructorDeclaration
+RecordBodyDeclaration: ClassBodyDeclaration
+                    | CompactConstructorDeclaration
+                    ;
+RecordBodyDeclarations_opt:
+                          | RecordBodyDeclarations_opt
+                          { 
+                            line = lexer.getLine(); 
+                          }
+                          RecordBodyDeclaration
+                          ;
+
+// CompactConstructorDeclaration:
+//     {ConstructorModifier} SimpleTypeName ConstructorBody
+CompactConstructorDeclaration: Modifiers_opt IDENTIFIER MethodBody /* =ConstructorBody */
+                              {
+                                builder.addCompactConstructorInfo(modifiers, $3);
+                                modifiers.clear();
+                              }
+                              ;
 
 // -----------------------------
 // Productions from �9 (Interfaces)

@@ -1,7 +1,16 @@
 package com.thoughtworks.qdox;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
+import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.JavaType;
+
+import java.util.LinkedList;
 import java.io.StringReader;
 
 /**
@@ -11,12 +20,33 @@ import java.io.StringReader;
  */
 public class RecordsTest
 {
-    private JavaProjectBuilder builder = new JavaProjectBuilder();
-    
+
     @Test
     public void withTwoFields() {
         String source = "record Rectangle(double length, double width) { }";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
+
+        JavaClass cls = javaDocBuilder.getClassByName("Rectangle");
+        Assertions.assertTrue( cls.isRecord() );
+        JavaField field = cls.getFieldByName("length");
+        Assertions.assertTrue( field.getType().isA("double") );
+        JavaConstructor constructor = cls.getConstructors().get(0);
+        JavaParameter lengthParam = constructor.getParameterByName("length");
+        Assertions.assertTrue( lengthParam != null );
+        JavaMethod lengthGetter = cls.getMethod( "length", new LinkedList(), false );
+        Assertions.assertTrue( lengthGetter.getReturns().isA( "double" ) );
+    }
+
+    @Test
+    public void withImplements() {
+        String source = "record Rectangle(double length, double width) implements java.util.List<String> { }";
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
+
+        JavaClass cls = javaDocBuilder.getClassByName("Rectangle");
+        Assertions.assertTrue( cls.isRecord() );
+        Assertions.assertTrue( cls.isA("java.util.List") );
     }
     
     @Test
@@ -31,7 +61,8 @@ public class RecordsTest
             + "        this.width = width;\n"
             + "    }\n"
             + "}";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
     
     @Test
@@ -44,7 +75,12 @@ public class RecordsTest
             + "        }\n"
             + "    }\n"
             + "}";
-        builder.addSource( new StringReader(source) );
+
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
+        JavaClass cls = javaDocBuilder.getClassByName( "Rectangle" );
+        JavaConstructor constructor = cls.getConstructors().get(0);
+        Assertions.assertTrue( constructor.getSourceCode() != null );
     }
 
     @Test
@@ -57,7 +93,8 @@ public class RecordsTest
             + "        return length;\n"
             + "    }\n"
             + "}";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
     
     @Test
@@ -77,7 +114,8 @@ public class RecordsTest
             + "        return new Rectangle(width, width * goldenRatio);\n"
             + "    }\n"
             + "}";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
     
     @Test
@@ -92,7 +130,8 @@ public class RecordsTest
             + "        diagonal = (x, y) -> Math.sqrt(x*x + y*y);\n"
             + "    }\n"
             + "}";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
 
     @Test
@@ -116,19 +155,22 @@ public class RecordsTest
             + "        return new Rectangle(x, y);\n"
             + "    }\n"
             + "}";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
 
     @Test
     public void withGenerics() {
         String source = "record Triangle<C extends Coordinate> (C top, C left, C right) { }";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
 
     @Test
     public void withInterface() {
         String source = "record Customer(String... data) implements Billable { }";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
 
     @Test
@@ -136,14 +178,16 @@ public class RecordsTest
         String source = "record Rectangle(\n"
             + "    @GreaterThanZero double length,\n"
             + "    @GreaterThanZero double width) { }";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
 
     @Test
     public void withAnnotation() {
         String source = "@Deprecated\n"
             + "record Line(int lenght) { }";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
 
     
@@ -162,7 +206,8 @@ public class RecordsTest
             + "        return record;\n"
             + "    }\n"
             + "}";
-            builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
 
     @Test
@@ -170,6 +215,7 @@ public class RecordsTest
         String source = "interface Example{\n"
             + " void apply(Object recordList);"
             + "}";
-        builder.addSource( new StringReader(source) );
+        JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
+        javaDocBuilder.addSource( new StringReader(source) );
     }
 }

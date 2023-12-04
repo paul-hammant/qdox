@@ -20,6 +20,7 @@ package com.thoughtworks.qdox.builder;
  */
 
 import java.net.URL;
+import java.util.Set;
 
 import com.thoughtworks.qdox.model.JavaModule;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -32,6 +33,7 @@ import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
+import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.writer.ModelWriterFactory;
 
 public interface Builder
@@ -59,9 +61,11 @@ public interface Builder
     void endClass();
     
     void addInitializer( InitDef def );
+    void addImplements( Set<TypeDef> implementSet );
 
     void beginConstructor();
     void endConstructor( MethodDef def );
+    void addCompactConstructorInfo( Set<String> modifiers, String body );
 
     void beginMethod();
     void endMethod( MethodDef def );

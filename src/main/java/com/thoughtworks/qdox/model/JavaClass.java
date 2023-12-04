@@ -60,6 +60,17 @@ public interface JavaClass extends JavaModel, JavaType, JavaAnnotatedElement, Ja
     boolean isEnum();
 
     /**
+     * (API description of {@link java.lang.Class#isRecord()})
+     * <p>
+     * Returns <code>true</code> if and only if this class was declared as a record in the source code.
+     * </p>
+     * 
+     * @return <code>true</code> if this object represents a record, otherwise <code>false</code>
+
+     */
+    boolean isRecord();
+
+    /**
      * (API description of {@link java.lang.Class#isAnnotation()})
      * <p>Returns true if this <code>Class</code> object represents an annotation type. 
      *    Note that if this method returns true, {@link #isInterface()} would also return true, as all annotation types are also interfaces.

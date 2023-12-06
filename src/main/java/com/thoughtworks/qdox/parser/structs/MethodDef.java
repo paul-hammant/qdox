@@ -31,7 +31,6 @@ public class MethodDef extends LocatedDef {
     private Set<String> modifiers = new LinkedHashSet<String>();
     private Set<TypeDef> exceptions = new LinkedHashSet<TypeDef>();
     private boolean constructor = false;
-    private boolean defaultRecordConstructor = false;
     private int dimensions;
     private String body;
     
@@ -87,14 +86,6 @@ public class MethodDef extends LocatedDef {
 
 	public boolean isConstructor() {
 		return constructor;
-	}
-
-	public void setDefaultRecordConstructor(boolean defaultRecordConstructor) {
-		this.defaultRecordConstructor = defaultRecordConstructor;
-	}
-
-	public boolean isDefaultRecordConstructor() {
-		return defaultRecordConstructor;
 	}
 
 	public void setBody(String body) {

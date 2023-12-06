@@ -95,6 +95,10 @@ public class RecordsTest
             + "}";
         JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource( new StringReader(source) );
+        JavaClass cls = javaDocBuilder.getClassByName( "Rectangle" );
+        Assertions.assertTrue( cls.getMethods().size() == 2 );
+        JavaMethod mth = cls.getMethod("length", new LinkedList(), false);
+        Assertions.assertTrue( mth.getLineNumber() == 4 );
     }
     
     @Test
@@ -157,6 +161,10 @@ public class RecordsTest
             + "}";
         JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource( new StringReader(source) );
+        JavaClass cls = javaDocBuilder.getClassByName( "Rectangle" );
+        JavaClass nestedCls = cls.getNestedClassByName( "RotationAngle" );
+        JavaConstructor constructor = nestedCls.getConstructors().getFirst();
+        Assertions.assertTrue( constructor.getSourceCode() != null );
     }
 
     @Test

@@ -730,7 +730,7 @@ RecordDeclaration: Modifiers_opt RECORD IDENTIFIER
                   }
                   RecordBody
                   {
-                    builder.endClass();
+                    builder.endRecord(recordHeaderStack.removeFirst());
                   }
                   ;
 
@@ -741,8 +741,8 @@ RecordHeader: PARENOPEN
                 builder.beginConstructor();
                 mth.setLineNumber(lexer.getLine());
                 mth.setConstructor(true); 
-                mth.setDefaultRecordConstructor(true);
                 mth.setName(cls.getName());
+                recordHeaderStack.addFirst(new RecordFieldsDef());
               }
               RecordComponentList_opt
               {
@@ -771,6 +771,7 @@ RecordComponent: Annotations_opt /* ={RecordComponentModifier} */ Type /* =Unann
                   param.setDimensions(0);
                   param.setVarArgs(false);
                   builder.addParameter(param);
+                  recordHeaderStack.getFirst().addField(param);
                   param = new FieldDef();
                 }
                | VariableArityRecordComponent
@@ -785,6 +786,7 @@ VariableArityRecordComponent: Annotations_opt /* ={RecordComponentModifier} */ T
                               param.setDimensions(0);
                               param.setVarArgs(true);
                               builder.addParameter(param);
+                              recordHeaderStack.getFirst().addField(param);
                               param = new FieldDef();
                             }
                             ;
@@ -811,8 +813,11 @@ RecordBodyDeclarations_opt:
 //     {ConstructorModifier} SimpleTypeName ConstructorBody
 CompactConstructorDeclaration: Modifiers_opt IDENTIFIER MethodBody /* =ConstructorBody */
                               {
-                                builder.addCompactConstructorInfo(modifiers, $3);
-                                modifiers.clear();
+                                compactConstructor.setModifiers(modifiers); modifiers.clear();
+                                compactConstructor.setBody($3);
+                                compactConstructor.setLineNumber(lexer.getLine());
+                                builder.addCompactConstructor(compactConstructor);
+                                compactConstructor = new CompactConstructorDef();
                               }
                               ;
 
@@ -2042,6 +2047,8 @@ private List<TypeVariableDef> typeParams = new LinkedList<TypeVariableDef>(); //
 private LinkedList<AnnoDef> annotationStack = new LinkedList<AnnoDef>(); // Use LinkedList instead of Stack because it is unsynchronized 
 private List<List<ElemValueDef>> annoValueListStack = new LinkedList<List<ElemValueDef>>(); // Use LinkedList instead of Stack because it is unsynchronized
 private List<ElemValueDef> annoValueList = null;
+private LinkedList<RecordFieldsDef> recordHeaderStack = new LinkedList<RecordFieldsDef>();
+private CompactConstructorDef compactConstructor = new CompactConstructorDef();
 private FieldDef param = new FieldDef();
 private java.util.Set<String> modifiers = new java.util.LinkedHashSet<String>();
 private TypeDef fieldType;

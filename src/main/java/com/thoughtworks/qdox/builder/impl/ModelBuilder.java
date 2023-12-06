@@ -64,6 +64,7 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
 import com.thoughtworks.qdox.parser.expression.ExpressionDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.parser.structs.CompactConstructorDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -74,6 +75,7 @@ import com.thoughtworks.qdox.parser.structs.ModuleDef.ProvidesDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.RequiresDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.UsesDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
+import com.thoughtworks.qdox.parser.structs.RecordFieldsDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
@@ -94,11 +96,9 @@ public class ModelBuilder implements Builder {
 
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
 
-    private LinkedList<DefaultJavaConstructor> defaultRecordConstructorStack = new LinkedList<DefaultJavaConstructor>();
+    private LinkedList<DefaultJavaConstructor> recordHeaderStack = new LinkedList<DefaultJavaConstructor>();
 
     private List<DefaultJavaParameter> parameterList = new LinkedList<DefaultJavaParameter>();
-
-    private List<FieldDef> parameterDefList = new LinkedList<FieldDef>();
 
     private DefaultJavaConstructor currentConstructor;
 
@@ -337,11 +337,48 @@ public class ModelBuilder implements Builder {
     /** {@inheritDoc} */
     public void endClass()
     {
-        if( classStack.getFirst().isRecord() )
+        classStack.removeFirst();
+    }
+
+    /** {@inheritDoc} */
+    public void endRecord( RecordFieldsDef def )
+    {
+        DefaultJavaClass cls = classStack.getFirst();
+        for ( FieldDef param : def.getFields() )
         {
-            defaultRecordConstructorStack.removeFirst();
+            int dimensions =
+                param.isVarArgs()
+                ? param.getDimensions() + 1
+                : param.getDimensions();
+
+            FieldDef field = new FieldDef();
+            field.setName(param.getName());
+            field.setType(param.getType());
+            field.setDimensions(dimensions);
+            field.setEnumConstant(false);
+            field.getModifiers().addAll(param.getModifiers());
+            field.getModifiers().add("private");
+            field.getModifiers().add("final");
+            field.setLineNumber(param.getLineNumber());
+            beginField(field);
+            endField();
+
+            if( cls.getMethod( param.getName(), new LinkedList(), false ) == null )
+            {
+                MethodDef mth = new MethodDef();
+                mth.setName(param.getName());
+                mth.setLineNumber(param.getLineNumber());
+                mth.setReturnType(param.getType());
+                mth.getModifiers().add("public");
+                mth.setDimensions(dimensions);
+                mth.setTypeParams(new LinkedList());
+                mth.setLineNumber(param.getLineNumber());
+                beginMethod();
+                endMethod(mth);
+            }
         }
 
+        recordHeaderStack.removeFirst();
         classStack.removeFirst();
     }
 
@@ -413,7 +450,14 @@ public class ModelBuilder implements Builder {
         addJavaDoc( currentConstructor );
         setAnnotations( currentConstructor );
 
-        classStack.getFirst().addConstructor( currentConstructor );
+        DefaultJavaClass cls = classStack.getFirst();
+
+        if( cls.isRecord() && cls.getConstructors().isEmpty() )
+        {
+            recordHeaderStack.addFirst( currentConstructor );
+        }
+
+        cls.addConstructor( currentConstructor );
     }
 
     /** {@inheritDoc} */
@@ -454,48 +498,15 @@ public class ModelBuilder implements Builder {
         }
 
         currentConstructor.setSourceCode( def.getBody() );
-
-        if ( def.isDefaultRecordConstructor() )
-        {
-            defaultRecordConstructorStack.addFirst( currentConstructor );
-            for ( FieldDef param : parameterDefList )
-            {
-                int dimensions =
-                  param.isVarArgs()
-                  ? param.getDimensions() + 1
-                  : param.getDimensions();
-
-                FieldDef field = new FieldDef();
-                field.setName(param.getName());
-                field.setType(param.getType());
-                field.setDimensions(dimensions);
-                field.setEnumConstant(false);
-                field.getModifiers().addAll(param.getModifiers());
-                field.getModifiers().add("private");
-                field.getModifiers().add("final");
-                beginField(field);
-                endField();
-
-                MethodDef mth = new MethodDef();
-                mth.setName(param.getName());
-                mth.setLineNumber(param.getLineNumber());
-                mth.setReturnType(param.getType());
-                mth.getModifiers().add("public");
-                mth.setDimensions(dimensions);
-                mth.setTypeParams(new LinkedList());
-                beginMethod();
-                endMethod(mth);
-            }
-        }
-
-        parameterDefList.clear();
     }
 
-    public void addCompactConstructorInfo( Set<String> modifiers, String body )
+    /** {@inheritDoc} */
+    public void addCompactConstructor( CompactConstructorDef def )
     {
-        DefaultJavaConstructor javaConstructor = defaultRecordConstructorStack.getFirst();
-        javaConstructor.setModifiers( new LinkedList<String>( modifiers ) );
-        javaConstructor.setSourceCode( body );
+        DefaultJavaConstructor javaConstructor = recordHeaderStack.getFirst();
+        javaConstructor.setModifiers( new LinkedList<String>( def.getModifiers() ) );
+        javaConstructor.setSourceCode( def.getBody() );
+        javaConstructor.setLineNumber( def.getLineNumber() );
     }
 
     /** {@inheritDoc} */
@@ -550,7 +561,6 @@ public class ModelBuilder implements Builder {
         {
             currentMethod.setParameters( new ArrayList<JavaParameter>( parameterList ) );
             parameterList.clear();
-            parameterDefList.clear();
         }
 
         currentMethod.setSourceCode( def.getBody() );
@@ -682,7 +692,6 @@ public class ModelBuilder implements Builder {
         addJavaDoc( jParam );
         setAnnotations( jParam );
         parameterList.add( jParam );
-        parameterDefList.add( fieldDef );
     }
 
     private void setAnnotations( final AbstractBaseJavaEntity entity )

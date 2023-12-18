@@ -163,7 +163,7 @@ public class RecordsTest
         javaDocBuilder.addSource( new StringReader(source) );
         JavaClass cls = javaDocBuilder.getClassByName( "Rectangle" );
         JavaClass nestedCls = cls.getNestedClassByName( "RotationAngle" );
-        JavaConstructor constructor = nestedCls.getConstructors().getFirst();
+        JavaConstructor constructor = nestedCls.getConstructors().get(0);
         Assertions.assertTrue( constructor.getSourceCode() != null );
     }
 

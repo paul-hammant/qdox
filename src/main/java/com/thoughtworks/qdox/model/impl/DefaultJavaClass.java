@@ -60,6 +60,8 @@ public class DefaultJavaClass
 
     private boolean anEnum;
 
+    private boolean aRecord;
+
     private boolean anAnnotation;
 
     private JavaType superClass;
@@ -113,6 +115,12 @@ public class DefaultJavaClass
     public boolean isEnum()
     {
         return anEnum;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isRecord()
+    {
+        return aRecord;
     }
 
     /** {@inheritDoc} */
@@ -206,6 +214,11 @@ public class DefaultJavaClass
     public void setEnum( boolean anEnum )
     {
         this.anEnum = anEnum;
+    }
+
+    public void setRecord( boolean aRecord )
+    {
+        this.aRecord = aRecord;
     }
 
     public void setAnnotation( boolean anAnnotation )

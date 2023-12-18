@@ -64,6 +64,7 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaTypeVariable;
 import com.thoughtworks.qdox.parser.expression.ExpressionDef;
 import com.thoughtworks.qdox.parser.structs.AnnoDef;
 import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.parser.structs.CompactConstructorDef;
 import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.InitDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
@@ -74,6 +75,7 @@ import com.thoughtworks.qdox.parser.structs.ModuleDef.ProvidesDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.RequiresDef;
 import com.thoughtworks.qdox.parser.structs.ModuleDef.UsesDef;
 import com.thoughtworks.qdox.parser.structs.PackageDef;
+import com.thoughtworks.qdox.parser.structs.RecordFieldsDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import com.thoughtworks.qdox.parser.structs.TypeDef;
 import com.thoughtworks.qdox.parser.structs.TypeVariableDef;
@@ -93,6 +95,8 @@ public class ModelBuilder implements Builder {
     private DefaultJavaModuleDescriptor moduleDescriptor;
 
     private LinkedList<DefaultJavaClass> classStack = new LinkedList<DefaultJavaClass>();
+
+    private LinkedList<DefaultJavaConstructor> recordHeaderStack = new LinkedList<DefaultJavaConstructor>();
 
     private List<DefaultJavaParameter> parameterList = new LinkedList<DefaultJavaParameter>();
 
@@ -226,6 +230,16 @@ public class ModelBuilder implements Builder {
         source.addImport( importName );
     }
 
+    public void addImplements( Set<TypeDef> implementSet )
+    {
+        List<JavaClass> implementz = new LinkedList<JavaClass>();
+        for ( TypeDef implementType : implementSet )
+        {
+            implementz.add( createType( implementType, 0 ) );
+        }
+        classStack.getFirst().setImplementz( implementz );
+    }
+
     /** {@inheritDoc} */
     public void addJavaDoc( String text )
     {
@@ -249,6 +263,7 @@ public class ModelBuilder implements Builder {
         newClass.setName( def.getName() );
         newClass.setInterface( ClassDef.INTERFACE.equals( def.getType() ) );
         newClass.setEnum( ClassDef.ENUM.equals( def.getType() ) );
+        newClass.setRecord( ClassDef.RECORD.equals( def.getType() ) );
         newClass.setAnnotation( ClassDef.ANNOTATION_TYPE.equals( def.getType() ) );
 
         // superclass
@@ -325,6 +340,48 @@ public class ModelBuilder implements Builder {
         classStack.removeFirst();
     }
 
+    /** {@inheritDoc} */
+    public void endRecord( RecordFieldsDef def )
+    {
+        DefaultJavaClass cls = classStack.getFirst();
+        for ( FieldDef param : def.getFields() )
+        {
+            int dimensions =
+                param.isVarArgs()
+                ? param.getDimensions() + 1
+                : param.getDimensions();
+
+            FieldDef field = new FieldDef();
+            field.setName(param.getName());
+            field.setType(param.getType());
+            field.setDimensions(dimensions);
+            field.setEnumConstant(false);
+            field.getModifiers().addAll(param.getModifiers());
+            field.getModifiers().add("private");
+            field.getModifiers().add("final");
+            field.setLineNumber(param.getLineNumber());
+            beginField(field);
+            endField();
+
+            if( cls.getMethod( param.getName(), new LinkedList(), false ) == null )
+            {
+                MethodDef mth = new MethodDef();
+                mth.setName(param.getName());
+                mth.setLineNumber(param.getLineNumber());
+                mth.setReturnType(param.getType());
+                mth.getModifiers().add("public");
+                mth.setDimensions(dimensions);
+                mth.setTypeParams(new LinkedList());
+                mth.setLineNumber(param.getLineNumber());
+                beginMethod();
+                endMethod(mth);
+            }
+        }
+
+        recordHeaderStack.removeFirst();
+        classStack.removeFirst();
+    }
+
     /**
      * this one is specific for those cases where dimensions can be part of both the type and identifier
      * i.e. private String[] matrix[]; //field
@@ -393,7 +450,14 @@ public class ModelBuilder implements Builder {
         addJavaDoc( currentConstructor );
         setAnnotations( currentConstructor );
 
-        classStack.getFirst().addConstructor( currentConstructor );
+        DefaultJavaClass cls = classStack.getFirst();
+
+        if( cls.isRecord() && cls.getConstructors().isEmpty() )
+        {
+            recordHeaderStack.addFirst( currentConstructor );
+        }
+
+        cls.addConstructor( currentConstructor );
     }
 
     /** {@inheritDoc} */
@@ -434,6 +498,15 @@ public class ModelBuilder implements Builder {
         }
 
         currentConstructor.setSourceCode( def.getBody() );
+    }
+
+    /** {@inheritDoc} */
+    public void addCompactConstructor( CompactConstructorDef def )
+    {
+        DefaultJavaConstructor javaConstructor = recordHeaderStack.getFirst();
+        javaConstructor.setModifiers( new LinkedList<String>( def.getModifiers() ) );
+        javaConstructor.setSourceCode( def.getBody() );
+        javaConstructor.setLineNumber( def.getLineNumber() );
     }
 
     /** {@inheritDoc} */

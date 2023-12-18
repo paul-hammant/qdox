@@ -573,6 +573,12 @@ public class DefaultJavaType implements JavaClass, JavaType, Serializable {
     }
 
     /** {@inheritDoc} */
+    public boolean isRecord()
+    {
+        return resolveRealClass().isRecord();
+    }
+
+    /** {@inheritDoc} */
     public String getComment()
     {
         return resolveRealClass().getComment();

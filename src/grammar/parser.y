@@ -770,6 +770,7 @@ RecordComponent: Annotations_opt /* ={RecordComponentModifier} */ Type /* =Unann
                   param.setName($3);
                   param.setDimensions(0);
                   param.setVarArgs(false);
+                  param.setLineNumber(lexer.getLine());
                   builder.addParameter(param);
                   recordHeaderStack.getFirst().addField(param);
                   param = new FieldDef();
@@ -785,6 +786,7 @@ VariableArityRecordComponent: Annotations_opt /* ={RecordComponentModifier} */ T
                               param.setName($4);
                               param.setDimensions(0);
                               param.setVarArgs(true);
+                              param.setLineNumber(lexer.getLine());
                               builder.addParameter(param);
                               recordHeaderStack.getFirst().addField(param);
                               param = new FieldDef();

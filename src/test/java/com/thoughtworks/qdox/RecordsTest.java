@@ -23,19 +23,25 @@ public class RecordsTest
 
     @Test
     public void withTwoFields() {
-        String source = "record Rectangle(double length, double width) { }";
+        String source = 
+         "/* comment */" +
+         "record Rectangle(double length, double width) { }";
         JavaProjectBuilder javaDocBuilder = new JavaProjectBuilder();
         javaDocBuilder.addSource( new StringReader(source) );
 
         JavaClass cls = javaDocBuilder.getClassByName("Rectangle");
+        Assertions.assertTrue( cls.getLineNumber() == 1 );
         Assertions.assertTrue( cls.isRecord() );
         JavaField field = cls.getFieldByName("length");
+        Assertions.assertTrue( field.getLineNumber() == 1 );
         Assertions.assertTrue( field.getType().isA("double") );
         JavaConstructor constructor = cls.getConstructors().get(0);
         JavaParameter lengthParam = constructor.getParameterByName("length");
         Assertions.assertTrue( lengthParam != null );
         JavaMethod lengthGetter = cls.getMethod( "length", new LinkedList(), false );
         Assertions.assertTrue( lengthGetter.getReturns().isA( "double" ) );
+        JavaMethod widthGetter = cls.getMethod( "width", new LinkedList(), false );
+        Assertions.assertTrue( widthGetter.getLineNumber() == 1 );
     }
 
     @Test

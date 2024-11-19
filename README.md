@@ -12,7 +12,9 @@ This project used to be on Codehaus, in Subversion. The trunk of that has been g
 
 # Download
 
-Maven's central repo [holds versions of QDox](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.thoughtworks.qdox%22%20AND%20a%3A%22qdox%22)
+Maven's central repo [holds versions of QDox](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.thoughtworks.qdox%22%20AND%20a%3A%22qdox%22) 
+
+Available assets: binary jar | sources jar | javadoc jar | project tar.bz2 | project tar.gz | project zip
 
 # In A Nutshell
 
@@ -50,20 +52,6 @@ JavaProjectBuilder builder = new JavaProjectBuilder( libraryBuilder );
 ## I'm getting an ArrayIndexOutOfBoundsException: 500. What to do?
 
 During the parsing of java files the Parser needs to remember states, which are kept in a stack. Due to recursive calls the stack can become very large. By default the size of this this stack is 500 and it can only be set during compile-time of QDox. Normally 500 per sourcefile will do, but in very, very rare cases this might be too little. The only way to increase this number is by rebuilding it. Download the sources and build it like mvn install -Dqdox.javaparser.stack=750 if you want to change it to 750.
-
-# Download
-
-QDox is available at the Maven Central. To include the most recent of QDox in your pom, include the following dependency:
-
-```xml
-  	 <dependency>
-  	   <groupId>${project.groupId}</groupId>
-  	   <artifactId>${project.artifactId}</artifactId>
-  	   <version>${project.version}</version>
-  	 </dependency>
-```
-
-Latest stable release - QDox ${project.rel.org.thoughtworks.qdox:qdox}: binary jar | sources jar | javadoc jar | project tar.bz2 | project tar.gz | project zip
 
 # What is using QDox
 

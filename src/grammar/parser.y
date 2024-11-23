@@ -49,7 +49,7 @@ import java.util.Stack;
 %token <sval> INTEGER_LITERAL
 %token <sval> FLOAT_LITERAL
 %token <sval> CHAR_LITERAL
-%token <sval> STRING_LITERAL
+%token <sval> STRING_LITERAL, TEXTBLOCK
 %token <ival> VERTLINE2 AMPERSAND2 VERTLINE CIRCUMFLEX AMPERSAND EQUALS2 NOTEQUALS
 %token <ival> LESSTHAN GREATERTHAN LESSEQUALS GREATEREQUALS LESSTHAN2 GREATERTHAN2 GREATERTHAN3
 %token <ival> PLUS MINUS STAR SLASH PERCENT TILDE EXCLAMATION
@@ -2019,6 +2019,10 @@ Literal: INTEGER_LITERAL
          {
            String s = lexer.getCodeBody(); 
            $$ = new ConstantDef(s, Character.class); 
+         }
+       | TEXTBLOCK {
+           String s = lexer.getCodeBody(); 
+           $$ = new ConstantDef(s, String.class); 
          } 
        | STRING_LITERAL 
          { 

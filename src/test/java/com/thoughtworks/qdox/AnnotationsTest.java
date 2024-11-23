@@ -268,4 +268,13 @@ public class AnnotationsTest {
         		+ "        \"\"\"", builder.getClassByName( "Thingy" ).getAnnotations().get( 0 ).getProperty( "value" ).getParameterValue());
     	
     }
+    
+    @Test
+    public void testComment() {
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+    	String source = "@Fields({\n"
+    			+ "            @Field(norms = Norms.NO, analyzer = @Analyzer(definition = \"whitespace_analyzer\")),\n"
+    			+ "    })";
+        builder.addSource( new StringReader( source ) );
+    }
 }

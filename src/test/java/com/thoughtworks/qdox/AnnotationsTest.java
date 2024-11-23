@@ -253,4 +253,19 @@ public class AnnotationsTest {
         String source = "public class Foo {\n" + "@SuppressWarnings({\"abc\\\\d\"})\n" + "private void bar() { } }";
         builder.addSource( new StringReader( source ) );
     }
+    
+    @Test
+    public void testTextBlock() {
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        String source = "@SuppressWarnings(\"\"\"\n"
+        		+ "        Lorem ipsum dolor sit amet\n"
+        		+ "        \"\"\")\n"
+        		+ "public class Thingy {\n"
+        		+ "}";
+        builder.addSource( new StringReader( source ) );
+        Assertions.assertEquals("\"\"\"\n"
+        		+ "        Lorem ipsum dolor sit amet\n"
+        		+ "        \"\"\"", builder.getClassByName( "Thingy" ).getAnnotations().get( 0 ).getProperty( "value" ).getParameterValue());
+    	
+    }
 }

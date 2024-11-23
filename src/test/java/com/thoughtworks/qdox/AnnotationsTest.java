@@ -270,11 +270,19 @@ public class AnnotationsTest {
     }
     
     @Test
-    public void testComment() {
+    public void testValueArray() {
         JavaProjectBuilder builder = new JavaProjectBuilder();
     	String source = "@Fields({\n"
     			+ "            @Field(norms = Norms.NO, analyzer = @Analyzer(definition = \"whitespace_analyzer\")),\n"
     			+ "    })";
         builder.addSource( new StringReader( source ) );
     }
+    
+    @Test
+    public void testFQNAnnotation() {
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+    	String source = "@Type(type = \"com.example.Type\", parameters = @com.example.Parameter(name = \"class\", value = \"com.example.Object\"))";
+        builder.addSource( new StringReader( source ) );
+    }
+    
 }

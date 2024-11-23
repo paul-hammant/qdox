@@ -227,4 +227,22 @@ public class EnumsTest {
         new JavaProjectBuilder().addSource(new StringReader(source));
     }
     
+    
+    @Test
+    public void testEnumWithLambdaParameter() {
+    	
+    	String source = "public class ClassToTest {\n"
+    			+ "	public static enum Display {\n"
+    			+ "		LOWVALUE(v -> v.toLowerCase() + \"_\");\n"
+    			+ "\n"
+    			+ "		final Function<String, String> convert;\n"
+    			+ "\n"
+    			+ "		private Display(final Function<String, String> convert) {\n"
+    			+ "			this.convert = convert;\n"
+    			+ "		}\n"
+    			+ "	}\n"
+    			+ "}";
+
+    	new JavaProjectBuilder().addSource(new StringReader(source));
+    }
 }

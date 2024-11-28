@@ -1987,7 +1987,6 @@ Modifier: Annotation
           {
             modifiers.add("default");
           }
-        | 
         ;
          
 Arguments_opt:

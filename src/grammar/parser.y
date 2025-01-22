@@ -1694,10 +1694,19 @@ Dims: SQUAREOPEN SQUARECLOSE
       { 
         $$ = 1;
       } 
+    | Annotation SQUAREOPEN SQUARECLOSE 
+      { 
+        $$ = 1;
+      } 
     | Dims SQUAREOPEN SQUARECLOSE 
       { 
         $$ = $1 + 1;
       };
+    | Annotation Dims SQUAREOPEN SQUARECLOSE 
+      { 
+        $$ = $2 + 1;
+      };
+
 Dims_opt: { 
             $$ = 0; 
           }

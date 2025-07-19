@@ -337,6 +337,9 @@
             <goal>test</goal>
           </goals>
           <settingsFile>src/it/settings.xml</settingsFile>
+          <showErrors>true</showErrors>
+          <streamLogs>false</streamLogs>
+          <streamLogsOnFailures>true</streamLogsOnFailures>
           <debug>true</debug>
           <properties>
             <maven.compiler.source>8</maven.compiler.source>

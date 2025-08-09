@@ -421,8 +421,12 @@ public class ModelBuilder implements Builder {
         }
         entity.setTags( tagList );
 
-        lastTagSet.clear();
-        lastComment = null;
+        // QDOX-212: only clear the comment if it's been set.
+        // Otherwise we might lose a comment for an inner class.
+        if (lastComment != null || !lastTagSet.isEmpty()) {
+            lastTagSet.clear();
+            lastComment = null;
+        }
     }
     
     /** {@inheritDoc} */

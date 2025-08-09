@@ -2076,4 +2076,10 @@ public class JavaProjectBuilderTest {
         builder.addSource(new StringReader(source));
         Assertions.assertNotNull(builder.getClassByName("com.foo.Bar"));
     }
+
+    @Test
+    public void testCommentedOutClass() throws IOException {
+        builder.addSource(new File("src/test/resources/com/thoughtworks/qdox/testdata/CommentedClass.java"));
+        Assertions.assertTrue(builder.getClasses().isEmpty());
+    }
 }

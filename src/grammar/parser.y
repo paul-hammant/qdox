@@ -107,7 +107,7 @@ import java.util.Stack;
 // CompilationUnit:
 //     [PackageDeclaration] {ImportDeclaration} {TypeDeclaration}
 //     {ImportDeclaration} ModuleDeclaration  
-CompilationUnit: CompilationDeclaration
+CompilationUnit:
                | CompilationUnit CompilationDeclaration
                ;
 

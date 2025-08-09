@@ -1,8 +1,8 @@
 def buildLog = new File( basedir, "build.log" )
 
-// zip contains 6 java files
-assert buildLog.text.contains( "Success: 6" )
-// zip contains 10 non-java files 
-assert buildLog.text.contains( "Failure: 10" )
+// zip contains 7 java files
+assert buildLog.text.contains( "Success: 7" )
+// zip contains 9 non-java files
+assert buildLog.text.contains( "Failure: 9" )
 assert buildLog.text.contains( "Error  : 0" )
 assert buildLog.text.contains( "Total  : 16" )

@@ -2061,4 +2061,19 @@ public class JavaProjectBuilderTest {
         
         verify( classLibraryBuilder ).addSourceFolder( same( file ) );
     }
+
+    @Test
+    public void testEmptyAndCommentOnlyFiles() {
+        // should not throw an exception
+        builder.addSource(new StringReader(""));
+        builder.addSource(new StringReader("// just a comment"));
+        builder.addSource(new StringReader("/* a multiline comment */"));
+    }
+
+    @Test
+    public void testBlankClass() {
+        String source = "package com.foo; public class Bar {}";
+        builder.addSource(new StringReader(source));
+        Assertions.assertNotNull(builder.getClassByName("com.foo.Bar"));
+    }
 }

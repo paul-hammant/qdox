@@ -319,7 +319,13 @@ public class JavaProjectBuilderTest {
         JavaClass list = builder.getClassByName("java.util.List");
         Assertions.assertTrue(list.isInterface());
         Assertions.assertNull(list.getSuperJavaClass());
-        Assertions.assertEquals("java.util.Collection", list.getImplements().get(0).getValue());
+        String firstInterface = list.getImplements().get(0).getValue();
+        int majorVersion = Integer.parseInt(System.getProperty("java.version").split("\\.")[0]);
+        if (majorVersion >= 21) {
+            Assertions.assertEquals("java.util.SequencedCollection", firstInterface);
+        } else {
+            Assertions.assertEquals("java.util.Collection", firstInterface);
+        }
     }
 
     @Test

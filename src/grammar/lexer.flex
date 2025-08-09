@@ -203,7 +203,7 @@ UnicodeChar                     = \\u[a-fA-F0-9]{4}
 Id						        = ([:jletter:]|{UnicodeChar}) ([:jletterdigit:]|{UnicodeChar})*
 JavadocEnd                      = "*"+ "/"
 
-%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ARGUMENTS NAME 
+%state JAVADOC JAVADOCTAG JAVADOCLINE CODEBLOCK PARENBLOCK ASSIGNMENT STRING CHAR SINGLELINECOMMENT MULTILINECOMMENT ANNOTATION ANNOSTRING ANNOCHAR ANNOTEXTBLOCK ARGUMENTS NAME
 %state ANNOTATIONTYPE ENUM MODULE RECORD TYPE ANNOTATIONNOARG ATANNOTATION
 %state NAME_OR_MODIFIER
 
@@ -511,7 +511,7 @@ JavadocEnd                      = "*"+ "/"
     "++"                { return Parser.PLUSPLUS; }
     "--"                { return Parser.MINUSMINUS; }
 
-    "\"\"\""            { appendingToCodeBody=true; codeBody.append("\"\"\""); pushState(ANNOSTRING); }
+    "\"\"\""            { appendingToCodeBody=true; codeBody.append("\"\"\""); pushState(ANNOTEXTBLOCK); }
 	"\""                { appendingToCodeBody=true; codeBody.append("\""); pushState(ANNOSTRING); }
     "\'"                { appendingToCodeBody=true; codeBody.append("\'"); pushState(ANNOCHAR); }
 
@@ -566,10 +566,13 @@ JavadocEnd                      = "*"+ "/"
 }
 
 <ANNOSTRING> {
-	"\"\"\""        { codeBody.append("\"\"\""); popState(); appendingToCodeBody=false; return Parser.TEXTBLOCK; }
 	"\""            { codeBody.append("\""); popState(); appendingToCodeBody=false; return Parser.STRING_LITERAL; }
 	"\\\""          { codeBody.append("\\\""); }
 	"\\\\"          { codeBody.append("\\\\"); }
+}
+
+<ANNOTEXTBLOCK> {
+	"\"\"\""        { codeBody.append("\"\"\""); popState(); appendingToCodeBody=false; return Parser.TEXTBLOCK; }
 }
 
 <ANNOCHAR> {

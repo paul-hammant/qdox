@@ -64,7 +64,7 @@ import java.util.Stack;
 %type <annoval> PostfixExpression PostIncrementExpression PostDecrementExpression CastExpression Assignment LeftHandSide AssignmentExpression
 %type <ival> Dims Dims_opt
 %type <sval> QualifiedIdentifier TypeDeclSpecifier MethodBody AssignmentOperator ModuleName
-%type <type> Type ReferenceType Wildcard WildcardBounds VariableDeclaratorId ClassOrInterfaceType TypeArgument
+%type <type> Type ReferenceType Wildcard WildcardBounds VariableDeclaratorId ClassOrInterfaceType TypeArgument AnnotatedTypeArgument
 
 %%
 // Source: Java Language Specification - Third Edition
@@ -1715,9 +1715,9 @@ Dims_opt: {
 
 // TypeParameter:
 //     {TypeParameterModifier} Identifier [TypeBound]
-TypeParameter: IDENTIFIER 
+TypeParameter: Annotations_opt IDENTIFIER 
                { 
-                 typeVariable = new TypeVariableDef($1);
+                 typeVariable = new TypeVariableDef($2);
                  typeVariable.setBounds(new LinkedList<TypeDef>());
                }
                TypeBound_opt
@@ -1780,15 +1780,23 @@ TypeArgumentList: TypeArgument
 //     Wildcard
 TypeArgument: ReferenceType
             | Wildcard
+            | AnnotatedTypeArgument
             ;
+
+// AnnotatedTypeArgument - handles @Annotation Type constructs in type arguments
+AnnotatedTypeArgument: Annotation ClassOrInterfaceType
+                      {
+                        $$ = $2;
+                      }
+                    ;
 
 // Wildcard:
 //     {Annotation} ? [WildcardBounds]
-Wildcard: QUERY WildcardBounds
+Wildcard: Annotations_opt QUERY WildcardBounds
           {
-            $$ = $2;
+            $$ = $3;
           }
-        | QUERY
+        | Annotations_opt QUERY
           {
             $$ = new WildcardTypeDef();
           }

@@ -148,36 +148,23 @@ public class SourceLibrary
         throws ParseException, IOException
     {
         JavaSource result = null;
-        if ( !"package-info.java".equals( file.getName() ) ) 
+        if ( "module-info.java".equals( file.getName() ) )
         {
-            if ( "module-info.java".equals( file.getName() ) )
-            {
-                // No parse specifications yet
-                return result;
-            }
+            // No parse specifications yet
+            return result;
+        }
 
-            Builder builder = parse( new FileInputStream( file ), file.toURI().toURL() );
-            
-            if ( builder != null )
-            {
-                result = builder.getSource();
-            }
-            
-            // if an error is handled by the errorHandler the result will be null
-            if( result != null )
-            {
-                if( getJavaPackage( result.getPackageName() ) == null )
-                {
-                    File packageInfo = new File(file.getParentFile(), "package-info.java");
-                    if( packageInfo.exists() )
-                    {
-                        JavaPackage pckg = parse( new FileInputStream( packageInfo ),
-                                                  packageInfo.toURI().toURL() ).getSource().getPackage();
-                        context.add( pckg );
-                    }
-                }
-                registerJavaSource(result);
-            }
+        Builder builder = parse( new FileInputStream( file ), file.toURI().toURL() );
+
+        if ( builder != null )
+        {
+            result = builder.getSource();
+        }
+
+        // if an error is handled by the errorHandler the result will be null
+        if( result != null )
+        {
+            registerJavaSource(result);
         }
     	return result;
     }
@@ -284,12 +271,22 @@ public class SourceLibrary
     
     private void registerJavaPackage( JavaPackage pckg )
     {
-        String pckgName = ( pckg == null || pckg.getName() == null ? "" : pckg.getName() );
-        if( getJavaPackage( pckgName ) == null )
+        String pckgName = ( pckg == null || pckg.getName() == null ) ? "" : pckg.getName();
+        JavaPackage currentPckg = getJavaPackage( pckgName );
+
+        if ( currentPckg == null )
         {
-            DefaultJavaPackage packageInfo = new DefaultJavaPackage( pckgName );
-            packageInfo.setClassLibrary( this );
-            context.add( packageInfo );
+            JavaPackage newPckg = (pckg != null) ? pckg : new DefaultJavaPackage(pckgName);
+
+            if ( newPckg instanceof DefaultJavaPackage )
+            {
+                ( (DefaultJavaPackage) newPckg ).setClassLibrary( this );
+            }
+            context.add( newPckg );
+        }
+        else if ( pckg != null && currentPckg instanceof DefaultJavaPackage )
+        {
+            ( (DefaultJavaPackage) currentPckg ).merge( pckg );
         }
     }
     

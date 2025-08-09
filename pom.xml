@@ -379,6 +379,18 @@
               </properties>
             </configuration>
           </execution>
+           <execution>
+            <id>integration-test-gh-205</id>
+            <goals>
+              <goal>install</goal>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <pomIncludes>
+                <pomInclude>gh-205/pom.xml</pomInclude>
+              </pomIncludes>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>

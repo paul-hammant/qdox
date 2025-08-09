@@ -151,4 +151,19 @@ public class DefaultJavaPackage extends AbstractBaseJavaEntity implements JavaPa
     public String toString() {
     	return "package " + name;
     }
+
+    public void merge( JavaPackage p )
+    {
+        // from AbstractBaseJavaEntity
+        if ( p.getComment() != null && getComment() == null )
+        {
+            setComment( p.getComment() );
+        }
+        if ( !p.getAnnotations().isEmpty() )
+        {
+            java.util.List<com.thoughtworks.qdox.model.JavaAnnotation> newAnnotations = new java.util.LinkedList<com.thoughtworks.qdox.model.JavaAnnotation>( getAnnotations() );
+            newAnnotations.addAll( p.getAnnotations() );
+            setAnnotations( newAnnotations );
+        }
+    }
 }

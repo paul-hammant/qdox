@@ -295,5 +295,17 @@ public class AnnotationsTest {
                 + "}";
         builder.addSource( new StringReader( source ) );
     }
+
+    @Test
+    public void testAnnotationOnMethodReturnType() {
+        String source = "class T { private byte @Nullable [] receiveFastpathResult() throws java.io.IOException, java.sql.SQLException { return null; } }";
+        JavaClass cls = builder.addSource(new StringReader(source)).getClassByName("T");
+        JavaMethod mth = cls.getMethods().get(0);
+        JavaType returnType = mth.getReturnType();
+        assertEquals("byte[]", returnType.getGenericValue());
+        assertNotNull( returnType.getAnnotations() );
+        assertEquals(1, returnType.getAnnotations().size());
+        assertEquals("Nullable", returnType.getAnnotations().get(0).getType().getValue());
+    }
     
 }

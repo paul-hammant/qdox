@@ -394,7 +394,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>integration-test-gh-263</id>
+            <id>integration-test-java-17</id>
             <goals>
               <goal>install</goal>
               <goal>run</goal>
@@ -402,6 +402,7 @@
             <configuration>
               <pomIncludes>
                 <pomInclude>gh-263/pom.xml</pomInclude>
+                <pomInclude>gh-292/pom.xml</pomInclude>
               </pomIncludes>
               <properties>
                 <maven.compiler.source>17</maven.compiler.source>

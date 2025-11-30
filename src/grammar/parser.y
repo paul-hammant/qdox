@@ -1776,9 +1776,17 @@ TypeArgumentList: TypeArgument
                 ;
 
 // TypeArgument:
-//     ReferenceType 
+//     ReferenceType
 //     Wildcard
-TypeArgument: ReferenceType
+TypeArgument: Annotation QUERY WildcardBounds
+              {
+                $$ = $3;
+              }
+            | Annotation QUERY
+              {
+                $$ = new WildcardTypeDef();
+              }
+            | ReferenceType
             | Wildcard
             | AnnotatedTypeArgument
             ;

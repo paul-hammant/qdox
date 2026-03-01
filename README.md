@@ -4,7 +4,7 @@
 
 2026: Teams relying on QDox should probably migrate to [JavaParser](https://github.com/javaparser/javaparser), or [Spoon](https://spoon.gforge.inria.fr/), [Rewrite](https://github.com/openrewrite/rewrite), or [Roaster](https://github.com/forge/roaster) which all have active development still.
 
-QDox is a high speed, small footprint parser for fully extracting class/interface/method definitions (including annotations, parameters, param names). It is designed to be used by active code generators or documentation tools.
+QDox **was** a high speed, small footprint parser for fully extracting class/interface/method definitions (including annotations, parameters, param names). It is designed to be used by active code generators or documentation tools.
 
 Not so relevant anymore, but it also processes JavaDoc @tags
 

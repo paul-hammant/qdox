@@ -15,7 +15,7 @@ jobs:
         experimental: [ false ]
 
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v6.0.1
       - uses: actions/cache@v4
         with:
           path: ~/.m2/repository
